@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -x
+
+unset SSH_AUTH_SOCK
+host=$1
+shift
+port=$1
+shift
+sshkey=$1
+shift
+
+if [ -z "$host" ]; then
+    echo "missing host argument (first arg)"
+    exit 1
+fi
+
+if [ -z "$port" ]; then
+    echo "missing port argument (second arg)"
+    exit 1
+fi
+
+if [ -z "$sshkey" ]; then
+    echo "missing sshkey argument (third arg)"
+    exit 1
+fi
+
+ssh="ssh -p $port"
+if [ "$sshkey" != "card" ]; then
+    ssh="$ssh -i $sshkey"
+fi
+ssh="$ssh -C $ssh_options $host $@"
+
+exec $ssh

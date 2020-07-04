@@ -1,0 +1,33 @@
+#!/bin/sh
+
+self=$(cd $(dirname $0) && pwd)
+host=$1
+shift
+port=$1
+shift
+sshkey=$1
+shift
+
+if [ -z "$host" ]; then
+    echo "missing host argument (first arg)"
+    exit 1
+fi
+
+if [ -z "$port" ]; then
+    echo "missing port argument (second arg)"
+    exit 1
+fi
+
+if [ -z "$sshkey" ]; then
+    echo "missing sshkey argument (third arg)"
+    exit 1
+fi
+
+export ssh_options="-o BatchMode=yes -o ConnectTimeout=2"
+if msg=$($self/btr-ssh $host $port $sshkey $@); then
+  echo >&2 "'$@' - MSG: '$msg'"
+  exit 0
+else
+  echo >&2 "'$@' failed on $host:$port - MSG: '$msg'"
+  exit 1
+fi

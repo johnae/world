@@ -1,0 +1,37 @@
+#!/bin/sh
+
+self=$(cd $(dirname $0) && pwd)
+
+volume=$1
+snapshot=.snapshot
+maxtoday=5
+keepdaily=1
+today=$(date +%Y%m%d)
+for i in {0..7}; do ((keep[$(date +%Y%m%d -d "-$i day")]++)); done
+
+echo "cleaning out old daily snapshots"
+for snap in $((ls -da $volume/$snapshot-$today* || true) | sort -r | tail -n +$(($maxtoday+1))); do
+  echo "will remove old local daily snapshot: '$snap'"
+  $self/btr-delete $snap
+done
+
+echo "cleaning out local snapshots older than today, keeping a weeks worth ($keepdaily per day)"
+for snap in $((ls -da $volume/$snapshot-2* || true) | sort -r); do
+  name=$(basename $snap)
+  when=$(echo $name | sed "s|$snapshot-||g")
+  day=$(echo $when | cut -c1-8)
+  if [ "$day" = "$today" ]; then
+    echo "skip local $snap (today)"
+    continue
+  fi
+  k=${keep[$day]}
+  if [ "$k" != "1" ]; then
+    echo "will remove local snap '$snap' as it is older than a week"
+    $self/btr-delete $snap
+  else
+    for dailysnap in $((ls -da $volume/$snapshot-$day* || true) | sort -r | tail -n +$(($keepdaily+1))); do
+      echo "will remove old local snap '$dailysnap' (keeping $keepdaily per day)"
+      $self/btr-delete $snap
+    done
+  fi
+done

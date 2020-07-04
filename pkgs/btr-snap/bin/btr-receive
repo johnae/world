@@ -1,0 +1,125 @@
+#!/bin/sh
+set -- $SSH_ORIGINAL_COMMAND
+
+cmd=$1
+dest=$2
+maxdaily=5
+keepdaily=1
+today=$(date +%y%m%d)
+
+for i in {0..7}; do ((keep[$(date +%Y%m%d -d "-$i day")]++)); done
+
+if [ -z "$dest" ]; then
+  echo "sorry, you must provide a destination as second argument"
+  exit 1
+fi
+
+cleanup() {
+  backup=$1
+  if [ -e $backup/.backup-new ]; then
+    latest=$(date +%Y%m%d%H%M -d @$(stat -c %Z $backup/.backup-latest))
+    if [ -e $backup/.backup-$latest ]; then
+      echo "preexisting $backup/.backup-$latest, removing first"
+      sudo btrfs subvolume delete $backup/.backup-$latest
+    fi
+    echo "move $backup/.backup-latest to $backup/.backup-$latest"
+    sudo mv $backup/.backup-latest $backup/.backup-$latest
+
+    echo "moving new remote backup $backup/.backup-new to $backup/.backup-latest..."
+    sudo mv $backup/.backup-new $backup/.backup-latest
+
+    echo "cleaning out old daily snapshots"
+    for snap in $((ls -da $backup/.backup-$today* || true) | sort -r | tail -n +$((maxdaily+1))); do
+      echo "removing old daily snapshot: '$snap'"
+      echo "sudo btrfs subvolume delete $snap"
+      sudo btrfs subvolume delete $snap
+    done
+
+    echo "cleaning out snapshots older than today, keeping a weeks worth ($keepdaily per day)"
+    for snap in $((ls -da $backup/.backup-2* || true) | sort -r); do
+      name=$(basename $snap)
+      when=$(echo $name | sed 's|\.backup-||g')
+      day=$(echo $when | cut -c1-8)
+      if [ "$day" = "$today" ]; then
+        echo "skip $snap (today)"
+        continue
+      fi
+      k=${keep[$day]}
+      if [ "$k" != "1" ]; then
+        echo "removing snap older than a week: $snap"
+        echo "sudo btrfs subvolume delete $snap"
+        sudo btrfs subvolume delete $snap
+      else
+        for dailysnap in $((ls -da $backup/.backup-$day* || true) | sort -r | tail -n +$((keepdaily+1))); do
+          echo "remove old snap $dailysnap (keeping one per day)"
+          echo "sudo btrfs subvolume delete $dailysnap"
+          sudo btrfs subvolume delete $dailysnap
+        done
+      fi
+    done
+  fi
+}
+
+receive() {
+  backup=$1
+  if [ -e $backup/.backup-new ]; then
+    echo "preexisting $backup/.backup-new, removing before receiving..."
+    sudo btrfs subvolume delete $backup/.backup-new
+  fi
+  echo "sudo btrfs receive \"$backup\""
+  if ! sudo btrfs receive "$backup"; then
+    echo >&2 "error receiving backup"
+    exit 1
+  fi
+  sync
+  cleanup $backup
+}
+
+exists() {
+  backup=$1
+  if test -e "$backup" && test -e "$backup/.backup-latest"; then
+    echo "$backup and $backup/.backup-latest exists"
+    exit 0
+  else
+    echo "$backup and $backup/.backup-latest does not exist"
+    exit 1
+  fi
+}
+
+check() {
+  echo "ok"
+  exit 0
+}
+
+setup() {
+  backup=$1
+  echo "setting up backup '$backup'"
+  echo "sudo mkdir -p \"$(dirname $backup)\""
+  sudo mkdir -p "$(dirname $backup)"
+  echo "sudo btrfs subvolume create \"$backup\""
+  sudo btrfs subvolume create "$backup" || true
+  exit 0
+}
+
+nocommand() {
+  echo >&2 "sorry only receive, exists, check and setup commands are allowed - they all take the destination path"
+  exit 1
+}
+
+case "$cmd" in
+  receive)
+    receive $dest
+    ;;
+  setup)
+    setup $dest
+    ;;
+  exists)
+    exists $dest
+    ;;
+  check)
+    check $dest
+    ;;
+  *)
+    nocommand $dest
+    ;;
+esac

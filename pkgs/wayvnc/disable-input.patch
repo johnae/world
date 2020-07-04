@@ -1,0 +1,199 @@
+From feb11ba680ce0db0777ce4a5c121571021e7ecda Mon Sep 17 00:00:00 2001
+From: John Axel Eriksson <john@insane.se>
+Date: Mon, 23 Mar 2020 20:26:00 +0100
+Subject: [PATCH] Just testing
+
+---
+ src/main.c | 120 ++++++++++++++++++++++++++---------------------------
+ 1 file changed, 60 insertions(+), 60 deletions(-)
+
+diff --git a/src/main.c b/src/main.c
+index 09f3539..85d0552 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -69,8 +69,8 @@ struct wayvnc {
+ 	struct cfg cfg;
+ 
+ 	struct zxdg_output_manager_v1* xdg_output_manager;
+-	struct zwp_virtual_keyboard_manager_v1* keyboard_manager;
+-	struct zwlr_virtual_pointer_manager_v1* pointer_manager;
++	//struct zwp_virtual_keyboard_manager_v1* keyboard_manager;
++	//struct zwlr_virtual_pointer_manager_v1* pointer_manager;
+ 
+ 	int pointer_manager_version;
+ 
+@@ -160,14 +160,14 @@ static void registry_add(void* data, struct wl_registry* registry,
+ 		return;
+ 	}
+ 
+-	if (strcmp(interface, zwlr_virtual_pointer_manager_v1_interface.name) == 0) {
+-		self->pointer_manager =
+-			wl_registry_bind(registry, id,
+-					 &zwlr_virtual_pointer_manager_v1_interface,
+-					 version);
+-		self->pointer_manager_version = version;
+-		return;
+-	}
++	//if (strcmp(interface, zwlr_virtual_pointer_manager_v1_interface.name) == 0) {
++	//	self->pointer_manager =
++	//		wl_registry_bind(registry, id,
++	//				 &zwlr_virtual_pointer_manager_v1_interface,
++	//				 version);
++	//	self->pointer_manager_version = version;
++	//	return;
++	//}
+ 
+ 	if (strcmp(interface, wl_seat_interface.name) == 0) {
+ 		struct wl_seat* wl_seat =
+@@ -185,13 +185,13 @@ static void registry_add(void* data, struct wl_registry* registry,
+ 		return;
+ 	}
+ 
+-	if (strcmp(interface, zwp_virtual_keyboard_manager_v1_interface.name) == 0) {
+-		self->keyboard_manager =
+-			wl_registry_bind(registry, id,
+-			                 &zwp_virtual_keyboard_manager_v1_interface,
+-			                 1);
+-		return;
+-	}
++	//if (strcmp(interface, zwp_virtual_keyboard_manager_v1_interface.name) == 0) {
++	//	self->keyboard_manager =
++	//		wl_registry_bind(registry, id,
++	//		                 &zwp_virtual_keyboard_manager_v1_interface,
++	//		                 1);
++	//	return;
++	//}
+ }
+ 
+ static void registry_remove(void* data, struct wl_registry* registry,
+@@ -229,12 +229,12 @@ void wayvnc_destroy(struct wayvnc* self)
+ 
+ 	wl_shm_destroy(self->screencopy_backend.wl_shm);
+ 
+-	zwp_virtual_keyboard_v1_destroy(self->keyboard_backend.virtual_keyboard);
+-	zwp_virtual_keyboard_manager_v1_destroy(self->keyboard_manager);
+-	keyboard_destroy(&self->keyboard_backend);
++	//zwp_virtual_keyboard_v1_destroy(self->keyboard_backend.virtual_keyboard);
++	//zwp_virtual_keyboard_manager_v1_destroy(self->keyboard_manager);
++	//keyboard_destroy(&self->keyboard_backend);
+ 
+-	zwlr_virtual_pointer_manager_v1_destroy(self->pointer_manager);
+-	pointer_destroy(&self->pointer_backend);
++	//zwlr_virtual_pointer_manager_v1_destroy(self->pointer_manager);
++	//pointer_destroy(&self->pointer_backend);
+ 
+ 	if (self->screencopy_backend.manager)
+ 		zwlr_screencopy_manager_v1_destroy(self->screencopy_backend.manager);
+@@ -282,15 +282,15 @@ static int init_wayland(struct wayvnc* self)
+ 
+ 	init_xdg_outputs(self);
+ 
+-	if (!self->pointer_manager) {
+-		log_error("Virtual Pointer protocol not supported by compositor.\n");
+-		goto failure;
+-	}
++	//if (!self->pointer_manager) {
++	//	log_error("Virtual Pointer protocol not supported by compositor.\n");
++	//	goto failure;
++	//}
+ 
+-	if (!self->keyboard_manager) {
+-		log_error("Virtual Keyboard protocol not supported by compositor.\n");
+-		goto failure;
+-	}
++	//if (!self->keyboard_manager) {
++	//	log_error("Virtual Keyboard protocol not supported by compositor.\n");
++	//	goto failure;
++	//}
+ 
+ 	wl_display_dispatch(self->display);
+ 	wl_display_roundtrip(self->display);
+@@ -379,19 +379,19 @@ uint32_t fourcc_from_gl_format(uint32_t format)
+ 	return DRM_FORMAT_INVALID;
+ }
+ 
+-static void on_pointer_event(struct nvnc_client* client, uint16_t x, uint16_t y,
+-			     enum nvnc_button_mask button_mask)
+-{
+-	// TODO: Have a seat per client
+-
+-	struct nvnc* nvnc = nvnc_get_server(client);
+-	struct wayvnc* wayvnc = nvnc_get_userdata(nvnc);
+-
+-	uint32_t xfx = 0, xfy = 0;
+-	output_transform_coord(wayvnc->selected_output, x, y, &xfx, &xfy);
+-
+-	pointer_set(&wayvnc->pointer_backend, xfx, xfy, button_mask);
+-}
++//static void on_pointer_event(struct nvnc_client* client, uint16_t x, uint16_t y,
++//			     enum nvnc_button_mask button_mask)
++//{
++//	// TODO: Have a seat per client
++//
++//	struct nvnc* nvnc = nvnc_get_server(client);
++//	struct wayvnc* wayvnc = nvnc_get_userdata(nvnc);
++//
++//	uint32_t xfx = 0, xfy = 0;
++//	output_transform_coord(wayvnc->selected_output, x, y, &xfx, &xfy);
++//
++//	pointer_set(&wayvnc->pointer_backend, xfx, xfy, button_mask);
++//}
+ 
+ static void on_key_event(struct nvnc_client* client, uint32_t symbol,
+                          bool is_pressed)
+@@ -437,11 +437,11 @@ int init_nvnc(struct wayvnc* self, const char* addr, uint16_t port)
+ 		nvnc_enable_auth(self->nvnc, self->cfg.private_key_file,
+ 		                 self->cfg.certificate_file, on_auth, self);
+ 
+-	if (self->pointer_manager)
+-		nvnc_set_pointer_fn(self->nvnc, on_pointer_event);
++	//if (self->pointer_manager)
++	//	nvnc_set_pointer_fn(self->nvnc, on_pointer_event);
+ 
+-	if (self->keyboard_backend.virtual_keyboard)
+-		nvnc_set_key_fn(self->nvnc, on_key_event);
++	//if (self->keyboard_backend.virtual_keyboard)
++	//	nvnc_set_key_fn(self->nvnc, on_key_event);
+ 
+ 	return 0;
+ }
+@@ -767,23 +767,23 @@ int main(int argc, char* argv[])
+ 	self.dmabuf_backend.fc.wl_output = out->wl_output;
+ 	self.screencopy_backend.frame_capture.wl_output = out->wl_output;
+ 
+-	self.keyboard_backend.virtual_keyboard =
+-		zwp_virtual_keyboard_manager_v1_create_virtual_keyboard(
+-			self.keyboard_manager, self.selected_seat->wl_seat);
++  //	self.keyboard_backend.virtual_keyboard =
++  //		zwp_virtual_keyboard_manager_v1_create_virtual_keyboard(
++  //			self.keyboard_manager, self.selected_seat->wl_seat);
+ 
+-	keyboard_init(&self.keyboard_backend, self.kb_layout);
++	//keyboard_init(&self.keyboard_backend, self.kb_layout);
+ 
+-	self.pointer_backend.vnc = self.nvnc;
+-	self.pointer_backend.output = self.selected_output;
++	//self.pointer_backend.vnc = self.nvnc;
++	//self.pointer_backend.output = self.selected_output;
+ 
+-	self.pointer_backend.pointer = self.pointer_manager_version == 2
+-		? zwlr_virtual_pointer_manager_v1_create_virtual_pointer_with_output(
+-			self.pointer_manager, self.selected_seat->wl_seat,
+-			out->wl_output)
+-		: zwlr_virtual_pointer_manager_v1_create_virtual_pointer(
+-			self.pointer_manager, self.selected_seat->wl_seat);
++	//self.pointer_backend.pointer = self.pointer_manager_version == 2
++	//	? zwlr_virtual_pointer_manager_v1_create_virtual_pointer_with_output(
++	//		self.pointer_manager, self.selected_seat->wl_seat,
++	//		out->wl_output)
++	//	: zwlr_virtual_pointer_manager_v1_create_virtual_pointer(
++	//		self.pointer_manager, self.selected_seat->wl_seat);
+ 
+-	pointer_init(&self.pointer_backend);
++	//pointer_init(&self.pointer_backend);
+ 
+ 	enum renderer_input_type renderer_input_type =
+ 		fcbackend == FRAME_CAPTURE_BACKEND_DMABUF ?
+-- 
+2.25.1
+

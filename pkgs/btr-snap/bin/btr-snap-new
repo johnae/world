@@ -1,0 +1,27 @@
+#!/bin/sh
+
+self=$(cd $(dirname $0) && pwd)
+
+volume=$1
+snapshot=.snapshot
+new=new
+
+if [ $(stat --format=%i $volume) -ne 256 ]; then
+  echo >&2 "$volume is not a btrfs subvolume, sorry."
+  exit 1
+fi
+
+## just delete the "new" snapshot if we have one
+if [ -e $volume/$snapshot-$new ]; then
+  ## if we have this already we can remove it and
+  ## do another - it should be safe
+  $self/btr-delete $volume/$snapshot-$new
+fi
+
+echo "creating a diff snapshot of $volume at $volume/$snapshot-$new"
+
+btrfs subvolume snapshot -r \
+     $volume \
+     $volume/$snapshot-$new
+
+sync

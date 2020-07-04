@@ -1,0 +1,35 @@
+#!/bin/sh
+
+set -x
+
+self=$(cd $(dirname $0) && pwd)
+
+volume=$1
+shift
+host=$1
+shift
+port=$1
+shift
+sshkey=$1
+shift
+remotedir=$1
+
+hostname=$(hostname)
+snapshot=.snapshot
+new=new
+current=current
+
+noleadingslash_volume=$(echo $volume | sed -s 's|^\/||g')
+
+if [ $(stat --format=%i $volume) -ne 256 ]; then
+  echo >&2 "$volume is not a btrfs subvolume, sorry."
+  exit 1
+fi
+
+## check if there are any backups at all yet at remote - and either do incremental backups (if there are backups) or do an initial send of the whole thing
+if $self/btr-ssh $host $port $sshkey exists $remotedir/$hostname/$noleadingslash_volume; then
+    $self/btr-snap-send-incremental $volume $host $port $sshkey $remotedir
+else
+    $self/btr-snap-send-initial $volume $host $port $sshkey $remotedir
+    $self/btr-snap-send-incremental $volume $host $port $sshkey $remotedir
+fi

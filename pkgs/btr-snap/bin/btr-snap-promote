@@ -1,0 +1,34 @@
+#!/bin/sh
+
+self=$(cd $(dirname $0) && pwd)
+
+volume=$1
+snapshot=.snapshot
+new=new
+current=current
+
+if [ $(stat --format=%i $volume) -ne 256 ]; then
+  echo >&2 "$volume is not a btrfs subvolume, sorry."
+  exit 1
+fi
+
+current_ts=$(date +%Y%m%d%H%M%S -d \
+                 @$(stat -c %Z $volume/$snapshot-$current) \
+         )
+
+if [ -e $volume/$snapshot-$current_ts ]; then
+    ## ensure we don't have a collision
+    ## it doesn't matter as the diff was made
+    ## between current and new
+    $self/btr-delete $volume/$snapshot-$current_ts
+fi
+
+mv \
+     $volume/$snapshot-$current \
+     $volume/$snapshot-$current_ts
+
+mv \
+     $volume/$snapshot-$new \
+     $volume/$snapshot-$current
+
+sync
