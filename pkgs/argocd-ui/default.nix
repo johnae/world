@@ -1,6 +1,6 @@
-{ stdenv, git, cacert, nodejs-10_x, yarn, argocd }:
+{ stdenv, git, cacert, nodejs-12_x, yarn, argocd }:
 let
-  nodejs = nodejs-10_x;
+  nodejs = nodejs-12_x;
   yarnOverridden = yarn.override { inherit nodejs; };
   src = "${argocd.src}/ui";
 in
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   inherit src;
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "0glglkm8fn6nskrs7id4bah7x201ill34gq7bfzj74sh3ldh2cmf";
+  outputHash = "sha256-PlmH8iPlVkeKYgqNzgH+tzRAxqLYGEE8/nIBu2qqHUQ=";
   buildInputs = [ git cacert nodejs yarn ];
   buildPhase = ''
     export HOME=$NIX_BUILD_TOP/fake_home
