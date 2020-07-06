@@ -108,6 +108,11 @@
 
       inherit nixosConfigurations;
 
+      packages.x86_64-linux.nixpkgs = nixpkgsFor."x86_64-linux";
+
+      ## for easy access to overlays which we might want to build in ci for example
+      overlayedPackages = (import ./overlays/pkgs.nix) pkgs pkgs;
+
       overlays =
         let
           overlayDir = ./overlays;
