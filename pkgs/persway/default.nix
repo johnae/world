@@ -7,7 +7,7 @@ buildRustPackage rec {
 
   src = inputs.persway;
 
-  cargoSha256 = "03p9gl9l4p6cj7jggdiiv00pfpmm88zwj2vc39a6ccrv46hqq5qf";
+  cargoSha256 = "sha256-NiYQGDyIYE2NjWFoZcGrTtq/vTzuA/iWDJNtbT9qKgU=";
 
   outputs = [ "out" ];
 
