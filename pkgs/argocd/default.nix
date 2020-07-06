@@ -1,8 +1,8 @@
 { stdenv, lib, buildGoModule, packr, inputs }:
 buildGoModule rec {
   pname = "argocd";
-  commit = inputs.argo-cd.version;
-  version = inputs.argo-cd.version;
+  commit = inputs.argo-cd.rev;
+  version = inputs.argo-cd.rev;
 
   src = inputs.argo-cd;
 
