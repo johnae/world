@@ -30,7 +30,7 @@ let
     shift
     path=.#nixosConfigurations."$host".config.system.build.toplevel
     echo Building host "$host" 1>&2
-    ${nixpkgs.nixFlakes}/bin/nix build "$path" "$@" 1>&2
+    ${nixpkgs.nixFlakes}/bin/nix build --no-link "$path" "$@" 1>&2
     ${nixpkgs.nixFlakes}/bin/nix path-info "$path"
   '';
 
@@ -39,7 +39,7 @@ let
     shift
     path=.#nixpkgs."$pkg"
     echo Building package "$pkg" 1>&2
-    ${nixpkgs.nixFlakes}/bin/nix build "$path" "$@" 1>&2
+    ${nixpkgs.nixFlakes}/bin/nix build --no-link "$path" "$@" 1>&2
     ${nixpkgs.nixFlakes}/bin/nix path-info "$path"
   '';
 
