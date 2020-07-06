@@ -111,7 +111,7 @@
       packages.x86_64-linux.nixpkgs = nixpkgsFor."x86_64-linux";
 
       ## for easy access to overlays which we might want to build in ci for example
-      overlayedPackages = (import ./overlays/pkgs.nix) pkgs pkgs;
+      overlayAttrs = pkgs.lib.filterAttrs (_: pkgs.lib.isDerivation) ((import ./overlays/pkgs.nix) pkgs pkgs);
 
       overlays =
         let
