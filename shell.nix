@@ -30,7 +30,8 @@ let
     shift
     path=.#nixosConfigurations."$host".config.system.build.toplevel
     echo Building host "$host" 1>&2
-    ${nixpkgs.nixFlakes}/bin/nix build "$path" "$@"
+    ${nixpkgs.nixFlakes}/bin/nix build "$path" "$@" 1>&2
+    ${nixpkgs.nixFlakes}/bin/nix path-info "$path"
   '';
 
   world-package = nixpkgs.writeStrictShellScriptBin "world-package" ''
@@ -38,7 +39,8 @@ let
     shift
     path=.#nixpkgs."$pkg"
     echo Building package "$pkg" 1>&2
-    ${nixpkgs.nixFlakes}/bin/nix build "$path" "$@"
+    ${nixpkgs.nixFlakes}/bin/nix build "$path" "$@" 1>&2
+    ${nixpkgs.nixFlakes}/bin/nix path-info "$path"
   '';
 
   world-update = nixpkgs.writeStrictShellScriptBin "world-update" ''
@@ -58,8 +60,7 @@ let
       sudo cp -a "$roottmp"/* /
     fi
 
-    ${world-build}/bin/world-build "$host" "$@"
-    pathToConfig="$(readlink result)"
+    pathToConfig="$(${world-build}/bin/world-build "$host" "$@")"
 
     echo Updating system profile
     sudo -E nix-env -p "$profile" --set "$pathToConfig"
@@ -86,8 +87,7 @@ let
     fi
 
     profile=/nix/var/nix/profiles/system
-    ${world-build}/bin/world-build "$host" "$@"
-    pathToConfig="$(readlink result)"
+    pathToConfig="$(${world-build}/bin/world-build "$host" "$@")"
 
     export NIX_SSHOPTS="-T -o RemoteCommand=none"
 
