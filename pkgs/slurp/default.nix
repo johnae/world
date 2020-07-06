@@ -13,7 +13,7 @@
 , inputs
 }:
 stdenv.mkDerivation rec {
-  name = "${inputs.slurp.repo}-${version}";
+  name = "slurp-${version}";
   version = inputs.slurp.rev;
 
   src = inputs.slurp;
