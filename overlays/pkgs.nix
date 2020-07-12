@@ -44,7 +44,6 @@ final: prev:
   wayvnc = prev.callPackage ../pkgs/wayvnc { };
   aml = prev.callPackage ../pkgs/aml { };
   neatvnc = prev.callPackage ../pkgs/neatvnc { };
-  pipewire = prev.callPackage ../pkgs/pipewire { };
 
   persway = prev.callPackage ../pkgs/persway { };
 
