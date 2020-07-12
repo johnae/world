@@ -1,41 +1,4 @@
 { config, pkgs, lib, ... }:
-
-## example
-#  environment.state."/keep" = {
-#    directories = [
-#      "/var/lib/bluetooth"
-#      "/var/lib/iwd"
-#      "/var/lib/wireguard"
-#      "/var/lib/systemd/coredump"
-#      "/root"
-#    ];
-#    files = [
-#      "/etc/machine-id"
-#    ];
-#    users.john.directories = [
-#      "/home/john/Downloads"
-#      "/home/john/Documents"
-#      "/home/john/Development"
-#      "/home/john/Photos"
-#      "/home/john/Sync"
-#      "/home/john/.gnupg/private-keys-v1.d"
-#      "/home/john/.local/share/direnv"
-#      "/home/john/.local/share/password-store"
-#      "/home/john/.mail"
-#      "/home/john/.cargo"
-#      "/home/john/.cache/mu"
-#    ];
-#    users.john.files = [
-#      "/home/john/.gnupg/pubring.kbx"
-#      "/home/john/.gnupg/sshcontrol"
-#      "/home/john/.gnupg/trustdb.gpg"
-#      "/home/john/.gnupg/random_seed"
-#      "/home/john/.kube/config"
-#      "/home/john/.ssh/known_hosts"
-#      "/home/john/.spotify_token_cache.json"
-#      "/home/john/.local/share/fish/fish_history"
-#    ];
-#  };
 let
   inherit (lib.types) listOf attrsOf str int submodule;
   inherit (lib) mkOption stringAfter flatten
@@ -64,18 +27,40 @@ let
     user = mkOption {
       type = str;
       default = user;
+      description = ''
+        The owner of the director(ies).
+      '';
+      example = "bob";
     };
     group = mkOption {
       type = str;
       default = group;
+      description = ''
+        The group of the director(ies).
+      '';
+      example = "users";
     };
     directories = mkOption {
       type = listOf str;
       default = [ ];
+      description = ''
+        A list of paths to directories which will be bind mounted from the given state store.
+      '';
+      example = [
+        "/var/log"
+        "/var/lib/iwd"
+        "/root"
+      ];
     };
     files = mkOption {
       type = listOf str;
       default = [ ];
+      description = ''
+        A list of paths to files which will be linked from the given state store.
+      '';
+      example = [
+        "/etc/machine-id"
+      ];
     };
   };
 
