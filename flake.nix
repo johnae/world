@@ -82,6 +82,8 @@
         let n = inputs.nixpkgs.lib.removeSuffix ".nix" name;
         in inputs.nixpkgs.lib.nameValuePair n (systemConfig n (./hosts + "/${name}"));
 
+      toInstallerConfiguration = name: conf:
+        inputs.nixpkgs.lib.nameValuePair name (installerConfig name conf.config.system.build.toplevel);
 
       systemConfig = hostName: configuration:
         inputs.nixpkgs.lib.nixosSystem {
@@ -99,14 +101,33 @@
             ];
         };
 
+      installerConfig = hostName: systemClosure:
+        inputs.nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit hostName inputs pkgs system systemClosure;
+          };
+          modules =
+            [
+              { nixpkgs = { inherit pkgs; }; }
+              ./bootstrap/installer.nix
+            ];
+        };
+
       nixosConfigurations =
         inputs.nixpkgs.lib.mapAttrs'
           toNixosConfiguration
           hosts;
+
+      isoConfigurations =
+        inputs.nixpkgs.lib.mapAttrs'
+          toInstallerConfiguration
+          self.nixosConfigurations;
     in
     {
 
       inherit nixosConfigurations;
+      inherit isoConfigurations;
 
       packages.x86_64-linux.nixpkgs = nixpkgsFor."x86_64-linux";
 
