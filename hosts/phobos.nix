@@ -153,7 +153,7 @@ with lib; {
   programs.sway.enable = true;
   home-manager.useUserPackages = true;
   home-manager.users."${userName}" = { ... }: {
-    imports = [ ../home/home.nix ];
+    imports = [ ((import ../home/home.nix) userName) ];
 
     wayland.windowManager.sway.config.output = {
       "eDP-1" = {

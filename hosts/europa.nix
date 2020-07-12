@@ -194,7 +194,7 @@ with lib; {
   home-manager.useUserPackages = true;
   home-manager.users."${userName}" = { ... }: {
     imports = [
-      ../home/home.nix
+      ((import ../home/home.nix) userName)
     ];
 
     wayland.windowManager.sway.config.output = {
