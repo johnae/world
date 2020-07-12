@@ -83,6 +83,7 @@ in
   home.sessionVariables = rec {
     EDITOR = "emacsclient -t -a=";
     VISUAL = EDITOR;
+    KUBECONFIG = "~/.kube/config";
   };
 
   xsession.pointerCursor = {
