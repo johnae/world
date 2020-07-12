@@ -93,6 +93,7 @@ with lib; {
         "/home/${userName}/.mail"
         "/home/${userName}/.cargo"
         "/home/${userName}/.cache/mu"
+        "/home/${userName}/.mozilla/firefox/default"
       ];
       files = [
         "/home/${userName}/.gnupg/pubring.kbx"
