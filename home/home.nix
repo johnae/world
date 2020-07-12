@@ -1,13 +1,5 @@
-userName:
 { pkgs, config, lib, options }:
 let
-  chromium-dev-ozone = import (
-    builtins.fetchTarball {
-      url =
-        "https://github.com/colemickens/nixpkgs-chromium/archive/6b6ba812f3ba52922f668e48684ced76883e775c.tar.gz";
-      sha256 = "0d5gmcnalh3x154mg40cx70d48a9nvn5x8kkcp2xxp0cha6hqh96";
-    }
-  );
   importsFrom = with lib; dir: mapAttrsToList
     (
       name: _: dir + "/${name}"
@@ -17,6 +9,7 @@ let
         (name: _: hasSuffix ".nix" name)
         (builtins.readDir dir)
     );
+  home = config.home;
 in
 {
   #nixpkgs.config = import ../nix/nixpkgs-config.nix;
@@ -84,7 +77,7 @@ in
   home.sessionVariables = rec {
     EDITOR = "emacsclient -t -a=";
     VISUAL = EDITOR;
-    KUBECONFIG = "/home/${userName}/.kube/config";
+    KUBECONFIG = "/home/${home.username}/.kube/config";
   };
 
   xsession.pointerCursor = {

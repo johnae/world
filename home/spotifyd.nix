@@ -1,5 +1,7 @@
 { pkgs, config, lib, options }:
-
+let
+  home = config.home;
+in
 {
   services.spotifyd = {
     enable = true;
@@ -10,7 +12,7 @@
         backend = "pulseaudio";
         mixer = "PCM";
         volume-control = "alsa";
-        device_name = lib.removeSuffix "\n" (builtins.readFile /etc/hostname);
+        device_name = home.extraConfig.hostname;
         bitrate = "320";
         cache_path = "${builtins.getEnv "HOME"}/.cache/spotifyd";
         volume-normalisation = "true";

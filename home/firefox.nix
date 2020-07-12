@@ -1,18 +1,13 @@
 { pkgs, config, lib, options }:
 let
-  firefox-nightly = pkgs.wrapFirefox
-    pkgs.latest.firefox-nightly-bin { browserName = "firefox"; };
-  #firefox-nightly = pkgs.wrapFirefox
-  #  (pkgs.firejailed {
-  #    package = pkgs.latest.firefox-nightly-bin;
-  #    ignore = [ "nou2f" ];
-  #  }
-  #  ) { browserName = "firefox"; };
+  firefox-beta = pkgs.wrapFirefox
+    pkgs.firefox-beta-bin
+    { browserName = "firefox"; };
 in
 {
   programs.firefox = {
     enable = true;
-    package = firefox-nightly;
+    package = firefox-beta;
     profiles = {
       default = {
         settings = {

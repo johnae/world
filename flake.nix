@@ -27,7 +27,6 @@
     i3status-rust = { url = "github:greshake/i3status-rust"; flake = false; };
     mako = { url = "github:emersion/mako"; flake = false; };
     neatvnc = { url = "github:any1/neatvnc"; flake = false; };
-    nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     persway = { url = "github:johnae/persway"; flake = false; };
     slurp = { url = "github:emersion/slurp"; flake = false; };
     spotifyd = { url = "github:spotifyd/spotifyd"; flake = false; };
@@ -42,6 +41,7 @@
     wl-clipboard = { url = "github:bugaevc/wl-clipboard"; flake = false; };
     xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr"; flake = false; };
     buildkite = { url = "github:buildkite/agent/v3.22.1"; flake = false; };
+    nixpkgs-chromium = { url = "github:colemickens/nixpkgs-chromium"; flake = false; };
     #rust-analyzer = {
     #  type = "file";
     #  url = "https://github.com/rust-analyzer/rust-analyzer/releases/download/2020-06-15/rust-analyzer-linux";
@@ -143,7 +143,19 @@
         (pathsToImportedAttrs overlayPaths) // {
           inputs = (final: prev: { inherit inputs; });
           emacs-overlay = inputs.emacs-overlay.overlay;
-          mozilla = import inputs.nixpkgs-mozilla;
+          chromium-dev-ozone =
+            let
+              pkgset = import (import "${inputs.nixpkgs-chromium}/nixpkgs/nixos-unstable") {
+                localSystem = { inherit system; };
+                overlays = [
+                  (final: prev: {
+                    inherit (final.callPackages "${inputs.nixpkgs-chromium}/pkgs/chromium-git" { })
+                      chromium-dev-ozone;
+                  })
+                ];
+              };
+            in
+            (final: prev: { inherit (pkgset) chromium-dev-ozone; });
         };
 
       devShell = forAllSystems

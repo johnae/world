@@ -262,6 +262,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-chromium": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1588114456,
+        "narHash": "sha256-JkEMjYIM3N7FZXOiXuy2SSHSwOkMkFdJCX1AqiyrrzQ=",
+        "owner": "colemickens",
+        "repo": "nixpkgs-chromium",
+        "rev": "6b6ba812f3ba52922f668e48684ced76883e775c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "repo": "nixpkgs-chromium",
+        "type": "github"
+      }
+    },
     "nixpkgs-fmt": {
       "flake": false,
       "locked": {
@@ -275,22 +291,6 @@
       "original": {
         "owner": "nix-community",
         "repo": "nixpkgs-fmt",
-        "type": "github"
-      }
-    },
-    "nixpkgs-mozilla": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1594136919,
-        "narHash": "sha256-+fFPYJIjSKDaJDPpohQ+iDF3pJVar7jk83Oo4wsNDeg=",
-        "owner": "mozilla",
-        "repo": "nixpkgs-mozilla",
-        "rev": "18cd4300e9bf61c7b8b372f07af827f6ddc835bb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mozilla",
-        "repo": "nixpkgs-mozilla",
         "type": "github"
       }
     },
@@ -328,8 +328,8 @@
         "netns-exec": "netns-exec",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-chromium": "nixpkgs-chromium",
         "nixpkgs-fmt": "nixpkgs-fmt",
-        "nixpkgs-mozilla": "nixpkgs-mozilla",
         "persway": "persway",
         "secrets": "secrets",
         "slurp": "slurp",
