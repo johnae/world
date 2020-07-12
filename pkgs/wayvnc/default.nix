@@ -10,6 +10,7 @@
 , pixman
 , aml
 , libglvnd
+, mesa
 , neatvnc
 , libX11
 , libdrm
@@ -39,6 +40,7 @@ stdenv.mkDerivation {
     neatvnc
     libX11
     libdrm
+    mesa
   ];
 
   enableParallelBuilding = true;
