@@ -20,7 +20,7 @@ let
     };
 
     services.rbsnapper = rec {
-      description = "Snapshot and remote backup of /home to ${cfg.destination}";
+      description = "Snapshot and remote backup of ${cfg.volume} to ${cfg.destination}";
 
       preStart = with pkgs; ''
         ${udev}/bin/systemctl set-environment \
@@ -30,39 +30,39 @@ let
       script = with pkgs; ''
         ${udev}/bin/systemd-inhibit \
           --what="idle:shutdown:sleep" \
-          --who="btr-snap" --why="Backing up /home" --mode=block \
-            ${btr-snap}/bin/btr-snap /home \
+          --who="btr-snap" --why="Backing up ${cfg.volume}" --mode=block \
+            ${btr-snap}/bin/btr-snap ${cfg.volume} \
               ${cfg.destination} ${cfg.port} ${cfg.sshKey}
       '';
 
       postStop = with pkgs; ''
-        if [ -e /run/user/1337/env-vars ]; then
-           source /run/user/1337/env-vars
-        fi
-        PID="$(${procps}/bin/pgrep -u 1337 sway | head -1)"
-        if [ -n "$PID" ]; then
-          USER_PROCESS_ENV=/proc/"$PID"/environ
-          if cat "$USER_PROCESS_ENV" | ${gnugrep}/bin/egrep -z DBUS_SESSION_BUS_ADDRESS; then
-             export "$(cat "$USER_PROCESS_ENV" | ${gnugrep}/bin/egrep -z DBUS_SESSION_BUS_ADDRESS)"
+          if [ -e /run/user/1337/env-vars ]; then
+             source /run/user/1337/env-vars
           fi
-        fi
-        export DISPLAY=:0
-        ENDED_AT="$(${coreutils}/bin/date +%s)"
-        DURATION="$((ENDED_AT - STARTED_AT))"
-        NOTIFY="${notify-desktop}/bin/notify-desktop"
-        if [ "$EXIT_STATUS" = "0" ]; then
-           MSG="${pango { font_weight = "bold"; } "Completed"} ${
-      toLower description
-      } in $DURATION"s.
-           ${busybox}/bin/su "$USER" -s /bin/sh -c \
-             "$NOTIFY -i emblem-insync-syncing \"Backup\" \"$MSG\""
-        else
-           MSG="${pango { font_weight = "bold"; } "Failed"} ${
-      toLower description
-      } after $DURATION"s.
-           ${busybox}/bin/su "$USER" -s /bin/sh -c \
-             "$NOTIFY -i dialog-error -u critical \"Backup\" \"$MSG\""
-        fi;
+          PID="$(${procps}/bin/pgrep -u 1337 sway | head -1)"
+          if [ -n "$PID" ]; then
+            USER_PROCESS_ENV=/proc/"$PID"/environ
+            if cat "$USER_PROCESS_ENV" | ${gnugrep}/bin/egrep -z DBUS_SESSION_BUS_ADDRESS; then
+               export "$(cat "$USER_PROCESS_ENV" | ${gnugrep}/bin/egrep -z DBUS_SESSION_BUS_ADDRESS)"
+            fi
+          fi
+          export DISPLAY=:0
+          ENDED_AT="$(${coreutils}/bin/date +%s)"
+          DURATION="$((ENDED_AT - STARTED_AT))"
+          NOTIFY="${notify-desktop}/bin/notify-desktop"
+          if [ "$EXIT_STATUS" = "0" ]; then
+             MSG="${pango { font_weight = "bold"; } "Completed"} ${
+        toLower description
+        } in $DURATION"s.
+             ${busybox}/bin/su "$USER" -s /bin/sh -c \
+               "$NOTIFY -i emblem-insync-syncing \"Backup\" \"$MSG\""
+          else
+             MSG="${pango { font_weight = "bold"; } "Failed"} ${
+        toLower description
+        } after $DURATION"s.
+             ${busybox}/bin/su "$USER" -s /bin/sh -c \
+               "$NOTIFY -i dialog-error -u critical \"Backup\" \"$MSG\""
+          fi;
       '';
 
     };
@@ -80,6 +80,15 @@ in
       example = "user@example.com";
       description = ''
         SSH user and host for connecting to remote backup storage.
+      '';
+    };
+
+    volume = mkOption {
+      type = types.str;
+      example = "/home";
+      default = "/home";
+      description = ''
+        The btrfs subvolume to snapshot and incrementally backup to remote
       '';
     };
 
@@ -104,7 +113,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd = mkRbSnapper { inherit (cfg) destination port sshKey; };
+    systemd = mkRbSnapper { };
   };
 
 }

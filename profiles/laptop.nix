@@ -95,6 +95,7 @@ in
   services.disable-usb-wakeup.enable = true;
   services.pasuspender.enable = true;
   services.rbsnapper.enable = true;
+  services.rbsnapper.volume = "/keep/home/john";
 
   fonts.fonts = with pkgs; [
     google-fonts

@@ -26,6 +26,7 @@ in
 with lib; {
   imports = [
     ../profiles/laptop.nix
+    ../modules/state.nix
     xps9370
     secrets
   ];
@@ -57,16 +58,52 @@ with lib; {
     };
   };
 
-  boot.btrfsCleanBoot = {
-    enable = true;
-    wipe = [ "@" "@var" ];
-    keep = [
+  system.activationScripts.preStateSetup = ''
+    [ -d "/keep/home" ] || ${pkgs.btrfsProgs}/bin/btrfs sub create /keep/home
+    [ -d "/keep/home/${userName}" ] || ${pkgs.btrfsProgs}/bin/btrfs sub create /keep/home/${userName}
+    [ -d "/keep/home/${userName}/Downloads" ] || ${pkgs.btrfsProgs}/bin/btrfs sub create /keep/home/${userName}/Downloads
+    chown ${builtins.toString secrets.users.extraUsers."${userName}".uid}:100 /keep/home/${userName}
+    chown ${builtins.toString secrets.users.extraUsers."${userName}".uid}:100 /keep/home/${userName}/Downloads
+  '';
+
+  environment.state."/keep" = {
+    directories = [
+      "/var/log"
       "/var/lib/bluetooth"
       "/var/lib/iwd"
       "/var/lib/wireguard"
-      "/var/lib/systemd"
+      "/var/lib/systemd/coredump"
       "/root"
     ];
+    files = [
+      "/etc/machine-id"
+    ];
+    users.${userName} = {
+      directories = [
+        "/home/${userName}/Downloads"
+        "/home/${userName}/Documents"
+        "/home/${userName}/Development"
+        "/home/${userName}/Photos"
+        "/home/${userName}/Pictures"
+        "/home/${userName}/Sync"
+        "/home/${userName}/.gnupg/private-keys-v1.d"
+        "/home/${userName}/.local/share/direnv"
+        "/home/${userName}/.local/share/password-store"
+        "/home/${userName}/.local/share/fish"
+        "/home/${userName}/.mail"
+        "/home/${userName}/.cargo"
+        "/home/${userName}/.cache/mu"
+      ];
+      files = [
+        "/home/${userName}/.gnupg/pubring.kbx"
+        "/home/${userName}/.gnupg/sshcontrol"
+        "/home/${userName}/.gnupg/trustdb.gpg"
+        "/home/${userName}/.gnupg/random_seed"
+        "/home/${userName}/.kube/config"
+        "/home/${userName}/.ssh/known_hosts"
+        "/home/${userName}/.spotify_token_cache.json"
+      ];
+    };
   };
 
   environment.systemPackages = [
@@ -155,7 +192,9 @@ with lib; {
 
   home-manager.useUserPackages = true;
   home-manager.users."${userName}" = { ... }: {
-    imports = [ ../home/home.nix ];
+    imports = [
+      ../home/home.nix
+    ];
 
     wayland.windowManager.sway.config.output = {
       "eDP-1" = {
@@ -174,23 +213,9 @@ with lib; {
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-label/root";
-    fsType = "btrfs";
-    options = [ "subvol=@" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
-  };
-
-  fileSystems."/home" = {
-    device = "/dev/disk/by-label/root";
-    fsType = "btrfs";
-    options =
-      [ "subvol=@home" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
-  };
-
-  fileSystems."/var" = {
-    device = "/dev/disk/by-label/root";
-    fsType = "btrfs";
-    options =
-      [ "subvol=@var" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
+    device = "none";
+    fsType = "tmpfs";
+    options = [ "defaults" "size=2G" "mode=755" ];
   };
 
   fileSystems."/nix" = {
@@ -203,6 +228,7 @@ with lib; {
   fileSystems."/keep" = {
     device = "/dev/disk/by-label/root";
     fsType = "btrfs";
+    neededForBoot = true;
     options =
       [ "subvol=@keep" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
   };
