@@ -14,10 +14,11 @@ let
       Hello, world! Here's some things to do:
 
         help                                 -  this help output
-        build <host>                         -  build the given host (you'll find the result in ./result)
+        build <host>                         -  build the given host
+        installer <host>                     -  build an iso image installer for the given host
         update                               -  update the current host (first build it, then update the profile and switch to new config)
         update-remote <host> [reboot]        -  update the given remote host (first build it, then update the profile remotely and switch to new config and maybe reboot)
-        package <package>                    -  build a package available under nixpkgs (includes overlays, you'll find the result in ./result)
+        package <package>                    -  build a package available under nixpkgs
         update-pkgs                          -  update all packages (except those outside flake control)
         update-bin-pkg <pkgpath> <repo> <dlname> [version]
                                              -  updates a binary package, eg. one that is precompiled generally,
@@ -32,6 +33,46 @@ let
     echo Building host "$host" 1>&2
     ${nixpkgs.nixFlakes}/bin/nix build --no-link "$@" "$path" 1>&2
     ${nixpkgs.nixFlakes}/bin/nix path-info "$@" "$path"
+  '';
+
+  world-installer = nixpkgs.writeStrictShellScriptBin "world-installer" ''
+    host="$1"
+    shift
+    path=.#isoConfigurations."$host".config.system.build.isoImage
+    echo Building iso image for host "$host" 1>&2
+    ${nixpkgs.nixFlakes}/bin/nix build --no-link "$@" "$path" 1>&2
+    ${nixpkgs.nixFlakes}/bin/nix path-info "$@" "$path"
+  '';
+
+  world-vm-installer = nixpkgs.writeStrictShellScriptBin "world-vm-installer" ''
+    export PATH=${nixpkgs.qemu}/bin:${nixpkgs.e2fsprogs}/bin:$PATH
+    host="$1"
+    shift
+    disk="$host"-qemu.img
+    if [ -e "$disk" ]; then
+      echo Booting system from "$disk"
+      qemu-system-x86_64 -enable-kvm -smp 2 -m 1024 -hda "$disk" \
+         -drive if=pflash,format=raw,readonly,file=${nixpkgs.OVMF.fd}/FV/OVMF_CODE.fd \
+         -drive if=pflash,format=raw,readonly,file=${nixpkgs.OVMF.fd}/FV/OVMF_VARS.fd \
+         -smbios type=2 \
+         -net user,hostfwd=tcp::10022-:22 -net nic
+    else
+      if [ ! -e boot.iso ]; then
+        isoDrv="$(${world-installer}/bin/world-installer "$host" "$@")"
+        isoPath="$isoDrv/iso/nixos-$(echo "$isoDrv" | awk -F'nixos-' '{print $2}')"
+        ln -s "$isoPath" boot.iso
+      else
+        isoPath=boot.iso
+      fi
+      echo Booting iso from "$isoPath"
+      qemu-img create -f qcow2 "$disk" 20G
+      chattr +C "$disk"
+      qemu-system-x86_64 -enable-kvm -smp 2 -boot d -cdrom "$isoPath" -m 1024 -hda "$disk" \
+         -drive if=pflash,format=raw,readonly,file=${nixpkgs.OVMF.fd}/FV/OVMF_CODE.fd \
+         -drive if=pflash,format=raw,readonly,file=${nixpkgs.OVMF.fd}/FV/OVMF_VARS.fd \
+         -smbios type=2 \
+         -net user,hostfwd=tcp::10022-:22 -net nic
+    fi
   '';
 
   world-package = nixpkgs.writeStrictShellScriptBin "world-package" ''
@@ -49,14 +90,15 @@ let
     profile=/nix/var/nix/profiles/system
 
     if [ -d "${nixpkgs.inputs.secrets}/$host/root" ]; then
-      roottmp="$(mktemp -d /tmp/roottmp.XXXXXXXX)"
-      trap 'sudo rm -rf "$roottmp"' EXIT
-      cp -a ${nixpkgs.inputs.secrets}/"$host"/root/* "$roottmp"/
-      for file in $(${nixpkgs.fd}/bin/fd . --type f "$roottmp"); do
-        echo Decrypting "$file"
-        ${nixpkgs.sops}/bin/sops -d -i "$file"
-      done
-      sudo chown -R root:root "$roottmp"/*
+    roottmp="$(mktemp -d /tmp/roottmp.XXXXXXXX)"
+    trap 'sudo rm - rf "$roottmp"' EXIT
+    cp - a ${nixpkgs.inputs.secrets}/"$host"/root/* "$roottmp"/
+    for file in $(${nixpkgs.fd}/bin/fd . --type f "$roottmp");
+    do
+      echo Decrypting "$file"
+      ${nixpkgs.sops}/bin/sops -d -i "$file"
+    done
+    sudo chown -R root:root "$roottmp"/*
       sudo cp -a "$roottmp"/* /
     fi
 
@@ -156,7 +198,7 @@ let
     unset NIX_PATH NIXPKGS_CONFIG
     NIXPKGS_ALLOW_UNFREE=1
     export NIXPKGS_ALLOW_UNFREE
-    export PATH=${nixpkgs.git}/bin:${world-build}/bin:${world-package}/bin:${world-update}/bin:${world-update-remote}/bin:${world-update-pkgs}/bin:${world-update-bin-pkg}/bin:${world-help}/bin:$PATH
+    export PATH=${nixpkgs.git}/bin:${world-build}/bin:${world-package}/bin:${world-update}/bin:${world-update-remote}/bin:${world-update-pkgs}/bin:${world-update-bin-pkg}/bin:${world-help}/bin:${world-installer}/bin:${world-vm-installer}/bin:$PATH
 
     cmd=''${1:-}
 
