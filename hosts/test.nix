@@ -5,7 +5,7 @@ let
     "-d"
     "${inputs.secrets}/${hostName}/meta.nix"
   ]) { inherit pkgs userName; };
-  persistenceDirs = config.environment.persistence."/keep".directories;
+  persistenceDirs = config.environment.state."/keep".directories;
 in
 {
   imports = [
@@ -22,7 +22,7 @@ in
     chown ${builtins.toString secrets.users.extraUsers."${userName}".uid}:100 /keep/home/${userName}/Downloads
   '';
 
-  environment.persist."/keep" = {
+  environment.state."/keep" = {
     directories = [
       "/var/log"
       "/var/lib/bluetooth"
