@@ -15,6 +15,7 @@ let
 
         help                                 -  this help output
         build <host>                         -  build the given host
+        repl                                 -  bit of a hacky way to get a repl (flakes are experimental still)
         installer <host>                     -  build an iso image installer for the given host
         update                               -  update the current host (first build it, then update the profile and switch to new config)
         update-remote <host> [reboot]        -  update the given remote host (first build it, then update the profile remotely and switch to new config and maybe reboot)
@@ -194,11 +195,20 @@ let
     EOF
   '';
 
+  world-repl = nixpkgs.writeStrictShellScriptBin "world-repl" ''
+    host="$(${nixpkgs.hostname}/bin/hostname)"
+    trap 'rm -f ./nix-repl.nix' EXIT
+    cat<<EOF>./nix-repl.nix
+    (builtins.getFlake (toString ./.)).nixosConfigurations.$host
+    EOF
+    ${nixpkgs.nixFlakes}/bin/nix repl ./nix-repl.nix
+  '';
+
   world = nixpkgs.writeStrictShellScriptBin "world" ''
     unset NIX_PATH NIXPKGS_CONFIG
     NIXPKGS_ALLOW_UNFREE=1
     export NIXPKGS_ALLOW_UNFREE
-    export PATH=${nixpkgs.git}/bin:${world-build}/bin:${world-package}/bin:${world-update}/bin:${world-update-remote}/bin:${world-update-pkgs}/bin:${world-update-bin-pkg}/bin:${world-help}/bin:${world-installer}/bin:${world-vm-installer}/bin:$PATH
+    export PATH=${nixpkgs.git}/bin:${world-build}/bin:${world-package}/bin:${world-update}/bin:${world-update-remote}/bin:${world-update-pkgs}/bin:${world-update-bin-pkg}/bin:${world-help}/bin:${world-installer}/bin:${world-vm-installer}/bin:${world-repl}/bin:$PATH
 
     cmd=''${1:-}
 
