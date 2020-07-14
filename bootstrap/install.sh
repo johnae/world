@@ -127,15 +127,19 @@ fi
 
 efi_space=500M # EF00 EFI Partition or EF02 BIOS Boot Partition - if we're Legacy booting
 luks_key_space=20M # 8300
-# set to half amount of RAM
-swap_space="$(($(free --giga | tail -n+2 | head -1 | awk '{print $2}') / 2))"
+ramgb="$(free --giga | tail -n+2 | head -1 | awk '{print $2}')"
+# set to half amount of RAM (but see further down for hibernation etc)
+swap_space="$((ramgb / 2))"
 # special case when there's very little ram
 if [ "$swap_space" = "0" ]; then
     swap_space="1"
-elif [ "$swap_space" -ge "17" ]; then
+elif [ "$swap_space" -ge "33" ]; then
     swap_space="8" ## this is likely a server so we don't want so much swap
+else
+    swap_space="$((swap_space + ramgb))" ## to ensure hibernation works properly
 fi
 swap_space="$swap_space"G
+echo Will use an "$swap_space" swap space partition
 # rest (eg. root) will use the remaining space (btrfs) 8300
 
 # now ensure there's a fresh GPT on there
