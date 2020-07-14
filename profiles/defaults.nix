@@ -3,6 +3,7 @@
 
   imports = [
     ../modules
+    ../cachix.nix
   ];
 
   nix = {
