@@ -14,7 +14,7 @@ in
         volume-control = "alsa";
         device_name = home.extraConfig.hostname;
         bitrate = "320";
-        cache_path = "${builtins.getEnv "HOME"}/.cache/spotifyd";
+        cache_path = "/home/${home.username}/.cache/spotifyd";
         volume-normalisation = "true";
         normalisation-pregain = "-10";
       };
