@@ -139,7 +139,7 @@ else
     swap_space="$((swap_space + ramgb))" ## to ensure hibernation works properly
 fi
 swap_space="$swap_space"G
-echo Will use an "$swap_space" swap space partition
+echo Will use "$swap_space" swap space partition
 # rest (eg. root) will use the remaining space (btrfs) 8300
 
 # now ensure there's a fresh GPT on there
