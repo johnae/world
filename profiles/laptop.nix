@@ -1,10 +1,11 @@
 { config, lib, pkgs, inputs, ... }:
 let
   nixos-hardware = inputs.nixos-hardware;
-  #loadBuildMachines = with builtins;
-  #  if getEnv "NIX_TEST" != ""
-  #  then [ ]
-  #  else (extraBuiltins.sops ../metadata/builders/hosts.yaml).buildMachines;
+  buildMachines = (builtins.exec [
+    "${pkgs.sops}/bin/sops"
+    "-d"
+    "${inputs.secrets}/builders/hosts.nix"
+  ]);
 in
 {
   imports = [
@@ -13,11 +14,11 @@ in
   ];
 
 
-  #nix.buildMachines = loadBuildMachines;
-  #nix.distributedBuilds = true;
-  #nix.extraOptions = ''
-  #  builders-use-substitutes = true
-  #'';
+  nix.buildMachines = buildMachines;
+  nix.distributedBuilds = true;
+  nix.extraOptions = ''
+    builders-use-substitutes = true
+  '';
 
   boot.kernel.sysctl = {
     "vm.dirty_writeback_centisecs" = 1500;
