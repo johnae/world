@@ -126,8 +126,11 @@ let
       exit 1
     fi
 
-    if [ -n "$reboot" ]; then
+    shift
+
+    if [ "$reboot" = "reboot=yes" ]; then
       after_update="sudo shutdown -r now"
+      shift
     fi
 
     profile=/nix/var/nix/profiles/system
