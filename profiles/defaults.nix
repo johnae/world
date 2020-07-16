@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 {
 
   imports = [
@@ -11,7 +11,7 @@
       experimental-features = nix-command flakes ca-references
     '';
 
-    nixPath = [ ];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
 
     gc = {
       automatic = true;
