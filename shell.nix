@@ -21,6 +21,7 @@ let
         update-remote <host> [reboot]        -  update the given remote host (first build it, then update the profile remotely and switch to new config and maybe reboot)
         package <package>                    -  build a package available under nixpkgs
         update-pkgs                          -  update all packages (except those outside flake control)
+        update-nixpkgs-image                 -  update the nixpkgs container image (see containers/)
         update-bin-pkg <pkgpath> <repo> <dlname> [version]
                                              -  updates a binary package, eg. one that is precompiled generally,
                                                 only works with github releases
@@ -195,6 +196,10 @@ let
     EOF
   '';
 
+  world-update-nixpkgs-image = nixpkgs.writeStrictShellScriptBin "world-update-nixpkgs-image" ''
+    ${nixpkgs.nix-prefetch-docker}/bin/nix-prefetch-docker --quiet --image-name nixpkgs/cachix-flakes --image-tag latest > containers/nixpkgs-image-meta.nix
+  '';
+
   world-repl = nixpkgs.writeStrictShellScriptBin "world-repl" ''
     host="$(${nixpkgs.hostname}/bin/hostname)"
     trap 'rm -f ./nix-repl.nix' EXIT
@@ -208,7 +213,7 @@ let
     unset NIX_PATH NIXPKGS_CONFIG
     NIXPKGS_ALLOW_UNFREE=1
     export NIXPKGS_ALLOW_UNFREE
-    export PATH=${nixpkgs.git}/bin:${world-build}/bin:${world-package}/bin:${world-update}/bin:${world-update-remote}/bin:${world-update-pkgs}/bin:${world-update-bin-pkg}/bin:${world-help}/bin:${world-installer}/bin:${world-vm-installer}/bin:${world-repl}/bin:$PATH
+    export PATH=${nixpkgs.git}/bin:${world-build}/bin:${world-package}/bin:${world-update}/bin:${world-update-remote}/bin:${world-update-pkgs}/bin:${world-update-bin-pkg}/bin:${world-help}/bin:${world-installer}/bin:${world-vm-installer}/bin:${world-repl}/bin:${world-update-nixpkgs-image}/bin:$PATH
 
     cmd=''${1:-}
 

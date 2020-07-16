@@ -158,6 +158,19 @@
             (final: prev: { inherit (pkgset) chromium-dev-ozone; });
         };
 
+      containers =
+        let
+          containerDir = ./containers;
+          fullPath = name: containerDir + "/${name}";
+          containerPaths = map fullPath (builtins.attrNames (
+            pkgs.lib.filterAttrs (_: t: t == "directory") (builtins.readDir containerDir)
+          ));
+        in
+        pkgs.recurseIntoAttrs (genAttrs' containerPaths (path: {
+          name = builtins.baseNameOf path;
+          value = pkgs.callPackage path { };
+        }));
+
       devShell = forAllSystems
         (sys:
           let
