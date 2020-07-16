@@ -73,6 +73,7 @@ with lib; {
       "/var/lib/iwd"
       "/var/lib/wireguard"
       "/var/lib/systemd/coredump"
+      "/var/lib/docker"
       "/root"
     ];
     files = [
