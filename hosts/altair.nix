@@ -12,6 +12,7 @@ in
 
   imports = [
     ../profiles/server.nix
+    ../modules/state.nix
     secrets
   ];
 
@@ -23,6 +24,29 @@ in
   };
 
   environment.systemPackages = [ pkgs.netns-exec ];
+
+  environment.state."/keep" = {
+    directories = [
+      "/var/log"
+      "/var/lib/wireguard"
+      "/var/lib/systemd/coredump"
+      "/var/lib/docker"
+      "/var/lib/dockershim"
+      "/var/lib/plex"
+      "/var/lib/k3s"
+      "/var/lib/kubelet"
+      "/var/lib/cni"
+      "/var/lib/transmission"
+      "/root"
+    ];
+    files = [
+      "/etc/machine-id"
+      "/etc/ssh/ssh_host_rsa_key"
+      "/etc/ssh/ssh_host_ed25519_key"
+      "/etc/ssh/ssh_host_rsa_key.pub"
+      "/etc/ssh/ssh_host_ed25519_key.pub"
+    ];
+  };
 
   services.myk3s = {
     nodeName = hostName;
@@ -132,21 +156,9 @@ in
   users.extraUsers."${userName}" = { shell = pkgs.fish; };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-label/root";
-    fsType = "btrfs";
-    options = [ "subvol=@" "rw" "noatime" "compress=zstd" "space_cache" ];
-  };
-
-  fileSystems."/home" = {
-    device = "/dev/disk/by-label/root";
-    fsType = "btrfs";
-    options = [ "subvol=@home" "rw" "noatime" "compress=zstd" "space_cache" ];
-  };
-
-  fileSystems."/var" = {
-    device = "/dev/disk/by-label/root";
-    fsType = "btrfs";
-    options = [ "subvol=@var" "rw" "noatime" "compress=zstd" "space_cache" ];
+    device = "none";
+    fsType = "tmpfs";
+    options = [ "defaults" "size=2G" "mode=755" ];
   };
 
   fileSystems."/nix" = {
