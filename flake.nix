@@ -12,6 +12,10 @@
       url = "git+ssh://git@github.com/johnae/nixos-metadata?ref=flakes";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixkite = {
+      url = "github:johnae/nixkite/flakes";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     ## non flakes
     nixos-hardware = { url = "github:nixos/nixos-hardware"; flake = false; };
@@ -168,7 +172,14 @@
         in
         pkgs.recurseIntoAttrs (genAttrs' containerPaths (path: {
           name = builtins.baseNameOf path;
-          value = pkgs.callPackage path { };
+          value =
+            let
+              archive = pkgs.callPackage path { };
+            in
+            {
+              inherit archive;
+              push = pkgs.pushDockerArchive { image = archive; };
+            };
         }));
 
       devShell = forAllSystems
@@ -177,6 +188,21 @@
             nixpkgs = nixpkgsFor.${sys};
           in
           import ./shell.nix { inherit nixpkgs; });
+
+      buildkite =
+        let
+          pipelineDir = ./buildkite-ci;
+          fullPath = name: pipelineDir + "/${name}";
+          pipelinePaths = map fullPath (builtins.attrNames (builtins.readDir pipelineDir));
+        in
+        genAttrs' pipelinePaths (path: {
+          name = inputs.nixpkgs.lib.removeSuffix ".nix" (builtins.baseNameOf path);
+          value = import "${inputs.nixkite}" {
+            inherit pkgs;
+            pipeline = path;
+            specialArgs = { inherit (self) containers overlayAttrs nixosConfigurations inputs; };
+          };
+        });
 
     };
 }
