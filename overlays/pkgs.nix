@@ -4,14 +4,14 @@ final: prev:
 
   pushDockerArchive = { image, tag ? null }:
     let
-      imageTag = if tag != null then tag else builtins.head (prev.lib.splitString "-" (builtins.baseNameOf "${image}"));
+      imageTag = if tag != null then tag else builtins.head (prev.lib.splitString "-" (builtins.baseNameOf image.outPath));
     in
     prev.writeStrictShellScript "pushDockerArchive" ''
       echo pushing ${image.imageName}:${imageTag} 1>&2
       ${prev.skopeo}/bin/skopeo copy "$@" \
           docker-archive:${image} \
           docker://${image.imageName}:${imageTag} 1>&2
-      echo ${image}
+      echo ${image.outPath}
     '';
 
   sway-unwrapped = prev.callPackage ../pkgs/sway { };
@@ -62,7 +62,8 @@ final: prev:
   k3s = prev.callPackage ../pkgs/k3s { };
 
   inherit (prev.recurseIntoAttrs (prev.callPackage ../pkgs/strict-shell { }))
-    writeStrictShellScript writeStrictShellScriptBin mkStrictShellScript;
+    writeStrictShellScript writeStrictShellScriptBin
+    mkStrictShellScript strict-bash;
 
   initialize-user = prev.callPackage ../pkgs/initialize-user { };
 
