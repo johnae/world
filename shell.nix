@@ -92,15 +92,16 @@ let
     profile=/nix/var/nix/profiles/system
 
     if [ -d "${nixpkgs.inputs.secrets}/$host/root" ]; then
-    roottmp="$(mktemp -d /tmp/roottmp.XXXXXXXX)"
-    trap 'sudo rm - rf "$roottmp"' EXIT
-    cp - a ${nixpkgs.inputs.secrets}/"$host"/root/* "$roottmp"/
-    for file in $(${nixpkgs.fd}/bin/fd . --type f "$roottmp");
-    do
-      echo Decrypting "$file"
-      ${nixpkgs.sops}/bin/sops -d -i "$file"
-    done
-    sudo chown -R root:root "$roottmp"/*
+      roottmp="$(mktemp -d /tmp/roottmp.XXXXXXXX)"
+      trap 'sudo rm - rf "$roottmp"' EXIT
+      cp -a ${nixpkgs.inputs.secrets}/"$host"/root/* "$roottmp"/
+      chmod -R +w "$roottmp"
+      for file in $(${nixpkgs.fd}/bin/fd . --type f "$roottmp");
+      do
+        echo Decrypting "$file"
+        ${nixpkgs.sops}/bin/sops -d -i "$file"
+      done
+      sudo chown -R root:root "$roottmp"/*
       sudo cp -a "$roottmp"/* /
     fi
 
@@ -145,6 +146,7 @@ let
       roottmp="$(mktemp -d /tmp/roottmp.XXXXXXXX)"
       trap 'sudo rm -rf "$roottmp"' EXIT
       cp -a ${nixpkgs.inputs.secrets}/"$host"/root/* "$roottmp"/
+      chmod -R +w "$roottmp"
       for file in $(${nixpkgs.fd}/bin/fd . --type f "$roottmp"); do
         echo Decrypting "$file"
         ${nixpkgs.sops}/bin/sops -d -i "$file"
