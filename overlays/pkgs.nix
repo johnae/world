@@ -8,7 +8,7 @@ final: prev:
     in
     prev.writeStrictShellScript "pushDockerArchive" ''
       echo pushing ${image.imageName}:${imageTag} 1>&2
-      ${prev.skopeo}/bin/skopeo copy "$@" \
+      ${prev.skopeo}/bin/skopeo --insecure-policy copy "$@" \
           docker-archive:${image} \
           docker://${image.imageName}:${imageTag} 1>&2
       echo ${image.outPath}
