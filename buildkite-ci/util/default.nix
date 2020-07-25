@@ -5,12 +5,10 @@ let
     isDerivation last splitString concatStringsSep;
 
   withBuildEnv = cmd: ''
-    nix develop <<'DEVSHELL'
     eval "$(nix print-dev-env)"
     strict-bash <<'NIXSH'
     ${cmd}
     NIXSH
-    DEVSHELL
   '';
 
   onlyDerivations = filterAttrs (_: isDerivation);

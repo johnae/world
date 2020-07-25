@@ -60,15 +60,12 @@ in
       }
 
       maybeUpdateCargoShas() {
-        if nix eval -f default.nix packages."$1".cargoSha256 > /dev/null 2>&1; then
-          update-rust-package-cargo "$1"
+        if nix eval .#nixpkgs."$1".cargoSha256 > /dev/null 2>&1; then
+          world update-rust-package-cargo "$1"
           gitCommitUpdate "$1 cargo dependencies" || echo no update
         fi
       }
 
-      echo --- Updating packages
-      nix flake update --update-input nixpkgs
-      gitCommitUpdate nixpkgs || echo no update
 
       world update-bin-pkg ./pkgs/k3s rancher/k3s k3s
       gitCommitUpdate k3s || echo no update
