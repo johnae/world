@@ -31,11 +31,9 @@ in
       "/var/lib/systemd/coredump"
       "/var/lib/docker"
       "/var/lib/dockershim"
-      "/var/lib/plex"
       "/var/lib/k3s"
       "/var/lib/kubelet"
       "/var/lib/cni"
-      "/var/lib/transmission"
       "/root"
     ];
     files = [

@@ -77,6 +77,12 @@ in
       '';
     };
 
+    extraFlags = mkOption {
+      description = "Extra flags to pass to the k3s command.";
+      default = "";
+      example = "--no-deploy traefik --cluster-cidr 10.24.0.0/16";
+    };
+
     masterUrl = mkOption {
       type = types.nullOr (types.strMatching "https://[0-9a-zA-Z.]+.*");
       example = "https://1.2.3.4:6332";
@@ -110,6 +116,7 @@ in
               (lib.concatStringsSep " "
                 (map (v: "--node-label ${v}") (cfg.labels ++ [ "hostname=${cfg.nodeName}" ]))
               )
+              cfg.extraFlags
             ]
           else
             [
@@ -123,6 +130,7 @@ in
               (lib.concatStringsSep " "
                 (map (v: "--node-label ${v}") (cfg.labels ++ [ "hostname=${cfg.nodeName}" ]))
               )
+              cfg.extraFlags
             ]
         );
 
@@ -137,14 +145,11 @@ in
           echo Applying extra kubernetes manifests...
           set -x
           ${lib.concatStringsSep "\n" (
-            map (
-                m:
-                "${pkgs.kubectl}/bin/kubectl --kubeconfig /kubeconfig.yml apply -f ${m}"
-                )
-            cfg.extraManifests
-            )}
-        '' else
-          ""
+            map
+              (m: "${pkgs.kubectl}/bin/kubectl --kubeconfig /kubeconfig.yml apply -f ${m}")
+              cfg.extraManifests
+          )}
+        '' else ""
       );
 
       serviceConfig = {
@@ -166,8 +171,8 @@ in
                       "exec ${k3s.package}/bin/k3s ${k3s.role}"
                     ] ++ (optional k3s.docker "--docker")
                     ++ (optional k3s.disableAgent "--disable-agent")
-                    ++ (optional (k3s.role == "agent") "--server ${k3s.serverAddr} --token ${k3s.token}")
-                    ++ [ k3s.extraFlags ]
+                    ++ (optional (k3s.role == "agent") "--server ${k3s.serverAddr}")
+                    ++ [ "--token ${k3s.token}" k3s.extraFlags ]
                   )
               )
           );
