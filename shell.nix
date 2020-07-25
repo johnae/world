@@ -221,7 +221,7 @@ let
     log="$(mktemp nix-rustbuild-log-"$attr".XXXXXXX)"
     trap 'rm -f $log' EXIT
 
-    ${world-package}/bin/world-package "$attr" 2>&1 | tee "$log" || true
+    ${nixpkgs.nixFlakes}/bin/nix build --no-link .#nixpkgs."$attr" 2>&1 | tee "$log" || true
     cargoSha256="$(grep 'got:.*sha256:.*' "$log" | cut -d':' -f3-)"
     echo Setting cargoSha256 for "$attr" to "$cargoSha256"
     sed -i "s|cargoSha256.*|cargoSha256 = \"$cargoSha256\";|" "$path"
@@ -241,7 +241,7 @@ let
     log="$(mktemp nix-fixed-output-drv-log-"$attr".XXXXXXX)"
     trap 'rm -f $log' EXIT
 
-    ${world-package}/bin/world-package "$attr" 2>&1 | tee "$log" || true
+    ${nixpkgs.nixFlakes}/bin/nix build --no-link .#nixpkgs."$attr" 2>&1 | tee "$log" || true
     outputHash="$(grep 'got:.*sha256:.*' "$log" | cut -d':' -f3-)"
     echo Setting outputHash for "$attr" to "$outputHash"
     sed -i "s|outputHash =.*|outputHash = \"$outputHash\";|" "$path"
