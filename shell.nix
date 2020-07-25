@@ -13,18 +13,20 @@ let
     cat<<HELP
       Hello, world! Here's some things to do:
 
-        help                                 -  this help output
-        build <host>                         -  build the given host
-        repl                                 -  bit of a hacky way to get a repl (flakes are experimental still)
-        installer <host>                     -  build an iso image installer for the given host
-        update                               -  update the current host (first build it, then update the profile and switch to new config)
-        update-remote <host> [reboot]        -  update the given remote host (first build it, then update the profile remotely and switch to new config and maybe reboot)
-        package <package>                    -  build a package available under nixpkgs
-        update-pkgs                          -  update all packages (except those outside flake control)
-        update-nixpkgs-image                 -  update the nixpkgs container image (see containers/)
+        help                                      -  this help output
+        build <host>                              -  build the given host
+        repl                                      -  bit of a hacky way to get a repl (flakes are experimental still)
+        installer <host>                          -  build an iso image installer for the given host
+        update                                    -  update the current host (first build it, then update the profile and switch to new config)
+        update-remote <host> [reboot]             -  update the given remote host (first build it, then update the profile remotely and switch to new config and maybe reboot)
+        package <package>                         -  build a package available under nixpkgs
+        update-pkgs                               -  update all packages (except those outside flake control)
+        update-nixpkgs-image                      -  update the nixpkgs container image (see containers/)
         update-bin-pkg <pkgpath> <repo> <dlname> [version]
-                                             -  updates a binary package, eg. one that is precompiled generally,
-                                                only works with github releases
+                                                  -  updates a binary package, eg. one that is precompiled generally,
+                                                     only works with github releases
+        update-rust-package-cargo <package>       -  updates the cargoSha256 of a rust package
+        update-fixed-output-derivation <package>  -  updates the outputHash of a fixed output drv
     HELP
   '';
 
@@ -205,6 +207,47 @@ let
     ${nixpkgs.nix-prefetch-docker}/bin/nix-prefetch-docker --quiet --image-name nixpkgs/cachix-flakes --image-tag latest > containers/nixpkgs-image-meta.nix
   '';
 
+  world-update-rust-package-cargo = nixpkgs.writeStrictShellScriptBin "world-update-rust-package-cargo" ''
+    if [ -z "$1" ]; then
+        echo "USAGE: $0 <attribute>"
+        echo "EXAMPLE: $0 ripgrep"
+        exit 1
+    fi
+
+    attr="$1"
+    path="$(EDITOR="ls" nix edit -f . .#nixpkgs."$attr")"
+    sed -i 's|cargoSha256.*|cargoSha256 = "0000000000000000000000000000000000000000000000000000";|' "$path"
+
+    log="$(mktemp nix-rustbuild-log-"$attr".XXXXXXX)"
+    trap 'rm -f $log' EXIT
+
+    ${world-package}/bin/world-package "$attr" 2>&1 | tee "$log" || true
+    cargoSha256="$(grep 'got:.*sha256:.*' "$log" | cut -d':' -f3-)"
+    echo Setting cargoSha256 for "$attr" to "$cargoSha256"
+    sed -i "s|cargoSha256.*|cargoSha256 = \"$cargoSha256\";|" "$path"
+  '';
+
+  world-update-fixed-output-derivation = nixpkgs.writeStrictShellScriptBin "world-update-fixed-output-derivation" ''
+    if [ -z "$1" ]; then
+        echo "USAGE: $0 <attribute>"
+        echo "EXAMPLE: $0 argocd-ui"
+        exit 1
+    fi
+
+    attr="$1"
+    path="$(EDITOR="ls" nix edit -f . .#nixpkgs."$attr")"
+    sed -i 's|outputHash =.*|outputHash = "0000000000000000000000000000000000000000000000000000";|' "$path"
+
+    log="$(mktemp nix-fixed-output-drv-log-"$attr".XXXXXXX)"
+    trap 'rm -f $log' EXIT
+
+    ${world-package}/bin/world-package "$attr" 2>&1 | tee "$log" || true
+    outputHash="$(grep 'got:.*sha256:.*' "$log" | cut -d':' -f3-)"
+    echo Setting outputHash for "$attr" to "$outputHash"
+    sed -i "s|outputHash =.*|outputHash = \"$outputHash\";|" "$path"
+  '';
+
+
   world-repl = nixpkgs.writeStrictShellScriptBin "world-repl" ''
     host="$(${nixpkgs.hostname}/bin/hostname)"
     trap 'rm -f ./nix-repl.nix' EXIT
@@ -218,7 +261,7 @@ let
     unset NIX_PATH NIXPKGS_CONFIG
     NIXPKGS_ALLOW_UNFREE=1
     export NIXPKGS_ALLOW_UNFREE
-    export PATH=${nixpkgs.git}/bin:${world-build}/bin:${world-package}/bin:${world-update}/bin:${world-update-remote}/bin:${world-update-pkgs}/bin:${world-update-bin-pkg}/bin:${world-help}/bin:${world-installer}/bin:${world-vm-installer}/bin:${world-repl}/bin:${world-update-nixpkgs-image}/bin:$PATH
+    export PATH=${nixpkgs.git}/bin:${world-build}/bin:${world-package}/bin:${world-update}/bin:${world-update-remote}/bin:${world-update-pkgs}/bin:${world-update-bin-pkg}/bin:${world-help}/bin:${world-installer}/bin:${world-vm-installer}/bin:${world-repl}/bin:${world-update-nixpkgs-image}/bin:${world-update-rust-package-cargo}/bin:${world-update-fixed-output-derivation}/bin:$PATH
 
     cmd=''${1:-}
 
