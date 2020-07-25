@@ -246,7 +246,7 @@ let
 in
 nixpkgs.mkShell {
   buildInputs =
-    [ world nixpkgs.sops nixpkgs.moreutils nixpkgs.nixFlakes ];
+    [ world nixpkgs.strict-bash nixpkgs.sops nixpkgs.moreutils nixpkgs.nixFlakes ];
 
   inherit SOPS_PGP_FP;
   NIX_CONF_DIR =
