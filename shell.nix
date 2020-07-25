@@ -215,7 +215,7 @@ let
     fi
 
     attr="$1"
-    path="$(EDITOR="ls" nix edit .#nixpkgs."$attr")"
+    path="$(pkgs/"$attr"/default.nix)"
     sed -i 's|cargoSha256.*|cargoSha256 = "0000000000000000000000000000000000000000000000000000";|' "$path"
 
     log="$(mktemp nix-rustbuild-log-"$attr".XXXXXXX)"
@@ -235,7 +235,7 @@ let
     fi
 
     attr="$1"
-    path="$(EDITOR="ls" nix edit .#nixpkgs."$attr")"
+    path="$(pkgs/"$attr"/default.nix)"
     sed -i 's|outputHash =.*|outputHash = "0000000000000000000000000000000000000000000000000000";|' "$path"
 
     log="$(mktemp nix-fixed-output-drv-log-"$attr".XXXXXXX)"
