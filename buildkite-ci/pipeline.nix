@@ -44,7 +44,7 @@ let
                 value = {
                   agents.queue = "linux";
                   label = ":nix: Cache pkgs: ${lib.concatStringsSep " " pkgs}";
-                  command = ''
+                  command = withBuildEnv ''
                     ${lib.concatStringsSep "\n"
                       (map
                         (pkg: "world package ${pkg} | cachix push insane")
