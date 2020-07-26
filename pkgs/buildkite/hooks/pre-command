@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+set -euo pipefail
+
+echo --- Running agent pre-command hook
+
+echo +++ Docker login
+if ! command -v docker >/dev/null 2>&1; then
+    nix profile install nixpkgs#docker
+fi
+echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin

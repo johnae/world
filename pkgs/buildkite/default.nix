@@ -7,7 +7,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-5m/jRpVSN0N0EJSbRRmpygsYxOVOjNlhB74DMn6gp5I=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper ];
 
   postInstall = ''
     # Fix binary name
@@ -15,7 +15,8 @@ buildGoModule rec {
 
     # These are runtime dependencies
     wrapProgram $out/bin/buildkite-agent \
-      --prefix PATH : '${stdenv.lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
+      --prefix PATH : '${stdenv.lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}' \
+      --set BUILDKITE_HOOKS_PATH ${./hooks}
   '';
 
   meta = with stdenv.lib; {

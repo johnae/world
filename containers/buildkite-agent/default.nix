@@ -58,6 +58,7 @@ dockerTools.buildImage {
   extraCommands = ''
     mkdir -p usr/bin
     mkdir -p var/lib/buildkite/builds
+    mkdir -p var/tmp
     ln -s ${coreutils}/bin/env usr/bin/env
   '';
 
