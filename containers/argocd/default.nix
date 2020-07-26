@@ -1,7 +1,6 @@
 { stdenv
 , writeText
 , bashInteractive
-, nix-plugins
 , openssh
 , gnupg
 , sops
