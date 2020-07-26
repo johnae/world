@@ -16,7 +16,7 @@ let
     (pkg:
       ''
         nix flake update --update-input "${pkg}"
-        if gitCommitUpdate "${pkg}"; then
+        if gitCommitUpdate "${pkg}" || [ "$FORCE_UPDATE" = "yes" ]; then
           if [ -d "pkgs/${pkg}" ]; then
             maybeUpdateCargoShas "${pkg}"
             gitCommitUpdate "${pkg}-cargo-sha-update" || echo no update
@@ -74,6 +74,12 @@ in
           gitCommitUpdate "$1 update fixed output hash" || echo no update
         fi
       }
+
+      nix flake update --update-input nixpkgs
+      gitCommitUpdate nixpkgs || echo no update
+      #if gitCommitUpdate nixpkgs; then
+      #  FORCE_UPDATE=yes
+      #fi
 
       world update-bin-pkg ./pkgs/k3s rancher/k3s k3s
       gitCommitUpdate k3s || echo no update
