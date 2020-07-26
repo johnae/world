@@ -20,6 +20,8 @@ let
           if [ -d "pkgs/${pkg}" ]; then
             maybeUpdateCargoShas "${pkg}"
             gitCommitUpdate "${pkg}-cargo-sha-update" || echo no update
+            maybeUpdateFixedOutputShas "${pkg}"
+            gitCommitUpdate "${pkg}-fixed-output-sha-update" || echo no update
             world package "${pkg}" | cachix push insane
           fi
         fi
@@ -62,10 +64,16 @@ in
       maybeUpdateCargoShas() {
         if nix eval .#nixpkgs."$1".cargoSha256 > /dev/null 2>&1; then
           world update-rust-package-cargo "$1"
-          gitCommitUpdate "$1 cargo dependencies" || echo no update
+          gitCommitUpdate "$1 update cargo hash" || echo no update
         fi
       }
 
+      maybeUpdateFixedOutputShas() {
+        if nix eval .#nixpkgs."$1".outputHash > /dev/null 2>&1; then
+          world update-fixed-output-derivation "$1"
+          gitCommitUpdate "$1 update fixed output hash" || echo no update
+        fi
+      }
 
       world update-bin-pkg ./pkgs/k3s rancher/k3s k3s
       gitCommitUpdate k3s || echo no update
