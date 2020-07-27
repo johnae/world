@@ -2,7 +2,9 @@
 buildGoModule rec {
   pname = "argocd";
   commit = inputs.argo-cd.rev;
-  version = inputs.argo-cd.rev;
+  version = builtins.replaceStrings
+    [ "\n" "\r" "\t" ] [ "" "" "" ]
+    (builtins.readFile "${inputs.argo-cd}/VERSION");
 
   src = inputs.argo-cd;
 
