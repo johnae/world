@@ -41,7 +41,7 @@ in
       to = 10252;
     }
   ];
-  networking.firewall.allowedTCPPorts = [ 22 6443 ];
+  networking.firewall.allowedTCPPorts = [ 22 80 443 6443 ];
 
   programs.fish.enable = true;
   security.sudo.wheelNeedsPassword = false;
