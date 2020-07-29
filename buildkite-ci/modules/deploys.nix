@@ -1,7 +1,7 @@
 { config, lib, pkgs, containers, ... }:
 let
   cfg = config.steps;
-  util = import ../util { inherit lib config; };
+  util = import ./util { inherit lib config; };
   inherit (util) withBuildEnv;
   inherit (lib) mkOption mkIf mkMerge mapAttrsToList bk;
   inherit (lib.types) nullOr attrsOf submodule str bool;
@@ -76,10 +76,12 @@ in
               )
             );
             build = value.build // {
-              APPLICATION = value.application;
-              APP_SHORTSHA = value.shortsha;
-              IMAGE = value.image;
-              IMAGE_TAG = containerNixHash;
+              env = {
+                APPLICATION = value.application;
+                APP_SHORTSHA = value.shortsha;
+                IMAGE = value.image;
+                IMAGE_TAG = containerNixHash;
+              };
             };
           in
           ({

@@ -47,8 +47,8 @@ in
 
   services.myk3s = {
     nodeName = hostName;
-    flannelBackend = "wireguard";
-    cniPackage = pkgs.cni-plugins;
+    flannelBackend = "none";
+    extraManifests = [ ../files/k3s/calico.vlan.yaml ];
   };
 
   boot =
@@ -121,6 +121,8 @@ in
 
   hardware.cpu.intel.updateMicrocode = lib.mkForce false;
   hardware.cpu.amd.updateMicrocode = true;
+
+  networking.firewall.allowedTCPPorts = [ 179 ];
 
   users.defaultUserShell = pkgs.fish;
   users.mutableUsers = false;
