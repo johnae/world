@@ -166,22 +166,6 @@
         "type": "github"
       }
     },
-    "i3status-rust": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1594772024,
-        "narHash": "sha256-SSOuzS9Ha4KarYC2e0E6BzKcVUc6PUPnQC506G6yuUo=",
-        "owner": "greshake",
-        "repo": "i3status-rust",
-        "rev": "4127fdb54fcd666695aaedced0087d6182791665",
-        "type": "github"
-      },
-      "original": {
-        "owner": "greshake",
-        "repo": "i3status-rust",
-        "type": "github"
-      }
-    },
     "mako": {
       "flake": false,
       "locked": {
@@ -343,7 +327,6 @@
         "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
         "grim": "grim",
         "home": "home",
-        "i3status-rust": "i3status-rust",
         "mako": "mako",
         "neatvnc": "neatvnc",
         "netns-exec": "netns-exec",
