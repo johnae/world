@@ -10,7 +10,7 @@ let
   inherit (builtins) filter attrNames;
   inherit (lib) concatStringsSep;
 
-  pkgs = filter (n: n != "nixpkgs") (attrNames overlayAttrs);
+  pkgs = filter (n: n != "nixpkgs") (attrNames inputs);
 
   updatePackages = concatStringsSep " \n" (map
     (pkg:
