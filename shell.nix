@@ -236,17 +236,21 @@ let
 
     attr="$1"
     path=pkgs/"$attr"/default.nix
-    sed -i 's|outputHash =.*|outputHash = "0000000000000000000000000000000000000000000000000000";|' "$path"
+    what=outputHash;
+    if grep -q "vendorSha256" "$path"; then
+      what="vendorSha256"
+    fi
+
+    sed -i "s|$what =.*|$what = \"0000000000000000000000000000000000000000000000000000\";|" "$path"
 
     log="$(mktemp nix-fixed-output-drv-log-"$attr".XXXXXXX)"
     trap 'rm -f $log' EXIT
 
     ${world-package}/bin/world-package "$attr" 2>&1 | tee "$log" || true
-    outputHash="$(grep 'got:.*sha256.*' "$log" | awk '{print $NF}')"
-    echo Setting outputHash for "$attr" to "$outputHash"
-    sed -i "s|outputHash =.*|outputHash = \"$outputHash\";|" "$path"
+    hash="$(grep 'got:.*sha256.*' "$log" | awk '{print $NF}')"
+    echo Setting "$what" for "$attr" to "$hash"
+    sed -i "s|$what =.*|$what = \"$hash\";|" "$path"
   '';
-
 
   world-repl = nixpkgs.writeStrictShellScriptBin "world-repl" ''
     host="$(${nixpkgs.hostname}/bin/hostname)"
