@@ -15,7 +15,9 @@
 , xcbutilimage
 , xcbutilerrors
 , mesa_noglu
+, libglvnd
 , libpng
+, ffmpeg
 , inputs
 }:
 
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
     "-Dx11-backend=enabled"
     "-Dxcb-icccm=enabled"
     "-Dxcb-errors=enabled"
-    "-Dfreerdp=disabled"
+    "-Dxcb-xkb=enabled"
   ];
 
   buildInputs = [
@@ -53,6 +55,8 @@ stdenv.mkDerivation rec {
     xcbutilerrors
     mesa_noglu
     libpng
+    ffmpeg
+    libglvnd
   ];
 
   meta = with stdenv.lib; {

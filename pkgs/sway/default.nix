@@ -2,8 +2,8 @@
 , meson
 , ninja
 , pkgconfig
+, makeWrapper
 , scdoc
-, freerdp
 , wayland
 , wayland-protocols
 , libxkbcommon
@@ -17,18 +17,22 @@
 , pam
 , gdk_pixbuf
 , libevdev
+, librsvg
 , wlroots
 , inputs
-, buildDocs ? true
 }:
 stdenv.mkDerivation rec {
-  name = "sway-${inputs.sway.rev}";
+  pname = "sway-unwrapped";
   version = inputs.sway.rev;
 
   src = inputs.sway;
 
-  nativeBuildInputs = [ pkgconfig meson ninja ]
-    ++ stdenv.lib.optional buildDocs scdoc;
+  patches = [
+    ./sway-config-no-nix-store-references.patch
+    ./load-configuration-from-etc.patch
+  ];
+
+  nativeBuildInputs = [ pkgconfig meson ninja scdoc ];
 
   buildInputs = [
     wayland
@@ -43,14 +47,15 @@ stdenv.mkDerivation rec {
     libcap
     pam
     gdk_pixbuf
-    freerdp
     wlroots
     libevdev
     scdoc
+    librsvg
   ];
 
   postPatch = ''
-    sed -iE "s/version: '1.0',/version: '${version}',/" meson.build
+    date="$(date -d '@${builtins.toString inputs.sway.lastModified}' +'%b %d %Y')"
+    sed -i "s/\([ \t]\)version: '\(.*\)',/\1version: '\2-${inputs.sway.shortRev} ($date)',/" meson.build
   '';
 
   mesonFlags = [
@@ -58,11 +63,14 @@ stdenv.mkDerivation rec {
     "-Dxwayland=enabled"
     "-Dgdk-pixbuf=enabled"
     "-Dtray=enabled"
-  ] ++ stdenv.lib.optional buildDocs "-Dman-pages=enabled";
+    "-Dman-pages=enabled"
+  ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
+    description = "i3-compatible tiling Wayland compositor";
+    homepage = https://swaywm.org;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [
