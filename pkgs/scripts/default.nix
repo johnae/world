@@ -284,7 +284,7 @@ let
       echo Hmm PSK was empty
       exit 1
     fi
-    cat <<EOF | ${pass}/bin/pass insert "wifi/networks/$NET"
+    cat <<EOF | ${pass}/bin/pass insert -m "wifi/networks/$NET"
     [Security]
     PreSharedKey=$PSK
     Passphrase=$PASS
