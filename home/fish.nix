@@ -12,8 +12,8 @@ let
       executable
     ];
 
-  privateSway = withinNetNS "sway" { };
-  privateFish = withinNetNS "fish" { };
+  privateSway = withinNetNS "${pkgs.sway}/bin/sway" { };
+  privateFish = withinNetNS "${pkgs.fish}/bin/fish" { };
 in
 {
 
