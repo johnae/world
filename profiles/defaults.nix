@@ -20,7 +20,7 @@
     };
   };
 
-  nix.package = pkgs.nixFlakes;
+  nix.package = pkgs.nixUnstable;
 
   nixpkgs.config.allowUnfree = true;
 

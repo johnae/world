@@ -35,8 +35,8 @@ let
     shift
     path=.#nixosConfigurations."$host".config.system.build.toplevel
     echo Building host "$host" 1>&2
-    ${nixpkgs.nixFlakes}/bin/nix build --no-link "$@" "$path" 1>&2
-    ${nixpkgs.nixFlakes}/bin/nix path-info "$@" "$path"
+    ${nixpkgs.nixUnstable}/bin/nix build --no-link "$@" "$path" 1>&2
+    ${nixpkgs.nixUnstable}/bin/nix path-info "$@" "$path"
   '';
 
   world-installer = nixpkgs.writeStrictShellScriptBin "world-installer" ''
@@ -44,8 +44,8 @@ let
     shift
     path=.#isoConfigurations."$host".config.system.build.isoImage
     echo Building iso image for host "$host" 1>&2
-    ${nixpkgs.nixFlakes}/bin/nix build --no-link "$@" "$path" 1>&2
-    ${nixpkgs.nixFlakes}/bin/nix path-info "$@" "$path"
+    ${nixpkgs.nixUnstable}/bin/nix build --no-link "$@" "$path" 1>&2
+    ${nixpkgs.nixUnstable}/bin/nix path-info "$@" "$path"
   '';
 
   world-vm-installer = nixpkgs.writeStrictShellScriptBin "world-vm-installer" ''
@@ -84,8 +84,8 @@ let
     shift
     path=.#nixpkgs."$pkg"
     echo Building package "$pkg" 1>&2
-    ${nixpkgs.nixFlakes}/bin/nix build --no-link "$@" "$path" 1>&2
-    ${nixpkgs.nixFlakes}/bin/nix path-info "$@" "$path"
+    ${nixpkgs.nixUnstable}/bin/nix build --no-link "$@" "$path" 1>&2
+    ${nixpkgs.nixUnstable}/bin/nix path-info "$@" "$path"
   '';
 
   world-update = nixpkgs.writeStrictShellScriptBin "world-update" ''
@@ -142,7 +142,7 @@ let
     export NIX_SSHOPTS="-T -o RemoteCommand=none"
 
     echo Copying closure to remote
-    ${nixpkgs.nixFlakes}/bin/nix-copy-closure "$host" "$pathToConfig"
+    ${nixpkgs.nixUnstable}/bin/nix-copy-closure "$host" "$pathToConfig"
 
     if [ -d "${nixpkgs.inputs.secrets}/$host/root" ]; then
       roottmp="$(mktemp -d /tmp/roottmp.XXXXXXXX)"
@@ -184,7 +184,7 @@ let
 
   world-update-pkgs = nixpkgs.writeStrictShellScriptBin "world-update-pkgs" ''
     for pkg in $(${nixpkgs.jq}/bin/jq -r '.nodes | keys[] | select(. != "root")' flake.lock); do
-      ${nixpkgs.nixFlakes}/bin/nix flake update --update-input "$pkg" "$@"
+      ${nixpkgs.nixUnstable}/bin/nix flake update --update-input "$pkg" "$@"
     done
   '';
 
@@ -199,7 +199,7 @@ let
     fi
     _url=https://github.com/"$_repo"/releases/download/"$_version"/"$_dlname"
     cat <<EOF>"$_pkgpath"/metadata.nix
-    { url = "$_url"; version = "$_version"; sha256 = "$(${nixpkgs.nixFlakes}/bin/nix-prefetch-url "$_url")"; }
+    { url = "$_url"; version = "$_version"; sha256 = "$(${nixpkgs.nixUnstable}/bin/nix-prefetch-url "$_url")"; }
     EOF
   '';
 
@@ -258,7 +258,7 @@ let
     cat<<EOF>./nix-repl.nix
     (builtins.getFlake (toString ./.)).nixosConfigurations.$host
     EOF
-    ${nixpkgs.nixFlakes}/bin/nix repl ./nix-repl.nix
+    ${nixpkgs.nixUnstable}/bin/nix repl ./nix-repl.nix
   '';
 
   world = nixpkgs.writeStrictShellScriptBin "world" ''
@@ -293,7 +293,7 @@ let
 in
 nixpkgs.mkShell {
   buildInputs =
-    [ world nixpkgs.strict-bash nixpkgs.sops nixpkgs.moreutils nixpkgs.nixFlakes ];
+    [ world nixpkgs.strict-bash nixpkgs.sops nixpkgs.moreutils nixpkgs.nixUnstable ];
 
   inherit SOPS_PGP_FP;
   NIX_CONF_DIR =

@@ -1,12 +1,12 @@
 { pkgs, config, lib, options }:
 let
-  importsFrom = with lib; dir: mapAttrsToList
+  importsFrom = dir: lib.mapAttrsToList
     (
       name: _: dir + "/${name}"
     )
     (
-      filterAttrs
-        (name: _: hasSuffix ".nix" name)
+      lib.filterAttrs
+        (name: _: lib.hasSuffix ".nix" name)
         (builtins.readDir dir)
     );
   home = config.home;
@@ -15,62 +15,62 @@ in
   #nixpkgs.config = import ../nix/nixpkgs-config.nix;
   #nixpkgs.overlays = import ../nix/overlays/overlays.nix { };
 
-  imports = with lib; (
+  imports = (
     importsFrom ../hm-modules
   ) ++ (
-    filter (path: path != ./home.nix) (importsFrom ./.)
+    builtins.filter (path: path != ./home.nix) (importsFrom ./.)
   );
 
-  home.packages = with pkgs;
+  home.packages =
     [
-      sway
-      swaybg
-      swayidle
-      swaylock
-      xwayland
-      iw
-      mako
-      spotifyd
-      spotnix
-      my-emacs
-      mu
-      bat
-      mail
-      alacritty
-      project-select
-      launch
-      git-credential-pass
-      sk-sk
-      sk-run
-      sk-window
-      sk-passmenu
-      add-wifi-network
-      update-wifi-networks
-      update-wireguard-keys
-      initialize-user
+      pkgs.sway
+      pkgs.swaybg
+      pkgs.swayidle
+      pkgs.swaylock
+      pkgs.xwayland
+      pkgs.iw
+      pkgs.mako
+      pkgs.spotifyd
+      pkgs.spotnix
+      pkgs.my-emacs
+      pkgs.mu
+      pkgs.bat
+      pkgs.mail
+      pkgs.alacritty
+      pkgs.project-select
+      pkgs.launch
+      pkgs.git-credential-pass
+      pkgs.sk-sk
+      pkgs.sk-run
+      pkgs.sk-window
+      pkgs.sk-passmenu
+      pkgs.add-wifi-network
+      pkgs.update-wifi-networks
+      pkgs.update-wireguard-keys
+      pkgs.initialize-user
       #spotify-cmd
       #spotify-play-album
       #spotify-play-track
       #spotify-play-artist
       #spotify-play-playlist
-      wl-clipboard
-      wl-clipboard-x11
-      wf-recorder
-      nordic
-      nordic-polar
-      wayvnc
-      nixpkgs-fmt
-      google-cloud-sdk
-      kubectl
-      kustomize
-      fzf # # for certain utilities that depend on it
-      rust-analyzer-bin
-      rnix-lsp
-      xdg_utils
-      netns-dbus-proxy
-      spook
-      gnome3.nautilus
-      chromium-dev-ozone
+      pkgs.wl-clipboard
+      pkgs.wl-clipboard-x11
+      pkgs.wf-recorder
+      pkgs.nordic
+      pkgs.nordic-polar
+      pkgs.wayvnc
+      pkgs.nixpkgs-fmt
+      pkgs.google-cloud-sdk
+      pkgs.kubectl
+      pkgs.kustomize
+      pkgs.fzf # # for certain utilities that depend on it
+      pkgs.rust-analyzer-bin
+      pkgs.rnix-lsp
+      pkgs.xdg_utils
+      pkgs.netns-dbus-proxy
+      pkgs.spook
+      pkgs.gnome3.nautilus
+      pkgs.chromium-dev-ozone
       #(pkgs.firejailed { package = chrpkgs.chromium-dev-wayland; ignore = [ "nou2f" ]; })
     ];
 
@@ -206,11 +206,11 @@ in
   programs.skim.enable = true;
 
   services.lorri.enable = true;
-  systemd.user.services.lorri.Service.Environment = with lib; mkForce
+  systemd.user.services.lorri.Service.Environment = lib.mkForce
     (
       let
-        path = with pkgs;
-          makeSearchPath "bin" [ nixFlakes gitMinimal gnutar gzip ];
+        path =
+          lib.makeSearchPath "bin" [ pkgs.nixUnstable pkgs.gitMinimal pkgs.gnutar pkgs.gzip ];
       in
       [ "PATH=${path}" ]
     );
