@@ -191,7 +191,7 @@
 
       buildkite =
         let
-          pipelineDir = ./buildkite-ci;
+          pipelineDir = ./.buildkite;
           fullPath = name: pipelineDir + "/${name}";
           pipelinePaths = map fullPath (builtins.attrNames (builtins.readDir pipelineDir));
         in
