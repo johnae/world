@@ -1,15 +1,13 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 {
-  imports = mapAttrsToList
+  imports = lib.mapAttrsToList
     (
       name: _: import (./services + "/${name}")
     )
     (
-      filterAttrs
-        (name: _: hasSuffix ".nix" name)
+      lib.filterAttrs
+        (name: _: lib.hasSuffix ".nix" name)
         (builtins.readDir ./services)
     );
 }

@@ -36,7 +36,7 @@ let
     )
     selectedFontsShas;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
   inherit srcs;
   pname = "nerdfonts";
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     find -name \*.ttf -exec mkdir -p $out/share/fonts/truetype/NerdFonts \; -exec mv {} $out/share/fonts/truetype/NerdFonts \;
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Iconic font aggregator, collection, & patcher. 3,600+ icons, 50+ patched fonts";
     longDescription = ''
       Nerd Fonts is a project that attempts to patch as many developer targeted
@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
       Awesome, Devicons, Octicons, and others.
     '';
     homepage = "https://nerdfonts.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = stdenv.lib.licenses.mit;
+    maintainers = [ stdenv.lib.maintainers.doronbehar ];
     hydraPlatforms = [ ]; # 'Output limit exceeded' on Hydra
   };
 }

@@ -149,12 +149,12 @@ let
     esac
   '';
 
-  writeKeys = with lib; loginKeys: backupKeys: to: ''
+  writeKeys = loginKeys: backupKeys: to: ''
     {
-    ${concatMapStringsSep "\n"
+    ${lib.concatMapStringsSep "\n"
       (x: '' echo '${x}' '')
       loginKeys}
-    ${concatMapStringsSep "\n"
+    ${lib.concatMapStringsSep "\n"
       (x: '' echo 'command="${rbreceive}/bin/rbreceive",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ${x}' '')
       backupKeys}
     } >> ${to}

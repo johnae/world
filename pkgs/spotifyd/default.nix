@@ -8,7 +8,7 @@
 , inputs
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "spotifyd";
   version = inputs.spotifyd.rev;
 
@@ -23,8 +23,8 @@ rustPlatform.buildRustPackage rec {
   #cargoBuildFlags = [ "--features pulseaudio_backend,dbus_mpris" ];
   cargoBuildFlags = [ "--features pulseaudio_backend" ];
 
-  meta = with stdenv.lib; {
-    license = licenses.gpl3;
+  meta = {
+    license = stdenv.lib.licenses.gpl3;
     maintainers = [
       {
         email = "john@insane.se";

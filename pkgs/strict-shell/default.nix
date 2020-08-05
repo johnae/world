@@ -1,6 +1,7 @@
 { stdenv, shellcheck, lib, writeTextFile, ... }:
 let
-  setToStringSep = with lib; sep: x: fun: concatStringsSep sep (mapAttrsToList fun x);
+  inherit (lib) concatStringsSep mapAttrsToList;
+  setToStringSep = sep: x: fun: concatStringsSep sep (mapAttrsToList fun x);
 
   substituteInPlace = file: substitutions: ''
     substituteInPlace ${file} \

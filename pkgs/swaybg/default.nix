@@ -12,7 +12,7 @@
 , buildDocs ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "swaybg-${inputs.swaybg.rev}";
   version = inputs.swaybg.rev;
 
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+  meta = {
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [
       {
         email = "john@insane.se";
         github = "johnae";

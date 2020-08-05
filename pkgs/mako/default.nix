@@ -19,7 +19,7 @@
 let
   version = inputs.mako.rev;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "mako-${version}";
   inherit version;
 
@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
      --set GDK_PIXBUF_MODULE_FILE "${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "notification daemon for Wayland";
     homepage = "https://mako-project.org/";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

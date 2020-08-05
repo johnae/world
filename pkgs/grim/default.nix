@@ -13,7 +13,7 @@
 , inputs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "grim-${inputs.grim.rev}";
   version = inputs.grim.rev;
 
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig git scdoc ];
   buildInputs = [ wayland wayland-protocols cairo libjpeg systemd ];
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "image grabber for wayland compositors";
     homepage = "https://wayland.emersion.fr/grim/";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

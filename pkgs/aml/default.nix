@@ -5,7 +5,7 @@
 , pkgconfig
 , inputs
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "aml";
   version = inputs.aml.rev;
 
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ];
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Andri's Main Loop";
     homepage = "https://github.com/any1/aml";
-    license = licenses.isc;
-    platforms = platforms.linux;
+    license = stdenv.lib.licenses.isc;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

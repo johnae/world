@@ -11,7 +11,7 @@
 , inputs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "wl-clipboard";
   version = inputs.wl-clipboard.rev;
 
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+  meta = {
+    license = stdenv.lib.licenses.gpl3;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

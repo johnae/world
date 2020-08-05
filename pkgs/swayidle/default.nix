@@ -16,7 +16,7 @@
 let
   version = inputs.swayidle.rev;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "swayidle-${version}";
   inherit version;
 
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+  meta = {
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [
       {
         email = "john@insane.se";
         github = "johnae";

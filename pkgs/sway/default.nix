@@ -68,12 +68,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "i3-compatible tiling Wayland compositor";
     homepage = https://swaywm.org;
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [
       {
         email = "john@insane.se";
         github = "johnae";

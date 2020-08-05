@@ -10,7 +10,7 @@
 , inputs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "wf-recorder";
   version = inputs.wf-recorder.rev;
 
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dopencl=disabled" ];
 
-  meta = with stdenv.lib; {
-    license = licenses.mit;
-    platforms = platforms.linux;
+  meta = {
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

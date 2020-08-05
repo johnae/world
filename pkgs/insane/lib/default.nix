@@ -1,12 +1,14 @@
 { stdenv, lib, shellcheck, coreutils, writeTextFile, ... }:
-
-with lib;
-with builtins;
 let
+  inherit (lib) stringToCharacters concatStringsSep
+    toUpper toLower splitString mapAttrsToList
+    stringAsChars makeSearchPath;
+  inherit (builtins) head tail concatMap;
   changeFirst = s: fn:
     let
       c = stringToCharacters s;
-    in concatStringsSep "" ([ (fn (head c)) ] ++ (tail c));
+    in
+    concatStringsSep "" ([ (fn (head c)) ] ++ (tail c));
   capitalize = s: changeFirst s toUpper;
   uncapitalize = s: changeFirst s toLower;
   toCamelCase = s: concatStringsSep "" (map (capitalize) (splitString "_" s));
@@ -16,30 +18,14 @@ let
   isAlpha = c: (toUpper c) != (toLower c);
   isUpper = c: (isAlpha c) && c == (toUpper c);
   isLower = c: !(isUpper c);
-  toSnakeCase = s: concatStringsSep "" (concatMap (x:
-    if isUpper x then [ "_" (toLower x) ] else [ x ]
-  ) (stringToCharacters s)
+  toSnakeCase = s: concatStringsSep "" (concatMap
+    (x:
+      if isUpper x then [ "_" (toLower x) ] else [ x ]
+    )
+    (stringToCharacters s)
   );
   isSnakeCase = s: s == (toSnakeCase s);
-in
-rec {
-  inherit changeFirst capitalize uncapitalize toCamelCase
-    toMixedCase toSnakeCase isUpper isLower
-    isCamelCase isMixedCase isSnakeCase;
-  ## Helper functions for generating strings from sets
-  ## For example, when sep is ",", x is { a = "123"; b = "456" }
-  ## and fun is (key: value: ''${key}: ${value}'') the resulting string is:
-  ## a: 123, b: 456
-
   setToStringSep = sep: x: fun: concatStringsSep sep (mapAttrsToList fun x);
-
-  ## Curry the above to have a specific separator already set (a newline in
-  ## this case)
-  toMultiLineString = setToStringSep "\n";
-
-  ## Replace spaces with "-"
-  spaceToMinus = s: stringAsChars (x: if x == " " then "-" else x) s;
-
   ## A helper (for below mainly) for substituting variables in place in a
   ## shell script using this enables one to write shell scripts with syntax
   ## highlighting
@@ -50,13 +36,19 @@ rec {
     (name: value: '' --subst-var-by ${name} "${value}"'')}
   '';
 
+  #########
+  toMultiLineString = setToStringSep "\n";
+
+  ## Replace spaces with "-"
+  spaceToMinus = s: stringAsChars (x: if x == " " then "-" else x) s;
+
   ## A helper for creating shell script derivations from files
   ## see above - enables one to get syntax highlighting while
   ## developing.
   mkStrictShellScript =
     { name
     , src
-    , substitutions ? {}
+    , substitutions ? { }
     }: stdenv.mkDerivation {
       inherit name;
       buildCommand = ''
@@ -83,7 +75,6 @@ rec {
       '';
     };
 
-
   ## A helper for creating shell script derivations from files
   ## see above - enables one to get syntax highlighting while
   ## developing.
@@ -91,7 +82,7 @@ rec {
     { name
     , paths
     , description
-    }: stdenv.mkDerivation rec {
+    }: stdenv.mkDerivation {
       inherit name;
       meta = {
         description = "${description} Part of insane tooling.";
@@ -119,7 +110,7 @@ rec {
         fi
       '';
       buildCommand = ''
-        n=$out${destination}
+        n=$out$destination
         mkdir -p "$(dirname "$n")"
         if [ -e "$textPath" ]; then
           mv "$textPath" "$n"
@@ -179,66 +170,12 @@ rec {
     ## if all of the above went well - execute the script
     "$script"
   '';
-
-  ## Generates test command which will run all the given tests
-  describe = name: specs: writeStrictShellScriptBin "describe-${spaceToMinus (toLower name)}" ''
-    export RED='\033[0;31m'
-    export GREEN='\033[0;32m'
-    export NEUTRAL='\033[0m'
-
-    neutral() { printf "%b" "$NEUTRAL"; }
-    start() { printf "%b" "$1"; }
-    clr() { start "$1""$2"; neutral; }
-
-    ERRORS=""
-    fail() {
-      FAILED=yes
-      clr "$RED" "FAIL: [ it $DESCRIPTION: $* ]\n"
-      ERRORS=$ERRORS''${ERRORS:+\\n}"   $DESCRIPTION: $*"
-    }
-
-    pass() {
-      clr "$GREEN" "PASS: [ it $DESCRIPTION ]\n"
-    }
-
-    assert() {
-      if ! test "$@"; then
-        fail "$@"
-      fi
-    }
-
-
-    ${concatStringsSep "\necho\n" specs}
-
-    if [ -n "$ERRORS" ]; then
-      clr "$RED" "Oops - we failed:\n\n"
-      clr "$RED" "$ERRORS\n"
-      exit 1
-    fi
-  '';
-
-  setup = { before ? "", after ? "" }: ''
-    at_exit() {
-      ${after}
-    }
-    sig_at_exit() {
-        trap "" EXIT
-        at_exit
-    }
-    trap at_exit EXIT
-    trap sig_at_exit INT QUIT TERM
-
-    ${before}
-  '';
-
-  ## It generates a single test meant to be included in the list to above `tests`
-  it = desc: content: ''
-    FAILED=no
-    DESCRIPTION='${desc}'
-    ${content}
-    if [ "$FAILED" = "no" ]; then
-      pass
-    fi
-  '';
+in
+{
+  inherit changeFirst capitalize uncapitalize toCamelCase
+    toMixedCase toSnakeCase isUpper isLower substituteInPlace
+    isCamelCase isMixedCase isSnakeCase setToStringSep
+    toMultiLineString spaceToMinus mkStrictShellScript
+    cmdWithSubCommands writeStrictShellScriptBin strict-bash;
 
 }

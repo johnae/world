@@ -45,9 +45,9 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    license = licenses.mit;
-    platforms = platforms.linux;
+  meta = {
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [
       {
         email = "john@insane.se";

@@ -1,9 +1,8 @@
 { config, lib, pkgs, options, ... }:
-
-with lib;
 let
+  inherit (lib) mkOption mkMerge mkIf mkEnableOption types;
   cfg = config.base16-theme;
-  cnotation = replaceStrings [ "#" ] [ "0x" ];
+  cnotation = builtins.replaceStrings [ "#" ] [ "0x" ];
   color = default: mkOption { inherit default; type = types.str; };
   alpha = clr: a: "${clr}${a}";
 in

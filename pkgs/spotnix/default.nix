@@ -1,6 +1,6 @@
 { stdenv, rustPlatform, pkgconfig, openssl, inputs }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "spotnix";
   version = inputs.spotnix.rev;
 
@@ -13,8 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    license = licenses.mit;
+  meta = {
+    license = stdenv.lib.licenses.mit;
     maintainers = [
       {
         email = "john@insane.se";

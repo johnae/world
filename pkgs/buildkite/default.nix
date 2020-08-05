@@ -1,5 +1,5 @@
 { stdenv, lib, buildGoModule, makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep, inputs }:
-buildGoModule rec {
+buildGoModule {
   pname = "buildkite-agent";
   version = inputs.buildkite.rev;
 
@@ -19,7 +19,7 @@ buildGoModule rec {
       --set BUILDKITE_HOOKS_PATH ${./hooks}
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Build runner for buildkite.com";
     longDescription = ''
       The buildkite-agent is a small, reliable, and cross-platform build runner
@@ -29,8 +29,14 @@ buildGoModule rec {
       and uploading the job's artifacts.
     '';
     homepage = "https://buildkite.com/docs/agent";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pawelpacana zimbatm rvl ];
-    platforms = platforms.unix;
+    license = stdenv.lib.licenses.mit;
+    maintainers = [
+      {
+        email = "john@insane.se";
+        github = "johnae";
+        name = "John Axel Eriksson";
+      }
+    ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

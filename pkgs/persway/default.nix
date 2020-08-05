@@ -1,7 +1,6 @@
 { stdenv, lib, rustPlatform, inputs }:
 
-with rustPlatform;
-buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "persway";
   version = inputs.persway.rev;
 
@@ -11,8 +10,8 @@ buildRustPackage rec {
 
   outputs = [ "out" ];
 
-  meta = with stdenv.lib; {
-    license = licenses.mit;
+  meta = {
+    license = stdenv.lib.licenses.mit;
     maintainers = [
       {
         email = "john@insane.se";

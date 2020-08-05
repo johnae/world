@@ -17,7 +17,7 @@
 , inputs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "xdg-desktop-portal-wlr";
   version = inputs.xdg-desktop-portal-wlr.rev;
 
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
     libdrm
   ];
 
-  meta = with stdenv.lib; {
+  meta = {
     inherit (inputs.xdg-desktop-portal-wlr) description homepage;
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

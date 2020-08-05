@@ -1,5 +1,5 @@
 { stdenv, lib, buildGoModule, packr, inputs }:
-buildGoModule rec {
+buildGoModule {
   pname = "argocd";
   commit = inputs.argo-cd.rev;
   version = builtins.replaceStrings
@@ -16,9 +16,9 @@ buildGoModule rec {
 
   buildFlagsArray = ''
     -ldflags=
-     -X github.com/argoproj/argo-cd/common.version=${version}
+     -X github.com/argoproj/argo-cd/common.version=$version
      -X github.com/argoproj/argo-cd/common.buildDate=unknown
-     -X github.com/argoproj/argo-cd/common.gitCommit=${commit}
+     -X github.com/argoproj/argo-cd/common.gitCommit=$commit
      -X github.com/argoproj/argo-cd/common.gitTreeState=clean
   '';
 
@@ -27,10 +27,10 @@ buildGoModule rec {
     packr
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes";
     homepage = "https://github.com/argoproj/argo";
-    license = licenses.asl20;
+    license = stdenv.lib.licenses.asl20;
     maintainers = [
       {
         email = "john@insane.se";

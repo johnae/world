@@ -11,9 +11,12 @@
 , zlib
 , inputs
 }:
-stdenv.mkDerivation rec {
-  pname = "neatvnc-${version}";
+let
   version = inputs.neatvnc.rev;
+in
+stdenv.mkDerivation {
+  pname = "neatvnc-${version}";
+  inherit version;
 
   src = inputs.neatvnc;
 
@@ -27,7 +30,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A VNC server library";
     longDescription = ''
       This is a liberally licensed VNC server library that's intended to be
@@ -36,9 +39,9 @@ stdenv.mkDerivation rec {
       - Clean interface
       - Interoperability with the Freedesktop.org ecosystem
     '';
-    inherit (src.meta) homepage;
-    license = licenses.isc;
-    platforms = platforms.linux;
+    inherit (inputs.neatvnc) homepage;
+    license = stdenv.lib.licenses.isc;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [
       {
         email = "john@insane.se";

@@ -33,8 +33,8 @@ in
     shellAliases = {
       k8s-run = "${pkgs.kubectl}/bin/kubectl run tmp-shell --generator=run-pod/v1 --rm -i --tty --image=nixpkgs/nix-unstable --restart=Never --attach -- nix-shell -p bashInteractive --run bash";
     };
-    shellInit = with pkgs; ''
-      source ${skim}/share/skim/key-bindings.fish
+    shellInit = ''
+      source ${pkgs.skim}/share/skim/key-bindings.fish
       set fish_greeting
       fish_vi_key_bindings ^ /dev/null
 
@@ -45,10 +45,10 @@ in
           set -q SK_TMUX_HEIGHT; or set SK_TMUX_HEIGHT 40%
           begin
             set -lx SK_DEFAULT_OPTS "--color=bw --height $SK_TMUX_HEIGHT $SK_DEFAULT_OPTS --tiebreak=index --bind=ctrl-r:toggle-sort $SK_CTRL_R_OPTS +m"
-            set -lx dir (${project-select}/bin/project-select ~/Development ~/.config)
+            set -lx dir (${pkgs.project-select}/bin/project-select ~/Development ~/.config)
             if [ "$dir" != "" ]
               cd $dir
-              set -lx file (${fd}/bin/fd -H -E "\.git" . | "${skim}"/bin/sk --color=bw)
+              set -lx file (${pkgs.fd}/bin/fd -H -E "\.git" . | "${pkgs.skim}"/bin/sk --color=bw)
               if [ "$file" != "" ]
                 emacsclient -t -a= "$file"
               end
@@ -66,7 +66,7 @@ in
           set -q SK_TMUX_HEIGHT; or set SK_TMUX_HEIGHT 40%
           begin
             set -lx SK_DEFAULT_OPTS "--color=bw --height $SK_TMUX_HEIGHT $SK_DEFAULT_OPTS --tiebreak=index --bind=ctrl-r:toggle-sort $SK_CTRL_R_OPTS +m"
-            set -lx file (${fd}/bin/fd -H -E "\.git" . | "${skim}"/bin/sk)
+            set -lx file (${pkgs.fd}/bin/fd -H -E "\.git" . | "${pkgs.skim}"/bin/sk)
             if [ "$file" != "" ]
               emacsclient -t -a= "$file"
             end
@@ -80,7 +80,7 @@ in
         end
 
         function kubectx-select -d "Select kubernetes cluster"
-          ${kubectx}/bin/kubectx
+          ${pkgs.kubectx}/bin/kubectx
         end
         bind \ck kubectx-select
 
@@ -89,7 +89,7 @@ in
         end
 
         function kubens-select -d "Select kubernetes namespace"
-          ${kubectx}/bin/kubens
+          ${pkgs.kubectx}/bin/kubens
         end
         bind \cn kubectx-select
 
@@ -98,7 +98,7 @@ in
         end
 
         function gcloud-project-select -d "Select gcloud project"
-          set proj (${google-cloud-sdk}/bin/gcloud projects list | tail -n +2 | ${gawk}/bin/awk '{print $1}' | ${skim}/bin/sk)
+          set proj (${pkgs.google-cloud-sdk}/bin/gcloud projects list | tail -n +2 | ${pkgs.gawk}/bin/awk '{print $1}' | ${pkgs.skim}/bin/sk)
           gcloud config set project $proj
         end
         bind \cw gcloud-project-select

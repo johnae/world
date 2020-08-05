@@ -12,9 +12,12 @@
 , scdoc
 , inputs
 }:
-stdenv.mkDerivation rec {
-  name = "slurp-${version}";
+let
   version = inputs.slurp.rev;
+in
+stdenv.mkDerivation {
+  name = "slurp-${version}";
+  inherit version;
 
   src = inputs.slurp;
 
@@ -28,9 +31,9 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  meta = with stdenv.lib; {
+  meta = {
     inherit (inputs.slurp) description homepage;
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

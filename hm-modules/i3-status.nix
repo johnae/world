@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
+  inherit (lib) mkOption mkEnableOption types mkIf;
   cfg = config.programs.i3status-rust;
 
   configFile = conf:

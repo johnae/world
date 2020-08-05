@@ -1,7 +1,7 @@
 { pkgs, config, lib, options }:
 let
-  secretHosts = with builtins;
-    mapAttrs
+  secretHosts =
+    builtins.mapAttrs
       (_: value:
         value // {
           forwardAgent = true;
@@ -12,7 +12,7 @@ let
         }
       )
       (
-        if getEnv "NIX_TEST" != ""
+        if builtins.getEnv "NIX_TEST" != ""
         then { }
         else
           builtins.exec [

@@ -21,7 +21,7 @@
 , inputs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "wlroots-${inputs.wlroots.rev}";
   version = inputs.wlroots.rev;
 
@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     libglvnd
   ];
 
-  meta = with stdenv.lib; {
+  meta = {
     inherit (inputs.wlroots) description homepage;
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [
       {
         email = "john@insane.se";
         github = "johnae";

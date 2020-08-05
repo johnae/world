@@ -2,13 +2,13 @@
 let
   metadata = import ./metadata.nix;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (metadata) version;
   name = "rust-analyzer";
   src = builtins.fetchurl { inherit (metadata) url sha256; };
   installPhase = ''
     mkdir -p $out/bin
-    cp ${src} $out/bin/rust-analyzer
+    cp $src $out/bin/rust-analyzer
     chmod +x $out/bin/rust-analyzer
     ln -s $out/bin/rust-analyzer $out/bin/ra_lsp_server
   '';
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
   unpackPhase = "true";
   buildPhase = "true";
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Pre-built rust-analyzer";
     longDescription = ''
       An experimental Rust compiler front-end for IDEs
     '';
     homepage = "https://github.com/rust-analyzer/rust-analyzer";
-    platforms = platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
