@@ -73,6 +73,7 @@ in
       agents.queue = "linux";
       #runDeploy = false; ## do this manually for now
       dependsOn = keysOf cachePkgs.steps.commands;
+      image = "johnae/argocd";
     };
 
     deploys.buildkite-agent = {
@@ -80,6 +81,7 @@ in
       waitForCompletion = false;
       dependsOn = (keysOf cachePkgs.steps.commands);
       deployDependsOn = (keysOf deployContainers.steps.deploys) ++ [ config.steps.deploys.argocd ];
+      image = "johnae/buildkite-agent";
     };
 
     commands.build-hosts = {
