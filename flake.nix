@@ -97,6 +97,7 @@
           };
           modules =
             [
+              { system.configurationRevision = inputs.nixpkgs.lib.mkIf (self ? rev) self.rev; }
               { nixpkgs = { inherit pkgs; }; }
               { system.nixos.versionSuffix = inputs.nixpkgs.lib.mkForce "git.${builtins.substring 0 11 inputs.nixpkgs.rev}"; }
               inputs.nixpkgs.nixosModules.notDetected
