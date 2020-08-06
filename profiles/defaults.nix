@@ -11,6 +11,8 @@
       experimental-features = nix-command flakes ca-references
     '';
 
+    registry.nixpkgs.flake = inputs.nixpkgs;
+
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
 
     gc = {
@@ -18,9 +20,9 @@
       dates = "daily";
       options = "--delete-older-than 30d";
     };
-  };
 
-  nix.package = pkgs.nixUnstable;
+    package = pkgs.nixUnstable;
+  };
 
   nixpkgs.config.allowUnfree = true;
 
