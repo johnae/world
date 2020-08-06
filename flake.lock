@@ -113,6 +113,21 @@
         "type": "github"
       }
     },
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1596290160,
+        "narHash": "sha256-QNXPeCiLKfLH6G6TtyuxZ14Zm+ZMxBaQ0Klccq+2RfM=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "0c686c77c4ac6f7add3262107685693ada8ae3b0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "google-cloud-sdk-fish-completion": {
       "flake": false,
       "locked": {
@@ -236,16 +251,17 @@
     },
     "nixkite": {
       "inputs": {
+        "flake-utils": "flake-utils",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1595166840,
-        "narHash": "sha256-o362V317n7/frfiujtmQPKqZz98lQf0Ersv+C18fIgo=",
+        "lastModified": 1596745808,
+        "narHash": "sha256-Pa4vjSAe8GEzlTC1NJHfyeZ+KO/A9XQCk1K2RkYXlJU=",
         "owner": "johnae",
         "repo": "nixkite",
-        "rev": "3f5bf3266f35f67454d4f1b1c1052f2751b81cb1",
+        "rev": "3d72cbf47fc1a7bf95251782c83b28269802f894",
         "type": "github"
       },
       "original": {
