@@ -214,6 +214,26 @@
         "type": "github"
       }
     },
+    "nix-misc": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1596742733,
+        "narHash": "sha256-8ZL0cKi3hnbXQ6P10V4c8bDPFdqnrLmjLP/T/A6MYKc=",
+        "owner": "johnae",
+        "repo": "nix-misc",
+        "rev": "806f20b24b339a6d8435a39b204335c234236dfd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "johnae",
+        "repo": "nix-misc",
+        "type": "github"
+      }
+    },
     "nixkite": {
       "inputs": {
         "nixpkgs": [
@@ -330,6 +350,7 @@
         "mako": "mako",
         "neatvnc": "neatvnc",
         "netns-exec": "netns-exec",
+        "nix-misc": "nix-misc",
         "nixkite": "nixkite",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",

@@ -297,12 +297,10 @@ let
   '';
 in
 {
-  paths = {
-    inherit mail project-select launch git-credential-pass sk-sk
-      sk-run sk-window sk-passmenu browse-chromium signal
-      screenshot random-name add-wifi-network update-wifi-networks
-      update-wireguard-keys spotify-play-album spotify-play-track spotify-cmd
-      spotify-play-artist spotify-play-playlist btrfs-diff
-      ;
-  };
+  inherit mail project-select launch git-credential-pass sk-sk
+    sk-run sk-window sk-passmenu browse-chromium signal
+    screenshot random-name add-wifi-network update-wifi-networks
+    update-wireguard-keys spotify-play-album spotify-play-track spotify-cmd
+    spotify-play-artist spotify-play-playlist btrfs-diff
+    ;
 }

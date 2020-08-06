@@ -16,6 +16,10 @@
       url = "github:johnae/nixkite/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-misc = {
+      url = "github:johnae/nix-misc";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     ## non flakes
     nixos-hardware = { url = "github:nixos/nixos-hardware"; flake = false; };
@@ -46,11 +50,6 @@
     xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr"; flake = false; };
     buildkite = { url = "github:buildkite/agent/v3.22.1"; flake = false; };
     nixpkgs-chromium = { url = "github:colemickens/nixpkgs-chromium"; flake = false; };
-    #rust-analyzer = {
-    #  type = "file";
-    #  url = "https://github.com/rust-analyzer/rust-analyzer/releases/download/2020-06-15/rust-analyzer-linux";
-    #  flake = false;
-    #};
   };
   outputs = { self, ... }@inputs:
     let
@@ -148,6 +147,7 @@
         (pathsToImportedAttrs overlayPaths) // {
           inputs = (final: prev: { inherit inputs; });
           emacs-overlay = inputs.emacs-overlay.overlay;
+          nix-misc = inputs.nix-misc.overlay;
           chromium-dev-ozone =
             let
               pkgset = import (import "${inputs.nixpkgs-chromium}/nixpkgs/nixos-unstable") {

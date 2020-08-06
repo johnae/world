@@ -61,13 +61,9 @@ final: prev:
 
   k3s = prev.callPackage ../pkgs/k3s { };
 
-  inherit (prev.recurseIntoAttrs (prev.callPackage ../pkgs/strict-shell { }))
-    writeStrictShellScript writeStrictShellScriptBin
-    mkStrictShellScript strict-bash;
-
   initialize-user = prev.callPackage ../pkgs/initialize-user { };
 
-  inherit ((prev.callPackage ../pkgs/scripts { }).paths)
+  inherit (prev.callPackage ../pkgs/scripts { })
     mail project-select launch git-credential-pass sk-sk
     sk-run sk-window sk-passmenu browse-chromium
     screenshot random-name add-wifi-network update-wifi-networks
