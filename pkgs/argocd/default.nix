@@ -1,10 +1,13 @@
 { stdenv, lib, buildGoModule, packr, inputs }:
-buildGoModule {
-  pname = "argocd";
+let
   commit = inputs.argo-cd.rev;
   version = builtins.replaceStrings
     [ "\n" "\r" "\t" ] [ "" "" "" ]
     (builtins.readFile "${inputs.argo-cd}/VERSION");
+in
+buildGoModule {
+  pname = "argocd";
+  inherit version commit;
 
   src = inputs.argo-cd;
 
@@ -16,9 +19,9 @@ buildGoModule {
 
   buildFlagsArray = ''
     -ldflags=
-     -X github.com/argoproj/argo-cd/common.version=$version
+     -X github.com/argoproj/argo-cd/common.version=${version}
      -X github.com/argoproj/argo-cd/common.buildDate=unknown
-     -X github.com/argoproj/argo-cd/common.gitCommit=$commit
+     -X github.com/argoproj/argo-cd/common.gitCommit=${commit}
      -X github.com/argoproj/argo-cd/common.gitTreeState=clean
   '';
 
