@@ -133,7 +133,7 @@
       inherit nixosConfigurations;
       inherit isoConfigurations;
 
-      packages.x86_64-linux.nixpkgs = nixpkgsFor."x86_64-linux";
+      packages.x86_64-linux.nixpkgs = pkgs;
 
       ## for easy access to overlays which we might want to build in ci for example
       overlayAttrs = pkgs.lib.filterAttrs (_: pkgs.lib.isDerivation) ((import ./overlays/pkgs.nix) pkgs pkgs);
