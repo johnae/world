@@ -6,6 +6,36 @@ let
     "${inputs.secrets}/${hostName}/meta.nix"
   ]) { inherit pkgs userName; };
 
+  sshExtraConfig =
+    let
+      secretHosts = builtins.exec [
+        "${pkgs.sops}/bin/sops"
+        "-d"
+        "${pkgs.inputs.secrets}/ssh-hosts/hosts.nix"
+      ];
+      builders = builtins.exec [
+        "${pkgs.sops}/bin/sops"
+        "-d"
+        "${pkgs.inputs.secrets}/builders/hosts.nix"
+      ];
+      buildHosts = lib.filterAttrs
+        (n: v:
+          builtins.any (e: e.hostName == v.hostname) builders
+        )
+        secretHosts;
+    in
+    lib.concatStringsSep "\n"
+      (lib.mapAttrsToList
+        (
+          name: value:
+            ''
+              Host ${name} ${value.hostname}
+                HostName ${value.hostname}
+                StrictHostKeyChecking accept-new
+            ''
+        )
+        buildHosts);
+
   nixos-hardware = inputs.nixos-hardware;
 
   xps9370 = {
@@ -191,6 +221,7 @@ with lib; {
   };
 
   programs.sway.enable = true;
+  programs.ssh.extraConfig = sshExtraConfig;
 
   home-manager.useUserPackages = true;
   home-manager.users."${userName}" = { ... }: {
