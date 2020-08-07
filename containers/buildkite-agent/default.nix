@@ -23,6 +23,7 @@ let
     experimental-features = nix-command flakes ca-references
     ## below allows the use of builtins.exec - for secrets decryption
     allow-unsafe-native-code-during-evaluation = true
+    builders-use-substitutes = true
   '';
 
   rootfs = stdenv.mkDerivation {
