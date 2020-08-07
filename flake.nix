@@ -2,6 +2,7 @@
   description = "A flake for building the world";
 
   inputs = {
+    flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home = {
       url = "github:johnae/home-manager/flakes";
@@ -19,6 +20,11 @@
     nix-misc = {
       url = "github:johnae/nix-misc";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    spook = {
+      url = "github:johnae/spook";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nix-misc.follows = "nix-misc";
     };
 
     ## non flakes
@@ -148,6 +154,7 @@
           inputs = (final: prev: { inherit inputs; });
           emacs-overlay = inputs.emacs-overlay.overlay;
           nix-misc = inputs.nix-misc.overlay;
+          spook = inputs.spook.overlay;
           chromium-dev-ozone =
             let
               pkgset = import (import "${inputs.nixpkgs-chromium}/nixpkgs/nixos-unstable") {

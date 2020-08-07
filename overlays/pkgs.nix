@@ -30,7 +30,7 @@ final: prev:
   mako = prev.callPackage ../pkgs/mako { };
   slurp = prev.callPackage ../pkgs/slurp { };
 
-  spook = prev.callPackage ../pkgs/spook { };
+  #spook = prev.callPackage ../pkgs/spook { };
   spotifyd = prev.callPackage ../pkgs/spotifyd { };
   spotnix = prev.callPackage ../pkgs/spotnix { };
 

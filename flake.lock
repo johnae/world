@@ -128,6 +128,36 @@
         "type": "github"
       }
     },
+    "flake-utils_2": {
+      "locked": {
+        "lastModified": 1596290160,
+        "narHash": "sha256-QNXPeCiLKfLH6G6TtyuxZ14Zm+ZMxBaQ0Klccq+2RfM=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "0c686c77c4ac6f7add3262107685693ada8ae3b0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_3": {
+      "locked": {
+        "lastModified": 1596290160,
+        "narHash": "sha256-QNXPeCiLKfLH6G6TtyuxZ14Zm+ZMxBaQ0Klccq+2RfM=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "0c686c77c4ac6f7add3262107685693ada8ae3b0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "google-cloud-sdk-fish-completion": {
       "flake": false,
       "locked": {
@@ -251,7 +281,31 @@
     },
     "nixkite": {
       "inputs": {
-        "flake-utils": "flake-utils",
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1596745808,
+        "narHash": "sha256-Pa4vjSAe8GEzlTC1NJHfyeZ+KO/A9XQCk1K2RkYXlJU=",
+        "owner": "johnae",
+        "repo": "nixkite",
+        "rev": "3d72cbf47fc1a7bf95251782c83b28269802f894",
+        "type": "github"
+      },
+      "original": {
+        "owner": "johnae",
+        "ref": "flakes",
+        "repo": "nixkite",
+        "type": "github"
+      }
+    },
+    "nixkite_2": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -360,6 +414,7 @@
         "emacs-overlay": "emacs-overlay",
         "fire": "fire",
         "fish-kubectl-completions": "fish-kubectl-completions",
+        "flake-utils": "flake-utils",
         "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
         "grim": "grim",
         "home": "home",
@@ -375,6 +430,7 @@
         "persway": "persway",
         "secrets": "secrets",
         "slurp": "slurp",
+        "spook": "spook",
         "spotifyd": "spotifyd",
         "spotnix": "spotnix",
         "sway": "sway",
@@ -422,6 +478,31 @@
       "original": {
         "owner": "emersion",
         "repo": "slurp",
+        "type": "github"
+      }
+    },
+    "spook": {
+      "inputs": {
+        "flake-utils": "flake-utils_3",
+        "nix-misc": [
+          "nix-misc"
+        ],
+        "nixkite": "nixkite_2",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1596806934,
+        "narHash": "sha256-5yTQcZRquvzz8ncE+NlVatCFEmHo0B1b7g00jl4tVPY=",
+        "owner": "johnae",
+        "repo": "spook",
+        "rev": "f9079cc203c2756c465e7ec5915bb47d1bc14461",
+        "type": "github"
+      },
+      "original": {
+        "owner": "johnae",
+        "repo": "spook",
         "type": "github"
       }
     },
