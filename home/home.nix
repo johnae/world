@@ -70,8 +70,6 @@ in
       pkgs.netns-dbus-proxy
       pkgs.spook
       pkgs.gnome3.nautilus
-      pkgs.chromium-dev-ozone
-      #(pkgs.firejailed { package = chrpkgs.chromium-dev-wayland; ignore = [ "nou2f" ]; })
     ];
 
   home.sessionVariables = rec {

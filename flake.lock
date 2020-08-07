@@ -357,22 +357,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-chromium": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1596761745,
-        "narHash": "sha256-vVP1XNnRzlsF1kYStAVYin9Uhx1r/32yVVecibyit/g=",
-        "owner": "colemickens",
-        "repo": "nixpkgs-chromium",
-        "rev": "4ba46e2f78a96a0e45d704509fa6532c6cd09548",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "repo": "nixpkgs-chromium",
-        "type": "github"
-      }
-    },
     "nixpkgs-fmt": {
       "flake": false,
       "locked": {
@@ -425,7 +409,6 @@
         "nixkite": "nixkite",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-chromium": "nixpkgs-chromium",
         "nixpkgs-fmt": "nixpkgs-fmt",
         "persway": "persway",
         "secrets": "secrets",
@@ -451,11 +434,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1595945767,
-        "narHash": "sha256-PerilGvWPUXt1kAq6hIbr8gu303y2JTdF1DBDvv20V0=",
+        "lastModified": 1596833844,
+        "narHash": "sha256-DpaPhOSjfcn+GQKZOB91qOqVVQ887hhKEO4yg4n4Pfs=",
         "ref": "flakes",
-        "rev": "dad9f5c040b11f795f60e36d0e2a1104c0b70fdf",
-        "revCount": 55,
+        "rev": "e263d356c3b851f2aa543e1bf7715748949975c9",
+        "revCount": 56,
         "type": "git",
         "url": "ssh://git@github.com/johnae/nixos-metadata"
       },

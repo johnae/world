@@ -55,7 +55,6 @@
     wl-clipboard = { url = "github:bugaevc/wl-clipboard"; flake = false; };
     xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr"; flake = false; };
     buildkite = { url = "github:buildkite/agent/v3.22.1"; flake = false; };
-    nixpkgs-chromium = { url = "github:colemickens/nixpkgs-chromium"; flake = false; };
   };
   outputs = { self, ... }@inputs:
     let
@@ -155,19 +154,6 @@
           emacs-overlay = inputs.emacs-overlay.overlay;
           nix-misc = inputs.nix-misc.overlay;
           spook = inputs.spook.overlay;
-          chromium-dev-ozone =
-            let
-              pkgset = import (import "${inputs.nixpkgs-chromium}/nixpkgs/nixos-unstable") {
-                localSystem = { inherit system; };
-                overlays = [
-                  (final: prev: {
-                    inherit (final.callPackages "${inputs.nixpkgs-chromium}/pkgs/chromium-git" { })
-                      chromium-dev-ozone;
-                  })
-                ];
-              };
-            in
-            (final: prev: { inherit (pkgset) chromium-dev-ozone; });
         };
 
       containers =
