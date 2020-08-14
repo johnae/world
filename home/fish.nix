@@ -116,6 +116,8 @@ in
         export QT_STYLE_OVERRIDE=gtk
         export _JAVA_AWT_WM_NONREPARENTING=1
         export XDG_CURRENT_DESKTOP=sway
+        export XDG_SESSION_TYPE=wayland
+        export XDG_CURRENT_DESKTOP=sway
 
         clear
         set RUN (echo -e "sway private\texec ${privateSway}\nsway\texec sway\nfish private\texec ${privateFish}\nfish\texec ${pkgs.dbus}/bin/dbus-run-session fish" | \

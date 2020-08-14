@@ -4,8 +4,12 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    firenight = {
+      url = "github:colemickens/flake-firefox-nightly";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home = {
-      url = "github:johnae/home-manager/flakes";
+      url = "github:rycee/home-manager/bqv-flakes";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -141,7 +145,11 @@
       packages.x86_64-linux.nixpkgs = pkgs;
 
       ## for easy access to overlays which we might want to build in ci for example
-      overlayAttrs = pkgs.lib.filterAttrs (_: pkgs.lib.isDerivation) ((import ./overlays/pkgs.nix) pkgs pkgs);
+      overlayAttrs = pkgs.lib.filterAttrs
+        (_: pkgs.lib.isDerivation)
+        (
+          (import ./overlays/pkgs.nix) pkgs pkgs
+        ) // { firefox-pipewire = true; spook = true; };
 
       overlays =
         let
@@ -154,6 +162,7 @@
           emacs-overlay = inputs.emacs-overlay.overlay;
           nix-misc = inputs.nix-misc.overlay;
           spook = inputs.spook.overlay;
+          firefox-pipewire = (final: prev: { inherit (inputs.firenight.packages.${system}) firefox-pipewire; });
         };
 
       containers =

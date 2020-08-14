@@ -1,13 +1,8 @@
 { pkgs, config, lib, options }:
-let
-  firefox-beta = pkgs.wrapFirefox
-    pkgs.firefox-beta-bin
-    { browserName = "firefox"; };
-in
 {
   programs.firefox = {
     enable = true;
-    package = firefox-beta;
+    package = pkgs.firefox-pipewire;
     profiles = {
       default = {
         settings = {
