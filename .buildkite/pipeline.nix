@@ -10,7 +10,7 @@ let
     listToDepKey pkgBatches keysOf;
 
   containerNames = builtins.attrNames (onlyDerivations containers);
-  pkgNames = mapAttrsToList (_: v: v) (filterAttrs (n: v: isDerivation v) pkgsToCache);
+  pkgNames = mapAttrsToList (n: _: n) (filterAttrs (n: v: isDerivation v) pkgsToCache);
   hostNames = builtins.attrNames (onlyDerivations nixosConfigurations);
   pkgChunks = pkgBatches pkgNames;
 

@@ -4,10 +4,6 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    firenight = {
-      url = "github:colemickens/flake-firefox-nightly";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home = {
       url = "github:rycee/home-manager/bqv-flakes";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -150,8 +146,8 @@
         (
           (import ./overlays/pkgs.nix) pkgs pkgs
         ) // {
-        inherit (self.packages.x86_64-linux)
-          firefox-pipewire spook;
+        inherit (pkgs)
+          spook;
       };
 
       overlays =

@@ -66,29 +66,13 @@
         "type": "github"
       }
     },
-    "cachixpkgs": {
-      "locked": {
-        "lastModified": 1597330233,
-        "narHash": "sha256-D1nHuBJV4zH8M+U76uXAm/8HCMJu4s/VI2Y9c9Eezac=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "05195accdc596c6c9eadfa7d283d7b780f87f96f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-20.03",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1597422090,
-        "narHash": "sha256-Csln3INbDYJI13Gc7V01hak3jKjU4mHIl+FY3H1DCnE=",
+        "lastModified": 1597434657,
+        "narHash": "sha256-EKpZKtX+0DHh5TmRa83QCIk5dnZdfhz+X4Fc/5U5J9k=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "feec0e42d581397d0004a64ef702a3a012fe3d13",
+        "rev": "fe2929d57acde6a146dc7ec0d89989a3f67867af",
         "type": "github"
       },
       "original": {
@@ -110,30 +94,6 @@
       "original": {
         "owner": "johnae",
         "repo": "fire",
-        "type": "github"
-      }
-    },
-    "firenight": {
-      "inputs": {
-        "cachixpkgs": "cachixpkgs",
-        "flake-utils": "flake-utils",
-        "master": "master",
-        "mozilla": "mozilla",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1597408122,
-        "narHash": "sha256-B5HN5Jy8lqLegPTpHYcerIXcdeAomkjKQbeqMuVmeaA=",
-        "owner": "colemickens",
-        "repo": "flake-firefox-nightly",
-        "rev": "53aac6109e3f0de8d2fcdf15e7be78438cf7080a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "repo": "flake-firefox-nightly",
         "type": "github"
       }
     },
@@ -170,21 +130,6 @@
     },
     "flake-utils_2": {
       "locked": {
-        "lastModified": 1597053966,
-        "narHash": "sha256-f9lbPS/GJ1His8fsDqM6gfa8kSqREU4eKiMCS5hrKg4=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "ec20f52e2ff61e9c36c2b894b62fc1b4bd04c71b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_3": {
-      "locked": {
         "lastModified": 1596290160,
         "narHash": "sha256-QNXPeCiLKfLH6G6TtyuxZ14Zm+ZMxBaQ0Klccq+2RfM=",
         "owner": "numtide",
@@ -198,7 +143,7 @@
         "type": "github"
       }
     },
-    "flake-utils_4": {
+    "flake-utils_3": {
       "locked": {
         "lastModified": 1596290160,
         "narHash": "sha256-QNXPeCiLKfLH6G6TtyuxZ14Zm+ZMxBaQ0Klccq+2RfM=",
@@ -282,38 +227,6 @@
         "type": "github"
       }
     },
-    "master": {
-      "locked": {
-        "lastModified": 1597404161,
-        "narHash": "sha256-lyuknWahyUGCkdmIEEjoBMEB7RuMcS90PQtcGpKBl74=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "177389f7533dbaf33de7be78d49942a038710bc2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "master",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "mozilla": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1595288330,
-        "narHash": "sha256-ykuEol9PGFoVYBR34leE/P9O9b4eyvxCJaASY/zRjes=",
-        "owner": "colemickens",
-        "repo": "nixpkgs-mozilla",
-        "rev": "047556ee50548da3d4f72bc9c34c29e46e5c1c08",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "repo": "nixpkgs-mozilla",
-        "type": "github"
-      }
-    },
     "neatvnc": {
       "flake": false,
       "locked": {
@@ -368,7 +281,7 @@
     },
     "nixkite": {
       "inputs": {
-        "flake-utils": "flake-utils_3",
+        "flake-utils": "flake-utils_2",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -484,9 +397,8 @@
         "buildkite": "buildkite",
         "emacs-overlay": "emacs-overlay",
         "fire": "fire",
-        "firenight": "firenight",
         "fish-kubectl-completions": "fish-kubectl-completions",
-        "flake-utils": "flake-utils_2",
+        "flake-utils": "flake-utils",
         "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
         "grim": "grim",
         "home": "home",
@@ -554,7 +466,7 @@
     },
     "spook": {
       "inputs": {
-        "flake-utils": "flake-utils_4",
+        "flake-utils": "flake-utils_3",
         "nix-misc": [
           "nix-misc"
         ],
