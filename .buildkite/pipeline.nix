@@ -5,11 +5,12 @@
 { config, pkgs, lib, cachePkgs, containers, nixosConfigurations, ... }:
 let
   util = import ./util { inherit lib config; };
+  inherit (lib) mapAttrsToList filterAttrs isDerivation;
   inherit (util) withBuildEnv onlyDerivations
     listToDepKey pkgBatches keysOf;
 
   containerNames = builtins.attrNames (onlyDerivations containers);
-  pkgNames = builtins.attrNames (onlyDerivations cachePkgs);
+  pkgNames = mapAttrsToList (_: v: v) (filterAttrs (n: v: isDerivation v) cachePkgs);
   hostNames = builtins.attrNames (onlyDerivations nixosConfigurations);
   pkgChunks = pkgBatches pkgNames;
 
