@@ -4,7 +4,7 @@ rustPlatform.buildRustPackage {
   version = inputs.netns-exec.rev;
 
   src = inputs.netns-exec;
-  cargoSha256 = "1k757mbj9i29191vxb1aqg8yc0v4pdzsfrp97dh5446h9ism9ncj";
+  cargoSha256 = "sha256-ktlUdUzQEFJgO+lmp3+7ZAPm0cMqrL5DCknEJFc95cw=";
 
   doCheck = false;
 
