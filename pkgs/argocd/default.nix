@@ -17,6 +17,8 @@ buildGoModule {
 
   CGO_ENABLED = 0;
 
+  doCheck = false;
+
   buildFlagsArray = ''
     -ldflags=
      -X github.com/argoproj/argo-cd/common.version=${version}
