@@ -9,6 +9,8 @@ buildGoModule {
 
   buildInputs = [ makeWrapper ];
 
+  doCheck = false;
+
   postInstall = ''
     # Fix binary name
     mv $out/bin/{agent,buildkite-agent}
