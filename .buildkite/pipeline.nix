@@ -2,14 +2,14 @@
 ##
 ## nix eval .#buildkite.pipeline --json
 
-{ config, pkgs, lib, overlayAttrs, containers, nixosConfigurations, ... }:
+{ config, pkgs, lib, cachePkgs, containers, nixosConfigurations, ... }:
 let
   util = import ./util { inherit lib config; };
   inherit (util) withBuildEnv onlyDerivations
     listToDepKey pkgBatches keysOf;
 
   containerNames = builtins.attrNames (onlyDerivations containers);
-  pkgNames = builtins.attrNames (onlyDerivations overlayAttrs);
+  pkgNames = builtins.attrNames (onlyDerivations cachePkgs);
   hostNames = builtins.attrNames (onlyDerivations nixosConfigurations);
   pkgChunks = pkgBatches pkgNames;
 

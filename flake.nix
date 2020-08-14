@@ -144,12 +144,15 @@
 
       packages.x86_64-linux.nixpkgs = pkgs;
 
-      ## for easy access to overlays which we might want to build in ci for example
-      overlayAttrs = pkgs.lib.filterAttrs
+      ## for easy access to packages which we might want to build and cache in ci
+      cachePkgs = pkgs.lib.filterAttrs
         (_: pkgs.lib.isDerivation)
         (
           (import ./overlays/pkgs.nix) pkgs pkgs
-        ) // { firefox-pipewire = true; spook = true; };
+        ) // {
+        inherit (self.packages.x86_64-linux)
+          firefox-pipewire spook;
+      };
 
       overlays =
         let
@@ -203,7 +206,7 @@
           value = import "${inputs.nixkite}" {
             inherit pkgs;
             pipeline = path;
-            specialArgs = { inherit (self) containers overlayAttrs nixosConfigurations inputs; };
+            specialArgs = { inherit (self) containers cachePkgs nixosConfigurations inputs; };
           };
         });
 

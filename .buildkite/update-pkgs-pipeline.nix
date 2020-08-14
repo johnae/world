@@ -3,31 +3,39 @@
 ## nix eval .#buildkite.update-packages --json
 
 ##
-{ config, pkgs, lib, inputs, overlayAttrs, ... }:
+{ config, pkgs, lib, inputs, cachePkgs, ... }:
 let
   util = import ./util { inherit lib config; };
   inherit (util) withBuildEnv;
   inherit (builtins) filter attrNames;
-  inherit (lib) concatStringsSep;
+  inherit (lib) concatStringsSep filterAttrs
+    isDerivation mapAttrsToList;
 
-  pkgs = filter (n: n != "nixpkgs") (attrNames inputs);
+  inputsToUpdate = filter (n: n != "nixpkgs") (attrNames inputs);
+  pkgsToUpdate = mapAttrsToList (_: v: v) (filterAttrs (n: v: isDerivation v) cachePkgs);
+
+  updateInputs = concatStringsSep " \n" (map
+    (input:
+      ''
+        nix flake update --update-input "${input}"
+        gitCommitUpdate "input ${input}" || echo no update
+      ''
+    )
+    inputsToUpdate);
 
   updatePackages = concatStringsSep " \n" (map
     (pkg:
       ''
-        nix flake update --update-input "${pkg}"
-        if gitCommitUpdate "${pkg}" || [ "$FORCE_UPDATE" = "yes" ]; then
-          if [ -d "pkgs/${pkg}" ]; then
-            maybeUpdateCargoShas "${pkg}"
-            gitCommitUpdate "${pkg}-cargo-sha-update" || echo no update
-            maybeUpdateFixedOutputShas "${pkg}"
-            gitCommitUpdate "${pkg}-fixed-output-sha-update" || echo no update
-            world package "${pkg}" | cachix push insane
-          fi
+        if [ -d "pkgs/${pkg}" ]; then
+          maybeUpdateCargoShas "${pkg}"
+          gitCommitUpdate "${pkg}-cargo-sha-update" || echo no update
+          maybeUpdateFixedOutputShas "${pkg}"
+          gitCommitUpdate "${pkg}-fixed-output-sha-update" || echo no update
         fi
+        world package "${pkg}" | cachix push insane
       ''
     )
-    pkgs);
+    inputsToUpdate);
 
 in
 {
@@ -87,6 +95,10 @@ in
       world update-bin-pkg ./pkgs/rust-analyzer-bin rust-analyzer/rust-analyzer rust-analyzer-linux
       gitCommitUpdate rust-analyzer || echo no update
 
+      echo --- Updating flake inputs
+      ${updateInputs}
+
+      echo --- Updating/caching packages
       ${updatePackages}
 
       echo --- Current revisions
