@@ -3,7 +3,7 @@
 ## nix eval .#buildkite.update-packages --json
 
 ##
-{ config, pkgs, lib, inputs, cachePkgs, ... }:
+{ config, pkgs, lib, inputs, pkgsToCache, ... }:
 let
   util = import ./util { inherit lib config; };
   inherit (util) withBuildEnv;
@@ -12,7 +12,7 @@ let
     isDerivation mapAttrsToList;
 
   inputsToUpdate = filter (n: n != "nixpkgs") (attrNames inputs);
-  pkgsToUpdate = mapAttrsToList (_: v: v) (filterAttrs (n: v: isDerivation v) cachePkgs);
+  pkgsToUpdate = mapAttrsToList (_: v: v) (filterAttrs (n: v: isDerivation v) pkgsToCache);
 
   updateInputs = concatStringsSep " \n" (map
     (input:

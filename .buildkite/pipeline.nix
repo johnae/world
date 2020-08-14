@@ -2,7 +2,7 @@
 ##
 ## nix eval .#buildkite.pipeline --json
 
-{ config, pkgs, lib, cachePkgs, containers, nixosConfigurations, ... }:
+{ config, pkgs, lib, pkgsToCache, containers, nixosConfigurations, ... }:
 let
   util = import ./util { inherit lib config; };
   inherit (lib) mapAttrsToList filterAttrs isDerivation;
@@ -10,7 +10,7 @@ let
     listToDepKey pkgBatches keysOf;
 
   containerNames = builtins.attrNames (onlyDerivations containers);
-  pkgNames = mapAttrsToList (_: v: v) (filterAttrs (n: v: isDerivation v) cachePkgs);
+  pkgNames = mapAttrsToList (_: v: v) (filterAttrs (n: v: isDerivation v) pkgsToCache);
   hostNames = builtins.attrNames (onlyDerivations nixosConfigurations);
   pkgChunks = pkgBatches pkgNames;
 

@@ -145,7 +145,7 @@
       packages.x86_64-linux.nixpkgs = pkgs;
 
       ## for easy access to packages which we might want to build and cache in ci
-      cachePkgs = pkgs.lib.filterAttrs
+      pkgsToCache = pkgs.lib.filterAttrs
         (_: pkgs.lib.isDerivation)
         (
           (import ./overlays/pkgs.nix) pkgs pkgs
@@ -206,7 +206,7 @@
           value = import "${inputs.nixkite}" {
             inherit pkgs;
             pipeline = path;
-            specialArgs = { inherit (self) containers cachePkgs nixosConfigurations inputs; };
+            specialArgs = { inherit (self) containers pkgsToCache nixosConfigurations inputs; };
           };
         });
 
