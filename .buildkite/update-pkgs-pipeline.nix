@@ -32,7 +32,6 @@ let
           maybeUpdateFixedOutputShas "${pkg}"
           gitCommitUpdate "${pkg}-fixed-output-sha-update" || echo no update
         fi
-        world package "${pkg}" | cachix push insane
       ''
     )
     inputsToUpdate);
