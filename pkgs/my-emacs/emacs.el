@@ -29,14 +29,16 @@
 (setq package-archives nil)
 (setq package-enable-at-startup nil)
 
+(require 'cl-lib)
+
 ;; Initialize [[https://github.com/jwiegley/use-package][use-package]].
 (eval-and-compile
   (require 'package)
   (package-initialize)
   (require 'use-package))
 
-;; Add path to mu4e to load-path.
-(add-to-list 'load-path "@MUSE_LOAD_PATH@")
+;; Add path to notmuch to load-path.
+(add-to-list 'load-path "@NOTMUCH_LOAD_PATH@")
 
 ;; Setup auth sources to use pass gpg files.
 
@@ -69,9 +71,18 @@
         org-todo-keywords
          '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED"))
         org-capture-templates
-         '(("a" "My TODO task format." entry
-          (file "~/Sync/org/todos.org")
-           "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n")))
+        '(
+          ("a" "My TODO task format."
+          entry (file "~/Sync/org/todos.org")
+          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n")
+
+          ("r" "Email REPLY task format."
+          entry (file "~/Sync/org/reply.org")
+          "* TODO Respond to %:from on %:subject  :email: \nSCHEDULED: %t\n%U\n%a\n"
+          :clock-in t
+          :clock-resume t
+          :immediate-finish t
+          )))
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -678,105 +689,269 @@
 (use-package alert
   :custom (alert-default-style 'libnotify))
 
-;; The awesome Mu4e email client. (This is added to the load path as it comes with mu).
 
-(setq uninteresting-mail-query
-      (concat
-       "from:/\\(hello|kooperativa|usafis|stadiummember|info-sas|.*no.?reply|store-news|newblack|stockholm\.soder|newsletter|.*campaign.*\\)@/"
-       " OR from:notifications@github.com"
-       " OR flag:trashed"
-       " OR flag:list"
-       " OR maildir:/Trash/"
-       " OR maildir:/Commercial/"
-       " OR maildir:/Junk/"
-       " OR maildir:/All.Mail/"))
+;; The amazing notmuch email client.
+(require 'notmuch)
+(require 'ol-notmuch)
 
-(require 'mu4e)
-(setq mail-user-agent 'mu4e-user-agent
-      mu4e-maildir "~/.mail"
-      ;;mu4e-compose-format-flowed t
-      mu4e-sent-messages-behavior (lambda ()
-        (if (not(string= (message-sendmail-envelope-from) "john@insane.se"))
-            'delete
-          'sent))
-      mu4e-headers-date-format "%Y-%m-%d"
-      mu4e-headers-time-format "%H:%M"
-      mu4e-headers-skip-duplicates t
-      mu4e-compose-dont-reply-to-self t
-      mu4e-compose-crypto-reply-policy 'sign-and-encrypt
-      mu4e-enable-async-operations t
-      mu4e-view-prefer-html nil
-      mu4e-hide-index-messages t
-      mu4e-change-filenames-when-moving t
-      mu4e-split-view 'horizontal
-      mu4e-view-show-addresses t
-      org-mu4e-convert-to-html t
-      mu4e-headers-leave-behavior 'apply
-      mu4e-headers-include-related t
+(setq user-mail-address (notmuch-user-primary-email)
+      notmuch-mail-dir (expand-file-name ".mail" (getenv "HOME"))
+      user-full-name (notmuch-user-name)
+      message-kill-buffers-on-exit t
+      send-mail-function 'smtpmail-send-it
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-user "john@insane.se"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      ;;message-send-mail-function 'message-send-mail-with-sendmail
+      ;; we substitute sendmail with msmtp
+      ;;sendmail-program (executable-find "msmtp")
+      ;;message-sendmail-envelope-from 'header
+      ;;mail-specify-envelope-from t
+      notmuch-archive-tags '("-inbox" "-unread" "+archived")
+      notmuch-show-mark-read-tags '("-inbox" "-unread")
+      notmuch-search-oldest-first nil
+      notmuch-show-indent-content nil
+      notmuch-hooks-dir (expand-file-name ".notmuch/hooks" notmuch-mail-dir))
 
-      mu4e-use-fancy-chars t
-      mu4e-headers-unread-mark    '("u" . " ")
-      mu4e-headers-new-mark       '("N" . " ")
-      mu4e-headers-draft-mark     '("D" . "⚒ ")
-      mu4e-headers-passed-mark    '("P" . "❯ ")
-      mu4e-headers-replied-mark   '("R" . "❮ ")
-      mu4e-headers-seen-mark      '("S" . "✔ ")
-      mu4e-headers-attach-mark    '("" . "⚓")
-      mu4e-headers-flagged-mark   '("F" . "✚ ")
-      mu4e-headers-trashed-mark   '("T" . " ")
-      mu4e-headers-encrypted-mark '("x" . "  ")
-      mu4e-headers-signed-mark    '("s" . " ")
+(progn
+  (setq notmuch-saved-searches nil)
+  (push '(:name "Inbox"
+                :query "tag:inbox AND tag:screened AND tag:unread"
+                :key "i"
+                :search-type 'tree)
+        notmuch-saved-searches)
+  (push '(:name "Previously Seen"
+                :query "tag:screened AND NOT tag:unread"
+                :key "I")
+        notmuch-saved-searches)
+  (push '(:name "Unscreened"
+                :query "tag:inbox AND NOT (tag:screened OR tag:archived)"
+                :key "s")
+        notmuch-saved-searches)
+  (push '(:name "The Feed"
+                :query "tag:thefeed"
+                :key "f"
+                :search-type 'tree)
+        notmuch-saved-searches)
+  (push '(:name "The Papertrail"
+                :query "tag:/ledger/"
+                :key "p")
+        notmuch-saved-searches))
 
-      ;;mu4e-html2text-command 'mu4e-shr2text
-      mu4e-html2text-command "iconv -c -t utf-8 | @PANDOC@ -f html -t plain"
-      ;;mu4e-html2text-command "w3m -dump -T text/html -cols 72 -o display_link_number=true -o auto_image=false -o display_image=false -o ignore_null_img_alt=true"
-      mu4e-get-mail-command "@MBSYNC@ -a"
-      mu4e-update-interval 1200 ;; we are using imapnotify so not super important
-      mu4e-view-fields '(:from :to :cc :subject :flags :date :maildir :mailing-list :tags :attachments :signature :decryption))
 
-(add-to-list 'mu4e-view-actions
-    '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+(eval-after-load 'notmuch-show
+  (progn
+     ;; Bindings in `notmuch-show-mode'
+    (evil-define-key 'normal notmuch-show-mode-map
+      (kbd "r") 'notmuch-show-reply
+      (kbd "R") 'notmuch-show-reply-sender
+      (kbd "C") 'insane/notmuch-reply-later
+    )
 
-(add-hook 'mu4e-mark-execute-pre-hook
-    (lambda (mark msg)
-      (cond ((member mark '(refile trash)) (mu4e-action-retag-message msg "-\\Inbox"))
-      ((equal mark 'flag) (mu4e-action-retag-message msg "\\Starred"))
-      ((equal mark 'unflag) (mu4e-action-retag-message msg "-\\Starred")))))
+     ;; Bindings in `notmuch-search-mode'
+    (evil-define-key 'normal notmuch-search-mode-map
+      (kbd "r") 'notmuch-search-reply-to-thread
+      (kbd "R") 'notmuch-search-reply-to-thread-sender
+      (kbd "/") 'notmuch-search-filter
+      (kbd "A") 'insane/notmuch-archive-all
+      (kbd "D") 'insane/notmuch-delete-all
+      (kbd "L") 'insane/notmuch-filter-by-from
+      (kbd ";") 'insane/notmuch-search-by-from
+      (kbd "d") 'insane/notmuch-search-delete-and-archive-thread
+      ;; Hey wf
+      (kbd "S") 'insane/notmuch-move-sender-to-spam
+      (kbd "I") 'insane/notmuch-move-sender-to-screened
+      (kbd "P") 'insane/notmuch-move-sender-to-papertrail
+      (kbd "f") 'insane/notmuch-move-sender-to-thefeed
+      (kbd "C") 'insane/notmuch-reply-later
+    )
 
-(add-hook 'mu4e-view-mode-hook
-          (lambda ()
-            (setq mu4e-view-show-images t)))
+     ;; Bindings in `notmuch-tree-mode'
+    (evil-define-key 'normal notmuch-tree-mode-map
+      (kbd "C") 'insane/notmuch-reply-later
+    )
+))
 
-(add-hook 'mu4e-compose-mode-hook
-          (lambda ()
-            (set-fill-column 72)
-            (auto-fill-mode 0)
-            (visual-fill-column-mode)
-            (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
-            (visual-line-mode)))
+(defun insane/notmuch-archive-all ()
+  "Archive all the emails in the current view."
+  (interactive)
+  (notmuch-search-archive-thread nil (point-min) (point-max)))
 
-(require 'org-mu4e)
-(setq org-mu4e-link-query-in-headers-mode nil)
+(defun insane/notmuch-delete-all ()
+  "Archive all the emails in the current view.
+Mark them for deletion by cron job."
+  (interactive)
+  (notmuch-search-tag-all '("+deleted"))
+  (insane/notmuch-archive-all))
 
-;; Mu4e alert. For notifications on new mail.
+(defun insane/notmuch-search-delete-and-archive-thread ()
+  "Archive the currently selected thread. Add the deleted tag as well."
+  (interactive)
+  (notmuch-search-add-tag '("+deleted"))
+  (notmuch-search-archive-thread))
 
-;; (use-package mu4e-alert
-;;     :after mu4e
-;;     :init
-;;     :config
-;;     (setq mu4e-alert-icon "mail-generic")
-;;     (mu4e-alert-set-default-style 'libnotify)
-;;     ;;(alert-add-rule :category "mu4e-alert" :icon "mail-generic" :continue t)
-;;     (setq mu4e-alert-email-notification-types '(subjects))
-;;     (setq mu4e-alert-interesting-mail-query
-;;       (concat
-;;        "date:today..now"
-;;        " AND flag:unread"
-;;        " AND NOT (" uninteresting-mail-query ") "))
-;;     (mu4e-alert-enable-mode-line-display)
-;;     (mu4e-alert-enable-notifications)
-;; )
+(defun insane/notmuch-tag-and-archive (tag-changes &optional beg end)
+  "Prompt the user for TAG-CHANGES.
+Apply the TAG-CHANGES to region and also archive all the emails.
+When called directly, BEG and END provide the region."
+  (interactive (notmuch-search-interactive-tag-changes))
+  (notmuch-search-tag tag-changes beg end)
+  (notmuch-search-archive-thread nil beg end))
 
+(defun insane/notmuch-search-get-from ()
+  "A helper function to find the email address for the given email."
+  (let ((notmuch-addr-sexp (car
+                            (notmuch-call-notmuch-sexp "address"
+                                                       "--format=sexp"
+                                                       "--format-version=1"
+                                                       "--output=sender"
+                                                       (notmuch-search-find-thread-id)))))
+    (plist-get notmuch-addr-sexp :name-addr)))
+
+(defun insane/notmuch-tree-get-from ()
+  "A helper function to find the email address for the given email.
+Assumes `notmuch-tree-mode'."
+  (plist-get (notmuch-tree-get-prop :headers) :From))
+
+(defun insane/notmuch-get-from ()
+  "Find the From email address for the email at point."
+  (car (notmuch-clean-address (cond
+                               ((eq major-mode 'notmuch-show-mode)
+                                (notmuch-show-get-from))
+                               ((eq major-mode 'notmuch-tree-mode)
+                                (insane/notmuch-tree-get-from))
+                               ((eq major-mode 'notmuch-search-mode)
+                                (insane/notmuch-search-get-from))
+                               ((t nil))))))
+
+(defun insane/notmuch-filter-by-from ()
+  "Filter the current search view to show all emails sent from the sender of the current thread."
+  (interactive)
+  (notmuch-search-filter (concat "from:" (insane/notmuch-get-from))))
+
+(defun insane/notmuch-search-by-from (&optional no-display)
+  "Show all emails sent from the sender of the current thread.
+NO-DISPLAY is sent forward to `notmuch-search'."
+  (interactive)
+  (notmuch-search (concat "from:" (insane/notmuch-get-from))
+                  notmuch-search-oldest-first
+                  nil
+                  nil
+                  no-display))
+
+(defun insane/notmuch-tag-by-from (tag-changes &optional beg end refresh)
+  "Apply TAG-CHANGES to all emails from the sender of the current thread.
+BEG and END provide the region, but are ignored. They are defined
+since `notmuch-search-interactive-tag-changes' returns them. If
+REFRESH is true, refresh the buffer from which we started the
+search."
+  (interactive (notmuch-search-interactive-tag-changes))
+  (let ((this-buf (current-buffer)))
+    (insane/notmuch-search-by-from t)
+    ;; This is a dirty hack since I can't find a way to run a
+    ;; temporary hook on `notmuch-search' completion. So instead of
+    ;; waiting on the search to complete in the background and then
+    ;; making tag-changes on it, I will just sleep for a short amount
+    ;; of time. This is generally good enough and works, but is not
+    ;; guaranteed to work every time. I'm fine with this.
+    (sleep-for 0.5)
+    (notmuch-search-tag-all tag-changes)
+    (when refresh
+      (set-buffer this-buf)
+      (notmuch-refresh-this-buffer))))
+
+(defun insane/notmuch-add-addr-to-db (nmaddr nmdbfile)
+  "Add the email address NMADDR to the db-file NMDBFILE."
+  (append-to-file (format "%s\n" nmaddr) nil nmdbfile))
+
+(defun insane/notmuch-move-sender-to-thefeed ()
+  "For the email at point, move the sender of that email to the feed.
+This means:
+1. All new email should go to the feed and skip the inbox altogether.
+2. All existing email should be updated with the tag =thefeed=.
+3. All existing email should be removed from the inbox."
+  (interactive)
+  (insane/notmuch-add-addr-to-db (insane/notmuch-get-from)
+                                 (format "%s/thefeed.db" notmuch-hooks-dir))
+  (insane/notmuch-tag-by-from '("+thefeed" "-inbox")))
+
+(defun insane/notmuch-move-sender-to-papertrail (tag-name)
+  "For the email at point, move the sender of that email to the papertrail.
+This means:
+1. All new email should go to the papertrail and skip the inbox altogether.
+2. All existing email should be updated with the tag =ledger/TAG-NAME=.
+3. All existing email should be removed from the inbox."
+  (interactive "sTag Name: ")
+  (insane/notmuch-add-addr-to-db (format "%s %s"
+                                         tag-name
+                                         (insane/notmuch-get-from))
+                                 (format "%s/ledger.db" notmuch-hooks-dir))
+  (let ((tag-string (format "+ledger/%s" tag-name)))
+    (insane/notmuch-tag-by-from (list tag-string "+archived" "-inbox" "-unread"))))
+
+(defun insane/notmuch-move-sender-to-screened ()
+  "For the email at point, move the sender of that email to Screened Emails.
+This means:
+1. All new email should be tagged =screened= and show up in the inbox.
+2. All existing email should be updated to add the tag =screened=."
+  (interactive)
+  (insane/notmuch-add-addr-to-db (insane/notmuch-get-from)
+                                 (format "%s/screened.db" notmuch-hooks-dir))
+  (insane/notmuch-tag-by-from '("+screened")))
+
+(defun insane/notmuch-move-sender-to-spam ()
+  "For the email at point, move the sender of that email to spam.
+This means:
+1. All new email should go to =spam= and skip the inbox altogether.
+2. All existing email should be updated with the tag =spam=.
+3. All existing email should be removed from the inbox."
+  (interactive)
+  (insane/notmuch-add-addr-to-db (insane/notmuch-get-from)
+                                 (format "%s/spam.db" notmuch-hooks-dir))
+  (insane/notmuch-tag-by-from '("+spam" "+deleted" "+archived" "-inbox" "-unread" "-screened")))
+
+(defun insane/notmuch-reply-later ()
+  "Capture this email for replying later."
+  (interactive)
+  ;; You need `org-capture' to be set up for this to work. Add this
+  ;; code somewhere in your init file after `org-cature' is loaded:
+
+  ;; (push '("r" "Respond to email"
+  ;;         entry (file org-default-notes-file)
+  ;;         "* TODO Respond to %:from on %:subject  :email: \nSCHEDULED: %t\n%U\n%a\n"
+  ;;         :clock-in t
+  ;;         :clock-resume t
+  ;;         :immediate-finish t)
+  ;;       org-capture-templates)
+
+  (org-capture nil "r")
+
+  ;; The rest of this function is just a nice message in the modeline.
+  (let* ((email-subject (format "%s..."
+                                (substring (notmuch-show-get-subject) 0 15)))
+         (email-from (format "%s..."
+                             (substring (notmuch-show-get-from) 0 15)))
+         (email-string (format "%s (From: %s)" email-subject email-from)))
+    (message "Noted! Reply Later: %s" email-string)))
+
+;; Sign messages by default.
+(add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+
+(setq notmuch-address-selection-function
+      (lambda (prompt collection initial-input)
+        (completing-read prompt
+                         (cons initial-input collection)
+                         nil
+                         t
+                         nil
+                         'notmuch-address-history)))
+
+(defun disable-auto-fill ()
+  "I don't want `auto-fill-mode'."
+  (auto-fill-mode -1))
+
+(add-hook 'message-mode-hook 'disable-auto-fill)
 
 ;; Visual-fill-column. Helps with composing emails.
 (use-package visual-fill-column
@@ -785,124 +960,6 @@
 ;; Sending email.
 (require 'jl-encrypt)
 (setq mml-secure-insert-signature "always")
-
-(setq mu4e-bookmarks
-  `( ,(make-mu4e-bookmark
-       :name  "Unread messages"
-       :query (concat "flag:unread"
-                      " AND NOT flag:trashed"
-                      " AND NOT maildir:/All.Mail/"
-                      " AND NOT maildir:/Junk/"
-                      " AND NOT maildir:/Commercial/"
-                      " AND NOT flag:list")
-       :key ?u)
-     ,(make-mu4e-bookmark
-       :name "Today's messages"
-       :query (concat "date:today..now"
-                      " AND maildir:/inbox/"
-                      " AND NOT (" uninteresting-mail-query ")")
-       :key ?t)
-     ,(make-mu4e-bookmark
-       :name "Today's lists"
-       :query (concat "date:today..now"
-                      " AND flag:list")
-       :key ?m)
-     ,(make-mu4e-bookmark
-       :name "Last 7 days"
-       :query (concat "date:7d..now"
-                      " AND maildir:/inbox/"
-                      " AND NOT (" uninteresting-mail-query ")")
-       :key ?w)
-     ,(make-mu4e-bookmark
-       :name "Last 7 days of lists"
-       :query (concat "date:7d..now"
-                      " AND flag:list")
-       :key ?l)
-     ,(make-mu4e-bookmark
-       :name "Flagged in INBOX"
-       :query (concat "flag:flagged"
-                      " AND maildir:/inbox/")
-       :key ?f))
-)
-
-(setq user-mail-address "john@insane.se"
-      mu4e-user-mail-address-list '("john@insane.se" "john@.karma.life" "john@karma.ly" "john@instabox.se")
-      message-kill-buffers-on-exit t
-      user-full-name "John Axel Eriksson"
-      send-mail-function 'smtpmail-send-it
-      smtpmail-default-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-user "john@insane.se"
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 587
-      mu4e-sent-folder "/personal/Sent"
-      mu4e-drafts-folder "/personal/Drafts"
-      mu4e-trash-folder "/personal/Trash"
-      mu4e-refile-folder "/personal/Archive"
-)
-
-(defvar my-mu4e-account-alist
-  '(("personal"
-     ;:(mu4e-sent-folder "/Gmail/sent")
-     (user-mail-address "john@insane.se")
-     (smtpmail-smtp-user "john@insane.se")
-     (smtpmail-local-domain "insane.se")
-     (smtpmail-default-smtp-server "smtp.gmail.com")
-     (smtpmail-smtp-server "smtp.gmail.com")
-     (smtpmail-smtp-service 587)
-     (mu4e-sent-folder "/personal/[Gmail]/Sent Mail")
-     (mu4e-drafts-folder "/personal/[Gmail]/Drafts")
-     (mu4e-trash-folder "/personal/[Gmail]/Trash")
-     (mu4e-refile-folder "/personal/[Gmail]/All Mail")
-     )
-    ("professional"
-     ;;(mu4e-sent-folder "/Gmail/sent")
-     (user-mail-address "john@instabox.se")
-     (smtpmail-smtp-user "john@instabox.se")
-     (smtpmail-local-domain "instabox.se")
-     (smtpmail-default-smtp-server "smtp.gmail.com")
-     (smtpmail-smtp-server "smtp.gmail.com")
-     (smtpmail-smtp-service 587)
-     (mu4e-sent-folder "/professional/[Gmail]/Sent Mail")
-     (mu4e-drafts-folder "/professional/[Gmail]/Drafts")
-     (mu4e-trash-folder "/professional/[Gmail]/Trash")
-     (mu4e-refile-folder "/professional/[Gmail]/All Mail")
-    )
-    ("work"
-     ;;(mu4e-sent-folder "/Gmail/sent")
-     (user-mail-address "john@karma.life")
-     (smtpmail-smtp-user "john@karma.life")
-     (smtpmail-local-domain "karma.life")
-     (smtpmail-default-smtp-server "smtp.gmail.com")
-     (smtpmail-smtp-server "smtp.gmail.com")
-     (smtpmail-smtp-service 587)
-     (mu4e-sent-folder "/work/[Gmail]/Sent Mail")
-     (mu4e-drafts-folder "/work/[Gmail]/Drafts")
-     (mu4e-trash-folder "/work/[Gmail]/Trash")
-     (mu4e-refile-folder "/work/[Gmail]/All Mail")
-    ))
-)
-
-(defun my-mu4e-set-account ()
-  "Set the account for composing a message.
-   This function is taken from:
-     https://www.djcbsoftware.nl/code/mu/mu4e/Multiple-accounts.html"
-  (let* ((account
-    (if mu4e-compose-parent-message
-        (let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
-    (string-match "/\\(.*?\\)/" maildir)
-    (match-string 1 maildir))
-      (completing-read (format "Compose with account: (%s) "
-             (mapconcat #'(lambda (var) (car var))
-            my-mu4e-account-alist "/"))
-           (mapcar #'(lambda (var) (car var)) my-mu4e-account-alist)
-           nil t nil nil (caar my-mu4e-account-alist))))
-   (account-vars (cdr (assoc account my-mu4e-account-alist))))
-    (if account-vars
-  (mapc #'(lambda (var)
-      (set (car var) (cadr var)))
-        account-vars)
-      (error "No email account found"))))
-(add-hook 'mu4e-compose-pre-hook 'my-mu4e-set-account)
 
 (use-package tramp
   :defer 5

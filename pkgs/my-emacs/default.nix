@@ -1,7 +1,7 @@
 { emacsPackages
 , fetchgit
 , writeText
-, mu
+, notmuch
 , emacsWithPackagesFromUsePackage
 , pkgs
 , makeWrapper
@@ -36,10 +36,11 @@ emacsWithPackagesFromUsePackage {
       postInstall = ''
         ${oa.postInstall}
         wrapProgram $out/bin/emacs \
-          --set TERM xterm-24bits
+          --set TERM xterm-24bits \
+          --prefix PATH : ${pkgs.lib.makeBinPath [ notmuch ]}
         wrapProgram $out/bin/emacsclient \
           --set TERM xterm-24bits
       '';
     });
-  extraEmacsPackages = epkgs: [ jl-encrypt ];
+  extraEmacsPackages = epkgs: [ jl-encrypt epkgs.org-plus-contrib ];
 }
