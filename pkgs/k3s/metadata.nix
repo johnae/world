@@ -1,1 +1,1 @@
-{ url = "https://github.com/rancher/k3s/releases/download/v1.18.6+k3s1/k3s"; version = "v1.18.6+k3s1"; sha256 = "1r0f6285hk8iwc8mc7mcvgihgm6awllfi7f8xvf2bsdyrm5lvf0m"; }
+{ url = "https://github.com/rancher/k3s/releases/download/v1.18.8+k3s1/k3s"; version = "v1.18.8+k3s1"; sha256 = "017vs8ky44dnc85arrv8p0znd67scidyngchblp8is7nf9h090l3"; }
