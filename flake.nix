@@ -161,7 +161,6 @@
           emacs-overlay = inputs.emacs-overlay.overlay;
           nix-misc = inputs.nix-misc.overlay;
           spook = inputs.spook.overlay;
-          firefox-pipewire = (final: prev: { inherit (inputs.firenight.packages.${system}) firefox-pipewire; });
         };
 
       containers =
