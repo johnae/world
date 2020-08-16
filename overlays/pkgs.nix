@@ -57,8 +57,6 @@ final: prev:
   fire = prev.callPackage ../pkgs/fire { };
   mynerdfonts = prev.nerdfonts.override { fonts = [ "JetBrainsMono" "DroidSansMono" ]; };
 
-  firefox-pipewire = prev.wrapFirefox (prev.callPackage ../pkgs/firefox { }) { browserName = "firefox"; };
-
   rust-analyzer-bin = prev.callPackage ../pkgs/rust-analyzer-bin { };
 
   k3s = prev.callPackage ../pkgs/k3s { };
