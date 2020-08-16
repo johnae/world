@@ -293,7 +293,7 @@ let
   '';
 
   mail = writeStrictShellScriptBin "mail" ''
-    exec ${alacritty}/bin/alacritty -e ${emacsclient} -t -a= -e '(mu4e)'
+    exec ${alacritty}/bin/alacritty -e ${emacsclient} -t -a= -e '(notmuch)'
   '';
 in
 {
