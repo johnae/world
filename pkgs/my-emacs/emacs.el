@@ -708,7 +708,7 @@
       ;;sendmail-program (executable-find "msmtp")
       ;;message-sendmail-envelope-from 'header
       ;;mail-specify-envelope-from t
-      notmuch-archive-tags '("-inbox" "-unread" "+archived")
+      notmuch-archive-tags '("-inbox" "-unread")
       notmuch-show-mark-read-tags '("-inbox" "-unread")
       notmuch-search-oldest-first nil
       notmuch-show-indent-content nil
@@ -726,7 +726,7 @@
                 :key "I")
         notmuch-saved-searches)
   (push '(:name "Unscreened"
-                :query "tag:inbox AND NOT (tag:screened OR tag:archived)"
+                :query "tag:inbox AND NOT tag:screened"
                 :key "s")
         notmuch-saved-searches)
   (push '(:name "The Feed"
@@ -888,7 +888,7 @@ This means:
                                          (insane/notmuch-get-from))
                                  (format "%s/ledger.db" notmuch-hooks-dir))
   (let ((tag-string (format "+ledger/%s" tag-name)))
-    (insane/notmuch-tag-by-from (list tag-string "+archived" "-inbox" "-unread"))))
+    (insane/notmuch-tag-by-from (list tag-string "-inbox" "-unread"))))
 
 (defun insane/notmuch-move-sender-to-screened ()
   "For the email at point, move the sender of that email to Screened Emails.
@@ -909,7 +909,7 @@ This means:
   (interactive)
   (insane/notmuch-add-addr-to-db (insane/notmuch-get-from)
                                  (format "%s/spam.db" notmuch-hooks-dir))
-  (insane/notmuch-tag-by-from '("+spam" "+deleted" "+archived" "-inbox" "-unread" "-screened")))
+  (insane/notmuch-tag-by-from '("+spam" "+deleted" "-inbox" "-unread" "-screened")))
 
 (defun insane/notmuch-reply-later ()
   "Capture this email for replying later."
