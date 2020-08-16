@@ -10,7 +10,7 @@
 
       if list="$(notmuch show --format=raw "$msg" 2>/dev/null | grep -E '^List-ID:\s.+')"; then
         listname="$(echo "$list" | awk '{print $2}')"
-        notmuch tag +list/"$list" +thefeed -- "$msg"
+        notmuch tag -new +list/"$list" +thefeed -- "$msg"
       fi
 
     done
