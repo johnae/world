@@ -1,9 +1,13 @@
 { pkgs, config, lib, options }:
-
+let
+  redshift-gammastep = pkgs.writeStrictShellScriptBin "redshift" ''
+    exec ${pkgs.gammastep}/bin/gammastep "$@"
+  '';
+in
 {
   services.redshift = {
     enable = true;
-    package = pkgs.redshift-wlr;
+    package = redshift-gammastep;
     latitude = "59.3293";
     longitude = "18.0686";
     temperature = {
