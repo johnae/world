@@ -5,6 +5,10 @@ echo --- Running agent pre-command hook
 
 echo +++ Docker login
 if ! command -v docker >/dev/null 2>&1; then
+    while nix profile info | grep docker; do
+        num="$(nix profile info | grep docker | head -1 | awk '{print $1}')"
+        nix profile remove "$num"
+    done
     nix profile install nixpkgs#docker
 fi
 echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
