@@ -111,13 +111,15 @@ let
   '';
 
   spotify-play = writeStrictShellScriptBin "spotify-play" ''
+    export SK_PROMPT="find music >> "
+    export SK_OPTS="--no-bold --color=bw  --height=40 --reverse --no-hscroll --no-mouse"
     TYPE="$1"
     set +e
-    search="$(SK_OPTS="--print-query" ${sk-sk}/bin/sk-sk < /dev/null)"
+    search="$(SK_OPTS="$SK_OPTS --print-query" ${sk-sk}/bin/sk-sk < /dev/null)"
     set -e
     echo "$TYPE" "$search" > "$XDG_RUNTIME_DIR"/spotnix_input
     ${sk-sk}/bin/sk-sk < "$XDG_RUNTIME_DIR"/spotnix_output | \
-        awk '{print $NF}' | xargs -r -I{} ${spotify-cmd}/bin/spotify-cmd {}
+        awk '{print $NF}' | xargs -r -I{} ${spotify-cmd}/bin/spotify-cmd play {}
   '';
 
   spotify-play-track = writeStrictShellScriptBin "spotify-play-track" ''
