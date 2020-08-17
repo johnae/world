@@ -61,13 +61,13 @@ let
   '';
 
   sway-background = pkgs.writeStrictShellScriptBin "sway-background" ''
-    category=''${1:-nature}
+    category=''${1:-art,abstract,space}
     BG=$(${random-picsum-background}/bin/random-picsum-background "$category")
     exec swaymsg "output * bg '$BG' fill"
   '';
 
   rotating-background = pkgs.writeStrictShellScriptBin "rotating-background" ''
-    category=''${1:-nature}
+    category=''${1:-art,abstract,space}
     while true; do
     if ! ${sway-background}/bin/sway-background "$category"; then
       exec swaymsg "output * bg '$HOME/Pictures/default-background.jpg' fill"
@@ -218,8 +218,8 @@ in
         "${modifier}+x" = ''mode "disabled keybindings"'';
         "${modifier}+r" = ''mode "resize"'';
 
-        "${modifier}+t" = ''exec ${pkgs.spotify-play-track}/bin/spotify-play-track'';
-        "${modifier}+p" = ''exec ${pkgs.spotify-play-playlist}/bin/spotify-play-playlist'';
+        "${modifier}+t" = ''exec ${pkgs.sk-window}/bin/sk-window ${pkgs.spotify-play-track}/bin/spotify-play-track'';
+        "${modifier}+p" = ''exec ${pkgs.sk-window}/bin/sk-window ${pkgs.spotify-play-playlist}/bin/spotify-play-playlist'';
         "${modifier}+Shift+n" = ''exec ${pkgs.spotify-cmd}/bin/spotify-cmd next'';
         "${modifier}+Shift+p" = ''exec ${pkgs.spotify-cmd}/bin/spotify-cmd prev'';
         "${modifier}+Shift+m" = ''exec ${pkgs.spotify-cmd}/bin/spotify-cmd pause'';
@@ -229,20 +229,18 @@ in
         "${modifier}+Control+l" = ''exec ${pkgs.swaylock-dope}/bin/swaylock-dope'';
 
 
-        "${modifier}+i" = ''exec swaymsg inhibit_idle open'';
-        "${modifier}+Shift+i" = ''exec swaymsg inhibit_idle none'';
+        "${modifier}+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle open'';
+        "${modifier}+Shift+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle none'';
 
-        "${modifier}+Return" = ''exec alacritty'';
-        "${modifier}+d" = ''exec sk-window sk-run'';
+        "${modifier}+Return" = ''exec ${pkgs.alacritty}/bin/alacritty'';
+        "${modifier}+d" = ''exec ${pkgs.sk-window}/bin/sk-window sk-run'';
 
-        "${modifier}+minus" = ''exec sk-window sk-passmenu'';
-        "${modifier}+Shift+minus" = ''exec passonly=y sk-window sk-passmenu'';
+        "${modifier}+minus" = ''exec ${pkgs.sk-window}/bin/sk-window sk-passmenu'';
+        "${modifier}+Shift+minus" = ''exec passonly=y ${pkgs.sk-window}/bin/sk-window sk-passmenu'';
 
-        "${modifier}+b" = ''exec sway-background'';
+        "${modifier}+b" = ''exec ${sway-background}/bin/sway-background'';
 
-        "${modifier}+Shift+e" = ''exec alacritty -t edit -e emacsclient -t -a='';
-
-        "${modifier}+Shift+b" = ''exec firefox'';
+        "${modifier}+Shift+e" = ''exec ${pkgs.alacritty}/bin/alacritty -t edit -e emacsclient -t -a='';
 
         "${modifier}+m" = ''move workspace to output right'';
         "${modifier}+Shift+q" = ''kill'';
