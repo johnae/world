@@ -52,7 +52,7 @@ let
 
   random-picsum-background = pkgs.writeStrictShellScriptBin "random-picsum-background" ''
     category=''${1:-nature}
-    ${pkgs.wget}/bin/wget -O /tmp/wallpaper.jpg 'https://source.unsplash.com/random/3200x1800/?'"$category" 2>/dev/null
+    ${pkgs.wget}/bin/wget -O /tmp/wallpaper.jpg 'https://source.unsplash.com/featured/3200x1800/?'"$category" 2>/dev/null
     if [ -e "$HOME"/Pictures/wallpaper.jpg ]; then
     mv "$HOME"/Pictures/wallpaper.jpg "$HOME"/Pictures/previous-wallpaper.jpg
     fi
@@ -320,7 +320,7 @@ in
 
   systemd.user.services = {
     persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w";
-    rotating-background = swayservice "Rotating background service for Sway" "${rotating-background}/bin/rotating-background art";
+    rotating-background = swayservice "Rotating background service for Sway" "${rotating-background}/bin/rotating-background art,abstract,space";
     swayidle = swayservice "Sway Idle Service - lock screen etc" swayidleCommand;
   };
 
