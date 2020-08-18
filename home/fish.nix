@@ -14,6 +14,45 @@ let
 
   privateSway = withinNetNS "${pkgs.sway}/bin/sway" { };
   privateFish = withinNetNS "${pkgs.fish}/bin/fish" { };
+
+  genLaunchOptions = attrs:
+    lib.concatStringsSep "\\n"
+      (lib.mapAttrsToList (k: v: "${k}\\texec ${v}") attrs);
+
+  genLauncher = attrs: ''
+    clear
+    set RUN (echo -e "${genLaunchOptions attrs}" | \
+        ${pkgs.skim}/bin/sk -p "start >> " --inline-info --margin 40%,40% \
+                            --color=bw --height=40 --no-hscroll --no-mouse \
+                            --reverse --delimiter='\t' --with-nth 1 | \
+                                 ${pkgs.gawk}/bin/awk -F'\t' '{print $2}')
+    eval "$RUN"
+  '';
+
+  swayDrmDebug = pkgs.writeStrictShellScriptBin "sway-drm-debug" ''
+    echo 0xFE | sudo tee /sys/module/drm/parameters/debug # Enable verbose DRM logging
+    sudo dmesg -C
+    dmesg -w >dmesg.log & # Continuously write DRM logs to a file
+    sway -d >sway.log 2>&1 # Reproduce the bug, then exit sway
+    fg # Kill dmesg with Ctrl+C
+    echo 0x00 | sudo tee /sys/module/drm/parameters/debug
+  '';
+
+  drmDebugLaunch = pkgs.writeStrictShellScriptBin "drm-debug-launch" ''
+    ln -s ${swayDrmDebug}/bin/sway-drm-debug ~/sway-drm-debug
+    echo Please execute ~/sway-drm-debug
+    ${pkgs.fish}/bin/fish
+  '';
+
+  launcher = genLauncher {
+    "sway private" = privateSway;
+    "sway" = "${pkgs.sway}/bin/sway";
+    "sway debug" = "${pkgs.sway}/bin/sway -d 2> ~/sway.log";
+    "sway drm debug" = "${drmDebugLaunch}/bin/drm-debug-launch";
+    "fish private" = privateFish;
+    "fish" = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.fish}/bin/fish";
+  };
+
 in
 {
 
@@ -118,11 +157,9 @@ in
         export XDG_CURRENT_DESKTOP=sway
         export XDG_SESSION_TYPE=wayland
         export XDG_CURRENT_DESKTOP=sway
+        export WLR_DRM_NO_MODIFIERS=1
 
-        clear
-        set RUN (echo -e "sway private\texec ${privateSway}\nsway\texec sway\nfish private\texec ${privateFish}\nfish\texec ${pkgs.dbus}/bin/dbus-run-session fish" | \
-        ${pkgs.skim}/bin/sk -p "start >> " --inline-info --margin 40%,40% --color=bw --height=40 --no-hscroll --no-mouse --reverse --delimiter='\t' --with-nth 1 | ${pkgs.gawk}/bin/awk -F'\t' '{print $2}')
-        eval "$RUN"
+        ${launcher}
       end
     '';
   };
