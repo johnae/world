@@ -4,4 +4,4 @@ set -euo pipefail
 echo --- Running agent pre-command hook
 
 echo +++ Docker login
-echo "$DOCKER_PASS" | nix run nixpkgs#docker login -u "$DOCKER_USER" --password-stdin
+echo "$DOCKER_PASS" | nix run nixpkgs#docker -- login -u "$DOCKER_USER" --password-stdin
