@@ -698,21 +698,41 @@
       notmuch-mail-dir (expand-file-name ".mail" (getenv "HOME"))
       user-full-name (notmuch-user-name)
       message-kill-buffers-on-exit t
-      send-mail-function 'smtpmail-send-it
-      smtpmail-default-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-user "john@insane.se"
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 587
-      ;;message-send-mail-function 'message-send-mail-with-sendmail
-      ;; we substitute sendmail with msmtp
-      ;;sendmail-program (executable-find "msmtp")
-      ;;message-sendmail-envelope-from 'header
-      ;;mail-specify-envelope-from t
+      sendmail-program "gmi"
+      send-mail-function 'sendmail-send-it
+      message-sendmail-extra-arguments '("send" "--quiet" "-t" "-C" "~/.mail/personal")
+      message-sendmail-f-is-evil t
+
+      mail-specify-envelope-from t
+      message-sendmail-envelope-from 'header
+      mail-envelope-from 'header
+
+      notmuch-always-prompt-for-sender t
       notmuch-archive-tags '("-inbox" "-unread")
       notmuch-show-mark-read-tags '("-inbox" "-unread")
       notmuch-search-oldest-first nil
       notmuch-show-indent-content nil
+      notmuch-fcc-dirs nil
       notmuch-hooks-dir (expand-file-name ".notmuch/hooks" notmuch-mail-dir))
+
+(defun insane/notmuch-set-account ()
+  (if (message-mail-p)
+      (save-excursion
+  (let* ((from (save-restriction
+           (message-narrow-to-headers)
+           (message-fetch-field "from")))
+         (account (cond
+       ((string-match "john@insane.se" from) "~/.mail/personal")
+       ((string-match "john@karma.life" from) "~/.mail/work")
+       ((string-match "john@karma.ly" from) "~/.mail/work")
+       ((string-match "john@instabox.se" from) "~/.mail/professional")
+       ((string-match "john@instabox.io" from) "~/.mail/professional")
+       )))
+    (progn
+            (setq message-sendmail-extra-arguments (list '"send" '"--quiet" '"-t" '"-C" account))
+            )
+    ))))
+(add-hook 'message-send-mail-hook 'insane/notmuch-set-account)
 
 (progn
   (setq notmuch-saved-searches nil)
