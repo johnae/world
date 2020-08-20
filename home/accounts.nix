@@ -5,6 +5,7 @@ let
 
   lieer = {
     enable = true;
+    ignoreTagsLocal = [ "new" ];
     sync.enable = true;
   };
 
@@ -23,11 +24,13 @@ in
       };
       professional = {
         address = "john@instabox.se";
+        aliases = [ "john@instabox.io" ];
         maildir.path = "professional";
         inherit realName flavor lieer notmuch;
       };
       work = {
         address = "john@karma.life";
+        aliases = [ "john@karma.ly" ];
         maildir.path = "work";
         inherit realName flavor lieer notmuch;
       };
