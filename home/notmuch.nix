@@ -9,8 +9,8 @@
     for msg in $(notmuch search --output=messages tag:new); do
 
       if list="$(notmuch show --format=raw "$msg" 2>/dev/null | grep -E '^List-ID:\s.+')"; then
-        listname="$(echo "$list" | awk '{print $2}')"
-        notmuch tag -new +list/"$listname" +thefeed -- "$msg"
+        declare -a "parts=($( echo "$string" | sed 's/[][`~!@#$%^&*():;<>.,?/\|{}=+-]/\\&/g' ))"
+        notmuch tag -new +list/"''${parts[1]}" +thefeed -- "$msg"
       fi
 
     done
