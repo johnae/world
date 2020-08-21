@@ -1,15 +1,12 @@
 { pkgs, config, lib, options }:
-
-{
-  programs.notmuch.enable = true;
-  programs.notmuch.new.tags = [ "new" ];
-  programs.notmuch.hooks.postNew = ''
+let
+  post-new-notmuch = pkgs.writeStrictShellScript "post-new-notmuch" ''
     maildir="${config.accounts.email.maildirBasePath}";
 
     for msg in $(notmuch search --output=messages tag:new); do
 
       if list="$(notmuch show --format=raw "$msg" 2>/dev/null | grep -E '^List-ID:\s.+')"; then
-        declare -a "parts=($( echo "$string" | sed 's/[][`~!@#$%^&*():;<>.,?/\|{}=+-]/\\&/g' ))"
+        read -r -a parts <<< "$(echo "$list" | sed 's/[][`~!@#$%^&*():;<>.,?/\|{}=+-]/\\&/g')"
         notmuch tag -new +list/"''${parts[1]}" +thefeed -- "$msg"
       fi
 
@@ -20,31 +17,36 @@
         tag=$(echo "$line" | cut -d' ' -f1 -)
         entry=$(echo "$line" | cut -d' ' -f2 -)
         if [ -n "$entry" ]; then
-            notmuch tag +ledger/"$nm_tag" -new -- tag:new and from:"$entry"
+            notmuch tag +ledger/"$tag" -new -- tag:new and from:"$entry"
         fi
     done < "$maildir"/.notmuch/hooks/ledger.db
 
     touch "$maildir"/.notmuch/hooks/spam.db
-    for entry in $(cat "$maildir"/.notmuch/hooks/spam.db); do
+    while IFS= read -r entry; do
         if [ -n "$entry" ]; then
             notmuch tag +spam +deleted -new -- tag:new and from:"$entry"
         fi
-    done
+    done < "$maildir"/.notmuch/hooks/spam.db
 
     touch "$maildir"/.notmuch/hooks/thefeed.db
-    for entry in $(cat "$maildir"/.notmuch/hooks/thefeed.db); do
+    while IFS= read -r entry; do
         if [ -n "$entry" ]; then
             notmuch tag +thefeed -new -- tag:new and from:"$entry"
         fi
-    done
+    done < "$maildir"/.notmuch/hooks/thefeed.db
 
     touch "$maildir"/.notmuch/hooks/screened.db
-    for entry in $(cat "$maildir"/.notmuch/hooks/screened.db); do
+    while IFS= read -r entry; do
         if [ -n "$entry" ]; then
             notmuch tag +screened -- tag:new and from:"$entry"
         fi
-    done
+    done < "$maildir"/.notmuch/hooks/screened.db
 
     notmuch tag +inbox +unread -new -- tag:new
   '';
+in
+{
+  programs.notmuch.enable = true;
+  programs.notmuch.new.tags = [ "new" ];
+  programs.notmuch.hooks.postNew = "exec ${post-new-notmuch}";
 }
