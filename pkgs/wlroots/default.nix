@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     "-Dxcb-icccm=enabled"
     "-Dxcb-errors=enabled"
     "-Dxcb-xkb=enabled"
+    "-Dlibseat=disabled"
   ];
 
   buildInputs = [
