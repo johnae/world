@@ -6,13 +6,58 @@ let
     "${inputs.secrets}/${hostName}/meta.nix"
   ]) { inherit pkgs userName; };
 
+  sshExtraConfig =
+    let
+      secretHosts = builtins.exec [
+        "${pkgs.sops}/bin/sops"
+        "-d"
+        "${pkgs.inputs.secrets}/ssh-hosts/hosts.nix"
+      ];
+      builders = builtins.exec [
+        "${pkgs.sops}/bin/sops"
+        "-d"
+        "${pkgs.inputs.secrets}/builders/hosts.nix"
+      ];
+      buildHosts = lib.filterAttrs
+        (n: v:
+          builtins.any (e: e.hostName == v.hostname) builders
+        )
+        secretHosts;
+    in
+    lib.concatStringsSep "\n"
+      (lib.mapAttrsToList
+        (
+          name: value:
+            ''
+              Host ${name} ${value.hostname}
+                HostName ${value.hostname}
+                StrictHostKeyChecking accept-new
+            ''
+        )
+        buildHosts);
+
   nixos-hardware = inputs.nixos-hardware;
+
+  xps9360 = {
+    imports = [
+      "${nixos-hardware}/common/cpu/intel/kaby-lake"
+      "${nixos-hardware}/common/pc/laptop"
+    ];
+
+    boot.kernelParams = [ "mem_sleep_default=deep" ];
+    boot.blacklistedKernelModules = [ "psmouse" ];
+    services.throttled.enable = lib.mkDefault true;
+    services.thermald.enable = true;
+  };
+
+  fwsvccfg = config.systemd.services.firewall;
+  fwcfg = config.networking.firewall;
 in
 with lib; {
   imports = [
     ../profiles/laptop.nix
     ../modules/state.nix
-    #"${nixos-hardware}/dell/xps/13-9360"
+    xps9360
     secrets
   ];
 
@@ -21,6 +66,26 @@ with lib; {
   networking = {
     inherit hostName;
     extraHosts = "127.0.1.1 ${hostName}";
+    wireguard.interfaces.vpn.postSetup = ''
+      printf "nameserver 193.138.218.74" | ${pkgs.openresolv}/bin/resolvconf -a vpn -m 0
+    '';
+  };
+
+  systemd.services.firewall-private = {
+    inherit (fwsvccfg) wantedBy reloadIfChanged;
+    wants = [ "wireguard-vpn.service" ];
+    unitConfig = {
+      inherit (fwsvccfg.unitConfig) ConditionCapability DefaultDependencies;
+    };
+    path = [ fwcfg.package ];
+    description = fwsvccfg.description + " in netns private";
+    after = fwsvccfg.after ++ [ "wireguard-vpn.service" ];
+    serviceConfig = with fwsvccfg.serviceConfig; {
+      inherit Type RemainAfterExit;
+      ExecStart = "${pkgs.iproute}/bin/ip netns exec private " + (lib.last (lib.splitString "@" ExecStart));
+      ExecReload = "${pkgs.iproute}/bin/ip netns exec private " + (lib.last (lib.splitString "@" ExecReload));
+      ExecStop = "${pkgs.iproute}/bin/ip netns exec private " + (lib.last (lib.splitString "@" ExecStop));
+    };
   };
 
   system.activationScripts.preStateSetup = ''
@@ -38,6 +103,7 @@ with lib; {
       "/var/lib/iwd"
       "/var/lib/wireguard"
       "/var/lib/systemd/coredump"
+      "/var/lib/docker"
       "/root"
     ];
     files = [
@@ -58,6 +124,7 @@ with lib; {
         "/home/${userName}/.mail"
         "/home/${userName}/.cargo"
         "/home/${userName}/.cache/mu"
+        "/home/${userName}/.mozilla/firefox/default"
       ];
       files = [
         "/home/${userName}/.gnupg/pubring.kbx"
@@ -84,7 +151,6 @@ with lib; {
     pkgs.usbutils
     pkgs.mkpasswd
     pkgs.glib
-
     pkgs.powertop
     pkgs.socat
     pkgs.nmap
@@ -95,7 +161,6 @@ with lib; {
     pkgs.dhcp
     pkgs.bind
     pkgs.pciutils
-
     pkgs.zip
     pkgs.wget
     pkgs.unzip
@@ -111,7 +176,6 @@ with lib; {
     pkgs.git
     pkgs.fish
     pkgs.tmux
-
     pkgs.blueman
     pkgs.pavucontrol
     pkgs.bluez
@@ -119,6 +183,11 @@ with lib; {
     pkgs.fd
     pkgs.wireguard
     pkgs.iwd
+    pkgs.du-dust
+    pkgs.hyperfine
+    pkgs.procs
+    pkgs.sd
+    pkgs.ytop
   ];
 
   ## trying to fix bluetooth disappearing after suspend
@@ -141,6 +210,7 @@ with lib; {
 
   users.defaultUserShell = pkgs.fish;
   users.mutableUsers = false;
+
   users.groups = {
     "${userName}".gid = 1337;
     scard.gid = 1050;
@@ -151,6 +221,8 @@ with lib; {
   };
 
   programs.sway.enable = true;
+  programs.ssh.extraConfig = sshExtraConfig;
+
   home-manager.useUserPackages = true;
   home-manager.users."${userName}" = { ... }: {
     imports = [
