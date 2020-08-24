@@ -7,7 +7,7 @@ let
 
       if list="$(notmuch show --format=raw "$msg" 2>/dev/null | grep -E '^List-ID:\s.+')"; then
         read -r -a parts <<< "''${list//[<>]/}"
-        notmuch tag -new +list/"''${parts[1]}" +thefeed -- "$msg"
+        notmuch tag -inbox -new +list/"''${parts[1]}" +thefeed -- "$msg"
       fi
 
     done
@@ -17,21 +17,21 @@ let
         tag=$(echo "$line" | cut -d' ' -f1 -)
         entry=$(echo "$line" | cut -d' ' -f2 -)
         if [ -n "$entry" ]; then
-            notmuch tag +ledger/"$tag" -new -- tag:new and from:"$entry"
+            notmuch tag +ledger/"$tag" -inbox -new -- tag:new and from:"$entry"
         fi
     done < "$maildir"/.notmuch/hooks/ledger.db
 
     touch "$maildir"/.notmuch/hooks/spam.db
     while IFS= read -r entry; do
         if [ -n "$entry" ]; then
-            notmuch tag +spam +deleted -new -- tag:new and from:"$entry"
+            notmuch tag +spam +deleted -inbox -new -- tag:new and from:"$entry"
         fi
     done < "$maildir"/.notmuch/hooks/spam.db
 
     touch "$maildir"/.notmuch/hooks/thefeed.db
     while IFS= read -r entry; do
         if [ -n "$entry" ]; then
-            notmuch tag +thefeed -new -- tag:new and from:"$entry"
+            notmuch tag +thefeed -inbox -new -- tag:new and from:"$entry"
         fi
     done < "$maildir"/.notmuch/hooks/thefeed.db
 
