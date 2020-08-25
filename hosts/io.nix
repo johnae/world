@@ -88,56 +88,66 @@ with lib; {
     };
   };
 
-  system.activationScripts.preStateSetup = ''
-    [ -d "/keep/home" ] || ${pkgs.btrfsProgs}/bin/btrfs sub create /keep/home
-    [ -d "/keep/home/${userName}" ] || ${pkgs.btrfsProgs}/bin/btrfs sub create /keep/home/${userName}
-    [ -d "/keep/home/${userName}/Downloads" ] || ${pkgs.btrfsProgs}/bin/btrfs sub create /keep/home/${userName}/Downloads
-    chown ${builtins.toString secrets.users.extraUsers."${userName}".uid}:100 /keep/home/${userName}
-    chown ${builtins.toString secrets.users.extraUsers."${userName}".uid}:100 /keep/home/${userName}/Downloads
-  '';
+  system.activationScripts.preStateSetup =
+    let
+      uid = builtins.toString
+        secrets.users.extraUsers."${userName}".uid;
+    in
+    ''
+      [ -d "/keep/home" ] || ${pkgs.btrfsProgs}/bin/btrfs sub create /keep/home
+      [ -d "/keep/home/${userName}" ] || ${pkgs.btrfsProgs}/bin/btrfs sub create /keep/home/${userName}
+      [ -d "/keep/home/${userName}/Downloads" ] || ${pkgs.btrfsProgs}/bin/btrfs sub create /keep/home/${userName}/Downloads
+      chown ${uid}:${uid} /keep/home/${userName}
+      chown ${uid}:${uid} /keep/home/${userName}/Downloads
+    '';
 
-  environment.state."/keep" = {
-    directories = [
-      "/var/log"
-      "/var/lib/bluetooth"
-      "/var/lib/iwd"
-      "/var/lib/wireguard"
-      "/var/lib/systemd/coredump"
-      "/var/lib/docker"
-      "/root"
-    ];
-    files = [
-      "/etc/machine-id"
-    ];
-    users.${userName} = {
+  environment.state."/keep" =
+    let
+      uid = builtins.toString
+        secrets.users.extraUsers."${userName}".uid;
+    in
+    {
       directories = [
-        "/home/${userName}/Downloads"
-        "/home/${userName}/Documents"
-        "/home/${userName}/Development"
-        "/home/${userName}/Photos"
-        "/home/${userName}/Pictures"
-        "/home/${userName}/Sync"
-        "/home/${userName}/.gnupg/private-keys-v1.d"
-        "/home/${userName}/.local/share/direnv"
-        "/home/${userName}/.local/share/password-store"
-        "/home/${userName}/.local/share/fish"
-        "/home/${userName}/.mail"
-        "/home/${userName}/.cargo"
-        "/home/${userName}/.cache/mu"
-        "/home/${userName}/.cache/nix"
-        "/home/${userName}/.mozilla/firefox/default"
+        "/var/log"
+        "/var/lib/bluetooth"
+        "/var/lib/iwd"
+        "/var/lib/wireguard"
+        "/var/lib/systemd/coredump"
+        "/var/lib/docker"
+        "/root"
       ];
       files = [
-        "/home/${userName}/.gnupg/pubring.kbx"
-        "/home/${userName}/.gnupg/sshcontrol"
-        "/home/${userName}/.gnupg/trustdb.gpg"
-        "/home/${userName}/.gnupg/random_seed"
-        "/home/${userName}/.kube/config"
-        "/home/${userName}/.ssh/known_hosts"
-        "/home/${userName}/.spotify_token_cache.json"
+        "/etc/machine-id"
       ];
+      users.${uid} = {
+        directories = [
+          "/home/${userName}/Downloads"
+          "/home/${userName}/Documents"
+          "/home/${userName}/Development"
+          "/home/${userName}/Photos"
+          "/home/${userName}/Pictures"
+          "/home/${userName}/Sync"
+          "/home/${userName}/.gnupg/private-keys-v1.d"
+          "/home/${userName}/.local/share/direnv"
+          "/home/${userName}/.local/share/password-store"
+          "/home/${userName}/.local/share/fish"
+          "/home/${userName}/.mail"
+          "/home/${userName}/.cargo"
+          "/home/${userName}/.cache/mu"
+          "/home/${userName}/.cache/nix"
+          "/home/${userName}/.mozilla/firefox/default"
+        ];
+        files = [
+          "/home/${userName}/.gnupg/pubring.kbx"
+          "/home/${userName}/.gnupg/sshcontrol"
+          "/home/${userName}/.gnupg/trustdb.gpg"
+          "/home/${userName}/.gnupg/random_seed"
+          "/home/${userName}/.kube/config"
+          "/home/${userName}/.ssh/known_hosts"
+          "/home/${userName}/.spotify_token_cache.json"
+        ];
+      };
     };
-  };
 
   environment.systemPackages = [
     pkgs.man-pages

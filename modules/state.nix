@@ -23,22 +23,22 @@ let
     in
     flatten (map eachStateRoot stateStoragePaths);
 
-  stateOptions = { user ? "root", group ? "root" }: {
-    user = mkOption {
+  stateOptions = { uid ? "0", gid ? "0" }: {
+    uid = mkOption {
       type = str;
-      default = user;
+      default = uid;
       description = ''
         The owner of the director(ies).
       '';
-      example = "bob";
+      example = "0";
     };
-    group = mkOption {
+    gid = mkOption {
       type = str;
-      default = group;
+      default = gid;
       description = ''
         The group of the director(ies).
       '';
-      example = "users";
+      example = "100";
     };
     directories = mkOption {
       type = listOf str;
@@ -67,22 +67,22 @@ let
   stateModule = submodule
     {
       options = {
-        inherit (stateOptions { }) user group directories files;
+        inherit (stateOptions { }) uid gid directories files;
         name = mkOption {
           type = str;
-          default = "root";
+          default = "0";
         };
         users = mkOption
           {
             type = attrsOf
               (submodule ({ config, name, ... }:
                 let
-                  user = name;
-                  group = "users";
+                  uid = name;
+                  gid = uid;
                 in
                 {
                   options = {
-                    inherit (stateOptions { inherit user group; }) user group directories files;
+                    inherit (stateOptions { inherit uid gid; }) uid gid directories files;
                     name = mkOption {
                       type = str;
                       default = name;
@@ -106,11 +106,11 @@ in
     system.activationScripts =
       (
         let
-          mkLinksToStateStorage = { mode ? null, user ? "root", group ? "root" }: stateRoot: target:
+          mkLinksToStateStorage = { mode ? null, uid ? "0", gid ? "0" }: stateRoot: target:
             let
               actualMode =
                 if mode == null then
-                  if user == "root" then
+                  if uid == "0" then
                     755
                   else
                     775
@@ -136,9 +136,9 @@ in
                     if [ "$currentSourcePath" != "$stateTarget/" ]; then
                       echo Creating source directory "'$currentSourcePath'"
                       mkdir "$currentSourcePath"
-                      chown ${user}:${group} "$currentSourcePath"
-                      chmod ${toString actualMode} "$currentSourcePath"
                     fi
+                    chown ${uid}:${gid} "$currentSourcePath"
+                    chmod ${toString actualMode} "$currentSourcePath"
                   fi
 
                   if [ ! -e "$currentTargetPath" ]; then
@@ -158,11 +158,11 @@ in
                 done
               )
             '';
-          mkStateSourceTargetDir = { mode ? null, user ? "root", group ? "root" }: stateRoot: target:
+          mkStateSourceTargetDir = { mode ? null, uid ? "0", gid ? "0" }: stateRoot: target:
             let
               actualMode =
                 if mode == null then
-                  if user == "root" then
+                  if uid == "0" then
                     755
                   else
                     775
@@ -189,9 +189,9 @@ in
 
                   if [ ! -d "$currentSourcePath" ]; then
                     mkdir "$currentSourcePath"
-                    chown ${toString user}:${group} "$currentSourcePath"
-                    chmod ${toString actualMode} "$currentSourcePath"
                   fi
+                  chown ${uid}:${gid} "$currentSourcePath"
+                  chmod ${toString actualMode} "$currentSourcePath"
                   [ -d "$currentTargetPath" ] || mkdir "$currentTargetPath"
 
                   currentRealSourcePath="$(realpath "$currentSourcePath")"
@@ -209,7 +209,7 @@ in
               toEntry = entry: nameValuePair
                 "createDirsIn-${replaceStrings [ "/" "." " " ] [ "-" "" "" ] "${stateRoot}-for-${entry.name}"}"
                 (stringAfter [ "preStateSetup" ] (concatMapStrings
-                  (mkStateSourceTargetDir { inherit (entry) user group; } stateRoot)
+                  (mkStateSourceTargetDir { inherit (entry) uid gid; } stateRoot)
                   entry.directories
                 ));
             in
@@ -222,7 +222,7 @@ in
               toEntry = entry: nameValuePair
                 "createLinksIn-${replaceStrings [ "/" "." " " ] [ "-" "" "" ] "${stateRoot}-for-${entry.name}"}"
                 (stringAfter [ "preStateSetup" ] (concatMapStrings
-                  (mkLinksToStateStorage { inherit (entry) user group; } stateRoot)
+                  (mkLinksToStateStorage { inherit (entry) uid gid; } stateRoot)
                   entry.files
                 ));
             in
