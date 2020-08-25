@@ -27,9 +27,14 @@ writeStrictShellScriptBin "initialize-user" ''
     echo world already exists at Development/nixos-metadata
   fi
 
-  if [ ! -e "$PASSWORD_STORE_DIR" ]; then
+  if [ ! -e "$PASSWORD_STORE_DIR/.git" ]; then
     echo Cloning password store to "$PASSWORD_STORE_DIR"
-    git clone git@github.com:johnae/passwords "$PASSWORD_STORE_DIR"
+    if [ -e "$PASSWORD_STORE_DIR" ]; then
+      cd "$PASSWORD_STORE_DIR"
+      git clone git@github.com:johnae/passwords .
+    else
+      git clone git@github.com:johnae/passwords "$PASSWORD_STORE_DIR"
+    fi
   else
     echo Password store "$PASSWORD_STORE_DIR" already present
   fi
