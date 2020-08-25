@@ -6,7 +6,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     secrets = {
-      url = "git+ssh://git@github.com/johnae/nixos-metadata?ref=flakes";
+      url = "git+ssh://git@github.com/johnae/secret-world";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixkite = {

@@ -466,18 +466,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1598291557,
-        "narHash": "sha256-rpN6iRIbXS3sfP9e6ylFbb60ko4mzbNnsBaUCfBf3f0=",
-        "ref": "flakes",
-        "rev": "5b2eafd312a268508f5f720557d79554319fa6c1",
-        "revCount": 59,
+        "lastModified": 1598353869,
+        "narHash": "sha256-BvZ/WRWbYcaXA6JKjyBKMVL1zCO5yxjCmgl0iI3VTGA=",
+        "ref": "master",
+        "rev": "9e4f14d862f453e6e37cb53600362f5b8a6ecc4f",
+        "revCount": 60,
         "type": "git",
-        "url": "ssh://git@github.com/johnae/nixos-metadata"
+        "url": "ssh://git@github.com/johnae/secret-world"
       },
       "original": {
-        "ref": "flakes",
         "type": "git",
-        "url": "ssh://git@github.com/johnae/nixos-metadata"
+        "url": "ssh://git@github.com/johnae/secret-world"
       }
     },
     "slurp": {
