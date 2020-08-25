@@ -723,8 +723,6 @@
            (message-fetch-field "from")))
          (account (cond
        ((string-match "john@insane.se" from) "~/.mail/personal")
-       ((string-match "john@karma.life" from) "~/.mail/work")
-       ((string-match "john@karma.ly" from) "~/.mail/work")
        ((string-match "john@instabox.se" from) "~/.mail/professional")
        ((string-match "john@instabox.io" from) "~/.mail/professional")
        )))
@@ -998,29 +996,6 @@ This means:
 
 ;; Allows memoization of expensive functions.
 (use-package memoize)
-
-;; Manage external processes from within emacs.
-;; (use-package prodigy
-;;   :ensure t
-;;   :init
-;;   (prodigy-define-tag
-;;    :name 'email
-;;    :ready-message "Watching for new email using imap idle. Ctrl-C to shutdown.")
-;;   (prodigy-define-service
-;;     :name "imapnotify-karma"
-;;     :command "@IMAPNOTIFY@"
-;;     :args (list "-c" (expand-file-name ".config/imapnotify.work.js" (getenv "HOME")))
-;;     :tags '(email)
-;;     :kill-signal 'sigkill)
-;;   (prodigy-define-service
-;;     :name "imapnotify-insane"
-;;     :command "@IMAPNOTIFY@"
-;;     :args (list "-c" (expand-file-name ".config/imapnotify.insane-gmail.js" (getenv "HOME")))
-;;     :tags '(email)
-;;     :kill-signal 'sigkill)
-;;   (prodigy-start-service (prodigy-find-service "imapnotify-karma"))
-;;   (prodigy-start-service (prodigy-find-service "imapnotify-insane"))
-;; )
 
 ;; Use wl-clipboard for interprocess copy/paste.
 (setq wl-copy-process nil)

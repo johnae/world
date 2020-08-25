@@ -28,12 +28,6 @@ in
         maildir.path = "professional";
         inherit realName flavor lieer notmuch;
       };
-      work = {
-        address = "john@karma.life";
-        aliases = [ "john@karma.ly" ];
-        maildir.path = "work";
-        inherit realName flavor lieer notmuch;
-      };
     };
   };
 }
