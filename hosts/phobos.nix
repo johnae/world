@@ -138,7 +138,6 @@ with lib; {
         ];
         files = [
           "/home/${userName}/.gnupg/pubring.kbx"
-          "/home/${userName}/.gnupg/sshcontrol"
           "/home/${userName}/.gnupg/trustdb.gpg"
           "/home/${userName}/.gnupg/random_seed"
           "/home/${userName}/.kube/config"
