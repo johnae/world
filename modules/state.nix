@@ -136,9 +136,9 @@ in
                     if [ "$currentSourcePath" != "$stateTarget/" ]; then
                       echo Creating source directory "'$currentSourcePath'"
                       mkdir "$currentSourcePath"
+                      chown ${uid}:${gid} "''${currentSourcePath%/}"
+                      chmod ${toString actualMode} "''${currentSourcePath%/}"
                     fi
-                    chown ${uid}:${gid} "$currentSourcePath"
-                    chmod ${toString actualMode} "$currentSourcePath"
                   fi
 
                   if [ ! -e "$currentTargetPath" ]; then
@@ -146,8 +146,8 @@ in
                       echo Creating target directory "'$currentTargetPath'"
                       mkdir "$currentTargetPath"
                       currentRealSourcePath="$(realpath "$currentSourcePath")"
-                      chown --reference="$currentRealSourcePath" "$currentTargetPath"
-                      chmod --reference="$currentRealSourcePath" "$currentTargetPath"
+                      chown --reference="''${currentRealSourcePath%/}" "''${currentTargetPath%/}"
+                      chmod --reference="''${currentRealSourcePath%/}" "''${currentTargetPath%/}"
                     else
                       echo Linking "'$target'" to "'$stateTarget'"
                       ln -f -s "$stateTarget" "$target"
@@ -189,14 +189,14 @@ in
 
                   if [ ! -d "$currentSourcePath" ]; then
                     mkdir "$currentSourcePath"
+                    chown ${uid}:${gid} "''${currentSourcePath%/}"
+                    chmod ${toString actualMode} "''${currentSourcePath%/}"
                   fi
-                  chown ${uid}:${gid} "$currentSourcePath"
-                  chmod ${toString actualMode} "$currentSourcePath"
                   [ -d "$currentTargetPath" ] || mkdir "$currentTargetPath"
 
                   currentRealSourcePath="$(realpath "$currentSourcePath")"
-                  chown --reference="$currentRealSourcePath" "$currentTargetPath"
-                  chmod --reference="$currentRealSourcePath" "$currentTargetPath"
+                  chown --reference="''${currentRealSourcePath%/}" "''${currentTargetPath%/}"
+                  chmod --reference="''${currentRealSourcePath%/}" "''${currentTargetPath%/}"
                   previousPath="$currentTargetPath"
                 done
               )
