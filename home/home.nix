@@ -215,4 +215,6 @@ in
 
   services.syncthing.enable = true;
 
+  home.stateVersion = "20.09";
+
 }

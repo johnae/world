@@ -4,10 +4,6 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home = {
-      url = "github:rycee/home-manager/bqv-flakes";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     secrets = {
       url = "git+ssh://git@github.com/johnae/nixos-metadata?ref=flakes";
@@ -26,8 +22,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nix-misc.follows = "nix-misc";
     };
+    notcoal = {
+      url = "github:johnae/notcoal";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     ## non flakes
+    home = { url = "github:rycee/home-manager"; flake = false; };
     nixos-hardware = { url = "github:nixos/nixos-hardware"; flake = false; };
     nixpkgs-fmt = { url = "github:nix-community/nixpkgs-fmt"; flake = false; };
     netns-exec = { url = "github:johnae/netns-exec"; flake = false; };
@@ -105,7 +106,7 @@
               { nixpkgs = { inherit pkgs; }; }
               { system.nixos.versionSuffix = inputs.nixpkgs.lib.mkForce "git.${builtins.substring 0 11 inputs.nixpkgs.rev}"; }
               inputs.nixpkgs.nixosModules.notDetected
-              inputs.home.nixosModules.home-manager
+              (import "${inputs.home}/nixos")
               configuration
             ];
         };
@@ -147,7 +148,7 @@
           (import ./overlays/pkgs.nix) pkgs pkgs
         ) // {
         inherit (pkgs)
-          spook;
+          notcoal spook;
       };
 
       overlays =
@@ -161,6 +162,7 @@
           emacs-overlay = inputs.emacs-overlay.overlay;
           nix-misc = inputs.nix-misc.overlay;
           spook = inputs.spook.overlay;
+          notcoal = inputs.notcoal.overlay;
         };
 
       containers =
