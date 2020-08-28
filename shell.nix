@@ -35,7 +35,7 @@ let
     shift
     path=.#nixosConfigurations."$host".config.system.build.toplevel
     echo Building host "$host" 1>&2
-    ${nixpkgs.nixUnstable}/bin/nix build --no-link "$@" "$path" 1>&2
+    ${nixpkgs.nixUnstable}/bin/nix build "$@" "$path" 1>&2
     ${nixpkgs.nixUnstable}/bin/nix path-info "$@" "$path"
   '';
 
@@ -44,7 +44,7 @@ let
     shift
     path=.#isoConfigurations."$host".config.system.build.isoImage
     echo Building iso image for host "$host" 1>&2
-    ${nixpkgs.nixUnstable}/bin/nix build --no-link "$@" "$path" 1>&2
+    ${nixpkgs.nixUnstable}/bin/nix build "$@" "$path" 1>&2
     ${nixpkgs.nixUnstable}/bin/nix path-info "$@" "$path"
   '';
 
@@ -84,12 +84,12 @@ let
     shift
     path=.#nixpkgs."$pkg"
     echo Building package "$pkg" 1>&2
-    ${nixpkgs.nixUnstable}/bin/nix build --no-link "$@" "$path" 1>&2
+    ${nixpkgs.nixUnstable}/bin/nix build "$@" "$path" 1>&2
     ${nixpkgs.nixUnstable}/bin/nix path-info "$@" "$path"
   '';
 
   world-update = nixpkgs.writeStrictShellScriptBin "world-update" ''
-    host="$(${nixpkgs.hostname}/bin/hostname)"
+    host=''${host:-"$(${nixpkgs.hostname}/bin/hostname)"}
 
     profile=/nix/var/nix/profiles/system
 
