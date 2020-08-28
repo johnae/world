@@ -148,6 +148,11 @@ in
           natural_scroll = "true";
           tap = "true";
         };
+        "1739:52710:DLL096D:01_06CB:CDE6_Touchpad" = {
+          dwt = "true";
+          natural_scroll = "true";
+          tap = "true";
+        };
       };
 
       colors = rec {
