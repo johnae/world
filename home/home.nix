@@ -70,6 +70,7 @@ in
       pkgs.netns-dbus-proxy
       pkgs.spook
       pkgs.gnome3.nautilus
+      pkgs.chromium
     ];
 
   home.sessionVariables = rec {
