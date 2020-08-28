@@ -141,6 +141,7 @@ with lib; {
           "/home/${userName}/.gnupg/pubring.kbx"
           "/home/${userName}/.gnupg/trustdb.gpg"
           "/home/${userName}/.gnupg/random_seed"
+          "/home/${userName}/.gnupg/sshcontrol"
           "/home/${userName}/.kube/config"
           "/home/${userName}/.ssh/known_hosts"
           "/home/${userName}/.spotify_token_cache.json"
@@ -201,15 +202,15 @@ with lib; {
   ];
 
   ## trying to fix bluetooth disappearing after suspend
-  sleepManagement = {
-    enable = true;
-    sleepCommands = ''
-      ${pkgs.libudev}/bin/systemctl stop bluetooth && ${pkgs.kmod}/bin/modprobe -r btusb
-    '';
-    wakeCommands = ''
-      ${pkgs.kmod}/bin/modprobe btusb && ${pkgs.libudev}/bin/systemctl start bluetooth
-    '';
-  };
+  # sleepManagement = {
+  #   enable = true;
+  #   sleepCommands = ''
+  #     ${pkgs.libudev}/bin/systemctl stop bluetooth && ${pkgs.kmod}/bin/modprobe -r btusb
+  #   '';
+  #   wakeCommands = ''
+  #     ${pkgs.kmod}/bin/modprobe btusb && ${pkgs.libudev}/bin/systemctl start bluetooth
+  #   '';
+  # };
   ## end fix
 
   security.pam.services.swaylock = {
@@ -252,6 +253,7 @@ with lib; {
   };
 
   hardware.enableRedistributableFirmware = true;
+  hardware.video.hidpi.enable = lib.mkDefault true;
 
   boot.initrd.availableKernelModules =
     [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
