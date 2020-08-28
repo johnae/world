@@ -22,10 +22,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nix-misc.follows = "nix-misc";
     };
-    notcoal = {
-      url = "github:johnae/notcoal";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     ## non flakes
     home = { url = "github:rycee/home-manager"; flake = false; };
@@ -87,12 +83,14 @@
 
       pkgs = nixpkgsFor.${system};
 
+      maybeTest = n: if n == "io-test" then "io" else n;
+
       toNixosConfiguration = name: _:
         let n = inputs.nixpkgs.lib.removeSuffix ".nix" name;
-        in inputs.nixpkgs.lib.nameValuePair n (systemConfig n (./hosts + "/${name}"));
+        in inputs.nixpkgs.lib.nameValuePair n (systemConfig (maybeTest n) (./hosts + "/${name}"));
 
       toInstallerConfiguration = name: conf:
-        inputs.nixpkgs.lib.nameValuePair name (installerConfig name conf.config.system.build.toplevel);
+        inputs.nixpkgs.lib.nameValuePair name (installerConfig (maybeTest name) conf.config.system.build.toplevel);
 
       systemConfig = hostName: configuration:
         inputs.nixpkgs.lib.nixosSystem {
@@ -148,7 +146,7 @@
           (import ./overlays/pkgs.nix) pkgs pkgs
         ) // {
         inherit (pkgs)
-          notcoal spook;
+          spook;
       };
 
       overlays =
@@ -162,7 +160,6 @@
           emacs-overlay = inputs.emacs-overlay.overlay;
           nix-misc = inputs.nix-misc.overlay;
           spook = inputs.spook.overlay;
-          notcoal = inputs.notcoal.overlay;
         };
 
       containers =

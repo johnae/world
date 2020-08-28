@@ -145,21 +145,6 @@
     },
     "flake-utils_3": {
       "locked": {
-        "lastModified": 1597053966,
-        "narHash": "sha256-f9lbPS/GJ1His8fsDqM6gfa8kSqREU4eKiMCS5hrKg4=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "ec20f52e2ff61e9c36c2b894b62fc1b4bd04c71b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_4": {
-      "locked": {
         "lastModified": 1596290160,
         "narHash": "sha256-QNXPeCiLKfLH6G6TtyuxZ14Zm+ZMxBaQ0Klccq+2RfM=",
         "owner": "numtide",
@@ -383,27 +368,6 @@
         "type": "github"
       }
     },
-    "notcoal": {
-      "inputs": {
-        "flake-utils": "flake-utils_3",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1598033859,
-        "narHash": "sha256-9Qo9l9ljgHupmw9wE0VmZosL11M3qLCg36Oej+0N6Xs=",
-        "owner": "johnae",
-        "repo": "notcoal",
-        "rev": "e5caf43fe3745dd37934f94d0917cc5eb2fd8db8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "johnae",
-        "repo": "notcoal",
-        "type": "github"
-      }
-    },
     "persway": {
       "flake": false,
       "locked": {
@@ -441,7 +405,6 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nixpkgs-fmt": "nixpkgs-fmt",
-        "notcoal": "notcoal",
         "persway": "persway",
         "secrets": "secrets",
         "slurp": "slurp",
@@ -497,7 +460,7 @@
     },
     "spook": {
       "inputs": {
-        "flake-utils": "flake-utils_4",
+        "flake-utils": "flake-utils_3",
         "nix-misc": [
           "nix-misc"
         ],
