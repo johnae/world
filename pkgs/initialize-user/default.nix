@@ -21,10 +21,10 @@ writeStrictShellScriptBin "initialize-user" ''
     echo world already exists at Development/world
   fi
 
-  if [ ! -e Development/nixos-metadata ]; then
-    git clone --recursive git@github.com:johnae/nixos-metadata Development/nixos-metadata
+  if [ ! -e Development/secret-world ]; then
+    git clone --recursive git@github.com:johnae/secret-world Development/secret-world
   else
-    echo world already exists at Development/nixos-metadata
+    echo world already exists at Development/secret-world
   fi
 
   if [ ! -e "$PASSWORD_STORE_DIR/.git" ]; then
