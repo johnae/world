@@ -272,10 +272,10 @@ debug "$DISK_SWAP and $DISK_ROOT wiped and formatted"
 
 if [ -b "$DISK2" ]; then
   echo Creating btrfs RAID1 filesystem on /dev/mapper/"$ENC_DISK_ROOT_LABEL" and /dev/mapper/"$ENC_DISK_ROOT2_LABEL"
-  retryDefault mkfs.btrfs -L "$DISK_ROOT_LABEL" -d raid1 -m raid1 /dev/mapper/"$ENC_DISK_ROOT_LABEL" /dev/mapper/"$ENC_DISK_ROOT2_LABEL"
+  retryDefault mkfs.btrfs -f -L "$DISK_ROOT_LABEL" -d raid1 -m raid1 /dev/mapper/"$ENC_DISK_ROOT_LABEL" /dev/mapper/"$ENC_DISK_ROOT2_LABEL"
 else
   echo Creating btrfs filesystem on /dev/mapper/"$ENC_DISK_ROOT_LABEL"
-  retryDefault mkfs.btrfs -L "$DISK_ROOT_LABEL" /dev/mapper/"$ENC_DISK_ROOT_LABEL"
+  retryDefault mkfs.btrfs -f -L "$DISK_ROOT_LABEL" /dev/mapper/"$ENC_DISK_ROOT_LABEL"
 fi
 
 # and create the efi boot partition
@@ -320,7 +320,7 @@ if [ -n "$ADDITIONAL_VOLUMES" ]; then
       partprobe /dev/mapper/"$ENC_DISK_EXTRA_LABEL"
 
       echo Creating btrfs filesystem on /dev/mapper/"$ENC_DISK_EXTRA_LABEL"
-      retryDefault mkfs.btrfs -L "$DISK_EXTRA_LABEL" /dev/mapper/"$ENC_DISK_EXTRA_LABEL"
+      retryDefault mkfs.btrfs -f -L "$DISK_EXTRA_LABEL" /dev/mapper/"$ENC_DISK_EXTRA_LABEL"
 
       partprobe /dev/mapper/"$ENC_DISK_EXTRA_LABEL"
 
