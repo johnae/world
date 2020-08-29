@@ -9,7 +9,9 @@ let
         (name: _: lib.hasSuffix ".nix" name)
         (builtins.readDir dir)
     );
+
   home = config.home;
+
 in
 {
   #nixpkgs.config = import ../nix/nixpkgs-config.nix;
@@ -48,6 +50,7 @@ in
       pkgs.update-wifi-networks
       pkgs.update-wireguard-keys
       pkgs.initialize-user
+      pkgs.nix-index
       #spotify-cmd
       #spotify-play-album
       #spotify-play-track
@@ -203,6 +206,19 @@ in
 
   programs.password-store.enable = true;
   programs.skim.enable = true;
+
+
+  systemd.user.services.nix-index = {
+    Unit.Description = "Nix-index indexes all files in nixpkgs etc";
+    Service.ExecStart = "${pkgs.nix-index}/bin/nix-index";
+  };
+
+  systemd.user.timers.nix-index = {
+    Unit.Description = "Nix-index indexes all files in nixpkgs etc";
+    Timer.OnCalendar = "daily";
+    Time.Unit = "nix-index.service";
+    Install.WantedBy = [ "timers.target" ];
+  };
 
   services.lorri.enable = true;
   systemd.user.services.lorri.Service.Environment = lib.mkForce
