@@ -11,7 +11,7 @@ buildGoModule {
 
   src = inputs.argo-cd;
 
-  vendorSha256 = "sha256-y8hrQTPwYBXq0maMiON6iKda3kBse0XNjLvmvrgzWQw=";
+  vendorSha256 = "sha256-TvlaPjN3b5iGk7ErzyLPOS1tnKLg4RfXaia6j3GJgbs=";
 
   nativeBuildInputs = [ packr ];
 

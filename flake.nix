@@ -32,7 +32,7 @@
     nixpkgs-fmt = { url = "github:nix-community/nixpkgs-fmt"; flake = false; };
     netns-exec = { url = "github:johnae/netns-exec"; flake = false; };
     aml = { url = "github:any1/aml"; flake = false; };
-    argo-cd = { url = "github:argoproj/argo-cd/v1.6.2"; flake = false; };
+    argo-cd = { url = "github:argoproj/argo-cd/v1.7.2"; flake = false; };
     blur = { url = "github:johnae/blur"; flake = false; };
     fire = { url = "github:johnae/fire"; flake = false; };
     fish-kubectl-completions = { url = "github:evanlucas/fish-kubectl-completions"; flake = false; };
