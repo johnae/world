@@ -215,8 +215,10 @@ in
 
   systemd.user.timers.nix-index = {
     Unit.Description = "Nix-index indexes all files in nixpkgs etc";
-    Timer.OnCalendar = "daily";
-    Time.Unit = "nix-index.service";
+    Timer = {
+      OnCalendar = "daily";
+      Unit = "nix-index.service";
+    };
     Install.WantedBy = [ "timers.target" ];
   };
 
