@@ -9,7 +9,7 @@ let
   inherit (util) withBuildEnv onlyDerivations
     listToDepKey pkgBatches keysOf;
 
-  containerNames = builtins.attrNames (onlyDerivations containers);
+  containerNames = builtins.attrNames (filterAttrs (n: v: (builtins.typeOf v == "set") && (builtins.hasAttr "archive" v)) containers);
   pkgNames = mapAttrsToList (n: _: n) (filterAttrs (n: v: isDerivation v) pkgsToCache);
   hostNames = builtins.attrNames (onlyDerivations nixosConfigurations);
   pkgChunks = pkgBatches pkgNames;
