@@ -14,7 +14,7 @@ let
   hostNames = builtins.attrNames (onlyDerivations nixosConfigurations);
   pkgChunks = pkgBatches pkgNames;
 
-  containersToDeploy = lib.filter (v: v != "argocd" && v != "buildkite-agent") containerNames;
+  containersToDeploy = lib.filter (v: v != "argocd" && v != "buildkite-agent" && v != "btrfs-backups") containerNames;
   deployContainers =
     {
       steps.deploys = lib.listToAttrs (
