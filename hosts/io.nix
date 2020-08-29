@@ -135,6 +135,7 @@ with lib; {
           "/home/${userName}/.cargo"
           "/home/${userName}/.cache/mu"
           "/home/${userName}/.cache/nix"
+          "/home/${userName}/.cache/nix-index"
           "/home/${userName}/.mozilla/firefox/default"
         ];
         files = [
