@@ -83,7 +83,9 @@
 
       pkgs = nixpkgsFor.${system};
 
-      maybeTest = n: if n == "io-test" then "io" else n;
+      maybeTest = n:
+        let test = builtins.match "(.*)-(test)$" n; # a match == [ "hostname" "test" ];
+        in if test != null then builtins.head test else n;
 
       toNixosConfiguration = name: _:
         let n = inputs.nixpkgs.lib.removeSuffix ".nix" name;
