@@ -22,9 +22,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nix-misc.follows = "nix-misc";
     };
+    home = {
+      url = "github:rycee/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     ## non flakes
-    home = { url = "github:rycee/home-manager"; flake = false; };
     nixos-hardware = { url = "github:nixos/nixos-hardware"; flake = false; };
     nixpkgs-fmt = { url = "github:nix-community/nixpkgs-fmt"; flake = false; };
     netns-exec = { url = "github:johnae/netns-exec"; flake = false; };
@@ -106,7 +109,7 @@
               { nixpkgs = { inherit pkgs; }; }
               { system.nixos.versionSuffix = inputs.nixpkgs.lib.mkForce "git.${builtins.substring 0 11 inputs.nixpkgs.rev}"; }
               inputs.nixpkgs.nixosModules.notDetected
-              (import "${inputs.home}/nixos")
+              inputs.home.nixosModules.home-manager
               configuration
             ];
         };
