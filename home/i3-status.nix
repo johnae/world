@@ -23,9 +23,20 @@ let
     LOCAL=$(echo "$VERSION_ID" | awk -F'.' '{print $3}')
 
     if [ "$LOCAL" != "$LATEST" ]; then
-      echo " $LATEST ($AGE_DAYS)"
+      echo "NixOS:  $LATEST ($AGE_DAYS)"
     else
-      echo " $LATEST ($AGE_DAYS)"
+      echo "NixOS:  $LATEST ($AGE_DAYS)"
+    fi
+  '';
+
+  checkConfigurationVersion = pkgs.writeStrictShellScriptBin "check-configuration-version" ''
+    PATH=${pkgs.stdenv}/bin:${pkgs.git}/bin:${pkgs.jq}/bin:$PATH
+    LATEST="$(git ls-remote https://github.com/johnae/world master | awk '{print $1}' | cut -c-11)"
+    LOCAL="$(nixos-version --json | jq -r .configurationRevision | cut -c-11)"
+    if [ "$LOCAL" != "$LATEST" ]; then
+      echo "Config:  $LATEST"
+    else
+      echo "Config:  $LATEST"
     fi
   '';
 
@@ -54,6 +65,12 @@ in
         block = "custom";
         interval = 600;
         command = "${checkNixosVersion}/bin/check-nixos-version";
+      }
+
+      {
+        block = "custom";
+        interval = 600;
+        command = "${checkConfigurationVersion}/bin/check-configuration-version";
       }
 
       {
