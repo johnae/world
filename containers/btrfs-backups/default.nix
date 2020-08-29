@@ -166,6 +166,7 @@ let
 
   authorizedBackupKeys = [
     ''ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDCfgTJK7V8XzYW+YJ725xo8m2beLDi2xaO3yI6/wpDIWxVOrsYYZTWIh6960n4juD7pAz5RYbYtQn87f74cXMTE6GWFlvIgTX1UL9sn7nBRowUQQ7bJdwx7PYz0upu1KoB/sW4QRCYLGCnQz19tQwrC49VynMT7x9H66R9kvWavgyWz8XvAPg5nQG5Fs+k7QZAydULJUcZ/ddLWKkMEubz4syBtwvODRP0Duhlr1YQvYsyF9lNxRFiWrl82PuymtZEzsJcaVqfMGxS5TZNfPA0AlDdHTKES/LAh9vqkTeZe0z+a1cpHzpx2aadk2l8/YavI6Wq9ctA23wa76qnmETgjgQc8pkxTzhvSVgeszWl9WHNOZdPqPYuczqWHsG/iNqoqv3+aCH61HGJoFkLOetO+KczlbrtMUDZQYSTzqkTubo+USBpDvlH0i8DENWWuNyyx4P7HWRaqiaJ/f2oylZImRjG4oQXVbl9uf+6IZL71My4feDVvCHxOTfgX4ucPP8= john@backup''
+    ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH/LoI8WFpO0/MhXngohxVu0CvbuqkVsXF2mQFQXGsgk john@backup2''
   ];
 
   entrypoint = writeStrictShellScriptBin "entrypoint.sh" ''
