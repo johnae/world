@@ -99,7 +99,7 @@ in
   services.pipewire.enable = true;
   xdg.portal.enable = true;
   xdg.portal.gtkUsePortal = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
 
   fonts.fonts = with pkgs; [
     google-fonts
