@@ -1,6 +1,5 @@
 {
   description = "A flake for building the world";
-
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -26,6 +25,11 @@
       url = "github:rycee/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpkgs-firefox-pipewire = {
+      url = "github:colemickens/nixpkgs/nixpkgs-firefox-pipewire";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    cachix = { url = "github:matthewbauer/cachix/add-flake"; };
 
     ## non flakes
     nixos-hardware = { url = "github:nixos/nixos-hardware"; flake = false; };
@@ -151,7 +155,7 @@
           (import ./overlays/pkgs.nix) pkgs pkgs
         ) // {
         inherit (pkgs)
-          spook;
+          spook firefox-pipewire cachix;
       };
 
       overlays =
@@ -165,6 +169,13 @@
           emacs-overlay = inputs.emacs-overlay.overlay;
           nix-misc = inputs.nix-misc.overlay;
           spook = inputs.spook.overlay;
+          cachix = (final: prev: { cachix = inputs.cachix.packages.${system}.cachix; });
+          firefox-pipewire = (final: prev: {
+            firefox-pipewire = (import inputs.nixpkgs-firefox-pipewire {
+              localSystem = { inherit system; };
+              config = { allowUnfree = true; };
+            }).firefox;
+          });
         };
 
       containers =

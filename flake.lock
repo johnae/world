@@ -66,6 +66,22 @@
         "type": "github"
       }
     },
+    "cachix": {
+      "locked": {
+        "lastModified": 1597870743,
+        "narHash": "sha256-GedzSUYQCBOqcy/OengcJxADNkzw35frLU3SCckb7HQ=",
+        "owner": "matthewbauer",
+        "repo": "cachix",
+        "rev": "3e26e04d3093905ae1f7c6e78fd39f15a4c46efe",
+        "type": "github"
+      },
+      "original": {
+        "owner": "matthewbauer",
+        "ref": "add-flake",
+        "repo": "cachix",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "locked": {
         "lastModified": 1598804572,
@@ -356,6 +372,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-firefox-pipewire": {
+      "locked": {
+        "lastModified": 1598381271,
+        "narHash": "sha256-FX4I8Ljfrm8nVNetkRsLX7PyUQ4fbuEWMqc+A5r6Rtg=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "e3c95ab7b9e3f10754f54b92c22a7b1780be0aff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "nixpkgs-firefox-pipewire",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-fmt": {
       "flake": false,
       "locked": {
@@ -394,6 +426,7 @@
         "argo-cd": "argo-cd",
         "blur": "blur",
         "buildkite": "buildkite",
+        "cachix": "cachix",
         "emacs-overlay": "emacs-overlay",
         "fire": "fire",
         "fish-kubectl-completions": "fish-kubectl-completions",
@@ -408,6 +441,7 @@
         "nixkite": "nixkite",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-firefox-pipewire": "nixpkgs-firefox-pipewire",
         "nixpkgs-fmt": "nixpkgs-fmt",
         "persway": "persway",
         "secrets": "secrets",

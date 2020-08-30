@@ -2,7 +2,7 @@
 {
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox;
+    package = pkgs.firefox-pipewire;
     profiles = {
       default = {
         settings = {

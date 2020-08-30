@@ -74,6 +74,7 @@ in
       pkgs.spook
       pkgs.gnome3.nautilus
       pkgs.chromium
+      pkgs.cachix
     ];
 
   home.sessionVariables = rec {
