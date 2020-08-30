@@ -57,7 +57,7 @@
     wayvnc = { url = "github:any1/wayvnc"; flake = false; };
     wf-recorder = { url = "github:ammen99/wf-recorder"; flake = false; };
     wl-clipboard = { url = "github:bugaevc/wl-clipboard"; flake = false; };
-    xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr"; flake = false; };
+    xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr/v0.1.0"; flake = false; };
     buildkite = { url = "github:buildkite/agent/v3.22.1"; flake = false; };
   };
   outputs = { self, ... }@inputs:
