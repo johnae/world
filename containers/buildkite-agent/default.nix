@@ -18,12 +18,17 @@
 , dockerTag ? "latest"
 }:
 let
+  nixCaches = (map (i: import i) (pkgs.callPackage ../../cachix.nix { }).imports);
   nixconf = writeText "nix.conf" ''
     sandbox = false
     experimental-features = nix-command flakes ca-references
     ## below allows the use of builtins.exec - for secrets decryption
     allow-unsafe-native-code-during-evaluation = true
     builders-use-substitutes = true
+    substituters = ${pkgs.lib.concatStringsSep " "
+      (pkgs.lib.flatten (map (v: v.nix.binaryCaches) nixCaches))} https://cache.nixos.org/
+    trusted-public-keys = ${pkgs.lib.concatStringsSep " "
+      (pkgs.lib.flatten (map (v: v.nix.binaryCachePublicKeys) nixCaches))} cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
   '';
 
   rootfs = stdenv.mkDerivation {
