@@ -690,6 +690,16 @@
   :custom (alert-default-style 'libnotify))
 
 
+(with-eval-after-load 'message
+  (setq message-cite-style message-cite-style-gmail)
+  (setq message-citation-line-function 'message-insert-formatted-citation-line)
+  (setq message-citation-line-format "On %a, %b %e, %Y at %I:%M %p %f wrote:"))
+
+(use-package messages-are-flowing
+  :ensure t
+  :hook ((message-mode . messages-are-flowing-use-and-mark-hard-newlines)))
+
+
 ;; The amazing notmuch email client.
 (require 'notmuch)
 (require 'ol-notmuch)
