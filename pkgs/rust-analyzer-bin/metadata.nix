@@ -1,1 +1,1 @@
-{ url = "https://github.com/rust-analyzer/rust-analyzer/releases/download/2020-08-24/rust-analyzer-linux"; version = "2020-08-24"; sha256 = "06f28kw6wgjp8xv97l1dpvx9aczr5cnj5syzgz7wg439cxy4dbb0"; }
+{ url = "https://github.com/rust-analyzer/rust-analyzer/releases/download/2020-08-31/rust-analyzer-linux"; version = "2020-08-31"; sha256 = "0854hmfl4vi0yqi72pypj6m521mwfcjdg7vbjjpiffj459ryk2q6"; }
