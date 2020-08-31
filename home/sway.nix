@@ -99,6 +99,7 @@ in
       focus = {
         followMouse = true;
         newWindow = "smart";
+        mouseWarping = true;
       };
 
       workspaceAutoBackAndForth = true;
