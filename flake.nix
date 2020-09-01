@@ -85,7 +85,7 @@
         (import inputs.nixpkgs {
           localSystem = { inherit system; };
           overlays = builtins.attrValues self.overlays;
-          config = { allowUnfree = true; };
+          config.allowUnfree = true;
         }));
 
       pkgs = nixpkgsFor.${system};
@@ -173,7 +173,7 @@
           firefox-pipewire = (final: prev: {
             firefox-pipewire = (import inputs.nixpkgs-firefox-pipewire {
               localSystem = { inherit system; };
-              config = { allowUnfree = true; };
+              config.allowUnfree = true;
             }).firefox;
           });
         };
