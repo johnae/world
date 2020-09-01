@@ -691,9 +691,7 @@
 
 
 (with-eval-after-load 'message
-  (setq message-cite-style message-cite-style-gmail)
-  (setq message-citation-line-function 'message-insert-formatted-citation-line)
-  (setq message-citation-line-format "On %a, %b %e, %Y at %I:%M %p %f wrote:"))
+  (setq message-cite-style message-cite-style-gmail))
 
 (use-package messages-are-flowing
   :ensure t
