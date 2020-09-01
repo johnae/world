@@ -11,6 +11,20 @@
         scale = 2.0;
       }
     ];
+    home.outputs = [
+      {
+        criteria = "Sharp Corporation 0x14CC 0x00000000";
+        mode = "3840x2400";
+        position = "0,0";
+        scale = 2.0;
+      }
+      {
+        criteria = "Unknown ASUS PB27U 0x0000C167";
+        mode = "3840x2160";
+        position = "1920,0";
+        scale = 1.6;
+      }
+    ];
     work.outputs = [
       {
         criteria = "Dell Inc. DELL P2419H H9T0943";
