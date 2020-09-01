@@ -61,6 +61,11 @@ with lib; {
     secrets
   ];
 
+  ## some issues with wifi powersaving on battery (connection lost)
+  services.tlp.settings.WIFI_PWR_ON_AC = "off";
+  services.tlp.settings.WIFI_PWR_ON_BAT = "off";
+  services.tlp.enable = lib.mkForce false;
+
   nix.trustedUsers = [ "root" userName ];
 
   networking = {
