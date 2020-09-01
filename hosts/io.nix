@@ -132,7 +132,6 @@ with lib; {
           "/home/${userName}/Photos"
           "/home/${userName}/Pictures"
           "/home/${userName}/Sync"
-          "/home/${userName}/.gnupg/private-keys-v1.d"
           "/home/${userName}/.local/share/direnv"
           "/home/${userName}/.local/share/password-store"
           "/home/${userName}/.local/share/fish"
@@ -142,12 +141,9 @@ with lib; {
           "/home/${userName}/.cache/nix"
           "/home/${userName}/.cache/nix-index"
           "/home/${userName}/.mozilla/firefox/default"
+          "/home/${userName}/.gnupg"
         ];
         files = [
-          "/home/${userName}/.gnupg/pubring.kbx"
-          "/home/${userName}/.gnupg/trustdb.gpg"
-          "/home/${userName}/.gnupg/random_seed"
-          "/home/${userName}/.gnupg/sshcontrol"
           "/home/${userName}/.kube/config"
           "/home/${userName}/.ssh/known_hosts"
           "/home/${userName}/.spotify_token_cache.json"
