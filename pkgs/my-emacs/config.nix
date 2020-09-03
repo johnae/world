@@ -5,6 +5,7 @@
 , wl-clipboard
 , notmuch
 , runCommand
+, pass
 , ...
 }:
 let
@@ -15,6 +16,8 @@ let
                       "${notmuch.emacs}/share/emacs/site-lisp" \
                       --subst-var-by PANDOC \
                       "${pandoc}/bin/pandoc" \
+                      --subst-var-by PASS \
+                      "${pass}/bin/pass" \
                       --subst-var-by WLCOPY \
                       "${wl-clipboard}/bin/wl-copy" \
                       --subst-var-by WLPASTE \

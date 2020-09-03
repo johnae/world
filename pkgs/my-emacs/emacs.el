@@ -45,6 +45,23 @@
 (setq auth-sources
     '((:source "~/.local/share/password-store/emacs/auth/authinfo.gpg")))
 
+(defun shell-command-to-string-nows (cmd)
+  "Return shell command output without trailing newline and whitespace."
+  (replace-regexp-in-string "\n\\'" ""
+    (replace-regexp-in-string "\\(\\`[[:space:]\n]*\\|[[:space:]\n]*\\'\\)" ""
+      (shell-command-to-string cmd)
+      )
+    )
+  )
+
+(use-package pass)
+
+;; Todoist <-> org
+(use-package todoist
+  :init
+  (setq todoist-token (shell-command-to-string-nows "@PASS@ show web/todoist.com/api-token"))
+  )
+
 ;; The famous [[https://orgmode.org/][org mode]]. Default settings I use and stuff.
 
 (use-package org
@@ -1168,7 +1185,6 @@ This means:
 (setq-default show-trailing-whitespace t)
 (set-face-background 'trailing-whitespace "yellow")
 
-
 ;; Eshell settings and tweaks.
 (use-package fish-completion
   :config
@@ -1268,15 +1284,6 @@ current buffer's file."
             it
           (concat acc esh-sep it))
       acc))
-
-  (defun shell-command-to-string-nows (cmd)
-    "Return shell command output without trailing newline and whitespace."
-    (replace-regexp-in-string "\n\\'" ""
-      (replace-regexp-in-string "\\(\\`[[:space:]\n]*\\|[[:space:]\n]*\\'\\)" ""
-        (shell-command-to-string cmd)
-        )
-      )
-    )
 
   (defun is-inside-git-tree ()
     "Returns true if inside git work tree."
