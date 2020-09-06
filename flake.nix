@@ -21,6 +21,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nix-misc.follows = "nix-misc";
     };
+    spotnix = {
+      url = "github:johnae/spotnix/flakes";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home = {
       url = "github:rycee/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -48,7 +52,7 @@
     persway = { url = "github:johnae/persway"; flake = false; };
     slurp = { url = "github:emersion/slurp"; flake = false; };
     spotifyd = { url = "github:spotifyd/spotifyd"; flake = false; };
-    spotnix = { url = "github:johnae/spotnix"; flake = false; };
+    #spotnix = { url = "github:johnae/spotnix"; flake = false; };
     sway = { url = "github:swaywm/sway"; flake = false; };
     swaybg = { url = "github:swaywm/swaybg"; flake = false; };
     swayidle = { url = "github:swaywm/swayidle"; flake = false; };
@@ -155,7 +159,10 @@
           (import ./overlays/pkgs.nix) pkgs pkgs
         ) // {
         inherit (pkgs)
-          spook firefox-pipewire cachix;
+          spook
+          firefox-pipewire
+          cachix
+          spotnix;
       };
 
       overlays =
@@ -169,6 +176,7 @@
           emacs-overlay = inputs.emacs-overlay.overlay;
           nix-misc = inputs.nix-misc.overlay;
           spook = inputs.spook.overlay;
+          spotnix = inputs.spotnix.overlay;
           cachix = (final: prev: { cachix = inputs.cachix.packages.${system}.cachix; });
           firefox-pipewire = (final: prev: {
             firefox-pipewire = (import inputs.nixpkgs-firefox-pipewire {
