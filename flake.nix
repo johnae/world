@@ -33,7 +33,6 @@
       url = "github:colemickens/nixpkgs/nixpkgs-firefox-pipewire";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    cachix = { url = "github:matthewbauer/cachix/add-flake"; };
 
     ## non flakes
     nixos-hardware = { url = "github:nixos/nixos-hardware"; flake = false; };
@@ -161,7 +160,6 @@
         inherit (pkgs)
           spook
           firefox-pipewire
-          cachix
           spotnix;
       };
 
@@ -177,7 +175,6 @@
           nix-misc = inputs.nix-misc.overlay;
           spook = inputs.spook.overlay;
           spotnix = inputs.spotnix.overlay;
-          cachix = (final: prev: { cachix = inputs.cachix.packages.${system}.cachix; });
           firefox-pipewire = (final: prev: {
             firefox-pipewire = (import inputs.nixpkgs-firefox-pipewire {
               localSystem = { inherit system; };

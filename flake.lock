@@ -66,22 +66,6 @@
         "type": "github"
       }
     },
-    "cachix": {
-      "locked": {
-        "lastModified": 1597870743,
-        "narHash": "sha256-GedzSUYQCBOqcy/OengcJxADNkzw35frLU3SCckb7HQ=",
-        "owner": "matthewbauer",
-        "repo": "cachix",
-        "rev": "3e26e04d3093905ae1f7c6e78fd39f15a4c46efe",
-        "type": "github"
-      },
-      "original": {
-        "owner": "matthewbauer",
-        "ref": "add-flake",
-        "repo": "cachix",
-        "type": "github"
-      }
-    },
     "emacs-overlay": {
       "locked": {
         "lastModified": 1599452645,
@@ -441,7 +425,6 @@
         "argo-cd": "argo-cd",
         "blur": "blur",
         "buildkite": "buildkite",
-        "cachix": "cachix",
         "emacs-overlay": "emacs-overlay",
         "fire": "fire",
         "fish-kubectl-completions": "fish-kubectl-completions",
