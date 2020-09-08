@@ -27,6 +27,7 @@ in
     pkgs.lsof
     pkgs.fish
     pkgs.wireguard
+    pkgs.nfs-utils
   ];
 
   services.myk3s.enable = true;
