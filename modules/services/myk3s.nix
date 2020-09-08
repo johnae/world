@@ -167,7 +167,7 @@ in
                 concatStringsSep " \\\n "
                   (
                     [
-                      "export PATH=${pkgs.wireguard}/bin:${pkgs.bash}/bin\${PATH:+:}$PATH \n"
+                      "export PATH=${pkgs.wireguard}/bin:${pkgs.nfs-utils}/bin:${pkgs.bash}/bin\${PATH:+:}$PATH \n"
                       "exec ${k3s.package}/bin/k3s ${k3s.role}"
                     ] ++ (optional k3s.docker "--docker")
                     ++ (optional k3s.disableAgent "--disable-agent")
