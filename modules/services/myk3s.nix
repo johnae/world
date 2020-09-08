@@ -110,7 +110,7 @@ in
         (
           if isAgent then
             [
-              ''--kubelet-arg "volume-plugin-dir=${k3sDir}/libexec/kubernetes/kubelet-plugins/volume/exec"''
+              ''-d ${k3sDataDir} --kubelet-arg "volume-plugin-dir=${k3sDir}/libexec/kubernetes/kubelet-plugins/volume/exec"''
               ''--kubelet-arg "cni-bin-dir=${cniBinDir}"''
               ''--node-name "$(cat /etc/k3s-node-name)"''
               (lib.concatStringsSep " "
@@ -167,7 +167,7 @@ in
                 concatStringsSep " \\\n "
                   (
                     [
-                      "export PATH=${pkgs.wireguard}/bin:${pkgs.bash}/bin\${PATH:+:}$PATH \n"
+                      "export PATH=${pkgs.wireguard}/bin:${pkgs.bash}/bin:${pkgs.mount}/bin:\${PATH:+:}$PATH \n"
                       "exec ${k3s.package}/bin/k3s ${k3s.role}"
                     ] ++ (optional k3s.docker "--docker")
                     ++ (optional k3s.disableAgent "--disable-agent")
