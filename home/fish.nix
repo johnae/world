@@ -1,5 +1,10 @@
 { pkgs, config, lib, options }:
 let
+  commandNotFound = pkgs.writeShellScriptBin "command-not-found" ''
+    # shellcheck disable=SC1091
+    source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
+    command_not_found_handle "$@"
+  '';
   ## used to start "something" within a different network namespace
   ## I use it to start my compositor and other stuff within a namespace
   ## with only wireguard interface(s)
@@ -76,6 +81,10 @@ in
       source ${pkgs.skim}/share/skim/key-bindings.fish
       set fish_greeting
       fish_vi_key_bindings ^ /dev/null
+
+      function __fish_command_not_found_handler --on-event fish_command_not_found
+        ${commandNotFound}/bin/command-not-found $argv
+      end
 
       function fish_user_key_bindings
         skim_key_bindings

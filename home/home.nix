@@ -169,10 +169,7 @@ in
     };
   };
 
-  programs.command-not-found = {
-    enable = true;
-    dbPath = "${./..}/programs.sqlite";
-  };
+  programs.command-not-found.enable = false;
 
   programs.starship = {
     enable = true;
