@@ -111,7 +111,6 @@ let
   '';
 
   spotify-play = writeStrictShellScriptBin "spotify-play" ''
-    export SK_PROMPT="find music >> "
     export SK_OPTS="--no-bold --color=bw  --height=40 --reverse --no-hscroll --no-mouse"
     TYPE="$1"
     set +e
@@ -123,18 +122,22 @@ let
   '';
 
   spotify-play-track = writeStrictShellScriptBin "spotify-play-track" ''
+    export SK_PROMPT="find music by track >> "
     exec ${spotify-play}/bin/spotify-play s
   '';
 
   spotify-play-artist = writeStrictShellScriptBin "spotify-play-artist" ''
+    export SK_PROMPT="find music by artist >> "
     exec ${spotify-play}/bin/spotify-play sar
   '';
 
   spotify-play-album = writeStrictShellScriptBin "spotify-play-album" ''
+    export SK_PROMPT="find music by album >> "
     exec ${spotify-play}/bin/spotify-play sab
   '';
 
   spotify-play-playlist = writeStrictShellScriptBin "spotify-play-playlist" ''
+    export SK_PROMPT="find music by playlist >> "
     exec ${spotify-play}/bin/spotify-play sap
   '';
 
