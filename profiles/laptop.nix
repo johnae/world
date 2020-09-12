@@ -83,9 +83,11 @@ in
   environment.etc."systemd/sleep.conf".text = "HibernateDelaySec=8h";
   ##
 
-  ## yubikey v4
   services.udev.extraRules = ''
+    ## yubikey v4
     ACTION=="add", SUBSYSTEM=="usb", ENV{ID_VENDOR_ID}=="1050", ENV{ID_MODEL_ID}=="0407", MODE="660", GROUP="scard"
+    ## turn off powersaving on wifi
+    ACTION=="add", SUBSYSTEM=="net", KERNEL=="wl*", RUN+="${pkgs.iw}/bin/iw dev $name set power_save off"
   '';
 
   ##
