@@ -2,7 +2,8 @@
   description = "A flake for building the world";
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    #nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/a31736120c5de6e632f5a0ba1ed34e53fc1c1b00";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     secrets = {
       url = "git+ssh://git@github.com/johnae/secret-world";
