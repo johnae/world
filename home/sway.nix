@@ -92,7 +92,7 @@ in
           scale = "1.0";
         };
         "*" = {
-          bg = "~/Pictures/default-background.jpg fill";
+          bg = "~/Pictures/wallpaper.jpg fill";
         };
       };
 

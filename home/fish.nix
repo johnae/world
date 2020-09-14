@@ -168,6 +168,10 @@ in
         export XDG_SESSION_DESKTOP=sway
         export WLR_DRM_NO_MODIFIERS=1
 
+        if ! test -e "$HOME"/Pictures/wallpaper.jpg
+          ln "$HOME"/Pictures/default-background.jpg "$HOME"/Pictures/wallpaper.jpg
+	end
+
         ${launcher}
       end
     '';
