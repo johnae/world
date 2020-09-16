@@ -46,13 +46,11 @@
     fish-kubectl-completions = { url = "github:evanlucas/fish-kubectl-completions"; flake = false; };
     google-cloud-sdk-fish-completion = { url = "github:Doctusoft/google-cloud-sdk-fish-completion"; flake = false; };
     grim = { url = "github:emersion/grim"; flake = false; };
-    #i3status-rust = { url = "github:greshake/i3status-rust"; flake = false; };
     mako = { url = "github:emersion/mako"; flake = false; };
     neatvnc = { url = "github:any1/neatvnc"; flake = false; };
     persway = { url = "github:johnae/persway"; flake = false; };
     slurp = { url = "github:emersion/slurp"; flake = false; };
     spotifyd = { url = "github:spotifyd/spotifyd"; flake = false; };
-    #spotnix = { url = "github:johnae/spotnix"; flake = false; };
     sway = { url = "github:swaywm/sway"; flake = false; };
     swaybg = { url = "github:swaywm/swaybg"; flake = false; };
     swayidle = { url = "github:swaywm/swayidle"; flake = false; };
@@ -149,8 +147,6 @@
 
       inherit nixosConfigurations;
       inherit isoConfigurations;
-
-      packages.x86_64-linux.nixpkgs = pkgs;
 
       ## for easy access to packages which we might want to build and cache in ci
       pkgsToCache = pkgs.lib.filterAttrs
