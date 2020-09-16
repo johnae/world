@@ -82,7 +82,7 @@ let
   world-package = nixpkgs.writeStrictShellScriptBin "world-package" ''
     pkg="$1"
     shift
-    path=.#nixpkgs."$pkg"
+    path=.#"$pkg"
     echo Building package "$pkg" 1>&2
     ${nixpkgs.nixUnstable}/bin/nix build "$@" "$path" 1>&2
     ${nixpkgs.nixUnstable}/bin/nix path-info "$@" "$path"

@@ -148,6 +148,8 @@
       inherit nixosConfigurations;
       inherit isoConfigurations;
 
+      packages.x86_64-linux = pkgs;
+
       ## for easy access to packages which we might want to build and cache in ci
       pkgsToCache = pkgs.lib.filterAttrs
         (_: pkgs.lib.isDerivation)
