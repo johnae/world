@@ -13,7 +13,11 @@ let
       eachStateRoot = stateRoot:
         let
           sysDirs = cfg.${stateRoot}.directories;
-          userDirs = (flatten (map (u: u.directories) (mapAttrsToList (_: v: v) cfg.${stateRoot}.users)));
+          userDirs = (flatten
+            (map (u: u.directories)
+              (mapAttrsToList (_: v: v) cfg.${stateRoot}.users)
+            )
+          );
         in
         (map
           (where: {
