@@ -269,6 +269,9 @@ in
         {
           command = "${pkgs.gnome3.gnome_settings_daemon}/libexec/gsd-xsettings";
         }
+        {
+          command = "${pkgs.dbus_tools}/bin/dbus-update-activation-environment WAYLAND_DISPLAY=$WAYLAND_DISPLAY";
+        }
       ];
 
       bars = [
