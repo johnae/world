@@ -123,8 +123,8 @@ in
                     cfg.commands."${name}-trigger"
                   ];
                   command = with value; ''
-                    nix shell .#nixpkgs.strict-bash \
-                              .#nixpkgs.curl \
+                    nix shell .#strict-bash \
+                              .#curl \
                     -c strict-bash <<'NIXSH'
                       annotate() {
                         style=''${1:-}
