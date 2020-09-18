@@ -251,8 +251,13 @@ in
         "${modifier}+m" = ''move workspace to output right'';
         "${modifier}+Shift+q" = ''kill'';
 
-        "XF86MonBrightnessUp" = ''exec light -As "sysfs/backlight/intel_backlight" 5'';
-        "XF86MonBrightnessDown" = ''exec light -Us "sysfs/backlight/intel_backlight" 5'';
+        XF86MonBrightnessUp = ''exec light -As "sysfs/backlight/intel_backlight" 5'';
+        XF86MonBrightnessDown = ''exec light -Us "sysfs/backlight/intel_backlight" 5'';
+
+        XF86AudioNext = ''exec ${pkgs.spotify-cmd}/bin/spotify-cmd next'';
+        XF86AudioPrev = ''exec ${pkgs.spotify-cmd}/bin/spotify-cmd prev'';
+        XF86AudioPlay = ''exec ${pkgs.spotify-cmd}/bin/spotify-cmd play'';
+        XF86AudioPause = ''exec ${pkgs.spotify-cmd}/bin/spotify-cmd pause'';
 
         "${modifier}+q" = ''layout stacking'';
         "${modifier}+o" = ''move absolute position center'';
