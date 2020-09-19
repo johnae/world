@@ -17,7 +17,25 @@ let
       executable
     ];
 
-  privateSway = withinNetNS "${pkgs.sway}/bin/sway" { };
+  sway = pkgs.callPackage (pkgs.path + "/pkgs/applications/window-managers/sway/wrapper.nix") {
+    extraSessionCommands = ''
+      export GDK_BACKEND=wayland
+      export MOZ_ENABLE_WAYLAND=1
+      export MOZ_USE_XINPUT2=1
+      export XCURSOR_THEME=default
+      export QT_STYLE_OVERRIDE=gtk
+      export _JAVA_AWT_WM_NONREPARENTING=1
+      export XDG_CURRENT_DESKTOP=sway
+      export XDG_SESSION_TYPE=wayland
+      export XDG_SESSION_DESKTOP=sway
+      export WLR_DRM_NO_MODIFIERS=1
+      if [ ! -e "$HOME"/Pictures/wallpaper.jpg ]; then
+        ln "$HOME"/Pictures/default-background.jpg "$HOME"/Pictures/wallpaper.jpg
+      fi
+    '';
+  };
+
+  privateSway = withinNetNS "${sway}/bin/sway" { };
   privateFish = withinNetNS "${pkgs.fish}/bin/fish" { };
 
   genLaunchOptions = attrs:
@@ -51,8 +69,8 @@ let
 
   launcher = genLauncher {
     "sway private" = privateSway;
-    "sway" = "${pkgs.sway}/bin/sway";
-    "sway debug" = "${pkgs.sway}/bin/sway -d 2> ~/sway.log";
+    "sway" = "${sway}/bin/sway";
+    "sway debug" = "${sway}/bin/sway -d 2> ~/sway.log";
     "sway drm debug" = "${drmDebugLaunch}/bin/drm-debug-launch";
     "fish private" = privateFish;
     "fish" = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.fish}/bin/fish";
@@ -158,21 +176,6 @@ in
     '';
     loginShellInit = ''
       if test "$DISPLAY" = ""; and test (tty) = /dev/tty1 || test (tty) = /dev/tty2; and test "$XDG_SESSION_TYPE" = "tty"
-        export GDK_BACKEND=wayland
-        export MOZ_ENABLE_WAYLAND=1
-        export MOZ_USE_XINPUT2=1
-        export XCURSOR_THEME=default
-        export QT_STYLE_OVERRIDE=gtk
-        export _JAVA_AWT_WM_NONREPARENTING=1
-        export XDG_CURRENT_DESKTOP=sway
-        export XDG_SESSION_TYPE=wayland
-        export XDG_SESSION_DESKTOP=sway
-        export WLR_DRM_NO_MODIFIERS=1
-
-        if ! test -e "$HOME"/Pictures/wallpaper.jpg
-          ln "$HOME"/Pictures/default-background.jpg "$HOME"/Pictures/wallpaper.jpg
-        end
-
         ${launcher}
       end
     '';
