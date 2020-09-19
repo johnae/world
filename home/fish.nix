@@ -160,6 +160,7 @@ in
       if test "$DISPLAY" = ""; and test (tty) = /dev/tty1 || test (tty) = /dev/tty2; and test "$XDG_SESSION_TYPE" = "tty"
         export GDK_BACKEND=wayland
         export MOZ_ENABLE_WAYLAND=1
+        export MOZ_USE_XINPUT2=1
         export XCURSOR_THEME=default
         export QT_STYLE_OVERRIDE=gtk
         export _JAVA_AWT_WM_NONREPARENTING=1
@@ -170,7 +171,7 @@ in
 
         if ! test -e "$HOME"/Pictures/wallpaper.jpg
           ln "$HOME"/Pictures/default-background.jpg "$HOME"/Pictures/wallpaper.jpg
-	end
+        end
 
         ${launcher}
       end
