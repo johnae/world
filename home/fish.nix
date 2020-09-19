@@ -38,13 +38,18 @@ let
   privateSway = withinNetNS "${sway}/bin/sway" { };
   privateFish = withinNetNS "${pkgs.fish}/bin/fish" { };
 
-  genLaunchOptions = attrs:
-    lib.concatStringsSep "\\n"
-      (lib.mapAttrsToList (k: v: "${k}\\texec ${v}") attrs);
+  genLaunchOptions = optionList:
+    lib.concatStringsSep "\\n" (lib.flatten (
+      map
+        (
+          lib.mapAttrsToList (k: v: "${k}\\texec ${v}")
+        )
+        optionList
+    ));
 
-  genLauncher = attrs: ''
+  genLauncher = optionList: ''
     clear
-    set RUN (echo -e "${genLaunchOptions attrs}" | \
+    set RUN (echo -e "${genLaunchOptions optionList}" | \
         ${pkgs.skim}/bin/sk -p "start >> " --inline-info --margin 40%,40% \
                             --color=bw --height=40 --no-hscroll --no-mouse \
                             --reverse --delimiter='\t' --with-nth 1 | \
@@ -67,14 +72,14 @@ let
     ${pkgs.fish}/bin/fish
   '';
 
-  launcher = genLauncher {
-    "sway private" = privateSway;
-    "sway" = "${sway}/bin/sway";
-    "sway debug" = "${sway}/bin/sway -d 2> ~/sway.log";
-    "sway drm debug" = "${drmDebugLaunch}/bin/drm-debug-launch";
-    "fish private" = privateFish;
-    "fish" = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.fish}/bin/fish";
-  };
+  launcher = genLauncher [
+    { "sway" = "${sway}/bin/sway"; }
+    { "sway private" = privateSway; }
+    { "fish" = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.fish}/bin/fish"; }
+    { "fish private" = privateFish; }
+    { "sway debug" = "${sway}/bin/sway -d 2> ~/sway.log"; }
+    { "sway drm debug" = "${drmDebugLaunch}/bin/drm-debug-launch"; }
+  ];
 
 in
 {
