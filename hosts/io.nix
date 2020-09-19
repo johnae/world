@@ -64,7 +64,6 @@ with lib; {
   ## some issues with wifi powersaving on battery (connection lost)
   services.tlp.settings.WIFI_PWR_ON_AC = "off";
   services.tlp.settings.WIFI_PWR_ON_BAT = "off";
-  services.tlp.enable = lib.mkForce false;
 
   nix.trustedUsers = [ "root" userName ];
 
@@ -75,6 +74,11 @@ with lib; {
       printf "nameserver 193.138.218.74" | ${pkgs.openresolv}/bin/resolvconf -a vpn -m 0
     '';
   };
+
+  services.udev.extraRules = ''
+    ## turn off powersaving on wifi
+    ACTION=="add", SUBSYSTEM=="net", KERNEL=="wl*", RUN+="${pkgs.iw}/bin/iw dev $name set power_save off"
+  '';
 
   systemd.services.firewall-private = {
     inherit (fwsvccfg) wantedBy reloadIfChanged;
