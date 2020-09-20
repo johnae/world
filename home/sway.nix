@@ -341,7 +341,7 @@ in
     swaySocket=''${XDG_RUNTIME_DIR:-/run/user/$UID}/sway-ipc.$UID.$(${pkgs.procps}/bin/pgrep -x sway || true).sock
     if [ -S "$swaySocket" ]; then
       echo "Reloading sway"
-      "$DRY_RUN_CMD" ${pkgs.sway}/bin/swaymsg -s "$swaySocket" reload
+      $DRY_RUN_CMD ${pkgs.sway}/bin/swaymsg -s $swaySocket reload
     fi
   '';
 
