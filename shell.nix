@@ -290,6 +290,8 @@ let
     "$subcmd" "$@"
   '';
 
+  nixCaches = (map (i: import i) (nixpkgs.callPackage ./cachix.nix { }).imports);
+
 in
 nixpkgs.mkShell {
   buildInputs =
@@ -302,6 +304,11 @@ nixpkgs.mkShell {
         experimental-features = nix-command flakes ca-references
         ## below allows the use of builtins.exec - for secrets decryption
         allow-unsafe-native-code-during-evaluation = true
+        builders-use-substitutes = true
+        substituters = ${nixpkgs.lib.concatStringsSep " "
+          (nixpkgs.lib.flatten (map (v: v.nix.binaryCaches) nixCaches))} https://cache.nixos.org/
+        trusted-public-keys = ${nixpkgs.lib.concatStringsSep " "
+          (nixpkgs.lib.flatten (map (v: v.nix.binaryCachePublicKeys) nixCaches))} cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
       '';
     in
     "${nixConf}/opt";
