@@ -6,6 +6,8 @@ let
 
   withBuildEnv = cmd: ''
     eval "$(nix print-dev-env)"
+    eval "$(nix print-dev-env)"
+    eval "$(nix print-dev-env)"
     strict-bash <<'NIXSH'
     ${cmd}
     NIXSH
