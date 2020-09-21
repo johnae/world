@@ -75,6 +75,16 @@ let
     sleep 600
     done
   '';
+
+
+  swayFocusWindow = pkgs.writeStrictShellScriptBin "sway-focus-window" ''
+    export SK_OPTS="--no-bold --color=bw  --height=40 --reverse --no-hscroll --no-mouse"
+    window="$(${pkgs.sway}/bin/swaymsg -t get_tree | \
+              ${pkgs.jq}/bin/jq -r '.nodes | .[] | .nodes | . [] | select(.nodes != null) | .nodes | .[] | select(.name != null) | "\(.id?) \(.name?)"' | \
+              ${pkgs.sk-sk}/bin/sk-sk | \
+              awk '{print $1}')"
+    ${pkgs.sway}/bin/swaymsg "[con_id=$window] focus"
+  '';
 in
 {
   wayland.windowManager.sway = {
@@ -223,6 +233,8 @@ in
         "${modifier}+Escape" = ''mode "(p)oweroff, (s)uspend, (h)ibernate, (r)eboot, (l)ogout"'';
         "${modifier}+x" = ''mode "disabled keybindings"'';
         "${modifier}+r" = ''mode "resize"'';
+
+        "${modifier}+g" = ''exec ${pkgs.sk-window}/bin/sk-window ${swayFocusWindow}/bin/sway-focus-window'';
 
         "${modifier}+t" = ''exec ${pkgs.sk-window}/bin/sk-window ${pkgs.spotify-play-track}/bin/spotify-play-track'';
         "${modifier}+p" = ''exec ${pkgs.sk-window}/bin/sk-window ${pkgs.spotify-play-playlist}/bin/spotify-play-playlist'';
