@@ -5,9 +5,7 @@ let
     isDerivation last splitString concatStringsSep;
 
   withBuildEnv = cmd: ''
-    eval "$(nix print-dev-env)"
-    eval "$(nix print-dev-env)"
-    eval "$(nix print-dev-env)"
+    eval "$(nix develop -c nix print-dev-env)"
     strict-bash <<'NIXSH'
     ${cmd}
     NIXSH
