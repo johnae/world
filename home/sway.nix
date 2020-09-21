@@ -30,7 +30,7 @@ let
     "before-sleep '${pkgs.swaylock-dope}/bin/swaylock-dope'"
   ];
 
-  toggle-keyboard-layouts = pkgs.writeStrictShellScriptBin "toggle-keyboard-layouts" ''
+  toggleKeyboardLayouts = pkgs.writeStrictShellScriptBin "toggle-keyboard-layouts" ''
     export PATH=${pkgs.jq}/bin''${PATH:+:}$PATH
     current_layout="$(swaymsg -t get_inputs -r | jq -r "[.[] | select(.xkb_active_layout_name != null)][0].xkb_active_layout_name")"
     if [ "$current_layout" = "English (US)" ]; then
@@ -40,7 +40,7 @@ let
     fi
   '';
 
-  random-background = pkgs.writeStrictShellScriptBin "random-background" ''
+  randomBackground = pkgs.writeStrictShellScriptBin "random-background" ''
     if [ ! -d "$HOME"/Pictures/backgrounds ] ||
     [ "$(${pkgs.findutils}/bin/find "$HOME"/Pictures/backgrounds/ -type f | wc -l)" = "0" ]; then
     echo "$HOME"/Pictures/default-background.jpg
@@ -50,7 +50,7 @@ let
     ${pkgs.coreutils}/bin/sort -R | ${pkgs.coreutils}/bin/tail -1
   '';
 
-  random-picsum-background = pkgs.writeStrictShellScriptBin "random-picsum-background" ''
+  randomPicsumBackground = pkgs.writeStrictShellScriptBin "random-picsum-background" ''
     category=''${1:-nature}
     ${pkgs.wget}/bin/wget -O /tmp/wallpaper.jpg 'https://source.unsplash.com/featured/3200x1800/?'"$category" 2>/dev/null
     if [ -e "$HOME"/Pictures/wallpaper.jpg ]; then
@@ -60,16 +60,16 @@ let
     echo "$HOME"/Pictures/wallpaper.jpg
   '';
 
-  sway-background = pkgs.writeStrictShellScriptBin "sway-background" ''
+  swayBackground = pkgs.writeStrictShellScriptBin "sway-background" ''
     category=''${1:-art,abstract,space}
-    BG=$(${random-picsum-background}/bin/random-picsum-background "$category")
+    BG=$(${randomPicsumBackground}/bin/random-picsum-background "$category")
     exec swaymsg "output * bg '$BG' fill"
   '';
 
-  rotating-background = pkgs.writeStrictShellScriptBin "rotating-background" ''
+  rotatingBackground = pkgs.writeStrictShellScriptBin "rotating-background" ''
     category=''${1:-art,abstract,space}
     while true; do
-    if ! ${sway-background}/bin/sway-background "$category"; then
+    if ! ${swayBackground}/bin/sway-background "$category"; then
       exec swaymsg "output * bg '$HOME/Pictures/default-background.jpg' fill"
     fi
     sleep 600
@@ -242,7 +242,7 @@ in
         "${modifier}+Shift+p" = ''exec ${pkgs.spotify-cmd}/bin/spotify-cmd prev'';
         "${modifier}+Shift+m" = ''exec ${pkgs.spotify-cmd}/bin/spotify-cmd pause'';
 
-        "${modifier}+Control+k" = ''exec ${toggle-keyboard-layouts}/bin/toggle-keyboard-layouts'';
+        "${modifier}+Control+k" = ''exec ${toggleKeyboardLayouts}/bin/toggle-keyboard-layouts'';
 
         "${modifier}+Control+l" = ''exec ${pkgs.swaylock-dope}/bin/swaylock-dope'';
 
@@ -256,7 +256,7 @@ in
         "${modifier}+minus" = ''exec ${pkgs.sk-window}/bin/sk-window sk-passmenu'';
         "${modifier}+Shift+minus" = ''exec passonly=y ${pkgs.sk-window}/bin/sk-window sk-passmenu'';
 
-        "${modifier}+b" = ''exec ${sway-background}/bin/sway-background'';
+        "${modifier}+b" = ''exec ${swayBackground}/bin/sway-background'';
 
         "${modifier}+Shift+e" = ''exec ${pkgs.alacritty}/bin/alacritty -t edit -e emacsclient -t -a='';
 
@@ -344,7 +344,7 @@ in
 
   systemd.user.services = {
     persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w";
-    rotating-background = swayservice "Rotating background service for Sway" "${rotating-background}/bin/rotating-background art,abstract,space";
+    rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
     swayidle = swayservice "Sway Idle Service - lock screen etc" swayidleCommand;
   };
 
