@@ -21,4 +21,4 @@ world help
 
 I do have an old repo for this here [NixOS Configuration](https://github.com/johnae/nixos-configuration).
 
-Also of note is that there's a private repo referenced in [flake.nix](flake.nix) with the name "secrets" though the repo is called "nixos-metadata". This is private and contains encrypted secrets. So clearly, you won't be able to just clone this repo and use an existing host.
+Also of note is that there's a private repo referenced in [flake.nix](flake.nix) with the name "secrets" though the repo is called "secret-world". This is private and contains encrypted secrets. So clearly, you won't be able to just clone this repo and use an existing host.
