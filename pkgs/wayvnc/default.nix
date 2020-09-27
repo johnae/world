@@ -4,6 +4,7 @@
 , ninja
 , wayland
 , wayland-protocols
+, scdoc
 , libxkbcommon
 , libvncserver
 , libpthreadstubs
@@ -27,7 +28,7 @@ stdenv.mkDerivation {
   #  ./disable-input.patch
   #];
 
-  nativeBuildInputs = [ pkgconfig meson ninja ];
+  nativeBuildInputs = [ pkgconfig meson ninja scdoc ];
   buildInputs = [
     wayland
     wayland-protocols
