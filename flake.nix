@@ -29,10 +29,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs-firefox-pipewire = {
-      url = "github:colemickens/nixpkgs/nixpkgs-firefox-pipewire";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     ## non flakes
     nixos-hardware = { url = "github:nixos/nixos-hardware"; flake = false; };
@@ -157,7 +153,6 @@
         ) // {
         inherit (pkgs)
           spook
-          firefox-pipewire
           spotnix;
       };
 
@@ -173,12 +168,6 @@
           nix-misc = inputs.nix-misc.overlay;
           spook = inputs.spook.overlay;
           spotnix = inputs.spotnix.overlay;
-          firefox-pipewire = (final: prev: {
-            firefox-pipewire = (import inputs.nixpkgs-firefox-pipewire {
-              localSystem = { inherit system; };
-              config.allowUnfree = true;
-            }).firefox;
-          });
         };
 
       containers =

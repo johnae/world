@@ -371,22 +371,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-firefox-pipewire": {
-      "locked": {
-        "lastModified": 1600652559,
-        "narHash": "sha256-blCKWG0DH8aqagOChvNf1Nq5yh7eYbDE9OE78G8biSU=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "31e54cdde34073b3b83e9fca4434cb0cedcb2829",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "nixpkgs-firefox-pipewire",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-fmt": {
       "flake": false,
       "locked": {
@@ -439,7 +423,6 @@
         "nixkite": "nixkite",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-firefox-pipewire": "nixpkgs-firefox-pipewire",
         "nixpkgs-fmt": "nixpkgs-fmt",
         "persway": "persway",
         "secrets": "secrets",
