@@ -295,7 +295,7 @@ let
 in
 nixpkgs.mkShell {
   buildInputs =
-    [ world nixpkgs.strict-bash nixpkgs.sops nixpkgs.moreutils nixpkgs.nixUnstable ];
+    [ world nixpkgs.cachix nixpkgs.strict-bash nixpkgs.sops nixpkgs.moreutils nixpkgs.nixUnstable ];
 
   inherit SOPS_PGP_FP;
   NIX_USER_CONF_FILES = nixpkgs.writeText "nix.conf" ''

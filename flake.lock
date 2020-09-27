@@ -128,51 +128,6 @@
         "type": "github"
       }
     },
-    "flake-utils_2": {
-      "locked": {
-        "lastModified": 1596290160,
-        "narHash": "sha256-QNXPeCiLKfLH6G6TtyuxZ14Zm+ZMxBaQ0Klccq+2RfM=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "0c686c77c4ac6f7add3262107685693ada8ae3b0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_3": {
-      "locked": {
-        "lastModified": 1596290160,
-        "narHash": "sha256-QNXPeCiLKfLH6G6TtyuxZ14Zm+ZMxBaQ0Klccq+2RfM=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "0c686c77c4ac6f7add3262107685693ada8ae3b0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_4": {
-      "locked": {
-        "lastModified": 1598466101,
-        "narHash": "sha256-JPhv+Ay98KMWRVRFlLEK9+eLpvNjhTBGWdFKZsE97ck=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "a586a6b966d59f53f45a04f8891fbc017dc09dbe",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "google-cloud-sdk-fish-completion": {
       "flake": false,
       "locked": {
@@ -295,7 +250,9 @@
     },
     "nixkite": {
       "inputs": {
-        "flake-utils": "flake-utils_2",
+        "flake-utils": [
+          "flake-utils"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -434,6 +391,7 @@
         "swaybg": "swaybg",
         "swayidle": "swayidle",
         "swaylock": "swaylock",
+        "tektonix": "tektonix",
         "wayvnc": "wayvnc",
         "wf-recorder": "wf-recorder",
         "wl-clipboard": "wl-clipboard",
@@ -479,7 +437,9 @@
     },
     "spook": {
       "inputs": {
-        "flake-utils": "flake-utils_3",
+        "flake-utils": [
+          "flake-utils"
+        ],
         "nix-misc": [
           "nix-misc"
         ],
@@ -520,7 +480,9 @@
     },
     "spotnix": {
       "inputs": {
-        "flake-utils": "flake-utils_4",
+        "flake-utils": [
+          "flake-utils"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -601,6 +563,32 @@
       "original": {
         "owner": "swaywm",
         "repo": "swaylock",
+        "type": "github"
+      }
+    },
+    "tektonix": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nix-misc": [
+          "nix-misc"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1601236315,
+        "narHash": "sha256-WogDqoEHPWXqh2mp74Jf+BPBYsI5rPCW14tgwLb4O/c=",
+        "owner": "johnae",
+        "repo": "tektonix",
+        "rev": "0a0948a299190f9cd9f8166e8b282cf1c499bbfc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "johnae",
+        "repo": "tektonix",
         "type": "github"
       }
     },
