@@ -4,6 +4,12 @@
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
+    tektonix = {
+      url = "github:johnae/tektonix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.nix-misc.follows = "nix-misc";
+    };
     secrets = {
       url = "git+ssh://git@github.com/johnae/secret-world";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -11,19 +17,24 @@
     nixkite = {
       url = "github:johnae/nixkite/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.nix-misc.follows = "nix-misc";
     };
     nix-misc = {
       url = "github:johnae/nix-misc";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
     spook = {
       url = "github:johnae/spook";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nix-misc.follows = "nix-misc";
+      inputs.flake-utils.follows = "flake-utils";
     };
     spotnix = {
       url = "github:johnae/spotnix/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
     home = {
       url = "github:nix-community/home-manager";
@@ -196,6 +207,31 @@
             nixpkgs = nixpkgsFor.${sys};
           in
           import ./shell.nix { inherit nixpkgs; });
+
+      tektonix =
+        let
+          pipelineDir = ./ci;
+          fullPath = name: pipelineDir + "/${name}";
+          pipelinePaths = map fullPath (builtins.attrNames (builtins.readDir pipelineDir));
+        in
+        genAttrs' pipelinePaths (path:
+          let
+            name = inputs.nixpkgs.lib.removeSuffix ".nix" (builtins.baseNameOf path); in
+          {
+            inherit name;
+            value = {
+              pipeline = import "${inputs.tektonix}" {
+                inherit pkgs;
+                pipelinePath = path;
+                specialArgs = { inherit (self) rev containers pkgsToCache nixosConfigurations inputs; inherit name; };
+              };
+              run = import "${inputs.tektonix}" {
+                inherit pkgs;
+                pipelinePath = pipelineDir + "/runs/${(builtins.baseNameOf path)}";
+                specialArgs = { inherit (self) rev containers pkgsToCache nixosConfigurations inputs; inherit name; };
+              };
+            };
+          });
 
       buildkite =
         let
