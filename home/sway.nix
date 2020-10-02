@@ -260,6 +260,8 @@ in
 
         "${modifier}+Shift+e" = ''exec ${pkgs.alacritty}/bin/alacritty -t edit -e emacsclient -t -a='';
 
+        "${modifier}+Shift+v" = ''splith'';
+
         "${modifier}+m" = ''move workspace to output right'';
         "${modifier}+Shift+q" = ''kill'';
 
