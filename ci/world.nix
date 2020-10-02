@@ -2,11 +2,22 @@
 
 let
 
-  inherit (lib) isDerivation mapAttrsToList filterAttrs listToAttrs;
+  inherit (lib) isDerivation mapAttrsToList filterAttrs
+    listToAttrs take drop concatStringsSep;
+  inherit (builtins) attrNames length;
 
   onlyDerivations = filterAttrs (_: isDerivation);
-  hostNames = builtins.attrNames nixosConfigurations;
+  hostNames = attrNames nixosConfigurations;
   pkgNames = mapAttrsToList (n: _: n) (filterAttrs (n: v: isDerivation v) pkgsToCache);
+
+  chunksOf = n: l:
+    if length l > 0
+    then [ (take n l) ] ++ (chunksOf n (drop n l))
+    else [ ];
+
+  pkgBatches = pkgNames: chunksOf (length pkgNames / 4 + 1) pkgNames;
+
+  pkgChunks = pkgBatches pkgNames;
 
   task = script: {
     taskRef.name = name;
@@ -31,11 +42,15 @@ in
     };
     tasks = listToAttrs (map
       (
-        name: {
-          name = "build-${name}";
-          value = task "world package ${name} | cachix push insane";
+        pkgList: {
+          name = "build-${concatStringsSep "-" pkgList}";
+          value = task (
+            concatStringsSep "\n" (
+              map (pkg: "world package ${pkg} | cachix push insane") pkgList
+            )
+          );
         }
       )
-      pkgNames);
+      pkgChunks);
   };
 }
