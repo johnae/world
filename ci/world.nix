@@ -4,7 +4,7 @@ let
 
   inherit (lib) isDerivation mapAttrsToList filterAttrs
     listToAttrs take drop concatStringsSep;
-  inherit (builtins) attrNames length;
+  inherit (builtins) attrNames length hashString substring;
 
   onlyDerivations = filterAttrs (_: isDerivation);
   hostNames = attrNames nixosConfigurations;
@@ -43,7 +43,7 @@ in
     tasks = listToAttrs (map
       (
         pkgList: {
-          name = "build-${concatStringsSep "-" pkgList}";
+          name = "build-pkgs-${substring 0 8 (hashString "sha256" (concatStringsSep "-" pkgList))}";
           value = task (
             concatStringsSep "\n" (
               map (pkg: "world package ${pkg} | cachix push insane") pkgList
