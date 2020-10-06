@@ -28,7 +28,7 @@ let
 in
 {
   resources.tasks.${name}.spec = {
-    volumes.nix.hostPath.path = "/var/nix-container";
+    volumes.nix.hostPath.path = "/keep/nix-container";
     volumes.home.emptyDir = { };
     params = {
       giturl.type = "string";
