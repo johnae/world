@@ -113,9 +113,8 @@ in
         skim_key_bindings
 
         function skim-jump-to-project-widget -d "Show list of projects"
-          set -q SK_TMUX_HEIGHT; or set SK_TMUX_HEIGHT 40%
           begin
-            set -lx SK_DEFAULT_OPTS "--color=bw --height $SK_TMUX_HEIGHT $SK_DEFAULT_OPTS --tiebreak=index --bind=ctrl-r:toggle-sort $SK_CTRL_R_OPTS +m"
+            set -lx SK_OPTS "--color=bw --no-hscroll --height=40"
             set -lx dir (${pkgs.project-select}/bin/project-select ~/Development ~/.config)
             if [ "$dir" != "" ]
               cd $dir
@@ -134,9 +133,8 @@ in
         end
 
         function skim-jump-to-file-widget -d "Show list of file to open in editor"
-          set -q SK_TMUX_HEIGHT; or set SK_TMUX_HEIGHT 40%
           begin
-            set -lx SK_DEFAULT_OPTS "--color=bw --height $SK_TMUX_HEIGHT $SK_DEFAULT_OPTS --tiebreak=index --bind=ctrl-r:toggle-sort $SK_CTRL_R_OPTS +m"
+            set -lx SK_OPTS "--color=bw --no-hscroll --height=40"
             set -lx file (${pkgs.fd}/bin/fd -H -E "\.git" . | "${pkgs.skim}"/bin/sk)
             if [ "$file" != "" ]
               emacsclient -t -a= "$file"
@@ -166,6 +164,24 @@ in
 
         if bind -M insert > /dev/null 2>&1
           bind -M insert \cn kubens-select
+        end
+
+        function kube-pod-exec -d "Exec into pod"
+          begin
+            set -lx SK_PROMPT "exec into pod > "
+            set -lx SK_OPTS "--color=bw --no-hscroll --height=40"
+            set -lx pod (${pkgs.kubectl}/bin/kubectl get pods --no-headers -o custom-columns=name:'{.metadata.name}' | "${pkgs.sk-sk}"/bin/sk-sk)
+            if [ "$pod" != "" ]
+              set -lx SK_PROMPT "select container > "
+              set -lx container (${pkgs.kubectl}/bin/kubectl get pods --no-headers "$pod" -o custom-columns=name:'{.spec.containers[*].name}' | tr ',' '\n' | "${pkgs.sk-sk}"/bin/sk-sk)
+              ${pkgs.kubectl}/bin/kubectl exec -ti "$pod" -c "$container" -- sh
+            end
+          end
+          commandline -f repaint
+        end
+        bind \ce kube-pod-exec
+        if bind -M insert > /dev/null 2>&1
+          bind -M insert \ce kube-pod-exec
         end
 
         function gcloud-project-select -d "Select gcloud project"
