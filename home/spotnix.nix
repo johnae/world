@@ -12,7 +12,7 @@ in
     };
     Service = {
       ExecStart = ''
-        ${pkgs.stdenv.shell} -c 'CLIENT_ID="$(${pkgs.pass}/bin/pass web/spotify.com/spotnix | head -1)" CLIENT_SECRET="$(${pkgs.pass}/bin/pass web/spotify.com/spotnix | tail -1)" REDIRECT_URI="http://localhost:8182/spotnix" ${pkgs.spotnix}/bin/spotnix -d ${home.extraConfig.hostname} -e $XDG_RUNTIME_DIR/spotnix_event -i $XDG_RUNTIME_DIR/spotnix_input -o $XDG_RUNTIME_DIR/spotnix_output -r 10'
+        ${pkgs.stdenv.shell} -c 'RUST_LOG=info CLIENT_ID="$(${pkgs.pass}/bin/pass web/spotify.com/spotnix | head -1)" CLIENT_SECRET="$(${pkgs.pass}/bin/pass web/spotify.com/spotnix | tail -1)" REDIRECT_URI="http://localhost:8182/spotnix" ${pkgs.spotnix}/bin/spotnix -d ${home.extraConfig.hostname} -e $XDG_RUNTIME_DIR/spotnix_event -i $XDG_RUNTIME_DIR/spotnix_input -o $XDG_RUNTIME_DIR/spotnix_output -r 10'
       '';
       Restart = "always";
       RestartSec = 3;
