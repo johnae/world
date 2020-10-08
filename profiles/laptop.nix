@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ hostName, userName, config, lib, pkgs, inputs, ... }:
 let
   nixos-hardware = inputs.nixos-hardware;
   buildMachines = (builtins.exec [
@@ -56,7 +56,8 @@ in
   powerManagement.powertop.enable = true;
   ##
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker.enable = false;
+  virtualisation.podman.enable = true;
 
   programs.ssh.startAgent = false;
 

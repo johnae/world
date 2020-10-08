@@ -122,7 +122,7 @@ with lib; {
         "/var/lib/iwd"
         "/var/lib/wireguard"
         "/var/lib/systemd/coredump"
-        "/var/lib/docker"
+        "/var/lib/containers"
         "/root"
       ];
       files = [
@@ -139,6 +139,7 @@ with lib; {
           "/home/${userName}/.local/share/direnv"
           "/home/${userName}/.local/share/password-store"
           "/home/${userName}/.local/share/fish"
+          "/home/${userName}/.local/share/containers"
           "/home/${userName}/.mail"
           "/home/${userName}/.cargo"
           "/home/${userName}/.cache/mu"
@@ -232,7 +233,7 @@ with lib; {
     "${userName}".gid = 1337;
     scard.gid = 1050;
   };
-  users.extraUsers."${userName}" = {
+  users.users."${userName}" = {
     shell = pkgs.fish;
     extraGroups = [ "scard" ];
   };
