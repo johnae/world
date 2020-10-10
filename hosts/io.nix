@@ -208,6 +208,13 @@ with lib; {
     pkgs.ytop
   ];
 
+  sleepManagement = {
+    enable = true;
+    wakeCommands = ''
+      ${pkgs.procps}/bin/pkill gammastep
+    '';
+  };
+
   ## trying to fix bluetooth disappearing after suspend
   # sleepManagement = {
   #   enable = true;
