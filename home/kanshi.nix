@@ -13,23 +13,16 @@
     ];
     home.outputs = [
       {
-        criteria = "Ancor Communications Inc VG248 G2LMQS056758";
-        mode = "1920x1080";
+        criteria = "Unknown ASUS PB27U 0x0000C167";
+        mode = "3840x2160";
         position = "0,0";
-        scale = 1.0;
-        transform = "270";
+        scale = 1.5;
       }
       {
         criteria = "Sharp Corporation 0x14CC 0x00000000";
         mode = "3840x2400";
-        position = "1080,0";
+        position = "2560,0";
         scale = 2.0;
-      }
-      {
-        criteria = "Unknown ASUS PB27U 0x0000C167";
-        mode = "3840x2160";
-        position = "3000,0";
-        scale = 1.5;
       }
     ];
     work.outputs = [
