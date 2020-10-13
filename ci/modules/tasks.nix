@@ -6,6 +6,7 @@ let
     runAsGroup = 999;
     allowPrivilegeEscalation = false;
   };
+  nixpkgs = "github:nixos/nixpkgs/41c0f49681009ceb57a65b7cd7d4e6d605df712c";
   workingDir = "/home/robot";
   env = [
     { name = "NIX_REMOTE"; value = "daemon"; }
@@ -45,7 +46,6 @@ in
           ''
             exec 2>&1
             set -euo pipefail
-            nixpkgs='github:nixos/nixpkgs/daaa0e33505082716beb52efefe3064f0332b521'
 
             show() {
               echo "$@"
@@ -55,9 +55,9 @@ in
             out="$(basename $(params.giturl) .git)"
             echo cloning repository $(params.giturl) to "$out"
 
-            show nix shell "$nixpkgs"#git -c git clone $(params.giturl) "$out"
+            show nix shell "${nixpkgs}"#git -c git clone $(params.giturl) "$out"
             show cd "$out"
-            show nix shell "$nixpkgs"#git -c git checkout $(params.gitrev)
+            show nix shell "${nixpkgs}"#git -c git checkout $(params.gitrev)
           ''
         ];
       }
@@ -70,7 +70,6 @@ in
           ''
             exec 2>&1
             set -euo pipefail
-            nixpkgs='github:nixos/nixpkgs/daaa0e33505082716beb52efefe3064f0332b521'
 
             show() {
               echo "$@"
