@@ -37,7 +37,7 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     home = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/0e9b6e6dc921b523d7aaf2f9069106230d273804";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
