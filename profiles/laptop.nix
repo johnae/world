@@ -81,6 +81,8 @@ in
   services.dbus.packages = with pkgs; [ gcr dconf gnome3.sushi ];
   services.udev.packages = with pkgs; [ gnome3.gnome-settings-daemon ];
 
+  services.hardware.bolt.enable = true;
+
   ##
   services.logind.lidSwitch = "suspend-then-hibernate";
   environment.etc."systemd/sleep.conf".text = "HibernateDelaySec=8h";
