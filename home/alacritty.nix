@@ -5,7 +5,7 @@ rec {
     enable = true;
     settings = rec {
       env = {
-        TERM = "alacritty-direct";
+        TERM = "alacritty";
       };
       window = {
         dimensions.columns = 80;
