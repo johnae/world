@@ -286,6 +286,7 @@
 (use-package counsel-projectile
   :diminish (projectile-mode . "")
   :config
+  (setq projectile-project-search-path '("~/Development/"))
   (projectile-mode)
   (counsel-projectile-mode))
 
