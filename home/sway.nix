@@ -234,7 +234,7 @@ in
         "${modifier}+x" = ''mode "disabled keybindings"'';
         "${modifier}+r" = ''mode "resize"'';
 
-        "${modifier}+g" = ''exec ${pkgs.sk-window}/bin/sk-window ${swayFocusWindow}/bin/sway-focus-window'';
+        "${modifier}+Tab" = ''exec ${pkgs.sk-window}/bin/sk-window ${swayFocusWindow}/bin/sway-focus-window'';
 
         "${modifier}+t" = ''exec ${pkgs.sk-window}/bin/sk-window ${pkgs.spotify-play-track}/bin/spotify-play-track'';
         "${modifier}+p" = ''exec ${pkgs.sk-window}/bin/sk-window ${pkgs.spotify-play-playlist}/bin/spotify-play-playlist'';
