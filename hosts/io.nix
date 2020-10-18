@@ -147,6 +147,7 @@ with lib; {
           "/home/${userName}/.cache/nix-index"
           "/home/${userName}/.mozilla/firefox/default"
           "/home/${userName}/.gnupg"
+          "/home/${userName}/.config/gcloud"
         ];
         files = [
           "/home/${userName}/.kube/config"
