@@ -197,7 +197,7 @@ with lib; {
     pkgs.hyperfine
     pkgs.procs
     pkgs.sd
-    pkgs.ytop
+    pkgs.bottom
   ];
 
   ## trying to fix bluetooth disappearing after suspend
