@@ -4,15 +4,17 @@ let
   cfg = config.programs.i3status-rust;
 
   configFile = conf:
+    let
+      jsonConf = builtins.toJSON conf;
+    in
     pkgs.runCommand "i3status-rust.toml"
       {
-        buildInputs = [ pkgs.remarshal ];
+        buildInputs = [ pkgs.yj ];
         preferLocalBuild = true;
         allowSubstitutes = false;
       }
       ''
-        remarshal -if json -of toml \
-          < ${pkgs.writeText "config.json" (builtins.toJSON conf)} \
+        yj -jt < ${pkgs.writeText "config.json" jsonConf} \
           > $out
       '';
 in
