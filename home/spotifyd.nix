@@ -3,7 +3,7 @@ let
   home = config.home;
 in
 {
-  services.spotifyd = {
+  services.my-spotifyd = {
     enable = true;
     settings = rec {
       global = rec {
