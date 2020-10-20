@@ -13,10 +13,10 @@ in
         mixer = "PCM";
         volume-control = "alsa";
         device_name = home.extraConfig.hostname;
-        bitrate = "320";
+        bitrate = 320;
         cache_path = "/home/${home.username}/.cache/spotifyd";
         volume-normalisation = "true";
-        normalisation-pregain = "-10";
+        normalisation-pregain = -10;
       };
     };
   };
