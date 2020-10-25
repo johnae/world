@@ -12,9 +12,7 @@ let
       inherit ExecStart;
     };
 
-    Install = {
-      WantedBy = [ "sway-session.target" ];
-    };
+    Install.WantedBy = [ "sway-session.target" ];
   };
 
   swaylockTimeout = "300";
@@ -123,18 +121,15 @@ in
           titlebar = false;
           border = 0;
           hideEdgeBorders = "smart";
-          #popupDuringFullscreen = "smart";
           commands = [
-            { inherit command; criteria = { class = "sk-window"; }; }
-            { inherit command; criteria = { title = "sk-window"; }; }
-            { inherit command; criteria = { app_id = "sk-window"; }; }
-            { command = floatCommand; criteria = { class = "input-window"; }; }
-            { command = floatCommand; criteria = { class = "gcr-prompter"; }; }
-            { command = "inhibit_idle fullscreen"; criteria = { shell = ".*"; }; }
+            { inherit command; criteria.class = "sk-window"; }
+            { inherit command; criteria.title = "sk-window"; }
+            { inherit command; criteria.app_id = "sk-window"; }
+            { command = floatCommand; criteria.class = "input-window"; }
+            { command = floatCommand; criteria.class = "gcr-prompter"; }
+            { command = "inhibit_idle fullscreen"; criteria.shell = ".*"; }
+            { command = "kill"; criteria.title = "Firefox - Sharing Indicator"; }
           ];
-          #noFocusCriteria = [
-          #  { window_role = "browser"; }
-          #];
         };
 
       floating = {
