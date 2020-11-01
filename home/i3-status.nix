@@ -1,31 +1,53 @@
 { pkgs, config, lib, options }:
 let
+
   checkNixosVersion = pkgs.writeStrictShellScriptBin "check-nixos-version" ''
-    PATH=${pkgs.stdenv}/bin:${pkgs.dateutils}/bin:${pkgs.yq}/bin:${pkgs.curl}/bin:$PATH
-    RELEASES="$(mktemp /tmp/nixos-version.XXXXXXXXXXX)"
-    curl -sS 'https://nix-releases.s3.amazonaws.com/?delimiter=/&prefix=nixos/unstable/' | \
-      xq -r '.ListBucketResult.Contents[] | "\(.Key) \(.LastModified)"' > "$RELEASES"
-    trap 'rm -f "$RELEASES"; exit' EXIT
+    PATH=${pkgs.stdenv}/bin:${pkgs.pass}/bin:${pkgs.dateutils}/bin:${pkgs.jq}/bin:${pkgs.curl}/bin:$PATH
 
-    CURRENT="$(tail -n1 "$RELEASES" | awk '{print $1}')"
-    LAST_MODIFIED="$(tail -n1 "$RELEASES" | awk '{print $2}')"
-    AGE_DAYS="$(ddiff -f '%d' "$LAST_MODIFIED" now)"
+    latest_release="$(mktemp /tmp/nixos-latest-version.XXXXXXXXXXX)"
+    trap 'rm -f "$latest_release"; exit' EXIT
+    cat<<'GQL' | tr '\n' ' ' | curl -u johnae:"$(pass show web/github.com/token)" -X POST \
+                                    -H "Content-Type: application/json" -d @- https://api.github.com/graphql | \
+                                    jq -r '.data.repository.ref.target.history.nodes[0] | "\(.oid) \(.committedDate)"' > "$latest_release"
+    { "query": "{
+      repository(name: \"nixpkgs\", owner: \"nixos\") {
+        ref(qualifiedName: \"nixos-unstable\") {
+          target {
+            ... on Commit {
+              history(first: 1) {
+                nodes {
+                  oid
+                  committedDate
+                }
+              }
+            }
+          }
+        }
+      }
+    }"}
+    GQL
 
-    if [ "$AGE_DAYS" = "1" ]; then
-      AGE_DAYS="$AGE_DAYS day ago"
+    latest_version="$(awk '{print $1}' < "$latest_release")"
+    last_modified="$(awk '{print $2}' < "$latest_release")"
+
+    age="$(ddiff -f '%d' "$last_modified" now)"
+
+    if [ "$age" = "1" ]; then
+        age="$age day ago"
     else
-      AGE_DAYS="$AGE_DAYS days ago"
+        age="$age days ago"
     fi
 
-    LATEST=$(echo "$CURRENT" | awk -F'.' '{print $NF}')
     # shellcheck disable=SC1091
     source /etc/os-release
-    LOCAL=$(echo "$VERSION_ID" | awk -F'.' '{print $3}')
+    local_version=$(echo "$VERSION_ID" | awk -F'.' '{print $3}')
 
-    if [ "$LOCAL" != "$LATEST" ]; then
-      echo "NixOS:  $LATEST ($AGE_DAYS)"
+    short_latest="$(echo "$latest_version" | cut -c1-11)"
+
+    if [ "$local_version" != "$short_latest" ]; then
+      echo "NixOS:  $short_latest ($age)"
     else
-      echo "NixOS:  $LATEST ($AGE_DAYS)"
+      echo "NixOS:  $short_latest ($age)"
     fi
   '';
 
