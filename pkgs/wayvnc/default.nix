@@ -11,6 +11,7 @@
 , pixman
 , aml
 , libglvnd
+, pam
 , mesa
 , neatvnc
 , libX11
@@ -41,6 +42,7 @@ stdenv.mkDerivation {
     neatvnc
     libX11
     libdrm
+    pam
     mesa
   ];
 
