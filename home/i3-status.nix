@@ -1,28 +1,29 @@
 { pkgs, config, lib, options }:
 let
 
-  checkNixosVersion = pkgs.writeStrictShellScriptBin "check-nixos-version" ''
+  upToDateCheck = pkgs.writeStrictShellScriptBin "up-to-date-check" ''
     PATH=${pkgs.stdenv}/bin:${pkgs.git}/bin:${pkgs.jq}/bin:$PATH
-    latest_version="$(git ls-remote https://github.com/nixos/nixpkgs nixos-unstable | awk '{print $1}' | cut -c-11)"
+
+    latest_config_version="$(git ls-remote https://github.com/johnae/world master | awk '{print $1}' | cut -c-11)"
+    local_config_version="$(nixos-version --json | jq -r .configurationRevision | cut -c-11)"
+
+    if [ "$local_config_version" != "$latest_config_version" ]; then
+      conf_status=" $latest_config_version"
+    else
+      conf_status=" $latest_config_version"
+    fi
+
+    latest_os_version="$(git ls-remote https://github.com/nixos/nixpkgs nixos-unstable | awk '{print $1}' | cut -c-11)"
     # shellcheck disable=SC1091
     source /etc/os-release
-    local_version=$(echo "$VERSION_ID" | awk -F'.' '{print $3}')
-    if [ "$local_version" != "$latest_version" ]; then
-      echo "NixOS:  $latest_version"
+    local_os_version=$(echo "$VERSION_ID" | awk -F'.' '{print $3}')
+    if [ "$local_os_version" != "$latest_os_version" ]; then
+      os_status=" $latest_os_version"
     else
-      echo "NixOS:  $latest_version"
+      os_status=" $latest_os_version"
     fi
-  '';
 
-  checkConfigurationVersion = pkgs.writeStrictShellScriptBin "check-configuration-version" ''
-    PATH=${pkgs.stdenv}/bin:${pkgs.git}/bin:${pkgs.jq}/bin:$PATH
-    latest_version="$(git ls-remote https://github.com/johnae/world master | awk '{print $1}' | cut -c-11)"
-    local_version="$(nixos-version --json | jq -r .configurationRevision | cut -c-11)"
-    if [ "$local_version" != "$latest_version" ]; then
-      echo "Config:  $latest_version"
-    else
-      echo "Config:  $latest_version"
-    fi
+    echo "OS: $os_status / Config: $conf_status"
   '';
 
   vpnStatus = pkgs.writeStrictShellScriptBin "vpn-status" ''
@@ -49,13 +50,7 @@ in
       {
         block = "custom";
         interval = 600;
-        command = "${checkNixosVersion}/bin/check-nixos-version";
-      }
-
-      {
-        block = "custom";
-        interval = 600;
-        command = "${checkConfigurationVersion}/bin/check-configuration-version";
+        command = "${upToDateCheck}/bin/up-to-date-check";
       }
 
       {
