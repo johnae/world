@@ -2,73 +2,36 @@
 let
 
   checkNixosVersion = pkgs.writeStrictShellScriptBin "check-nixos-version" ''
-    PATH=${pkgs.stdenv}/bin:${pkgs.pass}/bin:${pkgs.dateutils}/bin:${pkgs.jq}/bin:${pkgs.curl}/bin:$PATH
-
-    latest_release="$(mktemp /tmp/nixos-latest-version.XXXXXXXXXXX)"
-    trap 'rm -f "$latest_release"; exit' EXIT
-    cat<<'GQL' | tr '\n' ' ' | curl -u johnae:"$(pass show web/github.com/token)" -X POST \
-                                    -H "Content-Type: application/json" -d @- https://api.github.com/graphql | \
-                                    jq -r '.data.repository.ref.target.history.nodes[0] | "\(.oid) \(.committedDate)"' > "$latest_release"
-    { "query": "{
-      repository(name: \"nixpkgs\", owner: \"nixos\") {
-        ref(qualifiedName: \"nixos-unstable\") {
-          target {
-            ... on Commit {
-              history(first: 1) {
-                nodes {
-                  oid
-                  committedDate
-                }
-              }
-            }
-          }
-        }
-      }
-    }"}
-    GQL
-
-    latest_version="$(awk '{print $1}' < "$latest_release")"
-    last_modified="$(awk '{print $2}' < "$latest_release")"
-
-    age="$(ddiff -f '%d' "$last_modified" now)"
-
-    if [ "$age" = "1" ]; then
-        age="$age day ago"
-    else
-        age="$age days ago"
-    fi
-
+    PATH=${pkgs.stdenv}/bin:${pkgs.git}/bin:${pkgs.jq}/bin:$PATH
+    latest_version="$(git ls-remote https://github.com/nixos/nixpkgs nixos-unstable | awk '{print $1}' | cut -c-11)"
     # shellcheck disable=SC1091
     source /etc/os-release
     local_version=$(echo "$VERSION_ID" | awk -F'.' '{print $3}')
-
-    short_latest="$(echo "$latest_version" | cut -c1-11)"
-
-    if [ "$local_version" != "$short_latest" ]; then
-      echo "NixOS:  $short_latest ($age)"
+    if [ "$local_version" != "$latest_version" ]; then
+      echo "NixOS:  $latest_version"
     else
-      echo "NixOS:  $short_latest ($age)"
+      echo "NixOS:  $latest_version"
     fi
   '';
 
   checkConfigurationVersion = pkgs.writeStrictShellScriptBin "check-configuration-version" ''
     PATH=${pkgs.stdenv}/bin:${pkgs.git}/bin:${pkgs.jq}/bin:$PATH
-    LATEST="$(git ls-remote https://github.com/johnae/world master | awk '{print $1}' | cut -c-11)"
-    LOCAL="$(nixos-version --json | jq -r .configurationRevision | cut -c-11)"
-    if [ "$LOCAL" != "$LATEST" ]; then
-      echo "Config:  $LATEST"
+    latest_version="$(git ls-remote https://github.com/johnae/world master | awk '{print $1}' | cut -c-11)"
+    local_version="$(nixos-version --json | jq -r .configurationRevision | cut -c-11)"
+    if [ "$local_version" != "$latest_version" ]; then
+      echo "Config:  $latest_version"
     else
-      echo "Config:  $LATEST"
+      echo "Config:  $latest_version"
     fi
   '';
 
   vpnStatus = pkgs.writeStrictShellScriptBin "vpn-status" ''
-    VPN_EXIT="$(${pkgs.curl}/bin/curl -m 5 --connect-timeout 5 -sS https://am.i.mullvad.net/json | \
+    vpn_exit="$(${pkgs.curl}/bin/curl -m 5 --connect-timeout 5 -sS https://am.i.mullvad.net/json | \
                 ${pkgs.jq}/bin/jq -r .mullvad_exit_ip_hostname)"
-    if [ "$VPN_EXIT" = "null" ]; then
+    if [ "$vpn_exit" = "null" ]; then
       echo " vpn: down"
     else
-      echo " vpn: $VPN_EXIT"
+      echo " vpn: $vpn_exit"
     fi
   '';
 
