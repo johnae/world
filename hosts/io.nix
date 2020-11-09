@@ -46,7 +46,7 @@ let
 
     boot.kernelParams = [ "mem_sleep_default=deep" ];
     boot.blacklistedKernelModules = [ "psmouse" ];
-    services.throttled.enable = lib.mkDefault true;
+    services.throttled.enable = lib.mkDefault false;
     services.thermald.enable = true;
   };
 
