@@ -99,6 +99,7 @@ in
     };
     shellAliases = {
       k8s-run = "${pkgs.kubectl}/bin/kubectl run tmp-shell --generator=run-pod/v1 --rm -i --tty --image=nixpkgs/nix-unstable --restart=Never --attach -- nix-shell -p bashInteractive --run bash";
+      ssh = "env TERM=xterm-256color ssh";
     };
     shellInit = ''
       source ${pkgs.skim}/share/skim/key-bindings.fish
