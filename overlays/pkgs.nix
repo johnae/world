@@ -27,7 +27,7 @@ final: prev:
   blur = prev.callPackage ../pkgs/blur { };
 
   grim = prev.callPackage ../pkgs/grim { };
-  mako = prev.callPackage ../pkgs/mako { };
+  #mako = prev.callPackage ../pkgs/mako { };
   slurp = prev.callPackage ../pkgs/slurp { };
 
   spotifyd = prev.callPackage ../pkgs/spotifyd { };
