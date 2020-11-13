@@ -75,7 +75,6 @@ in
       pkgs.gnome3.nautilus
       pkgs.chromium
       pkgs.cachix
-      pkgs.zoom-us
     ];
 
   home.sessionVariables = rec {
