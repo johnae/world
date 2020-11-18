@@ -55,7 +55,7 @@ in
   };
 
   services.tailscale.enable = true;
-  services.tailscale-auth.enable = true;
+  systemd.services.tailscale-auth.enable = true;
 
   boot =
     let
