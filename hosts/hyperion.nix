@@ -19,6 +19,9 @@ in
     extraHosts = "127.0.1.1 ${hostName}";
   };
 
+  services.tailscale.enable = true;
+  systemd.services.tailscale-auth.enable = true;
+
   services.myk3s = {
     nodeName = hostName;
     flannelBackend = "none";
