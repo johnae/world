@@ -48,7 +48,14 @@ in
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" "wl" ];
-  boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
+  boot.extraModulePackages = [
+    (
+      config.boot.kernelPackages.broadcom_sta.overrideAttrs
+        (oldAttrs: {
+          patches = oldAttrs.patches ++ [ ../pkgs/broadcom-sta-patches/broadcom-sta-5.9.patch ];
+        })
+    )
+  ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-label/root";
