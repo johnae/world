@@ -34,6 +34,7 @@ in
       "/var/lib/k3s"
       "/var/lib/kubelet"
       "/var/lib/cni"
+      "/var/lib/tailscale"
       "/root"
       "/etc/rancher"
     ];
@@ -52,6 +53,8 @@ in
     flannelBackend = "none";
     extraManifests = [ ../files/k3s/calico.vlan.yaml ];
   };
+
+  services.tailscale.enable = true;
 
   boot =
     let
