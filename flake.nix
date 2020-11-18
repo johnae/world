@@ -109,11 +109,17 @@
       toInstallerConfiguration = name: conf:
         inputs.nixpkgs.lib.nameValuePair name (installerConfig (maybeTest name) conf.config.system.build.toplevel);
 
+      importSecret = secretPath: (builtins.exec [
+        "${pkgs.sops}/bin/sops"
+        "-d"
+        secretPath
+      ]) { inherit pkgs userName; };
+
       systemConfig = hostName: configuration:
         inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit hostName userName inputs pkgs;
+            inherit hostName userName inputs pkgs importSecret;
           };
           modules =
             [

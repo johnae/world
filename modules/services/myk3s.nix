@@ -79,8 +79,8 @@ in
 
     extraFlags = mkOption {
       description = "Extra flags to pass to the k3s command.";
-      default = "";
-      example = "--no-deploy traefik --cluster-cidr 10.24.0.0/16";
+      default = [ ];
+      example = [ "--no-deploy traefik" "--cluster-cidr 10.24.0.0/16" ];
     };
 
     masterUrl = mkOption {
@@ -111,27 +111,25 @@ in
           if isAgent then
             [
               ''-d ${k3sDataDir} --kubelet-arg "volume-plugin-dir=${k3sDir}/libexec/kubernetes/kubelet-plugins/volume/exec"''
-              ''--kubelet-arg "cni-bin-dir=${cniBinDir}"''
+              #''--kubelet-arg "cni-bin-dir=${cniBinDir}"''
               ''--node-name "$(cat /etc/k3s-node-name)"''
               (lib.concatStringsSep " "
                 (map (v: "--node-label ${v}") (cfg.labels ++ [ "hostname=${cfg.nodeName}" ]))
               )
-              cfg.extraFlags
-            ]
+            ] ++ cfg.extraFlags
           else
             [
               ''--no-deploy=traefik --no-deploy=servicelb --no-deploy=local-storage -d ${k3sDataDir}''
               ''-o /kubeconfig.yml''
               ''--flannel-backend=${cfg.flannelBackend}''
               ''--kubelet-arg "volume-plugin-dir=${k3sDir}/libexec/kubernetes/kubelet-plugins/volume/exec"''
-              ''--kubelet-arg "cni-bin-dir=${cniBinDir}"''
+              #''--kubelet-arg "cni-bin-dir=${cniBinDir}"''
               ''--kube-controller-arg "flex-volume-plugin-dir=${k3sDir}/libexec/kubernetes/kubelet-plugins/volume/exec"''
               ''--node-name "$(cat /etc/k3s-node-name)"''
               (lib.concatStringsSep " "
                 (map (v: "--node-label ${v}") (cfg.labels ++ [ "hostname=${cfg.nodeName}" ]))
               )
-              cfg.extraFlags
-            ]
+            ] ++ cfg.extraFlags
         );
 
 

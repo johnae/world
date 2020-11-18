@@ -1,15 +1,13 @@
-{ userName, hostName, pkgs, config, lib, inputs, ... }:
+{ userName, hostName, importSecret, pkgs, config, lib, inputs, ... }:
 let
-  secrets = (builtins.exec [
-    "${pkgs.sops}/bin/sops"
-    "-d"
-    "${inputs.secrets}/${hostName}/meta.nix"
-  ]) { inherit pkgs userName; };
+  secrets = importSecret "${inputs.secrets}/${hostName}/meta.nix";
+  tailscale = importSecret "${inputs.secrets}/tailscale/meta.nix";
 in
 {
   imports = [
     ../profiles/server.nix
     secrets
+    tailscale
   ];
 
   nix.trustedUsers = [ "root" userName ];
@@ -20,12 +18,10 @@ in
   };
 
   services.tailscale.enable = true;
-  systemd.services.tailscale-auth.enable = true;
 
   services.myk3s = {
     nodeName = hostName;
-    flannelBackend = "none";
-    extraManifests = [ ../files/k3s/calico.yaml ];
+    extraFlags = [ "--flannel-iface tailscale0" ];
   };
 
   users.defaultUserShell = pkgs.fish;
