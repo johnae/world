@@ -65,6 +65,8 @@ with lib; {
   services.tlp.settings.WIFI_PWR_ON_AC = "off";
   services.tlp.settings.WIFI_PWR_ON_BAT = "off";
 
+  services.tailscale.enable = true;
+
   nix.trustedUsers = [ "root" userName ];
 
   networking = {
@@ -123,6 +125,7 @@ with lib; {
         "/var/lib/wireguard"
         "/var/lib/systemd/coredump"
         "/var/lib/containers"
+        "/var/lib/tailscale"
         "/root"
       ];
       files = [
