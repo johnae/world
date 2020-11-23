@@ -80,7 +80,7 @@ in
         };
       };
       "hyperion" = {
-        hostname = "192.168.240.122";
+        hostname = "hyperion";
         forwardAgent = true;
         extraOptions = {
           inherit remoteCommand;
@@ -88,7 +88,7 @@ in
         };
       };
       "rhea" = {
-        hostname = "192.168.240.133";
+        hostname = "rhea";
         forwardAgent = true;
         extraOptions = {
           inherit remoteCommand;
@@ -96,7 +96,7 @@ in
         };
       };
       "titan" = {
-        hostname = "192.168.240.144";
+        hostname = "titan";
         forwardAgent = true;
         extraOptions = {
           inherit remoteCommand;
