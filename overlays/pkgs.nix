@@ -57,7 +57,7 @@ final: prev:
 
   rust-analyzer-bin = prev.callPackage ../pkgs/rust-analyzer-bin { };
 
-  k3s = prev.callPackage ../pkgs/k3s { };
+  #k3s = prev.callPackage ../pkgs/k3s { };
 
   initialize-user = prev.callPackage ../pkgs/initialize-user { };
 
