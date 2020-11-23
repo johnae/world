@@ -1,4 +1,7 @@
 { config, lib, pkgs, inputs, ... }:
+let
+  tsEnabled = config.services.tailscale.enable;
+in
 {
 
   imports = [
@@ -34,7 +37,24 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   hardware.cpu.intel.updateMicrocode = true;
-  networking.nameservers = [ "1.0.0.1" "1.1.1.1" "2606:4700:4700::1111" ];
+
+  networking.nameservers =
+    if tsEnabled then
+      [ "100.100.100.100" "1.0.0.1" "1.1.1.1" "2606:4700:4700::1111" ]
+    else
+      [ "1.0.0.1" "1.1.1.1" "2606:4700:4700::1111" ];
+
+  networking.search =
+    if tsEnabled then
+      [ "insane.se.beta.tailscale.net" "insane.se" ]
+    else
+      [ "insane.se" ];
+
+  networking.domain =
+    if tsEnabled then
+      "insane.se.beta.tailscale.net"
+    else
+      "insane.se";
 
   i18n.defaultLocale = "en_US.UTF-8";
   console.keyMap = "us";

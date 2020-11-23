@@ -40,7 +40,6 @@ let
 
   xps9300 = {
     imports = [
-      #"${nixos-hardware}/common/cpu/intel/kaby-lake"
       "${nixos-hardware}/common/pc/laptop"
     ];
 
@@ -72,9 +71,6 @@ with lib; {
   networking = {
     inherit hostName;
     extraHosts = "127.0.1.1 ${hostName}";
-    wireguard.interfaces.vpn.postSetup = ''
-      printf "nameserver 193.138.218.74" | ${pkgs.openresolv}/bin/resolvconf -a vpn -m 0
-    '';
   };
 
   services.udev.extraRules = ''
@@ -218,18 +214,6 @@ with lib; {
       ${pkgs.procps}/bin/pkill gammastep
     '';
   };
-
-  ## trying to fix bluetooth disappearing after suspend
-  # sleepManagement = {
-  #   enable = true;
-  #   sleepCommands = ''
-  #     ${pkgs.libudev}/bin/systemctl stop bluetooth && ${pkgs.kmod}/bin/modprobe -r btusb
-  #   '';
-  #   wakeCommands = ''
-  #     ${pkgs.kmod}/bin/modprobe btusb && ${pkgs.libudev}/bin/systemctl start bluetooth
-  #   '';
-  # };
-  ## end fix
 
   security.pam.services.swaylock = {
     text = ''

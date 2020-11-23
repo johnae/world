@@ -53,7 +53,7 @@ in
     };
 
     flannelBackend = mkOption {
-      type = with types; nullOr (enum [ "none" "vxlan" "ipsec" "wireguard" ]);
+      type = with types; nullOr (enum [ "none" "vxlan" "ipsec" "wireguard" "host-gw" ]);
       default = "vxlan";
       description = ''
         The type of flannel networking to use. If set to none, you are free to
@@ -135,7 +135,12 @@ in
 
     systemd.services.k3s = {
 
-      preStart = k3sNodeNameGen;
+      after = [ "network-online.service" "firewall.service" ];
+
+      preStart = ''
+        ${k3sNodeNameGen}
+        ${pkgs.kmod}/bin/modprobe -a br_netfilter overlay ip_vs ip_vs_rr ip_vs_wrr ip_vs_sh nf_conntrack
+      '';
 
       postStart = (
         if isMaster
@@ -158,6 +163,7 @@ in
         TasksMax = "infinity";
         TimeoutStartSec = 0;
         Restart = "always";
+
         ExecStart = with lib;
           mkForce (
             pkgs.writeStrictShellScript "unit-script-k3s-start"
@@ -165,7 +171,7 @@ in
                 concatStringsSep " \\\n "
                   (
                     [
-                      "export PATH=${pkgs.wireguard}/bin:${pkgs.bash}/bin:${pkgs.mount}/bin:\${PATH:+:}$PATH \n"
+                      "export PATH=${pkgs.wireguard}/bin:${pkgs.iptables}/bin:${pkgs.kmod}/bin:${pkgs.bash}/bin:${pkgs.mount}/bin:\${PATH:+:}$PATH \n"
                       "exec ${k3s.package}/bin/k3s ${k3s.role}"
                     ] ++ (optional k3s.docker "--docker")
                     ++ (optional k3s.disableAgent "--disable-agent")

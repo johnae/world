@@ -22,7 +22,7 @@ in
 
   services.myk3s = {
     nodeName = hostName;
-    extraFlags = [ "--flannel-iface tailscale0" "--node-ip 100.85.6.50" ];
+    extraFlags = [ "--flannel-iface tailscale0" ];
   };
 
   users.defaultUserShell = pkgs.fish;
