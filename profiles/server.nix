@@ -45,6 +45,9 @@ in
 
   systemd.services.k3s.after = [ "tailscaled.service" ];
 
+  networking.search = lib.mkForce [ ];
+  networking.domain = lib.mkForce null;
+
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
 

@@ -46,15 +46,15 @@ in
 
   networking.search =
     if tsEnabled then
-      [ "insane.se.beta.tailscale.net" "insane.se" ]
+      [ "insane.se.beta.tailscale.net" ]
     else
-      [ "insane.se" ];
+      [ ];
 
   networking.domain =
     if tsEnabled then
       "insane.se.beta.tailscale.net"
     else
-      "insane.se";
+      "";
 
   i18n.defaultLocale = "en_US.UTF-8";
   console.keyMap = "us";
