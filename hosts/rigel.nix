@@ -1,7 +1,6 @@
 { userName, hostName, importSecret, pkgs, config, lib, inputs, ... }:
 let
   secrets = importSecret "${inputs.secrets}/${hostName}/meta.nix";
-  tailscale = importSecret "${inputs.secrets}/tailscale/meta.nix";
 in
 {
 
@@ -9,7 +8,6 @@ in
     ../profiles/server.nix
     ../modules/state.nix
     secrets
-    tailscale
   ];
 
   nix.trustedUsers = [ "root" userName ];
@@ -44,13 +42,6 @@ in
       "/etc/ssh/ssh_host_ed25519_key.pub"
     ];
   };
-
-  services.myk3s = {
-    nodeName = hostName;
-    extraFlags = [ "--flannel-iface tailscale0" ];
-  };
-
-  services.tailscale.enable = true;
 
   boot =
     let

@@ -1,13 +1,11 @@
 { userName, hostName, importSecret, pkgs, config, lib, inputs, ... }:
 let
   secrets = importSecret "${inputs.secrets}/${hostName}/meta.nix";
-  tailscale = importSecret "${inputs.secrets}/tailscale/meta.nix";
 in
 {
   imports = [
     ../profiles/server.nix
     secrets
-    tailscale
   ];
 
   nix.trustedUsers = [ "root" userName ];
@@ -15,13 +13,6 @@ in
   networking = {
     inherit hostName;
     extraHosts = "127.0.1.1 ${hostName}";
-  };
-
-  services.tailscale.enable = true;
-
-  services.myk3s = {
-    nodeName = hostName;
-    extraFlags = [ "--flannel-iface tailscale0" ];
   };
 
   users.defaultUserShell = pkgs.fish;

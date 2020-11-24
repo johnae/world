@@ -1,14 +1,12 @@
 { userName, hostName, importSecret, pkgs, config, lib, inputs, ... }:
 let
   secrets = importSecret "${inputs.secrets}/${hostName}/meta.nix";
-  tailscale = importSecret "${inputs.secrets}/tailscale/meta.nix";
 in
 {
   imports =
     [
       ../profiles/server.nix
       secrets
-      tailscale
     ];
 
   nix.trustedUsers = [ "root" userName ];
@@ -18,11 +16,9 @@ in
     extraHosts = "127.0.1.1 ${hostName}";
   };
 
-  services.tailscale.enable = true;
-
   services.myk3s = {
-    nodeName = hostName;
-    extraFlags = [ "--flannel-iface tailscale0" ];
+    extraManifests = [ ../files/k3s/calico.ts.yaml ];
+    extraFlags = [ "--disable-network-policy" ];
   };
 
   users.defaultUserShell = pkgs.fish;

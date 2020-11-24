@@ -171,6 +171,12 @@ let
     sudo nix-env -p '$profile' --set '$pathToConfig'
     echo Updating system profile
 
+    switch="\$(mktemp /tmp/switch.XXXXXXXX)"
+    trap 'sudo rm -f "\$switch"' EXIT
+    chmod +x "\$switch"
+
+    cat<<'SWITCH'>"\$switch"
+    #!/usr/bin/env bash
     echo Switching to new configuration
     if ! sudo '$pathToConfig'/bin/switch-to-configuration switch; then
         echo "warning: error(s) occurred while switching to the new configuration" >&2
@@ -178,6 +184,10 @@ let
     fi
 
     $after_update
+    SWITCH
+
+    nohup "\$switch" &
+    wait "\$!"
 
     SSH
   '';

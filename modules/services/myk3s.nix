@@ -44,6 +44,25 @@ in
       '';
     };
 
+    clusterInit = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether this host should initialize HA clustering.
+        It needs to be initialized first if that's the case.
+      '';
+    };
+
+    clusterUrl = mkOption {
+      type = types.nullOr (types.strMatching "https://[0-9a-zA-Z.]+.*");
+      example = "https://1.2.3.4:6332";
+      default = null;
+      description = ''
+        The url to the first server node initialized. By specifying this, this
+        node will join the HA cluster as a server.
+      '';
+    };
+
     docker = mkOption {
       type = types.bool;
       default = false;
@@ -111,7 +130,7 @@ in
           if isAgent then
             [
               ''-d ${k3sDataDir} --kubelet-arg "volume-plugin-dir=${k3sDir}/libexec/kubernetes/kubelet-plugins/volume/exec"''
-              #''--kubelet-arg "cni-bin-dir=${cniBinDir}"''
+              ''--kubelet-arg "cni-bin-dir=${cniBinDir}"''
               ''--node-name "$(cat /etc/k3s-node-name)"''
               (lib.concatStringsSep " "
                 (map (v: "--node-label ${v}") (cfg.labels ++ [ "hostname=${cfg.nodeName}" ]))
@@ -123,13 +142,14 @@ in
               ''-o /kubeconfig.yml''
               ''--flannel-backend=${cfg.flannelBackend}''
               ''--kubelet-arg "volume-plugin-dir=${k3sDir}/libexec/kubernetes/kubelet-plugins/volume/exec"''
-              #''--kubelet-arg "cni-bin-dir=${cniBinDir}"''
+              ''--kubelet-arg "cni-bin-dir=${cniBinDir}"''
               ''--kube-controller-arg "flex-volume-plugin-dir=${k3sDir}/libexec/kubernetes/kubelet-plugins/volume/exec"''
               ''--node-name "$(cat /etc/k3s-node-name)"''
               (lib.concatStringsSep " "
                 (map (v: "--node-label ${v}") (cfg.labels ++ [ "hostname=${cfg.nodeName}" ]))
               )
             ] ++ cfg.extraFlags
+            ++ (optional (cfg.clusterUrl != null) "--server=${cfg.clusterUrl}")
         );
 
 
@@ -140,6 +160,9 @@ in
       preStart = ''
         ${k3sNodeNameGen}
         ${pkgs.kmod}/bin/modprobe -a br_netfilter overlay ip_vs ip_vs_rr ip_vs_wrr ip_vs_sh nf_conntrack
+        ${if cfg.clusterInit then
+          ''${k3s.package}/bin/k3s server --node-name "$(cat /etc/k3s-node-name)" -d ${k3sDataDir} --cluster-init --token ${k3s.token}''
+          else ""}
       '';
 
       postStart = (
