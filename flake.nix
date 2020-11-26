@@ -2,7 +2,7 @@
   description = "A flake for building the world";
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/2deeb58f49480f468adca6b08291322de4dbce6b";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     tektonix = {
       url = "github:johnae/tektonix";
