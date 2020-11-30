@@ -51,6 +51,7 @@ in
       pkgs.update-wireguard-keys
       pkgs.initialize-user
       pkgs.nix-index
+      pkgs.git-crypt
       #spotify-cmd
       #spotify-play-album
       #spotify-play-track
