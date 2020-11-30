@@ -2,7 +2,7 @@
 {
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox;
+    package = pkgs.temp-firefox;
     profiles = {
       default = {
         settings = {
