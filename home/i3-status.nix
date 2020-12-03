@@ -1,26 +1,54 @@
 { pkgs, config, lib, options }:
 let
 
+  ## add the days ago thingie later
+  githubGQLCheck = owner: repo: branch: pkgs.writeStrictShellScriptBin "check" ''
+    PATH=${pkgs.stdenv}/bin:${pkgs.pass}/bin:${pkgs.dateutils}/bin:${pkgs.jq}/bin:${pkgs.curl}/bin:${pkgs.gawk}/bin:$PATH
+    latest_release="$(mktemp /tmp/${owner}-${repo}-${branch}-latest-version.XXXXXXXXXXX)"
+    trap 'rm -f "$latest_release"; exit' EXIT
+    cat<<GQL | tr '\n' ' ' | curl -u johnae:"$(pass show web/github.com/token)" -X POST \
+                                    -H "Content-Type: application/json" -d @- https://api.github.com/graphql | \
+                                    jq -r '.data.repository.ref.target.history.nodes[0] | "\(.oid) \(.committedDate)"' > "$latest_release"
+    { "query": "{
+      repository(name: \"${repo}\", owner: \"${owner}\") {
+        ref(qualifiedName: \"${branch}\") {
+          target {
+            ... on Commit {
+              history(first: 1) {
+                nodes {
+                  oid
+                  committedDate
+                }
+              }
+            }
+          }
+        }
+      }
+    }"}
+    GQL
+
+    awk '{print $1}' < "$latest_release"
+  '';
+
   upToDateCheck = pkgs.writeStrictShellScriptBin "up-to-date-check" ''
-    PATH=${pkgs.stdenv}/bin:${pkgs.git}/bin:${pkgs.jq}/bin:$PATH
+    latest_os_version="$(${githubGQLCheck "nixos" "nixpkgs" "nixos-unstable"}/bin/check)"
+    latest_config_version="$(${githubGQLCheck "johnae" "world" "master"}/bin/check)"
 
-    latest_config_version="$(git ls-remote https://github.com/johnae/world master | awk '{print $1}' | cut -c-11)"
-    local_config_version="$(nixos-version --json | jq -r .configurationRevision | cut -c-11)"
+    local_config_version="$(nixos-version --json | jq -r .configurationRevision)"
+    local_os_version="$(nixos-version --json | jq -r .nixpkgsRevision)"
 
+    short_config_version="$(echo "$latest_config_version" | cut -c-11)"
     if [ "$local_config_version" != "$latest_config_version" ]; then
-      conf_status=" $latest_config_version"
+      conf_status=" $short_config_version"
     else
-      conf_status=" $latest_config_version"
+      conf_status=" $short_config_version"
     fi
 
-    latest_os_version="$(git ls-remote https://github.com/nixos/nixpkgs nixos-unstable | awk '{print $1}' | cut -c-11)"
-    # shellcheck disable=SC1091
-    source /etc/os-release
-    local_os_version=$(echo "$VERSION_ID" | awk -F'.' '{print $3}')
+    short_os_version="$(echo "$latest_os_version" | cut -c-11)"
     if [ "$local_os_version" != "$latest_os_version" ]; then
-      os_status=" $latest_os_version"
+      os_status=" $short_os_version"
     else
-      os_status=" $latest_os_version"
+      os_status=" $short_os_version"
     fi
 
     echo "OS: $os_status / Config: $conf_status"
@@ -77,7 +105,7 @@ in
         signal_strength = false;
         speed_up = true;
         graph_up = false;
-        interval = 5;
+        interval = 30;
       }
 
       {
@@ -91,7 +119,7 @@ in
 
       {
         block = "battery";
-        interval = 10;
+        interval = 30;
         format = "{percentage}% {time}";
       }
 
