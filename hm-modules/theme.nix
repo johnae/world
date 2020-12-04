@@ -84,7 +84,7 @@ in
           bright.white = cnotation cfg.base06;
         };
 
-        programs.i3status-rust.settings.theme.overrides = {
+        programs.my-i3status-rust.settings.theme.overrides = {
           idle_bg = alpha cfg.base03 "DD";
           idle_fg = cfg.base05;
 

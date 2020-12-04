@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   inherit (lib) mkOption mkEnableOption types mkIf;
-  cfg = config.programs.i3status-rust;
+  cfg = config.programs.my-i3status-rust;
 
   configFile = conf:
     let
@@ -19,7 +19,7 @@ let
       '';
 in
 {
-  options.programs.i3status-rust = {
+  options.programs.my-i3status-rust = {
     enable = mkEnableOption "i3status-rust: Generates status bar for i3bar.";
     settings = {
       block = mkOption {

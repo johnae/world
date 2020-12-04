@@ -1,4 +1,4 @@
-{ pkgs, config, lib, options }:
+{ pkgs, config, lib, options, ... }:
 let
 
   ## add the days ago thingie later
@@ -71,7 +71,7 @@ let
   '';
 in
 {
-  programs.i3status-rust = {
+  programs.my-i3status-rust = {
     enable = true;
     settings.block = [
 
