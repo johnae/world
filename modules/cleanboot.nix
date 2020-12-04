@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }:
 ## This requires certain things from your drive partitioning
 ## see ../installer/install.sh
+
+## NOTE: I'm not using this module anymore since I've opted to use
+## tmpfs for root instead
 let
   cfg = config.boot.btrfsCleanBoot;
 in
@@ -58,41 +61,45 @@ with lib; {
       };
 
     boot.initrd.postDeviceCommands = lib.mkAfter ''
-      mkdir -p /mnt
-      mount -o rw,noatime,compress=zstd,ssd,space_cache /dev/disk/by-label/root /mnt
-      if test -e /mnt/@/nowipe; then
-        echo Not wiping ephemeral data as /nowipe was detected
-        rm -f /mnt/@/nowipe
-      else
-        echo Wiping ephemeral data
-        ${lib.concatStringsSep "\n" (
-        map (vol: ''
-            for vol in $(find "/mnt/${vol}" -depth -inum 256)
-            do
-              echo Deleting subvolume "$vol"
-              btrfs sub delete "$vol"
-            done
-            echo Creating subvolume "$vol" from /mnt/@blank snapshot
-            btrfs sub snapshot /mnt/@blank /mnt/${vol}
-          ''
-            ) cfg.wipe
-        )}
+            mkdir -p /mnt
+            mount -o rw,noatime,compress=zstd,ssd,space_cache /dev/disk/by-label/root /mnt
+            if test -e /mnt/@/nowipe; then
+              echo Not wiping ephemeral data as /nowipe was detected
+              rm -f /mnt/@/nowipe
+            else
+              echo Wiping ephemeral data
+              ${lib.concatStringsSep "\n" (
+              map
+      (vol: ''
+                  for vol in $(find "/mnt/${vol}" -depth -inum 256)
+                  do
+                    echo Deleting subvolume "$vol"
+                    btrfs sub delete "$vol"
+                  done
+                  echo Creating subvolume "$vol" from /mnt/@blank snapshot
+                  btrfs sub snapshot /mnt/@blank /mnt/${vol}
+                ''
+                  )
+      cfg.wipe
+              )}
 
-        ${lib.concatStringsSep "\n" (
-        map (m:
-            let
-            dir = builtins.dirOf m;
-            in
-            ''
-              if [ ! -e "/mnt/@keep${m}" ]; then
-                echo Creating subvolume "/keep${m}"
-                mkdir -p "/mnt/@keep${dir}"
-                btrfs sub create "/mnt/@keep${m}"
-              fi
-            ''
-            ) cfg.keep
-        )}
-      fi
+              ${lib.concatStringsSep "\n" (
+              map
+      (m:
+                  let
+                  dir = builtins.dirOf m;
+                  in
+                  ''
+                    if [ ! -e "/mnt/@keep${m}" ]; then
+                      echo Creating subvolume "/keep${m}"
+                      mkdir -p "/mnt/@keep${dir}"
+                      btrfs sub create "/mnt/@keep${m}"
+                    fi
+                  ''
+                  )
+      cfg.keep
+              )}
+            fi
     '';
 
     systemd.mounts =
