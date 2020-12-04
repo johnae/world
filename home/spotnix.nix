@@ -1,4 +1,4 @@
-{ pkgs, config, lib, options }:
+{ pkgs, config, lib, options, ... }:
 let
   home = config.home;
 in

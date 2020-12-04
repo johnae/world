@@ -1,4 +1,4 @@
-{ pkgs, config, lib, options }:
+{ pkgs, config, lib, options, ... }:
 let
   gpgImport = pkgs.writeShellScript "gpg-import" ''
     ${pkgs.gnupg}/bin/gpg --import ${../files/public.key.gpg}

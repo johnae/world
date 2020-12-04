@@ -37,10 +37,11 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     home = {
-      url = "github:nix-community/home-manager/0e9b6e6dc921b523d7aaf2f9069106230d273804";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    ## these have a firefox with screen sharing still working - will be fixed upstream (eg. mozilla) at some point soon(tm)
     temp-ff-nixpkgs = {
       url = "github:nixos/nixpkgs/2deeb58f49480f468adca6b08291322de4dbce6b";
     };
@@ -124,7 +125,7 @@
       ]) { inherit pkgs userName; };
 
       systemConfig = hostName: configuration:
-        inputs.nixpkgs.lib.nixosSystem {
+        inputs.nixpkgs.lib.makeOverridable inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
             inherit hostName userName inputs pkgs importSecret;
@@ -141,7 +142,7 @@
         };
 
       installerConfig = hostName: systemClosure:
-        inputs.nixpkgs.lib.nixosSystem {
+        inputs.nixpkgs.lib.makeOverridable inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
             inherit hostName inputs pkgs system systemClosure;

@@ -1,4 +1,4 @@
-{ pkgs, config, lib, options }:
+{ pkgs, config, lib, options, ... }:
 let
   post-new-notmuch = pkgs.writeStrictShellScript "post-new-notmuch" ''
     maildir="${config.accounts.email.maildirBasePath}";

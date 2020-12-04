@@ -1,4 +1,4 @@
-{ pkgs, config, lib, options }:
+{ pkgs, config, lib, options, ... }:
 let
   redshift-gammastep = pkgs.writeStrictShellScriptBin "redshift" ''
     exec ${pkgs.gammastep}/bin/gammastep "$@"
