@@ -41,11 +41,11 @@ SKIP_INSTALL=${SKIP_INSTALL:-}
 DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd -P)
 
 ## This script bootstraps a nixos install. The assumptions are:
-# 1. You want an EFI System Partition (500MB) - so no BIOS support
+# 1. You want an EFI System Partition (500MB) - so no BIOS support. Wrong - actually support both legacy BIOS boot and UEFI now.
 # 2. You want encrypted root and swap
 # 3. You want swap space size to be half of RAM as per modern standards
 # 4. You want to use btrfs for everything else and you want to use subvolumes
-#    for /, /var and /home
+#    for /, /var etc
 # 5. You want to not care about atime and you want
 #    to compress your fs using zstd
 
