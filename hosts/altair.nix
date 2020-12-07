@@ -59,7 +59,7 @@ in
   };
 
   systemd.services.transmission
-  .unitConfig.NetworkNamespacePath = "/var/run/netns/private";
+  .serviceConfig.NetworkNamespacePath = "/var/run/netns/private";
 
   systemd.services.transmission-forwarder = {
     enable = true;
