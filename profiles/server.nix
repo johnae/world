@@ -33,17 +33,36 @@ in
     pkgs.iptables
   ];
 
-  services.myk3s = {
+  services.k3s = {
     enable = true;
     nodeName = hostName;
+    tokenFile = config.sops.secrets.k3sToken.path;
     flannelBackend = "none";
-    docker = true;
-    extraFlags = [ "--flannel-iface=tailscale0" ];
+    extraFlags = "--flannel-iface=tailscale0";
+    systemdAfter = [ "tailscaled.service" "tailscale-auth.service" ];
   };
 
   services.tailscale.enable = true;
 
-  systemd.services.k3s.after = [ "tailscaled.service" ];
+  systemd.services.tailscale-auth =
+    {
+      description = "Tailscale automatic authentication";
+      wantedBy = [ "tailscaled.service" ];
+      after = [ "tailscaled.service" ];
+      script = ''
+        ${pkgs.tailscale}/bin/tailscale up -authkey "$(cat ${config.sops.secrets.tailscaleToken.path})"
+      '';
+      serviceConfig.Type = "oneshot";
+    };
+
+  systemd.paths.tailscale-socket =
+    {
+      wantedBy = [ "tailscaled.service" ];
+      pathConfig = {
+        PathExists = "/var/run/tailscale/tailscaled.sock";
+        Unit = "tailscale-auth.service";
+      };
+    };
 
   networking.search = lib.mkForce [ ];
   networking.domain = lib.mkForce null;

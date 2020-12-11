@@ -1,6 +1,10 @@
 {
   description = "A flake for building the world";
   inputs = {
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -137,6 +141,7 @@
               { system.nixos.versionSuffix = inputs.nixpkgs.lib.mkForce "git.${builtins.substring 0 11 inputs.nixpkgs.rev}"; }
               inputs.nixpkgs.nixosModules.notDetected
               inputs.home.nixosModules.home-manager
+              inputs.sops-nix.nixosModules.sops
               configuration
             ];
         };
@@ -195,6 +200,12 @@
           spook = inputs.spook.overlay;
           spotnix = inputs.spotnix.overlay;
           temp-firefox = (final: prev: { temp-firefox = temp-ff-nixpkgs.firefox; });
+          ssh-to-pgp =
+            (final: prev:
+              {
+                ssh-to-pgp = inputs.sops-nix.packages.${system}.ssh-to-pgp.overrideAttrs (oAttrs: { doCheck = false; });
+              }
+            );
         };
 
       containers =

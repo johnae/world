@@ -384,6 +384,7 @@
         "persway": "persway",
         "secrets": "secrets",
         "slurp": "slurp",
+        "sops-nix": "sops-nix",
         "spook": "spook",
         "spotifyd": "spotifyd",
         "spotnix": "spotnix",
@@ -433,6 +434,26 @@
       "original": {
         "owner": "emersion",
         "repo": "slurp",
+        "type": "github"
+      }
+    },
+    "sops-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1606928391,
+        "narHash": "sha256-1/A/LGc565wysHZ+vGnxlm0A8X7my5O2sRZXTbycpWg=",
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "rev": "21333cfb81cf2e679be5d10cb08585564384aff8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "sops-nix",
         "type": "github"
       }
     },
