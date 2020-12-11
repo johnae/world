@@ -1,7 +1,5 @@
 { nixpkgs ? import <nixpkgs> { } }:
 let
-  SOPS_PGP_FP = "782517BE26FBB0CC5DA3EFE59D91E5C4D9515D9E";
-
   latestRelease = nixpkgs.writeStrictShellScriptBin "latest-release" ''
     export PATH=${nixpkgs.curl}/bin:${nixpkgs.jq}/bin:$PATH
     REPO=''${1:-}
@@ -307,7 +305,6 @@ nixpkgs.mkShell {
   buildInputs =
     [ world nixpkgs.cachix nixpkgs.strict-bash nixpkgs.sops nixpkgs.moreutils nixpkgs.nixUnstable ];
 
-  inherit SOPS_PGP_FP;
   NIX_USER_CONF_FILES = nixpkgs.writeText "nix.conf" ''
     experimental-features = nix-command flakes ca-references
     ## below allows the use of builtins.exec - for secrets decryption

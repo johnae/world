@@ -10,6 +10,18 @@ in
     ./defaults.nix
   ];
 
+  sops.defaultSopsFile = ../secrets + "/${hostName}/meta.yaml";
+  sops.secrets = {
+    initrd-ed25519-key.path = "/etc/nixos/initrd_keys/ed25519_key";
+    initrd-dsa-key.path = "/etc/nixos/initrd_keys/dsa_key";
+    initrd-rsa-key.path = "/etc/nixos/initrd_keys/rsa_key";
+    k3sToken = { };
+    wireguardPrivateKey = { };
+    tailscaleToken = { };
+    userPassword = { };
+    rootPassword = { };
+  };
+
   networking.usePredictableInterfaceNames = false; ## works when there's only one ethernet port
   networking.useDHCP = false;
 

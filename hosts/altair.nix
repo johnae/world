@@ -1,21 +1,93 @@
 { userName, hostName, importSecret, pkgs, config, lib, inputs, ... }:
 let
-  secrets = importSecret "${inputs.secrets}/${hostName}/meta.nix";
-  transmission = config.services.transmission;
+  internalIP = "192.168.243.1";
+  externalIP = "95.217.201.156";
+  lbIP = "95.217.92.223";
+  defaultGateway = "95.217.201.129";
+  authorizedKeys = [
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ== cardno:000607539231"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBTU5dDn7gokexQFPxH2tHWGh7MAEZ1aQ+cJdFgHFGxk john@insane.se"
+  ];
 in
 {
 
   imports = [
     ../profiles/server.nix
     ../modules/state.nix
-    secrets
   ];
 
   nix.trustedUsers = [ "root" userName ];
 
   networking = {
-    inherit hostName;
+    inherit hostName defaultGateway;
+    hostId = "fa23b2cd";
+    defaultGateway6 = {
+      address = "fe80::1";
+      interface = "eth0";
+    };
+    vlans.vlan4000 = {
+      id = 4000;
+      interface = "eth0";
+    };
+    interfaces = {
+      vlan4000.ipv4.addresses = [
+        {
+          address = internalIP;
+          prefixLength = 24;
+        }
+      ];
+      eth0 = {
+        ipv4.addresses = [
+          {
+            address = externalIP;
+            prefixLength = 26;
+          }
+          {
+            address = lbIP;
+            prefixLength = 32;
+          }
+        ];
+        ipv6.addresses = [
+          {
+            address = "2a01:4f9:4a:44a3::2";
+            prefixLength = 64;
+          }
+        ];
+      };
+    };
+    wireguard.interfaces.vpn = {
+      ips = [
+        "10.66.198.97/32"
+        "fc00:bbbb:bbbb:bb01::3:c660/128"
+      ];
+      peers = [
+        {
+          allowedIPs = [
+            "0.0.0.0/0"
+            "::0/0"
+          ];
+          endpoint = "185.204.1.211:3017";
+          persistentKeepalive = 25;
+          publicKey = "R5LUBgM/1UjeAR4lt+L/yA30Gee6/VqVZ9eAB3ZTajs=";
+        }
+      ];
+      preSetup = [
+        "${pkgs.iproute}/bin/ip netns add private || true"
+        "${pkgs.iproute}/bin/ip -n private link set lo up || true"
+      ];
+      interfaceNamespace = "private";
+      privateKeyFile = config.sops.secrets.wireguardPrivateKey.path;
+    };
     extraHosts = "127.0.1.1 ${hostName}";
+  };
+
+  services.k3s = {
+    masterUrl = "https://100.85.6.50:6443";
+    labels = [
+      "cpu=high"
+      "mem=high"
+      "cloud=hetzner"
+    ];
   };
 
   environment.systemPackages = [ pkgs.netns-exec ];
@@ -49,6 +121,13 @@ in
   services.transmission = {
     enable = true;
     downloadDirPermissions = "775";
+    settings = {
+      blocklist-enabled = true;
+      blocklist-url = "https://github.com/sahsu/transmission-blocklist/releases/latest/download/blocklist.gz";
+      encryption = 1;
+      ratio-limit = 0.1;
+    };
+    port = 9091;
   };
 
   services.plex = {
@@ -72,9 +151,7 @@ in
 
   boot =
     let
-      address = (builtins.head secrets.networking.interfaces.eth0.ipv4.addresses).address;
-      subnet = "255.255.255.192"; ## fixme
-      defaultGateway = secrets.networking.defaultGateway;
+      subnet = "255.255.255.192"; ## /26
     in
     {
 
@@ -85,7 +162,7 @@ in
       loader.grub.devices = [ "/dev/nvme0n1" "/dev/nvme1n1" ];
       loader.grub.enableCryptodisk = true;
       kernelParams = [
-        "ip=${address}::${defaultGateway}:${subnet}:${hostName}:eth0:none"
+        "ip=${externalIP}::${defaultGateway}:${subnet}:${hostName}:eth0:none"
       ];
 
       kernelModules = [ "kvm-amd" ];
@@ -106,8 +183,10 @@ in
             "/etc/nixos/initrd_keys/dsa_key"
             "/etc/nixos/initrd_keys/rsa_key"
             "/etc/nixos/initrd_keys/ed25519_key"
+            #config.sops.secrets.initrd-dsa-key.path
+            #config.sops.secrets.initrd-rsa-key.path
+            #config.sops.secrets.initrd-ed25519-key.path
           ];
-          authorizedKeys = secrets.users.extraUsers."${userName}".openssh.authorizedKeys.keys;
         };
         postCommands = ''
           echo 'cryptsetup-askpass' >> /root/.profile
@@ -144,7 +223,30 @@ in
   users.defaultUserShell = pkgs.fish;
   users.mutableUsers = false;
   users.groups."${userName}".gid = 1337;
-  users.extraUsers."${userName}" = { shell = pkgs.fish; };
+  users.users = {
+    root = {
+      passwordFile = config.sops.secrets.rootPassword.path;
+      openssh.authorizedKeys.keys = [
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ== cardno:000607539231"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBTU5dDn7gokexQFPxH2tHWGh7MAEZ1aQ+cJdFgHFGxk john@insane.se"
+      ];
+    };
+    ${userName} = {
+      isNormalUser = true;
+      uid = 1337;
+      shell = pkgs.fish;
+      passwordFile = config.sops.secrets.userPassword.path;
+      extraGroups = [
+        "wheel"
+        "docker"
+        "video"
+        "audio"
+      ];
+      openssh.authorizedKeys.keys = [
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ== cardno:000607539231"
+      ];
+    };
+  };
 
   fileSystems."/" = {
     device = "none";
