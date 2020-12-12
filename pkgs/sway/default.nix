@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     "-Dgdk-pixbuf=enabled"
     "-Dtray=enabled"
     "-Dman-pages=enabled"
+    "-Dsd-bus-provider=libsystemd"
   ];
 
   enableParallelBuilding = true;
