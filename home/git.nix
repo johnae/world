@@ -14,7 +14,7 @@
       signByDefault = true;
     };
     extraConfig = {
-      core.editor = "${pkgs.my-emacs}/bin/emacsclient -t -a=";
+      core.editor = "${pkgs.my-emacs}/bin/emacsclient -c";
       push.default = "upstream";
       pull.rebase = true;
       rebase.autoStash = true;
