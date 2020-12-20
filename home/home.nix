@@ -79,7 +79,7 @@ in
     ];
 
   home.sessionVariables = rec {
-    EDITOR = "emacsclient -t -a=";
+    EDITOR = "emacsclient -c -n -a=";
     VISUAL = EDITOR;
     KUBECONFIG = "/home/${home.username}/.kube/config";
   };

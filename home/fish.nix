@@ -81,6 +81,10 @@ let
     { "sway drm debug" = "${drmDebugLaunch}/bin/drm-debug-launch"; }
   ];
 
+  emacs_no_server = "emacs -nw";
+  emacsclient = "emacsclient -c -n -a=";
+  emacsclient_tui = "emacsclient -t -a=";
+
 in
 {
 
@@ -94,9 +98,9 @@ in
     shellAbbrs = {
       cat = "bat";
       g = "git";
-      et = "emacsclient -t -a=";
-      e = "emacsclient -c -n -a=";
-      em = "emacs -nw";
+      et = emacsclient_tui;
+      e = emacsclient;
+      em = emacs_no_server;
     };
     shellAliases = {
       k8s-run = "${pkgs.kubectl}/bin/kubectl run tmp-shell --generator=run-pod/v1 --rm -i --tty --image=nixpkgs/nix-unstable --restart=Never --attach -- nix-shell -p bashInteractive --run bash";
@@ -122,7 +126,7 @@ in
               cd $dir
               set -lx file (${pkgs.fd}/bin/fd -H -E "\.git" . | "${pkgs.skim}"/bin/sk --color=bw)
               if [ "$file" != "" ]
-                emacsclient -t -a= "$file"
+                ${emacsclient} "$file"
               end
             end
           end
@@ -139,7 +143,7 @@ in
             set -lx SK_OPTS "--color=bw --no-hscroll --height=40"
             set -lx file (${pkgs.fd}/bin/fd -H -E "\.git" . | "${pkgs.skim}"/bin/sk)
             if [ "$file" != "" ]
-              emacsclient -t -a= "$file"
+              ${emacsclient} "$file"
             end
           end
           commandline -f repaint
