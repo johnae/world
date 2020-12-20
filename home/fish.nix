@@ -81,7 +81,7 @@ let
     { "sway drm debug" = "${drmDebugLaunch}/bin/drm-debug-launch"; }
   ];
 
-  emacs_no_server = "emacs -nw";
+  emacs_tui_no_server = "emacs -nw";
   emacsclient = "emacsclient -c -n -a=";
   emacsclient_tui = "emacsclient -t -a=";
 
@@ -100,7 +100,7 @@ in
       g = "git";
       et = emacsclient_tui;
       e = emacsclient;
-      em = emacs_no_server;
+      em = emacs_tui_no_server;
     };
     shellAliases = {
       k8s-run = "${pkgs.kubectl}/bin/kubectl run tmp-shell --generator=run-pod/v1 --rm -i --tty --image=nixpkgs/nix-unstable --restart=Never --attach -- nix-shell -p bashInteractive --run bash";
