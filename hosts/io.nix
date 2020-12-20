@@ -147,6 +147,7 @@ with lib; {
           "/home/${userName}/.mozilla/firefox/default"
           "/home/${userName}/.gnupg"
           "/home/${userName}/.config/gcloud"
+          "/home/${userName}/.emacs.d"
         ];
         files = [
           "/home/${userName}/.kube/config"
