@@ -30,7 +30,8 @@ in
 emacsWithPackagesFromUsePackage {
   alwaysEnsure = true;
   config = builtins.readFile config.emacsConfig;
-  package = pkgs.emacsGit-nox.overrideAttrs
+  package = pkgs.emacsPgtkGcc.overrideAttrs
+    #package = pkgs.emacsGit-nox.overrideAttrs
     (oa: {
       nativeBuildInputs = oa.nativeBuildInputs ++ [ makeWrapper ];
       postInstall = ''

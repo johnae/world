@@ -1150,8 +1150,9 @@ This means:
 
 
 ;; This is a nice font :-).
-(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 18"))
-(set-face-attribute 'default t :font "JetBrainsMono Nerd Font 18")
+(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 14"))
+(set-face-attribute 'default t :font "JetBrainsMono Nerd Font 14")
+(set-frame-font "JetBrainsMono Nerd Font 14" nil t)
 
 
 ;; Did I mention I like utf8? I like utf8.
