@@ -1067,6 +1067,12 @@ This means:
   (powerline-center-evil-theme)
 )
 
+(use-package airline-themes
+  :ensure t
+  :config
+  (load-theme 'airline-base16_nord t)
+)
+
 (use-package nord-theme)
 
 ;; Define the overall theme somewhere for reuse.
@@ -1085,14 +1091,12 @@ This means:
                            (unless my:theme-window-loaded
                              (if my:theme-terminal-loaded
                                  (enable-theme my:theme)
-                               (load-theme my:theme t)
-                               (my-telephone-line-theme))
+                               (load-theme my:theme t))
                              (setq my:theme-window-loaded t))
                          (unless my:theme-terminal-loaded
                            (if my:theme-window-loaded
                                (enable-theme my:theme)
-                             (load-theme my:theme t)
-                             (my-telephone-line-theme))
+                             (load-theme my:theme t))
                            (setq my:theme-terminal-loaded t)))))
 
   (progn
