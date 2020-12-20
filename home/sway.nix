@@ -253,7 +253,7 @@ in
 
         "${modifier}+b" = ''exec ${swayBackground}/bin/sway-background'';
 
-        "${modifier}+Shift+e" = ''exec ${pkgs.alacritty}/bin/alacritty -t edit -e emacsclient -t -a='';
+        "${modifier}+Shift+e" = ''exec ${pkgs.my-emacs}/bin/emacsclient -c -n -a='';
 
         "${modifier}+Shift+v" = ''splith'';
 

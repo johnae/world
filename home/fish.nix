@@ -94,7 +94,8 @@ in
     shellAbbrs = {
       cat = "bat";
       g = "git";
-      e = "emacsclient -t -a=";
+      et = "emacsclient -t -a=";
+      e = "emacsclient -c -n -a=";
       em = "emacs -nw";
     };
     shellAliases = {
