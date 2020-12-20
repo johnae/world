@@ -162,6 +162,7 @@ in
   fileSystems."/keep" = {
     device = "/dev/disk/by-label/root";
     fsType = "btrfs";
+    neededForBoot = true;
     options =
       [ "subvol=@keep" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
   };
