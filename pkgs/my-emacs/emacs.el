@@ -1061,20 +1061,11 @@ This means:
     (concat "gpg --decrypt "
             "~/.local/share/password-store/" storepath ".gpg 2>/dev/null"))))
 
-;; Define a function to set the telephone line theme. This is so that when using emacsclient we
-;; can just call this rather than duplicate code. So we need to be able to set the theme more
-;; than once depending on whether we use the emacsclient or not.
-(defun my-telephone-line-theme ()
-  "Enables the current telephone line theme."
-  (setq telephone-line-primary-right-separator 'telephone-line-abs-left
-      telephone-line-secondary-right-separator 'telephone-line-abs-hollow-left)
-  (setq telephone-line-height 24
-      telephone-line-evil-use-short-tag t)
-  (telephone-line-mode 1))
-
-(use-package telephone-line
+(use-package powerline
+  :ensure t
   :config
-  (my-telephone-line-theme))
+  (powerline-center-evil-theme)
+)
 
 (use-package nord-theme)
 
