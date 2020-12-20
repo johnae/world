@@ -161,6 +161,7 @@
 (use-package evil
   :config
   (evil-mode 1)
+  (evil-set-undo-system 'undo-tree)
   (define-key evil-normal-state-map (kbd ", <right>") 'split-window-horizontally)
   (define-key evil-normal-state-map (kbd ", <SPC>") 'ivy-switch-buffer)
   (define-key evil-normal-state-map (kbd ", p") 'counsel-projectile-find-file)
