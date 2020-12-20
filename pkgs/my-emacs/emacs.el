@@ -1150,11 +1150,7 @@ This means:
 
 
 ;; This is a nice font :-).
-(set-face-attribute 'default t :font "JetBrainsMono Nerd Font 14")
-(set-frame-font "JetBrainsMono Nerd Font 14" nil t)
-(setq default-frame-alist '((font . "JetBrainsMono Nerd Font 14")))
-(add-hook 'server-after-make-frame-hook(lambda (frame)
-  (setq default-frame-alist '((font . "JetBrainsMono Nerd Font 14")))))
+(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 14"))
 
 ;; Did I mention I like utf8? I like utf8.
 (setq locale-coding-system 'utf-8)
