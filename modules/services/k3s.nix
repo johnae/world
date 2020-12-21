@@ -62,33 +62,22 @@ in
       '';
     };
 
+    token = mkOption {
+      type = types.str;
+      example = "iasjfasr9i239jawf";
+      default = "";
+      description = ''
+        The shared cluster secret enabling agents to join the master.
+        Either use this or the token-file attr.
+      '';
+    };
+
     tokenFile = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
       example = "/var/secrets/k3s-token";
       description = ''
-        The shared cluster secret enabling agents to talk to join the master.
-        This also doubles as the secret for connecting multiple masters together.
-      '';
-    };
-
-    ## this doesn't work yet
-    clusterInit = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether this host should initialize HA clustering.
-        It needs to be initialized first if that's the case.
-      '';
-    };
-
-    ## this doesn't work yet
-    clusterUrl = mkOption {
-      type = types.nullOr (types.strMatching "https://[0-9a-zA-Z.]+.*");
-      example = "https://1.2.3.4:6332";
-      default = null;
-      description = ''
-        The url to the first server node initialized. By specifying this, this
-        node will join the HA cluster as a "server".
+        The shared cluster secret enabling agents to join the master.
+        Either use this or the token attr.
       '';
     };
 
@@ -130,6 +119,12 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.token-file -> !(cfg.token == "");
+        message = "You can't use both token-file and token.";
+      }
+    ];
     services.k3s.role = if isAgent then "agent" else "server";
     services.k3s.serverAddr = if cfg.masterUrl != null then cfg.masterUrl else "";
     services.k3s.token = "dummy-token";
@@ -215,7 +210,8 @@ in
                     ++ (optional cfg.docker "--docker")
                     ++ (optional cfg.disableAgent "--disable-agent")
                     ++ (optional (cfg.role == "agent") "--server ${cfg.serverAddr}")
-                    ++ [ "--token-file ${cfg.tokenFile}" ]
+                    ++ (optional (cfg.token != "") "--token ${cfg.token}")
+                    ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
                     ++ [ cfg.extraFlags ]
                   )
               )
