@@ -3726,6 +3726,11 @@ spec:
               value: "true"
             - name: FELIX_IGNORELOOSERPF
               value: "true"
+            ## default is 0xffff0000 but that conflicts
+            ## with tailscales use of 0xC0000 - should be
+            ## fine as we're not using ipvs
+            - name: FELIX_IPTABLESMARKMASK
+              value: "0xff000000"
           securityContext:
             privileged: true
           resources:
