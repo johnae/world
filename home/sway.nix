@@ -281,6 +281,9 @@ in
           command = "echo UPDATESTARTUPTTY | ${pkgs.gnupg}/bin/gpg-connect-agent";
         }
         {
+          command = "${pkgs.gnupg}/bin/gpg --card-status > /dev/null";
+        }
+        {
           command = "${pkgs.gnome3.gnome_settings_daemon}/libexec/gsd-xsettings";
         }
         {
