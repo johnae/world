@@ -16,9 +16,8 @@ in
     extraHosts = "127.0.1.1 ${hostName}";
   };
 
-  services.myk3s = {
+  services.k3s = {
     extraManifests = [ ../files/k3s/calico.ts.yaml ];
-    extraFlags = [ "--disable-network-policy" ];
   };
 
   users.defaultUserShell = pkgs.fish;

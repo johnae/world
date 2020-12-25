@@ -62,19 +62,10 @@ in
       '';
     };
 
-    token = mkOption {
-      type = types.str;
-      example = "iasjfasr9i239jawf";
-      default = "";
-      description = ''
-        The shared cluster secret enabling agents to join the master.
-        Either use this or the token-file attr.
-      '';
-    };
-
     tokenFile = mkOption {
       type = types.nullOr types.path;
       example = "/var/secrets/k3s-token";
+      default = null;
       description = ''
         The shared cluster secret enabling agents to join the master.
         Either use this or the token attr.
@@ -121,13 +112,12 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.token-file -> !(cfg.token == "");
-        message = "You can't use both token-file and token.";
+        assertion = (cfg.tokenFile != null) -> !(cfg.token == "");
+        message = "You can't use both tokenFile and token.";
       }
     ];
     services.k3s.role = if isAgent then "agent" else "server";
     services.k3s.serverAddr = if cfg.masterUrl != null then cfg.masterUrl else "";
-    services.k3s.token = "dummy-token";
     services.k3s.extraFlags =
       let
         cniBinDir = if cfg.cniPackage != null then "${cfg.cniPackage}/bin" else "${cfg.k3sDir}/opt/cni/bin";
@@ -157,8 +147,7 @@ in
             (lib.concatStringsSep " "
               (map (v: "--node-label ${v}") (cfg.labels ++ (optional (cfg.nodeName != null) "hostname=${cfg.nodeName}")))
             )
-          ]
-          ++ (optional (cfg.clusterUrl != null) "--server=${cfg.clusterUrl}") ++ [ " " ]);
+          ]);
 
     systemd.services.k3s = {
 
@@ -166,13 +155,6 @@ in
 
       preStart = ''
         ${lib.optionalString (cfg.nodeName != null) k3sNodeNameGen}
-        ${if cfg.clusterInit then
-          (lib.concatStringsSep " " [
-           ''${k3s.package}/bin/k3s server''
-           (lib.optionalString (cfg.nodeName != null) ''--node-name "$(cat /etc/k3s-node-name)"'')
-           ''-d ${cfg.k3sDir}/data --cluster-init --token-file ${cfg.tokenFile}''
-          ])
-          else ""}
       '';
 
       postStart = (
