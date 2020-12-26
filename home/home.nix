@@ -74,7 +74,6 @@ in
       pkgs.netns-dbus-proxy
       pkgs.spook
       pkgs.gnome3.nautilus
-      pkgs.chromium
       pkgs.cachix
     ];
 
@@ -154,18 +153,7 @@ in
 
   programs.direnv = {
     enable = true;
-    ## use lorri if available
-    stdlib = ''
-      eval "`declare -f use_nix | sed '1s/.*/_&/'`"
-      use_nix() {
-        if type lorri &>/dev/null; then
-          echo "direnv: using lorri from PATH ($(type -p lorri))"
-          eval "$(lorri direnv)"
-        else
-          _use_nix
-        fi
-      }
-    '';
+    enableNixDirenvIntegration = true;
   };
 
   programs.password-store.enable = true;
@@ -185,16 +173,6 @@ in
     };
     Install.WantedBy = [ "timers.target" ];
   };
-
-  services.lorri.enable = true;
-  systemd.user.services.lorri.Service.Environment = lib.mkForce
-    (
-      let
-        path =
-          lib.makeSearchPath "bin" [ pkgs.nixUnstable pkgs.gitMinimal pkgs.gnutar pkgs.gzip ];
-      in
-      [ "PATH=${path}" ]
-    );
 
   services.syncthing.enable = true;
 
