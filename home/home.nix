@@ -52,17 +52,11 @@ in
       pkgs.initialize-user
       pkgs.nix-index
       pkgs.git-crypt
-      #spotify-cmd
-      #spotify-play-album
-      #spotify-play-track
-      #spotify-play-artist
-      #spotify-play-playlist
       pkgs.wl-clipboard
       pkgs.wl-clipboard-x11
       pkgs.wf-recorder
       pkgs.nordic
       pkgs.nordic-polar
-      pkgs.wayvnc
       pkgs.nixpkgs-fmt
       pkgs.google-cloud-sdk
       pkgs.kubectl
@@ -158,7 +152,6 @@ in
 
   programs.password-store.enable = true;
   programs.skim.enable = true;
-
 
   systemd.user.services.nix-index = {
     Unit.Description = "Nix-index indexes all files in nixpkgs etc";

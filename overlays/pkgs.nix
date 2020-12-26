@@ -39,10 +39,6 @@ final: prev:
   argocd = prev.callPackage ../pkgs/argocd { };
   argocd-ui = prev.callPackage ../pkgs/argocd-ui { };
 
-  wayvnc = prev.callPackage ../pkgs/wayvnc { };
-  aml = prev.callPackage ../pkgs/aml { };
-  neatvnc = prev.callPackage ../pkgs/neatvnc { };
-
   persway = prev.callPackage ../pkgs/persway { };
 
   nixpkgs-fmt = prev.callPackage ../pkgs/nixpkgs-fmt { };

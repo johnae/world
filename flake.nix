@@ -1,6 +1,7 @@
 {
   description = "A flake for building the world";
   inputs = {
+    nur.url = "github:nix-community/NUR";
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -54,7 +55,6 @@
     nixos-hardware = { url = "github:nixos/nixos-hardware"; flake = false; };
     nixpkgs-fmt = { url = "github:nix-community/nixpkgs-fmt"; flake = false; };
     netns-exec = { url = "github:johnae/netns-exec"; flake = false; };
-    aml = { url = "github:any1/aml"; flake = false; };
     argo-cd = { url = "github:argoproj/argo-cd/v1.7.6"; flake = false; };
     blur = { url = "github:johnae/blur"; flake = false; };
     fire = { url = "github:johnae/fire"; flake = false; };
@@ -62,7 +62,6 @@
     google-cloud-sdk-fish-completion = { url = "github:Doctusoft/google-cloud-sdk-fish-completion"; flake = false; };
     grim = { url = "github:emersion/grim"; flake = false; };
     mako = { url = "github:emersion/mako"; flake = false; };
-    neatvnc = { url = "github:any1/neatvnc"; flake = false; };
     persway = { url = "github:johnae/persway"; flake = false; };
     slurp = { url = "github:emersion/slurp"; flake = false; };
     spotifyd = { url = "github:spotifyd/spotifyd"; flake = false; };
@@ -71,7 +70,6 @@
     swayidle = { url = "github:swaywm/swayidle"; flake = false; };
     swaylock = { url = "github:swaywm/swaylock"; flake = false; };
     wlroots = { url = "github:swaywm/wlroots"; flake = false; };
-    wayvnc = { url = "github:any1/wayvnc"; flake = false; };
     wf-recorder = { url = "github:ammen99/wf-recorder"; flake = false; };
     wl-clipboard = { url = "github:bugaevc/wl-clipboard"; flake = false; };
     xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr"; flake = false; };
@@ -198,6 +196,7 @@
           emacs-overlay = inputs.emacs-overlay.overlay;
           nix-misc = inputs.nix-misc.overlay;
           spook = inputs.spook.overlay;
+          nur = inputs.nur.overlay;
           spotnix = inputs.spotnix.overlay;
           temp-firefox = (final: prev: { temp-firefox = temp-ff-nixpkgs.firefox; });
           ssh-to-pgp =
