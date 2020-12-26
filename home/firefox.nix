@@ -6,7 +6,7 @@
     profiles = {
       default = {
         settings = {
-          "browser.startup.homepage" = "about:home";
+          "browser.startup.homepage" = "https://duckduckgo.com";
           "browser.search.region" = "SE";
           "browser.search.isUS" = false;
           "distribution.searchplugins.defaultLocale" = "sv-SE";
@@ -19,6 +19,9 @@
 
         userChrome = ''
           #TabsToolbar {
+          visibility: collapse;
+          }
+          #nav-bar {
           visibility: collapse;
           }
         '';
