@@ -181,6 +181,7 @@
   (define-key evil-normal-state-map (kbd ", F") 'forward-page)
   (define-key evil-normal-state-map (kbd ", +") 'enlarge-window)
   (define-key evil-normal-state-map (kbd ", -") 'shrink-window)
+  (define-key evil-normal-state-map (kbd ", w") 'evil-avy-goto-subword-1)
   (define-key evil-normal-state-map (kbd ", <RET>") 'projectile-ag))
 
 
@@ -234,17 +235,6 @@
   :config
   (add-hook 'markdown-mode-hook 'poly-markdown-mode)
 )
-
-
-;; Avy is kind of like vim motion. It lets you jump to certain text using a
-;; character based decision tree.
-;; See: [[https://github.com/abo-abo/avy][https://github.com/abo-abo/avy]]
-
-(use-package avy
-  :config
-  (global-set-key (kbd "C-c ¨") 'avy-goto-char)
-)
-
 
 ;; Which key will show (in a popup) any possible continuations of a currently entered incomplete command.
 ;; See: [[https://github.com/justbur/emacs-which-key][https://github.com/justbur/emacs-which-key]]
