@@ -37,7 +37,6 @@ in
       pkgs.my-emacs
       pkgs.mu
       pkgs.bat
-      pkgs.mail
       pkgs.alacritty
       pkgs.project-select
       pkgs.launch

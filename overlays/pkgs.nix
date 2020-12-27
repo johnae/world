@@ -58,10 +58,9 @@ final: prev:
   initialize-user = prev.callPackage ../pkgs/initialize-user { };
 
   inherit (prev.callPackage ../pkgs/scripts { })
-    mail project-select launch git-credential-pass sk-sk
-    sk-run sk-window sk-passmenu browse-chromium
-    screenshot random-name add-wifi-network update-wifi-networks
+    project-select launch git-credential-pass sk-sk
+    sk-run sk-window sk-passmenu add-wifi-network update-wifi-networks
     update-wireguard-keys spotify-play-album spotify-play-track spotify-cmd
-    spotify-play-artist spotify-play-playlist btrfs-diff
+    spotify-play-artist spotify-play-playlist
     ;
 }
