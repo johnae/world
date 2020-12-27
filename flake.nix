@@ -46,11 +46,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    ## these have a firefox with screen sharing still working - will be fixed upstream (eg. mozilla) at some point soon(tm)
-    temp-ff-nixpkgs = {
-      url = "github:nixos/nixpkgs/2deeb58f49480f468adca6b08291322de4dbce6b";
-    };
-
     ## non flakes
     nixos-hardware = { url = "github:nixos/nixos-hardware"; flake = false; };
     nixpkgs-fmt = { url = "github:nix-community/nixpkgs-fmt"; flake = false; };
@@ -104,10 +99,6 @@
         }));
 
       pkgs = nixpkgsFor.${system};
-      temp-ff-nixpkgs = import inputs.temp-ff-nixpkgs {
-        localSystem = { inherit system; };
-        config.allowUnfree = true;
-      };
 
       maybeTest = n:
         let test = builtins.match "(.*)-(test)$" n; # a match == [ "hostname" "test" ];
@@ -198,7 +189,6 @@
           spook = inputs.spook.overlay;
           nur = inputs.nur.overlay;
           spotnix = inputs.spotnix.overlay;
-          temp-firefox = (final: prev: { temp-firefox = temp-ff-nixpkgs.firefox; });
           ssh-to-pgp =
             (final: prev:
               {
