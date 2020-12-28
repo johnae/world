@@ -3,6 +3,10 @@ let
   post-new-notmuch = pkgs.writeStrictShellScript "post-new-notmuch" ''
     maildir="${config.accounts.email.maildirBasePath}";
 
+    for msg in $(notmuch search --output=messages tag:spam); do
+        notmuch tag -inbox -new +spam +deleted -- "$msg"
+    done
+
     for msg in $(notmuch search --output=messages tag:new); do
 
       if list="$(notmuch show --format=raw "$msg" 2>/dev/null | grep -E '^List-ID:\s.+')"; then
