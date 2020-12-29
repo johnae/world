@@ -9,7 +9,8 @@ let
 
     for msg in $(notmuch search --output=messages tag:new); do
 
-      if list="$(notmuch show --format=raw "$msg" 2>/dev/null | grep -E '^List-ID:\s.+')"; then
+      if list="$(notmuch show --format=raw "$msg" 2>/dev/null | grep -iE '^List-ID:\s.+')"; then
+        list="''${list//\"}"
         read -r -a parts <<< "''${list//[<>]/}"
         notmuch tag -inbox -new +list/"''${parts[1]}" +thefeed -- "$msg"
       fi
