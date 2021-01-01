@@ -39,8 +39,6 @@ final: prev:
   argocd = prev.callPackage ../pkgs/argocd { };
   argocd-ui = prev.callPackage ../pkgs/argocd-ui { };
 
-  persway = prev.callPackage ../pkgs/persway { };
-
   nixpkgs-fmt = prev.callPackage ../pkgs/nixpkgs-fmt { };
   netns-dbus-proxy = prev.callPackage ../pkgs/netns-dbus-proxy { };
   netns-exec = prev.callPackage ../pkgs/netns-exec { };

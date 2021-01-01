@@ -46,6 +46,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    persway = {
+      url = "github:johnae/persway";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     ## non flakes
     nixos-hardware = { url = "github:nixos/nixos-hardware"; flake = false; };
     nixpkgs-fmt = { url = "github:nix-community/nixpkgs-fmt"; flake = false; };
@@ -57,7 +62,6 @@
     google-cloud-sdk-fish-completion = { url = "github:Doctusoft/google-cloud-sdk-fish-completion"; flake = false; };
     grim = { url = "github:emersion/grim"; flake = false; };
     mako = { url = "github:emersion/mako"; flake = false; };
-    persway = { url = "github:johnae/persway"; flake = false; };
     slurp = { url = "github:emersion/slurp"; flake = false; };
     spotifyd = { url = "github:spotifyd/spotifyd"; flake = false; };
     sway = { url = "github:swaywm/sway"; flake = false; };
@@ -173,6 +177,7 @@
         ) // {
         inherit (pkgs)
           spook
+          persway
           spotnix;
       };
 
@@ -189,6 +194,7 @@
           spook = inputs.spook.overlay;
           nur = inputs.nur.overlay;
           spotnix = inputs.spotnix.overlay;
+          persway = inputs.persway.overlay;
           ssh-to-pgp =
             (final: prev:
               {

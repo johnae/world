@@ -112,6 +112,21 @@
         "type": "github"
       }
     },
+    "flake-utils_2": {
+      "locked": {
+        "lastModified": 1609246779,
+        "narHash": "sha256-eq6ZXE/VWo3EMC65jmIT6H/rrUc9UWOWVujkzav025k=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "08c7ad4a0844adc4a7f9f5bb3beae482e789afa4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "google-cloud-sdk-fish-completion": {
       "flake": false,
       "locked": {
@@ -180,6 +195,22 @@
         "type": "github"
       }
     },
+    "mozilla": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1603906276,
+        "narHash": "sha256-RsNPnEKd7BcogwkqhaV5kI/HuNC4flH/OQCC/4W5y/8=",
+        "owner": "mozilla",
+        "repo": "nixpkgs-mozilla",
+        "rev": "8c007b60731c07dd7a052cce508de3bb1ae849b4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mozilla",
+        "repo": "nixpkgs-mozilla",
+        "type": "github"
+      }
+    },
     "netns-exec": {
       "flake": false,
       "locked": {
@@ -197,6 +228,26 @@
       }
     },
     "nix-misc": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1596783463,
+        "narHash": "sha256-Fucbc/QUYrDBFRo1aau59Qe8feHhru76vaNLWpWQelI=",
+        "owner": "johnae",
+        "repo": "nix-misc",
+        "rev": "0da4fdf62e9273205c8c773101ad36fc67215d87",
+        "type": "github"
+      },
+      "original": {
+        "owner": "johnae",
+        "repo": "nix-misc",
+        "type": "github"
+      }
+    },
+    "nix-misc_2": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
@@ -328,13 +379,20 @@
       }
     },
     "persway": {
-      "flake": false,
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "mozilla": "mozilla",
+        "nix-misc": "nix-misc_2",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1593963198,
-        "narHash": "sha256-G90tB59NQtPrUMX5SUpte2xRXQqXyaFeCr9XC9xz/7A=",
+        "lastModified": 1609518592,
+        "narHash": "sha256-h1hv2ZxJYKcLfcQtJj57C3q0ci/WfUvju4sYH3p57Fs=",
         "owner": "johnae",
         "repo": "persway",
-        "rev": "7076a9b3fad81360502891ba00217d88aca74009",
+        "rev": "4ee887efe81cb77a9c8df22f62246f5713afb6b7",
         "type": "github"
       },
       "original": {
