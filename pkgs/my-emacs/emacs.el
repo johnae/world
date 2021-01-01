@@ -181,7 +181,7 @@
   (define-key evil-normal-state-map (kbd ", F") 'forward-page)
   (define-key evil-normal-state-map (kbd ", +") 'enlarge-window)
   (define-key evil-normal-state-map (kbd ", -") 'shrink-window)
-  (define-key evil-normal-state-map (kbd ", w") 'evil-avy-goto-subword-1)
+  (define-key evil-normal-state-map (kbd ", d") 'evil-avy-goto-subword-1)
   (define-key evil-normal-state-map (kbd ", <RET>") 'projectile-ag))
 
 
