@@ -241,6 +241,7 @@ in
 
         "${modifier}+Control+l" = ''exec ${pkgs.swaylock-dope}/bin/swaylock-dope'';
 
+        "${modifier}+Control+Shift+l" = ''exec ${pkgs.psmisc}/bin/killall -USR1 swayidle'';
 
         "${modifier}+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle open'';
         "${modifier}+Shift+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle none'';
