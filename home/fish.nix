@@ -20,6 +20,7 @@ let
   sway = pkgs.callPackage (pkgs.path + "/pkgs/applications/window-managers/sway/wrapper.nix") {
     extraSessionCommands = ''
       export GDK_BACKEND=wayland
+      export CLUTTER_BACKEND=wayland
       export MOZ_ENABLE_WAYLAND=1
       export MOZ_USE_XINPUT2=1
       export XCURSOR_THEME=default
