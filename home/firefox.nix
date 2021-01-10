@@ -1,8 +1,22 @@
 { pkgs, config, lib, options, ... }:
+let
+  firefox = pkgs.firefox.override {
+    extraNativeMessagingHosts = [ pkgs.tridactyl-native ];
+  };
+in
 {
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox;
+    package = firefox;
+    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+      https-everywhere
+      tridactyl
+      adsum-notabs
+      ublock-origin
+      react-devtools
+      duckduckgo-privacy-essentials
+      privacy-badger
+    ];
     profiles = {
       default = {
         settings = {
