@@ -17,6 +17,7 @@
 , mesa_noglu
 , libglvnd
 , libpng
+, libuuid
 , ffmpeg
 , inputs
 }:
@@ -58,6 +59,7 @@ stdenv.mkDerivation {
     libpng
     ffmpeg
     libglvnd
+    libuuid
   ];
 
   meta = {
