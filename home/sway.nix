@@ -74,7 +74,6 @@ let
     done
   '';
 
-
   swayFocusWindow = pkgs.writeStrictShellScriptBin "sway-focus-window" ''
     export SK_OPTS="--no-bold --color=bw  --height=40 --reverse --no-hscroll --no-mouse"
     window="$(${pkgs.sway}/bin/swaymsg -t get_tree | \
@@ -83,6 +82,15 @@ let
               awk '{print $1}')"
     ${pkgs.sway}/bin/swaymsg "[con_id=$window] focus"
   '';
+
+  swayOnReload = pkgs.writeStrictShellScriptBin "sway-on-reload" ''
+    if grep -q open /proc/acpi/button/lid/LID0/state; then
+        swaymsg output eDP-1 enable
+    else
+        swaymsg output eDP-1 disable
+    fi
+  '';
+
 in
 {
   wayland.windowManager.sway = {
@@ -283,12 +291,17 @@ in
         }
         {
           command = "${pkgs.gnupg}/bin/gpg --card-status > /dev/null";
+          always = true;
         }
         {
           command = "${pkgs.gnome3.gnome_settings_daemon}/libexec/gsd-xsettings";
         }
         {
           command = "${pkgs.dbus_tools}/bin/dbus-update-activation-environment WAYLAND_DISPLAY=$WAYLAND_DISPLAY";
+        }
+        {
+          command = "${swayOnReload}/bin/sway-on-reload";
+          always = true;
         }
       ];
 
@@ -340,6 +353,8 @@ in
     extraConfig = ''
       no_focus [window_role="browser"]
       popup_during_fullscreen smart
+      bindswitch --reload --locked lid:on output eDP-1 disable
+      bindswitch --reload --locked lid:off output eDP-1 enable
     '';
   };
 
