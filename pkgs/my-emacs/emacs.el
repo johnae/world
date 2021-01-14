@@ -174,6 +174,8 @@
   (define-key evil-normal-state-map (kbd "P") 'counsel-yank-pop)
   (define-key evil-normal-state-map (kbd ", <down>") 'split-window-vertically)
   (define-key evil-normal-state-map (kbd ", g") 'magit-status)
+  (define-key evil-normal-state-map (kbd ", h") 'magit-file-dispatch)
+  (define-key evil-normal-state-map (kbd ", j") 'magit-dispatch)
   (define-key evil-normal-state-map (kbd ", w") 'whitespace-cleanup)
   (define-key evil-normal-state-map (kbd ", b") 'previous-buffer)
   (define-key evil-normal-state-map (kbd ", f") 'next-buffer)
