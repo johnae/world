@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
   version = inputs.spotifyd.rev;
 
   src = inputs.spotifyd;
-  cargoSha256 = "sha256-x+fmrvxfBYce8lN5FA/YS00gVRCsOFL5eay1yw61b2U=";
+  cargoSha256 = "sha256-go6YkMnXro5QI3o0OhwiCb/jCVGyK94oZrx2lxevTV0=";
 
   nativeBuildInputs = [ pkgconfig ];
 
