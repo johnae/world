@@ -255,6 +255,8 @@ with lib; {
 
   };
 
+  services.disable-usb-wakeup.enable = lib.mkForce false;
+
   hardware.enableRedistributableFirmware = true;
   hardware.video.hidpi.enable = lib.mkDefault true;
 
