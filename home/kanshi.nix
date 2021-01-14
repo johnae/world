@@ -12,12 +12,19 @@
       }
     ];
     home.outputs = [
+
       {
-        criteria = "Unknown ASUS PB27U 0x0000C167";
+        criteria = "Goldstar Company Ltd LG HDR 4K 0x0000AF76";
         mode = "3840x2160";
         position = "0,0";
-        scale = 1.5;
+        scale = 1.0;
       }
+      #{
+      #  criteria = "Unknown ASUS PB27U 0x0000C167";
+      #  mode = "3840x2160";
+      #  position = "0,0";
+      #  scale = 1.5;
+      #}
       {
         criteria = "Sharp Corporation 0x14CC 0x00000000";
         mode = "3840x2400";
