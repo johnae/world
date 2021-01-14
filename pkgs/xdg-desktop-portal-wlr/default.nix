@@ -36,6 +36,8 @@ stdenv.mkDerivation {
     libdrm
   ];
 
+  mesonFlags = [ "-Dauto_features=auto" ];
+
   meta = {
     inherit (inputs.xdg-desktop-portal-wlr) description homepage;
     license = stdenv.lib.licenses.mit;
