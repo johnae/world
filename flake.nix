@@ -8,7 +8,7 @@
     };
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay.url = "github:nix-community/emacs-overlay"; #"/6e3544b73afea08d1428b159b2a57dc9d1724493";
     tektonix = {
       url = "github:johnae/tektonix";
       inputs.nixpkgs.follows = "nixpkgs";
