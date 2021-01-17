@@ -359,7 +359,7 @@ in
   };
 
   systemd.user.services = {
-    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -a";
+    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -a -o0.8";
     rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
     swayidle = swayservice "Sway Idle Service - lock screen etc" swayidleCommand;
   };
