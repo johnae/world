@@ -55,28 +55,6 @@ with lib; {
     extraHosts = "127.0.1.1 ${hostName}";
   };
 
-  #services.udev.extraRules = ''
-  #  ## turn off powersaving on wifi
-  #  ACTION=="add", SUBSYSTEM=="net", KERNEL=="wl*", RUN+="${pkgs.iw}/bin/iw dev $name set power_save off"
-  #'';
-
-  systemd.services.firewall-private = {
-    inherit (fwsvccfg) wantedBy reloadIfChanged;
-    wants = [ "wireguard-vpn.service" ];
-    unitConfig = {
-      inherit (fwsvccfg.unitConfig) ConditionCapability DefaultDependencies;
-    };
-    path = [ fwcfg.package ];
-    description = fwsvccfg.description + " in netns private";
-    after = fwsvccfg.after ++ [ "wireguard-vpn.service" ];
-    serviceConfig = with fwsvccfg.serviceConfig; {
-      inherit Type RemainAfterExit;
-      ExecStart = "${pkgs.iproute}/bin/ip netns exec private " + (lib.last (lib.splitString "@" ExecStart));
-      ExecReload = "${pkgs.iproute}/bin/ip netns exec private " + (lib.last (lib.splitString "@" ExecReload));
-      ExecStop = "${pkgs.iproute}/bin/ip netns exec private " + (lib.last (lib.splitString "@" ExecStop));
-    };
-  };
-
   system.activationScripts.preStateSetup =
     let
       uid = builtins.toString
@@ -228,13 +206,6 @@ with lib; {
     home.username = userName;
     home.extraConfig.hostname = hostName;
 
-    #wayland.windowManager.sway.config.output = {
-    #  "eDP-1" = {
-    #    scale = "2.0";
-    #    pos = "0 0";
-    #  };
-    #};
-
   };
 
   hardware.cpu.intel.updateMicrocode = lib.mkForce false;
@@ -243,7 +214,7 @@ with lib; {
 
   boot.initrd.availableKernelModules =
     [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [ "kvm-amd" "k10temp" "nct6775" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {

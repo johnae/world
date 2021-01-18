@@ -246,6 +246,7 @@ with lib; {
     home.username = userName;
     home.extraConfig.hostname = hostName;
 
+    home.sessionVariables.WLR_DRM_NO_MODIFIERS = "1";
     wayland.windowManager.sway.config.output = {
       "eDP-1" = {
         scale = "2.0";

@@ -13,13 +13,6 @@ in
     ./defaults.nix
   ];
 
-
-  nix.buildMachines = buildMachines;
-  nix.distributedBuilds = true;
-  nix.extraOptions = ''
-    builders-use-substitutes = true
-  '';
-
   boot.kernel.sysctl = {
     "vm.dirty_writeback_centisecs" = 1500;
     "vm.laptop_mode" = 5;

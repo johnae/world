@@ -19,17 +19,6 @@ let
 
   sway = pkgs.callPackage (pkgs.path + "/pkgs/applications/window-managers/sway/wrapper.nix") {
     extraSessionCommands = ''
-      export GDK_BACKEND=wayland
-      export CLUTTER_BACKEND=wayland
-      export MOZ_ENABLE_WAYLAND=1
-      export MOZ_USE_XINPUT2=1
-      export XCURSOR_THEME=default
-      export QT_STYLE_OVERRIDE=gtk
-      export _JAVA_AWT_WM_NONREPARENTING=1
-      export XDG_CURRENT_DESKTOP=sway
-      export XDG_SESSION_TYPE=wayland
-      export XDG_SESSION_DESKTOP=sway
-      export WLR_DRM_NO_MODIFIERS=1
       if [ ! -e "$HOME"/Pictures/wallpaper.jpg ]; then
         ln "$HOME"/Pictures/default-background.jpg "$HOME"/Pictures/wallpaper.jpg
       fi

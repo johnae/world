@@ -1,5 +1,5 @@
 { stdenv
-, rustPlatform
+, rustPackages_1_45
 , pkgconfig
 , dbus
 , libpulseaudio
@@ -8,7 +8,7 @@
 , inputs
 }:
 
-rustPlatform.buildRustPackage {
+rustPackages_1_45.rustPlatform.buildRustPackage {
   pname = "spotifyd";
   version = inputs.spotifyd.rev;
 
