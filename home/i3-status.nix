@@ -1,7 +1,9 @@
-{ hostName, pkgs, config, lib, options, ... }:
+{ pkgs, config, lib, options, ... }:
 let
 
-  isDesktop = hostName == "eris";
+  home = config.home;
+
+  isDesktop = home.extraConfig.hostname == "eris";
   isLaptop = !isDesktop;
 
   ## add the days ago thingie later

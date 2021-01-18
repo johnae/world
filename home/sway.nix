@@ -102,9 +102,6 @@ in
     XCURSOR_THEME = "default";
     QT_STYLE_OVERRIDE = "gtk";
     _JAVA_AWT_WM_NONREPARENTING = "1";
-    XDG_SESSION_TYPE = "wayland";
-    XDG_CURRENT_DESKTOP = "sway";
-    XDG_SESSION_DESKTOP = "sway";
   };
 
   wayland.windowManager.sway = {
