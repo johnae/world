@@ -78,7 +78,7 @@ let
 in
 {
 
-  home.packages = [ pkgs.fish-foreign-env ];
+  home.packages = [ pkgs.fishPlugins.foreign-env ];
 
   xdg.configFile."fish/functions/gcloud_sdk_argcomplete.fish".source = "${pkgs.inputs.google-cloud-sdk-fish-completion}/functions/gcloud_sdk_argcomplete.fish";
   xdg.configFile."fish/completions/gcloud.fish".source = "${pkgs.inputs.google-cloud-sdk-fish-completion}/completions/gcloud.fish";
