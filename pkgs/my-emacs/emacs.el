@@ -998,20 +998,20 @@ This means:
 (require 'jl-encrypt)
 (setq mml-secure-insert-signature "always")
 
-(use-package tramp
-  :defer 5
-  :config
-  (with-eval-after-load 'tramp-cache
-    (setq tramp-persistency-file-name "~/.emacs.d/tramp"))
-  (setq tramp-default-method "ssh"
-        tramp-default-user-alist '(("\\`su\\(do\\)?\\'" nil "root"))
-        ;;tramp-use-ssh-controlmaster-options nil
-        backup-enable-predicate
-        (lambda (name)
-          (and (normal-backup-enable-predicate name)
-               (not (let ((method (file-remote-p name 'method)))
-                      (when (stringp method)
-                        (member method '("su" "sudo")))))))))
+;;(use-package tramp
+;;  :defer 5
+;;  :config
+;;  (with-eval-after-load 'tramp-cache
+;;    (setq tramp-persistency-file-name "~/.emacs.d/tramp"))
+;;  (setq tramp-default-method "ssh"
+;;        tramp-default-user-alist '(("\\`su\\(do\\)?\\'" nil "root"))
+;;        ;;tramp-use-ssh-controlmaster-options nil
+;;        backup-enable-predicate
+;;        (lambda (name)
+;;          (and (normal-backup-enable-predicate name)
+;;               (not (let ((method (file-remote-p name 'method)))
+;;                      (when (stringp method)
+;;                        (member method '("su" "sudo")))))))))
 
 ;; Allows memoization of expensive functions.
 (use-package memoize)
