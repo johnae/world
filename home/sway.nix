@@ -93,6 +93,20 @@ let
 
 in
 {
+
+  home.sessionVariables = {
+    GDK_BACKEND = "wayland";
+    CLUTTER_BACKEND = "wayland";
+    MOZ_ENABLE_WAYLAND = "1";
+    MOZ_USE_XINPUT2 = "1";
+    XCURSOR_THEME = "default";
+    QT_STYLE_OVERRIDE = "gtk";
+    _JAVA_AWT_WM_NONREPARENTING = "1";
+    XDG_SESSION_TYPE = "wayland";
+    XDG_CURRENT_DESKTOP = "sway";
+    XDG_SESSION_DESKTOP = "sway";
+  };
+
   wayland.windowManager.sway = {
     enable = true;
     systemdIntegration = true;
@@ -359,7 +373,7 @@ in
   };
 
   systemd.user.services = {
-    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -a";
+    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -a -o0.8";
     rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
     swayidle = swayservice "Sway Idle Service - lock screen etc" swayidleCommand;
   };

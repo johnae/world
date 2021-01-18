@@ -1,5 +1,8 @@
-{ pkgs, config, lib, options, ... }:
+{ hostName, pkgs, config, lib, options, ... }:
 let
+
+  isDesktop = hostName == "eris";
+  isLaptop = !isDesktop;
 
   ## add the days ago thingie later
   githubGQLCheck = owner: repo: branch: pkgs.writeStrictShellScriptBin "check" ''
@@ -94,6 +97,22 @@ in
         interval = 60;
         command = "${wifiStatus}/bin/wifi-status";
       }
+    ] ++
+
+    (if isDesktop then
+      [{
+        block = "temperature";
+        collapsed = false;
+        interval = 10;
+        format = "{average}° avg";
+        #chip = "*-isa-*";
+        inputs = [ "Tdie" ];
+      }]
+    else
+      [ ]
+    )
+    ++
+    [
 
       ## ssid/signal_strength won't work
       ## when in private mode (eg. only wireguard
@@ -113,15 +132,24 @@ in
         interval = 1;
       }
 
-      {
-        block = "backlight";
-      }
+    ]
+    ++
+    (if isLaptop then
+      [
+        {
+          block = "backlight";
+        }
 
-      {
-        block = "battery";
-        interval = 30;
-        format = "{percentage}% {time}";
-      }
+        {
+          block = "battery";
+          interval = 30;
+          format = "{percentage}% {time}";
+        }
+
+      ]
+    else [ ]
+    )
+    ++ [
 
       {
         block = "sound";

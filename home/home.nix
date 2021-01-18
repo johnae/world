@@ -14,9 +14,6 @@ let
 
 in
 {
-  #nixpkgs.config = import ../nix/nixpkgs-config.nix;
-  #nixpkgs.overlays = import ../nix/overlays/overlays.nix { };
-
   imports = (
     importsFrom ../hm-modules
   ) ++ (
@@ -68,11 +65,12 @@ in
       pkgs.spook
       pkgs.gnome3.nautilus
       pkgs.cachix
+      pkgs.lm_sensors
     ];
 
-  home.sessionVariables = rec {
+  home.sessionVariables = {
     EDITOR = "emacsclient -c -a=";
-    VISUAL = EDITOR;
+    VISUAL = "emacsclient -c -a=";
     KUBECONFIG = "/home/${home.username}/.kube/config";
   };
 
@@ -82,12 +80,6 @@ in
   };
 
   xdg.enable = true;
-
-  #xdg.configFile."nixpkgs/config.nix".source = ../nix/nixpkgs-config.nix;
-  #xdg.configFile."nix/nix.conf".source = pkgs.writeText "nix.conf" ''
-  #  substituters = ${lib.concatStringsSep " " config.nixpkgs.config.nix.binaryCaches}
-  #  trusted-public-keys = ${lib.concatStringsSep " " config.nixpkgs.config.nix.binaryCachePublicKeys}
-  #'';
 
   home.file.".emacs".source =
     (pkgs.callPackage ../pkgs/my-emacs/config.nix { }).emacsConfig;
