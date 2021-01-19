@@ -59,7 +59,7 @@ let
   '';
 
   swayBackground = pkgs.writeStrictShellScriptBin "sway-background" ''
-    category=''${1:-art,abstract,space}
+    category=''${1:-nature,abstract,space}
     BG=$(${randomPicsumBackground}/bin/random-picsum-background "$category")
     exec swaymsg "output * bg '$BG' fill"
   '';
