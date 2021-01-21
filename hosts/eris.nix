@@ -94,11 +94,14 @@ with lib; {
           "/home/${userName}/Development"
           "/home/${userName}/Photos"
           "/home/${userName}/Pictures"
+          "/home/${userName}/Games"
           "/home/${userName}/Sync"
           "/home/${userName}/.local/share/direnv"
           "/home/${userName}/.local/share/password-store"
           "/home/${userName}/.local/share/fish"
           "/home/${userName}/.local/share/containers"
+          "/home/${userName}/.local/share/Steam"
+          "/home/${userName}/.local/share/vulkan"
           "/home/${userName}/.mail"
           "/home/${userName}/.cargo"
           "/home/${userName}/.cache/mu"
@@ -196,6 +199,7 @@ with lib; {
 
   programs.sway.enable = true;
   programs.ssh.extraConfig = sshExtraConfig;
+  programs.steam.enable = true;
 
   home-manager.useUserPackages = true;
   home-manager.users."${userName}" = { ... }: {
@@ -220,7 +224,7 @@ with lib; {
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
-    options = [ "defaults" "size=2G" "mode=755" ];
+    options = [ "defaults" "size=8G" "mode=755" ];
   };
 
   fileSystems."/nix" = {
