@@ -29,6 +29,9 @@ in
           "browser.tabs.opentabfor.middleclick" = false;
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
           "media.peerconnection.enabled" = true;
+          "gfx.webrender.all" = true;
+          "media.ffmpeg.vaapi.enabled" = true;
+          "media.ffvpx.enabled" = true;
         };
 
         userChrome = ''
