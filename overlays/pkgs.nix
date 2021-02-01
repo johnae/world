@@ -36,9 +36,6 @@ final: prev:
   wl-clipboard = prev.callPackage ../pkgs/wl-clipboard { };
   wl-clipboard-x11 = prev.callPackage ../pkgs/wl-clipboard-x11 { };
 
-  argocd = prev.callPackage ../pkgs/argocd { };
-  argocd-ui = prev.callPackage ../pkgs/argocd-ui { };
-
   nixpkgs-fmt = prev.callPackage ../pkgs/nixpkgs-fmt { };
   netns-dbus-proxy = prev.callPackage ../pkgs/netns-dbus-proxy { };
   netns-exec = prev.callPackage ../pkgs/netns-exec { };

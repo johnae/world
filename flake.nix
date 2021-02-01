@@ -55,7 +55,6 @@
     nixos-hardware = { url = "github:nixos/nixos-hardware"; flake = false; };
     nixpkgs-fmt = { url = "github:nix-community/nixpkgs-fmt"; flake = false; };
     netns-exec = { url = "github:johnae/netns-exec"; flake = false; };
-    argo-cd = { url = "github:argoproj/argo-cd/v1.7.6"; flake = false; };
     blur = { url = "github:johnae/blur"; flake = false; };
     fire = { url = "github:johnae/fire"; flake = false; };
     fish-kubectl-completions = { url = "github:evanlucas/fish-kubectl-completions"; flake = false; };
