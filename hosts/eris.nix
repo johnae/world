@@ -249,7 +249,8 @@ with lib; {
 
   swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
 
-  nix.maxJobs = lib.mkDefault 32;
+  nix.maxJobs = lib.mkDefault 8;
+  nix.buildCores = lib.mkDefault 32;
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
   boot.initrd.luks.devices = {
     cryptkey = { device = "/dev/disk/by-label/cryptkey"; };
