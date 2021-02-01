@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , meson
 , ninja
@@ -51,7 +52,7 @@ stdenv.mkDerivation {
   meta = {
     description = "notification daemon for Wayland";
     homepage = "https://mako-project.org/";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

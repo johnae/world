@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , meson
 , ninja
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Andri's Main Loop";
     homepage = "https://github.com/any1/aml";
-    license = stdenv.lib.licenses.isc;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
   };
 }

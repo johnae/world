@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, pkgconfig, dbus, libpulseaudio, inputs }:
+{ stdenv, lib, rustPlatform, pkgconfig, dbus, libpulseaudio, inputs }:
 rustPlatform.buildRustPackage {
   pname = inputs.i3status-rust.repo;
   version = inputs.i3status-rust.rev;
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
     description =
       "Very resource-friendly and feature-rich replacement for i3status";
     homepage = "https://github.com/greshake/i3status-rust";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [
       {
         email = "john@insane.se";
@@ -25,6 +25,6 @@ rustPlatform.buildRustPackage {
         name = "John Axel Eriksson";
       }
     ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

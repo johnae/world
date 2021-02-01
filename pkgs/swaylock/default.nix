@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , meson
 , ninja
 , pkgconfig
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
   src = inputs.swaylock;
 
   nativeBuildInputs = [ meson ninja pkgconfig git ]
-    ++ stdenv.lib.optional buildDocs [ scdoc asciidoc libxslt docbook_xsl ];
+    ++ lib.optional buildDocs [ scdoc asciidoc libxslt docbook_xsl ];
   buildInputs = [ wayland wayland-protocols cairo pam gdk_pixbuf libxkbcommon ];
 
   mesonFlags = [ "-Dauto_features=enabled" ];
@@ -34,8 +35,8 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [
       {
         email = "john@insane.se";

@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, inputs }:
+{ stdenv, lib, rustPlatform, inputs }:
 rustPlatform.buildRustPackage rec {
   pname = "blur";
   version = inputs.blur.rev;
@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Blurring etc for sway lock screen";
     homepage = "https://github.com/johnae/blur";
     license = licenses.mit;

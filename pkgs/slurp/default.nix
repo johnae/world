@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , meson
 , ninja
 , pkgconfig
@@ -33,7 +34,7 @@ stdenv.mkDerivation {
 
   meta = {
     inherit (inputs.slurp) description homepage;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchpatch
 , meson
 , ninja
@@ -64,8 +65,8 @@ stdenv.mkDerivation {
 
   meta = {
     inherit (inputs.wlroots) description homepage;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [
       {
         email = "john@insane.se";

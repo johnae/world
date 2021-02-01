@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "2019-04-23";
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Office Code Pro Font (patched Source Code Pro Font)";
     homepage = "https://github.com/johnae/Office-Code-Pro";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [];
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
 }

@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , meson
 , pkg-config
@@ -40,8 +41,8 @@ stdenv.mkDerivation {
       - Interoperability with the Freedesktop.org ecosystem
     '';
     inherit (inputs.neatvnc) homepage;
-    license = stdenv.lib.licenses.isc;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
     maintainers = [
       {
         email = "john@insane.se";

@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , rustPackages_1_45
 , pkgconfig
 , dbus
@@ -24,7 +25,7 @@ rustPackages_1_45.rustPlatform.buildRustPackage {
   cargoBuildFlags = [ "--features pulseaudio_backend" ];
 
   meta = {
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [
       {
         email = "john@insane.se";

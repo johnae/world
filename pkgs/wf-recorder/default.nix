@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , meson
 , ninja
 , pkgconfig
@@ -23,7 +24,7 @@ stdenv.mkDerivation {
   mesonFlags = [ "-Dopencl=disabled" ];
 
   meta = {
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

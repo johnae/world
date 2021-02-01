@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , meson
 , ninja
 , pkgconfig
@@ -72,8 +73,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "i3-compatible tiling Wayland compositor";
     homepage = https://swaywm.org;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [
       {
         email = "john@insane.se";

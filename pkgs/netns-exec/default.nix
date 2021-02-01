@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, inputs }:
+{ stdenv, lib, rustPlatform, inputs }:
 rustPlatform.buildRustPackage {
   pname = "netns-exec";
   version = inputs.netns-exec.rev;
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Execute process within Linux network namespace";
     homepage = "https://github.com/johnae/netns-exec";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
       {
         email = "john@insane.se";

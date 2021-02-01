@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , meson
 , ninja
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
   meta = {
     description = "image grabber for wayland compositors";
     homepage = "https://wayland.emersion.fr/grim/";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv }:
+{ stdenv, lib }:
 let
   metadata = import ./metadata.nix;
 in
@@ -27,6 +27,6 @@ stdenv.mkDerivation {
       An experimental Rust compiler front-end for IDEs
     '';
     homepage = "https://github.com/rust-analyzer/rust-analyzer";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

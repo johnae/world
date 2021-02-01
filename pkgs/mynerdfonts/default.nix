@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchurl
 , lib
 , unzip
@@ -62,8 +63,8 @@ stdenv.mkDerivation {
       Awesome, Devicons, Octicons, and others.
     '';
     homepage = "https://nerdfonts.com/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.doronbehar ];
     hydraPlatforms = [ ]; # 'Output limit exceeded' on Hydra
   };
 }

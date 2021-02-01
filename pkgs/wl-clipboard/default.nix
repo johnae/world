@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , coreutils
 , gnused
 , meson
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

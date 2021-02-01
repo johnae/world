@@ -1,4 +1,4 @@
-{ stdenv }:
+{ stdenv, lib }:
 let
   metadata = import ./metadata.nix;
 in
@@ -23,6 +23,6 @@ stdenv.mkDerivation {
       much simpler to deploy and manage while using less reinputs.
     '';
     homepage = "https://github.com/rancher/k3s";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

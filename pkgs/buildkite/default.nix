@@ -17,7 +17,7 @@ buildGoModule {
 
     # These are runtime dependencies
     wrapProgram $out/bin/buildkite-agent \
-      --prefix PATH : '${stdenv.lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}' \
+      --prefix PATH : '${lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}' \
       --set BUILDKITE_HOOKS_PATH ${./hooks}
   '';
 
@@ -31,7 +31,7 @@ buildGoModule {
       and uploading the job's artifacts.
     '';
     homepage = "https://buildkite.com/docs/agent";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
       {
         email = "john@insane.se";
@@ -39,6 +39,6 @@ buildGoModule {
         name = "John Axel Eriksson";
       }
     ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

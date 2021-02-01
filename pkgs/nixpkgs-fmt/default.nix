@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, inputs }:
+{ stdenv, lib, rustPlatform, inputs }:
 rustPlatform.buildRustPackage {
   pname = "nixpkgs-fmt";
   version = inputs.nixpkgs-fmt.rev;
@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   meta = {
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
       {
         email = "john@insane.se";
