@@ -14,6 +14,7 @@
 , libX11
 , libcap
 , xcbutilimage
+, xcbutilrenderutil
 , xcbutilerrors
 , mesa_noglu
 , libglvnd
@@ -56,6 +57,7 @@ stdenv.mkDerivation {
     libcap
     xcbutilimage
     xcbutilerrors
+    xcbutilrenderutil
     mesa_noglu
     libpng
     ffmpeg
