@@ -1,8 +1,9 @@
 { config, pkgs, lib, ... }:
 
 let
+  chromiumVaapi = pkgs.chromium.override { enableVaapi = true; };
   chromium = pkgs.writeStrictShellScriptBin "chromium" ''
-    ${pkgs.chromium}/bin/chromium -enable-features=UseOzonePlatform -ozone-platform=wayland "$@"
+    ${chromiumVaapi}/bin/chromium -enable-features=UseOzonePlatform -ozone-platform=wayland "$@"
   '';
 in
 {
