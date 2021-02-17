@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  chromiumVaapi = pkgs.chromium.override { enableVaapi = true; };
-  chromium = pkgs.writeStrictShellScriptBin "chromium" ''
-    ${chromiumVaapi}/bin/chromium -enable-features=UseOzonePlatform -ozone-platform=wayland "$@"
-  '';
+  chromium = pkgs.chromium.override {
+    enableVaapi = true;
+    commandLineArgs = "-enable-features=UseOzonePlatform -ozone-platform=wayland";
+  };
 in
 {
   programs.chromium = {
@@ -15,6 +15,14 @@ in
         ## vimium
         id = "dbepggeogbaibhgnhhndojpepiihcmeb";
       }
+      {
+        ## stadia plus
+        id = "bbhmnnecicphphjamhdefpagipoegijd";
+      }
+      #{
+      #  ## stadia enhanced
+      #  id = "ldeakaihfnkjmelifgmbmjlphdfncbfg";
+      #}
     ];
   };
 }
