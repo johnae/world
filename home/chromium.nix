@@ -19,10 +19,6 @@ in
         ## stadia plus
         id = "bbhmnnecicphphjamhdefpagipoegijd";
       }
-      #{
-      #  ## stadia enhanced
-      #  id = "ldeakaihfnkjmelifgmbmjlphdfncbfg";
-      #}
     ];
   };
 }
