@@ -15,6 +15,7 @@
 , cairo
 , libinput
 , libcap
+, libdrm
 , pam
 , gdk_pixbuf
 , libevdev
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     libevdev
     scdoc
     librsvg
+    libdrm
   ];
 
   postPatch = ''
