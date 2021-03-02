@@ -112,12 +112,6 @@ in
       modifier = "Mod4";
 
       output = {
-        "Unknown ASUS PB27U 0x0000C167" = {
-          scale = "1.5";
-        };
-        "Unknown Q2790 GQMJ4HA000414" = {
-          scale = "1.0";
-        };
         "*" = {
           bg = "~/Pictures/wallpaper.jpg fill";
         };
@@ -138,7 +132,7 @@ in
         in
         {
           titlebar = false;
-          border = 0;
+          border = 3;
           hideEdgeBorders = "smart";
           commands = [
             { inherit command; criteria.class = "sk-window"; }
@@ -153,7 +147,7 @@ in
 
       floating = {
         titlebar = false;
-        border = 0;
+        border = 3;
       };
 
       input = {
@@ -178,35 +172,6 @@ in
           natural_scroll = "true";
           tap = "true";
         };
-      };
-
-      colors = rec {
-        focused = {
-          border = "#5E81AC";
-          background = "#5E81AC";
-          text = "#ECEFF4";
-          indicator = "#5E81AC";
-          childBorder = "#5E81AC";
-        };
-
-        focusedInactive = {
-          border = "#2E3440";
-          background = "#2E3440";
-          text = "#8FBCBB";
-          indicator = "#2E3440";
-          childBorder = "#2E3440";
-        };
-
-        unfocused = focusedInactive;
-
-        urgent = {
-          border = "#BF616A";
-          background = "#BF616A";
-          text = "#E5E9F0";
-          indicator = "#BF616A";
-          childBorder = "#BF616A";
-        };
-
       };
 
       gaps = {
@@ -366,11 +331,12 @@ in
       popup_during_fullscreen smart
       bindswitch --reload --locked lid:on output eDP-1 disable
       bindswitch --reload --locked lid:off output eDP-1 enable
+      titlebar_border_thickness 0
     '';
   };
 
   systemd.user.services = {
-    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -a -e '[tiling] opacity 1; border pixel 0' -f '[tiling] border pixel 0; border pixel 3'";
+    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -a -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1'";
     rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
     swayidle = swayservice "Sway Idle Service - lock screen etc" swayidleCommand;
   };
