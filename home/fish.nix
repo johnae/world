@@ -66,8 +66,8 @@ let
   '';
 
   launcher = genLauncher [
-    { "sway" = "${sway}/bin/sway"; }
-    { "sway private" = privateSway; }
+    { "sway" = "${pkgs.libudev}/bin/systemd-cat --identifier=sway ${sway}/bin/sway"; }
+    { "sway private" = "${pkgs.libudev}/bin/systemd-cat --identifier=sway ${privateSway}"; }
     { "fish" = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.fish}/bin/fish"; }
     { "fish private" = privateFish; }
     { "sway debug" = "${sway}/bin/sway -d 2> ~/sway.log"; }
