@@ -1,5 +1,8 @@
 { pkgs, config, lib, options, ... }:
 let
+
+  kanshisvc = config.services.kanshi;
+
   swayservice = Description: ExecStart: {
     Unit = {
       inherit Description;
@@ -89,6 +92,13 @@ let
     else
         swaymsg output eDP-1 disable
     fi
+
+    ${lib.optionalString config.services.kanshi.enable
+    ''
+    systemctl restart --user kanshi.service
+    ''
+    }
+    
   '';
 
 in
