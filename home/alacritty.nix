@@ -29,6 +29,10 @@ rec {
       };
       background_opacity = 0.95;
       mouse.hide_cursor_when_typing = true;
+      cursor = {
+        style.blinking = "Never";
+        unfocused_hollow = true;
+      };
     };
   };
 
