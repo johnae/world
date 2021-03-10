@@ -21,6 +21,7 @@
 , libpng
 , libuuid
 , ffmpeg
+, xwayland
 , inputs
 }:
 
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkgconfig xwayland ];
 
   mesonFlags = [
     "-Dlibcap=enabled"
