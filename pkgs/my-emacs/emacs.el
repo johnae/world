@@ -74,11 +74,12 @@
         org-crypt-key "0x45FEBADDA16B8E55"
         org-src-fontify-natively t
         org-ellipsis " ↘"
-        org-agenda-files '("~/Sync/org/")
-        org-directory '("~/Sync/org/")
+        org-agenda-files '("~/Development/org-agenda/" "~/.gcal-org-sync/")
+        org-directory '("~/Development/org/")
         org-enforce-todo-dependencies t
         org-startup-with-beamer-mode t
         org-export-coding-system 'utf-8
+        org-export-with-sub-superscripts '{}
         org-agenda-sorting-strategy
          (quote
           ((agenda deadline-up priority-down)
@@ -90,16 +91,10 @@
         org-capture-templates
         '(
           ("a" "My TODO task format."
-          entry (file "~/Sync/org/todos.org")
-          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n")
-
-          ("r" "Email REPLY task format."
-          entry (file "~/Sync/org/reply.org")
-          "* TODO Respond to %:from on %:subject  :email: \nSCHEDULED: %t\n%U\n%a\n"
-          :clock-in t
-          :clock-resume t
-          :immediate-finish t
-          )))
+          entry (file "~/.config/org-agenda/todo.org")
+          "* TODO %?\n")
+          )
+  )
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -207,12 +202,10 @@
 
 (use-package evil-org
   :after org
+  :hook (org-mode . (lambda () evil-org-mode))
   :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme))))
-
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 
 ;; Evil keybindings for many things.
 (use-package evil-collection
@@ -259,7 +252,7 @@
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t
         ivy-count-format "%d/%d ")
-  (add-hook 'shell-mode-hook '(lambda ()
+  (add-hook 'shell-mode-hook (lambda ()
     (define-key shell-mode-map "\t" 'completion-at-point))))
 
 (setq ivy-do-completion-in-region t)
@@ -656,6 +649,12 @@
 
 ;; Sometimes I edit markdown.
 (use-package markdown-mode)
+
+
+;; And I also like to export org to github flavored markdown.
+(use-package ox-gfm
+  :after org
+)
 
 
 ;; Highlights numbers in source code.
@@ -1225,7 +1224,7 @@ This means:
   (delq 'eshell-banner eshell-modules-list)
   (push 'eshell-tramp eshell-modules-list))
 (setq eshell-modify-global-environment t)
-(add-hook 'post-command-hook '(lambda ()
+(add-hook 'post-command-hook (lambda ()
    (setq eshell-path-env (getenv "PATH"))
   )
 )
