@@ -45,4 +45,13 @@ in
     Install.WantedBy = [ "paths.target" ];
   };
 
+  systemd.user.timers.org-agenda-sync = {
+    Unit.Description = "Continuously git commit push/pull org agenda";
+    Timer = {
+      OnCalendar = "*:0/5";
+      Unit = "org-agenda-sync.service";
+    };
+    Install.WantedBy = [ "timers.target" ];
+  };
+
 }
