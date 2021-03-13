@@ -68,16 +68,39 @@
   :defer t
   :bind (:map org-mode-map
               ("C-c e" . org-edit-src-code))
+  :custom-face
+  (variable-pitch ((t (:family "ETBembo", :height 180 :weight thin))))
+  (fixed-pitch ((t (:family "JetBrainsMono Nerd Font" :height 160))))
+  (org-document-title ((t (:weight bold :height 1.5))))
+  (org-done ((t (:strike-through t :weight bold))))
+  (org-headline-done ((t (:strike-through t))))
+  (org-level-1 ((t (:weight bold :height 1.75))))
+  (org-level-2 ((t (:weight normal :height 1.5))))
+  (org-level-3 ((t (:weight normal :height 1.25))))
+  (org-level-4 ((t (:weight normal :height 1.1))))
+  (org-level-5 ((t (:weight normal :height 1.0))))
+  (org-level-6 ((t (:weight normal :height 1.0))))
+  (org-level-7 ((t (:weight normal :height 1.0))))
+  (org-level-8 ((t (:weight normal :height 1.0))))
+  (org-image-actual-width '(600))
   :init
   (setq org-log-done 'time
         org-log-reschedule 'time
         org-crypt-key "0x45FEBADDA16B8E55"
         org-src-fontify-natively t
-        org-ellipsis " ↘"
+        org-ellipsis "  "
+        org-pretty-entities t
+        org-hide-emphasis-markers t
+        org-agenda-block-separator ""
+        org-src-fontify-natively t
+        org-fontify-whole-heading-line t
+        org-fontify-done-headline t
+        org-fontify-quote-and-verse-blocks t
         org-agenda-files '("~/Development/org-agenda/" "~/.gcal-org-sync/")
         org-directory '("~/Development/org/")
         org-enforce-todo-dependencies t
         org-startup-with-beamer-mode t
+        org-startup-indented t
         org-export-coding-system 'utf-8
         org-export-with-sub-superscripts '{}
         org-agenda-sorting-strategy
@@ -95,6 +118,24 @@
           "* TODO %?\n")
           )
   )
+  :hook (org-mode . (lambda ()
+                        (auto-revert-mode)
+                        (variable-pitch-mode 1)
+                        (mapc
+                          (lambda (face)
+                                  (set-face-attribute face nil :inherit 'fixed-pitch))
+                          (list 'org-code
+                                'org-link
+                                'org-block
+                                'org-table
+                                'org-verbatim
+                                'org-block-begin-line
+                                'org-block-end-line
+                                'org-meta-line
+                                'org-document-info-keyword)
+                          )
+                        )
+        )
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -116,15 +157,15 @@
 ;;(typescript . t)
      (calc . t)
      (C . t)))
-  (add-hook 'org-mode-hook 'auto-revert-mode))
+  )
 
 
 ;;Showing org bullets as utf8 characters seemed like a cool thing.
 
 (use-package org-bullets
-  :init
-  (setq org-bullets-bullet-list '("◉"))
-  (add-hook 'org-mode-hook 'org-bullets-mode))
+  ;;:init
+  ;;(setq org-bullets-bullet-list '("◉"))
+  :hook (org-mode . org-bullets-mode))
 
 
 ;;Presentation minor mode for org-mode see [[https://github.com/takaxp/org-tree-slide][org-tree-slide]]
@@ -1065,9 +1106,10 @@ This means:
 )
 
 (use-package nord-theme)
+(use-package spacemacs-theme)
 
 ;; Define the overall theme somewhere for reuse.
-(defvar my:theme 'nord)
+(defvar my:theme 'spacemacs-light)
 (load-theme my:theme t)
 
 
