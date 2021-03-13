@@ -37,7 +37,7 @@ let
 
   upToDateCheck = pkgs.writeStrictShellScriptBin "up-to-date-check" ''
     latest_os_version="$(${githubGQLCheck "nixos" "nixpkgs" "nixos-unstable"}/bin/check)"
-    latest_config_version="$(${githubGQLCheck "johnae" "world" "master"}/bin/check)"
+    latest_config_version="$(${githubGQLCheck "johnae" "world" "main"}/bin/check)"
 
     local_config_version="$(nixos-version --json | jq -r .configurationRevision)"
     local_os_version="$(nixos-version --json | jq -r .nixpkgsRevision)"
