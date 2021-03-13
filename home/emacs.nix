@@ -22,13 +22,15 @@ in
   systemd.user.services.org-agenda-sync =
     let
       agenda-sync = pkgs.writeStrictShellScriptBin "agenda-sync" ''
+        echo Starting agenda git sync
         cd ~/Development/org-agenda
-        echo Changes detected in "$(pwd)"
-        git add . || true
+        git add .
         git commit -m "Auto-commit" || true
-        git pull || true
-        git push || true
-        git status || true
+        echo Pulling changes from remote
+        git pull
+        echo Pushing changes to remote
+        git push
+        git status
       '';
     in
     {
