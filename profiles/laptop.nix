@@ -113,6 +113,7 @@ in
     powerline-fonts
     roboto
     mynerdfonts
+    etBook
   ];
 
 }
