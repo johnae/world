@@ -198,6 +198,10 @@
   :config
   (evil-mode 1)
   (evil-set-undo-system 'undo-tree)
+  (define-key evil-normal-state-map (kbd "C-<up>") 'windmove-up)
+  (define-key evil-normal-state-map (kbd "C-<down>") 'windmove-down)
+  (define-key evil-normal-state-map (kbd "C-<left>") 'windmove-left)
+  (define-key evil-normal-state-map (kbd "C-<right>") 'windmove-right)
   (define-key evil-normal-state-map (kbd ", <right>") 'split-window-horizontally)
   (define-key evil-normal-state-map (kbd ", <SPC>") 'ivy-switch-buffer)
   (define-key evil-normal-state-map (kbd ", p") 'counsel-projectile-find-file)
@@ -205,6 +209,7 @@
   (define-key evil-normal-state-map (kbd ", s") 'swiper)
   (define-key evil-normal-state-map (kbd ", e") 'jae/eshell-here)
   (define-key evil-normal-state-map (kbd ", n") 'jae/eshell-new)
+  (define-key evil-normal-state-map (kbd ", m") 'counsel-esh-history)
   (define-key evil-normal-state-map (kbd ", a") 'counsel-projectile-rg)
   (define-key evil-normal-state-map (kbd ", <up>") 'projectile-switch-project)
   (define-key evil-normal-state-map (kbd "P") 'counsel-yank-pop)
@@ -604,7 +609,7 @@
   :init
   :after (company)
   ;;(with-eval-after-load 'company
-  ;;  (add-to-list 'company-backends 'company-nixos-options))
+ ;;  (add-to-list 'company-backends 'company-nixos-options))
   )
 
 ;; This allows me to toggle between snake case, camel case etc.
@@ -1106,10 +1111,10 @@ This means:
 )
 
 (use-package nord-theme)
-(use-package spacemacs-theme)
 
 ;; Define the overall theme somewhere for reuse.
-(defvar my:theme 'spacemacs-light)
+(defvar my:theme 'nord)
+(setq nord-region-highlight "snowstorm")
 (load-theme my:theme t)
 
 
@@ -1223,6 +1228,16 @@ This means:
   :hook (eshell-mode . esh-autosuggest-mode)
   :ensure t)
 
+(defun setup-eshell-ivy-completion ()
+  (define-key eshell-mode-map [remap eshell-pcomplete] 'completion-at-point)
+  ;; only if you want to use the minibuffer for completions instead of the
+  ;; in-buffer interface
+  (setq-local ivy-display-functions-alist
+              (remq (assoc 'ivy-completion-in-region ivy-display-functions-alist)
+                    ivy-display-functions-alist)))
+
+(add-hook 'eshell-mode-hook #'setup-eshell-ivy-completion)
+
 (setq eshell-buffer-maximum-lines 1200)
 (defun eos/truncate-eshell-buffers ()
   "Truncates all eshell buffers."
@@ -1273,22 +1288,30 @@ This means:
 (with-eval-after-load 'eshell
   (require 'f)
 
+  ;; thanks http://www.howardism.org/Technical/Emacs/eshell-fun.html
   (defun jae/eshell-here ()
     "Opens up a new shell in the directory associated with the
-current buffer's file."
+  current buffer's file. The eshell is renamed to match that
+  directory to make multiple eshell windows easier."
     (interactive)
-    (let* ((height (/ (window-total-height) 3))
-           (name (format "*eshell: %s*"
-                         (f-filename default-directory))))
-      ;;(split-window-vertically (- height))
-      ;;(other-window 1)
-      (let ((buf (get-buffer name)))
-        (if buf
-            (switch-to-buffer buf)
-          (eshell 'new)
-          (rename-buffer name 'unique)))
+    (let* ((parent (if (buffer-file-name)
+                       (file-name-directory (buffer-file-name))
+                     default-directory))
+           (height (/ (window-total-height) 3))
+           (name   (car (last (split-string parent "/" t)))))
+      (split-window-vertically (- height))
+      (other-window 1)
+      (eshell "new")
+      (rename-buffer (concat "*eshell: " name "*"))
+
       (insert (concat "ls"))
       (eshell-send-input)))
+
+
+  (defun eshell/x ()
+    (insert "exit")
+    (eshell-send-input)
+    (delete-window))
 
   (require 'dash)
   (require 's)
@@ -1472,32 +1495,32 @@ current buffer's file."
   (esh-section esh-dir
                "\xf07c"  ;  (fontawesome folder)
                (abbreviate-file-name (eshell/pwd))
-               '(:foreground "gold" :bold ultra-bold :underline t))
+               '(:foreground "#81a1c1" :bold ultra-bold))
 
     (esh-section esh-git
                "\xf126"  ;  (git icon)
                (magit-get-current-branch)
-               '(:foreground "pink"))
+               '(:foreground "#5e81ac"))
 
     (esh-section esh-git-changes
                "\xf071"  ;  (warn icon)
                (git-changes)
-               '(:foreground "red"))
+               '(:foreground "#bf616a"))
 
     (esh-section esh-git-unpushed-commits
                "\xf714"  ;  (skull icon)
                (git-unpushed-commits)
-               '(:foreground "red"))
+               '(:foreground "#bf616a"))
 
     (esh-section esh-k8s
                "\xf1b3 "  ;  (cubes icon)
                (k8s-context)
-               '(:foreground "forest green"))
+               '(:foreground "#5e81ac"))
 
     (esh-section esh-gcp
                "\xf1a0"  ;  (google icon)
                (current-gcloud-project)
-               '(:foreground "dark green"))
+               '(:foreground "#5e81ac"))
 
   ;; Separator between esh-sections
   (setq esh-sep "  ")
