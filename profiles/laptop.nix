@@ -114,6 +114,7 @@ in
     roboto
     mynerdfonts
     etBook
+    emacs-all-the-icons-fonts
   ];
 
 }
