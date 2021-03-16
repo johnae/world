@@ -550,12 +550,13 @@
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
 )
 
-(use-package company-lsp
-  :after lsp-mode
-  :config
-  (push 'company-lsp company-backends)
-  :defer t
-)
+;; No longer supported?
+;;(use-package company-lsp
+;;  :after lsp-mode
+;;  :config
+;;  (push 'company-lsp company-backends)
+;;  :defer t
+;;)
 
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
