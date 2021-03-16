@@ -56,6 +56,7 @@ in
       pkgs.nixpkgs-fmt
       pkgs.google-cloud-sdk
       pkgs.kubectl
+      pkgs.kubectx
       pkgs.kustomize
       pkgs.fzf # # for certain utilities that depend on it
       pkgs.rust-analyzer-bin
