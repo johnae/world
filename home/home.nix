@@ -92,8 +92,7 @@ in
     };
   };
 
-  home.file.".emacs".source =
-    (pkgs.callPackage ../pkgs/my-emacs/config.nix { }).emacsConfig;
+  home.file.".emacs".source = ../pkgs/my-emacs/emacs.el;
 
   home.file.".icons/default" = {
     source = "${pkgs.arc-icon-theme}/share/icons/Arc";
