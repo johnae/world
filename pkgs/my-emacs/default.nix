@@ -2,6 +2,12 @@
 , fetchgit
 , writeText
 , notmuch
+, pandoc
+, pass
+, kubectl
+, kubectx
+, google-cloud-sdk
+, wl-clipboard
 , emacsWithPackagesFromUsePackage
 , pkgs
 , makeWrapper
@@ -24,21 +30,19 @@ let
                   :files (:defaults))
     '';
   };
-
-  config = pkgs.callPackage ./config.nix { };
 in
 emacsWithPackagesFromUsePackage {
   alwaysEnsure = true;
-  config = builtins.readFile config.emacsConfig;
+  config = builtins.readFile ./emacs.el;
   package = pkgs.emacsPgtk.overrideAttrs
-    #package = pkgs.emacsGit-nox.overrideAttrs
     (oa: {
       nativeBuildInputs = oa.nativeBuildInputs ++ [ makeWrapper ];
       postInstall = ''
         ${oa.postInstall}
         wrapProgram $out/bin/emacs \
           --set TERM xterm-24bits \
-          --prefix PATH : ${pkgs.lib.makeBinPath [ notmuch ]}
+          --set NOTMUCH_LOAD_PATH "${notmuch.emacs}/share/emacs/site-lisp" \
+          --prefix PATH : ${pkgs.lib.makeBinPath [ notmuch pandoc pass wl-clipboard kubectl kubectx google-cloud-sdk ]}
         wrapProgram $out/bin/emacsclient \
           --set TERM xterm-24bits
       '';

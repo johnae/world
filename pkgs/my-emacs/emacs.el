@@ -38,7 +38,7 @@
   (require 'use-package))
 
 ;; Add path to notmuch to load-path.
-(add-to-list 'load-path "@NOTMUCH_LOAD_PATH@")
+(add-to-list 'load-path (getenv "NOTMUCH_LOAD_PATH"))
 
 ;; Setup auth sources to use pass gpg files.
 
@@ -59,7 +59,7 @@
 ;; Todoist <-> org
 (use-package todoist
   :init
-  (setq todoist-token (shell-command-to-string-nows "@PASS@ show web/todoist.com/api-token"))
+  (setq todoist-token (shell-command-to-string-nows "pass show web/todoist.com/api-token"))
   )
 
 ;; The famous [[https://orgmode.org/][org mode]]. Default settings I use and stuff.
@@ -98,6 +98,8 @@
         org-fontify-quote-and-verse-blocks t
         org-agenda-files '("~/Development/org-agenda/" "~/.gcal-org-sync/")
         org-directory '("~/Development/org/")
+        org-agenda-todo-list-sublevels 1
+        org-agenda-todo-ignore-scheduled t
         org-enforce-todo-dependencies t
         org-startup-with-beamer-mode t
         org-startup-indented t
@@ -259,11 +261,6 @@
   :config
   (evil-collection-init))
 
-
-;; Evil keybindings for magit.
-(use-package evil-magit)
-
-
 ;; Polymode allows several major modes in one buffer.
 (use-package polymode)
 
@@ -318,6 +315,7 @@
 (use-package counsel-projectile
   :diminish (projectile-mode . "")
   :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (setq projectile-project-search-path '("~/Development/"))
   (projectile-mode)
   (counsel-projectile-mode))
@@ -1043,37 +1041,22 @@ This means:
 (require 'jl-encrypt)
 (setq mml-secure-insert-signature "always")
 
-;;(use-package tramp
-;;  :defer 5
-;;  :config
-;;  (with-eval-after-load 'tramp-cache
-;;    (setq tramp-persistency-file-name "~/.emacs.d/tramp"))
-;;  (setq tramp-default-method "ssh"
-;;        tramp-default-user-alist '(("\\`su\\(do\\)?\\'" nil "root"))
-;;        ;;tramp-use-ssh-controlmaster-options nil
-;;        backup-enable-predicate
-;;        (lambda (name)
-;;          (and (normal-backup-enable-predicate name)
-;;               (not (let ((method (file-remote-p name 'method)))
-;;                      (when (stringp method)
-;;                        (member method '("su" "sudo")))))))))
-
 ;; Allows memoization of expensive functions.
 (use-package memoize)
 
 ;; Use wl-clipboard for interprocess copy/paste.
 (setq wl-copy-process nil)
 (defun wl-copy (text)
-  (setq wl-copy-process (make-process :name "@WLCOPY@"
+  (setq wl-copy-process (make-process :name "wl-copy"
                                       :buffer nil
-                                      :command '("@WLCOPY@" "-f" "-n")
+                                      :command '("wl-copy" "-f" "-n")
                                       :connection-type 'pipe))
   (process-send-string wl-copy-process text)
   (process-send-eof wl-copy-process))
 (defun wl-paste ()
   (if (and wl-copy-process (process-live-p wl-copy-process))
       nil ; should return nil if we're the current paste owner
-      (shell-command-to-string "@WLPASTE@ -n | tr -d \r")))
+      (shell-command-to-string "wl-paste -n | tr -d \r")))
 (setq interprogram-cut-function 'wl-copy)
 (setq interprogram-paste-function 'wl-paste)
 
@@ -1098,17 +1081,26 @@ This means:
     (concat "gpg --decrypt "
             "~/.local/share/password-store/" storepath ".gpg 2>/dev/null"))))
 
-(use-package powerline
+(use-package all-the-icons)
+
+(use-package doom-modeline
   :ensure t
-  :config
-  (powerline-center-evil-theme)
+  :init
+  (setq doom-modeline-icon 1)
+  (doom-modeline-mode 1)
 )
 
-(use-package airline-themes
-  :ensure t
-  :config
-  (load-theme 'airline-base16_nord t)
-)
+;;(use-package powerline
+;;  :ensure t
+;;  :config
+;;  (powerline-center-evil-theme)
+;;)
+;;
+;;(use-package airline-themes
+;;  :ensure t
+;;  :config
+;;  (load-theme 'airline-base16_nord t)
+;;)
 
 (use-package nord-theme)
 
@@ -1285,6 +1277,7 @@ This means:
    (setq eshell-path-env (getenv "PATH"))
   )
 )
+
 (with-eval-after-load 'eshell
   (require 'f)
 
@@ -1307,6 +1300,9 @@ This means:
       (insert (concat "ls"))
       (eshell-send-input)))
 
+
+  (defun eshell/e (file)
+    (find-file file))
 
   (defun eshell/x ()
     (insert "exit")
@@ -1341,7 +1337,7 @@ This means:
     (string= (shell-command-to-string-nows "git rev-parse --is-inside-work-tree 2>/dev/null")
                  "true"
                  ))
-
+ 
   (defun git-unpushed-commits ()
     "Returns number of local commits not pushed."
     (if (is-inside-git-tree)
@@ -1356,7 +1352,7 @@ This means:
       nil
       )
     )
-
+ 
   (defun git-changes ()
     "Returns number of changes or nil."
     (if (is-inside-git-tree)
@@ -1371,7 +1367,7 @@ This means:
       nil
       )
     )
-
+ 
   (defun k8s-context ()
     "Return k8s context or nil"
     (let ((
@@ -1384,7 +1380,20 @@ This means:
         )
       )
     )
-
+ 
+  (defun k8s-ns ()
+    "Return k8s ns or nil"
+    (let ((
+           k8s-ns (shell-command-to-string-nows
+                    "kubens -c 2>/dev/null")
+                   ))
+      (if (string= k8s-ns "")
+          nil
+        k8s-ns
+        )
+      )
+    )
+ 
   (defun current-gcloud-project ()
     "Returns the current gcloud project."
     (let ((
@@ -1434,6 +1443,13 @@ This means:
             )
           (define-key
             eshell-mode-map
+            (kbd "C-c n") (lambda ()
+                        (interactive)
+                        (pick-kubens)
+                        )
+            )
+          (define-key
+            eshell-mode-map
             (kbd "C-c g") (lambda ()
                         (interactive)
                         (go-to-project)
@@ -1449,23 +1465,26 @@ This means:
           )
         )
 
-  (defun select-k8s-context (x)
-    (shell-command (concat "kubectx " x))
-    )
-
   (defun pick-kubectx ()
     "Select k8s context"
     (interactive)
     (setenv "KUBECTX_IGNORE_FZF" "y")
-    (ivy-read "Select kubernetes context: " (split-string (shell-command-to-string "kubectx") "\n" t)
+    (ivy-read "Select kubernetes cluster: " (split-string (shell-command-to-string "kubectx") "\n" t)
               :action '(1
-                       ("o" select-k8s-context)
+                       ("o" (shell-command "kubectx"))
                        )
               )
     )
 
-  (defun select-gcp-project (x)
-    (shell-command (concat "gcloud config set project " x))
+  (defun pick-kubens ()
+    "Select k8s namespace"
+    (interactive)
+    (setenv "KUBECTX_IGNORE_FZF" "y")
+    (ivy-read "Select kubernetes namespace: " (split-string (shell-command-to-string "kubens") "\n" t)
+              :action '(1
+                       ("o" (shell-command "kubens"))
+                       )
+              )
     )
 
   (defun pick-gcp-project ()
@@ -1473,8 +1492,8 @@ This means:
     (interactive)
     (ivy-read "Select GCP Project: " (split-string (shell-command-to-string "gcloud projects list | tail -n +2 | awk '{print $1}'") "\n" t)
               :action '(1
-                        ("o" select-gcp-project)
-                        )
+                       ("o" (shell-command "gcloud config set project"))
+                       )
               )
     )
 
@@ -1514,7 +1533,7 @@ This means:
 
     (esh-section esh-k8s
                "\xf1b3 "  ;  (cubes icon)
-               (k8s-context)
+               (format "%s (%s)" (k8s-context) (k8s-ns))
                '(:foreground "#5e81ac"))
 
     (esh-section esh-gcp
@@ -1544,7 +1563,6 @@ This means:
 
   ;; Enable the new eshell prompt
   (setq eshell-prompt-function 'esh-prompt-func)
-
 )
 
 (require 'em-term)
@@ -1614,3 +1632,4 @@ Version 2017-11-01"
 
 (customize-set-variable 'lsp-rust-server 'rust-analyzer)
 (customize-set-variable 'nix-nixfmt-bin "nixpkgs-fmt")
+Attempt to delete minibuffer or sole ordinary window
