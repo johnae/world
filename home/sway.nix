@@ -98,7 +98,7 @@ let
     systemctl restart --user kanshi.service
     ''
     }
-    
+
   '';
 
 in
@@ -240,7 +240,8 @@ in
         "${modifier}+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle open'';
         "${modifier}+Shift+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle none'';
 
-        "${modifier}+Return" = ''exec ${pkgs.alacritty}/bin/alacritty'';
+        "${modifier}+Return" = ''exec ${pkgs.my-emacs}/bin/emacsclient -c -n -a= --eval '(jae/eshell-new)' '';
+        "${modifier}+Shift+Return" = '' exec ${pkgs.alacritty}/bin/alacritty'';
         "${modifier}+d" = ''exec ${pkgs.sk-window}/bin/sk-window sk-run'';
 
         "${modifier}+minus" = ''exec ${pkgs.sk-window}/bin/sk-window sk-passmenu'';
