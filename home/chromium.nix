@@ -2,8 +2,7 @@
 
 let
   chromium = pkgs.chromium.override {
-    enableVaapi = true;
-    commandLineArgs = "-enable-features=UseOzonePlatform -ozone-platform=wayland";
+    commandLineArgs = "-enable-features=UseOzonePlatform -ozone-platform=wayland -enable-features=VaapiVideoDecoder";
   };
 in
 {
