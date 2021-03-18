@@ -116,7 +116,7 @@
         org-capture-templates
         '(
           ("a" "My TODO task format."
-          entry (file "~/.config/org-agenda/todo.org")
+          entry (file "~/Development/org-agenda/todo.org")
           "* TODO %?\n")
           )
   )
@@ -576,7 +576,7 @@
   (add-hook 'typescript-mode-hook 'prettier-js-mode))
 
 
-;; Company]] is a text completion framework for Emacs. The name stands for "complete anything". It uses pluggable back-ends
+;; [[https://company-mode.github.io/][Company]] is a text completion framework for Emacs. The name stands for "complete anything". It uses pluggable back-ends
 ;; and front-ends to retrieve and display completion candidates.
 ;;
 ;; It comes with several back-ends such as Elisp, Clang, Semantic, Eclim, Ropemacs, Ispell, CMake, BBDB, Yasnippet, dabbrev,
@@ -681,7 +681,7 @@
 
 ;; This will highlight matching parentheses. Some additional configuration for that.
 (defun my-show-paren-mode ()
-   "Enables show-paren-mode."
+   "Enables 'show-paren-mode'."
    (setq show-paren-delay 0)
    (set-face-background 'show-paren-match (face-background 'default))
    (set-face-foreground 'show-paren-match "#def")
@@ -1091,25 +1091,11 @@ This means:
   (doom-modeline-mode 1)
 )
 
-;;(use-package powerline
-;;  :ensure t
-;;  :config
-;;  (powerline-center-evil-theme)
-;;)
-;;
-;;(use-package airline-themes
-;;  :ensure t
-;;  :config
-;;  (load-theme 'airline-base16_nord t)
-;;)
-
-(use-package nord-theme)
+(use-package doom-themes)
 
 ;; Define the overall theme somewhere for reuse.
-(defvar my:theme 'nord)
-(setq nord-region-highlight "snowstorm")
+(defvar my:theme 'doom-nord)
 (load-theme my:theme t)
-
 
 ;; This is where we recognize whether emacsclient is being used or not and if it is we'll set the theme as necessary.
 (defvar my:theme-window-loaded nil)
@@ -1221,13 +1207,13 @@ This means:
   :hook (eshell-mode . esh-autosuggest-mode)
   :ensure t)
 
-(defun setup-eshell-ivy-completion ()
-  (define-key eshell-mode-map [remap eshell-pcomplete] 'completion-at-point)
+;;(defun setup-eshell-ivy-completion ()
+;;  (define-key eshell-mode-map [remap eshell-pcomplete] 'completion-at-point))
   ;; only if you want to use the minibuffer for completions instead of the
   ;; in-buffer interface
-  (setq-local ivy-display-functions-alist
-              (remq (assoc 'ivy-completion-in-region ivy-display-functions-alist)
-                    ivy-display-functions-alist)))
+  ;;(setq-local ivy-display-functions-alist
+  ;;            (remq (assoc 'ivy-completion-in-region ivy-display-functions-alist)
+  ;;                  ivy-display-functions-alist)))
 
 (add-hook 'eshell-mode-hook #'setup-eshell-ivy-completion)
 
@@ -1267,6 +1253,7 @@ This means:
       eshell-cmpl-ignore-case t)
 
 (require 'eshell)
+(require 'em-smart)
 (require 'em-tramp)
 (setq password-cache t)
 (setq password-cache-expiry 3600)
@@ -1338,7 +1325,7 @@ This means:
     (string= (shell-command-to-string-nows "git rev-parse --is-inside-work-tree 2>/dev/null")
                  "true"
                  ))
- 
+
   (defun git-unpushed-commits ()
     "Returns number of local commits not pushed."
     (if (is-inside-git-tree)
@@ -1353,7 +1340,7 @@ This means:
       nil
       )
     )
- 
+
   (defun git-changes ()
     "Returns number of changes or nil."
     (if (is-inside-git-tree)
@@ -1368,7 +1355,7 @@ This means:
       nil
       )
     )
- 
+
   (defun k8s-context ()
     "Return k8s context or nil"
     (let ((
@@ -1381,7 +1368,7 @@ This means:
         )
       )
     )
- 
+
   (defun k8s-ns ()
     "Return k8s ns or nil"
     (let ((
@@ -1394,7 +1381,7 @@ This means:
         )
       )
     )
- 
+
   (defun current-gcloud-project ()
     "Returns the current gcloud project."
     (let ((
@@ -1472,7 +1459,7 @@ This means:
     (setenv "KUBECTX_IGNORE_FZF" "y")
     (ivy-read "Select kubernetes cluster: " (split-string (shell-command-to-string "kubectx") "\n" t)
               :action '(1
-                       ("o" (shell-command "kubectx"))
+                         ("o" (lambda (x) (shell-command (concat "kubectx " x))))
                        )
               )
     )
@@ -1483,7 +1470,7 @@ This means:
     (setenv "KUBECTX_IGNORE_FZF" "y")
     (ivy-read "Select kubernetes namespace: " (split-string (shell-command-to-string "kubens") "\n" t)
               :action '(1
-                       ("o" (shell-command "kubens"))
+                       ("o" (lambda (x) (shell-command (concat "kubens " x))))
                        )
               )
     )
@@ -1493,7 +1480,7 @@ This means:
     (interactive)
     (ivy-read "Select GCP Project: " (split-string (shell-command-to-string "gcloud projects list | tail -n +2 | awk '{print $1}'") "\n" t)
               :action '(1
-                       ("o" (shell-command "gcloud config set project"))
+                       ("o" (lambda (x) (shell-command (concat "gcloud config set project " x))))
                        )
               )
     )
@@ -1633,4 +1620,3 @@ Version 2017-11-01"
 
 (customize-set-variable 'lsp-rust-server 'rust-analyzer)
 (customize-set-variable 'nix-nixfmt-bin "nixpkgs-fmt")
-Attempt to delete minibuffer or sole ordinary window
