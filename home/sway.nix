@@ -287,7 +287,7 @@ in
           command = "${pkgs.dbus_tools}/bin/dbus-update-activation-environment WAYLAND_DISPLAY=$WAYLAND_DISPLAY";
         }
         {
-          command = "echo hello | ${pkgs.netcat}/bin/nc -w1 -U /var/run/user/1337/emacs/server";
+          command = "while [ ! -e ~/.emacs ]; do sleep 1; done; echo hello | ${pkgs.netcat}/bin/nc -w1 -U /var/run/user/1337/emacs/server";
         }
         {
           command = "${swayOnReload}/bin/sway-on-reload";
