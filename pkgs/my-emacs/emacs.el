@@ -128,6 +128,9 @@
                                   (set-face-attribute face nil :inherit 'fixed-pitch))
                           (list 'org-code
                                 'org-link
+                                'org-todo
+                                'org-src
+                                'org-list
                                 'org-block
                                 'org-table
                                 'org-verbatim
@@ -1289,6 +1292,7 @@ This means:
       (eshell-send-input)))
 
 
+  ;; aliases
   (defun eshell/e (file)
     (find-file file))
 
@@ -1398,6 +1402,7 @@ This means:
 
   (add-hook 'eshell-first-time-mode-hook
         (lambda ()
+          (eshell/alias "ll" "ls -lah $1")
           (define-key
             eshell-mode-map
             (kbd "C-<up>") 'windmove-up
@@ -1617,6 +1622,9 @@ Version 2017-11-01"
 
 (setq calendar-time-display-form
       '(24-hours ":" minutes))
+
+(set-frame-parameter (selected-frame) 'alpha '(98 . 98))
+(add-to-list 'default-frame-alist '(alpha . (98 . 98)))
 
 (customize-set-variable 'lsp-rust-server 'rust-analyzer)
 (customize-set-variable 'nix-nixfmt-bin "nixpkgs-fmt")
