@@ -1623,8 +1623,8 @@ Version 2017-11-01"
 (setq calendar-time-display-form
       '(24-hours ":" minutes))
 
-(set-frame-parameter (selected-frame) 'alpha '(98 . 98))
-(add-to-list 'default-frame-alist '(alpha . (98 . 98)))
+(set-frame-parameter (selected-frame) 'alpha '(96 . 96))
+(add-to-list 'default-frame-alist '(alpha . (96 . 96)))
 
 (customize-set-variable 'lsp-rust-server 'rust-analyzer)
 (customize-set-variable 'nix-nixfmt-bin "nixpkgs-fmt")
