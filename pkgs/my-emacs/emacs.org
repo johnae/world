@@ -1,0 +1,412 @@
+#+TITLE: Emacs config
+#+PROPERTY: header-args :emacs-lisp :tangle yes :cache yes :results silent :comments link :exports code
+#+AUTHOR: John Axel Eriksson
+#+TOC: true
+
+This is my emacs configuration. It's documented for my benefit. This lives within my [[https://nixos.org][NixOS repo]] called [[https://github.com/johnae/world][world]].
+
+* Initialization
+
+** Optimization
+Here we do some basic optimizations to make emacs load faster and do "stuff" more efficiently.
+*** Keep a reference to the actual file-name-handler.
+#+BEGIN_SRC elisp
+  (defvar file-name-handler-alist-actual file-name-handler-alist)
+#+END_SRC
+
+*** Set the file-name-handler to nil (because regexing is cpu intensive)
+#+BEGIN_SRC elisp
+(setq file-name-handler-alist nil)
+#+END_SRC
+
+*** Increase the gc threshold significantly for faster startup
+#+BEGIN_SRC elisp
+(setq gc-cons-threshold 100000000)
+#+END_SRC
+
+*** The default is very low - 4k, lsp server responses are easily much larger
+#+BEGIN_SRC elisp
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+#+END_SRC
+
+*** Reset file-name-handler-alist after initialization
+#+BEGIN_SRC elisp
+(add-hook 'after-init-hook
+  (lambda ()
+    (garbage-collect)
+    (setq file-name-handler-alist file-name-handler-alist-actual)) t)
+#+END_SRC
+
+*** This makes emacsclient fast when starting up, not entirely sure why tbh
+#+BEGIN_SRC elisp
+(setq-default xterm-query-timeout nil)
+#+END_SRC
+
+*** Disable startup messages
+#+BEGIN_SRC elisp
+  (setq
+   inhibit-startup-echo-area-message t
+   inhibit-startup-screen t
+   initial-scratch-message nil)
+#+END_SRC
+
+*** Disable unnecessary UI widgets etc
+#+BEGIN_SRC elisp
+  (tool-bar-mode -1)
+  (blink-cursor-mode -1)
+  (menu-bar-mode -1)
+#+END_SRC
+*** Skip loading default lib, use fundamental-mode
+#+BEGIN_SRC elisp
+(setq inhibit-default-init t
+         initial-major-mode 'fundamental-mode)
+#+END_SRC
+*** Disable any native compilation at runtime - done by Nix
+#+BEGIN_SRC elisp
+(when (featurep 'nativecomp)
+  (setq comp-deferred-compilation nil))
+#+END_SRC
+*** Use package autoloads provided by Nix
+#+BEGIN_SRC elisp
+(defvar package-quickstart t)
+#+END_SRC
+*** Misc performance tweaks
+**** Skip trying a second pass through auto-mode-list
+#+BEGIN_SRC elisp
+(setq auto-mode-case-fold nil)
+#+END_SRC
+**** Enable so-long mode
+#+BEGIN_SRC elisp
+(global-so-long-mode 1)
+#+END_SRC
+** Setup
+Some basic useful settings.
+*** Don't create backup files, don't create #autosave# files
+#+BEGIN_SRC elisp
+(setq temporary-file-directory "~/.emacs.d/tmp/")
+(unless (file-exists-p "~/.emacs.d/tmp")
+  (make-directory "~/.emacs.d/tmp"))
+
+(setq backup-inhibited t
+         make-backup-files nil ; don't create backup~ files
+         auto-save-default nil) ; don't create #autosave# files
+#+END_SRC
+*** Don't confirm org-babel eval. Somewhat dangerous. I live in the fast lane.
+#+BEGIN_SRC elisp
+  (setq org-confirm-babel-evaluate nil)
+#+END_SRC
+
+*** Disable impure packages (as in not already fetched by Nix)
+#+BEGIN_SRC elisp
+  (setq
+     package-archives nil
+     package-enable-at-startup nil
+   )
+#+END_SRC
+
+*** Include common lisp emulation functions
+#+BEGIN_SRC elisp
+  (require 'cl-lib)
+#+END_SRC
+
+*** Initialize use-package
+#+BEGIN_SRC elisp
+  (eval-and-compile
+    (require 'package)
+    (package-initialize)
+    (require 'use-package)
+   )
+#+END_SRC
+
+*** Add notmuch to load-path
+#+BEGIN_SRC elisp
+  (add-to-list 'load-path (getenv "NOTMUCH_LOAD_PATH"))
+#+END_SRC
+
+*** Setup auth sources so we use pass gpg files
+#+BEGIN_SRC elisp
+  (setq auth-sources '((:source "~/.local/share/password-store/emacs/auth/authinfo.gpg")))
+#+END_SRC
+
+*** Set utf8 everywhere
+#+BEGIN_SRC elisp
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(when (display-graphic-p)
+  (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)))
+#+END_SRC
+*** Set browser function - eg. which browser to open links in
+#+BEGIN_SRC elisp
+  (setq browse-url-browser-function 'browse-url-generic
+           browse-url-generic-program "firefox")
+#+END_SRC
+*** Show trailing whitespace when programming
+#+BEGIN_SRC elisp
+(set-face-background 'trailing-whitespace "yellow")
+(add-hook 'prog-mode-hook
+  (lambda ()
+    (setq show-trailing-whitespace t)))
+#+END_SRC
+*** I'm in Europe so I want dates to be displayed in European formats
+#+BEGIN_SRC elisp
+(setq european-date-style 'european
+        calendar-set-date-style 'european
+        calendar-week-start-day 1
+        calendar-date-display-form
+           '((if dayname
+                 (concat dayname ", "))
+             day " " monthname " " year))
+
+(setq calendar-time-display-form
+      '(24-hours ":" minutes))
+#+END_SRC
+*** Highlight matching parentheses
+#+BEGIN_SRC elisp
+(defun my-show-paren-mode ()
+   "Enables 'show-paren-mode'."
+   (setq show-paren-delay 0)
+   (set-face-background 'show-paren-match (face-background 'default))
+   (set-face-foreground 'show-paren-match "#def")
+   (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
+   (show-paren-mode 1))
+(add-hook 'prog-mode-hook 'my-show-paren-mode)
+#+END_SRC
+*** Enable electric pair mode
+#+BEGIN_SRC elisp
+  (add-hook 'prog-mode-hook 'electric-pair-mode)
+#+END_SRC
+*** Highlight current line when programming
+#+BEGIN_SRC elisp
+  (add-hook 'prog-mode-hook 'hl-line-mode)
+#+END_SRC
+** User interface
+*** Set the default font
+#+BEGIN_SRC elisp
+  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 14"))
+#+END_SRC
+*** Set background alpha
+#+BEGIN_SRC elisp
+(set-frame-parameter (selected-frame) 'alpha '(96 . 96))
+(add-to-list 'default-frame-alist '(alpha . (96 . 96)))
+#+END_SRC
+** Utility functions
+Utility functions used here and there.
+
+*** Returns the output of a shell command without trailing whitespace
+#+BEGIN_SRC elisp
+  (defun jae/shell-command-to-string-nows (cmd)
+    "Return shell command output without trailing newline and whitespace."
+    (replace-regexp-in-string "\n\\'" ""
+      (replace-regexp-in-string "\\(\\`[[:space:]\n]*\\|[[:space:]\n]*\\'\\)" ""
+        (shell-command-to-string cmd)
+        )
+      )
+    )
+#+END_SRC
+
+*** Creates new empty numbered buffers
+#+BEGIN_SRC elisp
+;; Helper for opening a new empty buffer.
+(defun jae/new-empty-buffer ()
+  "Create a new empty buffer.
+New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”, etc."
+  (interactive)
+  (let (($buf (generate-new-buffer "untitled")))
+    (switch-to-buffer $buf)
+    (funcall initial-major-mode)
+    (setq buffer-offer-save t)
+    $buf
+    ))
+#+END_SRC
+* Packages
+Package setup.
+
+*** Performance
+**** Adjust garbage collection based on activity (eg. gc on idle)
+#+BEGIN_SRC elisp
+  (use-package gcmh
+    :hook (after-init-hook . gcmh-mode)
+    :init
+    (setq gcmh-idle-delay 5
+             gcmh-high-cons-threshold (* 32 1024 1024)) ; 32MB
+  )
+#+END_SRC
+*** Integrates emacs with the pass password manager - disabled
+#+BEGIN_SRC elisp
+;; (use-package pass)
+#+END_SRC
+*** Org mode packages
+**** Org mode itself
+#+BEGIN_SRC elisp
+  (use-package org)
+#+END_SRC
+**** Org bullets - uses different utf8 characters for different bullet nesting levels, see: [[https://github.com/sabof/org-bullets][sabof/org-bullets]]
+#+BEGIN_SRC elisp
+(use-package org-bullets
+ :hook (org-mode . org-bullets-mode))
+#+END_SRC
+**** Org tree slide - presentation mode for org, see: [[https://github.com/takaxp/org-tree-slide][takaxp/org-tree-slide - disabled]]
+#+BEGIN_SRC elisp
+;;(use-package org-tree-slide
+;;  :defer t
+;;  :config
+;;  (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-previous-tree)
+;;  (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree)
+;;  )
+#+END_SRC
+*** Evil Packages - Vim for emacs.
+**** Evil itself
+#+BEGIN_SRC elisp
+  (use-package evil
+    :init
+    (setq evil-want-keybinding nil)
+    :config
+    (evil-mode 1)
+  )
+#+END_SRC
+**** Evil collection - evil keybindings for different parts of Emacs and packages
+#+BEGIN_SRC elisp
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init)
+  )
+#+END_SRC
+**** Evil org
+#+BEGIN_SRC elisp
+  (use-package evil-org
+    :after org
+    :hook (org-mode . evil-org-mode)
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys)
+  )
+#+END_SRC
+*** Theming
+**** All the icons for doom modeline
+#+BEGIN_SRC elisp
+  (use-package all-the-icons)
+#+END_SRC
+**** Doom themes
+#+BEGIN_SRC elisp
+  (use-package doom-themes)
+#+END_SRC
+
+**** Doom modeline
+#+BEGIN_SRC elisp
+  (use-package doom-modeline
+    :init
+    (setq doom-modeline-icon 1)
+    (doom-modeline-mode)
+    )
+#+END_SRC
+**** Set default theme
+#+BEGIN_SRC elisp
+  (defvar jae:theme 'doom-nord)
+  (load-theme jae:theme t)
+#+END_SRC
+*** EShell
+**** Auto suggestions a la fish
+#+BEGIN_SRC elisp
+(use-package esh-autosuggest
+  :hook (eshell-mode . esh-autosuggest-mode))
+#+END_SRC
+
+**** Fish shell completion
+#+BEGIN_SRC elisp
+(use-package fish-completion
+  :config
+  (global-fish-completion-mode)
+)
+#+END_SRC
+*** VTerm - a faster replacement for Term (when you need a real terminal)
+#+BEGIN_SRC elisp
+  (use-package vterm)
+#+END_SRC
+*** Zoom window - eg. use control-x control-z to zoom in / out a window (eg. "fullscreen" it).
+#+BEGIN_SRC elisp
+(use-package zoom-window
+  :bind* ("C-x C-z" . zoom-window-zoom))
+#+END_SRC
+*** Highlight numbers in source code
+See: [[https://github.com/Fanael/highlight-numbers][https://github.com/Fanael/highlight-numbers]]
+#+BEGIN_SRC elisp
+(use-package highlight-numbers
+  :config
+  (add-hook 'prog-mode-hook 'highlight-numbers-mode))
+#+END_SRC
+*** Markdown mode
+When editing markdown this is useful.
+#+BEGIN_SRC elisp
+(use-package markdown-mode)
+#+END_SRC
+*** Company mode
+[[https://company-mode.github.io/][Company]] is a text completion framework for Emacs. The name stands for "complete anything". It uses pluggable back-ends
+and front-ends to retrieve and display completion candidates.
+It comes with several back-ends such as Elisp, Clang, Semantic, Eclim, Ropemacs, Ispell, CMake, BBDB, Yasnippet, dabbrev,
+etags, gtags, files, keywords and a few others.
+#+BEGIN_SRC elisp
+(use-package company
+  :init
+  (setq company-idle-delay 0
+        company-echo-delay 0
+        company-minimum-prefix-length 2
+        company-dabbrev-ignore-case nil
+        company-dabbrev-downcase nil)
+  :config
+  (global-company-mode))
+#+END_SRC
+*** Diff hl - highligt uncommitted changes
+#+BEGIN_SRC elisp
+(use-package diff-hl
+  :config
+  (setq diff-hl-side 'right)
+  (global-diff-hl-mode t)
+  (diff-hl-flydiff-mode)
+  (add-hook 'after-make-frame-functions(lambda (frame)
+    (if (window-system frame)
+      (diff-hl-mode)
+      (diff-hl-margin-mode))))
+  (add-hook 'dired-mode-hook 'diff-hl-dired-mode))
+#+END_SRC
+*** Magit - the most awesome git editor integration
+[[https://magit.vc/][Magit]] is possibly the most awesome git integration of any editor out there.
+#+BEGIN_SRC elisp
+(use-package magit
+  :config
+  (setq magit-auto-revert-mode nil
+           magit-repository-directories
+             '( "~/Development" ))
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+  )
+#+END_SRC
+
+*** Ivy - completion tools
+See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
+#+BEGIN_SRC elisp
+(use-package ivy
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t
+           ivy-do-completion-in-region t
+           ivy-count-format "%d/%d ")
+  (add-hook 'shell-mode-hook (lambda ()
+    (define-key shell-mode-map "\t" 'completion-at-point))))
+#+END_SRC
+*** Which key
+Which key will show (in a popup) any possible continuations of a currently entered incomplete command.
+See: [[https://github.com/justbur/emacs-which-key][https://github.com/justbur/emacs-which-key]]
+#+BEGIN_SRC elisp
+(use-package which-key
+  :init
+  (which-key-mode)
+  :config
+  (which-key-setup-side-window-bottom)
+  (setq which-key-sort-order 'which-key-key-order-alpha
+        which-key-side-window-max-width 0.33
+        which-key-idle-delay 0.05)
+  )
+#+END_SRC
