@@ -3,12 +3,19 @@
 #+AUTHOR: John Axel Eriksson
 #+TOC: true
 
-This is my emacs configuration. It's documented for my benefit. This lives within my [[https://nixos.org][NixOS repo]] called [[https://github.com/johnae/world][world]].
+This is my emacs configuration. It's documented for my benefit. This lives within my [[https://nixos.org][Nix/NixOS]] monorepo called [[https://github.com/johnae/world][world]].
 
 * Initialization
 
 ** Optimization
 Here we do some basic optimizations to make emacs load faster and do "stuff" more efficiently.
+*** Time startup
+#+BEGIN_SRC elisp
+   (add-hook 'emacs-startup-hook
+      (lambda ()
+        (message "Started emacs in %.03fs"
+            (float-time (time-subtract after-init-time before-init-time)))))
+#+END_SRC
 *** Keep a reference to the actual file-name-handler.
 #+BEGIN_SRC elisp
   (defvar file-name-handler-alist-actual file-name-handler-alist)
@@ -111,11 +118,8 @@ Some basic useful settings.
 
 *** Initialize use-package
 #+BEGIN_SRC elisp
-  (eval-and-compile
-    (require 'package)
-    (package-initialize)
-    (require 'use-package)
-   )
+(eval-when-compile
+  (require 'use-package))
 #+END_SRC
 
 *** Add notmuch to load-path
@@ -182,6 +186,37 @@ Some basic useful settings.
 #+BEGIN_SRC elisp
   (add-hook 'prog-mode-hook 'hl-line-mode)
 #+END_SRC
+*** Use wl-clipboard for interprocess copy/paste
+#+BEGIN_SRC elisp
+(setq wl-copy-process nil)
+(defun wl-copy (text)
+  (setq wl-copy-process (make-process :name "wl-copy"
+                                      :buffer nil
+                                      :command '("wl-copy" "-f" "-n")
+                                      :connection-type 'pipe))
+  (process-send-string wl-copy-process text)
+  (process-send-eof wl-copy-process))
+(defun wl-paste ()
+  (if (and wl-copy-process (process-live-p wl-copy-process))
+      nil ; should return nil if we're the current paste owner
+      (shell-command-to-string "wl-paste -n | tr -d \r")))
+(setq interprogram-cut-function 'wl-copy)
+(setq interprogram-paste-function 'wl-paste)
+#+END_SRC
+*** Editor settings (tabs, spaces, newlines etc)
+#+BEGIN_SRC elisp
+(setq mode-require-final-newline t
+         tabify nil
+         tab-stop-list (number-sequence 2 120 2))
+(setq-default tab-width 2
+                      indent-tabs-mode nil)
+#+END_SRC
+*** Default shell to bash
+Without this (if you're otherwise using fish for example) eshell prompts can be very sluggish - if you're doing anything fancy such as git status etc.
+The problem comes from executing external commands which are run by your $SHELL. Tramp can also be negatively affected.
+#+BEGIN_SRC elisp
+(setq shell-file-name "bash")
+#+END_SRC
 ** User interface
 *** Set the default font
 #+BEGIN_SRC elisp
@@ -194,7 +229,6 @@ Some basic useful settings.
 #+END_SRC
 ** Utility functions
 Utility functions used here and there.
-
 *** Returns the output of a shell command without trailing whitespace
 #+BEGIN_SRC elisp
   (defun jae/shell-command-to-string-nows (cmd)
@@ -206,10 +240,8 @@ Utility functions used here and there.
       )
     )
 #+END_SRC
-
 *** Creates new empty numbered buffers
 #+BEGIN_SRC elisp
-;; Helper for opening a new empty buffer.
 (defun jae/new-empty-buffer ()
   "Create a new empty buffer.
 New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”, etc."
@@ -224,8 +256,8 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
 * Packages
 Package setup.
 
-*** Performance
-**** Adjust garbage collection based on activity (eg. gc on idle)
+** Performance
+*** Adjust garbage collection based on activity (eg. gc on idle)
 #+BEGIN_SRC elisp
   (use-package gcmh
     :hook (after-init-hook . gcmh-mode)
@@ -234,21 +266,21 @@ Package setup.
              gcmh-high-cons-threshold (* 32 1024 1024)) ; 32MB
   )
 #+END_SRC
-*** Integrates emacs with the pass password manager - disabled
+** Integrates emacs with the pass password manager - disabled
 #+BEGIN_SRC elisp
 ;; (use-package pass)
 #+END_SRC
-*** Org mode packages
-**** Org mode itself
+** Org mode packages
+*** Org mode itself
 #+BEGIN_SRC elisp
   (use-package org)
 #+END_SRC
-**** Org bullets - uses different utf8 characters for different bullet nesting levels, see: [[https://github.com/sabof/org-bullets][sabof/org-bullets]]
+*** Org bullets - uses different utf8 characters for different bullet nesting levels, see: [[https://github.com/sabof/org-bullets][sabof/org-bullets]]
 #+BEGIN_SRC elisp
 (use-package org-bullets
  :hook (org-mode . org-bullets-mode))
 #+END_SRC
-**** Org tree slide - presentation mode for org, see: [[https://github.com/takaxp/org-tree-slide][takaxp/org-tree-slide - disabled]]
+*** Org tree slide - presentation mode for org, see: [[https://github.com/takaxp/org-tree-slide][takaxp/org-tree-slide - disabled]]
 #+BEGIN_SRC elisp
 ;;(use-package org-tree-slide
 ;;  :defer t
@@ -257,25 +289,27 @@ Package setup.
 ;;  (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree)
 ;;  )
 #+END_SRC
-*** Evil Packages - Vim for emacs.
-**** Evil itself
+** Evil Packages - Vim for emacs.
+*** Evil itself
 #+BEGIN_SRC elisp
   (use-package evil
     :init
+    (setq evil-undo-system 'undo-redo)
     (setq evil-want-keybinding nil)
     :config
     (evil-mode 1)
   )
 #+END_SRC
-**** Evil collection - evil keybindings for different parts of Emacs and packages
+*** Evil collection - evil keybindings for different parts of Emacs and packages
 #+BEGIN_SRC elisp
   (use-package evil-collection
     :after evil
     :config
+    (setq evil-collection-company-use-tng nil) ;; breaks esh-autosuggest
     (evil-collection-init)
   )
 #+END_SRC
-**** Evil org
+*** Evil org
 #+BEGIN_SRC elisp
   (use-package evil-org
     :after org
@@ -285,94 +319,317 @@ Package setup.
     (evil-org-agenda-set-keys)
   )
 #+END_SRC
-*** Theming
-**** All the icons for doom modeline
+** Theming
+*** All the icons for doom modeline
 #+BEGIN_SRC elisp
   (use-package all-the-icons)
 #+END_SRC
-**** Doom themes
+*** Doom themes
 #+BEGIN_SRC elisp
   (use-package doom-themes)
 #+END_SRC
 
-**** Doom modeline
+*** Doom modeline
 #+BEGIN_SRC elisp
   (use-package doom-modeline
     :init
     (setq doom-modeline-icon 1)
+    :config
     (doom-modeline-mode)
     )
 #+END_SRC
-**** Set default theme
+*** Set default theme
 #+BEGIN_SRC elisp
   (defvar jae:theme 'doom-nord)
   (load-theme jae:theme t)
 #+END_SRC
-*** EShell
-**** Auto suggestions a la fish
+** EShell
+*** Settings
+#+BEGIN_SRC elisp
+  (require 'eshell)
+  (require 'em-smart)
+  (require 'em-tramp)
+  (setq
+      eshell-where-to-jump 'begin
+      eshell-review-quick-commands nil
+      eshell-smart-space-goes-to-end t
+      eshell-glob-case-insensitive t
+      eshell-scroll-to-bottom-on-input 'this
+      eshell-buffer-shorthand t
+      eshell-history-size 10000
+      eshell-cmpl-ignore-case t)
+#+END_SRC
+*** Aliases
+#+BEGIN_SRC elisp
+  (defun eshell/x ()
+    (insert "exit")
+    (eshell-send-input)
+    (delete-window))
+  (defun eshell/exit () (eshell/x))
+  (defun eshell/e (file) (find-file file))
+  (add-hook 'eshell-first-time-mode-hook
+       (lambda ()
+         (eshell/alias "ll" "ls -lah $*" )
+       )
+  )
+#+END_SRC
+*** Helper functions
+#+BEGIN_SRC elisp
+  (defun jae/is-inside-git-tree ()
+    "Returns true if inside git work tree."
+    (string= (jae/shell-command-to-string-nows "git rev-parse --is-inside-work-tree 2>/dev/null")
+                 "true"
+                 ))
+
+  (defun jae/git-unpushed-commits ()
+    "Returns number of local commits not pushed."
+    (if (jae/is-inside-git-tree)
+        (let ((
+               changes (jae/shell-command-to-string-nows "git log @{u}.. --oneline 2> /dev/null | wc -l")
+               ))
+          (if (string= changes "0")
+              nil
+            changes
+            )
+          )
+      nil
+      )
+    )
+
+  (defun jae/git-changes ()
+    "Returns number of changes or nil."
+    (if (jae/is-inside-git-tree)
+        (let ((
+               diffs (jae/shell-command-to-string-nows "git diff-index HEAD 2> /dev/null | wc -l")
+               ))
+          (if (string= diffs "0")
+              nil
+            diffs
+            )
+          )
+      nil
+      )
+    )
+
+  (defun jae/k8s-context ()
+    "Return k8s context or nil"
+    (let ((
+           k8s-ctx (jae/shell-command-to-string-nows
+                    "kubectl config current-context 2>/dev/null")
+                   ))
+      (if (string= k8s-ctx "")
+          nil
+        k8s-ctx
+        )
+      )
+    )
+
+  (defun jae/k8s-ns ()
+    "Return k8s ns or nil"
+    (let ((
+           k8s-ns (jae/shell-command-to-string-nows
+                    "kubens -c 2>/dev/null")
+                   ))
+      (if (string= k8s-ns "")
+          nil
+        k8s-ns
+        )
+      )
+    )
+
+  (defun jae/current-gcloud-project ()
+    "Returns the current gcloud project."
+    (let ((
+           gcloud-project (
+              jae/shell-command-to-string-nows
+                 "cat ~/.config/gcloud/configurations/config_default | grep 'project =' | awk '{print $NF}'")
+                          ))
+      (if (string= gcloud-project "")
+          nil
+        gcloud-project
+        )
+      )
+    )
+
+  (defun pick-kubectx ()
+    "Select k8s context"
+    (interactive)
+    (setenv "KUBECTX_IGNORE_FZF" "y")
+    (ivy-read "Select kubernetes cluster: " (split-string (shell-command-to-string "kubectx") "\n" t)
+              :action '(1
+                         ("o" (lambda (x) (shell-command (concat "kubectx " x))))
+                       )
+              )
+    )
+
+  (defun pick-kubens ()
+    "Select k8s namespace"
+    (interactive)
+    (setenv "KUBECTX_IGNORE_FZF" "y")
+    (ivy-read "Select kubernetes namespace: " (split-string (shell-command-to-string "kubens") "\n" t)
+              :action '(1
+                       ("o" (lambda (x) (shell-command (concat "kubens " x))))
+                       )
+              )
+    )
+
+  (defun pick-gcp-project ()
+    "Select GCP proejct"
+    (interactive)
+    (ivy-read "Select GCP Project: " (split-string (shell-command-to-string "gcloud projects list | tail -n +2 | awk '{print $1}'") "\n" t)
+              :action '(1
+                       ("o" (lambda (x) (shell-command (concat "gcloud config set project " x))))
+                       )
+              )
+    )
+
+  (defun go-to-project ()
+    "Go to project"
+    (interactive)
+    (counsel-projectile-switch-project
+     'counsel-projectile-switch-project-action-run-eshell)
+    )
+#+END_SRC
+*** Prompt
+#+BEGIN_SRC elisp
+  (defmacro with-face (STR &rest PROPS)
+    "Return STR propertized with PROPS."
+    `(propertize ,STR 'face (list ,@PROPS)))
+
+  (defmacro esh-section (NAME ICON FORM &rest PROPS)
+    "Build eshell section NAME with ICON prepended to evaled FORM with PROPS."
+    `(setq ,NAME
+           (lambda () (when ,FORM
+                   (-> ,ICON
+                      (concat esh-section-delim ,FORM)
+                      (with-face ,@PROPS))))))
+
+  (defun esh-acc (acc x)
+    "Accumulator for evaluating and concatenating esh-sections."
+    (--if-let (funcall x)
+        (if (s-blank? acc)
+            it
+          (concat acc esh-sep it))
+      acc))
+
+  (defun esh-prompt-func ()
+    "Build `eshell-prompt-function'"
+    (concat esh-header
+            (-reduce-from 'esh-acc "" eshell-funcs)
+            "\n"
+            eshell-prompt-string))
+
+  (esh-section esh-dir
+               "\xf07c"  ;  (fontawesome folder)
+               (abbreviate-file-name (eshell/pwd))
+               '(:foreground "#81a1c1" :bold ultra-bold))
+
+    (esh-section esh-git
+               "\xf126"  ;  (git icon)
+               (magit-get-current-branch)
+               '(:foreground "#5e81ac"))
+
+    (esh-section esh-git-changes
+               "\xf071"  ;  (warn icon)
+               (jae/git-changes)
+               '(:foreground "#bf616a"))
+
+    (esh-section esh-git-unpushed-commits
+               "\xf714"  ;  (skull icon)
+               (jae/git-unpushed-commits)
+               '(:foreground "#bf616a"))
+
+    (esh-section esh-k8s
+               "\xf1b3 "  ;  (cubes icon)
+               (format "%s (%s)" (jae/k8s-context) (jae/k8s-ns))
+               '(:foreground "#5e81ac"))
+
+    (esh-section esh-gcp
+               "\xf1a0"  ;  (google icon)
+               (jae/current-gcloud-project)
+               '(:foreground "#5e81ac"))
+
+  ;; Separator between esh-sections
+  (setq esh-sep "  ")
+
+  ;; Separator between an esh-section icon and form
+  (setq esh-section-delim " ")
+
+  ;; Eshell prompt header
+  (setq esh-header "\n")
+
+  ;; Eshell prompt regexp and string. Unless you are varying the prompt by eg.
+  ;; your login, these can be the same.
+  (setq eshell-prompt-regexp "❯❯ ")
+  (setq eshell-prompt-string "❯❯ ")
+
+  ;; Choose which eshell-funcs to enable
+  (setq eshell-funcs (list esh-dir esh-git
+                           esh-git-changes
+                           esh-git-unpushed-commits
+                           esh-k8s esh-gcp
+                           ))
+
+  ;; Enable the new eshell prompt
+  (setq eshell-prompt-function 'esh-prompt-func)
+#+END_SRC
+*** Auto suggestions a la fish
 #+BEGIN_SRC elisp
 (use-package esh-autosuggest
   :hook (eshell-mode . esh-autosuggest-mode))
 #+END_SRC
 
-**** Fish shell completion
+*** Fish shell completion
 #+BEGIN_SRC elisp
 (use-package fish-completion
   :config
   (global-fish-completion-mode)
 )
 #+END_SRC
-*** VTerm - a faster replacement for Term (when you need a real terminal)
+** Direnv integration
+;; Direnv integration for emacs.
+;; See: [[https://github.com/wbolster/emacs-direnv][https://github.com/wbolster/emacs-direnv]]
+;; and ofc
+;; https://direnv.net/]]
+#+BEGIN_SRC elisp
+(use-package direnv
+  :init
+  (add-hook 'prog-mode-hook #'direnv-update-environment)
+  :config
+  (direnv-mode)
+  (add-to-list 'direnv-non-file-modes 'eshell-mode)
+)
+#+END_SRC
+** VTerm - a faster replacement for Term (when you need a real terminal)
 #+BEGIN_SRC elisp
   (use-package vterm)
 #+END_SRC
-*** Zoom window - eg. use control-x control-z to zoom in / out a window (eg. "fullscreen" it).
+** Zoom window - eg. use control-x control-z to zoom in / out a window (eg. "fullscreen" it).
 #+BEGIN_SRC elisp
 (use-package zoom-window
   :bind* ("C-x C-z" . zoom-window-zoom))
 #+END_SRC
-*** Highlight numbers in source code
+** Highlight numbers in source code
 See: [[https://github.com/Fanael/highlight-numbers][https://github.com/Fanael/highlight-numbers]]
 #+BEGIN_SRC elisp
 (use-package highlight-numbers
   :config
   (add-hook 'prog-mode-hook 'highlight-numbers-mode))
 #+END_SRC
-*** Markdown mode
-When editing markdown this is useful.
-#+BEGIN_SRC elisp
-(use-package markdown-mode)
-#+END_SRC
-*** Company mode
-[[https://company-mode.github.io/][Company]] is a text completion framework for Emacs. The name stands for "complete anything". It uses pluggable back-ends
-and front-ends to retrieve and display completion candidates.
-It comes with several back-ends such as Elisp, Clang, Semantic, Eclim, Ropemacs, Ispell, CMake, BBDB, Yasnippet, dabbrev,
-etags, gtags, files, keywords and a few others.
-#+BEGIN_SRC elisp
-(use-package company
-  :init
-  (setq company-idle-delay 0
-        company-echo-delay 0
-        company-minimum-prefix-length 2
-        company-dabbrev-ignore-case nil
-        company-dabbrev-downcase nil)
-  :config
-  (global-company-mode))
-#+END_SRC
-*** Diff hl - highligt uncommitted changes
+** Diff hl - highlight uncommitted changes
 #+BEGIN_SRC elisp
 (use-package diff-hl
   :config
   (setq diff-hl-side 'right)
   (global-diff-hl-mode t)
-  (diff-hl-flydiff-mode)
+  ;;(diff-hl-flydiff-mode)
   (add-hook 'after-make-frame-functions(lambda (frame)
     (if (window-system frame)
       (diff-hl-mode)
       (diff-hl-margin-mode))))
   (add-hook 'dired-mode-hook 'diff-hl-dired-mode))
 #+END_SRC
-*** Magit - the most awesome git editor integration
+** Magit - the most awesome git editor integration
 [[https://magit.vc/][Magit]] is possibly the most awesome git integration of any editor out there.
 #+BEGIN_SRC elisp
 (use-package magit
@@ -384,7 +641,7 @@ etags, gtags, files, keywords and a few others.
   )
 #+END_SRC
 
-*** Ivy - completion tools
+** Ivy - completion tools
 See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
 #+BEGIN_SRC elisp
 (use-package ivy
@@ -396,17 +653,193 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
   (add-hook 'shell-mode-hook (lambda ()
     (define-key shell-mode-map "\t" 'completion-at-point))))
 #+END_SRC
-*** Which key
+** Which key
 Which key will show (in a popup) any possible continuations of a currently entered incomplete command.
 See: [[https://github.com/justbur/emacs-which-key][https://github.com/justbur/emacs-which-key]]
 #+BEGIN_SRC elisp
 (use-package which-key
-  :init
-  (which-key-mode)
   :config
+  (which-key-mode)
   (which-key-setup-side-window-bottom)
   (setq which-key-sort-order 'which-key-key-order-alpha
         which-key-side-window-max-width 0.33
         which-key-idle-delay 0.05)
   )
+#+END_SRC
+** Fringe helper
+#+BEGIN_SRC elisp
+(use-package fringe-helper
+  :init
+  (setq-default left-fringe-width  16)
+  (setq-default right-fringe-width 16)
+  :config
+  )
+#+END_SRC
+** Programming and markup languages
+*** LSP Mode
+Language Server Protocol.
+See: [[https://github.com/emacs-lsp/lsp-mode][emacs-lsp/lsp-mode]]
+#+BEGIN_SRC elisp
+(use-package lsp-mode
+  ;;:after (direnv evil)
+  :init
+  (setq lsp-keymap-prefix "C-c a"
+        lsp-prefer-capf t
+        lsp-rust-server 'rust-analyzer)
+  :config
+  (setq lsp-prefer-flymake nil)
+  (setq lsp-enable-snippet nil)
+  (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
+                    :major-modes '(nix-mode)
+                    :server-id 'nix))
+  (setq lsp-file-watch-ignored '(
+    "[/\\\\]\\.direnv$"
+    ; SCM tools
+    "[/\\\\]\\.git$"
+    "[/\\\\]\\.hg$"
+    "[/\\\\]\\.bzr$"
+    "[/\\\\]_darcs$"
+    "[/\\\\]\\.svn$"
+    "[/\\\\]_FOSSIL_$"
+    ; IDE tools
+    "[/\\\\]\\.idea$"
+    "[/\\\\]\\.ensime_cache$"
+    "[/\\\\]\\.eunit$"
+    "[/\\\\]node_modules$"
+    "[/\\\\]\\.fslckout$"
+    "[/\\\\]\\.tox$"
+    "[/\\\\]\\.stack-work$"
+    "[/\\\\]\\.bloop$"
+    "[/\\\\]\\.metals$"
+    "[/\\\\]target$"
+    ; Autotools output
+    "[/\\\\]\\.deps$"
+    "[/\\\\]build-aux$"
+    "[/\\\\]autom4te.cache$"
+    "[/\\\\]\\.reference$"))
+  :hook (
+    (lsp-mode . lsp-enable-which-key-integration))
+ )
+
+(defun my-lsp ()
+  "Ensures environment is updated before enabling lsp mode."
+  (direnv-update-environment default-directory)
+  (lsp-deferred))
+
+(add-hook 'prog-mode-hook 'my-lsp)
+
+(use-package lsp-ui
+  :after lsp-mode
+  :config
+  (setq lsp-ui-doc-max-height 60)
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+)
+
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+#+END_SRC
+*** Flycheck mode
+**** The mode itself
+On-the-fly syntax checking, see: [[https://www.flycheck.org/en/latest/][https://www.flycheck.org/en/latest/]]
+#+BEGIN_SRC elisp
+(use-package flycheck
+  :config
+  (global-flycheck-mode)
+  (setq flycheck-idle-change-delay 2.0)
+  ;; we've wrapped executable-find so this will run direnv-update-environment before finding executable
+  (setq flycheck-executable-find
+        (lambda (cmd) (executable-find cmd)))
+)
+#+END_SRC
+**** Flycheck popups - error display
+***** Popup tip
+For showing errors in terminal (pos-tip doesn't do that - see below).
+See: [[https://github.com/flycheck/flycheck-popup-tip][https://github.com/flycheck/flycheck-popup-tip]]
+#+BEGIN_SRC elisp
+(use-package flycheck-popup-tip)
+#+END_SRC
+
+***** Pos tip
+For showing errors under point. Refers to above for similar terminal functionality.
+See: [[https://github.com/flycheck/flycheck-pos-tip][https://github.com/flycheck/flycheck-pos-tip]]
+#+BEGIN_SRC elisp
+(use-package flycheck-pos-tip
+  :config
+  (setq flycheck-pos-tip-display-errors-tty-function #'flycheck-popup-tip-show-popup)
+  (setq flycheck-pos-tip-timeout 0)
+  (flycheck-pos-tip-mode))
+#+END_SRC
+*** Rust
+#+BEGIN_SRC elisp
+(use-package rust-mode
+  :mode "\\.rs$"
+  :config
+  (setq rust-format-on-save t)
+  (add-hook 'rust-mode-hook 'cargo-minor-mode)
+)
+#+END_SRC
+*** Shell
+#+BEGIN_SRC elisp
+  #+END_SRC
+*** Markdown mode
+#+BEGIN_SRC elisp
+(use-package markdown-mode)
+#+END_SRC
+*** Company mode
+[[https://company-mode.github.io/][Company]] is a text completion framework for Emacs. The name stands for "complete anything". It uses pluggable back-ends
+and front-ends to retrieve and display completion candidates.
+It comes with several back-ends such as Elisp, Clang, Semantic, Eclim, Ropemacs, Ispell, CMake, BBDB, Yasnippet, dabbrev,
+etags, gtags, files, keywords and a few others.
+#+BEGIN_SRC elisp
+(use-package company
+  :init
+  (setq company-idle-delay 0.05
+        company-echo-delay 0.05
+        company-minimum-prefix-length 2
+        company-dabbrev-ignore-case nil
+        company-dabbrev-downcase nil)
+  :config
+  (global-company-mode))
+#+END_SRC
+*** Company quick help
+Show documentation popups when idling on a completion candidate.
+See: [[https://github.com/expez/company-quickhelp][https://github.com/expez/company-quickhelp]]
+#+BEGIN_SRC elisp
+(use-package company-quickhelp
+  :config
+  (company-quickhelp-mode 1)
+  (setq company-quickhelp-delay 0))
+#+END_SRC
+*** Golang
+**** Go mode
+#+BEGIN_SRC elisp
+(use-package go-mode
+  :config
+  (setq gofmt-command "goimports")
+)
+(add-hook 'before-save-hook 'gofmt-before-save)
+#+END_SRC
+**** Go guru
+#+BEGIN_SRC elisp
+(use-package go-guru
+  :config
+  (go-guru-hl-identifier-mode))
+#+END_SRC
+**** Flycheck Gometalinter
+#+BEGIN_SRC elisp
+(use-package flycheck-gometalinter
+  :after flycheck
+  :config
+  (setq flycheck-gometalinter-fast t
+        flycheck-gometalinter-test t
+        flycheck-gometalinter-deadlines "10s")
+  (progn
+    (flycheck-gometalinter-setup)))
+#+END_SRC
+**** Go Eldoc
+#+BEGIN_SRC elisp
+(use-package go-eldoc
+  :config
+  (add-hook 'go-mode-hook 'go-eldoc-setup))
 #+END_SRC
