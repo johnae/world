@@ -266,14 +266,138 @@ Package setup.
              gcmh-high-cons-threshold (* 32 1024 1024)) ; 32MB
   )
 #+END_SRC
+** No littering
+#+BEGIN_SRC elisp
+  (use-package no-littering)
+#+END_SRC
 ** Integrates emacs with the pass password manager - disabled
 #+BEGIN_SRC elisp
 ;; (use-package pass)
 #+END_SRC
+** Keybindings (general.el)
+*** General itself
+  #+BEGIN_SRC elisp
+    (use-package general
+      :config
+      (general-evil-setup t)
+      (general-create-definer jae/leader-keys
+        :keymaps '(normal insert visual emacs)
+        :prefix "SPC"
+        :global-prefix "C-SPC"))
+  #+END_SRC
+*** Leader key bindings
+  #+BEGIN_SRC elisp
+    (jae/leader-keys
+      "t" '(:ignore t :which-key "toggles")
+      "tt" '(counsel-load-theme :which-key "switch-theme")
+      "p" '(:ignore p :which-key "project")
+      "pp" '(counsel-projectile :which-key "open file in project")
+      "ps" '(counsel-projectile-switch-project :which-key "switch project")
+      "eh" '(jae/eshell-here :which-key "open eshell here")
+     )
+  #+END_SRC
 ** Org mode packages
 *** Org mode itself
 #+BEGIN_SRC elisp
-  (use-package org)
+(defun jae/configure-org-mode ()
+  "Configure 'org-mode'."
+  (org-indent-mode)
+  (variable-pitch-mode 1)
+  (visual-line-mode 1)
+  (mapc
+    (lambda (face)
+            (set-face-attribute face nil :inherit 'fixed-pitch))
+    (list 'org-code
+          'org-link
+          'org-todo
+          'org-src
+          'org-list
+          'org-block
+          'org-table
+          'org-verbatim
+          'org-block-begin-line
+          'org-block-end-line
+          'org-meta-line
+          'org-document-info-keyword)
+    )
+ )
+
+(use-package org
+  :hook (org-mode . jae/configure-org-mode)
+  :custom-face
+  (variable-pitch ((t (:family "ETBembo", :height 180 :weight thin))))
+  (fixed-pitch ((t (:family "JetBrainsMono Nerd Font" :height 160))))
+  (org-document-title ((t (:weight bold :height 1.5))))
+  (org-done ((t (:strike-through t :weight bold))))
+  (org-headline-done ((t (:strike-through t))))
+  (org-level-1 ((t (:weight bold :height 1.75))))
+  (org-level-2 ((t (:weight normal :height 1.5))))
+  (org-level-3 ((t (:weight normal :height 1.25))))
+  (org-level-4 ((t (:weight normal :height 1.1))))
+  (org-level-5 ((t (:weight normal :height 1.0))))
+  (org-level-6 ((t (:weight normal :height 1.0))))
+  (org-level-7 ((t (:weight normal :height 1.0))))
+  (org-level-8 ((t (:weight normal :height 1.0))))
+  (org-image-actual-width '(600))
+  :init
+  (setq org-log-done 'time
+        org-log-reschedule 'time
+        org-crypt-key "0x45FEBADDA16B8E55"
+        org-src-fontify-natively t
+        org-ellipsis "  "
+        org-pretty-entities t
+        org-hide-emphasis-markers t
+        org-agenda-block-separator ""
+        org-src-fontify-natively t
+        org-fontify-whole-heading-line t
+        org-fontify-done-headline t
+        org-fontify-quote-and-verse-blocks t
+        org-agenda-files '("~/Development/org-agenda/" "~/.gcal-org-sync/")
+        org-directory '("~/Development/org/")
+        org-agenda-todo-list-sublevels 1
+        org-agenda-todo-ignore-scheduled t
+        org-enforce-todo-dependencies t
+        org-startup-with-beamer-mode t
+        org-startup-indented t
+        org-export-coding-system 'utf-8
+        org-export-with-sub-superscripts '{}
+        org-agenda-sorting-strategy
+         (quote
+          ((agenda deadline-up priority-down)
+           (todo priority-down category-keep)
+           (tags priority-down category-keep)
+           (search category-keep)))
+        org-todo-keywords
+         '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED"))
+        org-capture-templates
+        '(
+          ("a" "My TODO task format."
+          entry (file "~/Development/org-agenda/todo.org")
+          "* TODO %?\n")
+          )
+  )
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((R . t)
+     (emacs-lisp . t)
+     (ruby . t)
+     (python . t)
+     (js . t)
+     (java . t)
+     (latex . t)
+     (haskell . t)
+     (clojure . t)
+     ;;(go . t)
+     (shell . t)
+     (sql . t)
+     (sqlite . t)
+     (groovy . t)
+;;(kotlin . t)
+;;(typescript . t)
+     (calc . t)
+     (C . t)))
+)
 #+END_SRC
 *** Org bullets - uses different utf8 characters for different bullet nesting levels, see: [[https://github.com/sabof/org-bullets][sabof/org-bullets]]
 #+BEGIN_SRC elisp
@@ -289,15 +413,43 @@ Package setup.
 ;;  (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree)
 ;;  )
 #+END_SRC
+*** Center buffers
+#+BEGIN_SRC elisp
+(defun jae/org-mode-visual-fill ()
+  "Enable visual fill column mode."
+  (setq visual-fill-column-width 100
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(use-package visual-fill-column
+  :hook (org-mode . jae/org-mode-visual-fill))
+#+END_SRC
+** Helpful
+#+BEGIN_SRC elisp
+  (use-package helpful
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key)
+   )
+#+END_SRC
 ** Evil Packages - Vim for emacs.
 *** Evil itself
 #+BEGIN_SRC elisp
   (use-package evil
     :init
-    (setq evil-undo-system 'undo-redo)
-    (setq evil-want-keybinding nil)
+    (setq evil-undo-system 'undo-redo
+          evil-want-keybinding nil
+          evil-want-integration t
+          evil-want-C-i-jump nil
+    )
     :config
     (evil-mode 1)
+    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
   )
 #+END_SRC
 *** Evil collection - evil keybindings for different parts of Emacs and packages
@@ -343,21 +495,62 @@ Package setup.
   (defvar jae:theme 'doom-nord)
   (load-theme jae:theme t)
 #+END_SRC
+** Term
+*** Enable nicer colors - broken, disabled
+#+BEGIN_SRC elisp
+;;  (use-package eterm-256color
+;;    :hook (term-mode . eterm-256color-mode))
+#+END_SRC
 ** EShell
 *** Settings
 #+BEGIN_SRC elisp
-  (require 'eshell)
-  (require 'em-smart)
-  (require 'em-tramp)
+  (defun jae/configure-eshell ()
+    (require 'em-smart)
+    (require 'em-tramp)
+    (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
+    ;; Better performance
+    (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
+    (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
+    (evil-normalize-keymaps)
+    (define-key eshell-mode-map (kbd "C-l") 'eshell/clear)
+    (define-key eshell-mode-map (kbd "C-u") 'kill-whole-line)
+    (define-key eshell-mode-map (kbd "C-c k") (lambda ()
+                                               (interactive)
+                                               (pick-kubectx)
+                                               ))
+    (define-key eshell-mode-map (kbd "C-c n") (lambda ()
+                                               (interactive)
+                                               (pick-kubens)
+                                               ))
+    (define-key eshell-mode-map (kbd "C-c g") (lambda ()
+                                               (interactive)
+                                               (go-to-project)
+                                               ))
+    (define-key eshell-mode-map (kbd "C-c w") (lambda ()
+                                               (interactive)
+                                               (pick-gcp-project)
+                                               ))
   (setq
       eshell-where-to-jump 'begin
       eshell-review-quick-commands nil
       eshell-smart-space-goes-to-end t
       eshell-glob-case-insensitive t
-      eshell-scroll-to-bottom-on-input 'this
+      eshell-scroll-to-bottom-on-input t
       eshell-buffer-shorthand t
       eshell-history-size 10000
+      eshell-buffer-maximum-lines 10000
+      eshell-hist-ignoredups t
       eshell-cmpl-ignore-case t)
+  )
+  (use-package eshell
+    :hook (eshell-first-time-mode . jae/configure-eshell)
+    :config
+    (with-eval-after-load 'esh-opt
+      (setq eshell-destroy-buffer-when-process-dies t
+            eshell-visual-commands '("htop" "fish" "bash" "vim")
+       )
+      )
+   )
 #+END_SRC
 *** Aliases
 #+BEGIN_SRC elisp
@@ -375,6 +568,25 @@ Package setup.
 #+END_SRC
 *** Helper functions
 #+BEGIN_SRC elisp
+
+  (defun jae/eshell-here ()
+    "Opens up a new shell in the directory associated with the
+  current buffer's file. The eshell is renamed to match that
+  directory to make multiple eshell windows easier."
+    (interactive)
+    (let* ((parent (if (buffer-file-name)
+                       (file-name-directory (buffer-file-name))
+                     default-directory))
+           (height (/ (window-total-height) 3))
+           (name   (car (last (split-string parent "/" t)))))
+      (split-window-vertically (- height))
+      (other-window 1)
+      (eshell "new")
+      (rename-buffer (concat "*eshell: " name "*"))
+
+      (insert (concat "ls"))
+      (eshell-send-input)))
+
   (defun jae/is-inside-git-tree ()
     "Returns true if inside git work tree."
     (string= (jae/shell-command-to-string-nows "git rev-parse --is-inside-work-tree 2>/dev/null")
@@ -586,6 +798,29 @@ Package setup.
   (global-fish-completion-mode)
 )
 #+END_SRC
+** Projectile
+*** The package itself
+   #+BEGIN_SRC elisp
+     (use-package projectile
+       :diminish projectile-mode
+       :config (projectile-mode)
+       :custom ((projectile-completion-system 'ivy))
+       :bind-keymap
+       ("C-c p" . projectile-command-map)
+       :init
+       (when (file-directory-p "~/Development")
+         (setq projectile-project-search-path '("~/Development"))
+        )
+       (setq projectile-switch-project-action #'projectile-dired)
+     )
+  #+END_SRC
+*** Counsel projectile
+#+BEGIN_SRC elisp
+  (use-package counsel-projectile
+    :after projectile
+    :config (counsel-projectile-mode)
+  )
+#+END_SRC
 ** Direnv integration
 ;; Direnv integration for emacs.
 ;; See: [[https://github.com/wbolster/emacs-direnv][https://github.com/wbolster/emacs-direnv]]
@@ -602,7 +837,13 @@ Package setup.
 #+END_SRC
 ** VTerm - a faster replacement for Term (when you need a real terminal)
 #+BEGIN_SRC elisp
-  (use-package vterm)
+  (use-package vterm
+    :commands vterm
+    :config
+    (setq vterm-shell "fish"
+             vterm-max-scrollback 10000
+     )
+   )
 #+END_SRC
 ** Zoom window - eg. use control-x control-z to zoom in / out a window (eg. "fullscreen" it).
 #+BEGIN_SRC elisp
@@ -638,12 +879,15 @@ See: [[https://github.com/Fanael/highlight-numbers][https://github.com/Fanael/hi
            magit-repository-directories
              '( "~/Development" ))
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   )
 #+END_SRC
 
 ** Ivy - completion tools
 See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
-#+BEGIN_SRC elisp
+*** Ivy itself
+   #+BEGIN_SRC elisp
 (use-package ivy
   :config
   (ivy-mode 1)
@@ -652,6 +896,34 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
            ivy-count-format "%d/%d ")
   (add-hook 'shell-mode-hook (lambda ()
     (define-key shell-mode-map "\t" 'completion-at-point))))
+#+END_SRC
+*** Rich
+#+BEGIN_SRC elisp
+(use-package ivy-rich
+  :after ivy
+  :config
+  (ivy-rich-mode 1))
+#+END_SRC
+*** Counsel
+   #+BEGIN_SRC elisp
+     (use-package counsel
+       :config
+       (counsel-mode 1)
+     )
+#+END_SRC
+*** Prescient
+#+BEGIN_SRC elisp
+(use-package ivy-prescient
+  :after counsel
+  :custom
+  (ivy-prescient-enable-filtering nil)
+  :config
+  (prescient-persist-mode 1)
+  (ivy-prescient-mode 1))
+#+END_SRC
+*** Swiper
+   #+BEGIN_SRC elisp
+(use-package swiper)
 #+END_SRC
 ** Which key
 Which key will show (in a popup) any possible continuations of a currently entered incomplete command.
@@ -674,6 +946,23 @@ See: [[https://github.com/justbur/emacs-which-key][https://github.com/justbur/em
   (setq-default right-fringe-width 16)
   :config
   )
+#+END_SRC
+** Hydra
+*** The package
+#+BEGIN_SRC elisp
+  (use-package hydra)
+#+END_SRC
+*** Text scaling
+#+BEGIN_SRC elisp
+  (defhydra hydra-text-scale (:timeout 4)
+    "scale text"
+    ("j" text-scale-increase "in")
+    ("k" text-scale-decrease "out")
+    ("f" nil "finished" :exit t)
+  )
+  (jae/leader-keys
+     "ts" '(hydra-text-scale/body :which-key "scale text")
+   )
 #+END_SRC
 ** Programming and markup languages
 *** LSP Mode
