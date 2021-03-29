@@ -2,6 +2,7 @@
 #+PROPERTY: header-args :emacs-lisp :tangle yes :cache yes :results silent :comments link :exports code
 #+AUTHOR: John Axel Eriksson
 #+TOC: true
+#+STARTUP: fninline overview
 
 This is my emacs configuration. It's documented for my benefit. This lives within my [[https://nixos.org][Nix/NixOS]] monorepo called [[https://github.com/johnae/world][world]].
 
@@ -290,114 +291,121 @@ Package setup.
     (jae/leader-keys
       "t" '(:ignore t :which-key "toggles")
       "tt" '(counsel-load-theme :which-key "switch-theme")
+
       "p" '(:ignore p :which-key "project")
       "pp" '(counsel-projectile :which-key "open file in project")
-      "ps" '(counsel-projectile-switch-project :which-key "switch project")
-      "eh" '(jae/eshell-here :which-key "open eshell here")
+      "ps" '(projectile-switch-project :which-key "switch project")
+
+      "e" '(:ignore e :which-key "shells")
+      "ee" '(projectile-run-eshell :which-key "open eshell in project")
+      "et" '(multi-vterm-project :which-key "open vterm in project")
+
+      "s" '(:ignore s :which-key "search")
+      "ss" '(swiper :which-key "search buffer")
+      "sa" '(counsel-projectile-rg :which-key "search project")
      )
   #+END_SRC
 ** Org mode packages
 *** Org mode itself
 #+BEGIN_SRC elisp
-(defun jae/configure-org-mode ()
-  "Configure 'org-mode'."
-  (org-indent-mode)
-  (variable-pitch-mode 1)
-  (visual-line-mode 1)
-  (mapc
-    (lambda (face)
-            (set-face-attribute face nil :inherit 'fixed-pitch))
-    (list 'org-code
-          'org-link
-          'org-todo
-          'org-src
-          'org-list
-          'org-block
-          'org-table
-          'org-verbatim
-          'org-block-begin-line
-          'org-block-end-line
-          'org-meta-line
-          'org-document-info-keyword)
-    )
- )
+  (defun jae/configure-org-mode ()
+    "Configure 'org-mode'."
+    (message "configure org")
+    (org-indent-mode)
+    (variable-pitch-mode 1)
+    (visual-line-mode 1)
+    (mapc
+      (lambda (face)
+              (set-face-attribute face nil :inherit 'fixed-pitch))
+      (list 'org-code
+            'org-link
+            'org-todo
+            'org-block
+            'org-table
+            'org-verbatim
+            'org-block-begin-line
+            'org-block-end-line
+            'org-meta-line
+            'org-document-info-keyword)
+      )
+   )
 
-(use-package org
-  :hook (org-mode . jae/configure-org-mode)
-  :custom-face
-  (variable-pitch ((t (:family "ETBembo", :height 180 :weight thin))))
-  (fixed-pitch ((t (:family "JetBrainsMono Nerd Font" :height 160))))
-  (org-document-title ((t (:weight bold :height 1.5))))
-  (org-done ((t (:strike-through t :weight bold))))
-  (org-headline-done ((t (:strike-through t))))
-  (org-level-1 ((t (:weight bold :height 1.75))))
-  (org-level-2 ((t (:weight normal :height 1.5))))
-  (org-level-3 ((t (:weight normal :height 1.25))))
-  (org-level-4 ((t (:weight normal :height 1.1))))
-  (org-level-5 ((t (:weight normal :height 1.0))))
-  (org-level-6 ((t (:weight normal :height 1.0))))
-  (org-level-7 ((t (:weight normal :height 1.0))))
-  (org-level-8 ((t (:weight normal :height 1.0))))
-  (org-image-actual-width '(600))
-  :init
-  (setq org-log-done 'time
-        org-log-reschedule 'time
-        org-crypt-key "0x45FEBADDA16B8E55"
-        org-src-fontify-natively t
-        org-ellipsis "  "
-        org-pretty-entities t
-        org-hide-emphasis-markers t
-        org-agenda-block-separator ""
-        org-src-fontify-natively t
-        org-fontify-whole-heading-line t
-        org-fontify-done-headline t
-        org-fontify-quote-and-verse-blocks t
-        org-agenda-files '("~/Development/org-agenda/" "~/.gcal-org-sync/")
-        org-directory '("~/Development/org/")
-        org-agenda-todo-list-sublevels 1
-        org-agenda-todo-ignore-scheduled t
-        org-enforce-todo-dependencies t
-        org-startup-with-beamer-mode t
-        org-startup-indented t
-        org-export-coding-system 'utf-8
-        org-export-with-sub-superscripts '{}
-        org-agenda-sorting-strategy
-         (quote
-          ((agenda deadline-up priority-down)
-           (todo priority-down category-keep)
-           (tags priority-down category-keep)
-           (search category-keep)))
-        org-todo-keywords
-         '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED"))
-        org-capture-templates
-        '(
-          ("a" "My TODO task format."
-          entry (file "~/Development/org-agenda/todo.org")
-          "* TODO %?\n")
-          )
+  (use-package org
+    :hook (org-mode . jae/configure-org-mode)
+    :custom-face
+    (variable-pitch ((t (:family "ETBembo", :height 180 :weight thin))))
+    (fixed-pitch ((t (:family "JetBrainsMono Nerd Font" :height 160))))
+    (org-document-title ((t (:weight bold :height 1.5))))
+    (org-done ((t (:strike-through t :weight bold))))
+    (org-headline-done ((t (:strike-through t))))
+    (org-level-1 ((t (:weight bold :height 1.75))))
+    (org-level-2 ((t (:weight normal :height 1.5))))
+    (org-level-3 ((t (:weight normal :height 1.25))))
+    (org-level-4 ((t (:weight normal :height 1.1))))
+    (org-level-5 ((t (:weight normal :height 1.0))))
+    (org-level-6 ((t (:weight normal :height 1.0))))
+    (org-level-7 ((t (:weight normal :height 1.0))))
+    (org-level-8 ((t (:weight normal :height 1.0))))
+    (org-image-actual-width '(600))
+    :init
+    (setq org-log-done 'time
+          org-log-reschedule 'time
+          org-crypt-key "0x45FEBADDA16B8E55"
+          org-src-fontify-natively t
+          org-ellipsis "  "
+          org-pretty-entities t
+          org-hide-emphasis-markers t
+          org-agenda-block-separator ""
+          org-src-fontify-natively t
+          org-fontify-whole-heading-line t
+          org-fontify-done-headline t
+          org-fontify-quote-and-verse-blocks t
+          org-agenda-files '("~/Development/org-agenda/" "~/.gcal-org-sync/")
+          org-directory '("~/Development/org/")
+          org-agenda-todo-list-sublevels 1
+          org-agenda-todo-ignore-scheduled t
+          org-enforce-todo-dependencies t
+          org-startup-with-beamer-mode t
+          org-startup-indented t
+          org-export-coding-system 'utf-8
+          org-export-with-sub-superscripts '{}
+          org-agenda-sorting-strategy
+           (quote
+            ((agenda deadline-up priority-down)
+             (todo priority-down category-keep)
+             (tags priority-down category-keep)
+             (search category-keep)))
+          org-todo-keywords
+           '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED"))
+          org-capture-templates
+          '(
+            ("a" "My TODO task format."
+            entry (file "~/Development/org-agenda/todo.org")
+            "* TODO %?\n")
+            )
+    )
+    :config
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((R . t)
+       (emacs-lisp . t)
+       (ruby . t)
+       (python . t)
+       (js . t)
+       (java . t)
+       (latex . t)
+       (haskell . t)
+       (clojure . t)
+       ;;(go . t)
+       (shell . t)
+       (sql . t)
+       (sqlite . t)
+       (groovy . t)
+  ;;(kotlin . t)
+  ;;(typescript . t)
+       (calc . t)
+       (C . t)))
   )
-  :config
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((R . t)
-     (emacs-lisp . t)
-     (ruby . t)
-     (python . t)
-     (js . t)
-     (java . t)
-     (latex . t)
-     (haskell . t)
-     (clojure . t)
-     ;;(go . t)
-     (shell . t)
-     (sql . t)
-     (sqlite . t)
-     (groovy . t)
-;;(kotlin . t)
-;;(typescript . t)
-     (calc . t)
-     (C . t)))
-)
 #+END_SRC
 *** Org bullets - uses different utf8 characters for different bullet nesting levels, see: [[https://github.com/sabof/org-bullets][sabof/org-bullets]]
 #+BEGIN_SRC elisp
@@ -407,7 +415,7 @@ Package setup.
 *** Org tree slide - presentation mode for org, see: [[https://github.com/takaxp/org-tree-slide][takaxp/org-tree-slide - disabled]]
 #+BEGIN_SRC elisp
 ;;(use-package org-tree-slide
-;;  :defer t
+;;  :defer 
 ;;  :config
 ;;  (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-previous-tree)
 ;;  (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree)
@@ -415,14 +423,12 @@ Package setup.
 #+END_SRC
 *** Center buffers
 #+BEGIN_SRC elisp
-(defun jae/org-mode-visual-fill ()
-  "Enable visual fill column mode."
-  (setq visual-fill-column-width 100
-        visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
-
-(use-package visual-fill-column
-  :hook (org-mode . jae/org-mode-visual-fill))
+  (use-package visual-fill-column
+    :hook (org-mode . visual-fill-column-mode)
+    :custom
+    (visual-fill-column-width 100)
+    (visual-fill-column-center-text t)
+  )
 #+END_SRC
 ** Helpful
 #+BEGIN_SRC elisp
@@ -803,6 +809,7 @@ Package setup.
    #+BEGIN_SRC elisp
      (use-package projectile
        :diminish projectile-mode
+       :demand t
        :config (projectile-mode)
        :custom ((projectile-completion-system 'ivy))
        :bind-keymap
@@ -836,15 +843,20 @@ Package setup.
 )
 #+END_SRC
 ** VTerm - a faster replacement for Term (when you need a real terminal)
-#+BEGIN_SRC elisp
-  (use-package vterm
-    :commands vterm
-    :config
-    (setq vterm-shell "fish"
-             vterm-max-scrollback 10000
-     )
-   )
-#+END_SRC
+*** The vterm package
+   #+BEGIN_SRC elisp
+     (use-package vterm
+       :commands vterm
+       :config
+       (setq vterm-shell "fish"
+                vterm-max-scrollback 10000
+        )
+      )
+   #+END_SRC
+*** Multi vterm
+   #+BEGIN_SRC elisp
+   (use-package multi-vterm)
+   #+END_SRC
 ** Zoom window - eg. use control-x control-z to zoom in / out a window (eg. "fullscreen" it).
 #+BEGIN_SRC elisp
 (use-package zoom-window
@@ -962,6 +974,18 @@ See: [[https://github.com/justbur/emacs-which-key][https://github.com/justbur/em
   )
   (jae/leader-keys
      "ts" '(hydra-text-scale/body :which-key "scale text")
+   )
+#+END_SRC
+*** Term switching
+#+BEGIN_SRC elisp
+  (defhydra hydra-term-switch (:timeout 4)
+    "switch term"
+    ("j" multi-vterm-prev "prev")
+    ("k" multi-vterm-next "next")
+    ("f" nil "finished" :exit t)
+  )
+  (jae/leader-keys
+     "es" '(hydra-term-switch/body :which-key "cycle through terminals")
    )
 #+END_SRC
 ** Programming and markup languages
@@ -1132,3 +1156,29 @@ See: [[https://github.com/expez/company-quickhelp][https://github.com/expez/comp
   :config
   (add-hook 'go-mode-hook 'go-eldoc-setup))
 #+END_SRC
+
+*** Terraform
+**** The mode itself
+     HashiCorps terraform.
+  #+BEGIN_SRC elisp
+  (use-package terraform-mode
+    :mode "\\.tf$"
+    :hook (terraform-mode . terraform-format-on-save-mode))
+  #+END_SRC
+**** Company terraform
+   #+BEGIN_SRC elisp
+      (use-package company-terraform
+        :after company
+        :config
+        (company-terraform-init))
+   #+END_SRC
+*** Nix
+**** The mode
+  #+BEGIN_SRC elisp
+    (defun jae/nix-mode-format-before-save-hook ()
+      (when (eq major-mode 'nix-mode)
+        (nix-format-buffer)))
+    (use-package nix-mode
+      :mode "\\.nix$"
+      :hook (nix-mode . jae/nix-mode-format-before-save))
+  #+END_SRC
