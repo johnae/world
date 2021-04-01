@@ -4,10 +4,12 @@
 , ninja
 , pkgconfig
 , makeWrapper
+, substituteAll
 , scdoc
 , wayland
 , wayland-protocols
 , libxkbcommon
+, swaybg
 , pcre
 , json_c
 , dbus
@@ -32,6 +34,10 @@ stdenv.mkDerivation rec {
   patches = [
     ./sway-config-no-nix-store-references.patch
     ./load-configuration-from-etc.patch
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit swaybg;
+    })
   ];
 
   nativeBuildInputs = [ pkgconfig meson ninja scdoc ];
