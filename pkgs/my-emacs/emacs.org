@@ -45,10 +45,11 @@ Here we do some basic optimizations to make emacs load faster and do "stuff" mor
     (setq file-name-handler-alist file-name-handler-alist-actual)) t)
 #+END_SRC
 
-*** This makes emacsclient fast when starting up, not entirely sure why tbh
-#+BEGIN_SRC elisp
-(setq-default xterm-query-timeout nil)
-#+END_SRC
+*** This makes emacsclient startup faster in TUI-mode
+   There's some code in ~xterm.el~ that will wait to avoid ugly flashes and such. It doesn't seem to work and I also don't really care. I'd rather not have it seem as if emacs just "hangs" for several seconds. Don't know why that happens really but disabling this has no negative effects in my use anyway (only positive).
+ #+BEGIN_SRC elisp
+ (setq-default xterm-query-timeout nil)
+ #+END_SRC
 
 *** Disable startup messages
 #+BEGIN_SRC elisp
