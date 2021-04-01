@@ -81,13 +81,14 @@ Here we do some basic optimizations to make emacs load faster and do "stuff" mor
 #+END_SRC
 *** Misc performance tweaks
 **** Skip trying a second pass through auto-mode-list
-#+BEGIN_SRC elisp
-(setq auto-mode-case-fold nil)
-#+END_SRC
+     #+BEGIN_SRC elisp
+     (setq auto-mode-case-fold nil)
+     #+END_SRC
 **** Enable so-long mode
-#+BEGIN_SRC elisp
-(global-so-long-mode 1)
-#+END_SRC
+     Emacs has problems with very long lines (eg. minified js, json for example). So long helps with that.
+     #+BEGIN_SRC elisp
+     (global-so-long-mode 1)
+     #+END_SRC
 ** Setup
 Some basic useful settings.
 *** Don't create backup files, don't create #autosave# files
