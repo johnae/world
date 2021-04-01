@@ -91,135 +91,132 @@ Here we do some basic optimizations to make emacs load faster and do "stuff" mor
 ** Setup
 Some basic useful settings.
 *** Don't create backup files, don't create #autosave# files
-#+BEGIN_SRC elisp
-(setq temporary-file-directory "~/.emacs.d/tmp/")
-(unless (file-exists-p "~/.emacs.d/tmp")
-  (make-directory "~/.emacs.d/tmp"))
+   #+BEGIN_SRC elisp
+   (setq temporary-file-directory "~/.emacs.d/tmp/")
+   (unless (file-exists-p "~/.emacs.d/tmp")
+     (make-directory "~/.emacs.d/tmp"))
 
-(setq backup-inhibited t
-         make-backup-files nil ; don't create backup~ files
-         create-lockfiles nil
-         auto-save-default nil) ; don't create #autosave# files
-#+END_SRC
+   (setq backup-inhibited t
+            make-backup-files nil ; don't create backup~ files
+            create-lockfiles nil
+            auto-save-default nil) ; don't create #autosave# files
+   #+END_SRC
 *** Don't confirm org-babel eval. Somewhat dangerous. I live in the fast lane.
-#+BEGIN_SRC elisp
-  (setq org-confirm-babel-evaluate nil)
-#+END_SRC
-
+   #+BEGIN_SRC elisp
+     (setq org-confirm-babel-evaluate nil)
+   #+END_SRC
 *** Disable impure packages (as in not already fetched by Nix)
-#+BEGIN_SRC elisp
-  (setq
-     package-archives nil
-     package-enable-at-startup nil
-   )
-#+END_SRC
-
+   #+BEGIN_SRC elisp
+     (setq
+        package-archives nil
+        package-enable-at-startup nil
+      )
+   #+END_SRC
 *** Include common lisp emulation functions
-#+BEGIN_SRC elisp
-  (require 'cl-lib)
-#+END_SRC
-
+   #+BEGIN_SRC elisp
+     (require 'cl-lib)
+   #+END_SRC
 *** Initialize use-package
-#+BEGIN_SRC elisp
-(eval-when-compile
-  (require 'use-package))
-#+END_SRC
-
+   #+BEGIN_SRC elisp
+   (eval-when-compile
+     (require 'use-package))
+   #+END_SRC
 *** Add notmuch to load-path
-#+BEGIN_SRC elisp
-  (add-to-list 'load-path (getenv "NOTMUCH_LOAD_PATH"))
-#+END_SRC
-
+   #+BEGIN_SRC elisp
+     (add-to-list 'load-path (getenv "NOTMUCH_LOAD_PATH"))
+   #+END_SRC
 *** Setup auth sources so we use can use pass gpg files
-#+BEGIN_SRC elisp
-  (setq auth-sources '((:source "~/.local/share/password-store/emacs/auth/authinfo.gpg")))
-#+END_SRC
-
+   #+BEGIN_SRC elisp
+     (setq auth-sources '((:source "~/.local/share/password-store/emacs/auth/authinfo.gpg")))
+   #+END_SRC
 *** Set utf8 everywhere
-#+BEGIN_SRC elisp
-(setq locale-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(when (display-graphic-p)
-  (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)))
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (set-charset-priority 'unicode)
+     (setq locale-coding-system 'utf-8)
+     (set-terminal-coding-system 'utf-8)
+     (set-keyboard-coding-system 'utf-8)
+     (set-selection-coding-system 'utf-8)
+     (prefer-coding-system 'utf-8)
+     (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+     (when (display-graphic-p)
+       (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)))
+   #+END_SRC
 *** Set browser function - eg. which browser to open links in
-#+BEGIN_SRC elisp
-  (setq browse-url-browser-function 'browse-url-generic
-           browse-url-generic-program "firefox")
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (setq browse-url-browser-function 'browse-url-generic
+              browse-url-generic-program "firefox")
+   #+END_SRC
 *** Show trailing whitespace when programming
-#+BEGIN_SRC elisp
-(set-face-background 'trailing-whitespace "yellow")
-(add-hook 'prog-mode-hook
-  (lambda ()
-    (setq show-trailing-whitespace t)))
-#+END_SRC
+   #+BEGIN_SRC elisp
+   (set-face-background 'trailing-whitespace "yellow")
+   (add-hook 'prog-mode-hook
+     (lambda ()
+       (setq show-trailing-whitespace t)))
+   #+END_SRC
 *** I'm in Europe so I want dates to be displayed in European formats
-#+BEGIN_SRC elisp
-(setq european-date-style 'european
-        calendar-set-date-style 'european
-        calendar-week-start-day 1
-        calendar-date-display-form
-           '((if dayname
-                 (concat dayname ", "))
-             day " " monthname " " year))
+   #+BEGIN_SRC elisp
+   (setq european-date-style 'european
+           calendar-set-date-style 'european
+           calendar-week-start-day 1
+           calendar-date-display-form
+              '((if dayname
+                    (concat dayname ", "))
+                day " " monthname " " year))
 
-(setq calendar-time-display-form
-      '(24-hours ":" minutes))
-#+END_SRC
+   (setq calendar-time-display-form
+         '(24-hours ":" minutes))
+   #+END_SRC
 *** Highlight matching parentheses
-#+BEGIN_SRC elisp
-(defun my-show-paren-mode ()
-   "Enables 'show-paren-mode'."
-   (setq show-paren-delay 0)
-   (set-face-background 'show-paren-match (face-background 'default))
-   (set-face-foreground 'show-paren-match "#def")
-   (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
-   (show-paren-mode 1))
-(add-hook 'prog-mode-hook 'my-show-paren-mode)
-#+END_SRC
+   #+BEGIN_SRC elisp
+   (defun my-show-paren-mode ()
+      "Enables 'show-paren-mode'."
+      (setq show-paren-delay 0)
+      (set-face-background 'show-paren-match (face-background 'default))
+      (set-face-foreground 'show-paren-match "#def")
+      (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
+      (show-paren-mode 1))
+   (add-hook 'prog-mode-hook 'my-show-paren-mode)
+   #+END_SRC
 *** Enable electric pair mode
-#+BEGIN_SRC elisp
-  (add-hook 'prog-mode-hook 'electric-pair-mode)
-#+END_SRC
+   Electric pair mode is a fancy way of saying - when inserting an opening delimiter, also insert a closing one and put me in between. Electric pair mode! Obviously.
+   #+BEGIN_SRC elisp
+     (add-hook 'prog-mode-hook 'electric-pair-mode)
+   #+END_SRC
 *** Highlight current line when programming
-#+BEGIN_SRC elisp
-  (add-hook 'prog-mode-hook 'hl-line-mode)
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (add-hook 'prog-mode-hook 'hl-line-mode)
+   #+END_SRC
 *** Use wl-clipboard for interprocess copy/paste
-#+BEGIN_SRC elisp
-(setq wl-copy-process nil)
-(defun wl-copy (text)
-  (setq wl-copy-process (make-process :name "wl-copy"
-                                      :buffer nil
-                                      :command '("wl-copy" "-f" "-n")
-                                      :connection-type 'pipe))
-  (process-send-string wl-copy-process text)
-  (process-send-eof wl-copy-process))
-(defun wl-paste ()
-  (if (and wl-copy-process (process-live-p wl-copy-process))
-      nil ; should return nil if we're the current paste owner
-      (shell-command-to-string "wl-paste -n | tr -d \r")))
-(setq interprogram-cut-function 'wl-copy)
-(setq interprogram-paste-function 'wl-paste)
-#+END_SRC
+   #+BEGIN_SRC elisp
+   (setq wl-copy-process nil)
+   (defun wl-copy (text)
+     (setq wl-copy-process (make-process :name "wl-copy"
+                                         :buffer nil
+                                         :command '("wl-copy" "-f" "-n")
+                                         :connection-type 'pipe))
+     (process-send-string wl-copy-process text)
+     (process-send-eof wl-copy-process))
+   (defun wl-paste ()
+     (if (and wl-copy-process (process-live-p wl-copy-process))
+         nil ; should return nil if we're the current paste owner
+         (shell-command-to-string "wl-paste -n | tr -d \r")))
+   (setq interprogram-cut-function 'wl-copy)
+   (setq interprogram-paste-function 'wl-paste)
+   #+END_SRC
 *** Editor settings (tabs, spaces, newlines etc)
-#+BEGIN_SRC elisp
-(setq mode-require-final-newline t
-         tabify nil
-         tab-stop-list (number-sequence 2 120 2))
-(setq-default tab-width 2
-                      indent-tabs-mode nil)
-#+END_SRC
+   #+BEGIN_SRC elisp
+   (setq mode-require-final-newline t
+            tabify nil
+            tab-stop-list (number-sequence 2 120 2))
+   (setq-default tab-width 2
+                         indent-tabs-mode nil)
+   #+END_SRC
 *** Default shell to bash
-Without this (if you're otherwise using fish for example) eshell prompts can be very sluggish - if you're doing anything fancy such as git status etc.
-The problem comes from executing external commands which are run by your $SHELL. Tramp can also be negatively affected.
-#+BEGIN_SRC elisp
-(setq shell-file-name "bash")
-#+END_SRC
+   Without this (if you're otherwise using fish for example) eshell prompts can be very sluggish - if you're doing anything fancy such as git status etc.
+   The problem comes from executing external commands which are run by your $SHELL. Tramp can also be negatively affected.
+   #+BEGIN_SRC elisp
+   (setq shell-file-name "bash")
+   #+END_SRC
 ** User interface
 *** Set the default font
 #+BEGIN_SRC elisp
@@ -256,27 +253,35 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
     $buf
     ))
 #+END_SRC
+*** Don't write custom settings anywhere
+   #+BEGIN_SRC elisp
+   (setq custom-file null-device)
+   #+END_SRC
+*** Themes aren't less safe than the rest of emacs
+   #+BEGIN_SRC elisp
+   (setq custom-safe-themes t)
+   #+END_SRC
 * Packages
 Package setup.
 
 ** Performance
 *** Adjust garbage collection based on activity (eg. gc on idle)
-#+BEGIN_SRC elisp
-  (use-package gcmh
-    :hook (after-init-hook . gcmh-mode)
-    :init
-    (setq gcmh-idle-delay 5
-             gcmh-high-cons-threshold (* 32 1024 1024)) ; 32MB
-  )
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (use-package gcmh
+       :hook (after-init-hook . gcmh-mode)
+       :init
+       (setq gcmh-idle-delay 5
+                gcmh-high-cons-threshold (* 32 1024 1024)) ; 32MB
+     )
+   #+END_SRC
 ** No littering
-#+BEGIN_SRC elisp
-  (use-package no-littering)
-#+END_SRC
+ #+BEGIN_SRC elisp
+   (use-package no-littering)
+ #+END_SRC
 ** Integrates emacs with the pass password manager - disabled
-#+BEGIN_SRC elisp
-;; (use-package pass)
-#+END_SRC
+ #+BEGIN_SRC elisp
+ ;; (use-package pass)
+ #+END_SRC
 ** Keybindings (general.el)
 *** General itself
   #+BEGIN_SRC elisp
@@ -324,507 +329,507 @@ Package setup.
   #+END_SRC
 ** Org mode packages
 *** Org mode itself
-#+BEGIN_SRC elisp
-  (defun jae/configure-org-mode ()
-    "Configure 'org-mode'."
-    (org-indent-mode)
-    (variable-pitch-mode 1)
-    (visual-line-mode 1)
-    (mapc
-      (lambda (face)
-              (set-face-attribute face nil :inherit 'fixed-pitch))
-      (list 'org-code
-            'org-link
-            'org-todo
-            'org-block
-            'org-table
-            'org-verbatim
-            'org-block-begin-line
-            'org-block-end-line
-            'org-meta-line
-            'org-document-info-keyword)
+   #+BEGIN_SRC elisp
+     (defun jae/configure-org-mode ()
+       "Configure 'org-mode'."
+       (org-indent-mode)
+       (variable-pitch-mode 1)
+       (visual-line-mode 1)
+       (mapc
+         (lambda (face)
+                 (set-face-attribute face nil :inherit 'fixed-pitch))
+         (list 'org-code
+               'org-link
+               'org-todo
+               'org-block
+               'org-table
+               'org-verbatim
+               'org-block-begin-line
+               'org-block-end-line
+               'org-meta-line
+               'org-document-info-keyword)
+         )
       )
-   )
 
-  (use-package org
-    :hook (org-mode . jae/configure-org-mode)
-    :custom-face
-    (variable-pitch ((t (:family "ETBembo", :height 180 :weight thin))))
-    (fixed-pitch ((t (:family "JetBrainsMono Nerd Font" :height 160))))
-    (org-document-title ((t (:weight bold :height 1.5))))
-    (org-done ((t (:strike-through t :weight bold))))
-    (org-headline-done ((t (:strike-through t))))
-    (org-level-1 ((t (:weight bold :height 1.75))))
-    (org-level-2 ((t (:weight normal :height 1.5))))
-    (org-level-3 ((t (:weight normal :height 1.25))))
-    (org-level-4 ((t (:weight normal :height 1.1))))
-    (org-level-5 ((t (:weight normal :height 1.0))))
-    (org-level-6 ((t (:weight normal :height 1.0))))
-    (org-level-7 ((t (:weight normal :height 1.0))))
-    (org-level-8 ((t (:weight normal :height 1.0))))
-    (org-image-actual-width '(600))
-    :init
-    (setq org-log-done 'time
-          org-log-reschedule 'time
-          org-crypt-key "0x45FEBADDA16B8E55"
-          org-src-fontify-natively t
-          org-ellipsis "  "
-          org-pretty-entities t
-          org-hide-emphasis-markers t
-          org-agenda-block-separator ""
-          org-src-fontify-natively t
-          org-fontify-whole-heading-line t
-          org-fontify-done-headline t
-          org-fontify-quote-and-verse-blocks t
-          org-agenda-files '("~/Development/org-agenda/" "~/.gcal-org-sync/")
-          org-directory '("~/Development/org/")
-          org-agenda-todo-list-sublevels 1
-          org-agenda-todo-ignore-scheduled t
-          org-enforce-todo-dependencies t
-          org-startup-with-beamer-mode t
-          org-startup-indented t
-          org-export-coding-system 'utf-8
-          org-export-with-sub-superscripts '{}
-          org-agenda-sorting-strategy
-           (quote
-            ((agenda deadline-up priority-down)
-             (todo priority-down category-keep)
-             (tags priority-down category-keep)
-             (search category-keep)))
-          org-todo-keywords
-           '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED"))
-          org-capture-templates
-          '(
-            ("a" "My TODO task format."
-            entry (file "~/Development/org-agenda/todo.org")
-            "* TODO %?\n")
-            )
-    )
-    :config
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((R . t)
-       (emacs-lisp . t)
-       (ruby . t)
-       (python . t)
-       (js . t)
-       (java . t)
-       (latex . t)
-       (haskell . t)
-       (clojure . t)
-       ;;(go . t)
-       (shell . t)
-       (sql . t)
-       (sqlite . t)
-       (groovy . t)
-  ;;(kotlin . t)
-  ;;(typescript . t)
-       (calc . t)
-       (C . t)))
-  )
-#+END_SRC
+     (use-package org
+       :hook (org-mode . jae/configure-org-mode)
+       :custom-face
+       (variable-pitch ((t (:family "ETBembo", :height 180 :weight thin))))
+       (fixed-pitch ((t (:family "JetBrainsMono Nerd Font" :height 160))))
+       (org-document-title ((t (:weight bold :height 1.5))))
+       (org-done ((t (:strike-through t :weight bold))))
+       (org-headline-done ((t (:strike-through t))))
+       (org-level-1 ((t (:weight bold :height 1.75))))
+       (org-level-2 ((t (:weight normal :height 1.5))))
+       (org-level-3 ((t (:weight normal :height 1.25))))
+       (org-level-4 ((t (:weight normal :height 1.1))))
+       (org-level-5 ((t (:weight normal :height 1.0))))
+       (org-level-6 ((t (:weight normal :height 1.0))))
+       (org-level-7 ((t (:weight normal :height 1.0))))
+       (org-level-8 ((t (:weight normal :height 1.0))))
+       (org-image-actual-width '(600))
+       :init
+       (setq org-log-done 'time
+             org-log-reschedule 'time
+             org-crypt-key "0x45FEBADDA16B8E55"
+             org-src-fontify-natively t
+             org-ellipsis "  "
+             org-pretty-entities t
+             org-hide-emphasis-markers t
+             org-agenda-block-separator ""
+             org-src-fontify-natively t
+             org-fontify-whole-heading-line t
+             org-fontify-done-headline t
+             org-fontify-quote-and-verse-blocks t
+             org-agenda-files '("~/Development/org-agenda/" "~/.gcal-org-sync/")
+             org-directory '("~/Development/org/")
+             org-agenda-todo-list-sublevels 1
+             org-agenda-todo-ignore-scheduled t
+             org-enforce-todo-dependencies t
+             org-startup-with-beamer-mode t
+             org-startup-indented t
+             org-export-coding-system 'utf-8
+             org-export-with-sub-superscripts '{}
+             org-agenda-sorting-strategy
+              (quote
+               ((agenda deadline-up priority-down)
+                (todo priority-down category-keep)
+                (tags priority-down category-keep)
+                (search category-keep)))
+             org-todo-keywords
+              '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED"))
+             org-capture-templates
+             '(
+               ("a" "My TODO task format."
+               entry (file "~/Development/org-agenda/todo.org")
+               "* TODO %?\n")
+               )
+       )
+       :config
+       (org-babel-do-load-languages
+        'org-babel-load-languages
+        '((R . t)
+          (emacs-lisp . t)
+          (ruby . t)
+          (python . t)
+          (js . t)
+          (java . t)
+          (latex . t)
+          (haskell . t)
+          (clojure . t)
+          ;;(go . t)
+          (shell . t)
+          (sql . t)
+          (sqlite . t)
+          (groovy . t)
+     ;;(kotlin . t)
+     ;;(typescript . t)
+          (calc . t)
+          (C . t)))
+     )
+   #+END_SRC
 *** Org bullets - uses different utf8 characters for different bullet nesting levels, see: [[https://github.com/sabof/org-bullets][sabof/org-bullets]]
-#+BEGIN_SRC elisp
-(use-package org-bullets
- :hook (org-mode . org-bullets-mode))
-#+END_SRC
+   #+BEGIN_SRC elisp
+   (use-package org-bullets
+    :hook (org-mode . org-bullets-mode))
+   #+END_SRC
 *** Org tree slide - presentation mode for org, see: [[https://github.com/takaxp/org-tree-slide][takaxp/org-tree-slide - disabled]]
-#+BEGIN_SRC elisp
-;;(use-package org-tree-slide
-;;  :defer
-;;  :config
-;;  (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-previous-tree)
-;;  (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree)
-;;  )
-#+END_SRC
+   #+BEGIN_SRC elisp
+   ;;(use-package org-tree-slide
+   ;;  :defer
+   ;;  :config
+   ;;  (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-previous-tree)
+   ;;  (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree)
+   ;;  )
+   #+END_SRC
 *** Center buffers
-#+BEGIN_SRC elisp
-  (use-package visual-fill-column
-    :hook (org-mode . visual-fill-column-mode)
-    :custom
-    (visual-fill-column-width 125)
-    (visual-fill-column-center-text t)
-  )
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (use-package visual-fill-column
+       :hook (org-mode . visual-fill-column-mode)
+       :custom
+       (visual-fill-column-width 125)
+       (visual-fill-column-center-text t)
+     )
+   #+END_SRC
 ** Helpful
-#+BEGIN_SRC elisp
-  (use-package helpful
-    :custom
-    (counsel-describe-function-function #'helpful-callable)
-    (counsel-describe-variable-function #'helpful-variable)
-    :bind
-    ([remap describe-function] . counsel-describe-function)
-    ([remap describe-command] . helpful-command)
-    ([remap describe-variable] . counsel-describe-variable)
-    ([remap describe-key] . helpful-key)
-   )
-#+END_SRC
+ #+BEGIN_SRC elisp
+   (use-package helpful
+     :custom
+     (counsel-describe-function-function #'helpful-callable)
+     (counsel-describe-variable-function #'helpful-variable)
+     :bind
+     ([remap describe-function] . counsel-describe-function)
+     ([remap describe-command] . helpful-command)
+     ([remap describe-variable] . counsel-describe-variable)
+     ([remap describe-key] . helpful-key)
+    )
+ #+END_SRC
 ** Evil Packages - Vim for emacs.
 *** Evil itself
-#+BEGIN_SRC elisp
-  (use-package evil
-    :init
-    (setq evil-undo-system 'undo-redo
-          evil-want-keybinding nil
-          evil-want-integration t
-          evil-want-C-i-jump nil
-    )
-    :config
-    (evil-mode 1)
-    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-  )
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (use-package evil
+       :init
+       (setq evil-undo-system 'undo-redo
+             evil-want-keybinding nil
+             evil-want-integration t
+             evil-want-C-i-jump nil
+       )
+       :config
+       (evil-mode 1)
+       (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+     )
+   #+END_SRC
 *** Evil collection - evil keybindings for different parts of Emacs and packages
-#+BEGIN_SRC elisp
-  (use-package evil-collection
-    :after evil
-    :config
-    (setq evil-collection-company-use-tng nil) ;; breaks esh-autosuggest
-    (evil-collection-init)
-  )
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (use-package evil-collection
+       :after evil
+       :config
+       (setq evil-collection-company-use-tng nil) ;; breaks esh-autosuggest
+       (evil-collection-init)
+     )
+   #+END_SRC
 *** Evil org
-#+BEGIN_SRC elisp
-  (use-package evil-org
-    :after org
-    :hook (org-mode . evil-org-mode)
-    :config
-    (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys)
-  )
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (use-package evil-org
+       :after org
+       :hook (org-mode . evil-org-mode)
+       :config
+       (require 'evil-org-agenda)
+       (evil-org-agenda-set-keys)
+     )
+   #+END_SRC
 ** Theming
 *** All the icons for doom modeline
-#+BEGIN_SRC elisp
-  (use-package all-the-icons)
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (use-package all-the-icons)
+   #+END_SRC
 *** Doom themes
-#+BEGIN_SRC elisp
-  (use-package doom-themes)
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (use-package doom-themes)
+   #+END_SRC
 
 *** Doom modeline
-#+BEGIN_SRC elisp
-  (use-package doom-modeline
-    :init
-    (setq doom-modeline-icon 1)
-    :config
-    (doom-modeline-mode)
-    )
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (use-package doom-modeline
+       :init
+       (setq doom-modeline-icon 1)
+       :config
+       (doom-modeline-mode)
+       )
+   #+END_SRC
 *** Set default theme
-#+BEGIN_SRC elisp
-  (defvar jae:theme 'doom-palenight)
-  (load-theme jae:theme t)
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (defvar jae:theme 'doom-oceanic-next)
+     (load-theme jae:theme t)
+   #+END_SRC
 ** Term
 *** Enable nicer colors - broken, disabled
-#+BEGIN_SRC elisp
-;;  (use-package eterm-256color
-;;    :hook (term-mode . eterm-256color-mode))
-#+END_SRC
+   #+BEGIN_SRC elisp
+   ;;  (use-package eterm-256color
+   ;;    :hook (term-mode . eterm-256color-mode))
+   #+END_SRC
 ** EShell
 *** Settings
-#+BEGIN_SRC elisp
-  (defun jae/configure-eshell ()
-    (require 'em-smart)
-    (require 'em-tramp)
-    (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
-    ;; Better performance
-    (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
-    (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
-    (evil-normalize-keymaps)
-    (define-key eshell-mode-map (kbd "C-l") 'eshell/clear)
-    (define-key eshell-mode-map (kbd "C-u") 'kill-whole-line)
-    (define-key eshell-mode-map (kbd "C-c k") (lambda ()
-                                               (interactive)
-                                               (jae/pick-kubectx)
-                                               ))
-    (define-key eshell-mode-map (kbd "C-c n") (lambda ()
-                                               (interactive)
-                                               (jae/pick-kubens)
-                                               ))
-    (define-key eshell-mode-map (kbd "C-c g") (lambda ()
-                                               (interactive)
-                                               (jae/go-to-project)
-                                               ))
-    (define-key eshell-mode-map (kbd "C-c w") (lambda ()
-                                               (interactive)
-                                               (jae/pick-gcp-project)
-                                               ))
-  (setq
-      eshell-where-to-jump 'begin
-      eshell-review-quick-commands nil
-      eshell-smart-space-goes-to-end t
-      eshell-glob-case-insensitive t
-      eshell-scroll-to-bottom-on-input t
-      eshell-buffer-shorthand t
-      eshell-history-size 10000
-      eshell-buffer-maximum-lines 10000
-      eshell-hist-ignoredups t
-      eshell-cmpl-ignore-case t)
-  )
-  (use-package eshell
-    :hook (eshell-first-time-mode . jae/configure-eshell)
-    :config
-    (with-eval-after-load 'esh-opt
-      (setq eshell-destroy-buffer-when-process-dies t
-            eshell-visual-commands '("htop" "fish" "bash" "vim")
-       )
+   #+BEGIN_SRC elisp
+     (defun jae/configure-eshell ()
+       (require 'em-smart)
+       (require 'em-tramp)
+       (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
+       ;; Better performance
+       (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
+       (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
+       (evil-normalize-keymaps)
+       (define-key eshell-mode-map (kbd "C-l") 'eshell/clear)
+       (define-key eshell-mode-map (kbd "C-u") 'kill-whole-line)
+       (define-key eshell-mode-map (kbd "C-c k") (lambda ()
+                                                  (interactive)
+                                                  (jae/pick-kubectx)
+                                                  ))
+       (define-key eshell-mode-map (kbd "C-c n") (lambda ()
+                                                  (interactive)
+                                                  (jae/pick-kubens)
+                                                  ))
+       (define-key eshell-mode-map (kbd "C-c g") (lambda ()
+                                                  (interactive)
+                                                  (jae/go-to-project)
+                                                  ))
+       (define-key eshell-mode-map (kbd "C-c w") (lambda ()
+                                                  (interactive)
+                                                  (jae/pick-gcp-project)
+                                                  ))
+     (setq
+         eshell-where-to-jump 'begin
+         eshell-review-quick-commands nil
+         eshell-smart-space-goes-to-end t
+         eshell-glob-case-insensitive t
+         eshell-scroll-to-bottom-on-input t
+         eshell-buffer-shorthand t
+         eshell-history-size 10000
+         eshell-buffer-maximum-lines 10000
+         eshell-hist-ignoredups t
+         eshell-cmpl-ignore-case t)
+     )
+     (use-package eshell
+       :hook (eshell-first-time-mode . jae/configure-eshell)
+       :config
+       (with-eval-after-load 'esh-opt
+         (setq eshell-destroy-buffer-when-process-dies t
+               eshell-visual-commands '("htop" "fish" "bash" "vim")
+          )
+         )
       )
-   )
-#+END_SRC
+   #+END_SRC
 *** Aliases
-#+BEGIN_SRC elisp
-  (defun eshell/x ()
-    (insert "exit")
-    (eshell-send-input)
-    (delete-window))
-  (defun eshell/exit () (eshell/x))
-  (defun eshell/e (file) (find-file file))
-  (add-hook 'eshell-first-time-mode-hook
-       (lambda ()
-         (eshell/alias "ll" "ls -lah $*" )
-       )
-  )
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (defun eshell/x ()
+       (insert "exit")
+       (eshell-send-input)
+       (delete-window))
+     (defun eshell/exit () (eshell/x))
+     (defun eshell/e (file) (find-file file))
+     (add-hook 'eshell-first-time-mode-hook
+          (lambda ()
+            (eshell/alias "ll" "ls -lah $*" )
+          )
+     )
+   #+END_SRC
 *** Helper functions
-#+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp
 
-  (defun jae/eshell-new ()
-    "Opens a new instance of eshell."
-    (interactive)
-    (eshell 'N))
+     (defun jae/eshell-new ()
+       "Opens a new instance of eshell."
+       (interactive)
+       (eshell 'N))
 
-  (defun jae/eshell-here ()
-    "Opens up a new shell in the directory associated with the
-  current buffer's file. The eshell is renamed to match that
-  directory to make multiple eshell windows easier."
-    (interactive)
-    (let* ((parent (if (buffer-file-name)
-                       (file-name-directory (buffer-file-name))
-                     default-directory))
-           (height (/ (window-total-height) 3))
-           (name   (car (last (split-string parent "/" t)))))
-      (split-window-vertically (- height))
-      (other-window 1)
-      (eshell "new")
-      (rename-buffer (concat "*eshell: " name "*"))
+     (defun jae/eshell-here ()
+       "Opens up a new shell in the directory associated with the
+     current buffer's file. The eshell is renamed to match that
+     directory to make multiple eshell windows easier."
+       (interactive)
+       (let* ((parent (if (buffer-file-name)
+                          (file-name-directory (buffer-file-name))
+                        default-directory))
+              (height (/ (window-total-height) 3))
+              (name   (car (last (split-string parent "/" t)))))
+         (split-window-vertically (- height))
+         (other-window 1)
+         (eshell "new")
+         (rename-buffer (concat "*eshell: " name "*"))
 
-      (insert (concat "ls"))
-      (eshell-send-input)))
+         (insert (concat "ls"))
+         (eshell-send-input)))
 
-  (defun jae/is-inside-git-tree ()
-    "Returns true if inside git work tree."
-    (string= (jae/shell-command-to-string-nows "git rev-parse --is-inside-work-tree 2>/dev/null")
-                 "true"
-                 ))
+     (defun jae/is-inside-git-tree ()
+       "Returns true if inside git work tree."
+       (string= (jae/shell-command-to-string-nows "git rev-parse --is-inside-work-tree 2>/dev/null")
+                    "true"
+                    ))
 
-  (defun jae/git-unpushed-commits ()
-    "Returns number of local commits not pushed."
-    (if (jae/is-inside-git-tree)
-        (let ((
-               changes (jae/shell-command-to-string-nows "git log @{u}.. --oneline 2> /dev/null | wc -l")
-               ))
-          (if (string= changes "0")
-              nil
-            changes
-            )
-          )
-      nil
-      )
-    )
+     (defun jae/git-unpushed-commits ()
+       "Returns number of local commits not pushed."
+       (if (jae/is-inside-git-tree)
+           (let ((
+                  changes (jae/shell-command-to-string-nows "git log @{u}.. --oneline 2> /dev/null | wc -l")
+                  ))
+             (if (string= changes "0")
+                 nil
+               changes
+               )
+             )
+         nil
+         )
+       )
 
-  (defun jae/git-changes ()
-    "Returns number of changes or nil."
-    (if (jae/is-inside-git-tree)
-        (let ((
-               diffs (jae/shell-command-to-string-nows "git diff-index HEAD 2> /dev/null | wc -l")
-               ))
-          (if (string= diffs "0")
-              nil
-            diffs
-            )
-          )
-      nil
-      )
-    )
+     (defun jae/git-changes ()
+       "Returns number of changes or nil."
+       (if (jae/is-inside-git-tree)
+           (let ((
+                  diffs (jae/shell-command-to-string-nows "git diff-index HEAD 2> /dev/null | wc -l")
+                  ))
+             (if (string= diffs "0")
+                 nil
+               diffs
+               )
+             )
+         nil
+         )
+       )
 
-  (defun jae/k8s-context ()
-    "Return k8s context or nil"
-    (let ((
-           k8s-ctx (jae/shell-command-to-string-nows
-                    "kubectl config current-context 2>/dev/null")
-                   ))
-      (if (string= k8s-ctx "")
-          nil
-        k8s-ctx
-        )
-      )
-    )
+     (defun jae/k8s-context ()
+       "Return k8s context or nil"
+       (let ((
+              k8s-ctx (jae/shell-command-to-string-nows
+                       "kubectl config current-context 2>/dev/null")
+                      ))
+         (if (string= k8s-ctx "")
+             nil
+           k8s-ctx
+           )
+         )
+       )
 
-  (defun jae/k8s-ns ()
-    "Return k8s ns or nil"
-    (let ((
-           k8s-ns (jae/shell-command-to-string-nows
-                    "kubens -c 2>/dev/null")
-                   ))
-      (if (string= k8s-ns "")
-          nil
-        k8s-ns
-        )
-      )
-    )
+     (defun jae/k8s-ns ()
+       "Return k8s ns or nil"
+       (let ((
+              k8s-ns (jae/shell-command-to-string-nows
+                       "kubens -c 2>/dev/null")
+                      ))
+         (if (string= k8s-ns "")
+             nil
+           k8s-ns
+           )
+         )
+       )
 
-  (defun jae/current-gcloud-project ()
-    "Returns the current gcloud project."
-    (let ((
-           gcloud-project (
-              jae/shell-command-to-string-nows
-                 "cat ~/.config/gcloud/configurations/config_default | grep 'project =' | awk '{print $NF}'")
-                          ))
-      (if (string= gcloud-project "")
-          nil
-        gcloud-project
-        )
-      )
-    )
+     (defun jae/current-gcloud-project ()
+       "Returns the current gcloud project."
+       (let ((
+              gcloud-project (
+                 jae/shell-command-to-string-nows
+                    "cat ~/.config/gcloud/configurations/config_default | grep 'project =' | awk '{print $NF}'")
+                             ))
+         (if (string= gcloud-project "")
+             nil
+           gcloud-project
+           )
+         )
+       )
 
-  (defun jae/pick-kubectx ()
-    "Select k8s context"
-    (interactive)
-    (setenv "KUBECTX_IGNORE_FZF" "y")
-    (ivy-read "Select kubernetes cluster: " (split-string (shell-command-to-string "kubectx") "\n" t)
-              :action '(1
-                         ("o" (lambda (x) (shell-command (concat "kubectx " x))))
-                       )
-              )
-    )
+     (defun jae/pick-kubectx ()
+       "Select k8s context"
+       (interactive)
+       (setenv "KUBECTX_IGNORE_FZF" "y")
+       (ivy-read "Select kubernetes cluster: " (split-string (shell-command-to-string "kubectx") "\n" t)
+                 :action '(1
+                            ("o" (lambda (x) (shell-command (concat "kubectx " x))))
+                          )
+                 )
+       )
 
-  (defun jae/pick-kubens ()
-    "Select k8s namespace"
-    (interactive)
-    (setenv "KUBECTX_IGNORE_FZF" "y")
-    (ivy-read "Select kubernetes namespace: " (split-string (shell-command-to-string "kubens") "\n" t)
-              :action '(1
-                       ("o" (lambda (x) (shell-command (concat "kubens " x))))
-                       )
-              )
-    )
+     (defun jae/pick-kubens ()
+       "Select k8s namespace"
+       (interactive)
+       (setenv "KUBECTX_IGNORE_FZF" "y")
+       (ivy-read "Select kubernetes namespace: " (split-string (shell-command-to-string "kubens") "\n" t)
+                 :action '(1
+                          ("o" (lambda (x) (shell-command (concat "kubens " x))))
+                          )
+                 )
+       )
 
-  (defun jae/pick-gcp-project ()
-    "Select GCP proejct"
-    (interactive)
-    (ivy-read "Select GCP Project: " (split-string (shell-command-to-string "gcloud projects list | tail -n +2 | awk '{print $1}'") "\n" t)
-              :action '(1
-                       ("o" (lambda (x) (shell-command (concat "gcloud config set project " x))))
-                       )
-              )
-    )
+     (defun jae/pick-gcp-project ()
+       "Select GCP proejct"
+       (interactive)
+       (ivy-read "Select GCP Project: " (split-string (shell-command-to-string "gcloud projects list | tail -n +2 | awk '{print $1}'") "\n" t)
+                 :action '(1
+                          ("o" (lambda (x) (shell-command (concat "gcloud config set project " x))))
+                          )
+                 )
+       )
 
-  (defun jae/go-to-project ()
-    "Go to project"
-    (interactive)
-    (counsel-projectile-switch-project
-     'counsel-projectile-switch-project-action-run-eshell)
-    )
-#+END_SRC
+     (defun jae/go-to-project ()
+       "Go to project"
+       (interactive)
+       (counsel-projectile-switch-project
+        'counsel-projectile-switch-project-action-run-eshell)
+       )
+   #+END_SRC
 *** Prompt
-#+BEGIN_SRC elisp
-  (defmacro with-face (STR &rest PROPS)
-    "Return STR propertized with PROPS."
-    `(propertize ,STR 'face (list ,@PROPS)))
+   #+BEGIN_SRC elisp
+     (defmacro with-face (STR &rest PROPS)
+       "Return STR propertized with PROPS."
+       `(propertize ,STR 'face (list ,@PROPS)))
 
-  (defmacro esh-section (NAME ICON FORM &rest PROPS)
-    "Build eshell section NAME with ICON prepended to evaled FORM with PROPS."
-    `(setq ,NAME
-           (lambda () (when ,FORM
-                   (-> ,ICON
-                      (concat esh-section-delim ,FORM)
-                      (with-face ,@PROPS))))))
+     (defmacro esh-section (NAME ICON FORM &rest PROPS)
+       "Build eshell section NAME with ICON prepended to evaled FORM with PROPS."
+       `(setq ,NAME
+              (lambda () (when ,FORM
+                      (-> ,ICON
+                         (concat esh-section-delim ,FORM)
+                         (with-face ,@PROPS))))))
 
-  (defun esh-acc (acc x)
-    "Accumulator for evaluating and concatenating esh-sections."
-    (--if-let (funcall x)
-        (if (s-blank? acc)
-            it
-          (concat acc esh-sep it))
-      acc))
+     (defun esh-acc (acc x)
+       "Accumulator for evaluating and concatenating esh-sections."
+       (--if-let (funcall x)
+           (if (s-blank? acc)
+               it
+             (concat acc esh-sep it))
+         acc))
 
-  (defun esh-prompt-func ()
-    "Build `eshell-prompt-function'"
-    (concat esh-header
-            (-reduce-from 'esh-acc "" eshell-funcs)
-            "\n"
-            eshell-prompt-string))
+     (defun esh-prompt-func ()
+       "Build `eshell-prompt-function'"
+       (concat esh-header
+               (-reduce-from 'esh-acc "" eshell-funcs)
+               "\n"
+               eshell-prompt-string))
 
-  (esh-section esh-dir
-               "\xf07c"  ;  (fontawesome folder)
-               (abbreviate-file-name (eshell/pwd))
-               '(:foreground "#81a1c1" :bold ultra-bold))
+     (esh-section esh-dir
+                  "\xf07c"  ;  (fontawesome folder)
+                  (abbreviate-file-name (eshell/pwd))
+                  '(:foreground "#81a1c1" :bold ultra-bold))
 
-    (esh-section esh-git
-               "\xf126"  ;  (git icon)
-               (magit-get-current-branch)
-               '(:foreground "#5e81ac"))
+       (esh-section esh-git
+                  "\xf126"  ;  (git icon)
+                  (magit-get-current-branch)
+                  '(:foreground "#5e81ac"))
 
-    (esh-section esh-git-changes
-               "\xf071"  ;  (warn icon)
-               (jae/git-changes)
-               '(:foreground "#bf616a"))
+       (esh-section esh-git-changes
+                  "\xf071"  ;  (warn icon)
+                  (jae/git-changes)
+                  '(:foreground "#bf616a"))
 
-    (esh-section esh-git-unpushed-commits
-               "\xf714"  ;  (skull icon)
-               (jae/git-unpushed-commits)
-               '(:foreground "#bf616a"))
+       (esh-section esh-git-unpushed-commits
+                  "\xf714"  ;  (skull icon)
+                  (jae/git-unpushed-commits)
+                  '(:foreground "#bf616a"))
 
-    (esh-section esh-k8s
-               "\xf1b3 "  ;  (cubes icon)
-               (format "%s (%s)" (jae/k8s-context) (jae/k8s-ns))
-               '(:foreground "#5e81ac"))
+       (esh-section esh-k8s
+                  "\xf1b3 "  ;  (cubes icon)
+                  (format "%s (%s)" (jae/k8s-context) (jae/k8s-ns))
+                  '(:foreground "#5e81ac"))
 
-    (esh-section esh-gcp
-               "\xf1a0"  ;  (google icon)
-               (jae/current-gcloud-project)
-               '(:foreground "#5e81ac"))
+       (esh-section esh-gcp
+                  "\xf1a0"  ;  (google icon)
+                  (jae/current-gcloud-project)
+                  '(:foreground "#5e81ac"))
 
-  ;; Separator between esh-sections
-  (setq esh-sep "  ")
+     ;; Separator between esh-sections
+     (setq esh-sep "  ")
 
-  ;; Separator between an esh-section icon and form
-  (setq esh-section-delim " ")
+     ;; Separator between an esh-section icon and form
+     (setq esh-section-delim " ")
 
-  ;; Eshell prompt header
-  (setq esh-header "\n")
+     ;; Eshell prompt header
+     (setq esh-header "\n")
 
-  ;; Eshell prompt regexp and string. Unless you are varying the prompt by eg.
-  ;; your login, these can be the same.
-  (setq eshell-prompt-regexp "❯❯ ")
-  (setq eshell-prompt-string "❯❯ ")
+     ;; Eshell prompt regexp and string. Unless you are varying the prompt by eg.
+     ;; your login, these can be the same.
+     (setq eshell-prompt-regexp "❯❯ ")
+     (setq eshell-prompt-string "❯❯ ")
 
-  ;; Choose which eshell-funcs to enable
-  (setq eshell-funcs (list esh-dir esh-git
-                           esh-git-changes
-                           esh-git-unpushed-commits
-                           esh-k8s esh-gcp
-                           ))
+     ;; Choose which eshell-funcs to enable
+     (setq eshell-funcs (list esh-dir esh-git
+                              esh-git-changes
+                              esh-git-unpushed-commits
+                              esh-k8s esh-gcp
+                              ))
 
-  ;; Enable the new eshell prompt
-  (setq eshell-prompt-function 'esh-prompt-func)
-#+END_SRC
+     ;; Enable the new eshell prompt
+     (setq eshell-prompt-function 'esh-prompt-func)
+   #+END_SRC
 *** Auto suggestions a la fish
-#+BEGIN_SRC elisp
-(use-package esh-autosuggest
-  :hook (eshell-mode . esh-autosuggest-mode))
-#+END_SRC
+   #+BEGIN_SRC elisp
+   (use-package esh-autosuggest
+     :hook (eshell-mode . esh-autosuggest-mode))
+   #+END_SRC
 
 *** Fish shell completion
-#+BEGIN_SRC elisp
-(use-package fish-completion
-  :config
-  (global-fish-completion-mode)
-)
-#+END_SRC
+   #+BEGIN_SRC elisp
+   (use-package fish-completion
+     :config
+     (global-fish-completion-mode)
+   )
+   #+END_SRC
 ** Projectile
 *** The package itself
    #+BEGIN_SRC elisp
@@ -843,28 +848,29 @@ Package setup.
      )
   #+END_SRC
 *** Counsel projectile
-#+BEGIN_SRC elisp
-  (use-package counsel-projectile
-    :after projectile
-    :config (counsel-projectile-mode)
-  )
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (use-package counsel-projectile
+       :after projectile
+       :config (counsel-projectile-mode)
+     )
+   #+END_SRC
 ** Direnv integration
-;; Direnv integration for emacs.
-;; See: [[https://github.com/wbolster/emacs-direnv][https://github.com/wbolster/emacs-direnv]]
-;; and ofc
-;; https://direnv.net/]]
-#+BEGIN_SRC elisp
-(use-package direnv
-  :init
-  (add-hook 'prog-mode-hook #'direnv-update-environment)
-  :config
-  (direnv-mode)
-  (add-to-list 'direnv-non-file-modes 'eshell-mode)
-)
-#+END_SRC
+ Direnv integration for emacs.
+ See: [[https://github.com/wbolster/emacs-direnv][https://github.com/wbolster/emacs-direnv]]
+ and ofc
+ https://direnv.net/
+ #+BEGIN_SRC elisp
+ (use-package direnv
+   :init
+   (add-hook 'prog-mode-hook #'direnv-update-environment)
+   :config
+   (direnv-mode)
+   (add-to-list 'direnv-non-file-modes 'eshell-mode)
+ )
+ #+END_SRC
 ** VTerm - a faster replacement for Term (when you need a real terminal)
 *** The vterm package
+   When you need a real, reasonably fast terminal.
    #+BEGIN_SRC elisp
      (use-package vterm
        :commands vterm
@@ -875,21 +881,22 @@ Package setup.
       )
    #+END_SRC
 *** Multi vterm
+   When you need more than one reasonably fast real terminal.
    #+BEGIN_SRC elisp
    (use-package multi-vterm)
    #+END_SRC
 ** Zoom window - eg. use control-x control-z to zoom in / out a window (eg. "fullscreen" it).
-#+BEGIN_SRC elisp
-(use-package zoom-window
-  :bind* ("C-x C-z" . zoom-window-zoom))
-#+END_SRC
+ #+BEGIN_SRC elisp
+ (use-package zoom-window
+   :bind* ("C-x C-z" . zoom-window-zoom))
+ #+END_SRC
 ** Highlight numbers in source code
-See: [[https://github.com/Fanael/highlight-numbers][https://github.com/Fanael/highlight-numbers]]
-#+BEGIN_SRC elisp
-(use-package highlight-numbers
-  :config
-  (add-hook 'prog-mode-hook 'highlight-numbers-mode))
-#+END_SRC
+ See: [[https://github.com/Fanael/highlight-numbers][https://github.com/Fanael/highlight-numbers]]
+ #+BEGIN_SRC elisp
+ (use-package highlight-numbers
+   :config
+   (add-hook 'prog-mode-hook 'highlight-numbers-mode))
+ #+END_SRC
 ** Relative line numbers
  #+BEGIN_SRC elisp
    (use-package linum-relative
@@ -900,346 +907,357 @@ See: [[https://github.com/Fanael/highlight-numbers][https://github.com/Fanael/hi
      (linum-relative-mode t))
  #+END_SRC
 ** Diff hl - highlight uncommitted changes
-#+BEGIN_SRC elisp
-(use-package diff-hl
-  :config
-  (setq diff-hl-side 'right)
-  (global-diff-hl-mode t)
-  ;;(diff-hl-flydiff-mode)
-  (add-hook 'after-make-frame-functions(lambda (frame)
-    (if (window-system frame)
-      (diff-hl-mode)
-      (diff-hl-margin-mode))))
-  (add-hook 'dired-mode-hook 'diff-hl-dired-mode))
-#+END_SRC
+ #+BEGIN_SRC elisp
+ (use-package diff-hl
+   :config
+   (setq diff-hl-side 'right)
+   (global-diff-hl-mode t)
+   ;;(diff-hl-flydiff-mode)
+   (add-hook 'after-make-frame-functions(lambda (frame)
+     (if (window-system frame)
+       (diff-hl-mode)
+       (diff-hl-margin-mode))))
+   (add-hook 'dired-mode-hook 'diff-hl-dired-mode))
+ #+END_SRC
 ** Magit - the most awesome git editor integration
-[[https://magit.vc/][Magit]] is possibly the most awesome git integration of any editor out there.
-#+BEGIN_SRC elisp
-(use-package magit
-  :config
-  (setq magit-auto-revert-mode nil
-           magit-repository-directories
-             '( "~/Development" ))
-  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
-  :custom
-  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
-  )
-#+END_SRC
-
+[[https://magit.vc/][ Magit]] is possibly the most awesome git integration of any editor out there.
+ #+BEGIN_SRC elisp
+ (use-package magit
+   :config
+   (setq magit-auto-revert-mode nil
+            magit-repository-directories
+              '( "~/Development" ))
+   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+   :custom
+   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+   )
+ #+END_SRC
 ** Ivy - completion tools
 See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
 *** Ivy itself
    #+BEGIN_SRC elisp
-(use-package ivy
-  :config
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t
-           ivy-do-completion-in-region t
-           ivy-count-format "%d/%d ")
-  (add-hook 'shell-mode-hook (lambda ()
-    (define-key shell-mode-map "\t" 'completion-at-point))))
-#+END_SRC
+  (use-package ivy
+    :config
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t
+             ivy-do-completion-in-region t
+             ivy-count-format "%d/%d ")
+    (add-hook 'shell-mode-hook (lambda ()
+      (define-key shell-mode-map "\t" 'completion-at-point))))
+  #+END_SRC
 *** Rich
-#+BEGIN_SRC elisp
-(use-package ivy-rich
-  :after ivy
-  :config
-  (ivy-rich-mode 1))
-#+END_SRC
+   #+BEGIN_SRC elisp
+   (use-package ivy-rich
+     :after ivy
+     :config
+     (ivy-rich-mode 1))
+   #+END_SRC
 *** Counsel
    #+BEGIN_SRC elisp
      (use-package counsel
        :config
        (counsel-mode 1)
      )
-#+END_SRC
+   #+END_SRC
 *** Prescient
-#+BEGIN_SRC elisp
-(use-package ivy-prescient
-  :after counsel
-  :custom
-  (ivy-prescient-enable-filtering nil)
-  :config
-  (prescient-persist-mode 1)
-  (ivy-prescient-mode 1))
-#+END_SRC
+   #+BEGIN_SRC elisp
+   (use-package ivy-prescient
+     :after counsel
+     :custom
+     (ivy-prescient-enable-filtering nil)
+     :config
+     (prescient-persist-mode 1)
+     (ivy-prescient-mode 1))
+   #+END_SRC
 *** Swiper
    #+BEGIN_SRC elisp
-(use-package swiper)
-#+END_SRC
+   (use-package swiper)
+   #+END_SRC
 ** Which key
-Which key will show (in a popup) any possible continuations of a currently entered incomplete command.
-See: [[https://github.com/justbur/emacs-which-key][https://github.com/justbur/emacs-which-key]]
-#+BEGIN_SRC elisp
-(use-package which-key
-  :config
-  (which-key-mode)
-  (which-key-setup-side-window-bottom)
-  (setq which-key-sort-order 'which-key-key-order-alpha
-        which-key-side-window-max-width 0.33
-        which-key-idle-delay 0.05)
-  )
-#+END_SRC
+ Which key will show any possible continuations of a currently entered incomplete command.
+ See: [[https://github.com/justbur/emacs-which-key][https://github.com/justbur/emacs-which-key]]
+ #+BEGIN_SRC elisp
+ (use-package which-key
+   :config
+   (which-key-mode)
+   (which-key-setup-side-window-bottom)
+   (setq which-key-sort-order 'which-key-key-order-alpha
+         which-key-side-window-max-width 0.33
+         which-key-idle-delay 0.05)
+   )
+ #+END_SRC
 ** Fringe helper
-#+BEGIN_SRC elisp
-(use-package fringe-helper
-  :init
-  (setq-default left-fringe-width  16)
-  (setq-default right-fringe-width 16)
-)
-#+END_SRC
+ Helper functions for generating fringe bitmaps, also comes with some "stock" ones.
+ #+BEGIN_SRC elisp
+ (use-package fringe-helper
+   :init
+   (setq-default left-fringe-width  16)
+   (setq-default right-fringe-width 16)
+ )
+ #+END_SRC
 ** Hydra
+ Hydra is a really cool package allowing you to temporarily enable some keybindings with an optional timeout. Hard to explain WHY that is cool, trust me - it is.
 *** The package
-#+BEGIN_SRC elisp
-  (use-package hydra)
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (use-package hydra)
+   #+END_SRC
 *** Text scaling
-#+BEGIN_SRC elisp
-  (defhydra hydra-text-scale (:timeout 4)
-    "scale text"
-    ("j" text-scale-increase "in")
-    ("k" text-scale-decrease "out")
-    ("f" nil "finished" :exit t)
-  )
-  (jae/leader-keys
-     "ts" '(hydra-text-scale/body :which-key "scale text")
-   )
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (defhydra hydra-text-scale (:timeout 4)
+       "scale text"
+       ("j" text-scale-increase "in")
+       ("k" text-scale-decrease "out")
+       ("f" nil "finished" :exit t)
+     )
+     (jae/leader-keys
+        "ts" '(hydra-text-scale/body :which-key "scale text")
+      )
+   #+END_SRC
 *** Term switching
-#+BEGIN_SRC elisp
-  (defhydra hydra-term-switch (:timeout 4)
-    "switch term"
-    ("j" multi-vterm-prev "prev")
-    ("k" multi-vterm-next "next")
-    ("f" nil "finished" :exit t)
-  )
-  (jae/leader-keys
-     "es" '(hydra-term-switch/body :which-key "cycle through terminals")
-   )
-#+END_SRC
+   #+BEGIN_SRC elisp
+     (defhydra hydra-term-switch (:timeout 4)
+       "switch term"
+       ("j" multi-vterm-prev "prev")
+       ("k" multi-vterm-next "next")
+       ("f" nil "finished" :exit t)
+     )
+     (jae/leader-keys
+        "es" '(hydra-term-switch/body :which-key "cycle through terminals")
+      )
+   #+END_SRC
 ** Programming and markup languages
 *** LSP Mode
-Language Server Protocol.
-See: [[https://github.com/emacs-lsp/lsp-mode][emacs-lsp/lsp-mode]]
-#+BEGIN_SRC elisp
-  (use-package lsp-mode
-    ;;:after (direnv evil)
-    :init
-    (setq lsp-keymap-prefix "C-c a"
-          lsp-prefer-capf t
-          lsp-rust-server 'rust-analyzer)
-    :config
-    (setq lsp-prefer-flymake nil)
-    (setq lsp-enable-snippet nil)
-    (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
-    (lsp-register-client
-     (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
-                      :major-modes '(nix-mode)
-                      :server-id 'nix))
-    (setq lsp-file-watch-ignored '(
-      "[/\\\\]\\.direnv$"
-      ; SCM tools
-      "[/\\\\]\\.git$"
-      "[/\\\\]\\.hg$"
-      "[/\\\\]\\.bzr$"
-      "[/\\\\]_darcs$"
-      "[/\\\\]\\.svn$"
-      "[/\\\\]_FOSSIL_$"
-      ; IDE tools
-      "[/\\\\]\\.idea$"
-      "[/\\\\]\\.ensime_cache$"
-      "[/\\\\]\\.eunit$"
-      "[/\\\\]node_modules$"
-      "[/\\\\]\\.fslckout$"
-      "[/\\\\]\\.tox$"
-      "[/\\\\]\\.stack-work$"
-      "[/\\\\]\\.bloop$"
-      "[/\\\\]\\.metals$"
-      "[/\\\\]target$"
-      ; Autotools output
-      "[/\\\\]\\.deps$"
-      "[/\\\\]build-aux$"
-      "[/\\\\]autom4te.cache$"
-      "[/\\\\]\\.reference$"))
-    :hook (
-      (lsp-mode . lsp-enable-which-key-integration)
-    )
-    :custom
-    (lsp-rust-analyzer-cargo-watch-command "clippy")
-    (lsp-eldoc-render-all t)
-    (lsp-idle-delay 0.6)
-    (lsp-rust-analyzer-server-display-inlay-hints t)
-  )
+   Language Server Protocol.
+   See: [[https://github.com/emacs-lsp/lsp-mode][emacs-lsp/lsp-mode]]
+   #+BEGIN_SRC elisp
+     (use-package lsp-mode
+       ;;:after (direnv evil)
+       :init
+       (setq lsp-keymap-prefix "C-c a"
+             lsp-prefer-capf t
+             lsp-rust-server 'rust-analyzer)
+       :config
+       (setq lsp-prefer-flymake nil)
+       (setq lsp-enable-snippet nil)
+       (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
+       (lsp-register-client
+        (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
+                         :major-modes '(nix-mode)
+                         :server-id 'nix))
+       (setq lsp-file-watch-ignored '(
+         "[/\\\\]\\.direnv$"
+         ; SCM tools
+         "[/\\\\]\\.git$"
+         "[/\\\\]\\.hg$"
+         "[/\\\\]\\.bzr$"
+         "[/\\\\]_darcs$"
+         "[/\\\\]\\.svn$"
+         "[/\\\\]_FOSSIL_$"
+         ; IDE tools
+         "[/\\\\]\\.idea$"
+         "[/\\\\]\\.ensime_cache$"
+         "[/\\\\]\\.eunit$"
+         "[/\\\\]node_modules$"
+         "[/\\\\]\\.fslckout$"
+         "[/\\\\]\\.tox$"
+         "[/\\\\]\\.stack-work$"
+         "[/\\\\]\\.bloop$"
+         "[/\\\\]\\.metals$"
+         "[/\\\\]target$"
+         ; Autotools output
+         "[/\\\\]\\.deps$"
+         "[/\\\\]build-aux$"
+         "[/\\\\]autom4te.cache$"
+         "[/\\\\]\\.reference$"))
+       :hook (
+         (lsp-mode . lsp-enable-which-key-integration)
+       )
+       :custom
+       (lsp-rust-analyzer-cargo-watch-command "clippy")
+       (lsp-eldoc-render-all t)
+       (lsp-idle-delay 0.6)
+       (lsp-rust-analyzer-server-display-inlay-hints t)
+     )
 
-  (defun my-lsp ()
-    "Ensures environment is updated before enabling lsp mode."
-    (direnv-update-environment default-directory)
-    (lsp-deferred))
+     (defun my-lsp ()
+       "Ensures environment is updated before enabling lsp mode."
+       (direnv-update-environment default-directory)
+       (lsp-deferred))
 
-  (add-hook 'prog-mode-hook 'my-lsp)
+     (add-hook 'prog-mode-hook 'my-lsp)
 
-  (use-package lsp-ui
-    :after lsp-mode
-    :config
-    (setq lsp-ui-doc-max-height 60)
-    :hook
-    (
-      (lsp-mode . lsp-ui-mode)
-    )
-    :custom
-    (lsp-ui-peek-always-show t)
-    (lsp-ui-sideline-show-hover t)
-  )
+     (use-package lsp-ui
+       :after lsp-mode
+       :config
+       (setq lsp-ui-doc-max-height 60)
+       :hook
+       (
+         (lsp-mode . lsp-ui-mode)
+       )
+       :custom
+       (lsp-ui-peek-always-show t)
+       (lsp-ui-sideline-show-hover t)
+     )
 
-  (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-#+END_SRC
+     (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+   #+END_SRC
 *** Flycheck mode
 **** The mode itself
-On-the-fly syntax checking, see: [[https://www.flycheck.org/en/latest/][https://www.flycheck.org/en/latest/]]
-#+BEGIN_SRC elisp
-(use-package flycheck
-  :config
-  (global-flycheck-mode)
-  (setq flycheck-idle-change-delay 2.0)
-  ;; we've wrapped executable-find so this will run direnv-update-environment before finding executable
-  (setq flycheck-executable-find
-        (lambda (cmd) (executable-find cmd)))
-)
-#+END_SRC
+     On-the-fly syntax checking, see: [[https://www.flycheck.org/en/latest/][https://www.flycheck.org/en/latest/]]
+     #+BEGIN_SRC elisp
+     (use-package flycheck
+       :config
+       (global-flycheck-mode)
+       (setq flycheck-idle-change-delay 2.0)
+       ;; we've wrapped executable-find so this will run direnv-update-environment before finding executable
+       (setq flycheck-executable-find
+             (lambda (cmd) (executable-find cmd)))
+     )
+     #+END_SRC
 **** Flycheck popups - error display
 ***** Popup tip
-For showing errors in terminal (pos-tip doesn't do that - see below).
-See: [[https://github.com/flycheck/flycheck-popup-tip][https://github.com/flycheck/flycheck-popup-tip]]
-#+BEGIN_SRC elisp
-(use-package flycheck-popup-tip)
-#+END_SRC
-
+       For showing errors in terminal (pos-tip doesn't do that - see below).
+       See: [[https://github.com/flycheck/flycheck-popup-tip][https://github.com/flycheck/flycheck-popup-tip]]
+       #+BEGIN_SRC elisp
+       (use-package flycheck-popup-tip)
+       #+END_SRC
 ***** Pos tip
-For showing errors under point. Refers to above for similar terminal functionality.
-See: [[https://github.com/flycheck/flycheck-pos-tip][https://github.com/flycheck/flycheck-pos-tip]]
-#+BEGIN_SRC elisp
-(use-package flycheck-pos-tip
-  :config
-  (setq flycheck-pos-tip-display-errors-tty-function #'flycheck-popup-tip-show-popup)
-  (setq flycheck-pos-tip-timeout 0)
-  (flycheck-pos-tip-mode))
-#+END_SRC
+       For showing errors under point. Refers to above for similar terminal functionality.
+       See: [[https://github.com/flycheck/flycheck-pos-tip][https://github.com/flycheck/flycheck-pos-tip]]
+       #+BEGIN_SRC elisp
+       (use-package flycheck-pos-tip
+         :config
+         (setq flycheck-pos-tip-display-errors-tty-function #'flycheck-popup-tip-show-popup)
+         (setq flycheck-pos-tip-timeout 0)
+         (flycheck-pos-tip-mode))
+       #+END_SRC
+*** Tree-sitter
+   Tree sitter provides better syntax highlighting.
+   #+BEGIN_SRC elisp
+   (use-package tree-sitter
+     :hook ((ruby-mode . tree-sitter-hl-mode)
+            (js-mode . tree-sitter-hl-mode)
+            (typescript-mode . tree-sitter-hl-mode)
+            (rustic-mode . tree-sitter-hl-mode)
+            (toml-mode . tree-sitter-hl-mode)
+            (web-mode . tree-sitter-hl-mode)
+            (shell-mode . tree-sitter-hl-mode)
+            (go-mode . tree-sitter-hl-mode)))
+   (use-package tree-sitter-langs)
+   #+END_SRC
 *** Rust
 **** Rustic
-  #+BEGIN_SRC elisp
-    (use-package rustic
-      :demand
-      :mode ("\\.rs$" . rustic-mode)
-      :bind (:map rustic-mode-map
-                  ("C-c C-c j" . lsp-ui-imenu)
-                  ("C-c C-c p" . lsp-find-references)
-                  ("C-c C-c l" . flycheck-list-errors)
-                  ("C-c C-c a" . lsp-execute-code-action)
-                  ("C-c C-c r" . lsp-rename)
-                  ("C-c C-c q" . lsp-workspace-restart)
-                  ("C-c C-c Q" . lsp-workspace-shutdown)
-                  ("C-c C-c s" . lsp-rust-analyzer-status))
-      :config
-      (setq rustic-format-on-save t)
-      (add-hook 'rustic-mode-hook 'jae/rustic-mode-hook))
+     #+BEGIN_SRC elisp
+       (use-package rustic
+         :demand
+         :mode ("\\.rs$" . rustic-mode)
+         :bind (:map rustic-mode-map
+                     ("C-c C-c j" . lsp-ui-imenu)
+                     ("C-c C-c p" . lsp-find-references)
+                     ("C-c C-c l" . flycheck-list-errors)
+                     ("C-c C-c a" . lsp-execute-code-action)
+                     ("C-c C-c r" . lsp-rename)
+                     ("C-c C-c q" . lsp-workspace-restart)
+                     ("C-c C-c Q" . lsp-workspace-shutdown)
+                     ("C-c C-c s" . lsp-rust-analyzer-status))
+         :config
+         (setq rustic-format-on-save t)
+         (add-hook 'rustic-mode-hook 'jae/rustic-mode-hook))
 
-    (defun jae/rustic-mode-hook ()
-      ;; make C-c C-c C-r work without confirmation
-      (setq-local buffer-save-without-query t))
-#+END_SRC
-*** Shell
-#+BEGIN_SRC elisp
-  #+END_SRC
+       (defun jae/rustic-mode-hook ()
+         ;; make C-c C-c C-r work without confirmation
+         (setq-local buffer-save-without-query t))
+     #+END_SRC
 *** Markdown mode
-#+BEGIN_SRC elisp
-(use-package markdown-mode)
-#+END_SRC
+   #+BEGIN_SRC elisp
+   (use-package markdown-mode)
+   #+END_SRC
 *** Company mode
-[[https://company-mode.github.io/][Company]] is a text completion framework for Emacs. The name stands for "complete anything". It uses pluggable back-ends
-and front-ends to retrieve and display completion candidates.
-It comes with several back-ends such as Elisp, Clang, Semantic, Eclim, Ropemacs, Ispell, CMake, BBDB, Yasnippet, dabbrev,
-etags, gtags, files, keywords and a few others.
-#+BEGIN_SRC elisp
-(use-package company
-  :init
-  (setq company-idle-delay 0.05
-        company-echo-delay 0.05
-        company-minimum-prefix-length 2
-        company-dabbrev-ignore-case nil
-        company-dabbrev-downcase nil)
-  :config
-  (global-company-mode))
-#+END_SRC
+[[https://company-mode.github.io/][ Company]] is a text completion framework for Emacs. The name stands for "complete anything". It uses pluggable back-ends
+  and front-ends to retrieve and display completion candidates.
+  It comes with several back-ends such as Elisp, Clang, Semantic, Eclim, Ropemacs, Ispell, CMake, BBDB, Yasnippet, dabbrev,
+  etags, gtags, files, keywords and a few others.
+  #+BEGIN_SRC elisp
+  (use-package company
+    :init
+    (setq company-idle-delay 0.05
+          company-echo-delay 0.05
+          company-minimum-prefix-length 2
+          company-dabbrev-ignore-case nil
+          company-dabbrev-downcase nil)
+    :config
+    (global-company-mode))
+  #+END_SRC
 *** Company quick help
-Show documentation popups when idling on a completion candidate.
-See: [[https://github.com/expez/company-quickhelp][https://github.com/expez/company-quickhelp]]
-#+BEGIN_SRC elisp
-(use-package company-quickhelp
-  :config
-  (company-quickhelp-mode 1)
-  (setq company-quickhelp-delay 0))
-#+END_SRC
+   Show documentation popups when idling on a completion candidate.
+   See: [[https://github.com/expez/company-quickhelp][https://github.com/expez/company-quickhelp]]
+   #+BEGIN_SRC elisp
+   (use-package company-quickhelp
+     :config
+     (company-quickhelp-mode 1)
+     (setq company-quickhelp-delay 0))
+   #+END_SRC
 *** Golang
 **** Go mode
-#+BEGIN_SRC elisp
-(use-package go-mode
-  :config
-  (setq gofmt-command "goimports")
-)
-(add-hook 'before-save-hook 'gofmt-before-save)
-#+END_SRC
+     #+BEGIN_SRC elisp
+     (use-package go-mode
+       :config
+       (setq gofmt-command "goimports")
+     )
+     (add-hook 'before-save-hook 'gofmt-before-save)
+     #+END_SRC
 **** Go guru
-#+BEGIN_SRC elisp
-(use-package go-guru
-  :config
-  (go-guru-hl-identifier-mode))
-#+END_SRC
+     #+BEGIN_SRC elisp
+     (use-package go-guru
+       :config
+       (go-guru-hl-identifier-mode))
+     #+END_SRC
 **** Flycheck Gometalinter
-#+BEGIN_SRC elisp
-(use-package flycheck-gometalinter
-  :after flycheck
-  :config
-  (setq flycheck-gometalinter-fast t
-        flycheck-gometalinter-test t
-        flycheck-gometalinter-deadlines "10s")
-  (progn
-    (flycheck-gometalinter-setup)))
-#+END_SRC
+     #+BEGIN_SRC elisp
+     (use-package flycheck-gometalinter
+       :after flycheck
+       :config
+       (setq flycheck-gometalinter-fast t
+             flycheck-gometalinter-test t
+             flycheck-gometalinter-deadlines "10s")
+       (progn
+         (flycheck-gometalinter-setup)))
+     #+END_SRC
 **** Go Eldoc
-#+BEGIN_SRC elisp
-(use-package go-eldoc
-  :config
-  (add-hook 'go-mode-hook 'go-eldoc-setup))
-#+END_SRC
+     #+BEGIN_SRC elisp
+     (use-package go-eldoc
+       :config
+       (add-hook 'go-mode-hook 'go-eldoc-setup))
+     #+END_SRC
 
 *** Terraform
 **** The mode itself
      HashiCorps terraform.
-  #+BEGIN_SRC elisp
-  (use-package terraform-mode
-    :mode "\\.tf$"
-    :hook (terraform-mode . terraform-format-on-save-mode))
-  #+END_SRC
+     #+BEGIN_SRC elisp
+     (use-package terraform-mode
+       :mode "\\.tf$"
+       :hook (terraform-mode . terraform-format-on-save-mode))
+     #+END_SRC
 **** Company terraform
-   #+BEGIN_SRC elisp
-      (use-package company-terraform
-        :after company
-        :config
-        (company-terraform-init))
-   #+END_SRC
+     #+BEGIN_SRC elisp
+        (use-package company-terraform
+          :after company
+          :config
+          (company-terraform-init))
+     #+END_SRC
 *** Nix
 **** The mode
-  #+BEGIN_SRC elisp
-    (defun jae/nix-mode-format-before-save-hook ()
-      (when (eq major-mode 'nix-mode)
-        (nix-format-buffer)))
-    (use-package nix-mode
-      :mode "\\.nix$"
-      :hook (nix-mode . jae/nix-mode-format-before-save)
-      :custom
-      (nix-nixfmt-bin "nixpkgs-fmt")
-    )
-  #+END_SRC
+     #+BEGIN_SRC elisp
+       (defun jae/nix-mode-format-before-save-hook ()
+         (when (eq major-mode 'nix-mode)
+           (nix-format-buffer)))
+       (use-package nix-mode
+         :mode "\\.nix$"
+         :hook (nix-mode . jae/nix-mode-format-before-save)
+         :custom
+         (nix-nixfmt-bin "nixpkgs-fmt")
+       )
+     #+END_SRC
 *** Web
    For editing html, css etc.
    See: [[https://github.com/fxbois/web-mode][https://github.com/fxbois/web-mode]]
@@ -1249,66 +1267,66 @@ See: [[https://github.com/expez/company-quickhelp][https://github.com/expez/comp
      :mode "\\.html?$")
    #+END_SRC
 *** Docker
-  You know, for docker.
- #+BEGIN_SRC elisp
-  (use-package dockerfile-mode
-  :mode "Dockerfile.*")
- #+END_SRC
-*** Moonscript
- #+BEGIN_SRC elisp
- (use-package moonscript
-   :mode ("\\Spookfile.*\\'" . moonscript-mode))
- #+END_SRC
-*** Lua
- #+BEGIN_SRC elisp
-   (use-package lua-mode
-     :mode "\\.lua$:")
- #+END_SRC
-*** Json
- #+BEGIN_SRC elisp
-    (use-package json-mode
-      :mode (
-             ("\\.bowerrc$" . json-mode)
-             ("\\.jshintrc$" . json-mode)
-             ("\\.json_schema$" . json-mode)
-             ("\\.json$'" . json-mode)
-            )
-      :bind (:package json-mode-map
-         :map json-mode-map
-             ("C-c <tab>" . json-mode-beautify))
-      :config
-      (make-local-variable 'js-indent-level)
-    )
- #+END_SRC
-*** Yaml
-#+BEGIN_SRC elisp
-  (use-package yaml-mode
-    :mode (
-           ("\\.cf$" . yaml-mode)
-           ("\\.yml$" . yaml-mode)
-           ("\\.yaml$" . yaml-mode)
-          )
-  )
-#+END_SRC
-*** Javascript
-**** The mode
+   You know, for docker.
    #+BEGIN_SRC elisp
-     (use-package js2-mode
-       :config
-       (setq js2-strict-missing-semi-warning nil)
-       (setq js2-missing-semi-one-line-override t)
-       (setq js-indent-level 2)
+    (use-package dockerfile-mode
+    :mode "Dockerfile.*")
+   #+END_SRC
+*** Moonscript
+   #+BEGIN_SRC elisp
+   (use-package moonscript
+     :mode ("\\Spookfile.*\\'" . moonscript-mode))
+   #+END_SRC
+*** Lua
+   #+BEGIN_SRC elisp
+     (use-package lua-mode
+       :mode "\\.lua$:")
+   #+END_SRC
+*** Json
+   #+BEGIN_SRC elisp
+      (use-package json-mode
+        :mode (
+               ("\\.bowerrc$" . json-mode)
+               ("\\.jshintrc$" . json-mode)
+               ("\\.json_schema$" . json-mode)
+               ("\\.json$'" . json-mode)
+              )
+        :bind (:package json-mode-map
+           :map json-mode-map
+               ("C-c <tab>" . json-mode-beautify))
+        :config
+        (make-local-variable 'js-indent-level)
+      )
+   #+END_SRC
+*** Yaml
+   #+BEGIN_SRC elisp
+     (use-package yaml-mode
        :mode (
-               ("\\.js$" . js2-mode)
+              ("\\.cf$" . yaml-mode)
+              ("\\.yml$" . yaml-mode)
+              ("\\.yaml$" . yaml-mode)
              )
      )
    #+END_SRC
-**** Make it pretty
-   #+BEGIN_SRC elisp
-     (use-package prettier-js
-       :hook (
-          (js2-mode . prettier-js-mode)
-          (typescript-mode . prettier-js-mode)
+*** Javascript
+**** The mode
+     #+BEGIN_SRC elisp
+       (use-package js2-mode
+         :config
+         (setq js2-strict-missing-semi-warning nil)
+         (setq js2-missing-semi-one-line-override t)
+         (setq js-indent-level 2)
+         :mode (
+                 ("\\.js$" . js2-mode)
+               )
        )
-     )
-   #+END_SRC
+     #+END_SRC
+**** Make it pretty
+     #+BEGIN_SRC elisp
+       (use-package prettier-js
+         :hook (
+            (js2-mode . prettier-js-mode)
+            (typescript-mode . prettier-js-mode)
+         )
+       )
+     #+END_SRC
