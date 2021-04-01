@@ -7,7 +7,12 @@
 This is my emacs configuration. It's documented for my benefit. This lives within my [[https://nixos.org][Nix/NixOS]] monorepo called [[https://github.com/johnae/world][world]].
 
 * Initialization
-
+** First things first
+***  Lexical binding
+   This has to be the first line in the file. Those are the rules.
+   #+BEGIN_SRC elisp
+   (setq lexical-binding t)
+   #+END_SRC
 ** Optimization
 Here we do some basic optimizations to make emacs load faster and do "stuff" more efficiently.
 *** Time startup
@@ -921,18 +926,30 @@ Package setup.
    (add-hook 'dired-mode-hook 'diff-hl-dired-mode))
  #+END_SRC
 ** Magit - the most awesome git editor integration
-[[https://magit.vc/][ Magit]] is possibly the most awesome git integration of any editor out there.
- #+BEGIN_SRC elisp
- (use-package magit
-   :config
-   (setq magit-auto-revert-mode nil
-            magit-repository-directories
-              '( "~/Development" ))
-   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
-   :custom
-   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
-   )
- #+END_SRC
+*** Magit itself
+[[https://magit.vc/][  Magit]] is possibly the most awesome git integration of any editor out there.
+   #+BEGIN_SRC elisp
+   (use-package magit
+     :config
+     (setq magit-auto-revert-mode nil
+              magit-repository-directories
+                '( "~/Development" ))
+     (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+     :custom
+     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+     )
+   #+END_SRC
+*** Libgit for better performance
+   #+BEGIN_SRC elisp
+     (use-package libgit)
+     (use-package magit-libgit
+       :after (magit libgit))
+   #+END_SRC
+*** The stupidly named forge package for github/gitlab integration
+   #+BEGIN_SRC elisp
+   (use-package forge
+     :after magit)
+   #+END_SRC
 ** Ivy - completion tools
 See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
 *** Ivy itself
@@ -1026,6 +1043,11 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
         "es" '(hydra-term-switch/body :which-key "cycle through terminals")
       )
    #+END_SRC
+** Restclient :-)
+ #+BEGIN_SRC elisp
+ (use-package restclient
+   :mode ("\\.restclient$" . restclient-mode))
+ #+END_SRC
 ** Programming and markup languages
 *** LSP Mode
    Language Server Protocol.
@@ -1259,11 +1281,15 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
          (nix-nixfmt-bin "nixpkgs-fmt")
        )
      #+END_SRC
+*** Shell
+   There's already shell mode. But I use fish shell so it's nice to get some syntax highlighting for that.
+   #+BEGIN_SRC elisp
+   (use-package fish-mode)
+   #+END_SRC
 *** Web
    For editing html, css etc.
    See: [[https://github.com/fxbois/web-mode][https://github.com/fxbois/web-mode]]
    #+BEGIN_SRC elisp
-
    (use-package web-mode
      :mode "\\.html?$")
    #+END_SRC
@@ -1306,6 +1332,14 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
               ("\\.cf$" . yaml-mode)
               ("\\.yml$" . yaml-mode)
               ("\\.yaml$" . yaml-mode)
+             )
+     )
+   #+END_SRC
+*** Toml
+   #+BEGIN_SRC elisp
+     (use-package toml-mode
+       :mode (
+              ("\\.toml$" . toml-mode)
              )
      )
    #+END_SRC
