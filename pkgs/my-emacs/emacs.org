@@ -129,7 +129,7 @@ Some basic useful settings.
   (add-to-list 'load-path (getenv "NOTMUCH_LOAD_PATH"))
 #+END_SRC
 
-*** Setup auth sources so we use pass gpg files
+*** Setup auth sources so we use can use pass gpg files
 #+BEGIN_SRC elisp
   (setq auth-sources '((:source "~/.local/share/password-store/emacs/auth/authinfo.gpg")))
 #+END_SRC
@@ -311,6 +311,12 @@ Package setup.
       "gf" '(magit-file-dispatch :which-key "magit file dispatch")
 
       "w" '(whitespace-cleanup :which-key "whitespace cleanup")
+      "b" '(previous-buffer :which-key "previous buffer")
+      "f" '(next-buffer :which-key "next buffer")
+
+      "o" '(:ignore o :which-key "orgmode")
+      "oa" '(counsel-projectile-org-agenda :which-key "org agenda")
+      "ot" '(counsel-projectile-org-capture :which-key "task capture")
      )
   #+END_SRC
 ** Org mode packages
@@ -505,7 +511,7 @@ Package setup.
 #+END_SRC
 *** Set default theme
 #+BEGIN_SRC elisp
-  (defvar jae:theme 'doom-nord)
+  (defvar jae:theme 'doom-palenight)
   (load-theme jae:theme t)
 #+END_SRC
 ** Term
@@ -972,8 +978,7 @@ See: [[https://github.com/justbur/emacs-which-key][https://github.com/justbur/em
   :init
   (setq-default left-fringe-width  16)
   (setq-default right-fringe-width 16)
-  :config
-  )
+)
 #+END_SRC
 ** Hydra
 *** The package
@@ -1116,7 +1121,7 @@ See: [[https://github.com/flycheck/flycheck-pos-tip][https://github.com/flycheck
   #+BEGIN_SRC elisp
     (use-package rustic
       :demand
-      :mode "\\.rs$"
+      :mode ("\\.rs$" . rustic-mode)
       :bind (:map rustic-mode-map
                   ("C-c C-c j" . lsp-ui-imenu)
                   ("C-c C-c p" . lsp-find-references)

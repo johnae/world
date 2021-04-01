@@ -4,6 +4,7 @@
 , notmuch
 , pandoc
 , pass
+, fish
 , kubectl
 , kubectx
 , google-cloud-sdk
@@ -16,12 +17,12 @@
 let
   jl-encrypt = emacsPackages.melpaBuild {
     pname = "jl-encrypt";
-    version = "20190618";
+    version = "20200904";
 
     src = fetchgit {
       url = "https://gitlab.com/lechten/defaultencrypt.git";
-      rev = "ba07acc8e9fd692534c39c7cdad0a19dc0d897d9";
-      sha256 = "1ln7h1syx7yi7bqvirv90mk4rvwxg4zm1wvfcvhfh64s3hqrbfgl";
+      rev = "83fb2d46061127b51d65d3548ffbe18642398a52";
+      sha256 = "sha256-jtTXuHy2EsJroyt5PX+L3rJaX3xrdjcLnNpk3w9/470=";
     };
 
     recipe = writeText "jl-encrypt-recipe" ''
@@ -33,18 +34,16 @@ let
 in
 emacsWithPackagesFromUsePackage {
   alwaysEnsure = true;
-  config = builtins.readFile ./emacs.el;
-  package = pkgs.emacsPgtk.overrideAttrs
+  alwaysTangle = true;
+  config = ./emacs.org;
+  package = pkgs.emacsPgtkGcc.overrideAttrs
     (oa: {
       nativeBuildInputs = oa.nativeBuildInputs ++ [ makeWrapper ];
       postInstall = ''
         ${oa.postInstall}
         wrapProgram $out/bin/emacs \
-          --set TERM xterm-24bits \
           --set NOTMUCH_LOAD_PATH "${notmuch.emacs}/share/emacs/site-lisp" \
-          --prefix PATH : ${pkgs.lib.makeBinPath [ notmuch pandoc pass wl-clipboard kubectl kubectx google-cloud-sdk ]}
-        wrapProgram $out/bin/emacsclient \
-          --set TERM xterm-24bits
+          --prefix PATH : ${pkgs.lib.makeBinPath [ fish notmuch pandoc pass wl-clipboard kubectl kubectx google-cloud-sdk ]}
       '';
     });
   extraEmacsPackages = epkgs: [ jl-encrypt epkgs.org-plus-contrib ];
