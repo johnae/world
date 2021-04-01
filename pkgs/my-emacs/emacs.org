@@ -299,7 +299,9 @@ Package setup.
 
       "e" '(:ignore e :which-key "shells")
       "ee" '(projectile-run-eshell :which-key "open eshell in project")
+      "en" '(jae/eshell-new :which-key "open a new eshell instance")
       "et" '(multi-vterm-project :which-key "open vterm in project")
+      "ey" '(multi-vterm-dedicated-open :which-key "open new dedicated vterm instance ")
 
       "s" '(:ignore s :which-key "search")
       "ss" '(swiper :which-key "search buffer")
@@ -535,19 +537,19 @@ Package setup.
     (define-key eshell-mode-map (kbd "C-u") 'kill-whole-line)
     (define-key eshell-mode-map (kbd "C-c k") (lambda ()
                                                (interactive)
-                                               (pick-kubectx)
+                                               (jae/pick-kubectx)
                                                ))
     (define-key eshell-mode-map (kbd "C-c n") (lambda ()
                                                (interactive)
-                                               (pick-kubens)
+                                               (jae/pick-kubens)
                                                ))
     (define-key eshell-mode-map (kbd "C-c g") (lambda ()
                                                (interactive)
-                                               (go-to-project)
+                                               (jae/go-to-project)
                                                ))
     (define-key eshell-mode-map (kbd "C-c w") (lambda ()
                                                (interactive)
-                                               (pick-gcp-project)
+                                               (jae/pick-gcp-project)
                                                ))
   (setq
       eshell-where-to-jump 'begin
@@ -587,6 +589,11 @@ Package setup.
 #+END_SRC
 *** Helper functions
 #+BEGIN_SRC elisp
+
+  (defun jae/eshell-new ()
+    "Opens a new instance of eshell."
+    (interactive)
+    (eshell 'N))
 
   (defun jae/eshell-here ()
     "Opens up a new shell in the directory associated with the
@@ -682,7 +689,7 @@ Package setup.
       )
     )
 
-  (defun pick-kubectx ()
+  (defun jae/pick-kubectx ()
     "Select k8s context"
     (interactive)
     (setenv "KUBECTX_IGNORE_FZF" "y")
@@ -693,7 +700,7 @@ Package setup.
               )
     )
 
-  (defun pick-kubens ()
+  (defun jae/pick-kubens ()
     "Select k8s namespace"
     (interactive)
     (setenv "KUBECTX_IGNORE_FZF" "y")
@@ -704,7 +711,7 @@ Package setup.
               )
     )
 
-  (defun pick-gcp-project ()
+  (defun jae/pick-gcp-project ()
     "Select GCP proejct"
     (interactive)
     (ivy-read "Select GCP Project: " (split-string (shell-command-to-string "gcloud projects list | tail -n +2 | awk '{print $1}'") "\n" t)
@@ -714,7 +721,7 @@ Package setup.
               )
     )
 
-  (defun go-to-project ()
+  (defun jae/go-to-project ()
     "Go to project"
     (interactive)
     (counsel-projectile-switch-project
