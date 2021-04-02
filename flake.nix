@@ -37,7 +37,7 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     spotnix = {
-      url = "github:johnae/spotnix/flakes";
+      url = "github:johnae/spotnix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
