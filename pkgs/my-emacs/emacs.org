@@ -1102,6 +1102,7 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
        (lsp-eldoc-render-all t)
        (lsp-idle-delay 0.6)
        (lsp-rust-analyzer-server-display-inlay-hints t)
+       (lsp-terraform-server '("terraform-ls" "serve"))
      )
 
      (use-package lsp-ui
