@@ -868,7 +868,7 @@ Package setup.
  #+BEGIN_SRC elisp
  (use-package direnv
    :init
-   (add-hook 'prog-mode-hook #'direnv-update-environment)
+   (add-hook 'prog-mode-hook #'direnv--maybe-update-environment)
    :config
    (direnv-mode)
    (add-to-list 'direnv-non-file-modes 'eshell-mode)
@@ -1092,8 +1092,10 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
          "[/\\\\]build-aux$"
          "[/\\\\]autom4te.cache$"
          "[/\\\\]\\.reference$"))
+       (advice-add 'lsp :before #'direnv-update-environment)
        :hook (
          (lsp-mode . lsp-enable-which-key-integration)
+         (prog-mode . lsp-mode)
        )
        :custom
        (lsp-rust-analyzer-cargo-watch-command "clippy")
@@ -1101,13 +1103,6 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
        (lsp-idle-delay 0.6)
        (lsp-rust-analyzer-server-display-inlay-hints t)
      )
-
-     (defun my-lsp ()
-       "Ensures environment is updated before enabling lsp mode."
-       (direnv-update-environment default-directory)
-       (lsp-deferred))
-
-     (add-hook 'prog-mode-hook 'my-lsp)
 
      (use-package lsp-ui
        :after lsp-mode
@@ -1157,16 +1152,30 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
 *** Tree-sitter
    Tree sitter provides better syntax highlighting.
    #+BEGIN_SRC elisp
-   (use-package tree-sitter
-     :hook ((ruby-mode . tree-sitter-hl-mode)
-            (js-mode . tree-sitter-hl-mode)
-            (typescript-mode . tree-sitter-hl-mode)
-            (rustic-mode . tree-sitter-hl-mode)
-            (toml-mode . tree-sitter-hl-mode)
-            (web-mode . tree-sitter-hl-mode)
-            (shell-mode . tree-sitter-hl-mode)
-            (go-mode . tree-sitter-hl-mode)))
-   (use-package tree-sitter-langs)
+     (use-package tree-sitter
+       :hook (((
+               ruby-mode
+               js-mode
+               typescript-mode
+               rustic-mode
+               toml-mode
+               shell-mode
+               go-mode
+             ) . tree-sitter-mode)
+             ((
+               ruby-mode
+               js-mode
+               typescript-mode
+               rustic-mode
+               toml-mode
+               shell-mode
+               go-mode
+             ) . tree-sitter-hl-mode)
+             )
+     )
+     (use-package tree-sitter-langs
+       :after tree-sitter
+     )
    #+END_SRC
 *** Rust
 **** Rustic
@@ -1365,3 +1374,4 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
          )
        )
      #+END_SRC
+     
