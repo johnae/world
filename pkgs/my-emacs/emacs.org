@@ -235,7 +235,7 @@ Some basic useful settings.
 *** Display line numbers
    Display relative line numbers actually.
  #+BEGIN_SRC elisp
-   (setq display-line-numbers 'relative
+   (setq display-line-numbers-type 'relative
          display-line-numbers-current-absolute t
    )
    (add-hook 'prog-mode-hook 'display-line-numbers-mode)
