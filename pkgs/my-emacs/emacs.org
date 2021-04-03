@@ -67,6 +67,7 @@ Here we do some basic optimizations to make emacs load faster and do "stuff" mor
     (tool-bar-mode -1)
     (blink-cursor-mode -1)
     (menu-bar-mode -1)
+    (setq frame-inhibit-implied-resize t) ;; don't resize gui when setting new font - affects startup time
   #+END_SRC
 *** Skip loading default lib, use fundamental-mode
   #+BEGIN_SRC elisp
