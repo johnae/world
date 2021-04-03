@@ -11,7 +11,8 @@ This is my emacs configuration. It's documented for my benefit. This lives withi
 ***  Lexical binding
    This has to be the first line in the file. Those are the rules.
    #+BEGIN_SRC elisp
-   (setq lexical-binding t)
+     ;; -*- lexical-binding: t; -*-
+     (setq lexical-binding t)
    #+END_SRC
 ** Optimization
 Here we do some basic optimizations to make emacs load faster and do "stuff" more efficiently.
@@ -32,7 +33,11 @@ Here we do some basic optimizations to make emacs load faster and do "stuff" mor
   #+END_SRC
 *** Increase the gc threshold significantly for faster startup
   #+BEGIN_SRC elisp
-  (setq gc-cons-threshold 100000000)
+   (setq gc-cons-threshold most-positive-fixnum)
+   (add-hook 'emacs-startup-hook
+     (lambda ()
+       (setq gc-cons-threshold 16777216 ; 16mb
+             gc-cons-percentage 0.1)))
   #+END_SRC
 *** The default is very low - 4k, lsp server responses are easily much larger
   #+BEGIN_SRC elisp
