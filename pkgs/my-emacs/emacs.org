@@ -16,64 +16,57 @@ This is my emacs configuration. It's documented for my benefit. This lives withi
 ** Optimization
 Here we do some basic optimizations to make emacs load faster and do "stuff" more efficiently.
 *** Time startup
-#+BEGIN_SRC elisp
-   (add-hook 'emacs-startup-hook
-      (lambda ()
-        (message "Started emacs in %.03fs"
-            (float-time (time-subtract after-init-time before-init-time)))))
-#+END_SRC
+ #+BEGIN_SRC elisp
+    (add-hook 'emacs-startup-hook
+       (lambda ()
+         (message "Started emacs in %.03fs"
+             (float-time (time-subtract after-init-time before-init-time)))))
+ #+END_SRC
 *** Keep a reference to the actual file-name-handler.
-#+BEGIN_SRC elisp
-  (defvar file-name-handler-alist-actual file-name-handler-alist)
-#+END_SRC
-
+  #+BEGIN_SRC elisp
+    (defvar file-name-handler-alist-actual file-name-handler-alist)
+  #+END_SRC
 *** Set the file-name-handler to nil (because regexing is cpu intensive)
-#+BEGIN_SRC elisp
-(setq file-name-handler-alist nil)
-#+END_SRC
-
+  #+BEGIN_SRC elisp
+  (setq file-name-handler-alist nil)
+  #+END_SRC
 *** Increase the gc threshold significantly for faster startup
-#+BEGIN_SRC elisp
-(setq gc-cons-threshold 100000000)
-#+END_SRC
-
+  #+BEGIN_SRC elisp
+  (setq gc-cons-threshold 100000000)
+  #+END_SRC
 *** The default is very low - 4k, lsp server responses are easily much larger
-#+BEGIN_SRC elisp
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
-#+END_SRC
-
+  #+BEGIN_SRC elisp
+  (setq read-process-output-max (* 1024 1024)) ;; 1mb
+  #+END_SRC
 *** Reset file-name-handler-alist after initialization
-#+BEGIN_SRC elisp
-(add-hook 'after-init-hook
-  (lambda ()
-    (garbage-collect)
-    (setq file-name-handler-alist file-name-handler-alist-actual)) t)
-#+END_SRC
-
+  #+BEGIN_SRC elisp
+  (add-hook 'after-init-hook
+    (lambda ()
+      (garbage-collect)
+      (setq file-name-handler-alist file-name-handler-alist-actual)) t)
+  #+END_SRC
 *** This makes emacsclient startup faster in TUI-mode
    There's some code in ~xterm.el~ that will wait to avoid ugly flashes and such. It doesn't seem to work and I also don't really care. I'd rather not have it seem as if emacs just "hangs" for several seconds. Don't know why that happens really but disabling this has no negative effects in my use anyway (only positive).
  #+BEGIN_SRC elisp
  (setq-default xterm-query-timeout nil)
  #+END_SRC
-
 *** Disable startup messages
-#+BEGIN_SRC elisp
-  (setq
-   inhibit-startup-echo-area-message t
-   inhibit-startup-screen t
-   initial-scratch-message nil)
-#+END_SRC
-
+  #+BEGIN_SRC elisp
+    (setq
+     inhibit-startup-echo-area-message t
+     inhibit-startup-screen t
+     initial-scratch-message nil)
+  #+END_SRC
 *** Disable unnecessary UI widgets etc
-#+BEGIN_SRC elisp
-  (tool-bar-mode -1)
-  (blink-cursor-mode -1)
-  (menu-bar-mode -1)
-#+END_SRC
+  #+BEGIN_SRC elisp
+    (tool-bar-mode -1)
+    (blink-cursor-mode -1)
+    (menu-bar-mode -1)
+  #+END_SRC
 *** Skip loading default lib, use fundamental-mode
-#+BEGIN_SRC elisp
-(setq inhibit-default-init t
-         initial-major-mode 'fundamental-mode)
+  #+BEGIN_SRC elisp
+  (setq inhibit-default-init t
+           initial-major-mode 'fundamental-mode)
 #+END_SRC
 *** Disable any native compilation at runtime - done by Nix
 #+BEGIN_SRC elisp
@@ -81,19 +74,19 @@ Here we do some basic optimizations to make emacs load faster and do "stuff" mor
   (setq comp-deferred-compilation nil))
 #+END_SRC
 *** Use package autoloads provided by Nix
-#+BEGIN_SRC elisp
-(defvar package-quickstart t)
-#+END_SRC
+  #+BEGIN_SRC elisp
+  (defvar package-quickstart t)
+  #+END_SRC
 *** Misc performance tweaks
 **** Skip trying a second pass through auto-mode-list
-     #+BEGIN_SRC elisp
-     (setq auto-mode-case-fold nil)
-     #+END_SRC
+   #+BEGIN_SRC elisp
+   (setq auto-mode-case-fold nil)
+   #+END_SRC
 **** Enable so-long mode
-     Emacs has problems with very long lines (eg. minified js, json for example). So long helps with that.
-     #+BEGIN_SRC elisp
-     (global-so-long-mode 1)
-     #+END_SRC
+      Emacs has problems with very long lines (eg. minified js, json for example). So long helps with that.
+   #+BEGIN_SRC elisp
+   (global-so-long-mode 1)
+   #+END_SRC
 ** Setup
 Some basic useful settings.
 *** Don't create backup files, don't create #autosave# files
@@ -233,6 +226,12 @@ Some basic useful settings.
 (set-frame-parameter (selected-frame) 'alpha '(96 . 96))
 (add-to-list 'default-frame-alist '(alpha . (96 . 96)))
 #+END_SRC
+*** Display line numbers
+   Display relative line numbers actually.
+ #+BEGIN_SRC elisp
+   (setq display-line-numbers 'relative)
+   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+ #+END_SRC
 ** Utility functions
 Utility functions used here and there.
 *** Returns the output of a shell command without trailing whitespace
@@ -331,6 +330,8 @@ Package setup.
       "o" '(:ignore o :which-key "orgmode")
       "oa" '(counsel-projectile-org-agenda :which-key "org agenda")
       "ot" '(counsel-projectile-org-capture :which-key "task capture")
+      "on" '(org-narrow-to-subtree :which-key "narrow to subtree")
+      "ow" '(widen :which-key "widen buffer to remove narrowing")
      )
   #+END_SRC
 ** Org mode packages
@@ -536,55 +537,55 @@ Package setup.
    #+END_SRC
 ** EShell
 *** Settings
-   #+BEGIN_SRC elisp
-     (defun jae/configure-eshell ()
-       (require 'em-smart)
-       (require 'em-tramp)
-       (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
-       ;; Better performance
-       (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
-       (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
-       (evil-normalize-keymaps)
-       (define-key eshell-mode-map (kbd "C-l") 'eshell/clear)
-       (define-key eshell-mode-map (kbd "C-u") 'kill-whole-line)
-       (define-key eshell-mode-map (kbd "C-c k") (lambda ()
-                                                  (interactive)
-                                                  (jae/pick-kubectx)
-                                                  ))
-       (define-key eshell-mode-map (kbd "C-c n") (lambda ()
-                                                  (interactive)
-                                                  (jae/pick-kubens)
-                                                  ))
-       (define-key eshell-mode-map (kbd "C-c g") (lambda ()
-                                                  (interactive)
-                                                  (jae/go-to-project)
-                                                  ))
-       (define-key eshell-mode-map (kbd "C-c w") (lambda ()
-                                                  (interactive)
-                                                  (jae/pick-gcp-project)
-                                                  ))
-     (setq
-         eshell-where-to-jump 'begin
-         eshell-review-quick-commands nil
-         eshell-smart-space-goes-to-end t
-         eshell-glob-case-insensitive t
-         eshell-scroll-to-bottom-on-input t
-         eshell-buffer-shorthand t
-         eshell-history-size 10000
-         eshell-buffer-maximum-lines 10000
-         eshell-hist-ignoredups t
-         eshell-cmpl-ignore-case t)
-     )
-     (use-package eshell
-       :hook (eshell-first-time-mode . jae/configure-eshell)
-       :config
-       (with-eval-after-load 'esh-opt
-         (setq eshell-destroy-buffer-when-process-dies t
-               eshell-visual-commands '("htop" "fish" "bash" "vim")
-          )
+  #+BEGIN_SRC elisp
+    (defun jae/configure-eshell ()
+      (require 'em-smart)
+      (require 'em-tramp)
+      (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
+      ;; Better performance
+      (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
+      (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
+      (evil-normalize-keymaps)
+      (define-key eshell-mode-map (kbd "C-l") 'eshell/clear)
+      (define-key eshell-mode-map (kbd "C-u") 'kill-whole-line)
+      (define-key eshell-mode-map (kbd "C-c k") (lambda ()
+                                                 (interactive)
+                                                 (jae/pick-kubectx)
+                                                 ))
+      (define-key eshell-mode-map (kbd "C-c n") (lambda ()
+                                                 (interactive)
+                                                 (jae/pick-kubens)
+                                                 ))
+      (define-key eshell-mode-map (kbd "C-c g") (lambda ()
+                                                 (interactive)
+                                                 (jae/go-to-project)
+                                                 ))
+      (define-key eshell-mode-map (kbd "C-c w") (lambda ()
+                                                 (interactive)
+                                                 (jae/pick-gcp-project)
+                                                 ))
+    (setq
+        eshell-where-to-jump 'begin
+        eshell-review-quick-commands nil
+        eshell-smart-space-goes-to-end t
+        eshell-glob-case-insensitive t
+        eshell-scroll-to-bottom-on-input t
+        eshell-buffer-shorthand t
+        eshell-history-size 10000
+        eshell-buffer-maximum-lines 10000
+        eshell-hist-ignoredups t
+        eshell-cmpl-ignore-case t)
+    )
+    (use-package eshell
+      :hook (eshell-first-time-mode . jae/configure-eshell)
+      :config
+      (with-eval-after-load 'esh-opt
+        (setq eshell-destroy-buffer-when-process-dies t
+              eshell-visual-commands '("htop" "fish" "bash" "vim")
          )
-      )
-   #+END_SRC
+        )
+     )
+  #+END_SRC
 *** Aliases
    #+BEGIN_SRC elisp
      (defun eshell/x ()
@@ -903,15 +904,6 @@ Package setup.
    :config
    (add-hook 'prog-mode-hook 'highlight-numbers-mode))
  #+END_SRC
-** Relative line numbers
- #+BEGIN_SRC elisp
-   (use-package linum-relative
-     :hook (prog-mode . linum-mode)
-     :config
-     (setq linum-relative-format "%s")
-     (setq linum-relative-current-symbol "")
-     (linum-relative-mode t))
- #+END_SRC
 ** Diff hl - highlight uncommitted changes
  #+BEGIN_SRC elisp
  (use-package diff-hl
@@ -1052,74 +1044,74 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
 *** LSP Mode
    Language Server Protocol.
    See: [[https://github.com/emacs-lsp/lsp-mode][emacs-lsp/lsp-mode]]
-   #+BEGIN_SRC elisp
-     (use-package lsp-mode
-       ;;:after (direnv evil)
-       :init
-       (setq lsp-keymap-prefix "C-c a"
-             lsp-prefer-capf t
-             lsp-rust-server 'rust-analyzer)
-       :config
-       (setq lsp-prefer-flymake nil)
-       (setq lsp-enable-snippet nil)
-       (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
-       (lsp-register-client
-        (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
-                         :major-modes '(nix-mode)
-                         :server-id 'nix))
-       (setq lsp-file-watch-ignored '(
-         "[/\\\\]\\.direnv$"
-         ; SCM tools
-         "[/\\\\]\\.git$"
-         "[/\\\\]\\.hg$"
-         "[/\\\\]\\.bzr$"
-         "[/\\\\]_darcs$"
-         "[/\\\\]\\.svn$"
-         "[/\\\\]_FOSSIL_$"
-         ; IDE tools
-         "[/\\\\]\\.idea$"
-         "[/\\\\]\\.ensime_cache$"
-         "[/\\\\]\\.eunit$"
-         "[/\\\\]node_modules$"
-         "[/\\\\]\\.fslckout$"
-         "[/\\\\]\\.tox$"
-         "[/\\\\]\\.stack-work$"
-         "[/\\\\]\\.bloop$"
-         "[/\\\\]\\.metals$"
-         "[/\\\\]target$"
-         ; Autotools output
-         "[/\\\\]\\.deps$"
-         "[/\\\\]build-aux$"
-         "[/\\\\]autom4te.cache$"
-         "[/\\\\]\\.reference$"))
-       (advice-add 'lsp :before #'direnv-update-environment)
-       :hook (
-         (lsp-mode . lsp-enable-which-key-integration)
-         (prog-mode . lsp-mode)
-       )
-       :custom
-       (lsp-rust-analyzer-cargo-watch-command "clippy")
-       (lsp-eldoc-render-all t)
-       (lsp-idle-delay 0.6)
-       (lsp-rust-analyzer-server-display-inlay-hints t)
-       (lsp-terraform-server '("terraform-ls" "serve"))
+ #+BEGIN_SRC elisp
+   (use-package lsp-mode
+     ;;:after (direnv evil)
+     :init
+     (setq lsp-keymap-prefix "C-c a"
+           lsp-prefer-capf t
+           lsp-rust-server 'rust-analyzer)
+     :config
+     (setq lsp-prefer-flymake nil)
+     (setq lsp-enable-snippet nil)
+     (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
+     (lsp-register-client
+      (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
+                       :major-modes '(nix-mode)
+                       :server-id 'nix))
+     (setq lsp-file-watch-ignored '(
+       "[/\\\\]\\.direnv$"
+       ; SCM tools
+       "[/\\\\]\\.git$"
+       "[/\\\\]\\.hg$"
+       "[/\\\\]\\.bzr$"
+       "[/\\\\]_darcs$"
+       "[/\\\\]\\.svn$"
+       "[/\\\\]_FOSSIL_$"
+       ; IDE tools
+       "[/\\\\]\\.idea$"
+       "[/\\\\]\\.ensime_cache$"
+       "[/\\\\]\\.eunit$"
+       "[/\\\\]node_modules$"
+       "[/\\\\]\\.fslckout$"
+       "[/\\\\]\\.tox$"
+       "[/\\\\]\\.stack-work$"
+       "[/\\\\]\\.bloop$"
+       "[/\\\\]\\.metals$"
+       "[/\\\\]target$"
+       ; Autotools output
+       "[/\\\\]\\.deps$"
+       "[/\\\\]build-aux$"
+       "[/\\\\]autom4te.cache$"
+       "[/\\\\]\\.reference$"))
+     (advice-add 'lsp :before #'direnv-update-environment)
+     :hook (
+       (lsp-mode . lsp-enable-which-key-integration)
+       (prog-mode . lsp-mode)
      )
+     :custom
+     (lsp-rust-analyzer-cargo-watch-command "clippy")
+     (lsp-eldoc-render-all t)
+     (lsp-idle-delay 0.6)
+     (lsp-rust-analyzer-server-display-inlay-hints t)
+     (lsp-terraform-server '("terraform-ls" "serve"))
+   )
 
-     (use-package lsp-ui
-       :after lsp-mode
-       :config
-       (setq lsp-ui-doc-max-height 60)
-       :hook
-       (
-         (lsp-mode . lsp-ui-mode)
-       )
-       :custom
-       (lsp-ui-peek-always-show t)
-       (lsp-ui-sideline-show-hover t)
+   (use-package lsp-ui
+     :after lsp-mode
+     :config
+     (setq lsp-ui-doc-max-height 60)
+     :hook
+     (
+       (lsp-mode . lsp-ui-mode)
      )
+     :custom
+     (lsp-ui-peek-always-show t)
+     (lsp-ui-sideline-show-hover t)
+   )
 
-     (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-   #+END_SRC
+   (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+ #+END_SRC
 *** Flycheck mode
 **** The mode itself
      On-the-fly syntax checking, see: [[https://www.flycheck.org/en/latest/][https://www.flycheck.org/en/latest/]]
@@ -1232,13 +1224,16 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
    #+END_SRC
 *** Golang
 **** Go mode
-     #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp
      (use-package go-mode
        :config
        (setq gofmt-command "goimports")
+       :hook (
+              (before-save . gofmt-before-save)
+              (go-mode . lsp)
+             )
      )
-     (add-hook 'before-save-hook 'gofmt-before-save)
-     #+END_SRC
+   #+END_SRC
 **** Go guru
      #+BEGIN_SRC elisp
      (use-package go-guru
@@ -1267,9 +1262,13 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
 **** The mode itself
      HashiCorps terraform.
      #+BEGIN_SRC elisp
-     (use-package terraform-mode
-       :mode "\\.tf$"
-       :hook (terraform-mode . terraform-format-on-save-mode))
+       (use-package terraform-mode
+         :mode "\\.tf$"
+         :hook (
+                (terraform-mode . terraform-format-on-save-mode)
+                (terraform-mode . lsp)
+               )
+       )
      #+END_SRC
 **** Company terraform
      #+BEGIN_SRC elisp
@@ -1280,17 +1279,20 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
      #+END_SRC
 *** Nix
 **** The mode
-     #+BEGIN_SRC elisp
-       (defun jae/nix-mode-format-before-save-hook ()
-         (when (eq major-mode 'nix-mode)
-           (nix-format-buffer)))
-       (use-package nix-mode
-         :mode "\\.nix$"
-         :hook (nix-mode . jae/nix-mode-format-before-save)
-         :custom
-         (nix-nixfmt-bin "nixpkgs-fmt")
-       )
-     #+END_SRC
+   #+BEGIN_SRC elisp
+     (defun jae/nix-mode-format-before-save-hook ()
+       (when (eq major-mode 'nix-mode)
+         (nix-format-buffer)))
+     (use-package nix-mode
+       :mode "\\.nix$"
+       :hook (
+              (nix-mode . jae/nix-mode-format-before-save)
+              (nix-mode . lsp)
+             )
+       :custom
+       (nix-nixfmt-bin "nixpkgs-fmt")
+     )
+   #+END_SRC
 *** Shell
    There's already shell mode. But I use fish shell so it's nice to get some syntax highlighting for that.
    #+BEGIN_SRC elisp
