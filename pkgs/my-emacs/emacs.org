@@ -443,6 +443,14 @@ Package setup.
           (C . t)))
      )
    #+END_SRC
+
+       Define some org-mode keybindings.
+   #+BEGIN_SRC elisp
+     (general-define-key
+      :prefix "C-c"
+      "C-r" 'verb-command-map
+     )
+   #+END_SRC
 *** Org bullets - uses different utf8 characters for different bullet nesting levels, see: [[https://github.com/sabof/org-bullets][sabof/org-bullets]]
    #+BEGIN_SRC elisp
    (use-package org-bullets
@@ -522,7 +530,6 @@ Package setup.
    #+BEGIN_SRC elisp
      (use-package doom-themes)
    #+END_SRC
-
 *** Doom modeline
    #+BEGIN_SRC elisp
      (use-package doom-modeline
@@ -1043,10 +1050,9 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
         "es" '(hydra-term-switch/body :which-key "cycle through terminals")
       )
    #+END_SRC
-** Restclient :-)
+** VERB http client
  #+BEGIN_SRC elisp
- (use-package restclient
-   :mode ("\\.restclient$" . restclient-mode))
+ (use-package verb)
  #+END_SRC
 ** Programming and markup languages
 *** LSP Mode
