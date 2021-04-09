@@ -274,6 +274,41 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
    #+BEGIN_SRC elisp
    (setq custom-safe-themes t)
    #+END_SRC
+*** Cloud/k8s utility functions
+   #+BEGIN_SRC elisp
+      (defun jae/pick-kubectx ()
+        "Select k8s context"
+        (interactive)
+        (setenv "KUBECTX_IGNORE_FZF" "y")
+        (ivy-read "Select kubernetes cluster: " (split-string (shell-command-to-string "kubectx") "\n" t)
+                  :action '(1
+                             ("o" (lambda (x) (shell-command (concat "kubectx " x))))
+                           )
+                  )
+        )
+
+      (defun jae/pick-kubens ()
+        "Select k8s namespace"
+        (interactive)
+        (setenv "KUBECTX_IGNORE_FZF" "y")
+        (ivy-read "Select kubernetes namespace: " (split-string (shell-command-to-string "kubens") "\n" t)
+                  :action '(1
+                           ("o" (lambda (x) (shell-command (concat "kubens " x))))
+                           )
+                  )
+        )
+
+      (defun jae/pick-gcp-project ()
+        "Select GCP proejct"
+        (interactive)
+        (ivy-read "Select GCP Project: " (split-string (shell-command-to-string "gcloud projects list | tail -n +2 | awk '{print $1}'") "\n" t)
+                  :action '(1
+                           ("o" (lambda (x) (shell-command (concat "gcloud config set project " x))))
+                           )
+                  )
+        )
+
+   #+END_SRC
 * Packages
 Package setup.
 
@@ -341,6 +376,24 @@ Package setup.
       "on" '(org-narrow-to-subtree :which-key "narrow to subtree")
       "ow" '(widen :which-key "widen buffer to remove narrowing")
      )
+  #+END_SRC
+*** General key bindings
+  #+BEGIN_SRC elisp
+    (general-define-key
+     :prefix "C-c"
+     "k" (lambda ()
+            (interactive)
+            (jae/pick-kubectx)
+         )
+     "n" (lambda ()
+            (interactive)
+            (jae/pick-kubens)
+         )
+     "w" (lambda ()
+            (interactive)
+            (jae/pick-gcp-project)
+         )
+    )
   #+END_SRC
 ** Org mode packages
 *** Org mode itself
@@ -568,22 +621,6 @@ Package setup.
       (evil-normalize-keymaps)
       (define-key eshell-mode-map (kbd "C-l") 'eshell/clear)
       (define-key eshell-mode-map (kbd "C-u") 'kill-whole-line)
-      (define-key eshell-mode-map (kbd "C-c k") (lambda ()
-                                                 (interactive)
-                                                 (jae/pick-kubectx)
-                                                 ))
-      (define-key eshell-mode-map (kbd "C-c n") (lambda ()
-                                                 (interactive)
-                                                 (jae/pick-kubens)
-                                                 ))
-      (define-key eshell-mode-map (kbd "C-c g") (lambda ()
-                                                 (interactive)
-                                                 (jae/go-to-project)
-                                                 ))
-      (define-key eshell-mode-map (kbd "C-c w") (lambda ()
-                                                 (interactive)
-                                                 (jae/pick-gcp-project)
-                                                 ))
     (setq
         eshell-where-to-jump 'begin
         eshell-review-quick-commands nil
@@ -622,7 +659,6 @@ Package setup.
    #+END_SRC
 *** Helper functions
    #+BEGIN_SRC elisp
-
      (defun jae/eshell-new ()
        "Opens a new instance of eshell."
        (interactive)
@@ -720,45 +756,6 @@ Package setup.
            gcloud-project
            )
          )
-       )
-
-     (defun jae/pick-kubectx ()
-       "Select k8s context"
-       (interactive)
-       (setenv "KUBECTX_IGNORE_FZF" "y")
-       (ivy-read "Select kubernetes cluster: " (split-string (shell-command-to-string "kubectx") "\n" t)
-                 :action '(1
-                            ("o" (lambda (x) (shell-command (concat "kubectx " x))))
-                          )
-                 )
-       )
-
-     (defun jae/pick-kubens ()
-       "Select k8s namespace"
-       (interactive)
-       (setenv "KUBECTX_IGNORE_FZF" "y")
-       (ivy-read "Select kubernetes namespace: " (split-string (shell-command-to-string "kubens") "\n" t)
-                 :action '(1
-                          ("o" (lambda (x) (shell-command (concat "kubens " x))))
-                          )
-                 )
-       )
-
-     (defun jae/pick-gcp-project ()
-       "Select GCP proejct"
-       (interactive)
-       (ivy-read "Select GCP Project: " (split-string (shell-command-to-string "gcloud projects list | tail -n +2 | awk '{print $1}'") "\n" t)
-                 :action '(1
-                          ("o" (lambda (x) (shell-command (concat "gcloud config set project " x))))
-                          )
-                 )
-       )
-
-     (defun jae/go-to-project ()
-       "Go to project"
-       (interactive)
-       (counsel-projectile-switch-project
-        'counsel-projectile-switch-project-action-run-eshell)
        )
    #+END_SRC
 *** Prompt
@@ -1396,4 +1393,3 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
          )
        )
      #+END_SRC
-     
