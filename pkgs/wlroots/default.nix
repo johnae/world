@@ -20,6 +20,7 @@
 , libglvnd
 , libpng
 , libuuid
+, libseat
 , ffmpeg
 , xwayland
 , inputs
@@ -37,13 +38,12 @@ stdenv.mkDerivation {
 
   mesonFlags = [
     "-Dlibcap=enabled"
-    "-Dlogind-provider=systemd"
     "-Dxwayland=enabled"
     "-Dx11-backend=enabled"
     "-Dxcb-icccm=enabled"
     "-Dxcb-errors=enabled"
     "-Dxcb-xkb=enabled"
-    "-Dlibseat=disabled"
+    "-Dlibseat=enabled"
   ];
 
   buildInputs = [
@@ -56,6 +56,7 @@ stdenv.mkDerivation {
     xcbutilwm
     libX11
     libcap
+    libseat
     xcbutilimage
     xcbutilerrors
     xcbutilrenderutil

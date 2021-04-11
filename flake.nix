@@ -67,7 +67,7 @@
     swaybg = { url = "github:swaywm/swaybg"; flake = false; };
     swayidle = { url = "github:swaywm/swayidle"; flake = false; };
     swaylock = { url = "github:swaywm/swaylock"; flake = false; };
-    wlroots = { url = "github:swaywm/wlroots"; flake = false; };
+    wlroots = { url = "github:swaywm/wlroots/d50bbf0"; flake = false; };
     wf-recorder = { url = "github:ammen99/wf-recorder"; flake = false; };
     wl-clipboard = { url = "github:bugaevc/wl-clipboard"; flake = false; };
     xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr/v0.2.0"; flake = false; };
