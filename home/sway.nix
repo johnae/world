@@ -107,6 +107,7 @@ in
   home.sessionVariables = {
     GDK_BACKEND = "wayland";
     CLUTTER_BACKEND = "wayland";
+    QT_QPA_PLATFORM = "wayland-egl";
     MOZ_ENABLE_WAYLAND = "1";
     MOZ_USE_XINPUT2 = "1";
     XCURSOR_THEME = "default";
