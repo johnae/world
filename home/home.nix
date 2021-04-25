@@ -129,7 +129,6 @@ in
       kubernetes.disabled = false;
       kubernetes.style = "bold blue";
       nix_shell.disabled = false;
-      nix_shell.use_name = true;
       rust.symbol = " ";
       gcloud = {
         format = "on [$symbol(\\($project\\))]($style) ";
