@@ -102,7 +102,7 @@ let
   '';
 
   fonts = {
-    names = [ "Font Awesome 5 Free" "Font Awesome 5 Brands" "Roboto" "Arial" "sans-serif" ];
+    names = [ "Roboto" "Font Awesome 5 Free" "Font Awesome 5 Brands" "Arial" "sans-serif" ];
     style = "Bold";
     size = 10.0;
   };
