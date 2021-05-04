@@ -101,6 +101,14 @@ let
 
   '';
 
+  fonts = {
+    names = [ "Font Awesome 5 Free" "Font Awesome 5 Brands" "Roboto" "Arial" "sans-serif" ];
+    style = "Bold";
+    size = 10.0;
+  };
+
+  modifier = "Mod4";
+
 in
 {
 
@@ -118,10 +126,8 @@ in
   wayland.windowManager.sway = {
     enable = true;
     systemdIntegration = true;
-    config = rec {
-      fonts = [ "Roboto" "Font Awesome 5 Free" "Font Awesome 5 Brands" "Arial" "sans-serif" "Bold 10" ];
-      modifier = "Mod4";
-
+    config = {
+      inherit fonts modifier;
       output = {
         "*" = {
           bg = "~/Pictures/wallpaper.jpg fill";
