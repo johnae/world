@@ -24,6 +24,7 @@
 , librsvg
 , wlroots
 , inputs
+, isNixOS ? true
 }:
 stdenv.mkDerivation rec {
   pname = "sway-unwrapped";
