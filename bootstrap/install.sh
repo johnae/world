@@ -71,7 +71,7 @@ DEVRANDOM=/dev/urandom
 if [ "$(systemd-detect-virt)" = "none" ]; then
   CRYPTKEYFILE="${CRYPTKEYFILE:-/sys/class/dmi/id/product_uuid}"
 else
-  CRYPTKEYFILE="${CRYPTKEYFILE:-/sys/class/dmi/id/product_version}" ## we're testing here
+  CRYPTKEYFILE="${CRYPTKEYFILE:-/sys/class/dmi/id/product_version}"
 fi
 
 if [ -n "$DISK_PASSWORD" ]; then

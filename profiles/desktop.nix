@@ -52,6 +52,7 @@ in
   virtualisation.docker.enable = false;
   virtualisation.podman.enable = true;
   virtualisation.podman.dockerCompat = true;
+  virtualisation.virtualbox.host.enable = true;
 
   programs.ssh.startAgent = false;
 

@@ -40,24 +40,6 @@ in
 
   hardware.cpu.intel.updateMicrocode = true;
 
-  networking.nameservers =
-    if tsEnabled then
-      [ "100.100.100.100" "1.0.0.1" "1.1.1.1" "2606:4700:4700::1111" ]
-    else
-      [ "1.0.0.1" "1.1.1.1" "2606:4700:4700::1111" ];
-
-  networking.search =
-    if tsEnabled then
-      [ "insane.se.beta.tailscale.net" ]
-    else
-      [ ];
-
-  networking.domain =
-    if tsEnabled then
-      "insane.se.beta.tailscale.net"
-    else
-      "";
-
   i18n.defaultLocale = "en_US.UTF-8";
   console.keyMap = "us";
   time.timeZone = "Europe/Stockholm";

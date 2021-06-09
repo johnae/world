@@ -102,11 +102,13 @@ with lib; {
           "/home/${userName}/.local/share/containers"
           "/home/${userName}/.local/share/Steam"
           "/home/${userName}/.local/share/vulkan"
+          "/home/${userName}/.local/share/qutebrowser"
           "/home/${userName}/.mail"
           "/home/${userName}/.cargo"
           "/home/${userName}/.cache/mu"
           "/home/${userName}/.cache/nix"
           "/home/${userName}/.cache/nix-index"
+          "/home/${userName}/.cache/qutebrowser"
           "/home/${userName}/.mozilla/firefox/default"
           "/home/${userName}/.gnupg"
           "/home/${userName}/.config/gcloud"
@@ -115,6 +117,8 @@ with lib; {
         files = [
           "/home/${userName}/.kube/config"
           "/home/${userName}/.ssh/known_hosts"
+          "/home/${userName}/.ssh/google_compute_engine"
+          "/home/${userName}/.ssh/id_nix_secrets_ed25519"
           "/home/${userName}/.spotify_token_cache.json"
         ];
       };
@@ -218,8 +222,11 @@ with lib; {
 
   boot.initrd.availableKernelModules =
     [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-  boot.kernelModules = [ "kvm-amd" "k10temp" "nct6775" ];
-  boot.extraModulePackages = [ ];
+  boot.extraModprobeConfig = ''
+    options v4l2loopback exclusive_caps=1
+  '';
+  boot.kernelModules = [ "kvm-amd" "k10temp" "nct6775" "v4l2loopback" ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
 
   fileSystems."/" = {
     device = "none";

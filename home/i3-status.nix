@@ -69,11 +69,11 @@ let
     fi
   '';
 
-  wifiStatus = pkgs.writeStrictShellScriptBin "wifi-status" ''
-    ${pkgs.iwd}/bin/iwctl station wlan0 get-networks rssi-dbms | \
-    ${pkgs.gnugrep}/bin/grep -E '>' | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | \
-    ${pkgs.gawk}/bin/awk '{ dbms=$4/100 ; signal_strength = (-0.0154 * dbms * dbms) - (0.3794 * dbms) + 98.182 ; printf "%s %1.0f%%", $2, signal_strength}'
-  '';
+  #wifiStatus = pkgs.writeStrictShellScriptBin "wifi-status" ''
+  #  ${pkgs.iwd}/bin/iwctl station wlan0 get-networks rssi-dbms | \
+  #  ${pkgs.gnugrep}/bin/grep -E '>' | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | \
+  #  ${pkgs.gawk}/bin/awk '{ dbms=$4/100 ; signal_strength = (-0.0154 * dbms * dbms) - (0.3794 * dbms) + 98.182 ; printf "%s %1.0f%%", $2, signal_strength}'
+  #'';
 in
 {
   programs.my-i3status-rust = {
@@ -94,11 +94,11 @@ in
 
       ## this enables us to get the signal strength regardless
       ## of network namespace - via iwd/iwctl (and dbus)
-      {
-        block = "custom";
-        interval = 60;
-        command = "${wifiStatus}/bin/wifi-status";
-      }
+      #{
+      #  block = "custom";
+      #  interval = 60;
+      #  command = "${wifiStatus}/bin/wifi-status";
+      #}
     ] ++
 
     (if isDesktop then
@@ -122,11 +122,11 @@ in
       {
         block = "net";
         device = "wlan0";
-        ssid = false;
-        signal_strength = false;
-        speed_up = true;
-        graph_up = false;
-        interval = 30;
+        format = "{ssid} {signal_strength} {speed_up;K*b} {speed_down;K*b}";
+        #signal_strength = false;
+        #speed_up = true;
+        #graph_up = false;
+        interval = 5;
       }
 
       {

@@ -1,4 +1,4 @@
-{ pkgs, config, nixosConfig, lib, options }:
+{ pkgs, config, nixosConfig, lib, options, specialArgs }:
 let
   importsFrom = dir: lib.mapAttrsToList
     (

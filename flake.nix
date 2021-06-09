@@ -8,6 +8,7 @@
     };
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-qute.url = "github:johnae/nixpkgs/qutebrowser-meet-patch";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     tektonix = {
       url = "github:johnae/tektonix";
@@ -114,17 +115,11 @@
       toInstallerConfiguration = name: conf:
         inputs.nixpkgs.lib.nameValuePair name (installerConfig (maybeTest name) conf.config.system.build.toplevel);
 
-      importSecret = secretPath: (builtins.exec [
-        "${pkgs.sops}/bin/sops"
-        "-d"
-        secretPath
-      ]) { inherit pkgs userName; };
-
       systemConfig = hostName: configuration:
         inputs.nixpkgs.lib.makeOverridable inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit hostName userName inputs pkgs importSecret;
+            inherit hostName userName inputs pkgs;
           };
           modules =
             [
@@ -194,6 +189,17 @@
           nur = inputs.nur.overlay;
           spotnix = inputs.spotnix.overlay;
           persway = inputs.persway.overlay;
+          qutebrowser-pipewire = (final: prev:
+            let
+              pkgs-qute = forAllSystems (system:
+                (import inputs.nixpkgs-qute {
+                  localSystem = { inherit system; };
+                  config.allowUnfree = true;
+                }));
+            in
+              {
+                qutebrowser-pipewire = pkgs-qute.${system}.qutebrowser;
+              });
           ssh-to-pgp =
             (final: prev:
               {
