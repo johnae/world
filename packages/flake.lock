@@ -1,25 +1,5 @@
 {
   "nodes": {
-    "agenix": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1620877075,
-        "narHash": "sha256-XvgTqtmQZHegu9UMDSR50gK5cHEM2gbnRH0qecmdN54=",
-        "owner": "ryantm",
-        "repo": "agenix",
-        "rev": "e543aa7d68f222e1e771165da9e9a64b5bf7b3e3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ryantm",
-        "repo": "agenix",
-        "type": "github"
-      }
-    },
     "blur": {
       "flake": false,
       "locked": {
@@ -137,26 +117,6 @@
         "type": "github"
       }
     },
-    "home-manager": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1623251710,
-        "narHash": "sha256-eCMquRJXAzzFgNcTO4jQqp8D40N0jSA58+oqhyOrEbU=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "42847469b3f65a363dc52b66be09d0ac4edcc55c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
     "mako": {
       "flake": false,
       "locked": {
@@ -249,35 +209,17 @@
         "type": "github"
       }
     },
-    "nixos-hardware": {
-      "locked": {
-        "lastModified": 1623143341,
-        "narHash": "sha256-a8NjpJVvJkb3ehu/KP1OaWwlRexom2D7lQEH5uCO9yA=",
-        "owner": "nixos",
-        "repo": "nixos-hardware",
-        "rev": "fccbee72df707c3fb074854668deee6e1ff02351",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixos-hardware",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1622966049,
-        "narHash": "sha256-6g+28v94ISkVk9TBSsITVOnB2slK8plieWPIF2jo/l0=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "fbfb79400a08bf754e32b4d4fc3f7d8f8055cf94",
-        "type": "github"
+        "lastModified": 1621288494,
+        "narHash": "sha256-3lQCSw8/J076UwoQhtSVymOibLuojlqF9BAMP6X+/48=",
+        "path": "/nix/store/km4navj5h5v69nhxjxfff1dzfl1ba4jf-source",
+        "rev": "673aea9f84c955c94b105797fdc56007017af4db",
+        "type": "path"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
+        "id": "nixpkgs",
+        "type": "indirect"
       }
     },
     "nixpkgs-fmt": {
@@ -294,66 +236,6 @@
         "owner": "nix-community",
         "repo": "nixpkgs-fmt",
         "type": "github"
-      }
-    },
-    "nur": {
-      "locked": {
-        "lastModified": 1623269399,
-        "narHash": "sha256-BcFaX2HGuAEZv8kIN8l7yPFoldEhYH8s75OrqH6K5kc=",
-        "owner": "nix-community",
-        "repo": "NUR",
-        "rev": "f42bad927d7c544a196c33f177075b934cc1e199",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "NUR",
-        "type": "github"
-      }
-    },
-    "packages": {
-      "inputs": {
-        "blur": "blur",
-        "emacs-overlay": "emacs-overlay",
-        "fenix": [
-          "fenix"
-        ],
-        "fire": "fire",
-        "fish-kubectl-completions": "fish-kubectl-completions",
-        "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
-        "grim": "grim",
-        "mako": "mako",
-        "netns-exec": "netns-exec",
-        "nix-misc": [
-          "nix-misc"
-        ],
-        "nixos-generators": "nixos-generators",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-fmt": "nixpkgs-fmt",
-        "persway": "persway",
-        "slurp": "slurp",
-        "spook": "spook",
-        "spotifyd": "spotifyd",
-        "spotnix": "spotnix",
-        "sway": "sway",
-        "swaybg": "swaybg",
-        "swayidle": "swayidle",
-        "swaylock": "swaylock",
-        "wf-recorder": "wf-recorder",
-        "wl-clipboard": "wl-clipboard",
-        "wlroots": "wlroots",
-        "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
-      },
-      "locked": {
-        "narHash": "sha256-VZdS0uOojxqwwKgCI+1n31HkueRm7lER9lV4zx3MATU=",
-        "path": "./packages",
-        "type": "path"
-      },
-      "original": {
-        "path": "./packages",
-        "type": "path"
       }
     },
     "persway": {
@@ -381,14 +263,32 @@
     },
     "root": {
       "inputs": {
-        "agenix": "agenix",
+        "blur": "blur",
+        "emacs-overlay": "emacs-overlay",
         "fenix": "fenix",
-        "home-manager": "home-manager",
+        "fire": "fire",
+        "fish-kubectl-completions": "fish-kubectl-completions",
+        "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
+        "grim": "grim",
+        "mako": "mako",
+        "netns-exec": "netns-exec",
         "nix-misc": "nix-misc",
-        "nixos-hardware": "nixos-hardware",
+        "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs",
-        "nur": "nur",
-        "packages": "packages"
+        "nixpkgs-fmt": "nixpkgs-fmt",
+        "persway": "persway",
+        "slurp": "slurp",
+        "spook": "spook",
+        "spotifyd": "spotifyd",
+        "spotnix": "spotnix",
+        "sway": "sway",
+        "swaybg": "swaybg",
+        "swayidle": "swayidle",
+        "swaylock": "swaylock",
+        "wf-recorder": "wf-recorder",
+        "wl-clipboard": "wl-clipboard",
+        "wlroots": "wlroots",
+        "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       }
     },
     "rust-analyzer-src": {

@@ -1,7 +1,4 @@
 { config, lib, pkgs, inputs, ... }:
-let
-  tsEnabled = config.services.tailscale.enable;
-in
 {
 
   imports = [
@@ -10,6 +7,7 @@ in
   ];
 
   nix = {
+    trustedUsers = [ "root" ];
     extraOptions = ''
       experimental-features = nix-command flakes ca-references
       keep-outputs = true
@@ -37,8 +35,6 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  hardware.cpu.intel.updateMicrocode = true;
 
   i18n.defaultLocale = "en_US.UTF-8";
   console.keyMap = "us";

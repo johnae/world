@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-set -euo pipefail
-
-echo --- Running agent pre-command hook
-
-echo +++ Docker login
-echo "$DOCKER_PASS" | nix shell nixpkgs#docker -c docker login -u "$DOCKER_USER" --password-stdin

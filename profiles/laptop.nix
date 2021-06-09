@@ -1,11 +1,11 @@
-{ hostName, userName, config, lib, pkgs, inputs, ... }:
+{ hostName, config, lib, pkgs, inputs, ... }:
 let
   nixos-hardware = inputs.nixos-hardware;
-  buildMachines = (builtins.exec [
-    "${pkgs.sops}/bin/sops"
-    "-d"
-    "${inputs.secrets}/builders/hosts.nix"
-  ]);
+  #buildMachines = (builtins.exec [
+  #  "${pkgs.sops}/bin/sops"
+  #  "-d"
+  #  "${inputs.secrets}/builders/hosts.nix"
+  #]);
 in
 {
   imports = [
@@ -14,11 +14,11 @@ in
   ];
 
 
-  nix.buildMachines = buildMachines;
-  nix.distributedBuilds = true;
-  nix.extraOptions = ''
-    builders-use-substitutes = true
-  '';
+  #nix.buildMachines = buildMachines;
+  #nix.distributedBuilds = true;
+  #nix.extraOptions = ''
+  #  builders-use-substitutes = true
+  #'';
 
   boot.kernel.sysctl = {
     "vm.dirty_writeback_centisecs" = 1500;
@@ -60,7 +60,7 @@ in
   virtualisation.podman.enable = true;
   virtualisation.podman.dockerCompat = true;
 
-  programs.ssh.startAgent = false;
+  programs.ssh.startAgent = true;
 
   programs.dconf.enable = true;
   programs.light.enable = true;
@@ -98,9 +98,6 @@ in
   services.upower.enable = true;
   services.disable-usb-wakeup.enable = true;
   services.pasuspender.enable = true;
-  ##
-  services.rbsnapper.enable = true;
-  services.rbsnapper.volume = "/keep/home/john";
 
   services.pipewire.enable = true;
   xdg.portal.enable = true;

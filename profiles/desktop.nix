@@ -1,16 +1,10 @@
 { hostName, userName, config, lib, pkgs, inputs, ... }:
-let
-  nixos-hardware = inputs.nixos-hardware;
-  buildMachines = (builtins.exec [
-    "${pkgs.sops}/bin/sops"
-    "-d"
-    "${inputs.secrets}/builders/hosts.nix"
-  ]);
-in
 {
   imports = [
-    "${nixos-hardware}/common/pc/ssd"
     ./defaults.nix
+    inputs.nixos-hardware.nixosModules.common-cpu-amd
+    inputs.nixos-hardware.nixosModules.common-gpu-amd
+    inputs.nixos-hardware.nixosModules.common-pc-ssd
   ];
 
   boot.kernel.sysctl = {
@@ -52,9 +46,8 @@ in
   virtualisation.docker.enable = false;
   virtualisation.podman.enable = true;
   virtualisation.podman.dockerCompat = true;
-  virtualisation.virtualbox.host.enable = true;
 
-  programs.ssh.startAgent = false;
+  programs.ssh.startAgent = true;
 
   programs.dconf.enable = true;
   programs.light.enable = true;
@@ -90,9 +83,6 @@ in
   ##
   services.upower.enable = true;
   services.pasuspender.enable = true;
-  ##
-  services.rbsnapper.enable = true;
-  services.rbsnapper.volume = "/keep/home/john";
 
   services.pipewire.enable = true;
   xdg.portal.enable = true;

@@ -1,279 +1,189 @@
 {
-  description = "A flake for building the world";
+  description = "John's NixOS configurations";
+
   inputs = {
+    nixpkgs = {
+      url = "github:nixos/nixpkgs/nixos-unstable";
+    };
+    nixos-hardware.url = "github:nixos/nixos-hardware";
     nur.url = "github:nix-community/NUR";
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
+    fenix = {
+      url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-qute.url = "github:johnae/nixpkgs/qutebrowser-meet-patch";
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
-    tektonix = {
-      url = "github:johnae/tektonix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.nix-misc.follows = "nix-misc";
-    };
-    secrets = {
-      url = "git+ssh://git@github.com/johnae/secret-world";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixkite = {
-      url = "github:johnae/nixkite/flakes";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.nix-misc.follows = "nix-misc";
     };
     nix-misc = {
       url = "github:johnae/nix-misc";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
     };
-    spook = {
-      url = "github:johnae/spook";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nix-misc.follows = "nix-misc";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    spotnix = {
-      url = "github:johnae/spotnix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    home = {
+    home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    persway = {
-      url = "github:johnae/persway";
+    packages = {
+      url = "path:./packages";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.fenix.follows = "fenix";
+      inputs.nix-misc.follows = "nix-misc";
     };
-
-    ## non flakes
-    nixos-hardware = { url = "github:nixos/nixos-hardware"; flake = false; };
-    nixpkgs-fmt = { url = "github:nix-community/nixpkgs-fmt"; flake = false; };
-    netns-exec = { url = "github:johnae/netns-exec"; flake = false; };
-    blur = { url = "github:johnae/blur"; flake = false; };
-    fire = { url = "github:johnae/fire"; flake = false; };
-    fish-kubectl-completions = { url = "github:evanlucas/fish-kubectl-completions"; flake = false; };
-    google-cloud-sdk-fish-completion = { url = "github:Doctusoft/google-cloud-sdk-fish-completion"; flake = false; };
-    grim = { url = "github:emersion/grim"; flake = false; };
-    mako = { url = "github:emersion/mako"; flake = false; };
-    slurp = { url = "github:emersion/slurp"; flake = false; };
-    spotifyd = { url = "github:spotifyd/spotifyd"; flake = false; };
-    sway = { url = "github:swaywm/sway"; flake = false; };
-    swaybg = { url = "github:swaywm/swaybg"; flake = false; };
-    swayidle = { url = "github:swaywm/swayidle"; flake = false; };
-    swaylock = { url = "github:swaywm/swaylock"; flake = false; };
-    wlroots = { url = "github:swaywm/wlroots/d50bbf0"; flake = false; };
-    wf-recorder = { url = "github:ammen99/wf-recorder"; flake = false; };
-    wl-clipboard = { url = "github:bugaevc/wl-clipboard"; flake = false; };
-    xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr/v0.2.0"; flake = false; };
-    buildkite = { url = "github:buildkite/agent/v3.22.1"; flake = false; };
+    agenix = {
+     url = "github:ryantm/agenix";
+     inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  outputs = { self, ... }@inputs:
+
+  outputs = { self, nixpkgs, ... } @ inputs:
     let
-      userName = "john";
-      system = "x86_64-linux";
+      inherit (nixpkgs.lib) genAttrs filterAttrs mkOverride makeOverridable mkIf
+        hasSuffix mapAttrs mapAttrs' removeSuffix nameValuePair nixosSystem
+        mkForce mapAttrsToList splitString concatStringsSep last hasAttr;
+      inherit (builtins) substring pathExists fromTOML readFile listToAttrs filter;
 
-      systems = [ "x86_64-linux" ];
+      supportedSystems = [ "x86_64-linux" ];
+      forAllSystems = f: genAttrs supportedSystems (system: f system);
+      pkgs = forAllSystems (system: import nixpkgs {
+        inherit system;
+        overlays = [
+          inputs.nix-misc.overlay
+          inputs.nur.overlay
+          inputs.agenix.overlay
+        ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
+      });
 
-      forAllSystems = f: inputs.nixpkgs.lib.genAttrs systems (system: f system);
+      hosts = mapAttrs (hostname: config: {
+        specialArgs.users = config.users;
+        configuration.imports = (map (item:
+          if pathExists (toString (./. + "/${item}")) then
+            (./. + "/${item}")
+          else (./. + "/${item}.nix")
+        ) config.imports) ++ (mapAttrsToList (name: value: ./. + "/users/${name}") config.users.users);
+      }) (fromTOML (readFile ./hosts.toml));
 
-      genAttrs' = values: f: builtins.listToAttrs (map f values);
-
-      pathsToImportedAttrs = paths:
-        genAttrs' paths (path: {
-          name = inputs.nixpkgs.lib.removeSuffix ".nix" (builtins.baseNameOf path);
-          value = import path;
-        });
-
-      hosts = inputs.nixpkgs.lib.filterAttrs
-        (name: _: inputs.nixpkgs.lib.hasSuffix ".nix" name)
-        (builtins.readDir ./hosts);
-
-      nixpkgsFor = forAllSystems (system:
-        (import inputs.nixpkgs {
-          localSystem = { inherit system; };
-          overlays = builtins.attrValues self.overlays;
-          config.allowUnfree = true;
-        }));
-
-      pkgs = nixpkgsFor.${system};
-
-      maybeTest = n:
-        let test = builtins.match "(.*)-(test)$" n; # a match == [ "hostname" "test" ];
-        in if test != null then builtins.head test else n;
-
-      toNixosConfiguration = name: _:
-        let n = inputs.nixpkgs.lib.removeSuffix ".nix" name;
-        in inputs.nixpkgs.lib.nameValuePair n (systemConfig (maybeTest n) (./hosts + "/${name}"));
-
-      toInstallerConfiguration = name: conf:
-        inputs.nixpkgs.lib.nameValuePair name (installerConfig (maybeTest name) conf.config.system.build.toplevel);
-
-      systemConfig = hostName: configuration:
-        inputs.nixpkgs.lib.makeOverridable inputs.nixpkgs.lib.nixosSystem {
+      systemConfig = hostName: host:
+        let
+          system = "x86_64-linux";
+        in
+        makeOverridable nixosSystem {
           inherit system;
           specialArgs = {
-            inherit hostName userName inputs pkgs;
-          };
-          modules =
-            [
-              { system.configurationRevision = inputs.nixpkgs.lib.mkIf (self ? rev) self.rev; }
-              { nixpkgs = { inherit pkgs; }; }
-              { system.nixos.versionSuffix = inputs.nixpkgs.lib.mkForce "git.${builtins.substring 0 11 inputs.nixpkgs.rev}"; }
+            pkgs = pkgs.${system};
+            inherit hostName inputs;
+            userProfiles = import ./users/profiles.nix { lib = inputs.nixpkgs.lib; };
+          } // host.specialArgs;
+          modules = [
+            #{ system.configurationRevision = mkIf (self ? rev) self.rev; }
+            { system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}"; }
+            { nixpkgs = { pkgs = pkgs.${system}; }; }
+            inputs.nixpkgs.nixosModules.notDetected
+            inputs.home-manager.nixosModules.home-manager
+            inputs.agenix.nixosModules.age
+            host.configuration
+          ];
+        };
+
+      toNixosConfig = hostName: hostConf: systemConfig hostName hostConf;
+
+      toPxeBootSystemConfig = hostName:
+        let
+          system = "x86_64-linux";
+        in
+          let bootSystem = makeOverridable nixosSystem {
+            inherit system;
+            specialArgs = {
+              pkgs = pkgs.${system};
+              inherit hostName inputs;
+            };
+            modules = [
+              { system.configurationRevision = mkIf (self ? rev) self.rev; }
+              { system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}"; }
+              { nixpkgs = { pkgs = pkgs.${system}; }; }
               inputs.nixpkgs.nixosModules.notDetected
-              inputs.home.nixosModules.home-manager
-              inputs.sops-nix.nixosModules.sops
-              configuration
-            ];
-        };
+              ({ config, modulesPath, pkgs, lib, ... }: {
+                 imports = [
+                   "${modulesPath}/installer/netboot/netboot-minimal.nix"
+                 ];
+                 nix = {
+                   trustedUsers = [ "root" ];
+                   extraOptions = ''
+                     experimental-features = nix-command flakes ca-references
+                   '';
+                   package = pkgs.nixUnstable;
+                 };
+                 environment.systemPackages = with pkgs; [
+                   git curl yj jq skim
+                 ];
+                 boot.zfs.enableUnstable = true;
+                 boot.kernelPackages = pkgs.linuxPackages_latest;
+                 services.getty.autologinUser = mkForce "root";
+                 hardware.video.hidpi.enable = true;
+                 # Enable sshd which gets disabled by netboot-minimal.nix
+                 systemd.services.sshd.wantedBy = mkOverride 0 [ "multi-user.target" ];
+                 users.users.root.openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ==" ];
 
-      installerConfig = hostName: systemClosure:
-        inputs.nixpkgs.lib.makeOverridable inputs.nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit hostName inputs pkgs system systemClosure;
+                 environment.etc."profile.local".text = ''
+                   attempt=0
+                   max_attempts=5
+                   wait_secs=3
+                   while ! curl -sf --connect-timeout 5 --max-time 5 http://www.google.com > /dev/null; do
+                     if [ "$attempt" -ge "$max_attempts" ]; then
+                       echo Fail - no internet, tried "$max_attempts" times over $((max_attempts * wait_secs)) seconds
+                       exit 1
+                     fi
+                     sleep "$wait_secs"
+                   done
+                   if [ -z "$_INSTALLER_HAS_RUN" ]; then
+                     _INSTALLER_HAS_RUN=y
+                     export _INSTALLER_HAS_RUN
+                     echo should format disks here
+                     git clone https://github.com/johnae/world /tmp/world
+                     cd /tmp/world
+                     git checkout new-world
+                     echo 'Which config should be installed?'
+                     host="$(cat hosts.toml | yj -tj | jq -r '. | keys | .[]' | sk)"
+                     nix build .#"$host"-diskformat
+                     ./result/bin/diskformat
+                     nixos-install --flake .#"$host" --no-root-passwd --impure
+                   else
+                     echo installer has already been run
+                   fi
+                   bash
+                 '';
+              })
+            ];
           };
-          modules =
-            [
-              { nixpkgs = { inherit pkgs; }; }
-              ./bootstrap/installer.nix
-            ];
-        };
+          in
+           pkgs.${system}.symlinkJoin {
+             name = "netboot";
+             paths = with bootSystem.config.system.build; [
+               netbootRamdisk
+               kernel
+               netbootIpxeScript
+             ];
+             preferLocalBuild = true;
+          };
 
-      nixosConfigurations =
-        inputs.nixpkgs.lib.mapAttrs'
-          toNixosConfiguration
-          hosts;
+      toDiskFormatter = hostName: config:
+        inputs.nixpkgs.lib.nameValuePair "${hostName}-diskformat" (
+          pkgs.x86_64-linux.callPackage ./utils/diskformat.nix {
+            inherit hostName config;
+          }
+        );
 
-      isoConfigurations =
-        inputs.nixpkgs.lib.mapAttrs'
-          toInstallerConfiguration
-          self.nixosConfigurations;
+      hostConfigurations = mapAttrs toNixosConfig hosts;
+
+      nixosConfigurations = hostConfigurations
+                            //
+                            {
+                              pxebooter = toPxeBootSystemConfig "pxebooter";
+                            };
+
+      diskFormatters = mapAttrs' toDiskFormatter hostConfigurations;
+
     in
     {
-
+      devShell = forAllSystems (system:
+        pkgs.${system}.callPackage ./devshell.nix { }
+      );
       inherit nixosConfigurations;
-      inherit isoConfigurations;
-
-      packages.x86_64-linux = pkgs;
-
-      ## for easy access to packages which we might want to build and cache in ci
-      pkgsToCache = pkgs.lib.filterAttrs
-        (_: pkgs.lib.isDerivation)
-        (
-          (import ./overlays/pkgs.nix) pkgs pkgs
-        ) // {
-        inherit (pkgs)
-          spook
-          persway
-          spotnix;
-      };
-
-      overlays =
-        let
-          overlayDir = ./overlays;
-          fullPath = name: overlayDir + "/${name}";
-          overlayPaths = map fullPath (builtins.attrNames (builtins.readDir overlayDir));
-        in
-        (pathsToImportedAttrs overlayPaths) // {
-          inputs = (final: prev: { inherit inputs; });
-          emacs-overlay = inputs.emacs-overlay.overlay;
-          nix-misc = inputs.nix-misc.overlay;
-          spook = inputs.spook.overlay;
-          nur = inputs.nur.overlay;
-          spotnix = inputs.spotnix.overlay;
-          persway = inputs.persway.overlay;
-          qutebrowser-pipewire = (final: prev:
-            let
-              pkgs-qute = forAllSystems (system:
-                (import inputs.nixpkgs-qute {
-                  localSystem = { inherit system; };
-                  config.allowUnfree = true;
-                }));
-            in
-              {
-                qutebrowser-pipewire = pkgs-qute.${system}.qutebrowser;
-              });
-          ssh-to-pgp =
-            (final: prev:
-              {
-                ssh-to-pgp = inputs.sops-nix.packages.${system}.ssh-to-pgp.overrideAttrs (oAttrs: { doCheck = false; });
-              }
-            );
-        };
-
-      containers =
-        let
-          containerDir = ./containers;
-          fullPath = name: containerDir + "/${name}";
-          containerPaths = map fullPath (builtins.attrNames (
-            pkgs.lib.filterAttrs (_: t: t == "directory") (builtins.readDir containerDir)
-          ));
-        in
-        pkgs.recurseIntoAttrs (genAttrs' containerPaths (path: {
-          name = builtins.baseNameOf path;
-          value =
-            let
-              archive = pkgs.callPackage path { };
-            in
-            {
-              inherit archive;
-              push = pkgs.pushDockerArchive { image = archive; };
-            };
-        }));
-
-      devShell = forAllSystems
-        (sys:
-          let
-            nixpkgs = nixpkgsFor.${sys};
-          in
-          import ./shell.nix { inherit nixpkgs; });
-
-      tektonix =
-        let
-          pipelineDir = ./ci;
-          fullPath = name: pipelineDir + "/${name}";
-          pipelinePaths = map fullPath (builtins.attrNames (builtins.readDir pipelineDir));
-        in
-        genAttrs' pipelinePaths (path:
-          let
-            name = inputs.nixpkgs.lib.removeSuffix ".nix" (builtins.baseNameOf path); in
-          {
-            inherit name;
-            value = {
-              pipeline = import "${inputs.tektonix}" {
-                inherit pkgs;
-                pipelinePath = path;
-                specialArgs = { inherit (self) rev containers pkgsToCache nixosConfigurations inputs; inherit name; };
-              };
-              run = import "${inputs.tektonix}" {
-                inherit pkgs;
-                pipelinePath = pipelineDir + "/runs/${(builtins.baseNameOf path)}";
-                specialArgs = { inherit (self) rev containers pkgsToCache nixosConfigurations inputs; inherit name; };
-              };
-            };
-          });
-
-      buildkite =
-        let
-          pipelineDir = ./.buildkite;
-          fullPath = name: pipelineDir + "/${name}";
-          pipelinePaths = map fullPath (builtins.attrNames (builtins.readDir pipelineDir));
-        in
-        genAttrs' pipelinePaths (path: {
-          name = inputs.nixpkgs.lib.removeSuffix ".nix" (builtins.baseNameOf path);
-          value = import "${inputs.nixkite}" {
-            inherit pkgs;
-            pipeline = path;
-            specialArgs = { inherit (self) containers pkgsToCache nixosConfigurations inputs; };
-          };
-        });
-
+      packages.x86_64-linux = diskFormatters // (mapAttrs (name: value: pkgs.x86_64-linux.${name} ) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) inputs.packages.overlays));
     };
 }
