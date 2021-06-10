@@ -17,12 +17,11 @@ in
 
   users.groups = {
     ${userName} = groupConfig;
-    scard.gid = 1050;
   };
 
   users.users."${userName}" = ({
     shell = pkgs.fish;
-    extraGroups = [ "scard" hostName ];
+    extraGroups = [ hostName ];
     isNormalUser = true;
   } // userConfig);
 
