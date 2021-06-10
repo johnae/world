@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "age-plugin-yubikey": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1619920282,
+        "narHash": "sha256-9EvNphIe6wXuVuEWZvDINz2S74OInubBw7Kq/OamRdY=",
+        "owner": "str4d",
+        "repo": "age-plugin-yubikey",
+        "rev": "0bbea83abfaf1aff9509953767fdbc4226cab4d9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "str4d",
+        "repo": "age-plugin-yubikey",
+        "type": "github"
+      }
+    },
     "blur": {
       "flake": false,
       "locked": {
@@ -263,6 +279,7 @@
     },
     "root": {
       "inputs": {
+        "age-plugin-yubikey": "age-plugin-yubikey",
         "blur": "blur",
         "emacs-overlay": "emacs-overlay",
         "fenix": "fenix",

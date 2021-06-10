@@ -75,6 +75,7 @@ imports = [
   "profiles/laptop",
   "profiles/default_fs",
   "profiles/pcscd",
+  "profiles/yubikey",
 ]
 [io.users.users.john]
 uid = 1337

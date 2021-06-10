@@ -29,6 +29,50 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  environment.systemPackages = [
+    pkgs.man-pages
+    pkgs.bmon
+    pkgs.iftop
+    pkgs.file
+    pkgs.cacert
+    pkgs.openssl
+    pkgs.curl
+    pkgs.gnupg
+    pkgs.lsof
+    pkgs.usbutils
+    pkgs.mkpasswd
+    pkgs.powertop
+    pkgs.socat
+    pkgs.nmap
+    pkgs.iptables
+    pkgs.bridge-utils
+    pkgs.pciutils
+    pkgs.zip
+    pkgs.wget
+    pkgs.unzip
+    pkgs.htop
+    pkgs.jq
+    pkgs.binutils
+    pkgs.psmisc
+    pkgs.tree
+    pkgs.ripgrep
+    pkgs.vim
+    pkgs.git
+    pkgs.fish
+    pkgs.tmux
+    pkgs.blueman
+    pkgs.pavucontrol
+    pkgs.bluez
+    pkgs.bluez-tools
+    pkgs.fd
+    pkgs.wireguard
+    pkgs.hyperfine
+    pkgs.procs
+    pkgs.sd
+    pkgs.bottom
+  ];
+
+
   home-manager.useUserPackages = true;
   home-manager.useGlobalPkgs = true;
 

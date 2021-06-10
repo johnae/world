@@ -21,7 +21,7 @@ in
 
   users.users."${userName}" = ({
     shell = pkgs.fish;
-    extraGroups = [ hostName "wheel" "docker" "video" "audio" ];
+    extraGroups = [ hostName "wheel" "docker" "video" "audio" "plugdev" ];
     isNormalUser = true;
   } // userConfig);
 

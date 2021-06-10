@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "age-plugin-yubikey": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1619920282,
+        "narHash": "sha256-9EvNphIe6wXuVuEWZvDINz2S74OInubBw7Kq/OamRdY=",
+        "owner": "str4d",
+        "repo": "age-plugin-yubikey",
+        "rev": "0bbea83abfaf1aff9509953767fdbc4226cab4d9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "str4d",
+        "repo": "age-plugin-yubikey",
+        "type": "github"
+      }
+    },
     "agenix": {
       "inputs": {
         "nixpkgs": [
@@ -313,6 +329,7 @@
     },
     "packages": {
       "inputs": {
+        "age-plugin-yubikey": "age-plugin-yubikey",
         "blur": "blur",
         "emacs-overlay": "emacs-overlay",
         "fenix": [
@@ -347,7 +364,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-IAcDDjc/3PkdZQHKgLaYALAJAW/hpGjiS4SEo4KrtWc=",
+        "narHash": "sha256-WnrLBOgcDRl6ywN9FcxHPzIRlIVP9YjC7g+eiQZ5wo0=",
         "path": "./packages",
         "type": "path"
       },

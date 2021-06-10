@@ -32,14 +32,15 @@
     };
 
     ## non flakes
-    nixpkgs-fmt = { url = "github:nix-community/nixpkgs-fmt"; flake = false; };
-    netns-exec = { url = "github:johnae/netns-exec"; flake = false; };
+    age-plugin-yubikey = { url = "github:str4d/age-plugin-yubikey"; flake = false; };
     blur = { url = "github:johnae/blur"; flake = false; };
     fire = { url = "github:johnae/fire"; flake = false; };
     fish-kubectl-completions = { url = "github:evanlucas/fish-kubectl-completions"; flake = false; };
     google-cloud-sdk-fish-completion = { url = "github:Doctusoft/google-cloud-sdk-fish-completion"; flake = false; };
     grim = { url = "github:emersion/grim"; flake = false; };
     mako = { url = "github:emersion/mako"; flake = false; };
+    nixpkgs-fmt = { url = "github:nix-community/nixpkgs-fmt"; flake = false; };
+    netns-exec = { url = "github:johnae/netns-exec"; flake = false; };
     slurp = { url = "github:emersion/slurp"; flake = false; };
     spotifyd = { url = "github:spotifyd/spotifyd"; flake = false; };
     sway = { url = "github:swaywm/sway"; flake = false; };
