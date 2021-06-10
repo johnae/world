@@ -74,6 +74,7 @@ imports = [
   "profiles/hidpi",
   "profiles/laptop",
   "profiles/default_fs",
+  "profiles/pcscd",
 ]
 [io.users.users.john]
 uid = 1337
