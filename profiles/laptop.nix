@@ -89,12 +89,6 @@ in
   environment.etc."systemd/sleep.conf".text = "HibernateDelaySec=8h";
   ##
 
-  services.udev.extraRules = ''
-    ## yubikey v4
-    ACTION=="add", SUBSYSTEM=="usb", ENV{ID_VENDOR_ID}=="1050", ENV{ID_MODEL_ID}=="0407", MODE="660", GROUP="scard"
-  '';
-
-  ##
   services.upower.enable = true;
   services.disable-usb-wakeup.enable = true;
   services.pasuspender.enable = true;
