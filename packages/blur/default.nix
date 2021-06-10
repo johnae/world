@@ -4,7 +4,7 @@ rustPlatform.buildRustPackage rec {
   version = inputs.blur.rev;
 
   src = inputs.blur;
-  cargoSha256 = "sha256-Y/fo7DvYYh7i59+LPA3iijOL5i1EzKuj+a4ESVUkKL4=";
+  cargoSha256 = "sha256-7o90FfQ10db3FJqbVLNo1TFbZank24Tpvjpi3VbXcZQ=";
 
   doCheck = false;
 
