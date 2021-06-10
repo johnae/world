@@ -141,8 +141,9 @@
                      echo 'Which config should be installed?'
                      host="$(cat hosts.toml | yj -tj | jq -r '. | keys | .[]' | sk)"
                      nix build .#"$host"-diskformat
-                     ./result/bin/diskformat
-                     nixos-install --flake .#"$host" --no-root-passwd --impure
+                     ./result/bin/diskformat | tee -a diskformat.log
+                     mount
+                     nixos-install --flake .#"$host" --no-root-passwd --impure | tee -a nixos-install.log
                    else
                      echo installer has already been run
                    fi
