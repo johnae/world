@@ -100,7 +100,9 @@ in
       exit 1
     fi
 
-    echo Formatting disk
+    echo Formatting disk "$DISK"
+
+    set -x
 
     wipefs -fa "$DISK"
     sgdisk -z "$DISK"
@@ -185,6 +187,7 @@ in
     mkfs.vfat -n "$DISK_EFI_LABEL" "$DISK_EFI"
 
     partprobe /dev/mapper/"$ENC_DISK_SWAP_LABEL"
+    partprobe /dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL"
 
     mount -t tmpfs none /mnt
     mkdir -p "/mnt/tmproot" ${concatStringsSep " " (map (v: "/mnt/${replaceStrings ["@"] [""] v}") subvolumes)} "/mnt/boot"
