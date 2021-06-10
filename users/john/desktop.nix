@@ -7,12 +7,31 @@ let
   userSettings = lib.attrByPath [ userName "settings"] {} users;
 in
 {
-  home-manager.users.${userName} = { ... }: {
+  home-manager.users.${userName} = { config, ... }:
+  let
+    gitEnabled = config.programs.git.enable;
+  in
+	
+  {
     imports = [
       userProfiles.sway
+      userProfiles.git
+      userProfiles.qutebrowser
+      userProfiles.emacs
+      userProfiles.ssh
     ];
     home.username = userName;
     #home.extraConfig.hostname = hostName;
+
+    programs.git = lib.mkIf gitEnabled {
+      userName = "John Axel Eriksson";
+      userEmail = "john@insane.se";
+      extraConfig = {
+        github.user = "johnae";
+        gitlab.user = "johnae";
+      };
+    };
+
   };
 
   environment.state."/keep" =

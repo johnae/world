@@ -1,10 +1,11 @@
-{ hostName, userProfiles, users, pkgs, lib, ... }:
+{ hostName, userProfiles, users, pkgs, lib, config, ... }:
 
 let
   userName = "john";
   userConfig = users.users.${userName};
   groupConfig = users.groups.${userName};
   userSettings = lib.attrByPath [ userName "settings"] {} users;
+
 in
 
 {
