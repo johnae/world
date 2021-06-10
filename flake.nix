@@ -100,6 +100,7 @@
               ({ config, modulesPath, pkgs, lib, ... }: {
                  imports = [
                    "${modulesPath}/installer/netboot/netboot-minimal.nix"
+                   ./cachix.nix
                  ];
                  nix = {
                    trustedUsers = [ "root" ];
