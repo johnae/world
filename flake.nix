@@ -179,13 +179,21 @@
                             };
 
       diskFormatters = mapAttrs' toDiskFormatter hostConfigurations;
+      exportedPackages = mapAttrs (name: value: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) inputs.packages.overlays);
 
     in
     {
       devShell = forAllSystems (system:
         pkgs.${system}.callPackage ./devshell.nix { }
       );
+
       inherit nixosConfigurations;
-      packages.x86_64-linux = diskFormatters // (mapAttrs (name: value: pkgs.x86_64-linux.${name} ) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) inputs.packages.overlays));
+
+      packages.x86_64-linux = diskFormatters // exportedPackages;
+
+      github-actions = {
+        os = [ "ubuntu-latest" ];
+        include = mapAttrsToList (name: value: { pkg = name; }) exportedPackages;
+      };
     };
 }

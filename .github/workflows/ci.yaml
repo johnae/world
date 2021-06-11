@@ -1,0 +1,41 @@
+name: Nix
+
+on:
+  push:
+    branches:
+    - new-world
+    #- main
+
+jobs:
+  create-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.job-matrix.outputs.matrix }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v13
+      with:
+        install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
+        extra_nix_config: |
+          experimental-features = nix-command flakes
+    - id: job-matrix
+      run: |
+        echo "::set-output name=matrix::$(nix eval .#github-actions --json)"
+  build:
+    needs: create-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.create-matrix.outputs.matrix)}}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v13
+      with:
+        install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
+        extra_nix_config: |
+          experimental-features = nix-command flakes
+    - env:
+        PKG: ${{ matrix.pkg }}
+        CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_SIGNING_KEY }}
+      run: |
+        nix build .#$PKG
+        readlink result | nix shell nixpkgs#cachix -c cachix push insane
