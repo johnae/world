@@ -281,13 +281,6 @@ in
           command = "${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources";
         }
         {
-          command = "echo UPDATESTARTUPTTY | ${pkgs.gnupg}/bin/gpg-connect-agent";
-        }
-        {
-          command = "${pkgs.gnupg}/bin/gpg --card-status > /dev/null";
-          always = true;
-        }
-        {
           command = "${pkgs.gnome3.gnome_settings_daemon}/libexec/gsd-xsettings";
         }
         {
