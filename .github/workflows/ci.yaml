@@ -25,7 +25,7 @@ jobs:
     needs: create-matrix
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: ${{fromJson(needs.create-matrix.outputs.matrix)}}
+      matrix: ${{ fromJson(needs.create-matrix.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v13
