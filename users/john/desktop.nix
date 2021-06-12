@@ -2,6 +2,8 @@
 
 let
   userName = "john";
+  userEmail = "john@insane.se";
+  userFullName = "John Axel Eriksson";
   userConfig = users.users.${userName};
   groupConfig = users.groups.${userName};
   userSettings = lib.attrByPath [ userName "settings"] {} users;
@@ -9,11 +11,12 @@ in
 {
   home-manager.users.${userName} = { config, ... }:
   let
-    gitEnabled = config.programs.git.enable;
+    extraConfig = config.home.extraConfig;
   in
 	
   {
     imports = [
+      userProfiles.extra-config
       userProfiles.sway
       userProfiles.git
       userProfiles.qutebrowser
@@ -21,17 +24,11 @@ in
       userProfiles.ssh
     ];
     home.username = userName;
-    #home.extraConfig.hostname = hostName;
-
-    programs.git = lib.mkIf gitEnabled {
-      userName = "John Axel Eriksson";
-      userEmail = "john@insane.se";
-      extraConfig = {
-        github.user = "johnae";
-        gitlab.user = "johnae";
-      };
-    };
-
+    home.extraConfig.hostName = hostName;
+    home.extraConfig.userEmail = userEmail;
+    home.extraConfig.userFullName = userFullName;
+    home.extraConfig.githubUser = "johnae";
+    home.extraConfig.gitlabUser = "johnae";
   };
 
   environment.state."/keep" =
