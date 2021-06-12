@@ -193,7 +193,7 @@
 
       github-actions = {
         os = [ "ubuntu-latest" ];
-        include = mapAttrsToList (name: value: { pkg = name; }) exportedPackages;
+        pkg = mapAttrsToList (name: _:  name) exportedPackages;
       };
     };
 }

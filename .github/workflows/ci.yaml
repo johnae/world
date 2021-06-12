@@ -23,7 +23,7 @@ jobs:
         echo "::set-output name=matrix::$(nix eval .#github-actions --json)"
   build:
     needs: create-matrix
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix: ${{fromJson(needs.create-matrix.outputs.matrix)}}
     steps:
