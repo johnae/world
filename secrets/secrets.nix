@@ -1,7 +1,16 @@
 let
-  eris = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIO1+nbifIWVNJJu/5zDga9cX1qVVMYyg0XZYyRos4Ue";
-  johnae = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKfOiIu2X42aHpqAlzF6dLfI6PCTeVw0z1qb/9lroIHp";
+  inherit (builtins) mapAttrs fromTOML readFile;
+  hosts = mapAttrs (_: value: value.public_key)
+    (fromTOML (readFile ../hosts.toml));
+  johnae = "age1yubikey1qt7cjux5unxcsrw9dnkq8qsh0jgnwwvxzxm2jn2pxetjchtclmlk6xvpckq";
 in
 {
-  "eris.age".publicKeys = [ eris johnae ];
+  "eris.age".publicKeys = [
+    hosts.eris
+    johnae
+  ];
+  "io.age".publicKeys = [
+    hosts.io
+    johnae
+  ];
 }
