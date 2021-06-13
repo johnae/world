@@ -2,11 +2,9 @@
 
 let
   userName = "john";
-  userEmail = "john@insane.se";
-  userFullName = "John Axel Eriksson";
   userConfig = users.users.${userName};
   groupConfig = users.groups.${userName};
-  userSettings = lib.attrByPath [ userName "settings"] {} users;
+  userSettings = lib.attrByPath [ userName ] {} users;
 in
 {
   home-manager.users.${userName} = { config, ... }:
@@ -14,33 +12,19 @@ in
     extraConfig = config.home.extraConfig;
   in
 
-  {
+    {
     imports = [
       userProfiles.home
-      userProfiles.alacritty
-      userProfiles.chromium
-      userProfiles.emacs
       userProfiles.extra-config
-      userProfiles.firefox
-      userProfiles.fish
-      userProfiles.git
-      userProfiles.mako
-      userProfiles.pulseaudio
-      userProfiles.qutebrowser
-      userProfiles.rbw
-      userProfiles.ssh
-      userProfiles.sway
-      userProfiles.starship
-      userProfiles.tmux
       userProfiles.theme
-      userProfiles.wlsunset
-    ];
+    ] ++ map (profile: userProfiles.${profile}) (lib.attrByPath [ "profiles"] [] userSettings);
+
     home.username = userName;
     home.extraConfig.hostName = hostName;
-    home.extraConfig.userEmail = userEmail;
-    home.extraConfig.userFullName = userFullName;
-    home.extraConfig.githubUser = "johnae";
-    home.extraConfig.gitlabUser = "johnae";
+    home.extraConfig.userEmail = userSettings.email;
+    home.extraConfig.userFullName = userSettings.fullName;
+    home.extraConfig.githubUser = userSettings.githubUser;
+    home.extraConfig.gitlabUser = userSettings.gitlabUser;
   };
 
   environment.state."/keep" =

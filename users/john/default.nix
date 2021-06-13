@@ -4,13 +4,13 @@ let
   userName = "john";
   userConfig = users.users.${userName};
   groupConfig = users.groups.${userName};
-  userSettings = lib.attrByPath [ userName "settings"] {} users;
+  userSettings = lib.attrByPath [ userName ] {} users;
 
 in
 
 {
 
-  imports = if userSettings ? "desktop" && userSettings.desktop then
+  imports = if userSettings ? "profiles" then
     [ ./desktop.nix ]
   else [ ];
 

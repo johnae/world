@@ -1,0 +1,5 @@
+{...}:
+
+{
+  programs.bat.enable = true;
+}
