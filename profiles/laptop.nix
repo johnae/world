@@ -74,7 +74,16 @@ in
 
   services.fwupd.enable = true;
 
-  services.interception-tools.enable = true;
+  services.interception-tools = {
+    enable = true;
+    plugins = [ pkgs.interception-tools-plugins.caps2esc ];
+    udevmonConfig = ''
+      - JOB: "${pkgs.interception-tools}/bin/intercept -g $DEVNODE | ${pkgs.interception-tools-plugins.caps2esc}/bin/caps2esc | ${pkgs.interception-tools}/bin/uinput -d $DEVNODE"
+        DEVICE:
+          EVENTS:
+            EV_KEY: [KEY_CAPSLOCK, KEY_ESC]
+    '';
+  };
 
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.gutenprint pkgs.hplip pkgs.gutenprintBin ];
