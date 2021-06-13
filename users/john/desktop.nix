@@ -16,12 +16,19 @@ in
 	
   {
     imports = [
-      userProfiles.extra-config
-      userProfiles.sway
-      userProfiles.git
-      userProfiles.qutebrowser
+      userProfiles.alacritty
+      userProfiles.chromium
       userProfiles.emacs
+      userProfiles.extra-config
+      userProfiles.firefox
+      userProfiles.git
+      userProfiles.mako
+      userProfiles.pulseaudio
+      userProfiles.qutebrowser
       userProfiles.ssh
+      userProfiles.sway
+      userProfiles.tmux
+      userProfiles.wlsunset
     ];
     home.username = userName;
     home.extraConfig.hostName = hostName;
