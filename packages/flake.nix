@@ -81,7 +81,11 @@
         mynerdfonts = (final: prev: { mynerdfonts = prev.nerdfonts.override { fonts = [ "JetBrainsMono" "DroidSansMono" ]; }; });
         swaylock-dope = (final: prev: { swaylock-dope = prev.callPackage ./swaylock-dope { }; });
         my-emacs = (final: prev: { my-emacs = prev.callPackage ./my-emacs { }; });
+        my-emacs-config = (final: prev: { my-emacs-config = prev.callPackage ./my-emacs/config.nix { }; });
         btr-snap = (final: prev: { btr-snap = prev.callPackage ./btr-snap { }; });
+        wl-clipboard-x11 = (final: prev: { wl-clipboard-x11 = prev.callPackage ./wl-clipboard-x11 { }; });
+        rust-analyzer-bin = (final: prev: { rust-analyzer-bin = prev.callPackage ./wl-clipboard-x11 { }; });
+        netns-dbus-proxy = (final: prev: { netns-dbus-proxy = prev.callPackage ./wl-clipboard-x11 { }; });
         scripts = (final: prev: { scripts = prev.callPackage ./scripts { }; });
       }
      ;

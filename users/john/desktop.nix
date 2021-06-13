@@ -16,18 +16,22 @@ in
 	
   {
     imports = [
+      userProfiles.home
       userProfiles.alacritty
       userProfiles.chromium
       userProfiles.emacs
       userProfiles.extra-config
       userProfiles.firefox
+      userProfiles.fish
       userProfiles.git
       userProfiles.mako
       userProfiles.pulseaudio
       userProfiles.qutebrowser
       userProfiles.ssh
       userProfiles.sway
+      userProfiles.starship
       userProfiles.tmux
+      userProfiles.theme
       userProfiles.wlsunset
     ];
     home.username = userName;
@@ -36,7 +40,6 @@ in
     home.extraConfig.userFullName = userFullName;
     home.extraConfig.githubUser = "johnae";
     home.extraConfig.gitlabUser = "johnae";
-    home.stateVersion = "21.05";
   };
 
   environment.state."/keep" =
