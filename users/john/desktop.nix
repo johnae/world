@@ -36,6 +36,7 @@ in
     home.extraConfig.userFullName = userFullName;
     home.extraConfig.githubUser = "johnae";
     home.extraConfig.gitlabUser = "johnae";
+    home.stateVersion = "21.05";
   };
 
   environment.state."/keep" =
