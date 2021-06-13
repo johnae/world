@@ -3,6 +3,7 @@ public_key = "xxxxx"
 imports = [
   "hardware/nuc",
   "modules/state",
+  "profiles/state",
   "profiles/hidpi",
   "profiles/server",
   "profiles/k3s-node",
@@ -20,6 +21,7 @@ public_key = "xxxxx"
 imports = [
   "hardware/nuc",
   "modules/state",
+  "profiles/state",
   "profiles/hidpi",
   "profiles/server",
   "profiles/k3s-node",
@@ -37,6 +39,7 @@ public_key = "xxxxx"
 imports = [
   "hardware/macmini",
   "modules/state",
+  "profiles/state",
   "profiles/hidpi",
   "profiles/server",
   "profiles/k3s-server",
@@ -54,6 +57,7 @@ public_key = "xxxxx"
 imports = [
   "hardware/x570",
   "modules/state",
+  "profiles/state",
   "profiles/hidpi",
   "profiles/desktop",
   "profiles/default_fs",
@@ -92,6 +96,7 @@ public_key = "xxxxx"
 imports = [
   "hardware/xps9300",
   "modules/state",
+  "profiles/state",
   "profiles/hidpi",
   "profiles/laptop",
   "profiles/default_fs",
