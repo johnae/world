@@ -13,7 +13,7 @@ in
   let
     extraConfig = config.home.extraConfig;
   in
-	
+
   {
     imports = [
       userProfiles.home
@@ -27,6 +27,7 @@ in
       userProfiles.mako
       userProfiles.pulseaudio
       userProfiles.qutebrowser
+      userProfiles.rbw
       userProfiles.ssh
       userProfiles.sway
       userProfiles.starship
