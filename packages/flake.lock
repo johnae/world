@@ -34,11 +34,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1623488513,
-        "narHash": "sha256-F62TEVC+D3o+y+zifSMZ7x/FhxRtaLN9zN6Bi3ffCus=",
+        "lastModified": 1623518868,
+        "narHash": "sha256-m0B2Mbjz1LVWp9YhC8aq9cBoMCeBDp6iHglDGJMmVnE=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "6b6945c6066590764f09a5429af92c2ab1b35f67",
+        "rev": "635ddae4ea9d1d45fa5a225a9c2c24f6fdbf6746",
         "type": "github"
       },
       "original": {
@@ -56,11 +56,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1623468948,
-        "narHash": "sha256-K8obxGG4aCa8YWXC6vwajTrGtIrUfGEGEDIrrCP/YjU=",
+        "lastModified": 1623551841,
+        "narHash": "sha256-ePzdAvtnNAWx7d92qQN9XSh35oZ/vHAxPNknCG2BsnQ=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "a1593248d6819f24a362d15eca606a5847eafcdb",
+        "rev": "1663777cc86ebfc25e37cd434a08e6cc4929acde",
         "type": "github"
       },
       "original": {
@@ -211,10 +211,10 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1622966049,
-        "narHash": "sha256-6g+28v94ISkVk9TBSsITVOnB2slK8plieWPIF2jo/l0=",
-        "path": "/nix/store/wfn9j2a5499gmfrms3l366r839918g2h-source",
-        "rev": "fbfb79400a08bf754e32b4d4fc3f7d8f8055cf94",
+        "lastModified": 1623324058,
+        "narHash": "sha256-Jm9GUTXdjXz56gWDKy++EpFfjrBaxqXlLvTLfgEi8lo=",
+        "path": "/nix/store/v13yb14bkddyc1rxlrna5j3441pyh0r8-source",
+        "rev": "432fc2d9a67f92e05438dff5fdc2b39d33f77997",
         "type": "path"
       },
       "original": {
@@ -294,11 +294,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1623448823,
-        "narHash": "sha256-v3PfFP2ND/DcALVfS85AqD42pbf8WQaMxHbGSCqdk+8=",
+        "lastModified": 1623531912,
+        "narHash": "sha256-o0OsiTAUH0JBjvoRxpmRmhYG6Yl9fhAbvd2ifkKCygU=",
         "owner": "rust-analyzer",
         "repo": "rust-analyzer",
-        "rev": "409f5fb563bfc992e4d05245d5c17e77ff8e2762",
+        "rev": "d6737e55fb49d286b5e646f57975b27b2c95ce92",
         "type": "github"
       },
       "original": {
