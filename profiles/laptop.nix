@@ -69,7 +69,7 @@ in
   services.avahi.enable = true;
   services.avahi.nssmdns = true;
   services.gvfs.enable = true;
-  services.gnome3.sushi.enable = true;
+  services.gnome.sushi.enable = true;
   services.openssh.enable = true;
 
   services.fwupd.enable = true;
