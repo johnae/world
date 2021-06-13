@@ -298,7 +298,7 @@ in
           extraConfig = ''
             height 25
           '';
-          statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config";
+          statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config-default.toml";
           colors = {
             background = "#2E3440AA";
             statusline = "#88C0D0";
