@@ -46,6 +46,7 @@
           inputs.nix-misc.overlay
           inputs.nur.overlay
           inputs.agenix.overlay
+          (final: prev: { nix-direnv = prev.nix-direnv.override { enableFlakes = true; }; })
         ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
       });
 
