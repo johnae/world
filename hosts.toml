@@ -53,7 +53,7 @@ hashedPassword = '$6$NH36UuVGJCVzhfL$K/73aYEiyB8xYrj03A2stxXB4cFV2bPHe6WQzwWd8ty
 gid = 1337
 
 [eris]
-public_key = "xxxxx"
+public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIO1+nbifIWVNJJu/5zDga9cX1qVVMYyg0XZYyRos4Ue"
 imports = [
   "hardware/x570",
   "modules/state",
@@ -92,7 +92,7 @@ profiles = [
   "wlsunset",
 ]
 [io]
-public_key = "xxxxx"
+public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5WClmubgehZKXvGwuLH621Nd5IMIxh8HWZf0lUW47M"
 imports = [
   "hardware/xps9300",
   "modules/state",
