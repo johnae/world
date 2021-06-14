@@ -4,7 +4,7 @@
   programs.i3status-rust = {
     enable = true;
     bars.default = {
-      theme = "modern";
+      settings.theme.name = "modern";
       icons = "awesome5";
       blocks = [
         {
