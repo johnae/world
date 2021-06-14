@@ -1,24 +1,12 @@
 { hostName, config, lib, pkgs, inputs, ... }:
 let
   nixos-hardware = inputs.nixos-hardware;
-  #buildMachines = (builtins.exec [
-  #  "${pkgs.sops}/bin/sops"
-  #  "-d"
-  #  "${inputs.secrets}/builders/hosts.nix"
-  #]);
 in
 {
   imports = [
     "${nixos-hardware}/common/pc/ssd"
     ./defaults.nix
   ];
-
-
-  #nix.buildMachines = buildMachines;
-  #nix.distributedBuilds = true;
-  #nix.extraOptions = ''
-  #  builders-use-substitutes = true
-  #'';
 
   boot.kernel.sysctl = {
     "vm.dirty_writeback_centisecs" = 1500;
@@ -30,10 +18,6 @@ in
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
 
-  #environment.variables = {
-  #  MESA_LOADER_DRIVER_OVERRIDE = "iris";
-  #};
-  #hardware.opengl.package = pkgs.mesa-iris.drivers;
   hardware.opengl.extraPackages = [
     pkgs.intel-media-driver
     pkgs.vaapiIntel
@@ -46,8 +30,6 @@ in
   hardware.pulseaudio.package = pkgs.pulseaudioFull;
   hardware.bluetooth.enable = true;
   networking.wireless.iwd.enable = true;
-
-  console.font = "latarcyrheb-sun32";
 
   environment.pathsToLink = [ "/etc/gconf" ];
 
@@ -73,17 +55,6 @@ in
   services.openssh.enable = true;
 
   services.fwupd.enable = true;
-
-  services.interception-tools = {
-    enable = true;
-    plugins = [ pkgs.interception-tools-plugins.caps2esc ];
-    udevmonConfig = ''
-      - JOB: "${pkgs.interception-tools}/bin/intercept -g $DEVNODE | ${pkgs.interception-tools-plugins.caps2esc}/bin/caps2esc | ${pkgs.interception-tools}/bin/uinput -d $DEVNODE"
-        DEVICE:
-          EVENTS:
-            EV_KEY: [KEY_CAPSLOCK, KEY_ESC]
-    '';
-  };
 
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.gutenprint pkgs.hplip pkgs.gutenprintBin ];
