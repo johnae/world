@@ -7,6 +7,8 @@
 , bashInteractive
 , fire
 , fd
+, rbw
+, wofi
 , skim
 , pass
 , wpa_supplicant
@@ -99,6 +101,25 @@ let
       read -r cmd
     fi
     echo "${fire}/bin/fire $cmd" | ${stdenv.shell}
+  '';
+
+  wofi-rbw = writeStrictShellScriptBin "wofi-rbw" ''
+    ${addToBinPath [ wofi rbw wl-clipboard ]}
+    passonly=''${passonly:-}
+    selection="$(rbw list --fields name,user | \
+       sed 's|\t|/|g' | \
+       wofi --show dmenu --insensitive --lines 10)"
+
+    entry="$(echo "$selection" | awk -F'/' '{print $1}')"
+    login="$(echo "$selection" | awk -F'/' '{print $2}')"
+    pass="$(rbw get "$entry" "$login")"
+
+    if [ -z "$passonly" ]; then
+      echo -n "$login" | wl-copy -onf
+      echo -n "$pass" | wl-copy -onf
+    else
+      echo -n "$pass" | wl-copy -onf
+    fi
   '';
 
   ## must be bashInteractive (not stdenv.shell) for compgen to work
@@ -236,6 +257,6 @@ buildEnv {
     sk-sk sk-run sk-window sk-passmenu
     add-wifi-network update-wifi-networks
     update-wireguard-keys spotify-play-album spotify-play-track
-    spotify-cmd spotify-play-artist spotify-play-playlist
+    spotify-cmd spotify-play-artist spotify-play-playlist wofi-rbw
   ];
 }

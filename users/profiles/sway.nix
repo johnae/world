@@ -234,9 +234,9 @@ in
 
         "${modifier}+t" = ''exec ${pkgs.scripts}/bin/scripts ${pkgs.scripts}/bin/scripts'';
         "${modifier}+p" = ''exec ${pkgs.scripts}/bin/scripts ${pkgs.scripts}/bin/scripts'';
-        "${modifier}+Shift+n" = ''exec ${pkgs.scripts}/bin/scripts next'';
-        "${modifier}+Shift+p" = ''exec ${pkgs.scripts}/bin/scripts prev'';
-        "${modifier}+Shift+m" = ''exec ${pkgs.scripts}/bin/scripts pause'';
+        "${modifier}+Shift+n" = ''exec ${pkgs.scripts}/bin/spotify-cmd next'';
+        "${modifier}+Shift+p" = ''exec ${pkgs.scripts}/bin/spotify-cmd prev'';
+        "${modifier}+Shift+m" = ''exec ${pkgs.scripts}/bin/spotify-cmd pause'';
 
         "${modifier}+Control+k" = ''exec ${toggleKeyboardLayouts}/bin/toggle-keyboard-layouts'';
 
@@ -249,10 +249,10 @@ in
 
         "${modifier}+Return" = ''exec ${pkgs.my-emacs}/bin/emacsclient -c -n -a= --eval '(jae/eshell-new)' '';
         "${modifier}+Shift+Return" = '' exec ${pkgs.alacritty}/bin/alacritty'';
-        "${modifier}+d" = ''exec ${pkgs.scripts}/bin/scripts sk-run'';
+        "${modifier}+d" = ''exec ${pkgs.wofi}/bin/wofi --show run'';
 
-        "${modifier}+minus" = ''exec ${pkgs.scripts}/bin/scripts sk-passmenu'';
-        "${modifier}+Shift+minus" = ''exec passonly=y ${pkgs.scripts}/bin/scripts sk-passmenu'';
+        "${modifier}+minus" = ''exec ${pkgs.scripts}/bin/wofi-rbw'';
+        "${modifier}+Shift+minus" = ''exec passonly=y ${pkgs.scripts}/bin/wofi-rbw'';
 
         "${modifier}+b" = ''exec ${swayBackground}/bin/sway-background'';
 
@@ -266,10 +266,10 @@ in
         XF86MonBrightnessUp = ''exec light -As "sysfs/backlight/intel_backlight" 5'';
         XF86MonBrightnessDown = ''exec light -Us "sysfs/backlight/intel_backlight" 5'';
 
-        XF86AudioNext = ''exec ${pkgs.scripts}/bin/scripts next'';
-        XF86AudioPrev = ''exec ${pkgs.scripts}/bin/scripts prev'';
-        XF86AudioPlay = ''exec ${pkgs.scripts}/bin/scripts play'';
-        XF86AudioPause = ''exec ${pkgs.scripts}/bin/scripts pause'';
+        XF86AudioNext = ''exec ${pkgs.scripts}/bin/spotify-cmd next'';
+        XF86AudioPrev = ''exec ${pkgs.scripts}/bin/spotify-cmd prev'';
+        XF86AudioPlay = ''exec ${pkgs.scripts}/bin/spotify-cmd play'';
+        XF86AudioPause = ''exec ${pkgs.scripts}/bin/spotify-cmd pause'';
 
         "${modifier}+q" = ''layout stacking'';
         "${modifier}+o" = ''move absolute position center'';
