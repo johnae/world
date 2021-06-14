@@ -1,6 +1,6 @@
 #!@bash@/bin/bash
 
-PATH=@stdenv@/bin:@blur@/bin:@jq@/bin:@grim@/bin:@sway@/bin${PATH:+:}$PATH
+PATH=@stdenv@/bin:@blur@/bin:@jq@/bin:@grim@/bin:@swaylock@/bin:@sway@/bin${PATH:+:}$PATH
 export PATH
 
 declare -a sway_outputs
