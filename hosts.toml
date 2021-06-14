@@ -1,135 +1,136 @@
 [hyperion]
-public_key = "xxxxx"
-imports = [
-  "hardware/nuc",
-  "modules/state",
-  "profiles/state",
-  "profiles/hidpi",
-  "profiles/server",
-  "profiles/k3s-node",
-  "profiles/default_fs",
-  "profiles/uuid_disk_crypt",
-]
+  public_key = "xxxxx"
+  imports = [
+    "hardware/nuc",
+    "modules/state",
+    "profiles/state",
+    "profiles/hidpi",
+    "profiles/server",
+    "profiles/k3s-node",
+    "profiles/default_fs",
+    "profiles/uuid_disk_crypt",
+  ]
 [hyperion.users.users.john]
-uid = 1337
-hashedPassword = '$6$Juk1xlDWz45N5dGc$W.BxolEvo.yWR3DgqzErIdXYYCXq4TjauGN8iA/kdlpaJiPw1lvdecydfF37yfnmTFU.vtnXUVVw3QOgwcJE.0'
+  uid = 1337
+  hashedPassword = '$6$Juk1xlDWz45N5dGc$W.BxolEvo.yWR3DgqzErIdXYYCXq4TjauGN8iA/kdlpaJiPw1lvdecydfF37yfnmTFU.vtnXUVVw3QOgwcJE.0'
 [hyperion.users.groups.john]
-gid = 1337
+  gid = 1337
 
 [titan]
-public_key = "xxxxx"
-imports = [
-  "hardware/nuc",
-  "modules/state",
-  "profiles/state",
-  "profiles/hidpi",
-  "profiles/server",
-  "profiles/k3s-node",
-  "profiles/default_fs",
-  "profiles/uuid_disk_crypt",
-]
+  public_key = "xxxxx"
+  imports = [
+    "hardware/nuc",
+    "modules/state",
+    "profiles/state",
+    "profiles/hidpi",
+    "profiles/server",
+    "profiles/k3s-node",
+    "profiles/default_fs",
+    "profiles/uuid_disk_crypt",
+  ]
 [titan.users.users.john]
-uid = 1337
-hashedPassword = '$6$6yT8x5V.3tTyRN2g$idNICkxytVFU6SR9DaafbU9W6.0qVdjyKMDzJCRWC/lwgjctxh4nFDCH2XHrEtb75WRsMFDGLJei0E3WiRqGz.'
+  uid = 1337
+  hashedPassword = '$6$6yT8x5V.3tTyRN2g$idNICkxytVFU6SR9DaafbU9W6.0qVdjyKMDzJCRWC/lwgjctxh4nFDCH2XHrEtb75WRsMFDGLJei0E3WiRqGz.'
 [titan.users.groups.john]
-gid = 1337
+  gid = 1337
 
 [rhea]
-public_key = "xxxxx"
-imports = [
-  "hardware/macmini",
-  "modules/state",
-  "profiles/state",
-  "profiles/hidpi",
-  "profiles/server",
-  "profiles/k3s-server",
-  "profiles/default_fs",
-  "profiles/uuid_disk_crypt",
-]
+  public_key = "xxxxx"
+  imports = [
+    "hardware/macmini",
+    "modules/state",
+    "profiles/state",
+    "profiles/hidpi",
+    "profiles/server",
+    "profiles/k3s-server",
+    "profiles/default_fs",
+    "profiles/uuid_disk_crypt",
+  ]
 [rhea.users.users.john]
-uid = 1337
-hashedPassword = '$6$NH36UuVGJCVzhfL$K/73aYEiyB8xYrj03A2stxXB4cFV2bPHe6WQzwWd8tyLNIZNszueAlG8jYENo5GfTuB3Zc0GITYQnqLvHNsvA0'
+  uid = 1337
+  hashedPassword = '$6$NH36UuVGJCVzhfL$K/73aYEiyB8xYrj03A2stxXB4cFV2bPHe6WQzwWd8tyLNIZNszueAlG8jYENo5GfTuB3Zc0GITYQnqLvHNsvA0'
 [rhea.users.groups.john]
-gid = 1337
+  gid = 1337
 
 [eris]
-public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIO1+nbifIWVNJJu/5zDga9cX1qVVMYyg0XZYyRos4Ue"
-imports = [
-  "hardware/x570",
-  "modules/state",
-  "profiles/state",
-  "profiles/hidpi",
-  "profiles/desktop",
-  "profiles/default_fs",
-]
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIO1+nbifIWVNJJu/5zDga9cX1qVVMYyg0XZYyRos4Ue"
+  imports = [
+    "hardware/x570",
+    "modules/state",
+    "profiles/state",
+    "profiles/hidpi",
+    "profiles/desktop",
+    "profiles/default_fs",
+  ]
 [eris.users.users.john]
-uid = 1337
-hashedPassword = '$6$187X59CnfYOygbdN$HopIW8qNY7hyiZA1kjiLDWHO8/brCNHxAajW1.lPaxTW8w6PVLo6RekBFlKKKsQFnBim6InOpwR3WzyVV0xj60'
+  uid = 1337
+  hashedPassword = '$6$187X59CnfYOygbdN$HopIW8qNY7hyiZA1kjiLDWHO8/brCNHxAajW1.lPaxTW8w6PVLo6RekBFlKKKsQFnBim6InOpwR3WzyVV0xj60'
 [eris.users.groups.john]
-gid = 1337
+  gid = 1337
 [eris.users.john]
-email = "john@insane.se"
-fullName = "John Axel Eriksson"
-githubUser = "johnae"
-gitlabUser = "johnae"
-profiles = [
-  "alacritty",
-  "bat",
-  "git",
-  "chromium",
-  "emacs",
-  "firefox",
-  "fish",
-  "mako",
-  "pulseaudio",
-  "qutebrowser",
-  "rbw",
-  "ssh",
-  "sway",
-  "starship",
-  "theme",
-  "tmux",
-  "wlsunset",
-]
+  email = "john@insane.se"
+  fullName = "John Axel Eriksson"
+  githubUser = "johnae"
+  gitlabUser = "johnae"
+  profiles = [
+    "alacritty",
+    "bat",
+    "git",
+    "chromium",
+    "emacs",
+    "firefox",
+    "fish",
+    "mako",
+    "pulseaudio",
+    "qutebrowser",
+    "rbw",
+    "ssh",
+    "sway",
+    "starship",
+    "theme",
+    "tmux",
+    "wlsunset",
+  ]
+
 [io]
-public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5WClmubgehZKXvGwuLH621Nd5IMIxh8HWZf0lUW47M"
-imports = [
-  "hardware/xps9300",
-  "modules/state",
-  "profiles/state",
-  "profiles/hidpi",
-  "profiles/laptop",
-  "profiles/default_fs",
-  "profiles/pcscd",
-  "profiles/yubikey",
-]
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5WClmubgehZKXvGwuLH621Nd5IMIxh8HWZf0lUW47M"
+  imports = [
+    "hardware/xps9300",
+    "modules/state",
+    "profiles/state",
+    "profiles/hidpi",
+    "profiles/laptop",
+    "profiles/default_fs",
+    "profiles/pcscd",
+    "profiles/yubikey",
+  ]
 [io.users.users.john]
-uid = 1337
-hashedPassword = '$6$mJA6xE6ZcfY9rn1$ym/OZ02gGK6APaoa9qTjhzWkyxokJ8ldqUt/x3nmGaAsCkMKWmWcB0guYO2ydtifN3EVGygcSZXrB4tLVMZpz0'
+  uid = 1337
+  hashedPassword = '$6$mJA6xE6ZcfY9rn1$ym/OZ02gGK6APaoa9qTjhzWkyxokJ8ldqUt/x3nmGaAsCkMKWmWcB0guYO2ydtifN3EVGygcSZXrB4tLVMZpz0'
 [io.users.groups.john]
-gid = 1337
+  gid = 1337
 [io.users.john]
-email = "john@insane.se"
-fullName = "John Axel Eriksson"
-githubUser = "johnae"
-gitlabUser = "johnae"
-profiles = [
-  "alacritty",
-  "bat",
-  "git",
-  "chromium",
-  "emacs",
-  "firefox",
-  "fish",
-  "i3status",
-  "mako",
-  "pulseaudio",
-  "qutebrowser",
-  "rbw",
-  "ssh",
-  "sway",
-  "starship",
-  "theme",
-  "tmux",
-  "wlsunset",
-]
+  email = "john@insane.se"
+  fullName = "John Axel Eriksson"
+  githubUser = "johnae"
+  gitlabUser = "johnae"
+  profiles = [
+    "alacritty",
+    "bat",
+    "git",
+    "chromium",
+    "emacs",
+    "firefox",
+    "fish",
+    "i3status",
+    "mako",
+    "pulseaudio",
+    "qutebrowser",
+    "rbw",
+    "ssh",
+    "sway",
+    "starship",
+    "theme",
+    "tmux",
+    "wlsunset",
+  ]

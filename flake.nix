@@ -71,7 +71,7 @@
             userProfiles = import ./users/profiles.nix { lib = inputs.nixpkgs.lib; };
           } // host.specialArgs;
           modules = [
-            #{ system.configurationRevision = mkIf (self ? rev) self.rev; }
+            { system.configurationRevision = mkIf (self ? rev) self.rev; }
             { system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}"; }
             { nixpkgs = { pkgs = pkgs.${system}; }; }
             inputs.nixpkgs.nixosModules.notDetected
