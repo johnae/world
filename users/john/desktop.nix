@@ -49,6 +49,7 @@ in
           "/home/${userName}/.cache/mu"
           "/home/${userName}/.cache/nix"
           "/home/${userName}/.cache/nix-index"
+          "/home/${userName}/.cache/rbw"
           "/home/${userName}/.mozilla/firefox/default"
           "/home/${userName}/.gnupg"
           "/home/${userName}/.config/gcloud"
