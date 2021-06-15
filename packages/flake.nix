@@ -55,7 +55,7 @@
   outputs = { self, nixpkgs, ...} @ inputs:
     let
       inherit (nixpkgs.lib) genAttrs listToAttrs mapAttrsToList filterAttrs;
-      inherit (builtins) filter attrNames pathExists toString mapAttrs;
+      inherit (builtins) filter attrNames pathExists toString mapAttrs hasAttr;
       supportedSystems = [ "x86_64-linux" ];
       forAllSystems = f: genAttrs supportedSystems (system: f system);
       pkgs = forAllSystems (system: import nixpkgs {
@@ -63,6 +63,7 @@
         overlays = mapAttrsToList (_: value: value) self.overlays;
       });
       nonFlakePkgList = filter (elem: ! (inputs.${elem} ? "sourceInfo") && pathExists (toString (./. + "/${elem}"))) (attrNames inputs);
+      exportedPackages = mapAttrs (name: value: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) self.overlays);
     in
     {
       overlays = (
@@ -89,5 +90,6 @@
         scripts = (final: prev: { scripts = prev.callPackage ./scripts { }; });
       }
      ;
+     packages.x86_64-linux = exportedPackages;
     };
 }
