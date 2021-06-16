@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ hostName, config, lib, pkgs, inputs, ... }:
 {
 
   imports = [
@@ -96,7 +96,11 @@
     Defaults  lecture="never"
   '';
 
-  networking.firewall.enable = true;
+  networking = {
+    firewall.enable = true;
+    inherit hostName;
+  };
+
   services.sshguard.enable = true;
 
   services.btrfs.autoScrub.enable = true;
