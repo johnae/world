@@ -108,7 +108,7 @@ let
     passonly=''${passonly:-}
     selection="$(rbw list --fields name,user | \
        sed 's|\t|/|g' | \
-       wofi --show dmenu --insensitive --lines 10)"
+       wofi --matching fuzzy --show dmenu --insensitive --lines 10)"
 
     entry="$(echo "$selection" | awk -F'/' '{print $1}')"
     login="$(echo "$selection" | awk -F'/' '{print $2}')"
