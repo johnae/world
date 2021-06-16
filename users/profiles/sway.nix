@@ -197,6 +197,11 @@ in
           natural_scroll = "true";
           tap = "true";
         };
+        "1739:52620:SYNA8005:00_06CB:CD8C_Touchpad" = {
+          dwt = "true";
+          natural_scroll = "true";
+          tap = "true";
+        };
       };
 
       gaps = {
