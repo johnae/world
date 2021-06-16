@@ -66,6 +66,9 @@
 [eris.users.users.john]
   uid = 1337
   hashedPassword = '$6$187X59CnfYOygbdN$HopIW8qNY7hyiZA1kjiLDWHO8/brCNHxAajW1.lPaxTW8w6PVLo6RekBFlKKKsQFnBim6InOpwR3WzyVV0xj60'
+  shell = "fish"
+  extraGroups = [ "wheel", "docker", "video", "audio", "plugdev", ];
+  isNormalUser = true;
 [eris.users.groups.john]
   gid = 1337
 [eris.users.john]
@@ -109,9 +112,12 @@
 [io.users.users.john]
   uid = 1337
   hashedPassword = '$6$mJA6xE6ZcfY9rn1$ym/OZ02gGK6APaoa9qTjhzWkyxokJ8ldqUt/x3nmGaAsCkMKWmWcB0guYO2ydtifN3EVGygcSZXrB4tLVMZpz0'
+  shell = "fish"
+  extraGroups = [ "wheel", "docker", "video", "audio", "plugdev", ];
+  isNormalUser = true;
 [io.users.groups.john]
   gid = 1337
-[io.users.john]
+[io.userConfigurations.john]
   email = "john@insane.se"
   fullName = "John Axel Eriksson"
   githubUser = "johnae"
