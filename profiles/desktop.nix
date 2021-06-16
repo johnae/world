@@ -1,4 +1,4 @@
-{ hostName, userName, config, lib, pkgs, inputs, ... }:
+{ hostName, config, lib, pkgs, inputs, ... }:
 {
   imports = [
     ./defaults.nix
@@ -29,6 +29,12 @@
   networking.wireless.iwd.enable = true;
 
   environment.pathsToLink = [ "/etc/gconf" ];
+
+  security.pam.services.swaylock = {
+    text = ''
+      auth include login
+    '';
+  };
 
   ##
   powerManagement.enable = true;
@@ -61,11 +67,8 @@
 
   services.hardware.bolt.enable = true;
 
-  ##
   environment.etc."systemd/sleep.conf".text = "HibernateDelaySec=8h";
-  ##
 
-  ##
   services.upower.enable = true;
   services.pasuspender.enable = true;
 
