@@ -261,6 +261,23 @@
         "type": "github"
       }
     },
+    "rofi-wayland": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1606328287,
+        "narHash": "sha256-xgXGPkSwRhAHEaWSiwYrQRI2Km/KaFFoXMHBgU6cRSQ=",
+        "owner": "lbonn",
+        "repo": "rofi",
+        "rev": "ab1ce4a4ca3ea236af1cbf13ec60ecc27b7e8fb8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lbonn",
+        "ref": "wayland",
+        "repo": "rofi",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "age-plugin-yubikey": "age-plugin-yubikey",
@@ -277,6 +294,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-fmt": "nixpkgs-fmt",
         "persway": "persway",
+        "rofi-wayland": "rofi-wayland",
         "slurp": "slurp",
         "spook": "spook",
         "spotifyd": "spotifyd",
