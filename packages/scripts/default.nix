@@ -8,7 +8,7 @@
 , fire
 , fd
 , rbw
-, wofi
+, rofi-wayland
 , skim
 , pass
 , wpa_supplicant
@@ -103,12 +103,12 @@ let
     echo "${fire}/bin/fire $cmd" | ${stdenv.shell}
   '';
 
-  wofi-rbw = writeStrictShellScriptBin "wofi-rbw" ''
-    ${addToBinPath [ wofi rbw wl-clipboard ]}
+  rofi-rbw = writeStrictShellScriptBin "rofi-rbw" ''
+    ${addToBinPath [ rofi-wayland rbw wl-clipboard ]}
     passonly=''${passonly:-}
     selection="$(rbw list --fields name,user | \
        sed 's|\t|/|g' | \
-       wofi --normal-window --matching fuzzy --show dmenu --insensitive --lines 10)"
+       rofi -normal-window -matching fuzzy -i -dmenu)"
 
     entry="$(echo "$selection" | awk -F'/' '{print $1}')"
     login="$(echo "$selection" | awk -F'/' '{print $2}')"
@@ -257,6 +257,6 @@ buildEnv {
     sk-sk sk-run sk-window sk-passmenu
     add-wifi-network update-wifi-networks
     update-wireguard-keys spotify-play-album spotify-play-track
-    spotify-cmd spotify-play-artist spotify-play-playlist wofi-rbw
+    spotify-cmd spotify-play-artist spotify-play-playlist rofi-rbw
   ];
 }

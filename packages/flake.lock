@@ -261,6 +261,22 @@
         "type": "github"
       }
     },
+    "rofi-nord-theme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1587642235,
+        "narHash": "sha256-VnFOd97f4R5vXkI+NxZIMJoXeu2Z6euOOecKS5Y2RxI=",
+        "owner": "undiabler",
+        "repo": "nord-rofi-theme",
+        "rev": "81bd16401708a5ed5df9bc6ec95dcf981c7de4e5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "undiabler",
+        "repo": "nord-rofi-theme",
+        "type": "github"
+      }
+    },
     "rofi-wayland": {
       "flake": false,
       "locked": {
@@ -294,6 +310,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-fmt": "nixpkgs-fmt",
         "persway": "persway",
+        "rofi-nord-theme": "rofi-nord-theme",
         "rofi-wayland": "rofi-wayland",
         "slurp": "slurp",
         "spook": "spook",

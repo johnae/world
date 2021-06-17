@@ -262,10 +262,10 @@ in
 
         "${modifier}+Return" = ''exec ${pkgs.my-emacs}/bin/emacsclient -c -n -a= --eval '(jae/eshell-new)' '';
         "${modifier}+Shift+Return" = '' exec ${pkgs.alacritty}/bin/alacritty'';
-        "${modifier}+d" = ''exec ${pkgs.wofi}/bin/wofi --show run'';
+        "${modifier}+d" = ''exec ${pkgs.rofi-wayland}/bin/rofi -show drun'';
 
-        "${modifier}+minus" = ''exec ${pkgs.scripts}/bin/wofi-rbw'';
-        "${modifier}+Shift+minus" = ''exec passonly=y ${pkgs.scripts}/bin/wofi-rbw'';
+        "${modifier}+minus" = ''exec ${pkgs.scripts}/bin/rofi-rbw'';
+        "${modifier}+Shift+minus" = ''exec passonly=y ${pkgs.scripts}/bin/rofi-rbw'';
 
         "${modifier}+b" = ''exec ${swayBackground}/bin/sway-background'';
 

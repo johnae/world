@@ -129,6 +129,7 @@
     "pulseaudio",
     "qutebrowser",
     "rbw",
+    "rofi",
     "ssh",
     "sway",
     "starship",
@@ -138,7 +139,7 @@
   ]
 
 [carbon]
-  public_key = "xxxxx"
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOsLzBkJNFdXKdXcAaMQ4VCzJ/9kBiP2xkwnMXCSmR2Z"
   imports = [
     "hardware/x1-carbon",
     "modules/state",
@@ -172,6 +173,7 @@
     "pulseaudio",
     "qutebrowser",
     "rbw",
+    "rofi",
     "ssh",
     "sway",
     "starship",
