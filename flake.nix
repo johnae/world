@@ -50,8 +50,9 @@
         ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
       });
 
-      hosts = mapAttrs (hostname: config: {
-        specialArgs.users = config.users;
+      hosts = mapAttrs (hostname: config:
+        {
+        specialArgs.hostConfig = config;
         configuration.imports = (map (item:
           if pathExists (toString (./. + "/${item}")) then
             (./. + "/${item}")

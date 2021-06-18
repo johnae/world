@@ -13,4 +13,8 @@ in
     hosts.io
     johnae
   ];
+  "carbon.age".publicKeys = [
+    hosts.carbon
+    johnae
+  ];
 }

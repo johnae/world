@@ -1,10 +1,10 @@
-{ hostName, userProfiles, users, pkgs, lib, ... }:
+{ hostName, userProfiles, hostConfig, pkgs, lib, ... }:
 
 let
   userName = "john";
-  userConfig = users.users.${userName};
-  groupConfig = users.groups.${userName};
-  userSettings = lib.attrByPath [ userName ] {} users;
+  userConfig = hostConfig.users.users.${userName};
+  groupConfig = hostConfig.users.groups.${userName};
+  userSettings = lib.attrByPath [ userName ] {} hostConfig.users;
 in
 {
   home-manager.users.${userName} = { config, ... }:
