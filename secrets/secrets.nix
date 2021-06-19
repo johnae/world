@@ -5,15 +5,9 @@ let
   johnae = "age1yubikey1qt7cjux5unxcsrw9dnkq8qsh0jgnwwvxzxm2jn2pxetjchtclmlk6xvpckq";
 in
 {
-  "eris.age".publicKeys = [
+  "spotnix.age".publicKeys = [
     hosts.eris
-    johnae
-  ];
-  "io.age".publicKeys = [
     hosts.io
-    johnae
-  ];
-  "carbon.age".publicKeys = [
     hosts.carbon
     johnae
   ];
