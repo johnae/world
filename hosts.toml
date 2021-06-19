@@ -159,9 +159,9 @@
     "profiles/yubikey",
     "profiles/secrets",
   ]
-#[carbon.age.secrets.secret1]
-#  file = "secrets/carbon.age"
-#  path = "/root-secret2"
+[carbon.age.secrets.spotnix]
+  file = "secrets/spotnix.age"
+  owner = "1337"
 [carbon.users.users.john]
   uid = 1337
   hashedPassword = '$6$7D0/IXD6AM$9QRdv2TlnbtCFgwOMUU5NDRakIXLvt1xx3s0AtRaUyqnsg8n8jEPOSHfGjiX41dveTKP8a.2qjF731Ie0VNSz0'
