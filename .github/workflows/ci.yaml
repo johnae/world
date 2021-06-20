@@ -1,10 +1,11 @@
-name: Nix
+name: Nix Builder
 
 on:
+  pull_request:
+    types: [opened, synchronize, reopened]
   push:
     branches:
-    - new-world
-    #- main
+    - main
 
 jobs:
   create_matrix:
