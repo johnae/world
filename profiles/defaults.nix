@@ -1,7 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
-let
-  tsEnabled = config.services.tailscale.enable;
-in
+{ hostName, config, lib, pkgs, inputs, ... }:
 {
 
   imports = [
@@ -10,6 +7,7 @@ in
   ];
 
   nix = {
+    trustedUsers = [ "root" ];
     extraOptions = ''
       experimental-features = nix-command flakes ca-references
       keep-outputs = true
@@ -31,32 +29,58 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
+  environment.systemPackages = [
+    pkgs.man-pages
+    pkgs.bmon
+    pkgs.iftop
+    pkgs.file
+    pkgs.cacert
+    pkgs.openssl
+    pkgs.curl
+    pkgs.gnupg
+    pkgs.lsof
+    pkgs.usbutils
+    pkgs.mkpasswd
+    pkgs.powertop
+    pkgs.socat
+    pkgs.nmap
+    pkgs.iptables
+    pkgs.bridge-utils
+    pkgs.pciutils
+    pkgs.zip
+    pkgs.wget
+    pkgs.unzip
+    pkgs.htop
+    pkgs.jq
+    pkgs.binutils
+    pkgs.psmisc
+    pkgs.tree
+    pkgs.ripgrep
+    pkgs.vim
+    pkgs.git
+    pkgs.fish
+    pkgs.tmux
+    pkgs.blueman
+    pkgs.pavucontrol
+    pkgs.bluez
+    pkgs.bluez-tools
+    pkgs.fd
+    pkgs.wireguard
+    pkgs.hyperfine
+    pkgs.procs
+    pkgs.sd
+    pkgs.bottom
+  ];
+
+
   home-manager.useUserPackages = true;
   home-manager.useGlobalPkgs = true;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  hardware.cpu.intel.updateMicrocode = true;
-
-  networking.nameservers =
-    if tsEnabled then
-      [ "100.100.100.100" "1.0.0.1" "1.1.1.1" "2606:4700:4700::1111" ]
-    else
-      [ "1.0.0.1" "1.1.1.1" "2606:4700:4700::1111" ];
-
-  networking.search =
-    if tsEnabled then
-      [ "insane.se.beta.tailscale.net" ]
-    else
-      [ ];
-
-  networking.domain =
-    if tsEnabled then
-      "insane.se.beta.tailscale.net"
-    else
-      "";
+  boot.initrd.availableKernelModules =
+    [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
 
   i18n.defaultLocale = "en_US.UTF-8";
   console.keyMap = "us";
@@ -72,7 +96,11 @@ in
     Defaults  lecture="never"
   '';
 
-  networking.firewall.enable = true;
+  networking = {
+    firewall.enable = true;
+    inherit hostName;
+  };
+
   services.sshguard.enable = true;
 
   services.btrfs.autoScrub.enable = true;

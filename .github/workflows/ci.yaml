@@ -1,0 +1,47 @@
+name: Nix Builder
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+    - main
+
+jobs:
+  create_matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.job-matrix.outputs.matrix }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v13
+      with:
+        install_url: https://nixos-nix-install-tests.cachix.org/serve/g5wb6882xaw11m5ygq2k9l6mqi6jalqa/install
+        install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
+        extra_nix_config: |
+          experimental-features = nix-command flakes
+    - id: job-matrix
+      run: |
+        echo "::set-output name=matrix::$(nix eval .#github-actions --json)"
+
+  build_package:
+    needs: create_matrix
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix: ${{ fromJson(needs.create_matrix.outputs.matrix) }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v13
+      with:
+        install_url: https://nixos-nix-install-tests.cachix.org/serve/g5wb6882xaw11m5ygq2k9l6mqi6jalqa/install
+        install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
+        extra_nix_config: |
+          substituters = https://nixpkgs-wayland.cachix.org https://nix-community.cachix.org https://insane.cachix.org https://cachix.cachix.org https://cache.nixos.org/
+          trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+          experimental-features = nix-command flakes
+    - env:
+        PKG: ${{ matrix.pkg }}
+        CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_SIGNING_KEY }}
+      run: |
+        nix build .#$PKG -L
+        readlink result | nix shell nixpkgs#cachix -c cachix push insane

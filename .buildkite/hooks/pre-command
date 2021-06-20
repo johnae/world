@@ -1,6 +1,0 @@
-#!/usr/bin/env sh
-set -euo pipefail
-
-echo --- Running repository pre-command hook
-
-cachix use insane

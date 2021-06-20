@@ -1,0 +1,25 @@
+#!@bash@/bin/bash
+
+PATH=@stdenv@/bin:@blur@/bin:@jq@/bin:@grim@/bin:@swaylock@/bin:@sway@/bin${PATH:+:}$PATH
+export PATH
+
+declare -a sway_outputs
+declare -a swaylock_params
+
+while read -r line; do
+    sway_outputs+=("$line")
+done <<< "$(swaymsg -t get_outputs | jq -r .[].name)"
+
+swaylock_params+=("-f" "-e" "-K" "-s" "fill" "--font=Roboto" "--inside-color=00000066" "--inside-clear-color=00660099" "--inside-ver-color=00006699" "--inside-wrong-color=66000099" "--key-hl-color=FFFFFF99" "--ring-color=GGGGGGBB" "--ring-wrong-color=FF6666BB" "--ring-ver-color=6666FFBB" "--text-color=FFFFFFFF" "--text-clear-color=FFFFFFFF" "--text-wrong-color=FFFFFFFF" "--text-ver-color=FFFFFFFF" "--indicator-radius=80")
+
+trap 'rm -f /tmp/bg-dope-*.*' EXIT
+
+echo -n "${sway_outputs[@]}" | xargs -d ' ' -I{} -r -n 1 -P8 sh -c 'grim -t jpeg -o {} /tmp/bg-dope-{}.jpg; blur /tmp/bg-dope-{}.jpg /tmp/bg-dope-{}.png'
+
+arraylen=${#sway_outputs[@]}
+for (( i=0; i<arraylen; i++ ));
+do
+    swaylock_params+=("-i" "${sway_outputs[$i]}:/tmp/bg-dope-${sway_outputs[$i]}.png")
+done
+
+swaylock "${swaylock_params[@]}"
