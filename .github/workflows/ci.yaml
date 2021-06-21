@@ -1,8 +1,7 @@
 name: Nix Builder
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  pull_request: {}
   push:
     branches:
     - main
