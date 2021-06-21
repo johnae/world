@@ -41,6 +41,7 @@ jobs:
         branch: package-auto-updates
         delete-branch: true
         title: '[Autoupdate] Update packages'
+        body: ''
         labels: |
           automated pr
         assignees: johnae
