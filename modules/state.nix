@@ -231,9 +231,15 @@ in
                 ));
             in
             map toEntry entries;
+
+          stateSetupScripts = (listToAttrs (flatten (map mkDirCreationScriptForPath stateStoragePaths))) //
+                       (listToAttrs (flatten (map mkLinkCreationScriptForPath stateStoragePaths)));
         in
-        (listToAttrs (flatten (map mkDirCreationScriptForPath stateStoragePaths))) //
-        (listToAttrs (flatten (map mkLinkCreationScriptForPath stateStoragePaths)))
+        stateSetupScripts //
+        ({ stateSetup = stringAfter (builtins.attrNames stateSetupScripts) (lib.mkDefault ''
+                              true
+                            '');
+        })
       ) // {
         preStateSetup = lib.mkDefault ''
           true
