@@ -93,5 +93,8 @@
       }
      ;
      packages.x86_64-linux = exportedPackages;
+     devShell = forAllSystems (system:
+       pkgs.${system}.callPackage ./devshell.nix { }
+     );
     };
 }
