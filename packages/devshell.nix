@@ -23,7 +23,7 @@ let
   '';
 
   update-all-cargo-vendor-shas = writeStrictShellScriptBin "update-all-cargo-vendor-shas" ''
-    for rpkg in $(${ripgrep}/bin/rg -l cargoSha256 . | awk -F'/' '{print $2}'); do
+    for rpkg in $(${ripgrep}/bin/rg -l cargoSha256 ./*/* | awk -F'/' '{print $2}'); do
       ${update-cargo-vendor-sha}/bin/update-cargo-vendor-sha "$rpkg"
     done
   '';
@@ -54,7 +54,7 @@ let
   '';
 
   update-all-fixed-output-derivation-shas = writeStrictShellScriptBin "update-all-fixed-output-derivation-shas" ''
-    for fopkg in $(${ripgrep}/bin/rg -l "outputHash|vendorSha256" . | awk -F'/' '{print $2}'); do
+    for fopkg in $(${ripgrep}/bin/rg -l "outputHash|vendorSha256" ./*/* | awk -F'/' '{print $2}'); do
       ${update-fixed-output-derivation-sha}/bin/update-fixed-output-derivation-sha "$fopkg"
     done
   '';
