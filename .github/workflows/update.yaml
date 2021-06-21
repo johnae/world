@@ -33,3 +33,18 @@ jobs:
         nix shell nixpkgs#git -c git commit -am "Auto-update all inputs"
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
+      with:
+        commit-message: Autoupdate
+        committer: GitHub <noreply@github.com>
+        author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+        signoff: false
+        branch: package-auto-updates
+        delete-branch: true
+        title: '[Autoupdate] Update packages'
+        labels: |
+          automated pr
+        assignees: johnae
+        reviewers: johnae
+        team-reviewers: |
+          owners
+          maintainers
