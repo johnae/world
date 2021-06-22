@@ -167,13 +167,14 @@
   imports = [
     "hardware/x1-carbon",
     "modules/state",
-    "profiles/state",
-    "profiles/laptop",
-    "profiles/interception-tools",
     "profiles/default_fs",
+    "profiles/interception-tools",
+    "profiles/laptop",
     "profiles/pcscd",
-    "profiles/yubikey",
     "profiles/secrets",
+    "profiles/state",
+    "profiles/tailscale",
+    "profiles/yubikey",
   ]
 [carbon.age.secrets.spotnix]
   file = "secrets/spotnix.age"
@@ -201,8 +202,8 @@
     "git",
     "i3status",
     "kanshi",
-    "obs",
     "mako",
+    "obs",
     "pulseaudio",
     "qutebrowser",
     "rbw",
