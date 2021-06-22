@@ -3,11 +3,11 @@
   imports = [
     "hardware/nuc",
     "modules/state",
-    "profiles/state",
-    "profiles/hidpi",
-    "profiles/server",
-    "profiles/k3s-node",
     "profiles/default_fs",
+    "profiles/hidpi",
+    "profiles/k3s-node",
+    "profiles/server",
+    "profiles/state",
     "profiles/uuid_disk_crypt",
   ]
 [hyperion.users.users.john]
@@ -21,11 +21,11 @@
   imports = [
     "hardware/nuc",
     "modules/state",
-    "profiles/state",
-    "profiles/hidpi",
-    "profiles/server",
-    "profiles/k3s-node",
     "profiles/default_fs",
+    "profiles/hidpi",
+    "profiles/k3s-node",
+    "profiles/server",
+    "profiles/state",
     "profiles/uuid_disk_crypt",
   ]
 [titan.users.users.john]
@@ -39,11 +39,11 @@
   imports = [
     "hardware/macmini",
     "modules/state",
-    "profiles/state",
-    "profiles/hidpi",
-    "profiles/server",
-    "profiles/k3s-server",
     "profiles/default_fs",
+    "profiles/hidpi",
+    "profiles/k3s-server",
+    "profiles/server",
+    "profiles/state",
     "profiles/uuid_disk_crypt",
   ]
 [rhea.users.users.john]
@@ -57,12 +57,12 @@
   imports = [
     "hardware/x570",
     "modules/state",
-    "profiles/state",
-    "profiles/hidpi",
-    "profiles/desktop",
-    "profiles/interception-tools",
     "profiles/default_fs",
+    "profiles/desktop",
+    "profiles/hidpi",
+    "profiles/interception-tools",
     "profiles/secrets",
+    "profiles/state",
   ]
 [eris.age.secrets.spotnix]
   file = "secrets/spotnix.age"
@@ -90,8 +90,8 @@
     "git",
     "i3status",
     "kanshi",
-    "obs",
     "mako",
+    "obs",
     "pulseaudio",
     "qutebrowser",
     "rbw",
@@ -111,14 +111,14 @@
   imports = [
     "hardware/xps9300",
     "modules/state",
-    "profiles/state",
-    "profiles/hidpi",
-    "profiles/laptop",
-    "profiles/interception-tools",
     "profiles/default_fs",
+    "profiles/hidpi",
+    "profiles/interception-tools",
+    "profiles/laptop",
     "profiles/pcscd",
-    "profiles/yubikey",
     "profiles/secrets",
+    "profiles/state",
+    "profiles/yubikey",
   ]
 [io.age.secrets.spotnix]
   file = "secrets/spotnix.age"
@@ -146,8 +146,8 @@
     "git",
     "i3status",
     "kanshi",
-    "obs",
     "mako",
+    "obs",
     "pulseaudio",
     "qutebrowser",
     "rbw",
