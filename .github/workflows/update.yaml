@@ -19,7 +19,7 @@ jobs:
           trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
           experimental-features = nix-command flakes
     - run: |
-        nix shell nixpkgs#git -c git config user.name 'Nix Autoupdater'
+        nix shell nixpkgs#git -c git config user.name 'NixBot'
         nix shell nixpkgs#git -c git config user.email 'johnae@users.noreply.github.com'
         (
           cd packages
@@ -27,12 +27,14 @@ jobs:
           nix develop -c update-all-cargo-vendor-shas
           nix develop -c update-all-fixed-output-derivation-shas
         )
-        nix shell nixpkgs#git -c git commit -am "Auto-update sub flake packages"
+        nix shell nixpkgs#git -c git commit -am "[Auto] update sub flake packages"
 
         nix flake update
-        nix shell nixpkgs#git -c git commit -am "Auto-update all inputs"
+        nix shell nixpkgs#git -c git commit -am "[Auto] update all inputs"
+      
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
+      id: cpr
       with:
         token: ${{ secrets.MACHINE_USER_TOKEN }}
         commit-message: Autoupdate
@@ -41,7 +43,7 @@ jobs:
         signoff: false
         branch: package-auto-updates
         delete-branch: true
-        title: '[Autoupdate] Update packages'
+        title: '[Auto] package updates'
         body: ''
         labels: |
           automated pr
@@ -50,3 +52,11 @@ jobs:
         team-reviewers: |
           owners
           maintainers
+
+    - name: Enable Pull Request Automerge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v1
+        with:
+        token: ${{ secrets.MACHINE_USER_TOKEN }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
