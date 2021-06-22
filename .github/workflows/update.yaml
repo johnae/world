@@ -37,13 +37,13 @@ jobs:
       id: cpr
       with:
         token: ${{ secrets.MACHINE_USER_TOKEN }}
-        commit-message: Autoupdate
+        commit-message: [Auto] Package updates
         committer: GitHub <noreply@github.com>
         author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
         signoff: false
         branch: package-auto-updates
         delete-branch: true
-        title: '[Auto] package updates'
+        title: '[Auto] Package updates'
         body: ''
         labels: |
           automated pr
