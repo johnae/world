@@ -1,12 +1,10 @@
 { config, hostName, lib, pkgs, inputs, ... }:
 let
   nixos-hardware = inputs.nixos-hardware;
-  #tailscale = importSecret "${inputs.secrets}/tailscale/meta.nix";
 in
 {
   imports = [
     "${nixos-hardware}/common/pc/ssd"
-    #tailscale
     ./defaults.nix
   ];
 
@@ -32,17 +30,6 @@ in
     pkgs.nfs-utils
     pkgs.iptables
   ];
-
-  #services.k3s = {
-  #  enable = true;
-  #  docker = true;
-  #  nodeName = hostName;
-  #  flannelBackend = "none";
-  #  extraFlags = " --flannel-iface=tailscale0 ";
-  #  systemdAfter = [ "tailscaled.service" "tailscale-auth.service" ];
-  #};
-
-  #services.tailscale.enable = true;
 
   networking.search = lib.mkForce [ ];
   networking.domain = lib.mkForce null;
