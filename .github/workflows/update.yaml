@@ -35,7 +35,6 @@ jobs:
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.MACHINE_USER_TOKEN }}
-        push-to-fork: 53f463c7/world
         commit-message: Autoupdate
         committer: GitHub <noreply@github.com>
         author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
