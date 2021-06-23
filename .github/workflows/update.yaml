@@ -3,7 +3,7 @@ name: Nix Autoupdater
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: '0 3 * * *'
+  - cron: '0 3 * * *'
 
 jobs:
   update-packages:
@@ -37,7 +37,7 @@ jobs:
       id: cpr
       with:
         token: ${{ secrets.MACHINE_USER_TOKEN }}
-        commit-message: [Auto] Package updates
+        commit-message: '[Auto] Package updates'
         committer: GitHub <noreply@github.com>
         author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
         signoff: false
