@@ -35,7 +35,7 @@ nixos-rebuild switch --flake .#hello --use-remote-sudo
 
 ## Package updates etc
 
-Package updates and OS updates are automated through actions. The update action creates a pull requests where all custom packages are built and then all machine configurations are built to test that things seem ok before merging. This should catch many issues coming from OS and package updates.
+Package updates and OS updates are automated through actions. The update action creates pull requests where all custom packages are built and then all machine configurations are built to test that things seem ok before merging. This should catch many issues coming from OS and package updates before they're deployed.
 
 
 ## License
