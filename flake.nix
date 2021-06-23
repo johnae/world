@@ -192,9 +192,14 @@
 
       packages.x86_64-linux = diskFormatters // exportedPackages;
 
-      github-actions = {
+      github-actions-package-matrix = {
         os = [ "ubuntu-latest" ];
         pkg = mapAttrsToList (name: _:  name) exportedPackages;
+      };
+
+      github-actions-host-matrix = {
+        os = [ "ubuntu-latest" ];
+        host = mapAttrsToList (name: _:  name) nixosConfigurations;
       };
     };
 }
