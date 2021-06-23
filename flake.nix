@@ -173,14 +173,10 @@
 
       hostConfigurations = mapAttrs toNixosConfig hosts;
 
-      nixosConfigurations = hostConfigurations
-                            //
-                            {
-                              pxebooter = toPxeBootSystemConfig "pxebooter";
-                            };
+      nixosConfigurations = hostConfigurations;
 
       diskFormatters = mapAttrs' toDiskFormatter hostConfigurations;
-      exportedPackages = mapAttrs (name: value: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) inputs.packages.overlays);
+      exportedPackages = (mapAttrs (name: value: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) inputs.packages.overlays)) // { pxebooter = toPxeBootSystemConfig "pxebooter"; };
 
     in
     {
