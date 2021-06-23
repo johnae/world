@@ -11,8 +11,6 @@ in
   networking.usePredictableInterfaceNames = false; ## works when there's only one ethernet port
   networking.useDHCP = false;
 
-  console.font = "Lat2-Terminus16";
-
   environment.systemPackages = [
     pkgs.wget
     pkgs.vim
