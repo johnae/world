@@ -1,6 +1,6 @@
 # The World
 
-This is a [NixOS](https://nixos.org) configuration repository for all my machines and custom packages (i.e not part of [nixpkgs](https://github.com/nixos/nixpkgs) yet). In essence, my world which is how it got its name.
+This is a [NixOS](https://nixos.org) configuration repository for all my machines and custom packages (i.e not part of [nixpkgs](https://github.com/nixos/nixpkgs) yet). In essence it contains my world - which is how it got its name.
 
 It's based on a relatively recent feature of the [Nix package manager](https://nixos.org) called [flakes](https://nixos.wiki/wiki/Flakes). Flakes are somewhat similar to a `Cargo.toml/Cargo.lock` from the [Rust programming language](https://rust-lang.org), a `go.mod/go.sum` from the [Go programming language](https://golang.org/) or the `package.json/package.lock` files used by the [Node Package Manager](https://www.npmjs.com/). The difference being that it is language agnostic - it handles any package or file/files really. Here, we're using it to build hosts and software deterministically in a reproducible fashion.
 
