@@ -25,4 +25,5 @@ in
 {
   "spotifyd.age".publicKeys = johnae ++ (hostKeys "spotifyd.age");
   "spotnix.age".publicKeys = johnae ++ (hostKeys "spotnix.age");
+  "wifi-networks.age".publicKeys = johnae ++ (hostKeys "wifi-networks.age");
 }

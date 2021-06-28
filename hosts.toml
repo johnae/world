@@ -70,6 +70,8 @@
 [eris.age.secrets.spotifyd]
   file = "secrets/spotifyd.age"
   owner = "1337"
+[eris.age.secrets.wifi-networks]
+  file = "secrets/wifi-networks.age"
 [eris.users.users.john]
   uid = 1337
   hashedPassword = '$6$187X59CnfYOygbdN$HopIW8qNY7hyiZA1kjiLDWHO8/brCNHxAajW1.lPaxTW8w6PVLo6RekBFlKKKsQFnBim6InOpwR3WzyVV0xj60'
@@ -126,6 +128,8 @@
 [io.age.secrets.spotifyd]
   file = "secrets/spotifyd.age"
   owner = "1337"
+[io.age.secrets.wifi-networks]
+  file = "secrets/wifi-networks.age"
 [io.users.users.john]
   uid = 1337
   hashedPassword = '$6$mJA6xE6ZcfY9rn1$ym/OZ02gGK6APaoa9qTjhzWkyxokJ8ldqUt/x3nmGaAsCkMKWmWcB0guYO2ydtifN3EVGygcSZXrB4tLVMZpz0'
@@ -182,6 +186,8 @@
 [carbon.age.secrets.spotifyd]
   file = "secrets/spotifyd.age"
   owner = "1337"
+[carbon.age.secrets.wifi-networks]
+  file = "secrets/wifi-networks.age"
 [carbon.users.users.john]
   uid = 1337
   hashedPassword = '$6$7D0/IXD6AM$9QRdv2TlnbtCFgwOMUU5NDRakIXLvt1xx3s0AtRaUyqnsg8n8jEPOSHfGjiX41dveTKP8a.2qjF731Ie0VNSz0'

@@ -61,6 +61,7 @@
   environment.etc."systemd/sleep.conf".text = "HibernateDelaySec=8h";
 
   services.pasuspender.enable = true;
+  services.write-iwd-secrets.enable = true;
 
   services.pipewire.enable = true;
   xdg.portal.enable = true;
