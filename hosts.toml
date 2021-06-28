@@ -2,7 +2,6 @@
   public_key = "xxxxx"
   imports = [
     "hardware/nuc",
-    "modules/state",
     "profiles/default_fs",
     "profiles/hidpi",
 #    "profiles/k3s-node",
@@ -20,7 +19,6 @@
   public_key = "xxxxx"
   imports = [
     "hardware/nuc",
-    "modules/state",
     "profiles/default_fs",
     "profiles/hidpi",
 #    "profiles/k3s-node",
@@ -38,7 +36,6 @@
   public_key = "xxxxx"
   imports = [
     "hardware/macmini",
-    "modules/state",
     "profiles/default_fs",
     "profiles/hidpi",
 #    "profiles/k3s-server",
@@ -56,7 +53,6 @@
   public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIO1+nbifIWVNJJu/5zDga9cX1qVVMYyg0XZYyRos4Ue"
   imports = [
     "hardware/x570",
-    "modules/state",
     "profiles/default_fs",
     "profiles/desktop",
     "profiles/hidpi",
@@ -112,7 +108,6 @@
   public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5WClmubgehZKXvGwuLH621Nd5IMIxh8HWZf0lUW47M"
   imports = [
     "hardware/xps9300",
-    "modules/state",
     "profiles/default_fs",
     "profiles/hidpi",
     "profiles/interception-tools",
@@ -170,7 +165,6 @@
   public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOsLzBkJNFdXKdXcAaMQ4VCzJ/9kBiP2xkwnMXCSmR2Z"
   imports = [
     "hardware/x1-carbon",
-    "modules/state",
     "profiles/default_fs",
     "profiles/interception-tools",
     "profiles/laptop",
