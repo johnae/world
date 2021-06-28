@@ -1,4 +1,4 @@
-{ writeText, writeStrictShellScriptBin, mkDevShell, ripgrep, agenix, age-plugin-yubikey, pixiecore }:
+{ writeText, writeStrictShellScriptBin, mkDevShell, ripgrep, agenix, age-plugin-yubikey, rage, pixiecore }:
 
 let
 
@@ -52,7 +52,7 @@ let
 
 mkDevShell {
   name = "world";
-  packages = [ agenix age-plugin-yubikey world ];
+  packages = [ rage agenix age-plugin-yubikey world ];
   intro = ''
 
     Hello, world!
