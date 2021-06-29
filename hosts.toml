@@ -50,7 +50,7 @@
   gid = 1337
 
 [eris]
-  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIO1+nbifIWVNJJu/5zDga9cX1qVVMYyg0XZYyRos4Ue"
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
   imports = [
     "hardware/x570",
     "profiles/default_fs",
