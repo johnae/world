@@ -60,6 +60,8 @@
     "profiles/interception-tools",
     "profiles/secrets",
     "profiles/state",
+    "profiles/yubikey",
+    "profiles/tailscale",
   ]
 [eris.age.secrets.spotnix]
   file = "secrets/spotnix.age"
