@@ -6,7 +6,6 @@
       directories = [
         "/var/log"
         "/var/lib/bluetooth"
-        "/var/lib/iwd"
         "/var/lib/wireguard"
         "/var/lib/systemd/coredump"
         "/var/lib/containers"
