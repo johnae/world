@@ -188,6 +188,7 @@ in
 
     partprobe /dev/mapper/"$ENC_DISK_SWAP_LABEL"
     partprobe /dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL"
+    partprobe /dev/mapper/"$ENC_DISK_ROOT_LABEL"
 
     mount -t tmpfs none /mnt
     mkdir -p "/mnt/tmproot" ${concatStringsSep " " (map (v: "/mnt/${replaceStrings ["@"] [""] v}") subvolumes)} "/mnt/boot"
