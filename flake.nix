@@ -139,10 +139,8 @@
                    if [ -z "$_INSTALLER_HAS_RUN" ]; then
                      _INSTALLER_HAS_RUN=y
                      export _INSTALLER_HAS_RUN
-                     echo should format disks here
                      git clone https://github.com/johnae/world /tmp/world
                      cd /tmp/world
-                     git checkout new-world
                      echo 'Which config should be installed?'
                      host="$(cat hosts.toml | yj -tj | jq -r '. | keys | .[]' | sk)"
                      nix build .#"$host"-diskformat
