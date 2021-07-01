@@ -30,6 +30,29 @@ in
   writeStrictShellScriptBin "diskformat" ''
     DIR=$(CDPATH=''' cd -- "$(dirname -- "$0")" && pwd -P)
 
+    retry() {
+      n=''${1:-1}
+      sleepwait=5
+      shift
+      if [ "$n" -le 0 ]; then
+         echo "\"$*\"" failed - giving up
+         sleep 10
+         exit 1
+      fi
+      n=$((n - 1))
+      if ! eval "$@"; then
+        echo "\"$*\" failed, will retry in 5 seconds"
+        sleep "$sleepwait"
+        echo retrying "\"$*\""
+        retry "$n" "$@"
+      else
+          echo "\"$*\"" succeeded
+      fi
+    }
+    retryDefault() {
+        retry 2 "$@"
+    }
+
     if [ -d /sys/firmware/efi/efivars ]; then
       BOOTMODE="''${BOOTMODE:-UEFI}"
     else
@@ -194,7 +217,7 @@ in
     mkdir -p "/mnt/tmproot" ${concatStringsSep " " (map (v: "/mnt/${replaceStrings ["@"] [""] v}") subvolumes)} "/mnt/boot"
 
     echo Temporarily mounting root btrfs volume from "/dev/disk/by-label/$DISK_ROOT_LABEL" to /mnt/tmproot
-    mount -o rw,noatime,compress=zstd,ssd,space_cache /dev/disk/by-label/"$DISK_ROOT_LABEL" /mnt/tmproot
+    retryDefault mount -o rw,noatime,compress=zstd,ssd,space_cache /dev/disk/by-label/"$DISK_ROOT_LABEL" /mnt/tmproot
 
     # now create the btrfs subvolumes we're interested in having
     echo Creating btrfs subvolumes at /mnt/tmproot
