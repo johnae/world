@@ -31,9 +31,9 @@ in
     DIR=$(CDPATH=''' cd -- "$(dirname -- "$0")" && pwd -P)
 
     if [ -d /sys/firmware/efi/efivars ]; then
-      BOOTMODE="UEFI"
+      BOOTMODE="''${BOOTMODE:-UEFI}"
     else
-      BOOTMODE="Legacy"
+      BOOTMODE="''${BOOTMODE:-Legacy}"
     fi
     DEVRANDOM=/dev/urandom
 
