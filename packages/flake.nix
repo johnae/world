@@ -91,6 +91,25 @@
         netns-dbus-proxy = (final: prev: { netns-dbus-proxy = prev.callPackage ./wl-clipboard-x11 { }; });
         scripts = (final: prev: { scripts = prev.callPackage ./scripts { }; });
       }
+      ##### remove this when meson 0.58.1 is in nixpkgs
+      //
+      {
+        meson-581 = (final: prev: { meson-581 = prev.meson.overrideAttrs
+          (oa:
+            rec {
+              pname = "meson";
+              version = "0.58.1";
+              src = prev.python3.pkgs.fetchPypi {
+                inherit pname version;
+                sha256 = "0padn0ykwz8azqiwkhi8p97bl742y8lsjbv0wpqpkkrgcvda6i1i";
+              };
+            }
+          );
+        });
+        wlroots = (final: prev: { wlroots = prev.callPackage ./wlroots { meson = prev.meson-581; }; });
+        sway-unwrapped = (final: prev: { sway-unwrapped = prev.callPackage ./sway { meson = prev.meson-581; }; });
+      }
+      ###############################################
      ;
      packages.x86_64-linux = exportedPackages;
      devShell = forAllSystems (system:
