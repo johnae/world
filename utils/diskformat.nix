@@ -3,6 +3,7 @@
 let
   inherit (lib) mapAttrsToList listToAttrs splitString concatStringsSep last flatten;
   inherit (builtins) filter match head foldl' replaceStrings;
+  bootMode = if config.config.boot.loader.systemd-boot.enable then "UEFI" else "Legacy";
   diskLabels = {
     boot = "boot";
     encCryptkey = "cryptkey";
@@ -53,11 +54,7 @@ in
         retry 2 "$@"
     }
 
-    if [ -d /sys/firmware/efi/efivars ]; then
-      BOOTMODE="''${BOOTMODE:-UEFI}"
-    else
-      BOOTMODE="''${BOOTMODE:-Legacy}"
-    fi
+    BOOTMODE="${bootMode}"
     DEVRANDOM=/dev/urandom
 
     if [ "$(systemd-detect-virt)" = "none" ]; then
