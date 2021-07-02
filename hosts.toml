@@ -14,6 +14,11 @@
   hashedPassword = '$6$Juk1xlDWz45N5dGc$W.BxolEvo.yWR3DgqzErIdXYYCXq4TjauGN8iA/kdlpaJiPw1lvdecydfF37yfnmTFU.vtnXUVVw3QOgwcJE.0'
 [hyperion.users.groups.john]
   gid = 1337
+[hyperion.networking]
+  defaultGateway = "192.168.240.1"
+  interfaces.eth0.ipv4.addresses = [
+    { address = "192.168.240.122", prefixLength = 24 }
+  ]
 
 [titan]
   public_key = "xxxxx"
@@ -31,6 +36,11 @@
   hashedPassword = '$6$6yT8x5V.3tTyRN2g$idNICkxytVFU6SR9DaafbU9W6.0qVdjyKMDzJCRWC/lwgjctxh4nFDCH2XHrEtb75WRsMFDGLJei0E3WiRqGz.'
 [titan.users.groups.john]
   gid = 1337
+[titan.networking]
+  defaultGateway = "192.168.240.1"
+  interfaces.eth0.ipv4.addresses = [
+    { address = "192.168.240.144", prefixLength = 24 }
+  ]
 
 [rhea]
   public_key = "xxxxx"
@@ -48,6 +58,11 @@
   hashedPassword = '$6$NH36UuVGJCVzhfL$K/73aYEiyB8xYrj03A2stxXB4cFV2bPHe6WQzwWd8tyLNIZNszueAlG8jYENo5GfTuB3Zc0GITYQnqLvHNsvA0'
 [rhea.users.groups.john]
   gid = 1337
+[rhea.networking]
+  defaultGateway = "192.168.240.1"
+  interfaces.eth0.ipv4.addresses = [
+    { address = "192.168.240.133", prefixLength = 24 }
+  ]
 
 [eris]
   public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
