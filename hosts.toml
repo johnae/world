@@ -6,6 +6,7 @@
     "profiles/hidpi",
 #    "profiles/k3s-node",
     "profiles/server",
+    "profiles/autoupgrade",
     "profiles/state",
     "profiles/uuid_disk_crypt",
   ]
@@ -28,6 +29,7 @@
     "profiles/hidpi",
 #    "profiles/k3s-node",
     "profiles/server",
+    "profiles/autoupgrade",
     "profiles/state",
     "profiles/uuid_disk_crypt",
   ]
@@ -49,6 +51,7 @@
     "profiles/default_fs",
     "profiles/hidpi",
 #    "profiles/k3s-server",
+    "profiles/autoupgrade",
     "profiles/server",
     "profiles/state",
     "profiles/uuid_disk_crypt",
