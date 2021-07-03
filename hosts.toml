@@ -16,7 +16,7 @@
   gid = 1337
 [hyperion.networking]
   defaultGateway = "192.168.240.1"
-[[hyperion.networking.eth0.ipv4.addresses]]
+[[hyperion.networking.interfaces.eth0.ipv4.addresses]]
   address = "192.168.240.122"
   prefixLength = 24
 
