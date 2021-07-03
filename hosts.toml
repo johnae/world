@@ -1,10 +1,9 @@
 [hyperion]
-  public_key = "xxxxx"
+  publicKey = "xxxxx"
   imports = [
     "hardware/nuc",
     "profiles/default_fs",
     "profiles/hidpi",
-#    "profiles/k3s-node",
     "profiles/server",
     "profiles/autoupgrade",
     "profiles/state",
@@ -17,17 +16,16 @@
   gid = 1337
 [hyperion.networking]
   defaultGateway = "192.168.240.1"
-  interfaces.eth0.ipv4.addresses = [
-    { address = "192.168.240.122", prefixLength = 24 }
-  ]
+[[hyperion.networking.eth0.ipv4.addresses]]
+  address = "192.168.240.122"
+  prefixLength = 24
 
 [titan]
-  public_key = "xxxxx"
+  publicKey = "xxxxx"
   imports = [
     "hardware/nuc",
     "profiles/default_fs",
     "profiles/hidpi",
-#    "profiles/k3s-node",
     "profiles/server",
     "profiles/autoupgrade",
     "profiles/state",
@@ -40,12 +38,12 @@
   gid = 1337
 [titan.networking]
   defaultGateway = "192.168.240.1"
-  interfaces.eth0.ipv4.addresses = [
-    { address = "192.168.240.144", prefixLength = 24 }
-  ]
+[[titan.networking.interfaces.eth0.ipv4.addresses]]
+  address = "192.168.240.144"
+  prefixLength = 24
 
 [rhea]
-  public_key = "xxxxx"
+  publicKey = "xxxxx"
   imports = [
     "hardware/macmini",
     "profiles/default_fs",
@@ -63,12 +61,12 @@
   gid = 1337
 [rhea.networking]
   defaultGateway = "192.168.240.1"
-  interfaces.eth0.ipv4.addresses = [
-    { address = "192.168.240.133", prefixLength = 24 }
-  ]
+[[rhea.networking.interfaces.eth0.ipv4.addresses]]
+  address = "192.168.240.133"
+  prefixLength = 24
 
 [eris]
-  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
   imports = [
     "hardware/x570",
     "profiles/default_fs",
@@ -78,8 +76,8 @@
     "profiles/interception-tools",
     "profiles/secrets",
     "profiles/state",
-    "profiles/yubikey",
     "profiles/tailscale",
+    "profiles/yubikey",
   ]
 [eris.age.secrets.spotnix]
   file = "secrets/spotnix.age"
@@ -125,7 +123,7 @@
   ]
 
 [io]
-  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5WClmubgehZKXvGwuLH621Nd5IMIxh8HWZf0lUW47M"
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5WClmubgehZKXvGwuLH621Nd5IMIxh8HWZf0lUW47M"
   imports = [
     "hardware/xps9300",
     "profiles/default_fs",
@@ -135,6 +133,7 @@
     "profiles/pcscd",
     "profiles/secrets",
     "profiles/state",
+    "profiles/tailscale",
     "profiles/yubikey",
   ]
 [io.age.secrets.spotnix]
@@ -181,7 +180,7 @@
   ]
 
 [carbon]
-  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOsLzBkJNFdXKdXcAaMQ4VCzJ/9kBiP2xkwnMXCSmR2Z"
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOsLzBkJNFdXKdXcAaMQ4VCzJ/9kBiP2xkwnMXCSmR2Z"
   imports = [
     "hardware/x1-carbon",
     "profiles/default_fs",
