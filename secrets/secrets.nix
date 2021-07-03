@@ -3,7 +3,7 @@ let
     attrValues mapAttrs fromTOML readFile hasAttr;
 
   hosts = mapAttrs (_: value: {
-    inherit (value) public_key;
+    inherit (value) publicKey;
     secrets = if hasAttr "age" value then
       attrValues (mapAttrs (_: s:
         baseNameOf s.file
@@ -15,7 +15,7 @@ let
   hostKeys = secretFile: filter (v: v!=null)
     (attrValues (mapAttrs (_: h:
       if any (v: v == secretFile) h.secrets then
-        h.public_key
+        h.publicKey
       else null
     ) hosts));
 
