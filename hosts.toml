@@ -7,7 +7,6 @@ imports = [
   "profiles/server",
   "profiles/autoupgrade",
   "profiles/state",
-  "profiles/secrets",
   "profiles/uuid_disk_crypt",
 ]
 [hyperion.users.users.john]
@@ -43,7 +42,6 @@ imports = [
   "profiles/server",
   "profiles/autoupgrade",
   "profiles/state",
-  "profiles/secrets",
   "profiles/uuid_disk_crypt",
 ]
 [titan.users.users.john]
@@ -79,7 +77,6 @@ imports = [
   "profiles/autoupgrade",
   "profiles/server",
   "profiles/state",
-  "profiles/secrets",
   "profiles/uuid_disk_crypt",
 ]
 [rhea.users.users.john]
@@ -110,7 +107,6 @@ imports = [
   "profiles/pcscd",
   "profiles/hidpi",
   "profiles/interception-tools",
-  "profiles/secrets",
   "profiles/state",
   "profiles/tailscale",
   "profiles/yubikey",
@@ -167,7 +163,6 @@ imports = [
   "profiles/interception-tools",
   "profiles/laptop",
   "profiles/pcscd",
-  "profiles/secrets",
   "profiles/state",
   "profiles/tailscale",
   "profiles/yubikey",
@@ -223,7 +218,6 @@ imports = [
   "profiles/interception-tools",
   "profiles/laptop",
   "profiles/pcscd",
-  "profiles/secrets",
   "profiles/state",
   "profiles/tailscale",
   "profiles/yubikey",

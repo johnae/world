@@ -12,10 +12,12 @@ let
   else {};
   hasState = hasAttr "state" config.environment &&
              (length (attrNames config.environment.state)) > 0;
+
+  networking = if hasAttr "networking" hostConfig then { inherit (hostConfig) networking; } else {};
 in
 
 {
-  imports = [ secrets ];
+  imports = [ secrets networking ];
 
   system.activationScripts.agenixRoot.deps = mkIf hasState [ "stateSetup" ];
   system.activationScripts.agenix.deps = mkIf hasState [ "stateSetup" ];
