@@ -17,6 +17,7 @@ hashedPassword = '$6$Juk1xlDWz45N5dGc$W.BxolEvo.yWR3DgqzErIdXYYCXq4TjauGN8iA/kdl
 gid = 1337
 [hyperion.networking]
 defaultGateway = "192.168.240.1"
+wireless.iwd.enable = true
 [hyperion.services.write-iwd-secrets]
 enable = true
 [hyperion.age.secrets.wifi-networks]
@@ -47,6 +48,7 @@ hashedPassword = '$6$6yT8x5V.3tTyRN2g$idNICkxytVFU6SR9DaafbU9W6.0qVdjyKMDzJCRWC/
 gid = 1337
 [titan.networking]
 defaultGateway = "192.168.240.1"
+wireless.iwd.enable = true
 [titan.age.secrets.wifi-networks]
 file = "secrets/wifi-networks.age"
 [titan.services.write-iwd-secrets]
@@ -81,6 +83,7 @@ enable = true
 file = "secrets/wifi-networks.age"
 [rhea.networking]
 defaultGateway = "192.168.240.1"
+wireless.iwd.enable = true
 [[rhea.networking.interfaces.eth0.ipv4.addresses]]
 address = "192.168.240.143"
 prefixLength = 24
