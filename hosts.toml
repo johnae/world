@@ -1,5 +1,5 @@
 [hyperion]
-publicKey = "xxxxx"
+publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMoTdeqiDgd0BjhgDu96R+fD1s3PNmAB0UgHFet+IPhS"
 imports = [
   "hardware/nuc",
   "profiles/default_fs",
