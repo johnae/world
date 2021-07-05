@@ -7,6 +7,7 @@ imports = [
   "profiles/server",
   "profiles/autoupgrade",
   "profiles/state",
+  "profiles/secrets",
   "profiles/uuid_disk_crypt",
 ]
 [hyperion.users.users.john]
@@ -16,6 +17,10 @@ hashedPassword = '$6$Juk1xlDWz45N5dGc$W.BxolEvo.yWR3DgqzErIdXYYCXq4TjauGN8iA/kdl
 gid = 1337
 [hyperion.networking]
 defaultGateway = "192.168.240.1"
+[hyperion.services.write-iwd-secrets]
+enable = true
+[hyperion.age.secrets.wifi-networks]
+file = "secrets/wifi-networks.age"
 [[hyperion.networking.interfaces.eth0.ipv4.addresses]]
 address = "192.168.240.141"
 prefixLength = 24
@@ -32,6 +37,7 @@ imports = [
   "profiles/server",
   "profiles/autoupgrade",
   "profiles/state",
+  "profiles/secrets",
   "profiles/uuid_disk_crypt",
 ]
 [titan.users.users.john]
@@ -41,6 +47,10 @@ hashedPassword = '$6$6yT8x5V.3tTyRN2g$idNICkxytVFU6SR9DaafbU9W6.0qVdjyKMDzJCRWC/
 gid = 1337
 [titan.networking]
 defaultGateway = "192.168.240.1"
+[titan.age.secrets.wifi-networks]
+file = "secrets/wifi-networks.age"
+[titan.services.write-iwd-secrets]
+enable = true
 [[titan.networking.interfaces.eth0.ipv4.addresses]]
 address = "192.168.240.142"
 prefixLength = 24
@@ -57,6 +67,7 @@ imports = [
   "profiles/autoupgrade",
   "profiles/server",
   "profiles/state",
+  "profiles/secrets",
   "profiles/uuid_disk_crypt",
 ]
 [rhea.users.users.john]
@@ -64,6 +75,10 @@ uid = 1337
 hashedPassword = '$6$NH36UuVGJCVzhfL$K/73aYEiyB8xYrj03A2stxXB4cFV2bPHe6WQzwWd8tyLNIZNszueAlG8jYENo5GfTuB3Zc0GITYQnqLvHNsvA0'
 [rhea.users.groups.john]
 gid = 1337
+[rhea.services.write-iwd-secrets]
+enable = true
+[rhea.age.secrets.wifi-networks]
+file = "secrets/wifi-networks.age"
 [rhea.networking]
 defaultGateway = "192.168.240.1"
 [[rhea.networking.interfaces.eth0.ipv4.addresses]]
