@@ -17,7 +17,10 @@ gid = 1337
 [hyperion.networking]
 defaultGateway = "192.168.240.1"
 [[hyperion.networking.interfaces.eth0.ipv4.addresses]]
-address = "192.168.240.122"
+address = "192.168.240.141"
+prefixLength = 24
+[[hyperion.networking.interfaces.wlan0.ipv4.addresses]]
+address = "192.168.240.151"
 prefixLength = 24
 
 [titan]
@@ -39,7 +42,10 @@ gid = 1337
 [titan.networking]
 defaultGateway = "192.168.240.1"
 [[titan.networking.interfaces.eth0.ipv4.addresses]]
-address = "192.168.240.144"
+address = "192.168.240.142"
+prefixLength = 24
+[[titan.networking.interfaces.wlan0.ipv4.addresses]]
+address = "192.168.240.152"
 prefixLength = 24
 
 [rhea]
@@ -61,7 +67,10 @@ gid = 1337
 [rhea.networking]
 defaultGateway = "192.168.240.1"
 [[rhea.networking.interfaces.eth0.ipv4.addresses]]
-address = "192.168.240.133"
+address = "192.168.240.143"
+prefixLength = 24
+[[rhea.networking.interfaces.wlan0.ipv4.addresses]]
+address = "192.168.240.153"
 prefixLength = 24
 
 [eris]
