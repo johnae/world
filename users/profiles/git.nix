@@ -6,7 +6,7 @@ let
 in
 {
   programs.git = {
-    userName = username;
+    userName = extraConfig.userFullName;
     userEmail = extraConfig.userEmail;
     enable = true;
     delta = {
