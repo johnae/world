@@ -55,6 +55,13 @@ in
       "x-scheme-handler/https" = "firefox.desktop";
       "x-scheme-handler/about" = "firefox.desktop";
       "x-scheme-handler/unknown" = "firefox.desktop";
+      "x-scheme-handler/chrome" = "firefox.desktop";
+      "application/x-exension-htm" = "firefox.desktop";
+      "application/x-exension-html" = "firefox.desktop";
+      "application/x-exension-shtml" = "firefox.desktop";
+      "application/xhtml+xml" = "firefox.desktop";
+      "application/x-exension-xhtml" = "firefox.desktop";
+      "application/x-exension-xht" = "firefox.desktop";
     };
   };
 
