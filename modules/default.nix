@@ -4,6 +4,5 @@
     ./cleanboot.nix
     ./state.nix
     ./sleep-management.nix
-    ./toml-config.nix
   ];
 }

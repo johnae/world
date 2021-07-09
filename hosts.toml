@@ -1,6 +1,6 @@
 [hyperion]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMoTdeqiDgd0BjhgDu96R+fD1s3PNmAB0UgHFet+IPhS"
-imports = [
+profiles = [
   "hardware/nuc",
   "profiles/default_fs",
   "profiles/hidpi",
@@ -21,21 +21,13 @@ openssh.authorizedKeys.keys = [
 gid = 1337
 [hyperion.networking]
 defaultGateway = "192.168.240.1"
-#wireless.iwd.enable = true
-#[hyperion.services]
-#write-iwd-secrets.enable = true
-#[hyperion.age.secrets.wifi-networks]
-#file = "secrets/wifi-networks.age"
 [[hyperion.networking.interfaces.eth0.ipv4.addresses]]
 address = "192.168.240.141"
 prefixLength = 24
-#[[hyperion.networking.interfaces.wlan0.ipv4.addresses]]
-#address = "192.168.240.151"
-#prefixLength = 24
 
 [titan]
 publicKey = "xxxxx"
-imports = [
+profiles = [
   "hardware/nuc",
   "profiles/default_fs",
   "profiles/hidpi",
@@ -56,21 +48,13 @@ openssh.authorizedKeys.keys = [
 gid = 1337
 [titan.networking]
 defaultGateway = "192.168.240.1"
-#wireless.iwd.enable = true
-#[titan.age.secrets.wifi-networks]
-#file = "secrets/wifi-networks.age"
-#[titan.services]
-#write-iwd-secrets.enable = true
 [[titan.networking.interfaces.eth0.ipv4.addresses]]
 address = "192.168.240.142"
 prefixLength = 24
-#[[titan.networking.interfaces.wlan0.ipv4.addresses]]
-#address = "192.168.240.152"
-#prefixLength = 24
 
 [rhea]
 publicKey = "xxxxx"
-imports = [
+profiles = [
   "hardware/macmini",
   "profiles/default_fs",
   "profiles/hidpi",
@@ -84,23 +68,15 @@ uid = 1337
 hashedPassword = '$6$NH36UuVGJCVzhfL$K/73aYEiyB8xYrj03A2stxXB4cFV2bPHe6WQzwWd8tyLNIZNszueAlG8jYENo5GfTuB3Zc0GITYQnqLvHNsvA0'
 [rhea.users.groups.john]
 gid = 1337
-#[rhea.services]
-#write-iwd-secrets.enable = true
-#[rhea.age.secrets.wifi-networks]
-#file = "secrets/wifi-networks.age"
 [rhea.networking]
 defaultGateway = "192.168.240.1"
-#wireless.iwd.enable = true
 [[rhea.networking.interfaces.eth0.ipv4.addresses]]
 address = "192.168.240.143"
 prefixLength = 24
-#[[rhea.networking.interfaces.wlan0.ipv4.addresses]]
-#address = "192.168.240.153"
-#prefixLength = 24
 
 [eris]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
-imports = [
+profiles = [
   "hardware/x570",
   "profiles/default_fs",
   "profiles/desktop",
@@ -156,7 +132,7 @@ profiles = [
 
 [io]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5WClmubgehZKXvGwuLH621Nd5IMIxh8HWZf0lUW47M"
-imports = [
+profiles = [
   "hardware/xps9300",
   "profiles/default_fs",
   "profiles/hidpi",
@@ -212,10 +188,11 @@ profiles = [
 
 [carbon]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOsLzBkJNFdXKdXcAaMQ4VCzJ/9kBiP2xkwnMXCSmR2Z"
-imports = [
+profiles = [
   "hardware/x1-carbon",
   "profiles/default_fs",
   "profiles/interception-tools",
+  "profiles/home-manager",
   "profiles/laptop",
   "profiles/pcscd",
   "profiles/state",
@@ -233,9 +210,10 @@ file = "secrets/wifi-networks.age"
 [carbon.users.users.john]
 uid = 1337
 hashedPassword = '$6$7D0/IXD6AM$9QRdv2TlnbtCFgwOMUU5NDRakIXLvt1xx3s0AtRaUyqnsg8n8jEPOSHfGjiX41dveTKP8a.2qjF731Ie0VNSz0'
+shell = "fish"
 [carbon.users.groups.john]
 gid = 1337
-[carbon.users.john]
+[carbon.userConfiguration.john]
 email = "john@insane.se"
 fullName = "John Axel Eriksson"
 githubUser = "johnae"

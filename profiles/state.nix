@@ -1,5 +1,10 @@
-{...}:
+{config, lib, ...}:
 
+let
+  inherit (lib) mapAttrs' nameValuePair filterAttrs;
+  inherit (builtins) toString;
+  users = config.users.users;
+in
 {
   environment.state."/keep" =
     {
@@ -19,5 +24,40 @@
         "/etc/ssh/ssh_host_rsa_key.pub"
         "/etc/ssh/ssh_host_ed25519_key.pub"
       ];
+
+      users = mapAttrs' (userName: conf:
+        nameValuePair (toString conf.uid) {
+          directories = [
+            "/home/${userName}/Downloads"
+            "/home/${userName}/Documents"
+            "/home/${userName}/Development"
+            "/home/${userName}/Photos"
+            "/home/${userName}/Pictures"
+            "/home/${userName}/Games"
+            "/home/${userName}/Sync"
+            "/home/${userName}/.local/share/direnv"
+            "/home/${userName}/.local/share/password-store"
+            "/home/${userName}/.local/share/fish"
+            "/home/${userName}/.local/share/containers"
+            "/home/${userName}/.local/share/Steam"
+            "/home/${userName}/.local/share/vulkan"
+            "/home/${userName}/.mail"
+            "/home/${userName}/.cargo"
+            "/home/${userName}/.cache/mu"
+            "/home/${userName}/.cache/nix"
+            "/home/${userName}/.cache/nix-index"
+            "/home/${userName}/.cache/rbw"
+            "/home/${userName}/.mozilla/firefox/default"
+            "/home/${userName}/.gnupg"
+            "/home/${userName}/.config/gcloud"
+            "/home/${userName}/.emacs.d"
+          ];
+          files = [
+            "/home/${userName}/.kube/config"
+            "/home/${userName}/.ssh/known_hosts"
+            "/home/${userName}/.spotify_token_cache.json"
+          ];
+        }
+      ) (filterAttrs (_: user: user.isNormalUser) users);
     };
 }

@@ -50,13 +50,17 @@
       });
 
       hosts = mapAttrs (hostname: config:
+        let
+          profiles = config.profiles;
+          cfg = builtins.removeAttrs config ["profiles"];
+        in
         {
-        specialArgs.hostConfig = config;
+        specialArgs.hostConfig = cfg;
         configuration.imports = (map (item:
           if pathExists (toString (./. + "/${item}")) then
             (./. + "/${item}")
           else (./. + "/${item}.nix")
-        ) config.imports) ++ (mapAttrsToList (name: value: ./. + "/users/${name}") config.users.users);
+        ) profiles) ++ [ ./modules/toml-config.nix ];
       }) (fromTOML (readFile ./hosts.toml));
 
       systemConfig = hostName: host:
