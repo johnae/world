@@ -58,7 +58,7 @@ jobs:
           trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
           experimental-features = nix-command flakes
     - uses: cachix/cachix-action@v10
-      if: ${{ matrix.pkg != "pxebooter" }}
+      if: ${{ matrix.pkg != 'pxebooter' }}
       with:
         name: insane
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
