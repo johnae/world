@@ -62,7 +62,9 @@ jobs:
         CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_SIGNING_KEY }}
       run: |
         nix build .#$PKG -L
-        readlink result | nix shell nixpkgs#cachix -c cachix push insane
+        if [ "$PKG" != "pxebooter" ]; then
+          readlink result | nix shell nixpkgs#cachix -c cachix push insane
+        fi
 
   build_host:
     needs: [create_host_matrix, build_package]
