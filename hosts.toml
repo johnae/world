@@ -100,7 +100,7 @@ uid = 1337
 hashedPassword = '$6$RG3QgdVr6A5s524$FRVNXOYWYCNXf6cH/gV4u7g6sffffznBnbXZGHysuWVHGYPpeLfuDuXEJHK.KUrkVCfPXFTTsCLJaj2Q6ATkC1'
 [eris.users.groups.john]
 gid = 1337
-[eris.users.john]
+[eris.userConfiguration.john]
 email = "john@insane.se"
 fullName = "John Axel Eriksson"
 githubUser = "johnae"
@@ -156,7 +156,7 @@ uid = 1337
 hashedPassword = '$6$mJA6xE6ZcfY9rn1$ym/OZ02gGK6APaoa9qTjhzWkyxokJ8ldqUt/x3nmGaAsCkMKWmWcB0guYO2ydtifN3EVGygcSZXrB4tLVMZpz0'
 [io.users.groups.john]
 gid = 1337
-[io.users.john]
+[io.userConfiguration.john]
 email = "john@insane.se"
 fullName = "John Axel Eriksson"
 githubUser = "johnae"
