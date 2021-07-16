@@ -54,11 +54,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1626400145,
-        "narHash": "sha256-exBQYMBJW4cDLrN7aJswuMxjwvvxe8fM1TTwHigdc6M=",
+        "lastModified": 1626456493,
+        "narHash": "sha256-lH9uzF5E4gOx3qw0hxSYVWDVoR1gJA2NSQWxTGuMNcM=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "4f428ff451cdd3f1e013306428e580c02ac72c43",
+        "rev": "47a84eaa4dc1cf443e2e0edd36d751bc208abfa6",
         "type": "github"
       },
       "original": {
@@ -365,7 +365,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-rCWOw8P2I3rnYS2k1W4/qG1sETdDFQMr4ghEICU2CRg=",
+        "narHash": "sha256-xq6vVBMmwdE0n+sqquIXM+qpsSqFXvFB1DLMUFB0ORI=",
         "path": "./packages",
         "type": "path"
       },
