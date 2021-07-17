@@ -34,11 +34,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1626456493,
-        "narHash": "sha256-lH9uzF5E4gOx3qw0hxSYVWDVoR1gJA2NSQWxTGuMNcM=",
+        "lastModified": 1626486593,
+        "narHash": "sha256-eD1x7SfXe/g9wavIbEBylol1DnoWh3YH6grJlttXOLE=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "47a84eaa4dc1cf443e2e0edd36d751bc208abfa6",
+        "rev": "9a1c7be0e49e50bb541b27ee1b95d6c8688cde5d",
         "type": "github"
       },
       "original": {
@@ -55,11 +55,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1626452118,
-        "narHash": "sha256-1sOG+ptSxOUdfTfdlyYtF2jxFsnNXxmLhc/LpM75Qck=",
+        "lastModified": 1626488791,
+        "narHash": "sha256-e6KrY88c7wEFW8aLiDa/kHJxMcsuwWCVrcUHyEhAK5I=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "e996b23f00f1081ee18f42be68217ef86b2986d4",
+        "rev": "3defaf1d83ac3875904f1b961d37efe7acabb68a",
         "type": "github"
       },
       "original": {
@@ -206,11 +206,12 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1625954936,
-        "narHash": "sha256-SRCR1sPRr2zqbTvNfkN/uZ/7OgW5orY0IOjU2QWT3jo=",
-        "path": "/nix/store/c8lcvnkj78g0nxjg619nn590pdvsqbf3-source",
-        "rev": "8743b115bbac05b0dd802149594c747bbab1de26",
-        "type": "path"
+        "lastModified": 1626487777,
+        "narHash": "sha256-spbRJPn645H9fdmnNs/fUMmVDjFEIlMH91I2NdFNHpo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "6e5f2d2b0105aea7aa925dd9eaa61d59317fcefe",
+        "type": "github"
       },
       "original": {
         "id": "nixpkgs",
@@ -324,11 +325,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1626385367,
-        "narHash": "sha256-L3ihlq4bGTrWBGvIppRGup+yPo2keS1YGhopFJ6AIwY=",
+        "lastModified": 1626443303,
+        "narHash": "sha256-348YlY3Zrc8SA/k5BhT8q/L70rPexBuOwxemlaU0/IU=",
         "owner": "rust-analyzer",
         "repo": "rust-analyzer",
-        "rev": "ed83b243aaf776ff8287b273ef041d2fd4547b80",
+        "rev": "a2f83c956e277b23e20ea2f4f0ac8c5034fe2507",
         "type": "github"
       },
       "original": {
