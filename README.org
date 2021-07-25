@@ -4,7 +4,6 @@
 #+TOC: true
 #+STARTUP: fninline overview
 
-
 This is a [[https://nixos.org][NixOS]] configuration repository for all my machines and custom packages (i.e not part of [[https://github.com/nixos/nixpkgs][nixpkgs]] yet). In some sense it contains my world, which is how it got its name.
 
 It's based on a relatively recent feature of the [[https://nixos.org][Nix package manager]]
@@ -22,6 +21,36 @@ Currently I PXE boot the (mostly automatic) installer which will format disks an
 You may have to turn off or tweak your firewall for the above to work. I've yet to do anything specific for that but I guess you could probably use the [[https://search.nixos.org/options?channel=21.05&from=0&size=50&sort=relevance&query=pixiecore][NixOS configuration options for pxebooting]] which would handle the firewall for you. But since this is usually a one-off thing for me I don't use that.
 
 Anyway, after running the above command you should be able to pxeboot a machine into the installer. You will then be asked which host to install and after that it's mostly automatic - except for asking you what password to use to unlock the disk.
+
+Installing without pxe booting is quite easy as well. Just download a recent installer from [[https://nixos.org/download.html#nixos-iso][https://nixos.org/download.html#nixos-iso]] and enable flakes after booting it:
+
+#+BEGIN_SRC sh
+  mkdir -p /etc/nix
+  cat<<EOF>>/etc/nix/nix.conf
+  experimental-features = nix-command flakes ca-references
+  EOF
+#+END_SRC
+
+You may want to add some binary caches to the nix conf as well, otherwise there'll be a bit of package building going on as part of the install.
+
+Then proceed to clone this repo:
+
+#+BEGIN_SRC sh
+  cd /tmp
+  git clone https://github.com/johnae/world
+  cd world
+#+END_SRC
+
+After that, just do:
+
+#+BEGIN_SRC sh
+  host=hello
+  nix build .#"$host"-diskformat
+  ./result/bin/diskformat
+  nixos-install --flake .#"$host" --no-root-passwd --impure
+#+END_SRC
+
+The pxebooter just automates the above in a nicer fashion.
 
 * Updating an existing machine
 
