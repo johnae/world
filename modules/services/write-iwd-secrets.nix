@@ -29,8 +29,12 @@ in
         OIFS="$IFS"
         IFS=$'\n'
         for file in $(jq -r ". | keys | .[]" "$SECRETS"); do
+            SSID="$(basename "$file" .psk)"
             PreSharedKey="$(jq -r ".\"$file\".PreSharedKey" "$SECRETS")"
             Passphrase="$(jq -r ".\"$file\".Passphrase" "$SECRETS")"
+            if echo -n "$SSID" | grep -vq '^[a-zA-Z_0-9-]' >/dev/null; then
+              file="=$(echo -n "$file" | od -A n -t x1 | sed 's| *||g').psk"
+            fi
             echo Writing wifi network secrets to /var/lib/iwd/"$file"
             cat<<EOF>/var/lib/iwd/"$file"
         [Security]
