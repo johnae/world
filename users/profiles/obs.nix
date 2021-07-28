@@ -1,4 +1,4 @@
-{ pkgs, config, lib, options, ... }:
+{ pkgs, ... }:
 {
   programs.obs-studio = {
     enable = true;

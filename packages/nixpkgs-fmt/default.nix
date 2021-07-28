@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, inputs }:
+{ lib, rustPlatform, inputs }:
 rustPlatform.buildRustPackage {
   pname = "nixpkgs-fmt";
   version = inputs.nixpkgs-fmt.rev;

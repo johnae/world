@@ -1,4 +1,4 @@
-{ pkgs, config, nixosConfig, lib, options, ... }:
+{ pkgs, config, ... }:
 let
   home = config.home;
 in

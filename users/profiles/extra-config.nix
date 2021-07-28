@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options, ... }:
+{ lib, ... }:
 {
   options.home.extraConfig = {
     hostName = lib.mkOption

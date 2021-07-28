@@ -59,17 +59,17 @@
       inherit (nixpkgs.lib) genAttrs listToAttrs mapAttrsToList filterAttrs;
       inherit (builtins) filter attrNames pathExists toString mapAttrs hasAttr;
       supportedSystems = [ "x86_64-linux" ];
-      forAllSystems = f: genAttrs supportedSystems (system: f system);
+      forAllSystems = genAttrs supportedSystems;
       pkgs = forAllSystems (system: import nixpkgs {
         inherit system;
         overlays = mapAttrsToList (_: value: value) self.overlays;
       });
       nonFlakePkgList = filter (elem: ! (inputs.${elem} ? "sourceInfo") && pathExists (toString (./. + "/${elem}"))) (attrNames inputs);
-      exportedPackages = mapAttrs (name: value: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) self.overlays);
+      exportedPackages = mapAttrs (name: _: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) self.overlays);
     in
     {
       overlays = (
-        mapAttrs (_: value: value.overlay) (filterAttrs (n: v: v ? "overlay") inputs)
+        mapAttrs (_: value: value.overlay) (filterAttrs (_: v: v ? "overlay") inputs)
       )
       //
       (genAttrs nonFlakePkgList (key: (
@@ -95,7 +95,7 @@
       //
       {
         meson-581 = (final: prev: { meson-581 = prev.meson.overrideAttrs
-          (oa:
+          (_:
             rec {
               pname = "meson";
               version = "0.58.1";

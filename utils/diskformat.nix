@@ -1,4 +1,4 @@
-{ hostName, config, lib, writeStrictShellScriptBin, ... }:
+{ config, lib, writeStrictShellScriptBin, ... }:
 
 let
   inherit (lib) mapAttrsToList listToAttrs splitString concatStringsSep last flatten;

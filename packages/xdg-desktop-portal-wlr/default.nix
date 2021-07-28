@@ -5,7 +5,6 @@
 , pkgconfig
 , scdoc
 , makeWrapper
-, dbus_libs
 , git
 , cairo
 , pango

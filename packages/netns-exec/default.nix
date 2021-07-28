@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, inputs }:
+{ lib, rustPlatform, inputs }:
 rustPlatform.buildRustPackage {
   pname = "netns-exec";
   version = inputs.netns-exec.rev;

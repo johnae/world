@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 ## This requires certain things from your drive partitioning
 ## see ../installer/install.sh
 

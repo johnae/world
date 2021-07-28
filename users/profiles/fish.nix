@@ -1,4 +1,4 @@
-{ pkgs, config, lib, options, ... }:
+{ pkgs, lib, ... }:
 let
   commandNotFound = pkgs.writeShellScriptBin "command-not-found" ''
     # shellcheck disable=SC1091

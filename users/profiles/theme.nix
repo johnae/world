@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options, ... }:
+{ config, lib, ... }:
 let
   inherit (lib) mkOption mkMerge mkIf mkEnableOption types;
   cfg = config.base16-theme;

@@ -1,4 +1,4 @@
-{ config, hostName, lib, pkgs, inputs, ... }:
+{ lib, pkgs, inputs, ... }:
 let
   nixos-hardware = inputs.nixos-hardware;
 in

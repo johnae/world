@@ -1,7 +1,4 @@
-{ emacsPackages
-, fetchgit
-, writeText
-, notmuch
+{ notmuch
 , pandoc
 , pass
 , fish

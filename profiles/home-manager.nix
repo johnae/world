@@ -5,7 +5,7 @@ let
 in
 {
   home-manager.users = mapAttrs (user: conf:
-    { config, ... }:
+    { ... }:
     {
       imports = [
         ../users/profiles/home.nix

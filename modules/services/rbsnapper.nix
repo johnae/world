@@ -105,7 +105,7 @@ in
       type = types.port;
       example = 4567;
       default = 30022;
-      apply = val: toString (val);
+      apply = toString;
       description = ''
         SSH remote port to connect to.
       '';

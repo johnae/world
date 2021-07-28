@@ -1,9 +1,7 @@
-{ pkgs, config, lib, options, ... }:
-
-rec {
+{
   programs.alacritty = {
     enable = true;
-    settings = rec {
+    settings = {
       env = {
         TERM = "alacritty";
       };
@@ -35,22 +33,4 @@ rec {
       };
     };
   };
-
-  xdg.configFile."alacritty/alacritty-launcher.yml" = {
-    text =
-      lib.replaceStrings [ "\\\\" ] [ "\\" ] (
-        builtins.toJSON
-          (
-            programs.alacritty.settings // {
-              font.size = 28.0;
-              font.normal.family = "Roboto Mono";
-              colors = {
-                primary.background = "0x00374e";
-                primary.foreground = "0xD8DEE9";
-              };
-            }
-          )
-      );
-  };
-
 }

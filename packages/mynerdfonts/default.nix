@@ -29,10 +29,10 @@ let
   srcs = lib.attrsets.mapAttrsToList
     (
       fName:
-      fSha:
+      sha256:
       (fetchurl {
         url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/${fName}.zip";
-        sha256 = fSha;
+        inherit sha256;
       })
     )
     selectedFontsShas;

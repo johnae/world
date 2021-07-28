@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ lib, config, ... }:
 let
   inherit (lib.types) listOf attrsOf str int submodule;
   inherit (lib) mkOption stringAfter flatten
@@ -7,7 +7,6 @@ let
 
   cfg = config.environment.state;
   stateStoragePaths = attrNames cfg;
-  users = config.users.users;
   bindMounts =
     let
       eachStateRoot = stateRoot:
@@ -79,7 +78,7 @@ let
         users = mkOption
           {
             type = attrsOf
-              (submodule ({ config, name, ... }:
+              (submodule ({ name, ... }:
                 let
                   uid = name;
                   gid = uid;

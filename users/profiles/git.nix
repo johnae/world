@@ -1,7 +1,6 @@
-{ pkgs, config, lib, options, ... }:
+{ pkgs, config, ... }:
 
 let
-  username = config.home.username;
   extraConfig = config.home.extraConfig;
 in
 {

@@ -8,7 +8,6 @@
 , wayland
 , wayland-protocols
 , git
-, systemd
 , inputs
 }:
 

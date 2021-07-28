@@ -1,5 +1,3 @@
-{...}:
-
 {
   imports = [
     ./intel.nix

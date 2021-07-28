@@ -39,7 +39,7 @@
       inherit (builtins) substring pathExists fromTOML readFile listToAttrs filter;
 
       supportedSystems = [ "x86_64-linux" ];
-      forAllSystems = f: genAttrs supportedSystems (system: f system);
+      forAllSystems = genAttrs supportedSystems;
       pkgs = forAllSystems (system: import nixpkgs {
         inherit system;
         overlays = [
@@ -49,7 +49,7 @@
         ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
       });
 
-      hosts = mapAttrs (hostname: config:
+      hosts = mapAttrs (_: config:
         let
           profiles = config.profiles;
           cfg = builtins.removeAttrs config ["profiles"];
@@ -63,10 +63,8 @@
         ) profiles) ++ [ ./modules/toml-config.nix ];
       }) (fromTOML (readFile ./hosts.toml));
 
-      systemConfig = hostName: host:
-        let
-          system = "x86_64-linux";
-        in
+      toNixosConfig = hostName: host:
+        let system = "x86_64-linux"; in
         makeOverridable nixosSystem {
           inherit system;
           specialArgs = {
@@ -85,13 +83,10 @@
           ];
         };
 
-      toNixosConfig = hostName: hostConf: systemConfig hostName hostConf;
-
       toPxeBootSystemConfig = hostName:
         let
           system = "x86_64-linux";
-        in
-          let bootSystem = makeOverridable nixosSystem {
+          bootSystem = makeOverridable nixosSystem {
             inherit system;
             specialArgs = {
               pkgs = pkgs.${system};
@@ -102,7 +97,7 @@
               { system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}"; }
               { nixpkgs = { pkgs = pkgs.${system}; }; }
               inputs.nixpkgs.nixosModules.notDetected
-              ({ config, modulesPath, pkgs, lib, ... }: {
+              ({ modulesPath, pkgs, ... }: {
                  imports = [
                    "${modulesPath}/installer/netboot/netboot-minimal.nix"
                    ./cachix.nix
@@ -182,7 +177,7 @@
       nixosConfigurations = hostConfigurations;
 
       diskFormatters = mapAttrs' toDiskFormatter hostConfigurations;
-      exportedPackages = (mapAttrs (name: value: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) inputs.packages.overlays)) // { pxebooter = toPxeBootSystemConfig "pxebooter"; };
+      exportedPackages = (mapAttrs (name: _: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) inputs.packages.overlays)) // { pxebooter = toPxeBootSystemConfig "pxebooter"; };
 
     in
     {

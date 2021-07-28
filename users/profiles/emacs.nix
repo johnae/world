@@ -1,8 +1,8 @@
-{ pkgs, config, lib, options, ... }:
+{ pkgs, ... }:
 
-let
-  home = config.home;
-in
+#let
+#  home = config.home;
+#in
 {
   services.emacs = {
     enable = true;

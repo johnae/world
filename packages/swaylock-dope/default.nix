@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lib, blur, bash, jq, grim, sway, swaylock, mkStrictShellScript }:
+{ stdenv, blur, bash, jq, grim, sway, swaylock, mkStrictShellScript }:
 mkStrictShellScript {
   name = "swaylock-dope";
   src = ./swaylock-dope;

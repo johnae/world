@@ -1,4 +1,4 @@
-{ pkgs, config, lib, options, ... }:
+{ pkgs, ... }:
 let
   nordTheme = pkgs.fetchFromGitHub {
     owner = "arcticicestudio";

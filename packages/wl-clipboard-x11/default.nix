@@ -1,4 +1,4 @@
-{ stdenv, lib, bash, wl-clipboard, mkStrictShellScript }:
+{ bash, wl-clipboard, mkStrictShellScript }:
 let
   wl-copy = "${wl-clipboard}/bin/wl-copy";
   wl-paste = "${wl-clipboard}/bin/wl-paste";
