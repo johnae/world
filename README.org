@@ -22,7 +22,7 @@ You may have to turn off or tweak your firewall for the above to work. I've yet 
 
 Anyway, after running the above command you should be able to pxeboot a machine into the installer. You will then be asked which host to install and after that it's mostly automatic - except for asking you what password to use to unlock the disk.
 
-Installing without pxe booting is quite easy as well. Just download a recent installer from [[https://nixos.org/download.html#nixos-iso][https://nixos.org/download.html#nixos-iso]] and enable flakes after booting it:
+Installing without pxe booting should be quite easy as well. Just download a recent installer from [[https://nixos.org/download.html#nixos-iso][https://nixos.org/download.html#nixos-iso]] and enable flakes after booting it:
 
 #+BEGIN_SRC sh
   mkdir -p /etc/nix
@@ -30,8 +30,6 @@ Installing without pxe booting is quite easy as well. Just download a recent ins
   experimental-features = nix-command flakes ca-references
   EOF
 #+END_SRC
-
-You may want to add some binary caches to the nix conf as well, otherwise there'll be a bit of package building going on as part of the install.
 
 Then proceed to clone this repo:
 
@@ -44,13 +42,13 @@ Then proceed to clone this repo:
 After that, just do:
 
 #+BEGIN_SRC sh
-  host=hello
+  host=eris
   nix build .#"$host"-diskformat
   ./result/bin/diskformat
   nixos-install --flake .#"$host" --no-root-passwd --impure
 #+END_SRC
 
-The pxebooter just automates the above in a nicer fashion.
+The pxebooter just automates the above in a nicer fashion. Hosts are defined in ~hosts.toml~.
 
 * Updating an existing machine
 
@@ -71,7 +69,6 @@ or via a local clone of this repo:
 * Package updates etc
 
 Package updates and OS updates are automated through actions. The update action creates pull requests where all custom packages are built and then all machine configurations are built to test that things seem ok before merging. This should catch many issues coming from OS and package updates before they're deployed.
-
 
 * License
 [[https://choosealicense.com/licenses/mit][MIT]]
