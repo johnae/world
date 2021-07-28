@@ -18,11 +18,11 @@ Currently I PXE boot the (mostly automatic) installer which will format disks an
   nix develop -c world pixieboot
 #+END_SRC
 
-You may have to turn off or tweak your firewall for the above to work. I've yet to do anything specific for that but I guess you could probably use the [[https://search.nixos.org/options?channel=21.05&from=0&size=50&sort=relevance&query=pixiecore][NixOS configuration options for pxebooting]] which would handle the firewall for you. But since this is usually a one-off thing for me I don't use that.
+You may have to turn off or tweak your firewall for the above to work. I've yet to do anything specific for that but I guess you could probably use the [[https://search.nixos.org/options?channel=21.05&from=0&size=50&sort=relevance&query=pixiecore][NixOS configuration options for pixiecore]] which would handle the firewall for you. But since this is usually a one-off thing for me I don't use that. By the way, I'm using [[https://github.com/danderson/netboot/tree/master/pixiecore][pixiecore]] currently because it's super simple to use and setup as opposed to most other pxe boot solutions. Might be nice to also add [[https://netboot.xyz/][netboot.xyz]] for remote server setups.
 
 Anyway, after running the above command you should be able to pxeboot a machine into the installer. You will then be asked which host to install and after that it's mostly automatic - except for asking you what password to use to unlock the disk.
 
-Installing without pxe booting should be quite easy as well. Just download a recent installer from [[https://nixos.org/download.html#nixos-iso][https://nixos.org/download.html#nixos-iso]] and enable flakes after booting it:
+Installing without pxe booting should be quite easy as well, though slightly more involved. Just download a recent installer from [[https://nixos.org/download.html#nixos-iso][https://nixos.org/download.html#nixos-iso]] and enable flakes after booting it:
 
 #+BEGIN_SRC sh
   mkdir -p /etc/nix
@@ -49,6 +49,8 @@ After that, just do:
 #+END_SRC
 
 The pxebooter just automates the above in a nicer fashion. Hosts are defined in ~hosts.toml~.
+
+/Please note that the setup is quite tailored towards how I like it. For example: *all disks are encrypted using dm-crypt* and then on top of that formatted as *btrfs*, swap is automatically setup to a "reasonable" value that is possibly not ideal for a lot of use cases, ~/~ *is mounted as tmpfs and will therefore use some amount of RAM and it'll also be ephemeral* - a reboot results in a clean slate and you'll have to opt-in to what you want to keep./
 
 * Updating an existing machine
 
