@@ -11,7 +11,7 @@ called [[https://nixos.wiki/wiki/Flakes][flakes]]. Flakes are somewhat similar t
 
 * Installing a new machine
 
-Edit the [hosts.toml](hosts.toml) file and add a new host. Add the wanted profiles and other configuration. Commit and push them to this repository.
+Edit the [[hosts.toml][hosts.toml]] file and add a new host. Add the wanted profiles and other configuration. Commit and push them to this repository.
 Currently I PXE boot the (mostly automatic) installer which will format disks and install the system and configuration for the defined hosts. To PXE boot the installer, enable any necessary options in BIOS and then - on another machine on the network from a checkout of this repo - run:
 
 #+BEGIN_SRC sh
@@ -73,4 +73,4 @@ Package updates and OS updates are automated through actions. The update action 
 * License
 [[https://choosealicense.com/licenses/mit][MIT]]
 
-This does reference many packages with varying licenses so please only consider the code in this repo to be MIT licensed, the rest you'll have to look up yourself.
+This repository references many packages with varying licenses so please only consider the actual code in this repo to be MIT licensed.
