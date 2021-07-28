@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 with lib;
 let
   cfg = config.services.write-iwd-secrets;
@@ -33,7 +32,7 @@ in
             PreSharedKey="$(jq -r ".\"$file\".PreSharedKey" "$SECRETS")"
             Passphrase="$(jq -r ".\"$file\".Passphrase" "$SECRETS")"
             if echo -n "$SSID" | grep -vq '^[a-zA-Z_0-9-]' >/dev/null; then
-              file="=$(echo -n "$file" | od -A n -t x1 | sed 's| *||g').psk"
+              file="=$(echo -n "$SSID" | od -A n -t x1 | sed 's| *||g').psk"
             fi
             echo Writing wifi network secrets to /var/lib/iwd/"$file"
             cat<<EOF>/var/lib/iwd/"$file"
@@ -42,7 +41,6 @@ in
         Passphrase=$Passphrase
         EOF
         done
-        IFS="$OIFS"
       '';
       wantedBy = [ "network.target" ];
     };
