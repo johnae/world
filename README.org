@@ -48,7 +48,7 @@ After that, just do:
   nixos-install --flake .#"$host" --no-root-passwd --impure
 #+END_SRC
 
-The pxebooter just automates the above in a nicer fashion. Hosts are defined in ~hosts.toml~.
+The pxebooter just automates the above in a nicer fashion. Hosts are defined in [[hosts.toml][hosts.toml]].
 
 /Please note that the setup is quite tailored towards how I like it. For example: all disks are encrypted using dm-crypt and then on top of that formatted as btrfs, swap is automatically setup to a "reasonable" value that is possibly not ideal for a lot of use cases, root is mounted as tmpfs and will therefore use some amount of RAM and it'll also be ephemeral - a reboot results in a clean slate and you'll have to opt-in to what you want to keep./
 
