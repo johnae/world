@@ -21,6 +21,8 @@ You may have to turn off or tweak your firewall for the above to work. I've yet 
 
 Anyway, after running the above command you should be able to pxe boot a machine into the installer. You will then be asked which host to install and after that it's mostly automatic - except for asking you what password to use to unlock the disk.
 
+** Installing without pxe booting
+
 Installing without pxe booting should be quite easy as well, though slightly more involved. Just download a recent installer from [[https://nixos.org/download.html#nixos-iso][https://nixos.org/download.html#nixos-iso]] and enable flakes after booting it:
 
 #+BEGIN_SRC sh
