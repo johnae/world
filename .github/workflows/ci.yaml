@@ -7,6 +7,20 @@ on:
     - main
 
 jobs:
+  nix_lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v13
+      with:
+        install_url: https://nixos-nix-install-tests.cachix.org/serve/mk2axn706i2ai3zvlhb7mckiv796bgag/install
+        install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          experimental-features = nix-command flakes
+      run: |
+        nix develop -c world lint
+
   create_package_matrix:
     runs-on: ubuntu-latest
     outputs:

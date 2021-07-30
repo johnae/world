@@ -1,4 +1,4 @@
-{ writeStrictShellScriptBin, mkDevShell, nix-linter, agenix, age-plugin-yubikey, rage, pixiecore }:
+{ writeShellScriptBin, writeStrictShellScriptBin, mkDevShell, nix-linter, agenix, age-plugin-yubikey, rage, pixiecore }:
 
 let
 
@@ -25,13 +25,31 @@ let
     cat<<HELP
       Hello, world! Here's some things to do:
         help                                          -  this help output
+        lint                                          -  lint nix expressions
         repl                                          -  bit of a hacky way to get a repl (flakes are experimental still)
         pixieboot                                     -  start a pxebooter where all defined hosts in this repo are installable
     HELP
   '';
 
-  world = writeStrictShellScriptBin "world" ''
-    export PATH=${world-pixieboot}/bin:${world-help}/bin:${world-pixieboot}/bin:${world-repl}/bin:$PATH
+  world-lint = writeShellScriptBin "world-lint" ''
+    shopt -s globstar
+    # shellcheck disable=SC2016
+    lintout="$(mktemp lintout.XXXXXXX)"
+    trap 'rm -f $lintout' EXIT
+    ${nix-linter}/bin/nix-linter -W no-FreeLetInFunc -W no-SetLiteralUpdate ./**/*.nix | \
+      grep -v 'Unused argument `final`' | \
+      grep -v 'Unused argument `prev`' | \
+      grep -v 'Unused argument `plugins`' | \
+      grep -v 'Unused argument `isNixOS`' \
+      > "$lintout"
+    cat "$lintout"
+    if [ -s "$lintout" ]; then
+      exit 1
+    fi
+  '';
+
+  world = writeShellScriptBin "world" ''
+    export PATH=${world-pixieboot}/bin:${world-help}/bin:${world-pixieboot}/bin:${world-repl}/bin:${world-lint}/bin:$PATH
     cmd=''${1:-}
     if [ -z "$cmd" ]; then
       echo Command expected
