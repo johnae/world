@@ -18,7 +18,7 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           experimental-features = nix-command flakes
-      run: |
+    - run: |
         nix develop -c world lint
 
   create_package_matrix:
