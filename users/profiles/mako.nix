@@ -1,6 +1,6 @@
-{ pkgs, config, lib, options, ... }:
+{ pkgs, ... }:
 
-rec {
+{
   programs.mako = {
     enable = true;
     font = "Roboto";

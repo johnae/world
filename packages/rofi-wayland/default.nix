@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchFromGitHub
 , meson
 , ninja
 , pkg-config
@@ -15,7 +14,7 @@
 , wayland-protocols
 , xcbutilwm
 , xcbutilxrm
-, plugins ? [] ## we don't bother doing anything with this
+, plugins ? [] ## just here for compatibility
 , inputs
 }:
 

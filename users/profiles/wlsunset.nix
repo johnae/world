@@ -1,4 +1,3 @@
-{ pkgs, config, lib, options, ... }:
 {
   services.wlsunset = {
     enable = true;

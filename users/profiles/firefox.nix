@@ -1,4 +1,4 @@
-{ pkgs, config, lib, options, ... }:
+{ pkgs, ... }:
 let
   firefox = pkgs.firefox.override {
     extraNativeMessagingHosts = [ pkgs.tridactyl-native ];

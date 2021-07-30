@@ -1,4 +1,3 @@
-{...}:
 {
   fileSystems."/" = {
     device = "none";

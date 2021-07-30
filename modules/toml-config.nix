@@ -1,14 +1,14 @@
-{hostName, hostConfig, userProfiles, config, lib, pkgs, ...}:
+{hostConfig, userProfiles, config, lib, pkgs, ...}:
 
 let
   inherit (builtins) hasAttr isAttrs mapAttrs attrNames length isString pathExists;
   inherit (lib) mkIf mkOption concatStringsSep filterAttrs;
   inherit (lib.types) submodule listOf attrsOf str;
   cfgMapper = {
-    "age.secrets" = mapAttrs (name: value:
+    "age.secrets" = mapAttrs (_: value:
       value // { file = ../. + "/${value.file}"; }
     );
-    "users.users" = mapAttrs (name: value:
+    "users.users" = mapAttrs (_: value:
       value // {
         shell = if hasAttr "shell" value then
           pkgs.${value.shell}
@@ -42,7 +42,7 @@ in
       default = "xxxx";
     };
     userConfiguration = mkOption {
-      type = attrsOf (submodule ({ config, name, ...}:
+      type = attrsOf (submodule ({ name, ...}:
         {
           options = {
             name = mkOption {

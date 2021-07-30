@@ -1,4 +1,4 @@
-{ writeText, writeStrictShellScriptBin, mkDevShell, ripgrep }:
+{ writeStrictShellScriptBin, mkDevShell, ripgrep }:
 
 let
 

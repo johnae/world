@@ -1,4 +1,4 @@
-{ stdenv, lib, bash, gnugrep, socat, mkStrictShellScript }:
+{ bash, gnugrep, socat, mkStrictShellScript }:
 
 mkStrictShellScript {
   name = "netns-dbus-proxy";

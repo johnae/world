@@ -1,4 +1,4 @@
-{ hostName, config, lib, pkgs, inputs, ... }:
+{ pkgs, inputs, ... }:
 {
   imports = [
     ./defaults.nix

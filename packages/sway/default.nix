@@ -3,7 +3,6 @@
 , meson
 , ninja
 , pkgconfig
-, makeWrapper
 , substituteAll
 , scdoc
 , wayland

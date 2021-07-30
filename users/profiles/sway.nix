@@ -1,7 +1,5 @@
-{ pkgs, config, lib, options, ... }:
+{ pkgs, config, lib, ... }:
 let
-
-  kanshisvc = config.services.kanshi;
 
   swayservice = Description: ExecStart: {
     Unit = {
@@ -39,16 +37,6 @@ let
     else
     swaymsg 'input "*" xkb_layout us'
     fi
-  '';
-
-  randomBackground = pkgs.writeStrictShellScriptBin "random-background" ''
-    if [ ! -d "$HOME"/Pictures/backgrounds ] ||
-    [ "$(${pkgs.findutils}/bin/find "$HOME"/Pictures/backgrounds/ -type f | wc -l)" = "0" ]; then
-    echo "$HOME"/Pictures/default-background.jpg
-    exit
-    fi
-    ${pkgs.findutils}/bin/find "$HOME/Pictures/backgrounds" -type f | \
-    ${pkgs.coreutils}/bin/sort -R | ${pkgs.coreutils}/bin/tail -1
   '';
 
   randomPicsumBackground = pkgs.writeStrictShellScriptBin "random-picsum-background" ''
