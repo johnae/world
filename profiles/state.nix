@@ -41,6 +41,7 @@ in
             "/home/${userName}/.local/share/containers"
             "/home/${userName}/.local/share/Steam"
             "/home/${userName}/.local/share/vulkan"
+            "/home/${userName}/.local/share/qutebrowser"
             "/home/${userName}/.mail"
             "/home/${userName}/.cargo"
             "/home/${userName}/.cache/mu"
