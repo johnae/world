@@ -1,4 +1,4 @@
-{ writeShellScriptBin, writeStrictShellScriptBin, mkDevShell, nix-linter, agenix, age-plugin-yubikey, rage, pixiecore }:
+{ writeShellScriptBin, writeStrictShellScriptBin, mkDevShell, nix-linter, agenix, age-plugin-yubikey, rage, pixiecore, docker }:
 
 let
 
@@ -27,8 +27,14 @@ let
         help                                          -  this help output
         lint                                          -  lint nix expressions
         repl                                          -  bit of a hacky way to get a repl (flakes are experimental still)
+        container                                     -  run a nixpkgs container with world mount at /world
         pixieboot                                     -  start a pxebooter where all defined hosts in this repo are installable
     HELP
+  '';
+
+  world-container = writeShellScriptBin "world-container" ''
+    docker run -v ./:/world -w /world -ti --entrypoint bash --rm nixpkgs/nix-unstable -c \
+       'mkdir -p /etc/nix; echo "experimental-features = nix-command flakes ca-references" >> /etc/nix/nix.conf; exec $0'
   '';
 
   world-lint = writeShellScriptBin "world-lint" ''
@@ -49,7 +55,7 @@ let
   '';
 
   world = writeShellScriptBin "world" ''
-    export PATH=${world-pixieboot}/bin:${world-help}/bin:${world-pixieboot}/bin:${world-repl}/bin:${world-lint}/bin:$PATH
+    export PATH=${world-pixieboot}/bin:${world-help}/bin:${world-pixieboot}/bin:${world-repl}/bin:${world-lint}/bin:${world-container}/bin:$PATH
     cmd=''${1:-}
     if [ -z "$cmd" ]; then
       echo Command expected
