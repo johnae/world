@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v13
       with:
-        install_url: https://nixos-nix-install-tests.cachix.org/serve/mk2axn706i2ai3zvlhb7mckiv796bgag/install
+        install_url: https://nixos-nix-install-tests.cachix.org/serve/3awh5h293iz3blkix10c577f953xq9a2/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
@@ -43,7 +43,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v13
       with:
-        install_url: https://nixos-nix-install-tests.cachix.org/serve/mk2axn706i2ai3zvlhb7mckiv796bgag/install
+        install_url: https://nixos-nix-install-tests.cachix.org/serve/3awh5h293iz3blkix10c577f953xq9a2/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
@@ -60,7 +60,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v13
       with:
-        install_url: https://nixos-nix-install-tests.cachix.org/serve/mk2axn706i2ai3zvlhb7mckiv796bgag/install
+        install_url: https://nixos-nix-install-tests.cachix.org/serve/3awh5h293iz3blkix10c577f953xq9a2/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
@@ -78,7 +78,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v13
       with:
-        install_url: https://nixos-nix-install-tests.cachix.org/serve/mk2axn706i2ai3zvlhb7mckiv796bgag/install
+        install_url: https://nixos-nix-install-tests.cachix.org/serve/3awh5h293iz3blkix10c577f953xq9a2/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
@@ -104,7 +104,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v13
       with:
-        install_url: https://nixos-nix-install-tests.cachix.org/serve/mk2axn706i2ai3zvlhb7mckiv796bgag/install
+        install_url: https://nixos-nix-install-tests.cachix.org/serve/3awh5h293iz3blkix10c577f953xq9a2/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
