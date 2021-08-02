@@ -19,7 +19,21 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           experimental-features = nix-command flakes
     - run: |
-        nix develop -c world lint
+        nix shell nixpkgs#gnugrep nixpkgs#nix-linter -c bash <<'SH'
+          shopt -s globstar
+          lintout="$(mktemp lintout.XXXXXXX)"
+          trap 'rm -f $lintout' EXIT
+          nix-linter -W no-FreeLetInFunc -W no-SetLiteralUpdate ./**/*.nix | \
+             grep -v 'Unused argument `final`' | \
+             grep -v 'Unused argument `prev`' | \
+             grep -v 'Unused argument `plugins`' | \
+             grep -v 'Unused argument `isNixOS`' \
+             > "$lintout"
+          cat "$lintout"
+          if [ -s "$lintout" ]; then
+             exit 1
+          fi
+        SH
 
   create_package_matrix:
     runs-on: ubuntu-latest
