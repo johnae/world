@@ -172,6 +172,8 @@
           }
         );
 
+      worldUtils = import ./utils/world.nix { inherit (pkgs.x86_64-linux) writeShellScriptBin writeStrictShellScriptBin nix-linter pixiecore; };
+
       hostConfigurations = mapAttrs toNixosConfig hosts;
 
       nixosConfigurations = hostConfigurations;
@@ -182,12 +184,12 @@
     in
     {
       devShell = forAllSystems (system:
-        pkgs.${system}.callPackage ./devshell.nix { }
+        pkgs.${system}.callPackage ./devshell.nix { inherit worldUtils; }
       );
 
       inherit nixosConfigurations;
 
-      packages.x86_64-linux = diskFormatters // exportedPackages;
+      packages.x86_64-linux = diskFormatters // exportedPackages // worldUtils;
 
       github-actions-package-matrix = {
         os = [ "ubuntu-latest" ];
