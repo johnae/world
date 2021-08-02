@@ -1,4 +1,4 @@
-{ writeShellScriptBin, writeStrictShellScriptBin, mkDevShell, nix-linter, agenix, age-plugin-yubikey, rage, pixiecore, docker }:
+{ writeShellScriptBin, writeStrictShellScriptBin, mkDevShell, nix-linter, agenix, age-plugin-yubikey, rage, pixiecore }:
 
 let
 
