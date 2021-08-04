@@ -59,8 +59,7 @@ let
       echo run a nix container with this repo mounted at /world
       exit 0
     fi
-    docker run -v ./:/world -w /world -ti --entrypoint bash --rm nixpkgs/nix-unstable -c \
-       'mkdir -p /etc/nix; echo "experimental-features = nix-command flakes ca-references" >> /etc/nix/nix.conf; exec $0'
+    docker run --privileged -v /etc/nix/nix.conf:/etc/nix/nix.conf -v ./:/world -w /world -ti --entrypoint bash --rm nixpkgs/nix-unstable -c bash
   '';
 
   world-lint = writeShellScriptBin "world-lint" ''
