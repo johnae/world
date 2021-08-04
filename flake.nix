@@ -2,9 +2,7 @@
   description = "John's NixOS configurations";
 
   inputs = {
-    nixpkgs = {
-      url = "github:nixos/nixpkgs/nixos-unstable";
-    };
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     nur.url = "github:nix-community/NUR";
     fenix = {
@@ -179,7 +177,9 @@
       nixosConfigurations = hostConfigurations;
 
       diskFormatters = mapAttrs' toDiskFormatter hostConfigurations;
-      exportedPackages = (mapAttrs (name: _: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) inputs.packages.overlays)) // { pxebooter = toPxeBootSystemConfig "pxebooter"; };
+      exportedPackages = (mapAttrs (name: _: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) inputs.packages.overlays)) // { pxebooter = toPxeBootSystemConfig "pxebooter"; } // { dummy = pkgs.x86_64-linux.writeShellScriptBin "dummy" ''
+        ${pkgs.x86_64-linux.coreutils}/bin/ls -lah
+      ''; };
 
     in
     {
