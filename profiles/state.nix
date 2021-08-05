@@ -15,6 +15,7 @@ in
         "/var/lib/systemd/coredump"
         "/var/lib/containers"
         "/var/lib/tailscale"
+        "/var/lib/cups"
         "/root"
       ];
       files = [
