@@ -1,8 +1,9 @@
-{ writeShellScriptBin, writeStrictShellScriptBin, nix-linter, pixiecore }:
+{ writeShellScriptBin, writeStrictShellScriptBin, nix-linter, pixiecore, gnugrep, gnused, findutils, hostname }:
 
 let
 
   world-pixieboot = writeStrictShellScriptBin "world-pixieboot" ''
+    export PATH=${gnugrep}/bin:$PATH
     _WORLD_HELP=''${_WORLD_HELP:-}
     if [ -n "$_WORLD_HELP" ]; then
       echo start pixiecore for automated network installation
@@ -18,6 +19,7 @@ let
   '';
 
   world-repl = writeStrictShellScriptBin "world-repl" ''
+    export PATH=${hostname}/bin:$PATH
     _WORLD_HELP=''${_WORLD_HELP:-}
     if [ -n "$_WORLD_HELP" ]; then
       echo start a nix repl in host context
@@ -32,6 +34,7 @@ let
   '';
 
   world-help = writeStrictShellScriptBin "world-help" ''
+    export PATH=${gnugrep}/bin:${gnused}/bin:${findutils}/bin:$PATH
     _WORLD_HELP=''${_WORLD_HELP:-}
     if [ -n "$_WORLD_HELP" ]; then
       echo this help text
@@ -53,6 +56,7 @@ let
     done
   '';
 
+  ## requires docker configured on system since docker requires more than just the cli tools
   world-container = writeShellScriptBin "world-container" ''
     _WORLD_HELP=''${_WORLD_HELP:-}
     if [ -n "$_WORLD_HELP" ]; then
@@ -63,6 +67,7 @@ let
   '';
 
   world-lint = writeShellScriptBin "world-lint" ''
+    export PATH=${nix-linter}/bin:${gnugrep}/bin:${gnused}/bin:${findutils}/bin:$PATH
     _WORLD_HELP=''${_WORLD_HELP:-}
     if [ -n "$_WORLD_HELP" ]; then
       echo lint all nix files
@@ -72,7 +77,7 @@ let
     # shellcheck disable=SC2016
     lintout="$(mktemp lintout.XXXXXXX)"
     trap 'rm -f $lintout' EXIT
-    ${nix-linter}/bin/nix-linter -W no-FreeLetInFunc -W no-SetLiteralUpdate ./**/*.nix | \
+    nix-linter -W no-FreeLetInFunc -W no-SetLiteralUpdate ./**/*.nix | \
       grep -v 'Unused argument `final`' | \
       grep -v 'Unused argument `prev`' | \
       grep -v 'Unused argument `plugins`' | \

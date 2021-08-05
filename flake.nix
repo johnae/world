@@ -170,7 +170,8 @@
           }
         );
 
-      worldUtils = import ./utils/world.nix { inherit (pkgs.x86_64-linux) writeShellScriptBin writeStrictShellScriptBin nix-linter pixiecore; };
+      worldUtils = import ./utils/world.nix { inherit (pkgs.x86_64-linux) writeShellScriptBin writeStrictShellScriptBin
+        nix-linter pixiecore gnugrep gnused findutils hostname; };
 
       hostConfigurations = mapAttrs toNixosConfig hosts;
 
