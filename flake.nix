@@ -182,7 +182,11 @@
     in
     {
       devShell = forAllSystems (system:
-        pkgs.${system}.callPackage ./devshell.nix { inherit worldUtils; }
+        let syspkgs = pkgs.${system}; in
+        syspkgs.callPackage ./devshell.nix {
+          inherit worldUtils;
+          mkDevShell = syspkgs.callPackage inputs.nix-misc.lib.mkSimpleShell {};
+        }
       );
 
       inherit nixosConfigurations;

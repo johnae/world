@@ -150,16 +150,14 @@
     },
     "nix-misc": {
       "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixlib": "nixlib"
       },
       "locked": {
-        "lastModified": 1620680677,
-        "narHash": "sha256-N5UFEiBgf3QHxsZqgTT1YE29dnZAv8wnD6kK1LIyuPY=",
+        "lastModified": 1628153879,
+        "narHash": "sha256-fL3masgY6dl0hySG182utvyV6BMl0RKx9EFIJR50FSw=",
         "owner": "johnae",
         "repo": "nix-misc",
-        "rev": "c40722f5e77d32bba72e91aa6d8d1dcf2135f314",
+        "rev": "3d0ef4a62f8f39be940ffa0798ce55526bd39a47",
         "type": "github"
       },
       "original": {
@@ -169,6 +167,21 @@
       }
     },
     "nixlib": {
+      "locked": {
+        "lastModified": 1627777762,
+        "narHash": "sha256-Tiuvy3qzX0XYba5215U4x885y6QQrnFCEU6v7lZRn8A=",
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "rev": "e3950f15efbebaa33d5252ab8c49d5ebb25423c6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "type": "github"
+      }
+    },
+    "nixlib_2": {
       "locked": {
         "lastModified": 1624753224,
         "narHash": "sha256-ZUEcPzgU1w8ZYeEgfcpzeciYcZShQZbEfRN2tV+K2yQ=",
@@ -185,7 +198,7 @@
     },
     "nixos-generators": {
       "inputs": {
-        "nixlib": "nixlib",
+        "nixlib": "nixlib_2",
         "nixpkgs": [
           "nixpkgs"
         ]
