@@ -114,7 +114,9 @@
      ;
      packages.x86_64-linux = exportedPackages;
      devShell = forAllSystems (system:
-       pkgs.${system}.callPackage ./devshell.nix { }
+       pkgs.${system}.callPackage ./devshell.nix {
+         mkDevShell = pkgs.${system}.callPackage inputs.nix-misc.lib.mkSimpleShell {};
+       }
      );
     };
 }
