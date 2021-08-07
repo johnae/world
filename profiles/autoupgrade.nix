@@ -1,10 +1,10 @@
-{hostName, ...}:
+{hostName, lib, ...}:
 
 {
   system.autoUpgrade = {
     enable = true;
-    flake = "github:johnae/world#${hostName}";
-    allowReboot = true;
-    randomizedDelaySec = "30min";
+    flake = lib.mkDefault "github:johnae/world#${hostName}";
+    allowReboot = lib.mkDefault true;
+    randomizedDelaySec = lib.mkDefault "30min";
   };
 }
