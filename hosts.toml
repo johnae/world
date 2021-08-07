@@ -26,6 +26,7 @@ address = "192.168.240.141"
 prefixLength = 24
 [hyperion.system.autoUpgrade]
 dates = "*:0/15"
+randomizedDelaySec = "5min"
 
 [titan]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOteEiVr+H3Q1tSw1bGQfjbVWuPggc/+w1vVXSFde0Rt"
@@ -55,6 +56,7 @@ address = "192.168.240.142"
 prefixLength = 24
 [titan.system.autoUpgrade]
 dates = "*:0/15"
+randomizedDelaySec = "5min"
 
 [rhea]
 publicKey = "xxxxx"
@@ -79,7 +81,7 @@ address = "192.168.240.143"
 prefixLength = 24
 [rhea.system.autoUpgrade]
 dates = "*:0/15"
-randomizedDelaySec=5min
+randomizedDelaySec = "5min"
 
 [eris]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
