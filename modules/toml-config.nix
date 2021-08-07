@@ -2,7 +2,7 @@
 
 let
   inherit (builtins) hasAttr isAttrs mapAttrs attrNames length isString pathExists;
-  inherit (lib) mkIf mkOption concatStringsSep filterAttrs;
+  inherit (lib) mkIf mkOption concatStringsSep filterAttrs recursiveUpdate;
   inherit (lib.types) submodule listOf attrsOf str;
   cfgMapper = {
     "age.secrets" = mapAttrs (_: value:
@@ -73,7 +73,7 @@ in
     };
   };
 
-  config = (mapConfig [] hostConfig) // {
+  config = recursiveUpdate (mapConfig [] hostConfig) {
 
     nix.trustedUsers = attrNames
       (filterAttrs (_: user: user.isNormalUser) config.users.users);
