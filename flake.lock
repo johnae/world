@@ -54,11 +54,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1628270983,
-        "narHash": "sha256-dW14suc7y4mVdtmgKWiXnitE0bCAbDnD5X6ZNyA9srA=",
+        "lastModified": 1628356768,
+        "narHash": "sha256-MYnHBDAH1pF3jCvsnxjfECD2PP0t1ODVFH6SnzIc2FQ=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "e240bc9ff1f36646c8a56895f706528f773d260b",
+        "rev": "cd04543c0155979dc019213a434e71734455e903",
         "type": "github"
       },
       "original": {
@@ -75,11 +75,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1628218774,
-        "narHash": "sha256-afNH17Z3m8+qOGI190cZq7zvvtuv1Y+blOJNphN7EM8=",
+        "lastModified": 1628306552,
+        "narHash": "sha256-V6n0DoMzfxtrVSeQ8Tnkl/dW+HuvmySndeXsKAjE6A0=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "b7c5c67a2fdb5998179b8743c88c685c84ff5b9a",
+        "rev": "ea4f7a0c2ef0a0cdd43f1136d469471b9743bff6",
         "type": "github"
       },
       "original": {
@@ -159,11 +159,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1628287034,
-        "narHash": "sha256-pWMEpQQcKxBy0OKskFLXJHEyGYJIiMu/BUQjCWxGF38=",
+        "lastModified": 1628383476,
+        "narHash": "sha256-jLSjfO9zG5KS7Yik1Te4DtXDZenHVQ16k7bC+pQqOOE=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "b0d769691cc379c9ab91d3acec5d14e75c02c02b",
+        "rev": "59be1f4983ee3689de3172716a6c7e95a6a37bb7",
         "type": "github"
       },
       "original": {
@@ -306,11 +306,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1628299333,
-        "narHash": "sha256-p+qqQfKx+MwYhvhdgKBDfBeCDLrdPef6oqbNEvnRlIY=",
+        "lastModified": 1628384033,
+        "narHash": "sha256-DW0O28T1Q7RUjN+UnavjKUWUHgUZjAJESb1e/DJzPKw=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "e6c5a29c9f25fb8e963b3d16c6a9241730a4f629",
+        "rev": "c414342849b9ef7ea305674baaf5bf68e64f543f",
         "type": "github"
       },
       "original": {
@@ -357,7 +357,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-BVG2/hBpXlYcT4NR3G/YSjMdC/WjbE8foPGGKq+5Xrk=",
+        "narHash": "sha256-e9g+EY4dNOnGKAboMG9Hi39uo5PdMEQP4fso/Disbl4=",
         "path": "./packages",
         "type": "path"
       },
@@ -437,11 +437,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1628196349,
-        "narHash": "sha256-s0geMLo0UvSSGpEfxyw7hoDlk36d+XyPFtOOdWBhihI=",
+        "lastModified": 1628259384,
+        "narHash": "sha256-y8sl7DEE+e2/FL+rOYWH6IUpCpjcBifgWstWX0q1I5g=",
         "owner": "rust-analyzer",
         "repo": "rust-analyzer",
-        "rev": "85d80df889bc17b736f283b73eca098b40f9c6cd",
+        "rev": "b8800fd85d705bb91c002a3a16dbf6150c7df20b",
         "type": "github"
       },
       "original": {
@@ -516,11 +516,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1623514306,
-        "narHash": "sha256-34uBvZ0S8cWCq2HarYaKOMIA1NTF2Jn5Hd0fnkql0gs=",
+        "lastModified": 1628324523,
+        "narHash": "sha256-hWy1ped/ncPnzKRdz7gDTNA24MiDvECC5VAWYXKPzlc=",
         "owner": "johnae",
         "repo": "spotnix",
-        "rev": "9ab9475ca6ed28ab355328d5422e638a2bab7fee",
+        "rev": "de86b5c16b14f6cc764aff3aeda75e3dc0e6882f",
         "type": "github"
       },
       "original": {
@@ -628,11 +628,11 @@
     "wlroots": {
       "flake": false,
       "locked": {
-        "lastModified": 1628283989,
-        "narHash": "sha256-iPPNQqccwM+pKcC1QmGNw+HYKWpLIiju+FQpx2+dIJk=",
+        "lastModified": 1628319852,
+        "narHash": "sha256-OzhUwrTkx//0fzjC22/mGd44BT3OsT4YKn7wMpuyOXc=",
         "owner": "swaywm",
         "repo": "wlroots",
-        "rev": "c27263c105745dbce31b7ebd8166e167e182ed19",
+        "rev": "033c9cab74801db9ad1165cbdfc4c4c63cb40dda",
         "type": "github"
       },
       "original": {
