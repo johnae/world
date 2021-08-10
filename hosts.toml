@@ -86,6 +86,7 @@ randomizedDelaySec = "5min"
 [eris]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
 profiles = [
+  "hardware/usbcore",
   "hardware/x570",
   "profiles/default_fs",
   "profiles/desktop",
@@ -144,6 +145,7 @@ profiles = [
 [io]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5WClmubgehZKXvGwuLH621Nd5IMIxh8HWZf0lUW47M"
 profiles = [
+  "hardware/usbcore",
   "hardware/xps9300",
   "profiles/default_fs",
   "profiles/hidpi",
@@ -202,6 +204,7 @@ profiles = [
 [carbon]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOsLzBkJNFdXKdXcAaMQ4VCzJ/9kBiP2xkwnMXCSmR2Z"
 profiles = [
+  "hardware/usbcore",
   "hardware/x1-carbon",
   "profiles/default_fs",
   "profiles/home-manager",
