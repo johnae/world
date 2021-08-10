@@ -96,7 +96,6 @@ profiles = [
   "profiles/pcscd",
   "profiles/state",
   "profiles/tailscale",
-  "profiles/yubikey",
 ]
 [eris.age.secrets.spotnix]
 file = "secrets/spotnix.age"
@@ -155,7 +154,6 @@ profiles = [
   "profiles/pcscd",
   "profiles/state",
   "profiles/tailscale",
-  "profiles/yubikey",
 ]
 [io.age.secrets.spotnix]
 file = "secrets/spotnix.age"
@@ -213,7 +211,6 @@ profiles = [
   "profiles/pcscd",
   "profiles/state",
   "profiles/tailscale",
-  "profiles/yubikey",
 ]
 [carbon.age.secrets.spotnix]
 file = "secrets/spotnix.age"
