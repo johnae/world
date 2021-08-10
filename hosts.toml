@@ -2,10 +2,10 @@
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMoTdeqiDgd0BjhgDu96R+fD1s3PNmAB0UgHFet+IPhS"
 profiles = [
   "hardware/nuc",
+  "profiles/autoupgrade",
   "profiles/default_fs",
   "profiles/hidpi",
   "profiles/server",
-  "profiles/autoupgrade",
   "profiles/state",
   "profiles/uuid_disk_crypt",
 ]
@@ -32,10 +32,10 @@ randomizedDelaySec = "5min"
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOteEiVr+H3Q1tSw1bGQfjbVWuPggc/+w1vVXSFde0Rt"
 profiles = [
   "hardware/nuc",
+  "profiles/autoupgrade",
   "profiles/default_fs",
   "profiles/hidpi",
   "profiles/server",
-  "profiles/autoupgrade",
   "profiles/state",
   "profiles/uuid_disk_crypt",
 ]
@@ -62,9 +62,9 @@ randomizedDelaySec = "5min"
 publicKey = "xxxxx"
 profiles = [
   "hardware/macmini",
+  "profiles/autoupgrade",
   "profiles/default_fs",
   "profiles/hidpi",
-  "profiles/autoupgrade",
   "profiles/server",
   "profiles/state",
   "profiles/uuid_disk_crypt",
@@ -89,9 +89,10 @@ profiles = [
   "hardware/x570",
   "profiles/default_fs",
   "profiles/desktop",
-  "profiles/pcscd",
   "profiles/hidpi",
+  "profiles/home-manager",
   "profiles/interception-tools",
+  "profiles/pcscd",
   "profiles/state",
   "profiles/tailscale",
   "profiles/yubikey",
@@ -145,6 +146,7 @@ profiles = [
   "hardware/xps9300",
   "profiles/default_fs",
   "profiles/hidpi",
+  "profiles/home-manager",
   "profiles/interception-tools",
   "profiles/laptop",
   "profiles/pcscd",
@@ -200,8 +202,8 @@ publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOsLzBkJNFdXKdXcAaMQ4VCzJ/9kBiP
 profiles = [
   "hardware/x1-carbon",
   "profiles/default_fs",
-  "profiles/interception-tools",
   "profiles/home-manager",
+  "profiles/interception-tools",
   "profiles/laptop",
   "profiles/pcscd",
   "profiles/state",
