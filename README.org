@@ -1,12 +1,12 @@
-#+TITLE: The World
+#+TITLE: World
 #+PROPERTY: header-args :emacs-lisp :tangle yes :cache yes :results silent :comments link :exports code
 #+AUTHOR: John Axel Eriksson
 #+TOC: true
 #+STARTUP: fninline overview
 
-This is the [[https://nixos.org][NixOS]] configuration repository for all my machines and custom packages (i.e not part of [[https://github.com/nixos/nixpkgs][nixpkgs]] yet). In some sense it contains my world, which is how it got its name.
+This is the [[https://nixos.org][NixOS]] configuration repository for all my machines and custom packages (i.e not part of [[https://github.com/nixos/nixpkgs][nixpkgs]] yet). In some sense it is my world, which is how it got its name.
 
-It's based on a relatively recent feature of the [[https://nixos.org][Nix package manager]] called [[https://nixos.wiki/wiki/Flakes][flakes]]. Flakes are somewhat similar to a ~Cargo.toml/Cargo.lock~ from the [[https://rust-lang.org][Rust programming language]], a ~go.mod/go.sum~ from the [[https://golang.org/][Go programming language]] or the ~package.json/package.lock~ files used by the [[https://www.npmjs.com/][Node Package Manager]]. The difference being that it is language agnostic - it handles any package(s) or file(s) really. Here, we're using it to build hosts and software deterministically in a reproducible fashion.
+It's based on a relatively recent feature of the [[https://nixos.org][Nix package manager]] called [[https://nixos.wiki/wiki/Flakes][flakes]]. Flakes are somewhat similar to a ~Cargo.toml/Cargo.lock~ from the [[https://rust-lang.org][Rust programming language]], a ~go.mod/go.sum~ from the [[https://golang.org/][Go programming language]] or the ~package.json/package.lock~ files used by the [[https://www.npmjs.com/][Node Package Manager]]. The difference being that it is language agnostic - it handles any package(s) or file(s) really. Here, we're using it to build hosts and software deterministically in a reproducible fashion. This would all be possible using Nix without the flakes feature, but it would be more work to design and keep it up-to-date. While flakes are still labelled "experimental" they have a bright future.
 
 * Installing a new machine
 
