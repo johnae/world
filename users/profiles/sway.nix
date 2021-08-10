@@ -248,8 +248,8 @@ in
         "${modifier}+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle open'';
         "${modifier}+Shift+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle none'';
 
-        "${modifier}+Return" = ''exec ${pkgs.my-emacs}/bin/emacsclient -c -n -a= --eval '(jae/eshell-new)' '';
-        "${modifier}+Shift+Return" = '' exec ${pkgs.alacritty}/bin/alacritty'';
+        "${modifier}+Shift+Return" = ''exec ${pkgs.my-emacs}/bin/emacsclient -c -n -a= --eval '(jae/eshell-new)' '';
+        "${modifier}+Return" = '' exec ${pkgs.alacritty}/bin/alacritty'';
         "${modifier}+d" = ''exec ${pkgs.rofi-wayland}/bin/rofi -show drun'';
 
         "${modifier}+minus" = ''exec ${pkgs.scripts}/bin/rofi-rbw'';
