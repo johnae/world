@@ -108,6 +108,7 @@ file = "secrets/wifi-networks.age"
 [eris.users.users.john]
 uid = 1337
 hashedPassword = '$6$RG3QgdVr6A5s524$FRVNXOYWYCNXf6cH/gV4u7g6sffffznBnbXZGHysuWVHGYPpeLfuDuXEJHK.KUrkVCfPXFTTsCLJaj2Q6ATkC1'
+shell = "fish"
 [eris.users.groups.john]
 gid = 1337
 [eris.userConfiguration.john]
@@ -165,6 +166,7 @@ file = "secrets/wifi-networks.age"
 [io.users.users.john]
 uid = 1337
 hashedPassword = '$6$mJA6xE6ZcfY9rn1$ym/OZ02gGK6APaoa9qTjhzWkyxokJ8ldqUt/x3nmGaAsCkMKWmWcB0guYO2ydtifN3EVGygcSZXrB4tLVMZpz0'
+shell = "fish"
 [io.users.groups.john]
 gid = 1337
 [io.userConfiguration.john]
