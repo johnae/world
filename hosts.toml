@@ -51,6 +51,7 @@ openssh.authorizedKeys.keys = [
 gid = 1337
 [titan.networking]
 defaultGateway = "192.168.240.1"
+firewall.allowedTCPPorts = [ 8443 ] ## for unifi controller
 [[titan.networking.interfaces.eth0.ipv4.addresses]]
 address = "192.168.240.142"
 prefixLength = 24
