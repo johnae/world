@@ -1,5 +1,9 @@
+{pkgs, ...}:
 {
-  services.unifi.enable = true;
+  services.unifi = {
+   enable = true;
+   unifiPackage = pkgs.unifi;
+  };
   environment.state."/keep".directories = [
     "/var/lib/unifi"
   ];
