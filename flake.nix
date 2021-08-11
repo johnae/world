@@ -40,6 +40,7 @@
       forAllSystems = genAttrs supportedSystems;
       pkgs = forAllSystems (system: import nixpkgs {
         inherit system;
+        config.allowUnfree = true;
         overlays = [
           inputs.nix-misc.overlay
           inputs.nur.overlay
