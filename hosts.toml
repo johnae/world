@@ -221,6 +221,17 @@ file = "secrets/spotifyd.age"
 owner = "1337"
 [carbon.age.secrets.wifi-networks]
 file = "secrets/wifi-networks.age"
+[carbon.age.secrets.wg-home]
+file = "secrets/carbon/wg-home.age"
+[carbon.networking.wireguard]
+enable = true
+[carbon.networking.wireguard.interfaces.home]
+ips = [ "192.168.240.5/32"]
+privateKeyFile = "/run/secrets/wg-home"
+[[carbon.networking.wireguard.interfaces.home.peers]]
+allowedIPs = ["192.168.240.1/32"]
+endpoint = "217.210.236.9:51820"
+publicKey = "mchGTiQLAg2WJj9SFuVN9eltpcd6JUSPGS6R3bFm8HE="
 [carbon.users.users.john]
 uid = 1337
 hashedPassword = '$6$7D0/IXD6AM$9QRdv2TlnbtCFgwOMUU5NDRakIXLvt1xx3s0AtRaUyqnsg8n8jEPOSHfGjiX41dveTKP8a.2qjF731Ie0VNSz0'

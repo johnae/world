@@ -1,12 +1,12 @@
 let
-  inherit (builtins) any baseNameOf filter
+  inherit (builtins) any replaceStrings filter
     attrValues mapAttrs fromTOML readFile hasAttr;
 
   hosts = mapAttrs (_: value: {
     inherit (value) publicKey;
     secrets = if hasAttr "age" value then
       attrValues (mapAttrs (_: s:
-        baseNameOf s.file
+        replaceStrings ["secrets/"] [""] s.file
       ) value.age.secrets)
     else [];
   })
@@ -29,4 +29,5 @@ in
   "spotifyd.age".publicKeys = johnae ++ (hostKeys "spotifyd.age");
   "spotnix.age".publicKeys = johnae ++ (hostKeys "spotnix.age");
   "wifi-networks.age".publicKeys = johnae ++ (hostKeys "wifi-networks.age");
+  "carbon/wg-home.age".publicKeys = johnae ++ (hostKeys "carbon/wg-home.age");
 }
