@@ -59,7 +59,11 @@ let
     category=''${1:-art,abstract,space}
     while true; do
     if ! ${swayBackground}/bin/sway-background "$category"; then
-      exec swaymsg "output * bg '$HOME/Pictures/default-background.jpg' fill"
+      if [ -e "$HOME/Pictures/wallpaper.jpg" ] && [ "$(stat -c "$HOME/Pictures/wallpaper.jpg")" -ge 50000 ]; then
+        exec swaymsg "output * bg '$HOME/Pictures/wallpaper.jpg' fill"
+      else
+        exec swaymsg "output * bg '$HOME/Pictures/default-background.jpg' fill"
+      fi
     fi
     sleep 600
     done
