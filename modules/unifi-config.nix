@@ -10,13 +10,13 @@ let
   sitesDir = "${dataDir}/sites";
   configFile = config: pkgs.writeText "config.gateway.json"
     (toJSON config);
-  mountPoints = mapAttrsToList (_: conf:
+  configDestinations = mapAttrsToList (_: conf:
     {
       what = "${configFile conf.config}";
       where = "${sitesDir}/${conf.site}/config.gateway.json";
     }
   ) cfg.configGateway;
-  systemdMountPoints = map (m: "${utils.escapeSystemdPath m.where}") mountPoints;
+  systemdCopyServices = map (m: "${utils.escapeSystemdPath m.where}.service") configDestinations;
 in
 {
   options = {
@@ -60,11 +60,11 @@ in
         '';
         enable = true;
       };
-    }) mountPoints)) // {
+    }) configDestinations)) // {
       unifi = {
-        after = systemdMountPoints;
-        partOf = systemdMountPoints;
-        bindsTo = systemdMountPoints;
+        after = systemdCopyServices;
+        partOf = systemdCopyServices;
+        bindsTo = systemdCopyServices;
       };
     };
   };
