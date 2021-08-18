@@ -53,6 +53,7 @@ in
       script = ''
         cp ${what} ${where}
       '';
+      enable = true;
     }) mountPoints;
     systemd.services.unifi = {
       after = systemdMountPoints;
