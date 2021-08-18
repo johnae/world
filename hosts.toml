@@ -86,6 +86,7 @@ randomizedDelaySec = "5min"
 
 [eris]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
+wgPublicKey = "Oya0T0tzAV25A7/Qp3tqKP+2KgGjA/OVuUmKzsTFpRo="
 profiles = [
   "hardware/usbcore",
   "hardware/x570",
@@ -106,6 +107,17 @@ file = "secrets/spotifyd.age"
 owner = "1337"
 [eris.age.secrets.wifi-networks]
 file = "secrets/wifi-networks.age"
+[eris.age.secrets.wg-home]
+file = "secrets/eris/wg-home.age"
+[eris.networking.wireguard]
+enable = true
+[eris.networking.wireguard.interfaces.home]
+ips = [ "192.168.241.2/32"]
+privateKeyFile = "/run/secrets/wg-home"
+[[eris.networking.wireguard.interfaces.home.peers]]
+allowedIPs = ["192.168.241.1/32"]
+endpoint = "217.210.236.9:51820"
+publicKey = "mchGTiQLAg2WJj9SFuVN9eltpcd6JUSPGS6R3bFm8HE="
 [eris.users.users.john]
 uid = 1337
 hashedPassword = '$6$RG3QgdVr6A5s524$FRVNXOYWYCNXf6cH/gV4u7g6sffffznBnbXZGHysuWVHGYPpeLfuDuXEJHK.KUrkVCfPXFTTsCLJaj2Q6ATkC1'
@@ -202,6 +214,7 @@ profiles = [
 
 [carbon]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOsLzBkJNFdXKdXcAaMQ4VCzJ/9kBiP2xkwnMXCSmR2Z"
+wgPublicKey = "WiNYoRIrLjyeuRkD4uhKJ0qKS32up4wYJSviR5q8QnY="
 profiles = [
   "hardware/usbcore",
   "hardware/x1-carbon",
@@ -226,10 +239,10 @@ file = "secrets/carbon/wg-home.age"
 [carbon.networking.wireguard]
 enable = true
 [carbon.networking.wireguard.interfaces.home]
-ips = [ "192.168.240.5/32"]
+ips = [ "192.168.241.5/32"]
 privateKeyFile = "/run/secrets/wg-home"
 [[carbon.networking.wireguard.interfaces.home.peers]]
-allowedIPs = ["192.168.240.1/32"]
+allowedIPs = ["192.168.241.1/32"]
 endpoint = "217.210.236.9:51820"
 publicKey = "mchGTiQLAg2WJj9SFuVN9eltpcd6JUSPGS6R3bFm8HE="
 [carbon.users.users.john]
