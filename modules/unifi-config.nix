@@ -50,6 +50,7 @@ in
         unitConfig.RequiresMountsFor = dataDir;
         serviceConfig = {
           User = "unifi";
+          UMask = "0022";
           Type = "oneshot";
           RemainAfterExit = "yes";
         };
