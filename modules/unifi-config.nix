@@ -49,10 +49,13 @@ in
         partOf = [ "unifi.service" ];
         unitConfig.RequiresMountsFor = dataDir;
         serviceConfig = {
+          User = "unifi";
+          UMask = "0077";
           Type = "oneshot";
           RemainAfterExit = "yes";
         };
         script = ''
+          mkdir -p "$(dirname "${where}")"
           cp ${what} ${where}
         '';
         enable = true;
