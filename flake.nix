@@ -48,6 +48,8 @@
         ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
       });
 
+      hostConfigs = fromTOML (readFile ./hosts.toml);
+
       hosts = mapAttrs (_: config:
         let
           profiles = config.profiles;
@@ -55,12 +57,13 @@
         in
         {
         specialArgs.hostConfig = cfg;
+        specialArgs.hostConfigs = hostConfigs;
         configuration.imports = (map (item:
           if pathExists (toString (./. + "/${item}")) then
             (./. + "/${item}")
           else (./. + "/${item}.nix")
         ) profiles) ++ [ ./modules/toml-config.nix ];
-      }) (fromTOML (readFile ./hosts.toml));
+      }) hostConfigs;
 
       toNixosConfig = hostName: host:
         let system = "x86_64-linux"; in
