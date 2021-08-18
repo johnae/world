@@ -1,6 +1,12 @@
 let
-  inherit (builtins) any replaceStrings filter
-    attrValues mapAttrs fromTOML readFile hasAttr;
+  inherit (builtins) any replaceStrings filter foldl' elem listToAttrs
+    attrValues concatMap isList mapAttrs fromTOML readFile hasAttr;
+
+  flatten = x: if isList x
+               then concatMap (y: flatten y) x
+               else [x];
+
+  unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
 
   hosts = mapAttrs (_: value: {
     inherit (value) publicKey;
@@ -19,15 +25,18 @@ let
       else null
     ) hosts));
 
+  secretFiles = unique (flatten (attrValues (mapAttrs (_: h:
+    h.secrets
+  ) hosts)));
+
   johnae = [
     "age1yubikey1qt7cjux5unxcsrw9dnkq8qsh0jgnwwvxzxm2jn2pxetjchtclmlk6xvpckq"
     "age1yubikey1qvkk2zuwvypyfkwanf08wzq369a07ukstj5czuwavdn2peczyec764ywpxw"
   ];
 
 in
-{
-  "spotifyd.age".publicKeys = johnae ++ (hostKeys "spotifyd.age");
-  "spotnix.age".publicKeys = johnae ++ (hostKeys "spotnix.age");
-  "wifi-networks.age".publicKeys = johnae ++ (hostKeys "wifi-networks.age");
-  "carbon/wg-home.age".publicKeys = johnae ++ (hostKeys "carbon/wg-home.age");
-}
+
+listToAttrs (map (name: {
+  inherit name;
+  value.publicKeys = johnae ++ (hostKeys name);
+}) secretFiles)
