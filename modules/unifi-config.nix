@@ -42,12 +42,17 @@ in
   };
 
   config = mkIf (cfg.enable) {
-    systemd.mounts = map ({what, where}: {
-      inherit what where;
+    systemd.services = map ({what, where}: {
       bindsTo = [ "unifi.service" ];
       partOf = [ "unifi.service" ];
       unitConfig.RequiresMountsFor = dataDir;
-      options = "bind";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = "yes";
+      };
+      script = ''
+        cp ${what} ${where}
+      '';
     }) mountPoints;
     systemd.services.unifi = {
       after = systemdMountPoints;
