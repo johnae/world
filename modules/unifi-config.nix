@@ -3,7 +3,7 @@
 ### this extends the existing unifi module
 
 let
-  inherit (lib) mapAttrsToList mkIf mkOption types mkMerge;
+  inherit (lib) mapAttrsToList mkIf mkOption types mkMerge listToAttrs;
   inherit (builtins) toJSON;
   cfg = config.services.unifi;
   dataDir = cfg.dataDir;
@@ -42,23 +42,27 @@ in
   };
 
   config = mkIf (cfg.enable) {
-    systemd.services = map ({what, where}: {
-      bindsTo = [ "unifi.service" ];
-      partOf = [ "unifi.service" ];
-      unitConfig.RequiresMountsFor = dataDir;
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = "yes";
+    systemd.services = (listToAttrs (map ({what, where}: {
+      name = utils.escapeSystemdPath where;
+      value = {
+        bindsTo = [ "unifi.service" ];
+        partOf = [ "unifi.service" ];
+        unitConfig.RequiresMountsFor = dataDir;
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = "yes";
+        };
+        script = ''
+          cp ${what} ${where}
+        '';
+        enable = true;
       };
-      script = ''
-        cp ${what} ${where}
-      '';
-      enable = true;
-    }) mountPoints;
-    systemd.services.unifi = {
-      after = systemdMountPoints;
-      partOf = systemdMountPoints;
-      bindsTo = systemdMountPoints;
+    }) mountPoints)) // {
+      unifi = {
+        after = systemdMountPoints;
+        partOf = systemdMountPoints;
+        bindsTo = systemdMountPoints;
+      };
     };
   };
 }
