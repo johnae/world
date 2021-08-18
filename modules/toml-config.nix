@@ -3,7 +3,7 @@
 let
   inherit (builtins) hasAttr isAttrs mapAttrs attrNames length isString pathExists;
   inherit (lib) mkIf mkOption concatStringsSep filterAttrs recursiveUpdate;
-  inherit (lib.types) submodule listOf attrsOf str;
+  inherit (lib.types) submodule listOf attrsOf str nullOr;
   cfgMapper = {
     "age.secrets" = mapAttrs (_: value:
       value // { file = ../. + "/${value.file}"; }
@@ -40,6 +40,10 @@ in
     publicKey = mkOption {
       type = str;
       default = "xxxx";
+    };
+    wgPublicKey = mkOption {
+      type = nullOr str;
+      default = null;
     };
     userConfiguration = mkOption {
       type = attrsOf (submodule ({ name, ...}:
