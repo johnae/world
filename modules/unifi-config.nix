@@ -57,6 +57,7 @@ in
         script = ''
           mkdir -p "$(dirname "${where}")"
           cp ${what} ${where}
+          chmod u+rw ${where}
         '';
         enable = true;
       };
