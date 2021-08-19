@@ -106,8 +106,11 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: Build (matrix)
-    needs: [build_package, build_host]
+    needs: [build_package, build_host, nix_lint]
     steps:
+      - name: Check linting status
+        if: ${{ needs.nix_lint.result != 'success' }}
+        run: exit 1
       - name: Check package build matrix status
         if: ${{ needs.build_package.result != 'success' }}
         run: exit 1
