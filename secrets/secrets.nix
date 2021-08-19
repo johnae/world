@@ -3,7 +3,7 @@ let
     attrValues concatMap isList mapAttrs fromTOML readFile hasAttr;
 
   flatten = x: if isList x
-               then concatMap (y: flatten y) x
+               then concatMap flatten x
                else [x];
 
   unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
