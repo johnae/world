@@ -40,6 +40,8 @@ profiles = [
   "profiles/unifi_controller",
   "profiles/uuid_disk_crypt",
 ]
+[titan.age.secrets.wifi-networks]
+file = "secrets/ubnt-api-user-password.age"
 [titan.users.users.john]
 uid = 1337
 hashedPassword = '$6$6yT8x5V.3tTyRN2g$idNICkxytVFU6SR9DaafbU9W6.0qVdjyKMDzJCRWC/lwgjctxh4nFDCH2XHrEtb75WRsMFDGLJei0E3WiRqGz.'
