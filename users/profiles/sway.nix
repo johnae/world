@@ -41,7 +41,7 @@ let
 
   randomPicsumBackground = pkgs.writeStrictShellScriptBin "random-picsum-background" ''
     category=''${1:-nature}
-    ${pkgs.wget}/bin/wget -O /tmp/wallpaper.jpg 'https://source.unsplash.com/featured/3200x1800/?'"$category" 2>/dev/null
+    ${pkgs.curl}/bin/curl --silent --fail-with-body -Lo /tmp/wallpaper.jpg 'https://source.unsplash.com/featured/3200x1800/?'"$category" 2>/dev/null
     if [ -e "$HOME"/Pictures/wallpaper.jpg ]; then
     mv "$HOME"/Pictures/wallpaper.jpg "$HOME"/Pictures/previous-wallpaper.jpg
     fi
