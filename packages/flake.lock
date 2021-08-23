@@ -34,11 +34,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1629563608,
-        "narHash": "sha256-lxaSJVP56WWC9fUNUUM1i5+VH4T1PbVTNPhwWZ6effc=",
+        "lastModified": 1629653295,
+        "narHash": "sha256-Nxx+1mX6bii9WDrPFYA+Tjt/X8yW9jzhesu5RKL7TW0=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "8fe125ce72dfaa90451f15ec6fd00c8a2d37599f",
+        "rev": "230f699f9dbf18fc665d484d26dfa6ed8943cb89",
         "type": "github"
       },
       "original": {
@@ -55,11 +55,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1629515779,
-        "narHash": "sha256-TbW3IhyQdCA9PXh0KqMzvSWYhLgk26WrgA+hz91WbaM=",
+        "lastModified": 1629601880,
+        "narHash": "sha256-+bRPeVmQDChGYgbc5H6ZHTVbrqnhbO+enDyDS/K/liU=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "0fbdf4595c04fbb8c42de64044a1297d430ccaa3",
+        "rev": "fe4ddfec9eaa0c1e7fcb2a4ec58ae28922ed8e8d",
         "type": "github"
       },
       "original": {
@@ -119,11 +119,11 @@
     "grim": {
       "flake": false,
       "locked": {
-        "lastModified": 1628859280,
-        "narHash": "sha256-v2UxQGLw30rNIcxMus/aHG5YhLAFNe394TGPxlYt7qQ=",
+        "lastModified": 1629658497,
+        "narHash": "sha256-FweFHsBE3nW7RqBu6/58z5fbSv2oUXzyvEfmKFcaqx4=",
         "owner": "emersion",
         "repo": "grim",
-        "rev": "e1cdbf0fdf1f16782a6c86b4ff97c8d87a60e3ca",
+        "rev": "f746858ba7c3d6bdabf6dd721778b661c156ea05",
         "type": "github"
       },
       "original": {
@@ -340,11 +340,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1629468128,
-        "narHash": "sha256-l4+oBQkC5dK2s9119WwTSe2NfaEmbRQHqG7e/izdQwM=",
+        "lastModified": 1629581160,
+        "narHash": "sha256-xdv/uhxzw9QDkuyh9FghJN/FznxX14y2azhg9TjWpwI=",
         "owner": "rust-analyzer",
         "repo": "rust-analyzer",
-        "rev": "13bbed7c16f91dbe8546325fe27311f94239f204",
+        "rev": "8cd171cd949f6c82a9ce50645f6ca68b1249c4c8",
         "type": "github"
       },
       "original": {
@@ -357,11 +357,11 @@
     "slurp": {
       "flake": false,
       "locked": {
-        "lastModified": 1625488132,
-        "narHash": "sha256-D9vOo7yu+ddEpno7zo8H47+zvzTbQWp8hByUjlJ8XbI=",
+        "lastModified": 1629658547,
+        "narHash": "sha256-DJ0qoY/dlkkdi2zZFA4cjJVy7mv27ZjmkUbrZLtCGrE=",
         "owner": "emersion",
         "repo": "slurp",
-        "rev": "4eaad7dbc67b66f72ca0fab8a327e59a317e7015",
+        "rev": "ce12cb2be7add82792211113745df0321c3cb115",
         "type": "github"
       },
       "original": {
