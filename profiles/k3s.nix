@@ -11,7 +11,7 @@ in
   environment.state."/keep" = {
     directories = [
       "/var/lib/dockershim"
-      "/var/lib/k3s"
+      "/var/lib/rancher"
       "/var/lib/kubelet"
       "/var/lib/cni"
       "/var/lib/containerd"
