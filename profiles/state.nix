@@ -16,6 +16,11 @@ in
         "/var/lib/containers"
         "/var/lib/tailscale"
         "/var/lib/cups"
+        "/var/lib/docker"
+        "/var/lib/dockershim"
+        "/var/lib/k3s"
+        "/var/lib/kubelet"
+        "/var/lib/cni"
         "/root"
       ];
       files = [
