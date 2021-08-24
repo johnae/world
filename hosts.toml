@@ -161,6 +161,7 @@ publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5WClmubgehZKXvGwuLH621Nd5IMIx
 profiles = [
   "hardware/usbcore",
   "hardware/xps9300",
+  "profiles/bluez_autoswitch",
   "profiles/default_fs",
   "profiles/hidpi",
   "profiles/home-manager",
@@ -220,6 +221,7 @@ wgPublicKey = "WiNYoRIrLjyeuRkD4uhKJ0qKS32up4wYJSviR5q8QnY="
 profiles = [
   "hardware/usbcore",
   "hardware/x1-carbon",
+  "profiles/bluez_autoswitch",
   "profiles/default_fs",
   "profiles/home-manager",
   "profiles/interception-tools",
