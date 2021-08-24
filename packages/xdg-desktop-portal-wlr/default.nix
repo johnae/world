@@ -1,21 +1,27 @@
-{ stdenv
+{
+  stdenv
 , lib
+, grim
+, inih
+, iniparser
+, inputs
+, libdrm
+, makeWrapper
 , meson
 , ninja
-, pkgconfig
+, pipewire
+, pkg-config
 , scdoc
-, makeWrapper
-, git
-, cairo
-, pango
+, slurp
+, systemd
 , wayland
 , wayland-protocols
-, pipewire
-, libdrm
-, systemd
-, gdk_pixbuf
-, inputs
 }:
+
+
+
+
+
 
 stdenv.mkDerivation {
   name = "xdg-desktop-portal-wlr";
@@ -23,20 +29,31 @@ stdenv.mkDerivation {
 
   src = inputs.xdg-desktop-portal-wlr;
 
-  nativeBuildInputs = [ meson ninja pkgconfig git scdoc makeWrapper ];
-
-  buildInputs = [
-    cairo
-    pango
-    wayland
+  nativeBuildInputs = [
+    makeWrapper
+    meson
+    ninja
+    pkg-config
     wayland-protocols
-    systemd
-    gdk_pixbuf
-    pipewire
-    libdrm
   ];
 
-  mesonFlags = [ "-Dauto_features=auto" ];
+  buildInputs = [
+    inih
+    iniparser
+    libdrm
+    pipewire
+    scdoc
+    systemd
+    wayland
+  ];
+
+  mesonFlags = [
+    "-Dsd-bus-provider=libsystemd"
+  ];
+
+  postInstall = ''
+    wrapProgram $out/libexec/xdg-desktop-portal-wlr --prefix PATH ":" ${lib.makeBinPath [ grim slurp ]}
+  '';
 
   meta = {
     inherit (inputs.xdg-desktop-portal-wlr) description homepage;

@@ -357,7 +357,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-9qw1tjO6dwJc0ZiQlbjpsuEM4e0VKglRtg0W+s49dKM=",
+        "narHash": "sha256-AXmnidtUBFQ2zAnHmsQNCDwSZti8Yzv+jew3OLrNyiM=",
         "path": "./packages",
         "type": "path"
       },
@@ -644,16 +644,16 @@
     "xdg-desktop-portal-wlr": {
       "flake": false,
       "locked": {
-        "lastModified": 1613380949,
-        "narHash": "sha256-3WnWHn/YVrgEKI05tM5jnzxzBU3HUIh+EbyHFYcHX+4=",
+        "lastModified": 1622010938,
+        "narHash": "sha256-O3rn7S0VDmhdmPMBt+4/wsOBA2B3JYl0JxNauRD8y40=",
         "owner": "emersion",
         "repo": "xdg-desktop-portal-wlr",
-        "rev": "e103e120e20e83acec5b66ce4cd33a0eb86df0b0",
+        "rev": "28a82d05685dfe23be2adc798537a2db6bb98a7f",
         "type": "github"
       },
       "original": {
         "owner": "emersion",
-        "ref": "v0.2.0",
+        "ref": "v0.4.0",
         "repo": "xdg-desktop-portal-wlr",
         "type": "github"
       }
