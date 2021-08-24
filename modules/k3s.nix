@@ -1,6 +1,6 @@
 {lib, config, ...}:
 let
-  inherit (lib) mkOption mkIf mkMerge types;
+  inherit (lib) mkOption mkIf mkMerge mkForce types;
   inherit (builtins) concatStringsSep;
   cfg = config.services.k3s;
 in
@@ -14,6 +14,7 @@ in
     default = [];
   };
   config = mkIf (cfg.nodeID != null) {
+    systemd.enableUnifiedCgroupHierarchy = mkForce true;
     services.k3s.extraFlagsList = [ "--with-node-id ${cfg.nodeID}" ];
     services.k3s.extraFlags = concatStringsSep " " cfg.extraFlagsList;
   };
