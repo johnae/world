@@ -65,7 +65,8 @@
         inherit system;
         overlays = mapAttrsToList (_: value: value) self.overlays;
       });
-      nonFlakePkgList = filter (elem: ! (inputs.${elem} ? "sourceInfo") && pathExists (toString (./. + "/${elem}"))) (attrNames inputs);
+      extraPkgs = [ "k3s-io" ];
+      nonFlakePkgList = (filter (elem: ! (inputs.${elem} ? "sourceInfo") && pathExists (toString (./. + "/${elem}"))) (attrNames inputs)) ++ extraPkgs;
       exportedPackages = mapAttrs (name: _: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) self.overlays);
     in
     {
