@@ -1,6 +1,21 @@
-{ writeShellScriptBin, writeStrictShellScriptBin, nix-linter, pixiecore, gnugrep, gnused, findutils, hostname }:
+{ writeShellScriptBin, writeStrictShellScriptBin, nix-linter, pixiecore, gnugrep, gnused, findutils, kubernetes-helm, hostname }:
 
 let
+
+  world-generate-k8s-cilium-manifest = writeStrictShellScriptBin "world-generate-k8s-cilium-manifest" ''
+    export PATH=${kubernetes-helm}/bin:$PATH
+    _WORLD_HELP=''${_WORLD_HELP:-}
+    if [ -n "$_WORLD_HELP" ]; then
+      echo generate cilium manifest for latest version
+      exit 0
+    fi
+    helm repo add cilium https://helm.cilium.io/
+    helm template cilium cilium/cilium \
+      --set cni.confPath=/var/lib/rancher/k3s/agent/etc/cni/net.d \
+      --set cni.binPath=/var/lib/rancher/k3s/data/current/bin \
+      --set ipam.operator.clusterPoolIPv4PodCIDR=10.128.128.0/24 \
+      --set ipam.operator.clusterPoolIPv4MaskSize=26
+  '';
 
   world-pixieboot = writeStrictShellScriptBin "world-pixieboot" ''
     export PATH=${gnugrep}/bin:$PATH
@@ -110,5 +125,5 @@ in
 
 {
   inherit world world-pixieboot world-container
-    world-help world-lint world-repl;
+    world-help world-lint world-repl world-generate-k8s-cilium-manifest;
 }

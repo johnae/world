@@ -34,7 +34,7 @@
       inherit (nixpkgs.lib) genAttrs filterAttrs mkOverride makeOverridable mkIf
         hasSuffix mapAttrs mapAttrs' removeSuffix nameValuePair nixosSystem
         mkForce mapAttrsToList splitString concatStringsSep last hasAttr;
-      inherit (builtins) substring pathExists fromTOML readFile listToAttrs filter;
+      inherit (builtins) attrNames functionArgs substring pathExists fromTOML readFile listToAttrs filter;
 
       supportedSystems = [ "x86_64-linux" ];
       forAllSystems = genAttrs supportedSystems;
@@ -174,8 +174,10 @@
           }
         );
 
-      worldUtils = import ./utils/world.nix { inherit (pkgs.x86_64-linux) writeShellScriptBin writeStrictShellScriptBin
-        nix-linter pixiecore gnugrep gnused findutils hostname; };
+      worldUtils = let
+        f = import ./utils/world.nix;
+        args = listToAttrs (map (name: { inherit name; value = pkgs.x86_64-linux.${name}; }) (attrNames (functionArgs f)));
+      in f args;
 
       hostConfigurations = mapAttrs toNixosConfig hosts;
 

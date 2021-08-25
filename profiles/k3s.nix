@@ -5,9 +5,12 @@ in
 {
   services.k3s.enable = true;
   services.k3s.package = pkgs.k3s-io;
-  services.k3s.cniPlugin = "none";
+  services.k3s.disableFlannel = true;
   services.k3s.extraFlagsList = [
     "--node-label hostname=${hostName}"
+  ];
+  services.k3s.autoDeployList = [
+    ../files/k3s/cilium.yaml
   ];
   services.k3s.skipDeployList = [ "traefik" "local-storage" ];
   networking.firewall.allowedTCPPorts = lib.mkIf (cfg.role == "server") [ 6443 ];
