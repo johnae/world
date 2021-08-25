@@ -9,7 +9,7 @@ let
       echo generate cilium manifest for latest version
       exit 0
     fi
-    helm repo add cilium https://helm.cilium.io/
+    helm repo add cilium https://helm.cilium.io/ > /dev/null 2>&1
     helm template cilium cilium/cilium \
       --set cni.confPath=/var/lib/rancher/k3s/agent/etc/cni/net.d \
       --set cni.binPath=/var/lib/rancher/k3s/data/current/bin \
