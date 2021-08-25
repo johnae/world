@@ -10,6 +10,7 @@ in
   networking.firewall.allowedTCPPorts = lib.mkIf (cfg.role == "server") [ 6443 ];
   environment.state."/keep" = {
     directories = [
+      "/etc/rancher"
       "/var/lib/dockershim"
       "/var/lib/rancher"
       "/var/lib/kubelet"
