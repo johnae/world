@@ -31,8 +31,8 @@ in
     services.k3s.extraFlagsList = [ "--with-node-id ${cfg.nodeID}" ] ++ (optional (cfg.cniPlugin != "flannel" && cfg.role == "server") "--flannel-backend=none");
     services.k3s.extraFlags = concatStringsSep " " cfg.extraFlagsList;
     systemd.services.k3s.postStart = mkIf (cfg.role == "server" && cfg.cniPlugin == "cilium") ''
-      env KUBECONFIG=/etc/rancher/k3s/k3s.yaml ${pkgs.cilium-cli}/bin/cilium install
-      env KUBECONFIG=/etc/rancher/k3s/k3s.yaml ${pkgs.cilium-cli}/bin/cilium upgrade
+      env KUBECONFIG=/etc/rancher/k3s/k3s.yaml ${pkgs.cilium-cli}/bin/cilium install || true
+      env KUBECONFIG=/etc/rancher/k3s/k3s.yaml ${pkgs.cilium-cli}/bin/cilium upgrade || true
     '';
     systemd.services.k3s.preStart = mkIf (cfg.role == "server") ''
     mkdir -p ${k3sManifestsDir}
