@@ -27,6 +27,7 @@ in
     services.k3s.extraFlagsList = [ "--with-node-id ${cfg.nodeID}" ];
     services.k3s.extraFlags = concatStringsSep " " cfg.extraFlagsList;
     systemd.services.k3s.preStart = ''
+    mkdir -p ${k3sManifestsDir}
     ${concatStringsSep "\n" (map (manifestName:
       "touch ${k3sManifestsDir}/${manifestName}.skip"
       ) cfg.skipDeployList)
