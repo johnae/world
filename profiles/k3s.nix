@@ -7,6 +7,7 @@ in
   services.k3s.package = pkgs.k3s-io;
   services.k3s.extraFlagsList = [
     "--node-label hostname=${hostName}"
+    "--no-deploy=traefik --no-deploy=servicelb --no-deploy=local-storage"
   ];
   networking.firewall.allowedTCPPorts = lib.mkIf (cfg.role == "server") [ 6443 ];
   environment.state."/keep" = {
