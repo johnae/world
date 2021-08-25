@@ -29,7 +29,7 @@ in
     systemd.services.k3s.preStart = ''
     mkdir -p ${k3sManifestsDir}
     ${concatStringsSep "\n" (map (manifestName:
-      "touch ${k3sManifestsDir}/${manifestName}.skip"
+      "touch ${k3sManifestsDir}/${manifestName}.yaml.skip"
       ) cfg.skipDeployList)
     }
     ${concatStringsSep "\n" (map (manifestPath:
