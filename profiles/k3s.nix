@@ -14,6 +14,7 @@ in
   ];
   services.k3s.skipDeployList = [ "traefik" "local-storage" ];
   networking.firewall.allowedTCPPorts = lib.mkIf (cfg.role == "server") [ 6443 ];
+  networking.firewall.allowedUDPPorts = [ 8472 6081 ];
   environment.state."/keep" = {
     directories = [
       "/etc/rancher"
