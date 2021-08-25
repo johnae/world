@@ -14,7 +14,8 @@ let
       --set cni.confPath=/var/lib/rancher/k3s/agent/etc/cni/net.d \
       --set cni.binPath=/var/lib/rancher/k3s/data/current/bin \
       --set ipam.operator.clusterPoolIPv4PodCIDR=10.128.128.0/24 \
-      --set ipam.operator.clusterPoolIPv4MaskSize=26
+      --set ipam.operator.clusterPoolIPv4MaskSize=26 \
+      --namespace=kube-system
   '';
 
   world-pixieboot = writeStrictShellScriptBin "world-pixieboot" ''
