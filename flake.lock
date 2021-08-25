@@ -54,11 +54,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1629739732,
-        "narHash": "sha256-OcSR9n6B0wR6kViudI42Uhpp3JuRGNHyarxO+KHQ7/Y=",
+        "lastModified": 1629855694,
+        "narHash": "sha256-UqhxwQNfk8m1lmMCnxyKfbyglQpXqz0BtEEFYZLGFwg=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "a72e2a008e2551b2e4bcbae0c20e7e6e6f91dfc6",
+        "rev": "fc972b0dccbf4dbbe486a21f5a3703531b37fd94",
         "type": "github"
       },
       "original": {
@@ -75,11 +75,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1629685468,
-        "narHash": "sha256-NJUiIZlIl3VadVR7Horn2M++YtZbZJAe/wJtEm+0K8M=",
+        "lastModified": 1629771719,
+        "narHash": "sha256-AZHCyQRbytK9kzCTKDHCLa+5a1xwKS2cdLzEbOZiX/A=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "f2449b21b6bab91eda097e86dc5703dcd67baf4e",
+        "rev": "3e9fcc91a4eb75fb10b048ffc159c6cf8cc6fcf1",
         "type": "github"
       },
       "original": {
@@ -159,11 +159,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1629729582,
-        "narHash": "sha256-P8bSE0v/alIafhsDVPwIZyBMz4YfHc2H0mOabnsf1so=",
+        "lastModified": 1629834586,
+        "narHash": "sha256-XIFTB7uMGdJGgT8qS01HkT8AUCYMLI6PCHWPq9Nm9Ns=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "9029fd2b9de2147480efab55f351343f4fed73b9",
+        "rev": "84d54402a5dcd5f5561f1273db0781d8e96df229",
         "type": "github"
       },
       "original": {
@@ -274,11 +274,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1629292755,
-        "narHash": "sha256-5xMo32NVLnloY9DveqwJO/Cab1+PbTMPqU4WMmawX5M=",
+        "lastModified": 1629618782,
+        "narHash": "sha256-2K8SSXu3alo/URI3MClGdDSns6Gb4ZaW4LET53UWyKk=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "253aecf69ed7595aaefabde779aa6449195bebb7",
+        "rev": "870959c7fb3a42af1863bed9e1756086a74eb649",
         "type": "github"
       },
       "original": {
@@ -306,11 +306,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1629762733,
-        "narHash": "sha256-j/1WuGBBo+82kq3dUy3xZnbTOAePBCM2+cL88+9rz/I=",
+        "lastModified": 1629854693,
+        "narHash": "sha256-fZYwOXR5VR6+m5Vl6z3fq12+aHFRoLIYpYWq3wbANjE=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "926324cc9b1ffb873e6db8cb7b6d5baacb73c52f",
+        "rev": "4682728f496d13e1b09af12b5b96ea9a6b5c8eb1",
         "type": "github"
       },
       "original": {
@@ -357,7 +357,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-hrRm8zKL+DAOPAxm3GbUpefiCBJDjLx1nZ6eGPTlDPE=",
+        "narHash": "sha256-celaChAsqkqKptw/Bizxta6hVDEjC4VEgfqXbHMHgjM=",
         "path": "./packages",
         "type": "path"
       },
@@ -437,11 +437,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1629648648,
-        "narHash": "sha256-6Tbgy77Essi3Hyd5kdJ7JJbx7RuFZQWURfRrpScvPPQ=",
+        "lastModified": 1629757190,
+        "narHash": "sha256-GQQO3WyFuCRGHfOtwHTXN6qpgHRnbQtufca12ZTrTjM=",
         "owner": "rust-analyzer",
         "repo": "rust-analyzer",
-        "rev": "996300f4a061e895a339a909fddce94f68ce7d19",
+        "rev": "ced65f77c45b0636ffb1c37c8e1992f3885e5e0a",
         "type": "github"
       },
       "original": {
@@ -628,11 +628,11 @@
     "wlroots": {
       "flake": false,
       "locked": {
-        "lastModified": 1629469948,
-        "narHash": "sha256-XaUvFHlcfh+FBCcXkw7s2QsIgWDzMBESYWtKp0TfH6A=",
+        "lastModified": 1629794166,
+        "narHash": "sha256-qN3DuJmotvVDIMfcZyVtZtnhDTLuLNSAZTz1kIZtbtE=",
         "owner": "swaywm",
         "repo": "wlroots",
-        "rev": "f2f3df9fb1ecc6d5d4fbda26ba5d57a8c04a3b62",
+        "rev": "72a156b18aea4da5a87823da8a10ace389f9325e",
         "type": "github"
       },
       "original": {
