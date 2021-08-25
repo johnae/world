@@ -5,7 +5,7 @@ in
 {
   services.k3s.enable = true;
   services.k3s.package = pkgs.k3s-io;
-  services.k3s.cniPlugin = "cilium";
+  services.k3s.cniPlugin = "none";
   services.k3s.extraFlagsList = [
     "--node-label hostname=${hostName}"
   ];

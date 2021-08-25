@@ -19,7 +19,7 @@ in
     default = [];
   };
   options.services.k3s.cniPlugin = mkOption {
-    type = types.enum [ "flannel" "cilium" ];
+    type = types.enum [ "none" "flannel" "cilium" ];
     default = "flannel";
   };
   options.services.k3s.extraFlagsList = mkOption {
