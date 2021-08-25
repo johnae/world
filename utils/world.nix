@@ -15,6 +15,11 @@ let
       --set cni.binPath=/var/lib/rancher/k3s/data/current/bin \
       --set ipam.operator.clusterPoolIPv4PodCIDR=10.128.128.0/24 \
       --set ipam.operator.clusterPoolIPv4MaskSize=26 \
+      --set global.containerRuntime.integration=containerd \
+      --set global.containerruntime.socketpath=/var/run/k3s/containerd/containerd.sock \
+      --set hubble.enabled=true \
+      --set hubble.ui.enabled=true \
+      --set hubble.relay.enabled=true \
       --namespace=kube-system
   '';
 
