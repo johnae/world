@@ -9,6 +9,7 @@ in
   services.k3s.disableFlannel = true;
   services.k3s.extraFlagsList = [
     "--node-label hostname=${hostName}"
+    "--kubelet-arg cgroup-driver=systemd"
   ];
   services.k3s.autoDeployList = [
     ../files/k3s/cilium.yaml
