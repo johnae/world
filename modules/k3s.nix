@@ -43,7 +43,7 @@ in
     default = [];
   };
   config = mkIf (cfg.nodeID != null) {
-    #systemd.enableUnifiedCgroupHierarchy = mkForce true;
+    systemd.enableUnifiedCgroupHierarchy = mkForce true;
     services.k3s.extraFlagsList = [
       "--with-node-id ${cfg.nodeID}"
     ]
