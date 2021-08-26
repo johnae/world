@@ -4,6 +4,7 @@ let
 in
 {
   services.k3s.enable = true;
+  services.k3s.docker = true;
   services.k3s.package = pkgs.k3s-io;
   services.k3s.disableFlannel = true;
   services.k3s.extraFlagsList = [

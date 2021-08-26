@@ -2,6 +2,10 @@
 
 let
 
+  #    --set datapathMode=ipvlan \
+  #    --set hubble.enabled=true \
+  #    --set hubble.ui.enabled=true \
+  #    --set hubble.relay.enabled=true \
   world-generate-k8s-cilium-manifest = writeStrictShellScriptBin "world-generate-k8s-cilium-manifest" ''
     export PATH=${kubernetes-helm}/bin:$PATH
     _WORLD_HELP=''${_WORLD_HELP:-}
@@ -15,11 +19,6 @@ let
       --set cni.binPath=/var/lib/rancher/k3s/data/current/bin \
       --set ipam.operator.clusterPoolIPv4PodCIDR=10.128.128.0/24 \
       --set ipam.operator.clusterPoolIPv4MaskSize=26 \
-      --set global.containerRuntime.integration=containerd \
-      --set global.containerruntime.socketpath=/var/run/k3s/containerd/containerd.sock \
-      --set hubble.enabled=true \
-      --set hubble.ui.enabled=true \
-      --set hubble.relay.enabled=true \
       --set kubeProxyReplacement=strict \
       --namespace=kube-system
   '';
