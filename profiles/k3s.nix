@@ -12,7 +12,8 @@ in
   services.k3s.autoDeployList = [
     ../files/k3s/cilium.yaml
   ];
-  services.k3s.skipDeployList = [ "traefik" "local-storage" ];
+  services.k3s.disable = [ "traefik" "local-storage" ];
+  services.k3s.disableKubeProxy = true;
   networking.firewall.allowedTCPPorts = lib.mkIf (cfg.role == "server") [ 6443 ];
   networking.firewall.allowedUDPPorts = [ 8472 6081 ];
   boot.kernel.sysctl = {

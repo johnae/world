@@ -20,6 +20,7 @@ let
       --set hubble.enabled=true \
       --set hubble.ui.enabled=true \
       --set hubble.relay.enabled=true \
+      --set kubeProxyReplacement=strict \
       --namespace=kube-system
   '';
 
