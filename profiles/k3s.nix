@@ -5,11 +5,11 @@ in
 {
   services.k3s.enable = true;
   services.k3s.docker = true;
+  virtualisation.docker.extraOptions = "--exec-opt native.cgroupdriver=cgroupfs";
   services.k3s.package = pkgs.k3s-io;
   services.k3s.disableFlannel = true;
   services.k3s.extraFlagsList = [
     "--node-label hostname=${hostName}"
-    "--kubelet-arg cgroup-driver=systemd"
   ];
   services.k3s.autoDeployList = [
     ../files/k3s/cilium.yaml
