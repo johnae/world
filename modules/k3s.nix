@@ -1,4 +1,4 @@
-{pkgs, lib, config, ...}:
+{lib, config, ...}:
 let
   inherit (lib) mkOption mkIf mkMerge mkForce types optional;
   inherit (builtins) concatStringsSep;
