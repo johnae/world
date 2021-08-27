@@ -4,9 +4,6 @@ let
 in
 {
   services.k3s.enable = true;
-  services.k3s.docker = true;
-  virtualisation.docker.extraOptions = "--exec-opt native.cgroupdriver=cgroupfs";
-  #services.k3s.package = pkgs.k3s-io;
   services.k3s.disableFlannel = true;
   services.k3s.extraFlagsList = [
     "--node-label hostname=${hostName}"
@@ -17,10 +14,8 @@ in
   services.k3s.disable = [ "traefik" "local-storage" ];
   services.k3s.disableKubeProxy = true;
   networking.firewall.allowedTCPPorts = lib.mkIf (cfg.role == "server") [ 6443 ];
-  networking.firewall.allowedUDPPorts = [ 8472 6081 ];
-  boot.kernel.sysctl = {
-    "net.ipv4.conf.lxc*.rp_filter" = 0;
-  };
+  networking.firewall.trustedInterfaces = [ "cni0" "flannel.1" "calico+" "cilium+" "lxc+" ];
+  boot.kernel.sysctl."net.ipv4.conf.lxc*.rp_filter" = 0;
   environment.state."/keep" = {
     directories = [
       "/etc/rancher"

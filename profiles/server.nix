@@ -35,14 +35,7 @@ in
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
 
-  networking.firewall.allowedTCPPortRanges = [
-    {
-      from = 10250;
-      to = 10252;
-    }
-  ];
   networking.firewall.allowedTCPPorts = [ 22 ];
-  networking.firewall.trustedInterfaces = [ "tailscale0" "cni0" "flannel.1" ];
 
   programs.fish.enable = true;
   security.sudo.wheelNeedsPassword = false;
