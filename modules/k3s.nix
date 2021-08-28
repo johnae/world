@@ -51,14 +51,17 @@ in
     ++ (optionals (cfg.disableScheduler && cfg.role == "server") [ "--disable-scheduler" ])
     ++ (optionals (cfg.disableCloudController && cfg.role == "server") [ "--disable-cloud-controller" ])
     ++ (optionals (cfg.disableKubeProxy && cfg.role == "server") [ "--disable-kube-proxy" ])
-    ++ (optionals (cfg.disableNetworkPolicy && cfg.role == "server") [ "--disable-network-policy" ])
-    ++ (optionals (cfg.role == "server") (map (component: "--disable ${component}") cfg.disable));
+    ++ (optionals (cfg.disableNetworkPolicy && cfg.role == "server") [ "--disable-network-policy" ]);
     services.k3s.extraFlags = concatStringsSep " " cfg.extraFlagsList;
     systemd.services.k3s.preStart = mkIf (cfg.role == "server") ''
     mkdir -p ${k3sManifestsDir}
     ${concatStringsSep "\n" (map (manifestPath:
       "cp ${manifestPath} ${k3sManifestsDir}/"
       ) cfg.autoDeployList)
+    }
+    ${concatStringsSep "\n" (map (manifestName:
+      "touch ${k3sManifestsDir}/${manifestName}.yaml.skip"
+      ) cfg.disable)
     }
     '';
   };
