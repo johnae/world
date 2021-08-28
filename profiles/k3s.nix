@@ -1,4 +1,4 @@
-{pkgs, lib, config, hostName,...}:
+{lib, config, hostName,...}:
 let
   cfg = config.services.k3s;
 in
