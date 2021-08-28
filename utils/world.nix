@@ -20,6 +20,9 @@ let
       --set ipam.operator.clusterPoolIPv4PodCIDR=10.128.128.0/24 \
       --set ipam.operator.clusterPoolIPv4MaskSize=26 \
       --set kubeProxyReplacement=strict \
+      --set tunnel=disabled \
+      --set endpointRoutes.enabled=true \
+      --set autoDirectNodeRoutes=true \
       --namespace=kube-system
   '';
 

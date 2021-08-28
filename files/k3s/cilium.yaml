@@ -113,7 +113,7 @@ data:
   #   - disabled
   #   - vxlan (default)
   #   - geneve
-  tunnel: vxlan
+  tunnel: disabled
   # Enables L7 proxy for L7 policy enforcement and visibility
   enable-l7-proxy: "true"
 
@@ -128,7 +128,7 @@ data:
   install-iptables-rules: "true"
   install-no-conntrack-iptables-rules: "false"
 
-  auto-direct-node-routes: "false"
+  auto-direct-node-routes: "true"
   enable-bandwidth-manager: "false"
   enable-local-redirect-policy: "false"
 
@@ -138,6 +138,7 @@ data:
   node-port-bind-protection: "true"
   enable-auto-protect-node-port-range: "true"
   enable-session-affinity: "true"
+  enable-endpoint-routes: "true"
   enable-endpoint-health-checking: "true"
   enable-health-checking: "true"
   enable-well-known-identities: "false"
