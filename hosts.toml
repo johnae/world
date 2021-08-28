@@ -25,9 +25,9 @@ defaultGateway = "192.168.240.1"
 [[hyperion.networking.interfaces.eth0.ipv4.addresses]]
 address = "192.168.240.141"
 prefixLength = 24
-#[hyperion.system.autoUpgrade]
-#dates = "*:0/15"
-#randomizedDelaySec = "5min"
+[hyperion.system.autoUpgrade]
+dates = "*:0/15"
+randomizedDelaySec = "5min"
 [hyperion.age.secrets.k3s-token]
 file = "secrets/k3s/token.age"
 [hyperion.services.k3s]
@@ -65,9 +65,9 @@ defaultGateway = "192.168.240.1"
 [[titan.networking.interfaces.eth0.ipv4.addresses]]
 address = "192.168.240.142"
 prefixLength = 24
-#[titan.system.autoUpgrade]
-#dates = "*:0/15"
-#randomizedDelaySec = "5min"
+[titan.system.autoUpgrade]
+dates = "*:0/15"
+randomizedDelaySec = "5min"
 [titan.age.secrets.k3s-token]
 file = "secrets/k3s/token.age"
 [titan.services.k3s]
