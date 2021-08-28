@@ -16,7 +16,6 @@ in
   services.k3s.disableKubeProxy = true;
   networking.firewall.allowedTCPPorts = lib.mkIf (cfg.role == "server") [ 6443 ];
   networking.firewall.trustedInterfaces = [ "cni0" "flannel.1" "calico+" "cilium+" "lxc+" ];
-  #networking.firewall.enable = lib.mkForce false;
   boot.kernel.sysctl."net.ipv4.conf.lxc*.rp_filter" = 0;
   environment.state."/keep" = {
     directories = [
