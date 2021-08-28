@@ -131,7 +131,7 @@ data:
   auto-direct-node-routes: "true"
   enable-bandwidth-manager: "false"
   enable-local-redirect-policy: "false"
-  native-routing-cidr: 10.128.128.0/24
+  native-routing-cidr: 10.128.128.0/21
 
   kube-proxy-replacement:  "strict"
   kube-proxy-replacement-healthz-bind-address: ""
@@ -156,7 +156,7 @@ data:
   hubble-tls-key-file: /var/lib/cilium/tls/hubble/server.key
   hubble-tls-client-ca-files: /var/lib/cilium/tls/hubble/client-ca.crt
   ipam: "cluster-pool"
-  cluster-pool-ipv4-cidr: "10.128.128.0/24"
+  cluster-pool-ipv4-cidr: "10.128.128.0/21"
   cluster-pool-ipv4-mask-size: "26"
   disable-cnp-status-updates: "true"
   cgroup-root: "/run/cilium/cgroupv2"

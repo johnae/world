@@ -2,6 +2,9 @@
 
 let
 
+  clusterPoolIPv4CIDR = "10.128.128.0/21";
+  clusterPoolIPv4MaskSize = "26";
+
   world-generate-k8s-cilium-manifest = writeStrictShellScriptBin "world-generate-k8s-cilium-manifest" ''
     export PATH=${kubernetes-helm}/bin:$PATH
     _WORLD_HELP=''${_WORLD_HELP:-}
@@ -13,9 +16,9 @@ let
     helm template cilium cilium/cilium \
       --set cni.confPath=/var/lib/rancher/k3s/agent/etc/cni/net.d \
       --set cni.binPath=/var/lib/rancher/k3s/data/current/bin \
-      --set ipam.operator.clusterPoolIPv4PodCIDR=10.128.128.0/24 \
-      --set ipam.operator.clusterPoolIPv4MaskSize=26 \
-      --set nativeRoutingCIDR=10.128.128.0/24 \
+      --set ipam.operator.clusterPoolIPv4PodCIDR=${clusterPoolIPv4CIDR} \
+      --set ipam.operator.clusterPoolIPv4MaskSize=${clusterPoolIPv4MaskSize} \
+      --set nativeRoutingCIDR=${clusterPoolIPv4CIDR} \
       --set kubeProxyReplacement=strict \
       --set tunnel=disabled \
       --set endpointRoutes.enabled=true \
