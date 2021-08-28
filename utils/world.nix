@@ -2,10 +2,6 @@
 
 let
 
-  #    --set datapathMode=ipvlan \
-  #    --set hubble.enabled=true \
-  #    --set hubble.ui.enabled=true \
-  #    --set hubble.relay.enabled=true \
   world-generate-k8s-cilium-manifest = writeStrictShellScriptBin "world-generate-k8s-cilium-manifest" ''
     export PATH=${kubernetes-helm}/bin:$PATH
     _WORLD_HELP=''${_WORLD_HELP:-}
