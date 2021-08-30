@@ -43,7 +43,7 @@ in
     default = [];
   };
   config = mkIf cfg.enable {
-    services.k3s.extraFlagsList = (optionals (cfg.uniqueNodeNames) [ "--with-node-id"])
+    services.k3s.extraFlagsList = (optionals (cfg.uniqueNodeNames) [ "--with-node-id yes" ])
     ++ (optionals (cfg.disableFlannel && cfg.role == "server") [ "--flannel-backend=none" ])
     ++ (optionals (cfg.disableScheduler && cfg.role == "server") [ "--disable-scheduler" ])
     ++ (optionals (cfg.disableCloudController && cfg.role == "server") [ "--disable-cloud-controller" ])
