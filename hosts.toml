@@ -33,7 +33,6 @@ file = "secrets/k3s/token.age"
 [hyperion.services.k3s]
 role = "server"
 tokenFile = "/run/secrets/k3s-token"
-nodeID = "b9cd"
 
 [titan]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOteEiVr+H3Q1tSw1bGQfjbVWuPggc/+w1vVXSFde0Rt"
@@ -74,7 +73,6 @@ file = "secrets/k3s/token.age"
 role = "agent"
 tokenFile = "/run/secrets/k3s-token"
 serverAddr = "https://192.168.240.141:6443"
-nodeID = "42b2"
 
 [rhea]
 publicKey = "xxxxx"
