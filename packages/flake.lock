@@ -100,6 +100,22 @@
         "type": "github"
       }
     },
+    "git-branchless": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1630270856,
+        "narHash": "sha256-gNk1t7YFPbypMF2KkZ4OE17guihCjxxA8S+FnikVdu0=",
+        "owner": "arxanas",
+        "repo": "git-branchless",
+        "rev": "03638c55c43cc7fc956d7bb7c395b19e527bddf3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "arxanas",
+        "repo": "git-branchless",
+        "type": "github"
+      }
+    },
     "google-cloud-sdk-fish-completion": {
       "flake": false,
       "locked": {
@@ -313,6 +329,7 @@
         "fenix": "fenix",
         "fire": "fire",
         "fish-kubectl-completions": "fish-kubectl-completions",
+        "git-branchless": "git-branchless",
         "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
         "grim": "grim",
         "netns-exec": "netns-exec",

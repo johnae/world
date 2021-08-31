@@ -120,6 +120,22 @@
         "type": "github"
       }
     },
+    "git-branchless": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1630270856,
+        "narHash": "sha256-gNk1t7YFPbypMF2KkZ4OE17guihCjxxA8S+FnikVdu0=",
+        "owner": "arxanas",
+        "repo": "git-branchless",
+        "rev": "03638c55c43cc7fc956d7bb7c395b19e527bddf3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "arxanas",
+        "repo": "git-branchless",
+        "type": "github"
+      }
+    },
     "google-cloud-sdk-fish-completion": {
       "flake": false,
       "locked": {
@@ -329,6 +345,7 @@
         ],
         "fire": "fire",
         "fish-kubectl-completions": "fish-kubectl-completions",
+        "git-branchless": "git-branchless",
         "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
         "grim": "grim",
         "netns-exec": "netns-exec",
@@ -357,7 +374,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-X3M7BlmIgKyoNi82fcQcx4zN/ZnN/Dhw87DiIKsRa9I=",
+        "narHash": "sha256-6SfIRO5PVLUts2Y7fh8ghQM69PtOFrzPnyVQ9F60s1M=",
         "path": "./packages",
         "type": "path"
       },
