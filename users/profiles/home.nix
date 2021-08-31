@@ -31,6 +31,7 @@ in
       pkgs.cachix
       pkgs.lm_sensors
       pkgs.git-branchless
+      pkgs.pueue
     ];
 
   home.sessionVariables = {
