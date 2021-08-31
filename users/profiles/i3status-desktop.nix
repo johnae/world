@@ -7,7 +7,6 @@
       blocks = [
         {
           block = "net";
-          device = "wlan0";
           format = "{ssid} {signal_strength} {ip} {speed_down;K*b}/{speed_up;K*b}";
           interval = 5;
         }
