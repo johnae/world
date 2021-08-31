@@ -30,6 +30,7 @@ in
       pkgs.gnome3.nautilus
       pkgs.cachix
       pkgs.lm_sensors
+      pkgs.git-branchless
     ];
 
   home.sessionVariables = {
