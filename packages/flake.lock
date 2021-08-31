@@ -288,6 +288,22 @@
         "type": "github"
       }
     },
+    "pueue": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1630363101,
+        "narHash": "sha256-Nz/zQTRUOIxD8eoa53WDm8Er6nnqOXiTxwI9kzqm2C8=",
+        "owner": "Nukesor",
+        "repo": "pueue",
+        "rev": "50f323c7407460e22fa7cda90f22e20e40a14d58",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Nukesor",
+        "repo": "pueue",
+        "type": "github"
+      }
+    },
     "rofi-nord-theme": {
       "flake": false,
       "locked": {
@@ -338,6 +354,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-fmt": "nixpkgs-fmt",
         "persway": "persway",
+        "pueue": "pueue",
         "rofi-nord-theme": "rofi-nord-theme",
         "rofi-wayland": "rofi-wayland",
         "slurp": "slurp",

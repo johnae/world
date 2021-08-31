@@ -54,6 +54,7 @@
     wl-clipboard = { url = "github:bugaevc/wl-clipboard"; flake = false; };
     xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr/v0.4.0"; flake = false; };
     git-branchless = { url = "github:arxanas/git-branchless"; flake = false; };
+    pueue = { url = "github:Nukesor/pueue"; flake = false; };
   };
 
   outputs = { self, nixpkgs, ...} @ inputs:
