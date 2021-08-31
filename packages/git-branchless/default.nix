@@ -1,5 +1,4 @@
 { lib
-, coreutils
 , git
 , ncurses
 , rustPlatform
