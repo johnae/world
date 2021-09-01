@@ -15,8 +15,7 @@ let
         replaceStrings ["secrets/"] [""] s.file
       ) value.age.secrets)
     else [];
-  })
-  (fromTOML (readFile ../hosts.toml));
+  }) (builtins.getFlake (toString ../.)).hostConfigs;
 
   hostKeys = secretFile: filter (v: v!=null)
     (attrValues (mapAttrs (_: h:

@@ -34,7 +34,7 @@
       inherit (nixpkgs.lib) genAttrs filterAttrs mkOverride makeOverridable mkIf
         hasSuffix mapAttrs mapAttrs' removeSuffix nameValuePair nixosSystem
         mkForce mapAttrsToList splitString concatStringsSep last hasAttr;
-      inherit (builtins) attrNames functionArgs substring pathExists fromTOML readFile listToAttrs filter;
+      inherit (builtins) attrNames functionArgs substring pathExists fromJSON readFile listToAttrs filter;
 
       supportedSystems = [ "x86_64-linux" ];
       forAllSystems = genAttrs supportedSystems;
@@ -48,7 +48,14 @@
         ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
       });
 
-      hostConfigs = fromTOML (readFile ./hosts.toml);
+      hostConfigs = let
+        inherit (pkgs.x86_64-linux) runCommand yj;
+      in
+        fromJSON (readFile (
+          runCommand "to-json" { preferLocalBuild = true; } ''
+            ${yj}/bin/yj < ${./hosts.yaml} > $out
+          ''
+        ));
 
       hosts = mapAttrs (_: config:
         let
@@ -143,7 +150,7 @@
                      git clone https://github.com/johnae/world /tmp/world
                      cd /tmp/world
                      echo 'Which config should be installed?'
-                     host="$(cat hosts.toml | yj -tj | jq -r '. | keys | .[]' | sk)"
+                     host="$(yj -yj < hosts.yaml | jq -r '. | keys | .[]' | sk)"
                      nix build .#"$host"-diskformat
                      ./result/bin/diskformat | tee -a diskformat.log
                      mount
@@ -196,7 +203,7 @@
         }
       );
 
-      inherit nixosConfigurations;
+      inherit nixosConfigurations hostConfigs;
 
       packages.x86_64-linux = diskFormatters // exportedPackages // worldUtils;
 
