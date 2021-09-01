@@ -62,7 +62,7 @@
           if pathExists (toString (./. + "/${item}")) then
             (./. + "/${item}")
           else (./. + "/${item}.nix")
-        ) profiles) ++ [ ./modules/toml-config.nix ];
+        ) profiles) ++ [ ./modules/config-from-data.nix ];
       }) hostConfigs;
 
       toNixosConfig = hostName: host:
