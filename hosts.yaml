@@ -2,7 +2,6 @@ hyperion:
   publicKey: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMoTdeqiDgd0BjhgDu96R+fD1s3PNmAB0UgHFet+IPhS
   profiles:
     - hardware/nuc
-    - profiles/autoupgrade
     - profiles/default_fs
     - profiles/hidpi
     - profiles/k3s
@@ -33,6 +32,9 @@ hyperion:
               prefixLength: 24
   system:
     autoUpgrade:
+      enable: true
+      flake: github:johnae/world
+      allowReboot: true
       dates: '*:0/15'
       randomizedDelaySec: 5min
   age:
@@ -47,7 +49,6 @@ titan:
   publicKey: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOteEiVr+H3Q1tSw1bGQfjbVWuPggc/+w1vVXSFde0Rt
   profiles:
     - hardware/nuc
-    - profiles/autoupgrade
     - profiles/default_fs
     - profiles/hidpi
     - profiles/k3s
@@ -85,6 +86,9 @@ titan:
               prefixLength: 24
   system:
     autoUpgrade:
+      enable: true
+      flake: github:johnae/world
+      allowReboot: true
       dates: '*:0/15'
       randomizedDelaySec: 5min
   services:
@@ -96,7 +100,6 @@ rhea:
   publicKey: xxxxx
   profiles:
     - hardware/macmini
-    - profiles/autoupgrade
     - profiles/default_fs
     - profiles/hidpi
     - profiles/server
@@ -120,6 +123,9 @@ rhea:
               prefixLength: 24
   system:
     autoUpgrade:
+      enable: true
+      flake: github:johnae/world
+      allowReboot: true
       dates: '*:0/15'
       randomizedDelaySec: 5min
 eris:
