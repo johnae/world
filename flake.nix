@@ -191,7 +191,8 @@
       devShell = forAllSystems (system:
         pkgs.${system}.callPackage ./devshell.nix {
           inherit worldUtils;
-          mkDevShell = pkgs.${system}.callPackage inputs.nix-misc.lib.mkSimpleShell {};
+          agenix = pkgs.${system}.agenix.override { nix = pkgs.${system}.nixUnstable; };
+          mkDevShell = pkgs.${system}.callPackage inputs.nix-misc.lib.mkSimpleShell { };
         }
       );
 
