@@ -54,11 +54,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1630458197,
-        "narHash": "sha256-+lcnLjoOo1+OC2OzYAQErTekWh5frjdPmjnIR4nx4jk=",
+        "lastModified": 1630514605,
+        "narHash": "sha256-zS2APzOFlInFZI0w8IBN1sb8nYtZ3L2mi8ltuq33VVU=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "0cd0cb90011b5035ba4b9d106888f2d7773418ee",
+        "rev": "f0873ab32f26a0d3a0d58794214e70b765e04a68",
         "type": "github"
       },
       "original": {
@@ -75,11 +75,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1630429465,
-        "narHash": "sha256-X3uwaeFuIj7YyIN5Or55Ok+mpOxSNafKbe8hjdhk9ss=",
+        "lastModified": 1630463394,
+        "narHash": "sha256-X0RBhYZf8HNTgP3NOlXIisQFP420xSXEspxQ6tjQ9k8=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "3c0a313533fb8a70a8b6798908a2549eded5fc76",
+        "rev": "a1c76e71cefa4e9b311f55988d6b21b627c93c45",
         "type": "github"
       },
       "original": {
@@ -322,11 +322,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1630456407,
-        "narHash": "sha256-dTLcxkRZCcE2BrNCHxoB41G4n3xlNKp238zi6OQyx18=",
+        "lastModified": 1630545932,
+        "narHash": "sha256-7nksEuQ6GrG//nL+ZtldVE5ZZee1jM011ClAaQl7Qws=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "45f8470f72f1c8989ae5fe23c6cc343ae3463a97",
+        "rev": "a47ea7670e33ebd0053cf416c856b789da21ea1f",
         "type": "github"
       },
       "original": {
@@ -375,7 +375,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-TwMaNoi3gm9witVGIYGv8qbbCjBPLJDdMbBUnZu9G2k=",
+        "narHash": "sha256-Pon4Y5TUHtbLPz8UPykV8U4bmnH0zofN9bZXWqG3x4c=",
         "path": "./packages",
         "type": "path"
       },
@@ -426,11 +426,11 @@
     "rofi-nord-theme": {
       "flake": false,
       "locked": {
-        "lastModified": 1587642235,
-        "narHash": "sha256-VnFOd97f4R5vXkI+NxZIMJoXeu2Z6euOOecKS5Y2RxI=",
+        "lastModified": 1630499373,
+        "narHash": "sha256-2c9CcBMeu+70CzunKRG6LbDIV4JXDVVonVCFgwOFGMM=",
         "owner": "undiabler",
         "repo": "nord-rofi-theme",
-        "rev": "81bd16401708a5ed5df9bc6ec95dcf981c7de4e5",
+        "rev": "22bcd591b1d92ece575686442f494c87b749a586",
         "type": "github"
       },
       "original": {
@@ -471,11 +471,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1630352100,
-        "narHash": "sha256-hFrB3fqfGIgqsBWldESLtrU2muJBmPFFPxS+WK7vYuM=",
+        "lastModified": 1630426544,
+        "narHash": "sha256-rBs2MlWoh99M8EPXxKb5+mrZePwCLdnylUHOFBa3SMo=",
         "owner": "rust-analyzer",
         "repo": "rust-analyzer",
-        "rev": "20f3792d10bd92605b7e9c2677c87868eb8089d9",
+        "rev": "535f0726f18187574d47de1a4b78d0d54bc00de8",
         "type": "github"
       },
       "original": {
@@ -662,11 +662,11 @@
     "wlroots": {
       "flake": false,
       "locked": {
-        "lastModified": 1630336211,
-        "narHash": "sha256-7OJ53PR/kCFg5ZntOTjXpiZGFUfheo3CclW2BBdSO+8=",
+        "lastModified": 1630525863,
+        "narHash": "sha256-ux0ZNzfFMdTGeeRiFt6Ne1J31sVSf13WHhNAI8D5mC8=",
         "owner": "swaywm",
         "repo": "wlroots",
-        "rev": "c8d97e27916e1a1df6d103fa957a56829af6add3",
+        "rev": "267eb02c310a5905a5dab107fd10ac7c2d6137c4",
         "type": "github"
       },
       "original": {
