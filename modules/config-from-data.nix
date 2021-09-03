@@ -1,9 +1,9 @@
-{hostConfig, userProfiles, config, lib, pkgs, ...}:
+{hostConfig, config, lib, pkgs, ...}:
 
 let
-  inherit (builtins) hasAttr isAttrs mapAttrs attrNames length isString pathExists;
-  inherit (lib) mkIf mkOption concatStringsSep filterAttrs recursiveUpdate;
-  inherit (lib.types) submodule listOf attrsOf str nullOr;
+  inherit (builtins) hasAttr isAttrs mapAttrs attrNames length;
+  inherit (lib) mkIf concatStringsSep filterAttrs recursiveUpdate;
+
   cfgMapper = {
     "age.secrets" = mapAttrs (_: value:
       value // { file = ../. + "/${value.file}"; }
@@ -36,47 +36,6 @@ let
   hasSecrets = config.age.secrets != {};
 in
 {
-  options = {
-    publicKey = mkOption {
-      type = str;
-      default = "xxxx";
-    };
-    wgPublicKey = mkOption {
-      type = nullOr str;
-      default = null;
-    };
-    userConfiguration = mkOption {
-      type = attrsOf (submodule ({ name, ...}:
-        {
-          options = {
-            name = mkOption {
-              type = str;
-              default = name;
-            };
-            email = mkOption {
-              type = str;
-              example = "example@example.com";
-            };
-            fullName = mkOption {
-              type = str;
-              example = "Recurse Recursson";
-            };
-            githubUser = mkOption {
-              type = str;
-            };
-            gitlabUser = mkOption {
-              type = str;
-            };
-            profiles = mkOption {
-              type = listOf (str);
-              apply = map (v: userProfiles.${v});
-            };
-          };
-        }));
-      default = {};
-    };
-  };
-
   config = recursiveUpdate (mapConfig [] hostConfig) {
 
     nix.trustedUsers = attrNames
