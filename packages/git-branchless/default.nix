@@ -1,6 +1,8 @@
 { lib
 , git
 , ncurses
+, openssl
+, pkg-config
 , rustPlatform
 , sqlite
 , inputs
@@ -14,8 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-1U5/MN2l7sV1RQEbnG3nXY75mn8T4tf7pTK9Ehe+k4M=";
 
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     ncurses
+    openssl
     sqlite
   ];
 
