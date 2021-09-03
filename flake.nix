@@ -119,7 +119,7 @@
                    package = pkgs.nixUnstable;
                  };
                  environment.systemPackages = with pkgs; [
-                   git curl yj jq skim
+                   git curl jq skim
                  ];
                  boot.zfs.enableUnstable = true;
                  boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -150,7 +150,7 @@
                      git clone https://github.com/johnae/world /tmp/world
                      cd /tmp/world
                      echo 'Which config should be installed?'
-                     host="$(yj -yj < hosts.yaml | jq -r '. | keys | .[]' | sk)"
+                     host="$(nix eval --apply builtins.attrNames .#nixosConfigurations --json | jq -r '.[]' | sk)"
                      nix build .#"$host"-diskformat
                      ./result/bin/diskformat | tee -a diskformat.log
                      mount
