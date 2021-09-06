@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   src = inputs.git-branchless;
 
-  cargoSha256 = "sha256-jPUJaXMGncGPzE1Hiw9QDX7CcWUJ1PiUWF1STQI/aq8=";
+  cargoSha256 = "sha256-+QBCgAfn9PKVSrInvvXBwOwpMpHp8x0oi4EGdOtYUlE=";
 
   nativeBuildInputs = [ pkg-config ];
 
