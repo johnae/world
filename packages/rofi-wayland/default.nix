@@ -14,6 +14,7 @@
 , wayland-protocols
 , xcbutilwm
 , xcbutilxrm
+, xcbutilcursor
 , plugins ? [] ## just here for compatibility
 , inputs
 }:
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     pango
     wayland
     wayland-protocols
+    xcbutilcursor
     xcbutilwm
     xcbutilxrm
   ];
