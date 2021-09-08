@@ -2,7 +2,6 @@
 {
 
   imports = [
-    ../modules
     ../cachix.nix
   ];
 
@@ -70,6 +69,7 @@
     pkgs.procs
     pkgs.sd
     pkgs.bottom
+    pkgs.virtmanager
   ];
 
 

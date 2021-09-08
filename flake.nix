@@ -69,7 +69,7 @@
           if pathExists (toString (./. + "/${item}")) then
             (./. + "/${item}")
           else (./. + "/${item}.nix")
-        ) profiles) ++ [ ./modules/config-from-data.nix ];
+        ) profiles) ++ [ ./modules ];
       }) hostConfigs;
 
       toNixosConfig = hostName: host:
