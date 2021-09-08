@@ -131,6 +131,9 @@ rhea:
 eris:
   publicKey: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST
   wgPublicKey: Oya0T0tzAV25A7/Qp3tqKP+2KgGjA/OVuUmKzsTFpRo=
+  virtualisation:
+    libvirtd:
+      enable: true
   profiles:
     - hardware/usbcore
     - hardware/x570
