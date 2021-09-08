@@ -134,6 +134,11 @@ eris:
   virtualisation:
     libvirtd:
       enable: true
+  environment:
+    state:
+      /keep:
+        directories:
+          - /var/lib/libvirt
   profiles:
     - hardware/usbcore
     - hardware/x570
