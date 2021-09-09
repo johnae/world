@@ -116,6 +116,12 @@ in
 
     if [ ! -b "$DISK" ]; then
       echo "$DISK" is not a block device
+      PARTITION_PREFIX=""
+      DISK=/dev/vda
+    fi
+
+    if [ ! -b "$DISK" ]; then
+      echo "$DISK" is not a block device
       echo Giving up
       exit 1
     fi
