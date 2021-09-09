@@ -8,25 +8,22 @@ let
 
   unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
 
-  hosts = mapAttrs (_: value: {
-    inherit (value) publicKey;
-    secrets = if hasAttr "age" value then
-      attrValues (mapAttrs (_: s:
-        replaceStrings ["secrets/"] [""] s.file
-      ) value.age.secrets)
-    else [];
-  }) (builtins.getFlake (toString ../.)).hostConfigs;
+  hostsWithSecrets =
+    filter (host: hasAttr "publicKey" host && hasAttr "age" host)
+      (attrValues (builtins.getFlake (toString ../.)).hostConfigs);
 
-  hostKeys = secretFile: filter (v: v!=null)
-    (attrValues (mapAttrs (_: h:
-      if any (v: v == secretFile) h.secrets then
-        h.publicKey
-      else null
-    ) hosts));
+  secretsToPublicKey = map (host:
+    {
+      inherit (host) publicKey;
+      secrets = map (s: replaceStrings ["secrets/"] [""] s.file)
+            (attrValues host.age.secrets);
+    }
+  ) hostsWithSecrets;
 
-  secretFiles = unique (flatten (attrValues (mapAttrs (_: h:
-    h.secrets
-  ) hosts)));
+  secretToKeyMapping = secretName: unique (map (keyMap: keyMap.publicKey)
+    (filter (keyMap: any (secret: secret == secretName) keyMap.secrets) secretsToPublicKey));
+
+  secretFiles = unique (flatten (map (h: h.secrets) secretsToPublicKey));
 
   johnae = [
     "age1yubikey1qt7cjux5unxcsrw9dnkq8qsh0jgnwwvxzxm2jn2pxetjchtclmlk6xvpckq"
@@ -37,5 +34,5 @@ in
 
 listToAttrs (map (name: {
   inherit name;
-  value.publicKeys = johnae ++ (hostKeys name);
+  value.publicKeys = johnae ++ (secretToKeyMapping name);
 }) secretFiles)
