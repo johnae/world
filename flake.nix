@@ -34,7 +34,7 @@
       inherit (nixpkgs.lib) genAttrs filterAttrs mkOverride makeOverridable mkIf
         hasSuffix mapAttrs mapAttrs' removeSuffix nameValuePair nixosSystem
         mkForce mapAttrsToList splitString concatStringsSep last hasAttr;
-      inherit (builtins) attrNames functionArgs substring pathExists fromJSON readFile listToAttrs filter;
+      inherit (builtins) attrNames functionArgs substring pathExists fromTOML readFile listToAttrs filter;
 
       supportedSystems = [ "x86_64-linux" ];
       forAllSystems = genAttrs supportedSystems;
@@ -48,14 +48,7 @@
         ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
       });
 
-      hostConfigs = let
-        inherit (pkgs.x86_64-linux) runCommand yj;
-      in
-        fromJSON (readFile (
-          runCommand "to-json" { preferLocalBuild = true; } ''
-            ${yj}/bin/yj < ${./hosts.yaml} > $out
-          ''
-        ));
+      hostConfigs = fromTOML (readFile ./hosts.toml);
 
       hosts = mapAttrs (_: config:
         let
