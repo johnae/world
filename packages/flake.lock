@@ -365,6 +365,7 @@
         "swaybg": "swaybg",
         "swayidle": "swayidle",
         "swaylock": "swaylock",
+        "wayland-protocols-master": "wayland-protocols-master",
         "wf-recorder": "wf-recorder",
         "wl-clipboard": "wl-clipboard",
         "wlroots": "wlroots",
@@ -528,6 +529,23 @@
         "owner": "swaywm",
         "repo": "swaylock",
         "type": "github"
+      }
+    },
+    "wayland-protocols-master": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1630482332,
+        "narHash": "sha256-0h2Kb3toTy8XXAgaTb0+RuIsfAISXFY05PsML+dOVf8=",
+        "ref": "main",
+        "rev": "b631f502b779006bd5a7938efc950fe74572cf0d",
+        "revCount": 244,
+        "type": "git",
+        "url": "https://gitlab.freedesktop.org/wayland/wayland-protocols"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://gitlab.freedesktop.org/wayland/wayland-protocols"
       }
     },
     "wf-recorder": {

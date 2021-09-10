@@ -45,6 +45,7 @@
     netns-exec = { url = "github:johnae/netns-exec"; flake = false; };
     slurp = { url = "github:emersion/slurp"; flake = false; };
     spotifyd = { url = "github:spotifyd/spotifyd"; flake = false; };
+    wayland-protocols-master = { url = "git+https://gitlab.freedesktop.org/wayland/wayland-protocols?ref=main"; flake = false; };
     sway = { url = "github:swaywm/sway"; flake = false; };
     swaybg = { url = "github:swaywm/swaybg"; flake = false; };
     swayidle = { url = "github:swaywm/swayidle"; flake = false; };
@@ -82,7 +83,8 @@
       //
       {
         nixos-generators = (final: prev: { inherit (inputs.nixos-generators.packages.${prev.system}) nixos-generators; });
-        sway-unwrapped = (final: prev: { sway-unwrapped = prev.callPackage ./sway { }; });
+        wlroots = (final: prev: { wlroots = prev.callpackage ./wlroots { wayland-protocols = final.wayland-protocols-master; }; });
+        sway-unwrapped = (final: prev: { sway-unwrapped = prev.callpackage ./sway { wayland-protocols = final.wayland-protocols-master; }; });
         sway = (final: prev: { sway = prev.callPackage (prev.path + "/pkgs/applications/window-managers/sway/wrapper.nix") { }; } );
         inputs = (final: prev: { inherit inputs; });
         mynerdfonts = (final: prev: { mynerdfonts = prev.nerdfonts.override { fonts = [ "JetBrainsMono" "DroidSansMono" ]; }; });
@@ -110,8 +112,9 @@
             }
           );
         });
-        wlroots = (final: prev: { wlroots = prev.callPackage ./wlroots { meson = prev.meson-581; }; });
-        sway-unwrapped = (final: prev: { sway-unwrapped = prev.callPackage ./sway { meson = prev.meson-581; }; });
+        wlroots = (final: prev: { wlroots = prev.callPackage ./wlroots { wayland-protocols = final.wayland-protocols-master; meson = prev.meson-581; }; });
+        sway-unwrapped = (final: prev: { sway-unwrapped = prev.callPackage ./sway { wayland-protocols = final.wayland-protocols-master; meson = prev.meson-581; }; });
+        swaylock = (final: prev: { swaylock = prev.callPackage ./sway { wayland-protocols = final.wayland-protocols-master; meson = prev.meson-581; }; });
       }
       ###############################################
      ;
