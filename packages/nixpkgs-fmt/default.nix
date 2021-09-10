@@ -4,7 +4,7 @@ rustPlatform.buildRustPackage {
   version = inputs.nixpkgs-fmt.rev;
 
   src = inputs.nixpkgs-fmt;
-  cargoSha256 = "sha256-QeVn0egLcyp/EN8TtoGo6CeDz0phMdFp845Sbj8w2MY=";
+  cargoSha256 = "sha256-5GY//OiOCvZBWbcxAWtd/4XJ6fTjY/Y82WQeADyE0Y0=";
 
   doCheck = false;
 

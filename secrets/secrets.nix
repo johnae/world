@@ -1,6 +1,6 @@
 let
-  inherit (builtins) any replaceStrings filter foldl' elem listToAttrs
-    attrValues concatMap isList mapAttrs fromTOML readFile hasAttr;
+  inherit (builtins) any all replaceStrings filter foldl' elem listToAttrs
+    attrValues concatMap isList mapAttrs fromTOML readFile hasAttr getFlake;
 
   flatten = x: if isList x
                then concatMap flatten x
@@ -8,22 +8,19 @@ let
 
   unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
 
-  hostsWithSecrets =
-    filter (host: hasAttr "publicKey" host && hasAttr "age" host)
-      (attrValues (builtins.getFlake (toString ../.)).hostConfigs);
+  hasAttrsFilter = attrsList: filter (attr: all (key: hasAttr key attr) attrsList);
 
-  secretsToPublicKey = map (host:
-    {
-      inherit (host) publicKey;
-      secrets = map (s: replaceStrings ["secrets/"] [""] s.file)
-            (attrValues host.age.secrets);
-    }
-  ) hostsWithSecrets;
+  hostConfigsList = attrValues (getFlake (toString ../.)).hostConfigs;
 
-  secretToKeyMapping = secretName: unique (map (keyMap: keyMap.publicKey)
-    (filter (keyMap: any (secret: secret == secretName) keyMap.secrets) secretsToPublicKey));
+  hostsWithSecrets = hasAttrsFilter [ "publicKey" "age" ] hostConfigsList;
 
-  secretFiles = unique (flatten (map (h: h.secrets) secretsToPublicKey));
+  toLocalSecretPath = replaceStrings [ "secrets/" ] [ "" ];
+
+  secretsList = unique (flatten (map (host: map (s: toLocalSecretPath s.file) (attrValues host.age.secrets)) hostsWithSecrets));
+
+  mapSecretToPublicKeys = secret:
+    map (host: host.publicKey)
+      (filter (host: any (s: secret == toLocalSecretPath s.file) (attrValues host.age.secrets)) hostsWithSecrets);
 
   johnae = [
     "age1yubikey1qt7cjux5unxcsrw9dnkq8qsh0jgnwwvxzxm2jn2pxetjchtclmlk6xvpckq"
@@ -34,5 +31,5 @@ in
 
 listToAttrs (map (name: {
   inherit name;
-  value.publicKeys = johnae ++ (secretToKeyMapping name);
-}) secretFiles)
+  value.publicKeys = johnae ++ (mapSecretToPublicKeys name);
+}) secretsList)

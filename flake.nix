@@ -62,7 +62,7 @@
           if pathExists (toString (./. + "/${item}")) then
             (./. + "/${item}")
           else (./. + "/${item}.nix")
-        ) profiles) ++ [ ./modules ];
+        ) profiles) ++ [ ./modules ./profiles/disable-users-groups-dry-run.nix ]; ## disable-users-groups-dry-run is a temp fix
       }) hostConfigs;
 
       toNixosConfig = hostName: host:
