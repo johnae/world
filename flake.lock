@@ -256,7 +256,6 @@
       "inputs": {
         "nixlib": "nixlib_2",
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },
@@ -370,13 +369,14 @@
         "swaybg": "swaybg",
         "swayidle": "swayidle",
         "swaylock": "swaylock",
+        "wayland-protocols-master": "wayland-protocols-master",
         "wf-recorder": "wf-recorder",
         "wl-clipboard": "wl-clipboard",
         "wlroots": "wlroots",
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-vmS/pg7W7syA4kxgOaDa4CdkSNXM6EvcwOtIcMtJlRU=",
+        "narHash": "sha256-KCUoxCpzmWQ+YJwgCFLW1uvrs5KkgAqCHMy2KWrk23U=",
         "path": "./packages",
         "type": "path"
       },
@@ -388,11 +388,9 @@
     "persway": {
       "inputs": {
         "fenix": [
-          "packages",
           "fenix"
         ],
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },
@@ -507,11 +505,9 @@
     "spook": {
       "inputs": {
         "nix-misc": [
-          "packages",
           "nix-misc"
         ],
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },
@@ -548,11 +544,9 @@
     "spotnix": {
       "inputs": {
         "fenix": [
-          "packages",
           "fenix"
         ],
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },
@@ -632,6 +626,23 @@
         "owner": "swaywm",
         "repo": "swaylock",
         "type": "github"
+      }
+    },
+    "wayland-protocols-master": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1630482332,
+        "narHash": "sha256-0h2Kb3toTy8XXAgaTb0+RuIsfAISXFY05PsML+dOVf8=",
+        "ref": "main",
+        "rev": "b631f502b779006bd5a7938efc950fe74572cf0d",
+        "revCount": 244,
+        "type": "git",
+        "url": "https://gitlab.freedesktop.org/wayland/wayland-protocols"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://gitlab.freedesktop.org/wayland/wayland-protocols"
       }
     },
     "wf-recorder": {
