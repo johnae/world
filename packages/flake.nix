@@ -114,7 +114,7 @@
         });
         wlroots = (final: prev: { wlroots = prev.callPackage ./wlroots { wayland-protocols = final.wayland-protocols-master; meson = prev.meson-581; }; });
         sway-unwrapped = (final: prev: { sway-unwrapped = prev.callPackage ./sway { wayland-protocols = final.wayland-protocols-master; meson = prev.meson-581; }; });
-        swaylock = (final: prev: { swaylock = prev.callPackage ./sway { wayland-protocols = final.wayland-protocols-master; meson = prev.meson-581; }; });
+        swaylock = (final: prev: { swaylock = prev.callPackage ./swaylock { wayland-protocols = final.wayland-protocols-master; meson = prev.meson-581; }; });
       }
       ###############################################
      ;

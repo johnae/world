@@ -256,7 +256,6 @@
       "inputs": {
         "nixlib": "nixlib_2",
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },
@@ -377,7 +376,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-Wu9WaGDpg+ZeHJs2XqRRfMQFTlfABJB+iUv9f2BQxIY=",
+        "narHash": "sha256-qyE1E88caJ5bVy8U+kqZ3uwn0vagRUp+WQDmREBgTcM=",
         "path": "./packages",
         "type": "path"
       },
@@ -389,11 +388,9 @@
     "persway": {
       "inputs": {
         "fenix": [
-          "packages",
           "fenix"
         ],
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },
@@ -508,11 +505,9 @@
     "spook": {
       "inputs": {
         "nix-misc": [
-          "packages",
           "nix-misc"
         ],
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },
@@ -549,11 +544,9 @@
     "spotnix": {
       "inputs": {
         "fenix": [
-          "packages",
           "fenix"
         ],
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },
