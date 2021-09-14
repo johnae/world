@@ -134,7 +134,7 @@
   age.secrets.wg-home.file = "secrets/eris/wg-home.age"
 
   services.innernet.client.insane.enable = true
-  services.innernet.client.insane.settings.interface = { address = "192.168.104.65/26", privateKeyFile = "/run/secrets/wg-home" }
+  services.innernet.client.insane.settings.interface = { address = "192.168.104.65/22", privateKeyFile = "/run/secrets/wg-home" }
   services.innernet.client.insane.settings.server = { publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8=", externalEndpoint = "217.210.236.9:51820", internalEndpoint = "192.168.104.1:51820" }
 
   users.groups.john.gid = 1337
@@ -251,7 +251,7 @@
   age.secrets.wg-home.file = "secrets/carbon/wg-home.age"
 
   services.innernet.client.insane.enable = true
-  services.innernet.client.insane.settings.interface = { address = "192.168.104.66/26", privateKeyFile = "/run/secrets/wg-home" }
+  services.innernet.client.insane.settings.interface = { address = "192.168.104.66/22", privateKeyFile = "/run/secrets/wg-home" }
   services.innernet.client.insane.settings.server = { publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8=", externalEndpoint = "217.210.236.9:51820", internalEndpoint = "192.168.104.1:51820" }
 
   users.groups.john.gid = 1337
