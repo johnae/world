@@ -12,11 +12,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-    spook = {
-      url = "github:johnae/spook";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nix-misc.follows = "nix-misc";
-    };
     spotnix = {
       url = "github:johnae/spotnix";
       inputs.nixpkgs.follows = "nixpkgs";

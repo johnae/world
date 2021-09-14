@@ -256,7 +256,6 @@
       "inputs": {
         "nixlib": "nixlib_2",
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },
@@ -363,7 +362,6 @@
         "rofi-nord-theme": "rofi-nord-theme",
         "rofi-wayland": "rofi-wayland",
         "slurp": "slurp",
-        "spook": "spook",
         "spotifyd": "spotifyd",
         "spotnix": "spotnix",
         "sway": "sway",
@@ -377,7 +375,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-HHKiE3fpYppLGpLPUA1TMTZsxoYrFvQVK6nbB97SySc=",
+        "narHash": "sha256-ovuVlL8T7pbr2H2y4MVWE95GJUfwxJSjrrlqcLAa3lA=",
         "path": "./packages",
         "type": "path"
       },
@@ -389,11 +387,9 @@
     "persway": {
       "inputs": {
         "fenix": [
-          "packages",
           "fenix"
         ],
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },
@@ -505,31 +501,6 @@
         "type": "github"
       }
     },
-    "spook": {
-      "inputs": {
-        "nix-misc": [
-          "packages",
-          "nix-misc"
-        ],
-        "nixpkgs": [
-          "packages",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1620680797,
-        "narHash": "sha256-LsxwACs/o0g0JutA8WCi3bcu3J178LmZJmya6ZtBFKM=",
-        "owner": "johnae",
-        "repo": "spook",
-        "rev": "f2795859143586f06b180b30870fa838d32a3ef9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "johnae",
-        "repo": "spook",
-        "type": "github"
-      }
-    },
     "spotifyd": {
       "flake": false,
       "locked": {
@@ -549,11 +520,9 @@
     "spotnix": {
       "inputs": {
         "fenix": [
-          "packages",
           "fenix"
         ],
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },

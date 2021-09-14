@@ -358,7 +358,6 @@
         "rofi-nord-theme": "rofi-nord-theme",
         "rofi-wayland": "rofi-wayland",
         "slurp": "slurp",
-        "spook": "spook",
         "spotifyd": "spotifyd",
         "spotnix": "spotnix",
         "sway": "sway",
@@ -402,29 +401,6 @@
       "original": {
         "owner": "emersion",
         "repo": "slurp",
-        "type": "github"
-      }
-    },
-    "spook": {
-      "inputs": {
-        "nix-misc": [
-          "nix-misc"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1620680797,
-        "narHash": "sha256-LsxwACs/o0g0JutA8WCi3bcu3J178LmZJmya6ZtBFKM=",
-        "owner": "johnae",
-        "repo": "spook",
-        "rev": "f2795859143586f06b180b30870fa838d32a3ef9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "johnae",
-        "repo": "spook",
         "type": "github"
       }
     },
