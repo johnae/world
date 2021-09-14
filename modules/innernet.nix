@@ -176,7 +176,7 @@ in {
                   address = mkOption {
                     type = str;
                     example = "10.100.0.5/16";
-                    description = "The addresss of this peer";
+                    description = "The addresss of this peer, the prefix should be that of the network (not the cidr this host is part of)";
                   };
                   privateKeyFile = mkOption {
                     type = path;
