@@ -26,7 +26,6 @@ in
       pkgs.rnix-lsp
       pkgs.xdg_utils
       pkgs.netns-dbus-proxy
-      pkgs.spook
       pkgs.gnome3.nautilus
       pkgs.cachix
       pkgs.lm_sensors
