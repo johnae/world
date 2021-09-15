@@ -26,6 +26,7 @@
   ]
 
   services.innernet.server.insane.enable = true
+  services.innernet.server.insane.settings.openFirewall = true
   services.innernet.server.insane.settings.cidr = "192.168.104.0/22"
   services.innernet.server.insane.settings.listenPort = 51820
   services.innernet.server.insane.settings.privateKeyFile = "/run/secrets/wg-home"
