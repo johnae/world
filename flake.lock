@@ -188,6 +188,22 @@
         "type": "github"
       }
     },
+    "innernet": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1631677400,
+        "narHash": "sha256-3pLdyl/TxBlJT9bNGG0Q4BQIZrZc/yxMxGfj+3CaZIk=",
+        "owner": "tonarino",
+        "repo": "innernet",
+        "rev": "4fa689d400ce4aefe8bc937d09b476dd476d4afd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tonarino",
+        "repo": "innernet",
+        "type": "github"
+      }
+    },
     "netns-exec": {
       "flake": false,
       "locked": {
@@ -349,6 +365,7 @@
         "git-branchless": "git-branchless",
         "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
         "grim": "grim",
+        "innernet": "innernet",
         "netns-exec": "netns-exec",
         "nix-misc": [
           "nix-misc"
@@ -376,7 +393,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-uMg+S01S1wSugg0Eboc3uPF3sVi58N1bQ9S4QS4S1NU=",
+        "narHash": "sha256-fqzUlU+BYjC90txFf3CoADKRtDxVcWl6gMOgc3cpfto=",
         "path": "./packages",
         "type": "path"
       },

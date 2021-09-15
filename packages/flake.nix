@@ -51,6 +51,7 @@
     xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr/v0.4.0"; flake = false; };
     git-branchless = { url = "github:arxanas/git-branchless"; flake = false; };
     pueue = { url = "github:Nukesor/pueue"; flake = false; };
+    innernet = { url = "github:tonarino/innernet"; flake = false; };
   };
 
   outputs = { self, nixpkgs, ...} @ inputs:
