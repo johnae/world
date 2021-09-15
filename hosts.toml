@@ -37,6 +37,7 @@
   services.innernet.server.insane.settings.peers.carbon = { ip = "192.168.104.66", cidr = "home", publicKey = "WiNYoRIrLjyeuRkD4uhKJ0qKS32up4wYJSviR5q8QnY=", isAdmin = true }
   services.innernet.server.insane.settings.peers.titan = { ip = "192.168.104.67", cidr = "home", publicKey = "vNfSS1HsbnRqV6V/RfG0Aq1IoNQPS+IP2O162UlVQQA=" }
 
+
   system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.wg-home.file = "secrets/hyperion/wg-home.age"
@@ -46,7 +47,6 @@
 
 [titan]
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOteEiVr+H3Q1tSw1bGQfjbVWuPggc/+w1vVXSFde0Rt"
-  wgPublicKey = "vNfSS1HsbnRqV6V/RfG0Aq1IoNQPS+IP2O162UlVQQA="
 
   profiles = [
     "hardware/nuc",
@@ -86,6 +86,72 @@
   services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.240.141:6443" }
 
 
+[polaris]
+  #publicKey = "xxx"
+
+  profiles = [
+    "hardware/ax41",
+    "profiles/default_fs",
+    #"profiles/k3s",
+    "profiles/server",
+    "profiles/state",
+  ]
+
+  users.groups.john.gid = 1337
+  users.users.john.uid = 1337
+  users.users.john.hashedPassword = "$6$MY8KAtdXlQP5.$TEZbPueD71fYUGviybTjFWCD5s1eWmr9FK9WtoLFKFy3yfLu18KPJ2wAbK8ZVJDo52hsc0vGa4LKYbzb.pwPk0"
+  users.users.john.openssh.authorizedKeys.keys = [
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ==",
+    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo=",
+    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
+  ]
+
+  boot.kernelParams = [
+    "ip=65.108.2.146::65.108.2.129:255.255.255.192:polaris:eth0:none",
+  ]
+
+  boot.initrd.availableKernelModules = [
+    "r8169",
+    "nvme",
+    "ahci",
+    "usbhid",
+  ]
+
+  boot.initrd.network.enable = true
+  boot.initrd.network.postCommands = "echo 'cryptsetup-askpass' >> /root/.profile"
+  boot.initrd.network.ssh.enable = true
+  boot.initrd.network.ssh.port = 2222
+  ## this is fragile, on first install they'll need to be copied over to the proper place or they
+  ## won't be there in for when the bootloader is installed something to keep in mind
+  boot.initrd.network.ssh.hostKeys = [
+    "/run/secrets/initrd_rsa_key",
+    "/run/secrets/initrd_ed25519_key",
+  ]
+  boot.initrd.network.ssh.authorizedKeys = [
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ==",
+    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo=",
+    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
+  ]
+
+  networking.defaultGateway = "65.108.2.129"
+  networking.interfaces.eth0.ipv4.addresses = [
+    { address = "65.108.2.146", prefixLength = 26 }
+  ]
+  networking.defaultGateway6 = { address = "fe80::1", interface = "eth0" }
+  networking.interfaces.eth0.ipv6.addresses = [
+    { address = "2a01:4f9:6a:51ed::2", prefixLength = 64 }
+  ]
+
+  #system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
+
+  #age.secrets.k3s-token.file = "secrets/k3s/token.age"
+  #age.secrets.wg-home.file = "secrets/polaris/wg-home.age"
+  #age.secrets.initrd_rsa_key.file = "secrets/polaris/initrd_rsa_key.age"
+  #age.secrets.initrd_ed25519_key.file = "secrets/polaris/initrd_ed25519_key.age"
+
+  #services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.240.141:6443" }
+
+
 [rhea]
   # publicKey = "?"
   profiles = [
@@ -113,7 +179,6 @@
 
 [eris]
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
-  wgPublicKey = "Oya0T0tzAV25A7/Qp3tqKP+2KgGjA/OVuUmKzsTFpRo="
 
   virtualisation.libvirtd.enable = true
 
@@ -237,7 +302,6 @@
 
 [carbon]
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOsLzBkJNFdXKdXcAaMQ4VCzJ/9kBiP2xkwnMXCSmR2Z"
-  wgPublicKey = "WiNYoRIrLjyeuRkD4uhKJ0qKS32up4wYJSviR5q8QnY="
   profiles = [
     "hardware/usbcore",
     "hardware/x1-carbon",
