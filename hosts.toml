@@ -87,7 +87,7 @@
 
 
 [polaris]
-  #publicKey = "xxx"
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH3j2ERE2uNapkkM3Ls6V2COd14Bmu6ClWfhheghDNzt"
 
   profiles = [
     "hardware/ax41",
@@ -121,8 +121,10 @@
   boot.initrd.network.postCommands = "echo 'cryptsetup-askpass' >> /root/.profile"
   boot.initrd.network.ssh.enable = true
   boot.initrd.network.ssh.port = 2222
-  ## this is fragile, on first install they'll need to be copied over to the proper place or they
-  ## won't be there in for when the bootloader is installed something to keep in mind
+  ## This is fragile, on first install they'll need to be copied over to the proper place or they
+  ## won't be there in for when the bootloader is installed
+  ## Basically, on first install these need to go into a defined fs like /keep for example, later they
+  ## can go in /run/secrets. This ONLY affects the initrd keys.
   boot.initrd.network.ssh.hostKeys = [
     "/run/secrets/initrd_ed25519_key",
   ]
@@ -143,9 +145,9 @@
 
   #system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
 
-  #age.secrets.k3s-token.file = "secrets/k3s/token.age"
-  #age.secrets.wg-home.file = "secrets/polaris/wg-home.age"
-  #age.secrets.initrd_ed25519_key.file = "secrets/polaris/initrd_ed25519_key.age"
+  age.secrets.k3s-token.file = "secrets/k3s/token.age"
+  age.secrets.wg-home.file = "secrets/polaris/wg-home.age"
+  age.secrets.initrd_ed25519_key.file = "secrets/polaris/initrd_ed25519_key.age"
 
   #services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.240.141:6443" }
 
