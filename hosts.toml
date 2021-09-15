@@ -124,7 +124,6 @@
   ## this is fragile, on first install they'll need to be copied over to the proper place or they
   ## won't be there in for when the bootloader is installed something to keep in mind
   boot.initrd.network.ssh.hostKeys = [
-    "/run/secrets/initrd_rsa_key",
     "/run/secrets/initrd_ed25519_key",
   ]
   boot.initrd.network.ssh.authorizedKeys = [
@@ -146,7 +145,6 @@
 
   #age.secrets.k3s-token.file = "secrets/k3s/token.age"
   #age.secrets.wg-home.file = "secrets/polaris/wg-home.age"
-  #age.secrets.initrd_rsa_key.file = "secrets/polaris/initrd_rsa_key.age"
   #age.secrets.initrd_ed25519_key.file = "secrets/polaris/initrd_ed25519_key.age"
 
   #services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.240.141:6443" }
