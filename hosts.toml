@@ -75,7 +75,7 @@
 
   services.innernet.client.insane.enable = true
   services.innernet.client.insane.settings.interface = { address = "192.168.104.67/22", privateKeyFile = "/run/secrets/wg-home" }
-  services.innernet.client.insane.settings.server = { publicKey = "vNfSS1HsbnRqV6V/RfG0Aq1IoNQPS+IP2O162UlVQQA=", externalEndpoint = "217.210.236.9:51820", internalEndpoint = "192.168.104.1:51820" }
+  services.innernet.client.insane.settings.server = { publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8=", externalEndpoint = "217.210.236.9:51820", internalEndpoint = "192.168.104.1:51820" }
 
   system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
 
