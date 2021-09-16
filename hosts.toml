@@ -25,18 +25,9 @@
     { address = "192.168.240.141", prefixLength = 24 }
   ]
 
-  services.innernet.server.insane.enable = true
-  services.innernet.server.insane.settings.openFirewall = true
-  services.innernet.server.insane.settings.cidr = "192.168.104.0/22"
-  services.innernet.server.insane.settings.listenPort = 51820
-  services.innernet.server.insane.settings.privateKeyFile = "/run/secrets/wg-home"
-  services.innernet.server.insane.settings.publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8="
-  services.innernet.server.insane.settings.externalEndpoint = "217.210.236.9:51820"
-  services.innernet.server.insane.settings.cidrs.home = { cidr = "192.168.104.64/26", parent = "insane" }
-  services.innernet.server.insane.settings.peers.eris = { ip = "192.168.104.65", cidr = "home", publicKey = "Oya0T0tzAV25A7/Qp3tqKP+2KgGjA/OVuUmKzsTFpRo=", isAdmin = true }
-  services.innernet.server.insane.settings.peers.carbon = { ip = "192.168.104.66", cidr = "home", publicKey = "WiNYoRIrLjyeuRkD4uhKJ0qKS32up4wYJSviR5q8QnY=", isAdmin = true }
-  services.innernet.server.insane.settings.peers.titan = { ip = "192.168.104.67", cidr = "home", publicKey = "vNfSS1HsbnRqV6V/RfG0Aq1IoNQPS+IP2O162UlVQQA=" }
-
+  services.innernet.client.insane.enable = true
+  services.innernet.client.insane.settings.interface = { address = "192.168.104.68/22", privateKeyFile = "/run/secrets/wg-home" }
+  services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
 
   system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
@@ -75,7 +66,7 @@
 
   services.innernet.client.insane.enable = true
   services.innernet.client.insane.settings.interface = { address = "192.168.104.67/22", privateKeyFile = "/run/secrets/wg-home" }
-  services.innernet.client.insane.settings.server = { publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8=", externalEndpoint = "217.210.236.9:51820", internalEndpoint = "192.168.104.1:51820" }
+  services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
 
   system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
 
@@ -131,6 +122,19 @@
     "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo=",
     "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
   ]
+
+  services.innernet.server.insane.enable = true
+  services.innernet.server.insane.settings.openFirewall = true
+  services.innernet.server.insane.settings.cidr = "192.168.104.0/22"
+  services.innernet.server.insane.settings.listenPort = 51820
+  services.innernet.server.insane.settings.privateKeyFile = "/run/secrets/wg-home"
+  services.innernet.server.insane.settings.publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY="
+  services.innernet.server.insane.settings.externalEndpoint = "65.108.2.146:51820"
+  services.innernet.server.insane.settings.cidrs.home = { cidr = "192.168.104.64/26", parent = "insane" }
+  services.innernet.server.insane.settings.peers.eris = { ip = "192.168.104.65", cidr = "home", publicKey = "Oya0T0tzAV25A7/Qp3tqKP+2KgGjA/OVuUmKzsTFpRo=", isAdmin = true }
+  services.innernet.server.insane.settings.peers.carbon = { ip = "192.168.104.66", cidr = "home", publicKey = "WiNYoRIrLjyeuRkD4uhKJ0qKS32up4wYJSviR5q8QnY=", isAdmin = true }
+  services.innernet.server.insane.settings.peers.titan = { ip = "192.168.104.67", cidr = "home", publicKey = "vNfSS1HsbnRqV6V/RfG0Aq1IoNQPS+IP2O162UlVQQA=" }
+  services.innernet.server.insane.settings.peers.hyperion = { ip = "192.168.104.68", cidr = "home", publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8=" }
 
   networking.defaultGateway = "65.108.2.129"
   networking.interfaces.eth0.ipv4.addresses = [
@@ -203,7 +207,7 @@
 
   services.innernet.client.insane.enable = true
   services.innernet.client.insane.settings.interface = { address = "192.168.104.65/22", privateKeyFile = "/run/secrets/wg-home" }
-  services.innernet.client.insane.settings.server = { publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8=", externalEndpoint = "217.210.236.9:51820", internalEndpoint = "192.168.104.1:51820" }
+  services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
 
   users.groups.john.gid = 1337
   users.users.john.uid = 1337
@@ -319,7 +323,7 @@
 
   services.innernet.client.insane.enable = true
   services.innernet.client.insane.settings.interface = { address = "192.168.104.66/22", privateKeyFile = "/run/secrets/wg-home" }
-  services.innernet.client.insane.settings.server = { publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8=", externalEndpoint = "217.210.236.9:51820", internalEndpoint = "192.168.104.1:51820" }
+  services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
 
   users.groups.john.gid = 1337
   users.users.john.uid = 1337
