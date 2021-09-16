@@ -122,12 +122,9 @@
   boot.initrd.network.postCommands = "echo 'cryptsetup-askpass' >> /root/.profile"
   boot.initrd.network.ssh.enable = true
   boot.initrd.network.ssh.port = 2222
-  ## This is fragile, on first install they'll need to be copied over to the proper place or they
-  ## won't be there in for when the bootloader is installed
-  ## Basically, on first install these need to go into a defined fs like /keep for example, later they
-  ## can go in /run/secrets. This ONLY affects the initrd keys.
+  ## This isn't so nice. Have to copy the file to /keep/secrets and keep it there.
   boot.initrd.network.ssh.hostKeys = [
-    "/run/secrets/initrd_ed25519_key",
+    "/keep/secrets/initrd_ed25519_key",
   ]
   boot.initrd.network.ssh.authorizedKeys = [
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ==",
@@ -148,7 +145,6 @@
 
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.wg-home.file = "secrets/polaris/wg-home.age"
-  age.secrets.initrd_ed25519_key.file = "secrets/polaris/initrd_ed25519_key.age"
 
   #services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.240.141:6443" }
 
