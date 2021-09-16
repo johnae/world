@@ -82,6 +82,7 @@
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.ubnt-api-user-password.file = "secrets/ubnt-api-user-password.age"
   age.secrets.wg-home.file = "secrets/titan/wg-home.age"
+  age.secrets.remote-disk-password.file = "secrets/remote-disk-password.age"
 
   services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.240.141:6443" }
 
