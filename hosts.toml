@@ -33,7 +33,7 @@
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.wg-home.file = "secrets/hyperion/wg-home.age"
 
-  services.k3s = { role = "server", tokenFile = "/run/secrets/k3s-token" }
+  services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.104.1:6443" }
 
 
 [titan]
@@ -80,7 +80,7 @@
   age.secrets.remote-disk-password.file = "secrets/remote-disk-password.age"
   age.secrets.id_ed25519_remote_unlock.file = "secrets/titan/id_ed25519_remote_unlock.age"
 
-  services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.240.141:6443" }
+  services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.104.1:6443" }
 
 
 [polaris]
@@ -156,7 +156,7 @@
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.wg-home.file = "secrets/polaris/wg-home.age"
 
-  #services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.240.141:6443" }
+  services.k3s = { role = "server", tokenFile = "/run/secrets/k3s-token" }
 
 
 [rhea]
@@ -182,7 +182,7 @@
 
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
 
-  services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.240.141:6443" }
+  services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.104.1:6443" }
 
 [eris]
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
