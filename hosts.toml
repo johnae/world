@@ -89,7 +89,7 @@
   profiles = [
     "hardware/ax41",
     "profiles/default_fs",
-    #"profiles/k3s",
+    "profiles/k3s",
     "profiles/server",
     "profiles/state",
   ]
