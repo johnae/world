@@ -18,11 +18,7 @@ let
       --set cni.binPath=/var/lib/rancher/k3s/data/current/bin \
       --set ipam.operator.clusterPoolIPv4PodCIDR=${clusterPoolIPv4CIDR} \
       --set ipam.operator.clusterPoolIPv4MaskSize=${clusterPoolIPv4MaskSize} \
-      --set nativeRoutingCIDR=${clusterPoolIPv4CIDR} \
       --set kubeProxyReplacement=strict \
-      --set tunnel=disabled \
-      --set endpointRoutes.enabled=true \
-      --set autoDirectNodeRoutes=true \
       --namespace=kube-system
   '';
 
