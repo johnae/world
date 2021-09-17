@@ -1,5 +1,3 @@
-#timeout 5 bash -c "</dev/tcp/65.108.2.142/2222"
-
 { config, lib, pkgs, ...}:
 
 let
@@ -27,7 +25,7 @@ let
       description = "Remote unlock ${host}:${strPort}";
       script = ''
         echo "Probing host ${host} on strPort ${strPort}"
-        if timeout 5 bash -c "</dev/tcp/${host}/${strPort}"; then
+        if timeout 5 ${pkgs.bash}/bin/bash -c "</dev/tcp/${host}/${strPort}"; then
           echo "Host ${host} is listening on strPort ${strPort}, unlocking..."
           cat ${passwordFile} | \
             ${pkgs.openssh}/bin/ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null \
