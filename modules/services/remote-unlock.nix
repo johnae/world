@@ -29,7 +29,7 @@ let
           echo "Host ${host} is listening on strPort ${strPort}, unlocking..."
           cat ${passwordFile} | \
             ${pkgs.openssh}/bin/ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null \
-                -i ${identityFile} -p ${strPort} ${host}
+                -i ${identityFile} -p ${strPort} ${host} || true
         else
           echo "No response on ${host}:${strPort}, going to sleep"
         fi
