@@ -125,7 +125,7 @@ data:
   install-iptables-rules: "true"
   install-no-conntrack-iptables-rules: "false"
 
-  auto-direct-node-routes: "true"
+  auto-direct-node-routes: "false"
   enable-bandwidth-manager: "false"
   enable-local-redirect-policy: "false"
 

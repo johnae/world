@@ -20,7 +20,6 @@ let
       --set ipam.operator.clusterPoolIPv4MaskSize=${clusterPoolIPv4MaskSize} \
       --set kubeProxyReplacement=strict \
       --set endpointRoutes.enabled=true \
-      --set autoDirectNodeRoutes=true \
       --namespace=kube-system
   '';
 
