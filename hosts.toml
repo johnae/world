@@ -33,7 +33,12 @@
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.wg-home.file = "secrets/hyperion/wg-home.age"
 
-  services.k3s = { extraFlagsList = [ "--node-ip 192.168.104.68" ], role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.104.1:6443" }
+
+    #"--flannel-iface insane"
+    #"--advertise-address ${innernetAddress}"
+    #"--node-ip ${innernetAddress}"
+    #"--node-external-ip ${innernetAddress}"
+  services.k3s = { extraFlagsList = [ "--node-ip 192.168.104.68", "--flannel-iface insane", "--advertise-address 192.168.104.68", "--node-external-ip 192.168.104.68" ], role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.104.1:6443" }
 
 
 [titan]
@@ -80,8 +85,7 @@
   age.secrets.remote-disk-password.file = "secrets/remote-disk-password.age"
   age.secrets.id_ed25519_remote_unlock.file = "secrets/titan/id_ed25519_remote_unlock.age"
 
-  services.k3s = { extraFlagsList = [ "--node-ip 192.168.104.67" ], role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.104.1:6443" }
-
+  services.k3s = { extraFlagsList = [ "--node-ip 192.168.104.67", "--flannel-iface insane", "--advertise-address 192.168.104.67", "--node-external-ip 192.168.104.67" ], role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.104.1:6443" }
 
 [polaris]
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILOeY+TshjtBK5VQu4ZJVJ0ol1PsZxLvIy+YNCOtfZmd"
@@ -156,7 +160,7 @@
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.wg-home.file = "secrets/polaris/wg-home.age"
 
-  services.k3s = { extraFlagsList = [ "--node-ip 192.168.104.1" ], role = "server", tokenFile = "/run/secrets/k3s-token" }
+  services.k3s = { extraFlagsList = [ "--node-ip 192.168.104.1", "--flannel-iface insane", "--advertise-address 192.168.104.1", "--node-external-ip 192.168.104.1" ], role = "server", tokenFile = "/run/secrets/k3s-token" }
 
 
 [rhea]
