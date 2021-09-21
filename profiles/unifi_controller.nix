@@ -51,4 +51,6 @@ in
     "/var/lib/unifi"
   ];
   networking.firewall.allowedTCPPorts = [ 8443 ];
+  users.users.unifi.group = "unifi";
+  users.groups.unifi = {};
 }
