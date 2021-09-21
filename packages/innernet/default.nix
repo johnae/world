@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = inputs.innernet;
 
-  cargoSha256 = "sha256-9NiGeh0PrEKdkJ3+T6sekmOayBIQ++c01q2HUgP50H8=";
+  cargoSha256 = "sha256-KBhq70kt3OZcsVogml7K1p3MITUpHAvPb6aKBSkP5cY=";
 
   nativeBuildInputs = with llvmPackages; [
     llvm
