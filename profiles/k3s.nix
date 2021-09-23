@@ -1,4 +1,4 @@
-{lib, config, hostName, hostConfig,...}:
+{lib, config, hostName, ...}:
 let
   cfg = config.services.k3s;
 in
