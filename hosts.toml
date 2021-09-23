@@ -33,7 +33,14 @@
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.wg-home.file = "secrets/hyperion/wg-home.age"
 
-  services.k3s = { extraFlagsList = [ "--node-ip 192.168.104.68", "--flannel-iface insane", "--advertise-address 192.168.104.68", "--node-external-ip 192.168.104.68" ], role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.104.1:6443" }
+  services.k3s.role = "agent"
+  services.k3s.serverAddr = "https://192.168.104.1:6443"
+  services.k3s.tokenFile = "/run/secrets/k3s-token"
+  services.k3s.clusterCIDR = "10.128.128.0/21"
+  services.k3s.serviceCIDR = "10.129.128.0/22"
+  services.k3s.clusterDNS = "10.129.128.1"
+  services.k3s.maxPodsPerNode = 30
+  services.k3s.extraFlagsList = [ "--node-ip 192.168.104.68", "--flannel-iface insane", "--advertise-address 192.168.104.68", "--node-external-ip 192.168.240.141" ]
 
 
 [titan]
@@ -80,7 +87,14 @@
   age.secrets.remote-disk-password.file = "secrets/remote-disk-password.age"
   age.secrets.id_ed25519_remote_unlock.file = "secrets/titan/id_ed25519_remote_unlock.age"
 
-  services.k3s = { extraFlagsList = [ "--node-ip 192.168.104.67", "--flannel-iface insane", "--advertise-address 192.168.104.67", "--node-external-ip 192.168.104.67" ], role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.104.1:6443" }
+  services.k3s.role = "agent"
+  services.k3s.serverAddr = "https://192.168.104.1:6443"
+  services.k3s.tokenFile = "/run/secrets/k3s-token"
+  services.k3s.clusterCIDR = "10.128.128.0/21"
+  services.k3s.serviceCIDR = "10.129.128.0/22"
+  services.k3s.clusterDNS = "10.129.128.1"
+  services.k3s.maxPodsPerNode = 30
+  services.k3s.extraFlagsList = [ "--node-ip 192.168.104.67", "--flannel-iface insane", "--advertise-address 192.168.104.67", "--node-external-ip 192.168.240.142" ]
 
 [polaris]
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILOeY+TshjtBK5VQu4ZJVJ0ol1PsZxLvIy+YNCOtfZmd"
@@ -155,7 +169,13 @@
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.wg-home.file = "secrets/polaris/wg-home.age"
 
-  services.k3s = { extraFlagsList = [ "--node-ip 192.168.104.1", "--flannel-iface insane", "--advertise-address 192.168.104.1", "--node-external-ip 192.168.104.1" ], role = "server", tokenFile = "/run/secrets/k3s-token" }
+  services.k3s.role = "server"
+  services.k3s.tokenFile = "/run/secrets/k3s-token"
+  services.k3s.clusterCIDR = "10.128.128.0/21"
+  services.k3s.serviceCIDR = "10.129.128.0/22"
+  services.k3s.clusterDNS = "10.129.128.1"
+  services.k3s.maxPodsPerNode = 30
+  services.k3s.extraFlagsList = [ "--node-ip 192.168.104.1", "--flannel-iface insane", "--advertise-address 192.168.104.1", "--node-external-ip 65.108.2.146" ]
 
 
 [rhea]

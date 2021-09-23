@@ -6,6 +6,26 @@ let
   k3sManifestsDir = "/var/lib/rancher/k3s/server/manifests";
 in
 {
+  options.services.k3s.maxPodsPerNode = mkOption {
+    type = types.int;
+    default = 110;
+    description = "Max no of pods per node";
+  };
+  options.services.k3s.clusterCIDR = mkOption {
+    type = types.nullOr types.str;
+    default = null;
+    description = "IPv4/IPv6 network CIDRs to use for pod IPs (default: 10.42.0.0/16)";
+  };
+  options.services.k3s.serviceCIDR = mkOption {
+    type = types.nullOr types.str;
+    default = null;
+    description = "IPv4/IPv6 network CIDRs to use for service IPs (default: 10.43.0.0/16)";
+  };
+  options.services.k3s.clusterDNS = mkOption {
+    type = types.nullOr types.str;
+    default = null;
+    description = "IPv4 Cluster IP for coredns service. Should be in your service-cidr range (default: 10.43.0.10)";
+  };
   options.services.k3s.uniqueNodeNames = mkOption {
     type = types.bool;
     default = true;
@@ -48,7 +68,11 @@ in
     ++ (optionals (cfg.disableScheduler && cfg.role == "server") [ "--disable-scheduler" ])
     ++ (optionals (cfg.disableCloudController && cfg.role == "server") [ "--disable-cloud-controller" ])
     ++ (optionals (cfg.disableKubeProxy && cfg.role == "server") [ "--disable-kube-proxy" ])
-    ++ (optionals (cfg.disableNetworkPolicy && cfg.role == "server") [ "--disable-network-policy" ]);
+    ++ (optionals (cfg.disableNetworkPolicy && cfg.role == "server") [ "--disable-network-policy" ])
+    ++ (optionals (cfg.clusterCIDR != null && cfg.role == "server") [ "--cluster-cidr ${cfg.clusterCIDR}" ])
+    ++ (optionals (cfg.serviceCIDR != null && cfg.role == "server") [ "--service-cidr ${cfg.serviceCIDR}" ])
+    ++ (optionals (cfg.clusterDNS != null && cfg.role == "server") [ "--cluster-dns ${cfg.clusterDNS}" ])
+    ++ [ "--kubelet-arg=\"max-pods=${toString cfg.maxPodsPerNode}\"" ];
     services.k3s.extraFlags = concatStringsSep " " cfg.extraFlagsList;
     systemd.services.k3s.preStart = mkIf (cfg.role == "server") ''
     mkdir -p ${k3sManifestsDir}
