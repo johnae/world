@@ -33,11 +33,6 @@
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.wg-home.file = "secrets/hyperion/wg-home.age"
 
-
-    #"--flannel-iface insane"
-    #"--advertise-address ${innernetAddress}"
-    #"--node-ip ${innernetAddress}"
-    #"--node-external-ip ${innernetAddress}"
   services.k3s = { extraFlagsList = [ "--node-ip 192.168.104.68", "--flannel-iface insane", "--advertise-address 192.168.104.68", "--node-external-ip 192.168.104.68" ], role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.104.1:6443" }
 
 
