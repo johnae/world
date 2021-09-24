@@ -180,6 +180,7 @@
   services.k3s.maxPodsPerNode = 30
   services.k3s.extraFlagsList = [ "--node-ip 192.168.104.1", "--flannel-iface insane", "--advertise-address 192.168.104.1", "--node-external-ip 65.108.2.146" ]
 
+  services.plex = { enable = true, openFirewall = true }
 
 [rhea]
   # publicKey = "?"
