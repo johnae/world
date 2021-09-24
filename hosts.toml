@@ -33,6 +33,7 @@
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.wg-home.file = "secrets/hyperion/wg-home.age"
 
+  networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
   services.k3s.role = "agent"
   services.k3s.serverAddr = "https://192.168.104.1:6443"
   services.k3s.tokenFile = "/run/secrets/k3s-token"
@@ -87,6 +88,7 @@
   age.secrets.remote-disk-password.file = "secrets/remote-disk-password.age"
   age.secrets.id_ed25519_remote_unlock.file = "secrets/titan/id_ed25519_remote_unlock.age"
 
+  networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
   services.k3s.role = "agent"
   services.k3s.serverAddr = "https://192.168.104.1:6443"
   services.k3s.tokenFile = "/run/secrets/k3s-token"
@@ -169,6 +171,7 @@
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.wg-home.file = "secrets/polaris/wg-home.age"
 
+  networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
   services.k3s.role = "server"
   services.k3s.tokenFile = "/run/secrets/k3s-token"
   services.k3s.clusterCIDR = "10.128.128.0/21"
