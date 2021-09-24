@@ -107,7 +107,12 @@
 
   services.btrfs.autoScrub.enable = true;
 
-  security.wrappers.netns-exec.source = "${pkgs.netns-exec}/bin/netns-exec";
+  security.wrappers.netns-exec = {
+   source = "${pkgs.netns-exec}/bin/netns-exec";
+   owner = "root";
+   group = "root";
+   setuid = true;
+  };
 
   ## This just auto-creates /nix/var/nix/{profiles,gcroots}/per-user/<USER>
   ## for all extraUsers setup on the system. Without this home-manager refuses
