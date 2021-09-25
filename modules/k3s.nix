@@ -38,6 +38,10 @@ in
     type = types.bool;
     default = false;
   };
+  options.services.k3s.after = mkOption {
+    type = types.listOf types.str;
+    default = [];
+  };
   options.services.k3s.disable = mkOption {
     type = types.listOf (types.enum [ "coredns" "servicelb" "traefik" "local-storage" "metrics-server" ]);
     default = [];
@@ -91,6 +95,6 @@ in
     ## but the below works for me anyway
     boot.kernelModules = [ "br_netfilter" "ip_conntrack" "ip_vs" "ip_vs_rr" "ip_vs_wrr" "ip_vs_sh" "overlay" ];
     systemd.services.k3s.serviceConfig.KillMode = lib.mkForce "control-group";
-    systemd.services.k3s.after = [ "network-online.service" "firewall.service" ];
+    systemd.services.k3s.after = [ "network-online.service" "firewall.service" ] ++ cfg.after;
   };
 }

@@ -42,7 +42,7 @@
   services.k3s.clusterDNS = "10.129.128.1"
   services.k3s.maxPodsPerNode = 30
   services.k3s.extraFlagsList = [ "--node-ip 192.168.104.68", "--flannel-iface insane", "--advertise-address 192.168.104.68", "--node-external-ip 192.168.240.141" ]
-
+  services.k3s.after = [ "innernet-client-insane.service" ]
 
 [titan]
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOteEiVr+H3Q1tSw1bGQfjbVWuPggc/+w1vVXSFde0Rt"
@@ -97,6 +97,7 @@
   services.k3s.clusterDNS = "10.129.128.1"
   services.k3s.maxPodsPerNode = 30
   services.k3s.extraFlagsList = [ "--node-ip 192.168.104.67", "--flannel-iface insane", "--advertise-address 192.168.104.67", "--node-external-ip 192.168.240.142" ]
+  services.k3s.after = [ "innernet-client-insane.service" ]
 
 [polaris]
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILOeY+TshjtBK5VQu4ZJVJ0ol1PsZxLvIy+YNCOtfZmd"
@@ -179,6 +180,7 @@
   services.k3s.clusterDNS = "10.129.128.1"
   services.k3s.maxPodsPerNode = 30
   services.k3s.extraFlagsList = [ "--node-ip 192.168.104.1", "--flannel-iface insane", "--advertise-address 192.168.104.1", "--node-external-ip 65.108.2.146" ]
+  services.k3s.after = [ "innernet-server-insane.service" ]
 
   services.plex = { enable = true, openFirewall = true }
 
