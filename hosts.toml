@@ -167,10 +167,21 @@
     { address = "2a01:4f9:6a:51ed::2", prefixLength = 64 }
   ]
 
+  networking.wireguard.interfaces.private.ips = [
+    "10.65.167.230/32",
+    "fc00:bbbb:bbbb:bb01::2:a7e5/128"
+  ]
+  networking.wireguard.interfaces.private.privateKeyFile = "/run/secrets/wg-net"
+  networking.wireguard.interfaces.private.interfaceNamespace = "private"
+  networking.wireguard.interfaces.private.peers = [
+  { allowedIPs = [ "0.0.0.0/0", "::0/0" ], endpoint = "185.65.135.70:51820", publicKey = "615mnBGkvjZnD/vRbyL/6da7YhtctfB+jimN+wfV724=" }
+  ]
+
   system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
 
   age.secrets.k3s-token.file = "secrets/k3s/token.age"
   age.secrets.wg-home.file = "secrets/polaris/wg-home.age"
+  age.secrets.wg-net.file = "secrets/polaris/wg-net.age"
 
   networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
   services.k3s.role = "server"
