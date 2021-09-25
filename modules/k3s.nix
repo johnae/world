@@ -85,5 +85,12 @@ in
       ) cfg.disable)
     }
     '';
+    ## Fixes for k3s networking etc
+    ## see: https://github.com/NixOS/nixpkgs/issues/98766
+    ## some of these issues may have been fixed by (eg. modprobe in PATH): https://github.com/NixOS/nixpkgs/pull/101744
+    ## but the below works for me anyway
+    boot.kernelModules = [ "br_netfilter" "ip_conntrack" "ip_vs" "ip_vs_rr" "ip_vs_wrr" "ip_vs_sh" "overlay" ];
+    systemd.services.k3s.serviceConfig.KillMode = lib.mkForce "control-group";
+    systemd.services.k3s.after = [ "network-online.service" "firewall.service" ];
   };
 }
