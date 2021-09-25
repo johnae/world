@@ -11,7 +11,7 @@ in
   services.k3s.disableNetworkPolicy = true;
   #networking.firewall.allowedTCPPorts = lib.mkIf (cfg.role == "server") [ 6443 ];
   #networking.firewall.allowedUDPPorts = [ 8472 ];
-  networking.firewall.trustedInterfaces = [ "cni0" "flannel.1" "calico+" "cilium+" "lxc+" ];
+  networking.firewall.trustedInterfaces = [ "cni+" "flannel.1" "calico+" "cilium+" "lxc+" ];
   environment.state."/keep" = {
     directories = [
       "/etc/rancher"
