@@ -1,8 +1,8 @@
 {pkgs, config, lib, ...}:
 
 let
-  inherit (builtins) attrNames;
-  inherit (lib) filterAttrs mapAttrs;
+  inherit (builtins) length attrNames;
+  inherit (lib) mkIf filterAttrs mapAttrs;
   privateInterfaces = filterAttrs (_: v: v.interfaceNamespace != null) config.networking.wireguard.interfaces;
 in
 {
