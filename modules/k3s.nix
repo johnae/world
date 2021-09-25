@@ -1,4 +1,4 @@
-{lib, config, ...}:
+{pkgs, lib, config, ...}:
 let
   inherit (lib) mkOption mkIf mkMerge mkForce types optionals;
   inherit (builtins) concatStringsSep;
@@ -95,5 +95,17 @@ in
     ## but the below works for me anyway
     boot.kernelModules = [ "br_netfilter" "ip_conntrack" "ip_vs" "ip_vs_rr" "ip_vs_wrr" "ip_vs_sh" "overlay" ];
     systemd.services.k3s.after = [ "network-online.service" "firewall.service" ] ++ cfg.after;
+    systemd.timers.restart-k3s-on-boot = {
+      description = "Hack for fixing k3s vxlan networking :-|";
+      enable = true;
+      wantedBy = [ "timers.target" ];
+      timerConfig.OnBootSec = "5m";
+    };
+    systemd.services.restart-k3s-on-boot = {
+      description = "Hack for fixing k3s vxlan networking :-|";
+      script = ''
+        ${pkgs.systemd}/bin/systemctl restart k3s.service
+      '';
+    };
   };
 }
