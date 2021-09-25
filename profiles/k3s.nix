@@ -1,4 +1,4 @@
-{config, hostName, ...}:
+{hostName, ...}:
 {
   services.k3s.enable = true;
   services.k3s.extraFlagsList = [
