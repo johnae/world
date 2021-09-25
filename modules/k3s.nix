@@ -89,12 +89,11 @@ in
       ) cfg.disable)
     }
     '';
-    ## Fixes for k3s networking etc
+    ## Random fixes and hacks for k3s networking
     ## see: https://github.com/NixOS/nixpkgs/issues/98766
-    ## some of these issues may have been fixed by (eg. modprobe in PATH): https://github.com/NixOS/nixpkgs/pull/101744
-    ## but the below works for me anyway
     boot.kernelModules = [ "br_netfilter" "ip_conntrack" "ip_vs" "ip_vs_rr" "ip_vs_wrr" "ip_vs_sh" "overlay" ];
     systemd.services.k3s.after = [ "network-online.service" "firewall.service" ] ++ cfg.after;
+    ## Really stupid obviously
     systemd.timers.restart-k3s-on-boot = {
       description = "Hack for fixing k3s vxlan networking :-|";
       enable = true;
@@ -104,6 +103,7 @@ in
     systemd.services.restart-k3s-on-boot = {
       description = "Hack for fixing k3s vxlan networking :-|";
       script = ''
+        echo Restarting k3s
         ${pkgs.systemd}/bin/systemctl restart k3s.service
       '';
     };
