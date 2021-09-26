@@ -7,7 +7,7 @@
     ./unifi-config.nix
     ./k3s.nix
     ./innernet.nix
-    ./wireguard.nix
+    ./private-wireguard.nix
     ./config-from-data.nix
     ./host-config.nix
     ./user-config.nix
