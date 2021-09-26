@@ -98,7 +98,7 @@ in
       description = "Hack for fixing k3s vxlan networking :-|";
       enable = true;
       wantedBy = [ "timers.target" ];
-      timerConfig.OnStartupSec = "5m";
+      timerConfig.OnStartupSec = if cfg.role == "server" then "3m" else "15m";
     };
     systemd.services.restart-k3s-on-boot = {
       description = "Hack for fixing k3s vxlan networking :-|";
