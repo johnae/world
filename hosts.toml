@@ -197,6 +197,7 @@
   services.plex = { enable = true, openFirewall = true }
   environment.state."/keep".directories = [
     "/var/lib/plex",
+    "/var/lib/media",
   ]
 
 [eris]
