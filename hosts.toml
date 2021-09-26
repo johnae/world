@@ -157,6 +157,7 @@
   services.innernet.server.insane.settings.peers.carbon = { ip = "192.168.104.66", cidr = "home", publicKey = "WiNYoRIrLjyeuRkD4uhKJ0qKS32up4wYJSviR5q8QnY=", isAdmin = true }
   services.innernet.server.insane.settings.peers.titan = { ip = "192.168.104.67", cidr = "home", publicKey = "vNfSS1HsbnRqV6V/RfG0Aq1IoNQPS+IP2O162UlVQQA=" }
   services.innernet.server.insane.settings.peers.hyperion = { ip = "192.168.104.68", cidr = "home", publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8=" }
+  services.innernet.server.insane.settings.peers.triton = { ip = "192.168.104.69", cidr = "home", publicKey = "gq5yK4X2IqPz74Jc1GQlVb3rgmtuqn8yzlPMeN0UMVI=" }
 
   networking.defaultGateway = "65.108.2.129"
   networking.interfaces.eth0.ipv4.addresses = [
@@ -194,31 +195,9 @@
   services.k3s.after = [ "innernet-server-insane.service" ]
 
   services.plex = { enable = true, openFirewall = true }
-
-[rhea]
-  # publicKey = "?"
-  profiles = [
-    "hardware/macmini",
-    "profiles/default_fs",
-    "profiles/hidpi",
-    "profiles/server",
-    "profiles/state",
-    "profiles/uuid_disk_crypt",
+  environment.state."/keep".directories = [
+    "/var/lib/plex",
   ]
-  users.groups.john.gid = 1337
-  users.users.john.uid = 1337
-  users.users.john.hashedPassword = "$6$NH36UuVGJCVzhfL$K/73aYEiyB8xYrj03A2stxXB4cFV2bPHe6WQzwWd8tyLNIZNszueAlG8jYENo5GfTuB3Zc0GITYQnqLvHNsvA0"
-
-  networking.defaultGateway = "192.168.240.1"
-  networking.interfaces.eth0.ipv4.addresses = [
-    { address = "192.168.240.143", prefixLength = 24 }
-  ]
-
-  system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
-
-  age.secrets.k3s-token.file = "secrets/k3s/token.age"
-
-  services.k3s = { role = "agent", tokenFile = "/run/secrets/k3s-token", serverAddr = "https://192.168.104.1:6443" }
 
 [eris]
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
@@ -288,67 +267,11 @@
     "wlsunset",
   ]
 
-[io]
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE5WClmubgehZKXvGwuLH621Nd5IMIxh8HWZf0lUW47M"
+[triton]
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID8Yt1yqz+9QumTqWxGwuCZ3uLxRY3koQmFILZ9JHrQP" ## temporary, fixme
   profiles = [
     "hardware/usbcore",
-    "hardware/xps9300",
-    "profiles/bluez_autoswitch",
-    "profiles/default_fs",
-    "profiles/hidpi",
-    "profiles/home-manager",
-    "profiles/interception-tools",
-    "profiles/laptop",
-    "profiles/pcscd",
-    "profiles/state",
-    "profiles/tailscale",
-  ]
-
-  age.secrets.spotnix = { file = "secrets/spotnix.age", owner = "1337" }
-  age.secrets.spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
-  age.secrets.wifi-networks.file = "secrets/wifi-networks.age"
-
-  users.groups.john.gid = 1337
-  users.users.john.uid = 1337
-  users.users.john.shell = "fish"
-  users.users.john.hashedPassword = "$6$mJA6xE6ZcfY9rn1$ym/OZ02gGK6APaoa9qTjhzWkyxokJ8ldqUt/x3nmGaAsCkMKWmWcB0guYO2ydtifN3EVGygcSZXrB4tLVMZpz0"
-
-  userConfiguration.john.email = "john@insane.se"
-  userConfiguration.john.fullName = "John Axel Eriksson"
-  userConfiguration.john.githubUser = "johnae"
-  userConfiguration.john.gitlabUser = "johnae"
-  userConfiguration.john.profiles = [
-    "alacritty",
-    "bat",
-    "chromium",
-    "dconf",
-    "emacs",
-    "firefox",
-    "fish",
-    "git",
-    "i3status-laptop",
-    "kanshi",
-    "mako",
-    "obs",
-    "pueue",
-    "qutebrowser",
-    "rbw",
-    "rofi",
-    "spotifyd",
-    "spotnix",
-    "ssh",
-    "starship",
-    "sway",
-    "theme",
-    "tmux",
-    "wlsunset",
-  ]
-
-[carbon]
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOsLzBkJNFdXKdXcAaMQ4VCzJ/9kBiP2xkwnMXCSmR2Z"
-  profiles = [
-    "hardware/usbcore",
-    "hardware/x1-carbon",
+    "hardware/yoga-slim-7-amd",
     "profiles/bluez_autoswitch",
     "profiles/default_fs",
     "profiles/home-manager",
@@ -362,16 +285,17 @@
   age.secrets.spotnix = { file = "secrets/spotnix.age", owner = "1337" }
   age.secrets.spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
   age.secrets.wifi-networks.file = "secrets/wifi-networks.age"
-  age.secrets.wg-home.file = "secrets/carbon/wg-home.age"
+  age.secrets.wg-home.file = "secrets/triton/wg-home.age"
+  age.secrets.wg-net.file = "secrets/triton/wg-net.age"
 
   services.innernet.client.insane.enable = true
-  services.innernet.client.insane.settings.interface = { address = "192.168.104.66/22", privateKeyFile = "/run/secrets/wg-home" }
+  services.innernet.client.insane.settings.interface = { address = "192.168.104.69/22", privateKeyFile = "/run/secrets/wg-home" }
   services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
 
   users.groups.john.gid = 1337
   users.users.john.uid = 1337
   users.users.john.shell = "fish"
-  users.users.john.hashedPassword = "$6$7D0/IXD6AM$9QRdv2TlnbtCFgwOMUU5NDRakIXLvt1xx3s0AtRaUyqnsg8n8jEPOSHfGjiX41dveTKP8a.2qjF731Ie0VNSz0"
+  users.users.john.hashedPassword = "$6$pUcetTdGMZMdzwx$ySPiZXgZUkIGO3jaEXIIEIh6ks8rea9uE5B08SHku2aJUolHeYKrMvhyFvNYcpvYQ/jf7kgOXL8dL0Yn.IuNS."
 
   userConfiguration.john.email = "john@insane.se"
   userConfiguration.john.fullName = "John Axel Eriksson"
