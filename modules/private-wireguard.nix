@@ -26,6 +26,7 @@ in
     };
     interfaceNamespace = mkOption {
       type = types.str;
+      default = "private";
     };
     peers = mkOption {
       type = types.listOf peers;
@@ -36,7 +37,7 @@ in
   };
 
   config = mkIf (cfg.enable) {
-    networking.wireguard.interfaces.private-wireguard = {
+    networking.wireguard.interfaces.private = {
       inherit (cfg) privateKeyFile interfaceNamespace peers ips;
       preSetup = ''
         ${pkgs.iproute2}/bin/ip netns add ${cfg.interfaceNamespace}

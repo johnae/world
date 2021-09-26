@@ -173,7 +173,6 @@
     "fc00:bbbb:bbbb:bb01::2:a7e5/128"
   ]
   networking.private-wireguard.privateKeyFile = "/run/secrets/wg-net"
-  networking.private-wireguard.interfaceNamespace = "private"
   networking.private-wireguard.peers = [
     { allowedIPs = [ "0.0.0.0/0", "::0/0" ], endpoint = "185.65.135.70:51820", publicKey = "615mnBGkvjZnD/vRbyL/6da7YhtctfB+jimN+wfV724=" }
   ]
