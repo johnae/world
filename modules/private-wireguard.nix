@@ -2,9 +2,9 @@
 
 ## really just a wrapper so that it's easier to specify through toml (eg. the preSetup hook with a pkg ref)
 let
-  inherit (lib) mkEnableOption mkOption mkIf types submodule;
+  inherit (lib) mkEnableOption mkOption mkIf types;
   cfg = config.networking.private-wireguard;
-  peers = submodule {
+  peers = types.submodule {
     options = {
       allowedIPs = mkOption {
         type = types.listOf types.str;
