@@ -167,6 +167,7 @@
     { address = "2a01:4f9:6a:51ed::2", prefixLength = 64 }
   ]
 
+  networking.private-wireguard.enable = true
   networking.private-wireguard.ips = [
     "10.65.167.230/32",
     "fc00:bbbb:bbbb:bb01::2:a7e5/128"
