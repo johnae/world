@@ -41,7 +41,10 @@
   services.k3s.serviceCIDR = "10.129.128.0/22"
   services.k3s.clusterDNS = "10.129.128.1"
   services.k3s.maxPodsPerNode = 30
-  services.k3s.extraFlagsList = [ "--node-ip 192.168.104.68", "--flannel-iface insane", "--advertise-address 192.168.104.68", "--node-external-ip 192.168.240.141" ]
+  services.k3s.nodeCIDRMaskSize = 26
+  services.k3s.flannelIface = "insane"
+  services.k3s.nodeIP = "192.168.104.68"
+  services.k3s.nodeExternalIP = "192.168.240.141"
   services.k3s.after = [ "innernet-client-insane.service" ]
 
 [titan]
@@ -96,7 +99,10 @@
   services.k3s.serviceCIDR = "10.129.128.0/22"
   services.k3s.clusterDNS = "10.129.128.1"
   services.k3s.maxPodsPerNode = 30
-  services.k3s.extraFlagsList = [ "--node-ip 192.168.104.67", "--flannel-iface insane", "--advertise-address 192.168.104.67", "--node-external-ip 192.168.240.142" ]
+  services.k3s.nodeCIDRMaskSize = 26
+  services.k3s.flannelIface = "insane"
+  services.k3s.nodeIP = "192.168.104.67"
+  services.k3s.nodeExternalIP = "192.168.240.142"
   services.k3s.after = [ "innernet-client-insane.service" ]
 
 [polaris]
@@ -191,7 +197,11 @@
   services.k3s.serviceCIDR = "10.129.128.0/22"
   services.k3s.clusterDNS = "10.129.128.1"
   services.k3s.maxPodsPerNode = 30
-  services.k3s.extraFlagsList = [ "--node-ip 192.168.104.1", "--flannel-iface insane", "--advertise-address 192.168.104.1", "--node-external-ip 65.108.2.146" ]
+  services.k3s.nodeCIDRMaskSize = 26
+  services.k3s.flannelIface = "insane"
+  services.k3s.nodeIP = "192.168.104.1"
+  services.k3s.nodeExternalIP = "65.108.2.146"
+  services.k3s.advertiseAddress = "192.168.104.1"
   services.k3s.after = [ "innernet-server-insane.service" ]
 
   services.plex = { enable = true, openFirewall = true }
