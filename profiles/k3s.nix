@@ -2,7 +2,7 @@
 {
   services.k3s.enable = true;
   services.k3s.extraFlagsList = [
-    "--node-label hostname=${hostName}"
+    "--node-label host=${hostName}"
   ];
   services.k3s.disable = [ "traefik" "local-storage" ];
   services.k3s.disableNetworkPolicy = true;
