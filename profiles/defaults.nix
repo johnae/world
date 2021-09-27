@@ -11,6 +11,7 @@
       experimental-features = nix-command flakes ca-references
       keep-outputs = true
       keep-derivations = true
+      tarball-ttl = 900
     '';
 
     registry.nixpkgs.flake = inputs.nixpkgs;
