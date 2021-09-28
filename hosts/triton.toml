@@ -12,6 +12,8 @@ profiles = [
   "profiles/tailscale",
 ]
 
+boot.kernelParams = [ "iommu=soft" ] ## fixes amd driver crash on bios 1.12
+
 age.secrets.spotnix = { file = "secrets/spotnix.age", owner = "1337" }
 age.secrets.spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
 age.secrets.wifi-networks.file = "secrets/wifi-networks.age"
