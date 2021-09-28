@@ -10,7 +10,7 @@ It's based on a relatively recent feature of the [[https://nixos.org][Nix packag
 
 * Installing a new machine
 
-Edit the [[hosts.yaml][hosts.yaml]] file and add a new host. Add the wanted profiles and other configuration. Commit and push them to this repository.
+Add a new toml file under the [[hosts/][hosts/]] directory, possibly copying an existing fitting host and modifying it. Add the wanted profiles and other configuration. Commit and push them to this repository.
 Currently I PXE boot the (mostly automatic) installer which will format disks and install the system and configuration for the defined hosts. To PXE boot the installer, enable any necessary options in BIOS and then, on another machine on the network from a checkout of this repo, run:
 
 #+BEGIN_SRC sh
@@ -49,7 +49,7 @@ After that, just do:
   nixos-install --flake .#"$host" --no-root-passwd --impure
 #+END_SRC
 
-The pxebooter just automates the above in a nicer fashion. Hosts are defined in [[hosts.yaml][hosts.yaml]]
+The pxebooter just automates the above in a nicer fashion. Hosts are defined in the [[hosts/][hosts/]] directory.
 
 /Please note that the setup is quite tailored towards how I like it. For example: all disks are encrypted using dm-crypt and then on top of that formatted as btrfs, swap is automatically setup to a "reasonable" value that is not ideal for a lot of use cases, root is mounted as tmpfs and will therefore use some amount of RAM and it'll also be ephemeral - a reboot results in a clean slate and you'll have to opt-in to what you want to keep./
 
