@@ -174,7 +174,7 @@ in
           xkb_options = "ctrl:nocaps,lv3:lalt_switch,compose:ralt,lv3:ralt_alt";
           xkb_variant = "\"\"";
         };
-        "MSFT0001:00 06CB:CE44 Touchpad" = {
+        "1739:52804:MSFT0001:00_06CB:CE44_Touchpad" = {
           dwt = "true";
           natural_scroll = "true";
           tap = "true";
