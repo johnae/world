@@ -1,0 +1,66 @@
+publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
+
+virtualisation.libvirtd.enable = true
+
+environment.state."/keep".directories = [
+  "/var/lib/libvirt",
+]
+
+profiles = [
+  "hardware/usbcore",
+  "hardware/x570",
+  "profiles/default_fs",
+  "profiles/desktop",
+  "profiles/hidpi",
+  "profiles/home-manager",
+  "profiles/interception-tools",
+  "profiles/pcscd",
+  "profiles/state",
+  "profiles/tailscale",
+]
+
+age.secrets.spotnix = { file = "secrets/spotnix.age", owner = "1337" }
+age.secrets.spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
+age.secrets.wifi-networks.file = "secrets/wifi-networks.age"
+age.secrets.wg-home.file = "secrets/eris/wg-home.age"
+age.secrets.wg-net.file = "secrets/eris/wg-net.age"
+
+services.innernet.client.insane.enable = true
+services.innernet.client.insane.settings.interface = { address = "192.168.104.65/22", privateKeyFile = "/run/secrets/wg-home" }
+services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
+
+users.groups.john.gid = 1337
+users.users.john.uid = 1337
+users.users.john.shell = "fish"
+users.users.john.hashedPassword = "$6$RG3QgdVr6A5s524$FRVNXOYWYCNXf6cH/gV4u7g6sffffznBnbXZGHysuWVHGYPpeLfuDuXEJHK.KUrkVCfPXFTTsCLJaj2Q6ATkC1"
+
+userConfiguration.john.email = "john@insane.se"
+userConfiguration.john.fullName = "John Axel Eriksson"
+userConfiguration.john.githubUser = "johnae"
+userConfiguration.john.gitlabUser = "johnae"
+userConfiguration.john.profiles = [
+  "alacritty",
+  "bat",
+  "chromium",
+  "dconf",
+  "emacs",
+  "firefox",
+  "fish",
+  "git",
+  "i3status-desktop",
+  "kanshi",
+  "mako",
+  "obs",
+  "pueue",
+  "qutebrowser",
+  "rbw",
+  "rofi",
+  "spotifyd",
+  "spotnix",
+  "ssh",
+  "starship",
+  "sway",
+  "theme",
+  "tmux",
+  "wlsunset",
+]

@@ -34,7 +34,7 @@
       inherit (nixpkgs.lib) genAttrs filterAttrs mkOverride makeOverridable mkIf
         hasSuffix mapAttrs mapAttrs' removeSuffix nameValuePair nixosSystem
         mkForce mapAttrsToList splitString concatStringsSep last hasAttr;
-      inherit (builtins) attrNames functionArgs substring pathExists fromTOML readFile listToAttrs filter;
+      inherit (builtins) replaceStrings attrNames functionArgs substring pathExists fromTOML readFile readDir listToAttrs filter;
 
       supportedSystems = [ "x86_64-linux" ];
       forAllSystems = genAttrs supportedSystems;
@@ -48,7 +48,10 @@
         ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
       });
 
-      hostConfigs = fromTOML (readFile ./hosts.toml);
+      hostConfigs = mapAttrs' (f: t:
+        let hostname = replaceStrings [".toml"] [""] f;
+        in { name = hostname; value = fromTOML (readFile (./hosts + "/${f}")); }
+      ) (readDir ./hosts);
 
       hosts = mapAttrs (_: config:
         let

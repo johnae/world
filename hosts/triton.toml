@@ -1,0 +1,59 @@
+publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID8Yt1yqz+9QumTqWxGwuCZ3uLxRY3koQmFILZ9JHrQP" ## temporary, fixme
+profiles = [
+  "hardware/usbcore",
+  "hardware/yoga-slim-7-amd",
+  "profiles/bluez_autoswitch",
+  "profiles/default_fs",
+  "profiles/home-manager",
+  "profiles/interception-tools",
+  "profiles/laptop",
+  "profiles/pcscd",
+  "profiles/state",
+  "profiles/tailscale",
+]
+
+age.secrets.spotnix = { file = "secrets/spotnix.age", owner = "1337" }
+age.secrets.spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
+age.secrets.wifi-networks.file = "secrets/wifi-networks.age"
+age.secrets.wg-home.file = "secrets/triton/wg-home.age"
+age.secrets.wg-net.file = "secrets/triton/wg-net.age"
+
+services.innernet.client.insane.enable = true
+services.innernet.client.insane.settings.interface = { address = "192.168.104.69/22", privateKeyFile = "/run/secrets/wg-home" }
+services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
+
+users.groups.john.gid = 1337
+users.users.john.uid = 1337
+users.users.john.shell = "fish"
+users.users.john.hashedPassword = "$6$pUcetTdGMZMdzwx$ySPiZXgZUkIGO3jaEXIIEIh6ks8rea9uE5B08SHku2aJUolHeYKrMvhyFvNYcpvYQ/jf7kgOXL8dL0Yn.IuNS."
+
+userConfiguration.john.email = "john@insane.se"
+userConfiguration.john.fullName = "John Axel Eriksson"
+userConfiguration.john.githubUser = "johnae"
+userConfiguration.john.gitlabUser = "johnae"
+userConfiguration.john.profiles = [
+  "alacritty",
+  "bat",
+  "chromium",
+  "dconf",
+  "emacs",
+  "firefox",
+  "fish",
+  "git",
+  "i3status-laptop",
+  "kanshi",
+  "mako",
+  "obs",
+  "pueue",
+  "qutebrowser",
+  "rbw",
+  "rofi",
+  "spotifyd",
+  "spotnix",
+  "ssh",
+  "starship",
+  "sway",
+  "theme",
+  "tmux",
+  "wlsunset",
+]
