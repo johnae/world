@@ -4,10 +4,10 @@
     {
       default.outputs = [
         {
-          criteria = "Sharp Corporation 0x14CC 0x00000000";
-          mode = "3840x2400";
+          criteria = "Unknown 0x4152 0x00000000";
+          mode = "2880x1800";
           position = "0,0";
-          scale = 2.0;
+          scale = 1.5;
         }
       ];
       desktop.outputs = [

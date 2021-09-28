@@ -1,4 +1,4 @@
-publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID8Yt1yqz+9QumTqWxGwuCZ3uLxRY3koQmFILZ9JHrQP" ## temporary, fixme
+publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMqXrRzKxAJ7RkKIt+w98rVsT0RWsusdB2EsVd2OwylX"
 profiles = [
   "hardware/usbcore",
   "hardware/yoga-slim-7-amd",
@@ -11,8 +11,6 @@ profiles = [
   "profiles/state",
   "profiles/tailscale",
 ]
-
-#boot.kernelParams = [ "iommu=soft" ] ## fixes amd driver crash on bios 1.12
 
 age.secrets.spotnix = { file = "secrets/spotnix.age", owner = "1337" }
 age.secrets.spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
