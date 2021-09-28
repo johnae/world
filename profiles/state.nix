@@ -12,7 +12,7 @@ in
         "/var/log"
         "/var/lib/bluetooth"
         "/var/lib/wireguard"
-        "/var/lib/systemd/coredump"
+        "/var/lib/systemd"
         "/var/lib/containers"
         "/var/lib/tailscale"
         "/var/lib/cups"
