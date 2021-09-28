@@ -48,7 +48,7 @@
         ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
       });
 
-      hostConfigs = mapAttrs' (f: t:
+      hostConfigs = mapAttrs' (f: _:
         let hostname = replaceStrings [".toml"] [""] f;
         in { name = hostname; value = fromTOML (readFile (./hosts + "/${f}")); }
       ) (readDir ./hosts);
