@@ -4,6 +4,7 @@
 , fish
 , kubectl
 , kubectx
+, texlive
 , google-cloud-sdk
 , wl-clipboard
 , emacsWithPackagesFromUsePackage
@@ -22,7 +23,7 @@ emacsWithPackagesFromUsePackage {
         ${oa.postInstall}
         wrapProgram $out/bin/emacs \
           --set NOTMUCH_LOAD_PATH "${notmuch.emacs}/share/emacs/site-lisp" \
-          --prefix PATH : ${pkgs.lib.makeBinPath [ fish notmuch pandoc pass wl-clipboard kubectl kubectx google-cloud-sdk ]}
+          --prefix PATH : ${pkgs.lib.makeBinPath [ fish notmuch pandoc pass wl-clipboard kubectl kubectx google-cloud-sdk texlive.combined.scheme-basic ]}
       '';
     });
   extraEmacsPackages = epkgs: [ epkgs.org-plus-contrib ];
