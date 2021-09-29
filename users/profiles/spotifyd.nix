@@ -20,6 +20,5 @@ in
   };
   systemd.user.services.spotifyd = {
     Install.WantedBy = lib.mkForce [ "sway-session.target" ];
-    Unit.PartOf = [ "spotnix.service" ];
   };
 }
