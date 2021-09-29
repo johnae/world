@@ -1,4 +1,4 @@
-{config, inputs, ...}:
+{inputs, ...}:
 {
   imports = [
     ./amd.nix
