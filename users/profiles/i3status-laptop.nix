@@ -20,6 +20,9 @@
           format = "{percentage}% {time}";
         }
         {
+          block = "backlight";
+        }
+        {
           block = "sound";
         }
         {
