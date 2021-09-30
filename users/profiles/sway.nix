@@ -273,8 +273,8 @@ in
         "${modifier}+m" = ''move workspace to output right'';
         "${modifier}+Shift+q" = ''kill'';
 
-        XF86MonBrightnessUp = ''exec light -As "sysfs/backlight/intel_backlight" 5'';
-        XF86MonBrightnessDown = ''exec light -Us "sysfs/backlight/intel_backlight" 5'';
+        XF86MonBrightnessUp = ''exec light -A 5'';
+        XF86MonBrightnessDown = ''exec light -U 5'';
 
         XF86AudioNext = ''exec ${pkgs.scripts}/bin/spotify-cmd next'';
         XF86AudioPrev = ''exec ${pkgs.scripts}/bin/spotify-cmd prev'';
