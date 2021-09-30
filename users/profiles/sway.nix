@@ -242,8 +242,8 @@ in
 
         "${modifier}+Tab" = ''exec ${pkgs.scripts}/bin/scripts ${swayFocusWindow}/bin/sway-focus-window'';
 
-        "${modifier}+t" = ''exec ${pkgs.scripts}/bin/scripts ${pkgs.scripts}/bin/scripts'';
-        "${modifier}+p" = ''exec ${pkgs.scripts}/bin/scripts ${pkgs.scripts}/bin/scripts'';
+        "${modifier}+t" = ''exec ${pkgs.scripts}/bin/rofi-spotify-search track'';
+        "${modifier}+p" = ''exec ${pkgs.scripts}/bin/rofi-spotify-search playlist'';
         "${modifier}+Shift+n" = ''exec ${pkgs.scripts}/bin/spotify-cmd next'';
         "${modifier}+Shift+p" = ''exec ${pkgs.scripts}/bin/spotify-cmd prev'';
         "${modifier}+Shift+m" = ''exec ${pkgs.scripts}/bin/spotify-cmd pause'';

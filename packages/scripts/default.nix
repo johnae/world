@@ -59,42 +59,6 @@ let
       xargs -I{} echo "$HOME/{}"
   '';
 
-  spotify-cmd = writeStrictShellScriptBin "spotify-cmd" ''
-    echo "$@" > "$XDG_RUNTIME_DIR"/spotnix_input
-  '';
-
-  spotify-play = writeStrictShellScriptBin "spotify-play" ''
-    ${addToBinPath [ sk-sk fd spotify-cmd ]}
-    export SK_OPTS="--no-bold --color=bw  --height=40 --reverse --no-hscroll --no-mouse"
-    TYPE="$1"
-    set +e
-    search="$(SK_OPTS="$SK_OPTS --print-query" sk-sk < /dev/null)"
-    set -e
-    echo "$TYPE" "$search" > "$XDG_RUNTIME_DIR"/spotnix_input
-    sk-sk < "$XDG_RUNTIME_DIR"/spotnix_output | \
-        awk '{print $NF}' | xargs -r -I{} spotify-cmd play {}
-  '';
-
-  spotify-play-track = writeStrictShellScriptBin "spotify-play-track" ''
-    export SK_PROMPT="find music by track >> "
-    exec ${spotify-play}/bin/spotify-play s
-  '';
-
-  spotify-play-artist = writeStrictShellScriptBin "spotify-play-artist" ''
-    export SK_PROMPT="find music by artist >> "
-    exec ${spotify-play}/bin/spotify-play sar
-  '';
-
-  spotify-play-album = writeStrictShellScriptBin "spotify-play-album" ''
-    export SK_PROMPT="find music by album >> "
-    exec ${spotify-play}/bin/spotify-play sab
-  '';
-
-  spotify-play-playlist = writeStrictShellScriptBin "spotify-play-playlist" ''
-    export SK_PROMPT="find music by playlist >> "
-    exec ${spotify-play}/bin/spotify-play sap
-  '';
-
   launch = writeStrictShellScriptBin "launch" ''
     cmd=$*
     if [ -z "$cmd" ]; then
@@ -122,84 +86,26 @@ let
     fi
   '';
 
-  ## must be bashInteractive (not stdenv.shell) for compgen to work
-  sk-run = writeScriptBin "sk-run" ''
-    #!${bashInteractive}/bin/bash
-    ${addToBinPath [ sk-sk launch ]}
-    export SK_PROMPT="run >> "
-    export SK_OPTS="$SK_OPTS''${SK_OPTS:+ }--no-bold --color=bw --height=40 --no-hscroll --no-mouse --print-query --reverse"
-
-    compgen -c | \
-    sort -u | \
-    awk '{ if (length($0) > 2) print }' | \
-    grep -v -E '^\..*' | \
-    sk-sk | \
-    tail -n1 | \
-    xargs -r launch
+  spotify-cmd = writeStrictShellScriptBin "spotify-cmd" ''
+    echo "$@" > "$XDG_RUNTIME_DIR"/spotnix_input
   '';
 
-  sk-window = writeStrictShellScriptBin "sk-window" ''
-    ${addToBinPath [ procps alacritty ]}
-    cmd=''${1:-}
-    if [ -z "$cmd" ]; then
-      echo "Please provide a command to run in the window as the argument"
-      exit 1
-    fi
-    shift
-    pkill -f '\--class sk-window' || true
-    # shellcheck disable=SC2086
-    exec alacritty --config-file ~/.config/alacritty/alacritty-launcher.yml --class "sk-window" -e $cmd
+  rofi-spotnix-play = writeStrictShellScriptBin "rofi-spotnix-play" ''
+    ${addToBinPath [ rofi-wayland wl-clipboard ]}
+    t="$1"
+    awk -F ' - spotify:' \
+           '{print "<span size=\"medium\">"$1"</span><span size=\"0\">#spotify:"$2"</span>"}' \
+           < "$XDG_RUNTIME_DIR"/spotnix_output | \
+           rofi -normal-window -matching fuzzy -i -dmenu -markup-rows -format p -p "$t >" | \
+           awk -F'#' '{print "play "$2}' > "$XDG_RUNTIME_DIR"/spotnix_input
   '';
 
-  sk-passmenu = writeStrictShellScriptBin "sk-passmenu" ''
-    ${addToBinPath [ fd sk-sk launch gnupg libnotify wl-clipboard ]}
-    export SK_PROMPT="copy password >> "
-    export SK_OPTS="--no-bold --color=bw  --height=40 --reverse --no-hscroll --no-mouse"
-
-    passfile=''${1:-}
-    nosubmit=''${nosubmit:-}
-    passonly=''${passonly:-}
-    _passmenu_didsearch=''${_passmenu_didsearch:-}
-    prefix=$(readlink -f "$PASSWORD_STORE_DIR")
-    if [ -z "$_passmenu_didsearch" ]; then
-      export _passmenu_didsearch=y
-      fd --type f -E '/notes/' '.gpg$' "$PASSWORD_STORE_DIR" | \
-         sed "s|$prefix/||g" | sed 's|.gpg$||g' | \
-         sk-sk | \
-         xargs -r -I{} echo "$0 {}" | \
-         launch
-    fi
-
-    if [ "$passfile" = "" ]; then
-      exit
-    fi
-
-    error_icon=~/Pictures/icons/essential/error.svg
-
-    getlogin() {
-      echo -n "$(basename "$1")"
-    }
-
-    getpass() {
-      echo -n "$(gpg --decrypt "$prefix/$1.gpg" \
-                            2>/dev/null | head -1)"
-    }
-
-    login=$(getlogin "$passfile")
-    pass=$(getpass "$passfile")
-
-    if [ "$pass" = "" ]; then
-      notify-send -i $error_icon -a "Password store" -u critical \
-      "Decrypt error" "Error decrypting password file, is your gpg card inserted?"
-    else
-      if [ -z "$passonly" ]; then
-        echo -n "$login" | wl-copy -onf
-        echo -n "$pass" | wl-copy -onf
-      else
-        echo -n "$pass" | wl-copy -onf
-      fi
-    fi
-
+  rofi-spotify-search = writeStrictShellScriptBin "rofi-spotify-search" ''
+    ${addToBinPath [ rofi-wayland wl-clipboard ]}
+    t="$1"
+    search="$(rofi -normal-window -dmenu -p "search $t >")"
+    echo search_"$t" "$search" > "$XDG_RUNTIME_DIR"/spotnix_input
+    ${rofi-spotnix-play}/bin/rofi-spotnix-play "$t"
   '';
 
   update-wireguard-keys = writeStrictShellScriptBin "update-wireguard-keys" ''
@@ -254,9 +160,8 @@ buildEnv {
   name = "scripts";
   paths = [
     project-select launch git-credential-pass
-    sk-sk sk-run sk-window sk-passmenu
     add-wifi-network update-wifi-networks
-    update-wireguard-keys spotify-play-album spotify-play-track
-    spotify-cmd spotify-play-artist spotify-play-playlist rofi-rbw
+    update-wireguard-keys spotify-cmd rofi-rbw
+    rofi-spotify-search
   ];
 }
