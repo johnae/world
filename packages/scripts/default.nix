@@ -1,10 +1,8 @@
 { stdenv
 , lib
-, writeScriptBin
 , writeStrictShellScriptBin
 , buildEnv
 , wl-clipboard
-, bashInteractive
 , fire
 , fd
 , rbw
@@ -12,11 +10,7 @@
 , skim
 , pass
 , wpa_supplicant
-, gnupg
-, alacritty
-, libnotify
 , hostname
-, procps
 }:
 let
 
