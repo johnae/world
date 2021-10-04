@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   home = config.home;
 in
@@ -20,5 +20,22 @@ in
   };
   systemd.user.services.spotifyd = {
     Install.WantedBy = lib.mkForce [ "sway-session.target" ];
+  };
+  ## because it seems the spotifyd speaker is gone after a suspend/resume cycle
+  systemd.user.services.spotifyd-resume-action = {
+    Unit = {
+      Description = "Restarts spotifyd after sleep";
+      StartLimitInterval = 300;
+      StartLimitBurst = 5;
+    };
+    Install.WantedBy = [ "suspend.target"
+                         "hibernate.target"
+                         "hybrid-sleep.target" ];
+    Service = {
+      Type = "simple";
+      Restart = "on-failure";
+      RestartSec = 30;
+      ExecStart = "${pkgs.systemd}/bin/systemctl --user restart spotifyd.service";
+    };
   };
 }
