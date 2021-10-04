@@ -13,6 +13,20 @@ in
   systemd.user.services.org-agenda-sync =
     let
       agenda-sync = pkgs.writeStrictShellScriptBin "agenda-sync" ''
+        ssh_identity="/run/secrets/id_ed25519_agenda_updater"
+        if [ ! -e "$ssh_identity" ]; then
+          echo "$ssh_identity" missing
+          exit 1
+        fi
+        GIT_SSH_COMMAND="ssh -i \"$ssh_identity\" -o IdentitiesOnly=yes"
+        export GIT_SSH_COMMAND
+
+        if [ ! -d ~/Development/org-agenda ]; then
+          cd ~/Development
+          git clone git@github.com:johnae/org-agenda
+          cd ~
+        fi
+
         echo Starting agenda git sync
         cd ~/Development/org-agenda
         git add .
