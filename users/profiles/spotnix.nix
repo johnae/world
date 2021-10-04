@@ -13,7 +13,7 @@ in
     Service = {
       ExecStartPre = "${pkgs.coreutils}/bin/sleep 4";
       ExecStart = ''
-        ${pkgs.stdenv.shell} -c 'RUST_LOG=info CLIENT_ID="$(head -1 /run/secrets/spotnix)" CLIENT_SECRET="$(tail -1 /run/secrets/spotnix)" REDIRECT_URI="http://localhost:8182/spotnix" ${pkgs.spotnix}/bin/spotnix -d ${home.extraConfig.hostName} -e $XDG_RUNTIME_DIR/spotnix_event -i $XDG_RUNTIME_DIR/spotnix_input -o $XDG_RUNTIME_DIR/spotnix_output -r 10'
+        ${pkgs.stdenv.shell} -c 'RUST_LOG=info CLIENT_ID="$(head -1 /run/secrets/spotnix)" CLIENT_SECRET="$(tail -1 /run/secrets/spotnix)" REDIRECT_URI="http://localhost:8182/spotnix" ${pkgs.spotnix}/bin/spotnix -d ${home.extraConfig.hostName} -s $XDG_RUNTIME_DIR/spotnix_status -i $XDG_RUNTIME_DIR/spotnix_input -o $XDG_RUNTIME_DIR/spotnix_output -r 10'
       '';
       Restart = "always";
       RestartSec = 3;
