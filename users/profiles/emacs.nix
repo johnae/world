@@ -18,7 +18,7 @@ in
           echo "$ssh_identity" missing
           exit 1
         fi
-        GIT_SSH_COMMAND="ssh -i \"$ssh_identity\" -o IdentitiesOnly=yes"
+        GIT_SSH_COMMAND="ssh -i $ssh_identity -o IdentitiesOnly=yes"
         export GIT_SSH_COMMAND
 
         if [ ! -d ~/Development/org-agenda ]; then
