@@ -528,7 +528,7 @@ Package setup.
      (use-package visual-fill-column
        :hook (org-mode . visual-fill-column-mode)
        :custom
-       (visual-fill-column-width 125)
+       (visual-fill-column-width 175)
        (visual-fill-column-center-text t)
      )
    #+END_SRC
@@ -1406,3 +1406,4 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
          )
        )
      #+END_SRC
+     
