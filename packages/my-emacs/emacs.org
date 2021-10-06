@@ -512,7 +512,7 @@ Package setup.
 *** Org -> Github flavored markdown
   #+BEGIN_SRC elisp
    (use-package ox-gfm
-    :after ox)
+    :after org)
   #+END_SRC
 *** Org bullets - uses different utf8 characters for different bullet nesting levels, see: [[https://github.com/sabof/org-bullets][sabof/org-bullets]]
    #+BEGIN_SRC elisp
