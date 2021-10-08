@@ -20,6 +20,7 @@ in
     profiles = {
       default = {
         settings = {
+          "browser.compactmode.show" = true;
           "browser.startup.homepage" = "https://duckduckgo.com";
           "browser.search.region" = "SE";
           "browser.search.isUS" = false;
@@ -36,9 +37,6 @@ in
 
         userChrome = ''
           #TabsToolbar {
-          visibility: collapse;
-          }
-          #nav-bar {
           visibility: collapse;
           }
         '';
