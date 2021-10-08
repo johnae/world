@@ -248,6 +248,7 @@ in
         "${modifier}+Shift+p" = ''exec ${pkgs.scripts}/bin/spotify-cmd prev'';
         "${modifier}+Shift+m" = ''exec ${pkgs.scripts}/bin/spotify-cmd pause'';
 
+        "${modifier}+Shift+k" = ''exec ${pkgs.systemd}/bin/systemctl --user restart kanshi'';
         "${modifier}+Control+k" = ''exec ${toggleKeyboardLayouts}/bin/toggle-keyboard-layouts'';
 
         "${modifier}+Control+l" = ''exec ${pkgs.swaylock-dope}/bin/swaylock-dope'';
