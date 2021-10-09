@@ -377,7 +377,6 @@
         "nixpkgs-fmt": "nixpkgs-fmt",
         "persway": "persway",
         "pueue": "pueue",
-        "rofi-nord-theme": "rofi-nord-theme",
         "rofi-wayland": "rofi-wayland",
         "slurp": "slurp",
         "spotifyd": "spotifyd",
@@ -393,7 +392,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-aDGqpoiyX24l2lfNjFwmVyMDJTFEvf6IVW0sSv5zly4=",
+        "narHash": "sha256-24zhvEFUxHtYY8tc6hfgUIKmpGGtI9821WogxTN4TPg=",
         "path": "./packages",
         "type": "path"
       },
@@ -440,22 +439,6 @@
       "original": {
         "owner": "Nukesor",
         "repo": "pueue",
-        "type": "github"
-      }
-    },
-    "rofi-nord-theme": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1630499373,
-        "narHash": "sha256-2c9CcBMeu+70CzunKRG6LbDIV4JXDVVonVCFgwOFGMM=",
-        "owner": "undiabler",
-        "repo": "nord-rofi-theme",
-        "rev": "22bcd591b1d92ece575686442f494c87b749a586",
-        "type": "github"
-      },
-      "original": {
-        "owner": "undiabler",
-        "repo": "nord-rofi-theme",
         "type": "github"
       }
     },
