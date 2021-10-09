@@ -29,7 +29,6 @@
 
     ## non flakes
     rofi-wayland = { url = "github:lbonn/rofi/wayland"; flake = false; };
-    rofi-nord-theme = { url = "github:undiabler/nord-rofi-theme"; flake = false; };
     age-plugin-yubikey = { url = "github:str4d/age-plugin-yubikey"; flake = false; };
     blur = { url = "github:johnae/blur"; flake = false; };
     fire = { url = "github:johnae/fire"; flake = false; };
