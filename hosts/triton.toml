@@ -1,4 +1,5 @@
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMqXrRzKxAJ7RkKIt+w98rVsT0RWsusdB2EsVd2OwylX"
+syncthingDeviceID = "5OGTM2O-IJQ4Z2I-DDMZD33-GIIQCID-VJY7E32-AMOS6JN-WOVZ5TO-CWE2OQM"
 profiles = [
   "hardware/usbcore",
   "hardware/yoga-slim-7-amd",
@@ -10,6 +11,7 @@ profiles = [
   "profiles/laptop",
   "profiles/pcscd",
   "profiles/state",
+  "profiles/syncthing",
   "profiles/tailscale",
 ]
 
@@ -20,6 +22,20 @@ age.secrets.wg-home.file = "secrets/triton/wg-home.age"
 age.secrets.wg-net.file = "secrets/triton/wg-net.age"
 age.secrets.id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", owner = "1337" }
 age.secrets.id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
+age.secrets.syncthing-cert = { file = "secrets/triton/syncthing-cert.age", owner = "1337" }
+age.secrets.syncthing-key = { file = "secrets/triton/syncthing-key.age", owner = "1337" }
+
+services.syncthing.enable = true
+services.syncthing.user = "john"
+services.syncthing.openDefaultPorts = true
+services.syncthing.folders."/home/john/Sync".id = "sync"
+services.syncthing.folders."/home/john/Sync".devices = [
+  "eris",
+  "polaris"
+]
+services.syncthing.cert = "/run/secrets/syncthing-cert"
+services.syncthing.key = "/run/secrets/syncthing-key"
+services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
 
 services.innernet.client.insane.enable = true
 services.innernet.client.insane.settings.interface = { address = "192.168.104.69/22", privateKeyFile = "/run/secrets/wg-home" }
