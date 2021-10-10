@@ -1,4 +1,5 @@
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILOeY+TshjtBK5VQu4ZJVJ0ol1PsZxLvIy+YNCOtfZmd"
+syncthingDeviceID = "5RMZCHO-M3OA4UH-3PMKBWD-IVJGW4Q-VZBME6O-OCSPMK4-7YOVDAM-QOEDOQC"
 
 profiles = [
   "hardware/ax41",
@@ -6,6 +7,7 @@ profiles = [
   "profiles/k3s",
   "profiles/server",
   "profiles/state",
+  "profiles/syncthing",
 ]
 
 users.groups.john.gid = 1337
@@ -42,6 +44,18 @@ boot.initrd.network.ssh.authorizedKeys = [
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+trOinD68RD1efI6p05HeaNA0SjzeRnUvpf22+jsq+",
 ]
+
+services.syncthing.enable = true
+services.syncthing.user = "john"
+services.syncthing.openDefaultPorts = true
+services.syncthing.folders."/home/john/Sync".id = "sync"
+services.syncthing.folders."/home/john/Sync".devices = [
+  "triton",
+  "eris"
+]
+services.syncthing.cert = "/run/secrets/syncthing-cert"
+services.syncthing.key = "/run/secrets/syncthing-key"
+services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
 
 services.innernet.server.insane.enable = true
 services.innernet.server.insane.settings.openFirewall = true
@@ -81,6 +95,8 @@ system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot
 age.secrets.k3s-token.file = "secrets/k3s/token.age"
 age.secrets.wg-home.file = "secrets/polaris/wg-home.age"
 age.secrets.wg-net.file = "secrets/polaris/wg-net.age"
+age.secrets.syncthing-cert = { file = "secrets/polaris/syncthing-cert.age", owner = "1337" }
+age.secrets.syncthing-key = { file = "secrets/polaris/syncthing-key.age", owner = "1337" }
 
 networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
 services.k3s.role = "server"

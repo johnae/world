@@ -9,6 +9,10 @@ in
       type = str;
       default = "xxxx";
     };
+    syncthingDeviceID = mkOption {
+      type = nullOr str;
+      default = null;
+    };
     wgPublicKey = mkOption {
       type = nullOr str;
       default = null;

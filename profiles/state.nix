@@ -44,6 +44,7 @@ in
             "/home/${userName}/.local/share/Steam"
             "/home/${userName}/.local/share/vulkan"
             "/home/${userName}/.local/share/qutebrowser"
+            "/home/${userName}/.local/share/syncthing-data"
             "/home/${userName}/.mail"
             "/home/${userName}/.cargo"
             "/home/${userName}/.cache/mu"
