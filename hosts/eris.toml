@@ -33,6 +33,7 @@ age.secrets.syncthing-key = { file = "secrets/eris/syncthing-key.age", owner = "
 
 services.syncthing.enable = true
 services.syncthing.user = "john"
+services.syncthing.group = "users"
 services.syncthing.openDefaultPorts = true
 services.syncthing.folders."/home/john/Sync".id = "sync"
 services.syncthing.folders."/home/john/Sync".devices = [
