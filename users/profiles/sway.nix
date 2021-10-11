@@ -87,7 +87,7 @@ let
        echo No lid found - skipping sway reload action
        exit
     fi
-    if grep -q "$LID"/state; then
+    if grep -q open "$LID"/state; then
         swaymsg output eDP-1 enable
     else
         swaymsg output eDP-1 disable
