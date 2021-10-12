@@ -1,7 +1,7 @@
 {hostConfig, config, lib, pkgs, ...}:
 
 let
-  inherit (builtins) hasAttr isAttrs mapAttrs attrNames length;
+  inherit (builtins) hasAttr isAttrs mapAttrs attrNames length toFile;
   inherit (lib) mkIf concatStringsSep filterAttrs recursiveUpdate;
 
   cfgMapper = {
@@ -28,7 +28,7 @@ let
       cfgMapper.${stringPath} value
     else if isAttrs value then
       mapConfig (path ++ [name]) value
-    else value
+    else lib.mkForce value
   );
 
   hasState = hasAttr "state" config.environment &&
