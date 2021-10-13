@@ -1,3 +1,5 @@
+{lib}:
+
 {
   imports = [
     ./workstation.nix
@@ -9,8 +11,8 @@
   services.upower.enable = true;
 
   boot.kernel.sysctl = {
-    "vm.dirty_writeback_centisecs" = 1500;
-    "vm.laptop_mode" = 5;
-    "vm.swappiness" = 1;
+    "vm.dirty_writeback_centisecs" = lib.mkDefault 1500;
+    "vm.laptop_mode" = lib.mkDefault 5;
+    "vm.swappiness" = lib.mkDefault 1;
   };
 }
