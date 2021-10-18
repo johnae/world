@@ -33,11 +33,15 @@
     encrypted_root = {
       device = "/dev/disk/by-label/encrypted_root";
       keyFile = "/dev/mapper/cryptkey";
+      bypassWorkqueues = true; # https://github.com/cloudflare/linux/issues/1
+      allowDiscards = true; # some security implications but not really too concerning to me
     };
 
     encrypted_swap = {
       device = "/dev/disk/by-label/encrypted_swap";
       keyFile = "/dev/mapper/cryptkey";
+      bypassWorkqueues = true;
+      allowDiscards = true;
     };
   };
 }
