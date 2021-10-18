@@ -9,6 +9,7 @@ profiles = [
   "profiles/state",
   "profiles/unifi_controller",
   "profiles/uuid_disk_crypt",
+  "profiles/zram",
 ]
 
 users.groups.john.gid = 1337

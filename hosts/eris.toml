@@ -19,6 +19,7 @@ profiles = [
   "profiles/state",
   "profiles/syncthing",
   "profiles/tailscale",
+  "profiles/zram",
 ]
 
 age.secrets.spotnix = { file = "secrets/spotnix.age", owner = "1337" }

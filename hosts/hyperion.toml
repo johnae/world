@@ -8,6 +8,7 @@ profiles = [
   "profiles/server",
   "profiles/state",
   "profiles/uuid_disk_crypt",
+  "profiles/zram",
 ]
 
 users.groups.john.gid = 1337

@@ -13,6 +13,7 @@ profiles = [
   "profiles/state",
   "profiles/syncthing",
   "profiles/tailscale",
+  "profiles/zram",
 ]
 
 age.secrets.spotnix = { file = "secrets/spotnix.age", owner = "1337" }
@@ -41,10 +42,6 @@ services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
 services.innernet.client.insane.enable = true
 services.innernet.client.insane.settings.interface = { address = "192.168.104.69/22", privateKeyFile = "/run/secrets/wg-home" }
 services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
-
-## with zram it makes sense to swap more aggressively
-zramSwap.enable = true
-boot.kernel.sysctl."vm.swappiness" = 133
 
 users.groups.john.gid = 1337
 users.users.john.uid = 1337
