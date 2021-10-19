@@ -22,6 +22,9 @@
 , libseat
 , ffmpeg
 , xwayland
+, vulkan-headers
+, vulkan-loader
+, glslang
 , inputs
 }:
 
@@ -64,6 +67,9 @@ stdenv.mkDerivation {
     ffmpeg
     libglvnd
     libuuid
+    vulkan-headers
+    vulkan-loader
+    glslang
   ];
 
   meta = {
