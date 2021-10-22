@@ -24,6 +24,7 @@
 , wlroots
 , inputs
 , isNixOS ? true
+, enableXWayland ? true
 }:
 stdenv.mkDerivation rec {
   pname = "sway-unwrapped";
@@ -55,11 +56,11 @@ stdenv.mkDerivation rec {
     libcap
     pam
     gdk_pixbuf
-    wlroots
     libevdev
     scdoc
     librsvg
     libdrm
+    wlroots
   ];
 
   postPatch = ''

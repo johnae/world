@@ -25,6 +25,7 @@
 , vulkan-headers
 , vulkan-loader
 , glslang
+, enableXWayland ? true
 , inputs
 }:
 

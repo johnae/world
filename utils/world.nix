@@ -81,7 +81,8 @@ let
       grep -v 'Unused argument `final`' | \
       grep -v 'Unused argument `prev`' | \
       grep -v 'Unused argument `plugins`' | \
-      grep -v 'Unused argument `isNixOS`' \
+      grep -v 'Unused argument `isNixOS`' | \
+      grep -v 'Unused argument `enableXWayland`' \
       > "$lintout"
     cat "$lintout"
     if [ -s "$lintout" ]; then
