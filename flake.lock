@@ -54,11 +54,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1635096486,
-        "narHash": "sha256-rcf0AG6xVRuHE9cupBd15u5s4MYVBSzmf3VtxAJzhCk=",
+        "lastModified": 1635183298,
+        "narHash": "sha256-C0VopVxzm2i//6Dy8onliLZPlpN5AI+oKlRURluNs58=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "e859854c57c0793f8da053e811112cb774a20778",
+        "rev": "087c697a615cc651d7af0751899118f11924813f",
         "type": "github"
       },
       "original": {
@@ -75,11 +75,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1635108067,
-        "narHash": "sha256-u/kFBuEVTRZS/wgqNLMY0VSrBpv2y9O6622Oru9tRLQ=",
+        "lastModified": 1635143082,
+        "narHash": "sha256-c9otb52r47mU3qs4vgGHIp4OmsWxG+gGePvZ1qo2KHE=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "3d98d48fe91763dfc380f635da9c13de449dd509",
+        "rev": "3c7bda8f41ce448753170a6d8257245311a59056",
         "type": "github"
       },
       "original": {
@@ -339,11 +339,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1635124149,
-        "narHash": "sha256-lNdqN0EpXqT8Ui6ipbs/Hp7VS+c2JVGhRRkXsrveJbs=",
+        "lastModified": 1635192185,
+        "narHash": "sha256-m1G3a7Huc4IvrTpeQdNoLDS73263qczKa2+nLbtLSK4=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "8482380861573ae8f9bff3dff88cdeae4d80f806",
+        "rev": "2aab272f024586d3464713a10679ff0e3725bcbd",
         "type": "github"
       },
       "original": {
@@ -392,7 +392,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-CHZ/xQ0d4hlTlOMEmKp1GSA4M9jXjxx1REi1z9DB/Ng=",
+        "narHash": "sha256-a+OFVvfuETlTFK6YAAsldPffAtOd0UAsMKuJB/BM3FI=",
         "path": "./packages",
         "type": "path"
       },
@@ -445,11 +445,11 @@
     "rofi-wayland": {
       "flake": false,
       "locked": {
-        "lastModified": 1634382199,
-        "narHash": "sha256-8gCdvZc9xumOrrDymEwQ56DEqz7yXfCS/sOghqo2N2A=",
+        "lastModified": 1635185661,
+        "narHash": "sha256-Rt9WqMUr9imZsoOJ+gT7ADk8OYf4UjLDeqWgOYi1v1I=",
         "owner": "lbonn",
         "repo": "rofi",
-        "rev": "9f0f97a8d92d647aec97750d9f866dee0e71246e",
+        "rev": "70efa84f9bdf46593ee9d1a11acfe0a6e1c899a7",
         "type": "github"
       },
       "original": {
@@ -474,11 +474,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1634995832,
-        "narHash": "sha256-9j9UzrimhoeyU2RJVs+TR53wyL67UjMgUb1e+jMNL5g=",
+        "lastModified": 1635076431,
+        "narHash": "sha256-3AMRwtEmITIvUdR/NINQTPatkjhmS1dQsbbsefIDYAE=",
         "owner": "rust-analyzer",
         "repo": "rust-analyzer",
-        "rev": "9d33d05d85456c855b88a8bdf4ab44d97e32bd4a",
+        "rev": "1f47693e02809c97db61b51247ae4e4d46744c61",
         "type": "github"
       },
       "original": {
@@ -548,11 +548,11 @@
     "sway": {
       "flake": false,
       "locked": {
-        "lastModified": 1634889425,
-        "narHash": "sha256-gUbvxeqCUY/oFVMJ4ZnC6ZoNkP+Yx+Xigu4HpvEyVpE=",
+        "lastModified": 1635149920,
+        "narHash": "sha256-N5VeD4q32/pHbnA6orxikFwK82f6RtBFSSD0UId5MI0=",
         "owner": "swaywm",
         "repo": "sway",
-        "rev": "b223f702500d7cda6336e948062d680f07f34f66",
+        "rev": "9303bed4d4523d158b33c44f534a53b21d7688d6",
         "type": "github"
       },
       "original": {
@@ -661,11 +661,11 @@
     "wlroots": {
       "flake": false,
       "locked": {
-        "lastModified": 1634942964,
-        "narHash": "sha256-I3BPW6uTGKcEFFsk1jIJ8GEhSx8MaXzDkk/CJ/+1/cU=",
+        "lastModified": 1635175331,
+        "narHash": "sha256-a9BXg2Ja1iq2xsY9PNOsXewXgkpytfv4SXuapB2nHJw=",
         "owner": "swaywm",
         "repo": "wlroots",
-        "rev": "fb393ddf84dd5ad14c00afaa25ee81bc5b8eef14",
+        "rev": "3d6ca9942db43ca182d91b115597a4ca7f367eef",
         "type": "github"
       },
       "original": {
