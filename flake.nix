@@ -33,10 +33,10 @@
     let
       inherit (nixpkgs.lib) genAttrs filterAttrs mkOverride makeOverridable mkIf
         hasSuffix mapAttrs mapAttrs' removeSuffix nameValuePair nixosSystem
-        mkForce mapAttrsToList splitString concatStringsSep last hasAttr;
+        mkForce mapAttrsToList splitString concatStringsSep last hasAttr recursiveUpdate;
       inherit (builtins) replaceStrings attrNames functionArgs substring pathExists fromTOML readFile readDir listToAttrs filter;
 
-      supportedSystems = [ "x86_64-linux" ];
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = genAttrs supportedSystems;
       pkgs = forAllSystems (system: import nixpkgs {
         inherit system;
@@ -55,10 +55,12 @@
 
       hosts = mapAttrs (_: config:
         let
+          arch = if hasAttr "arch" config then config.arch else "x86_64-linux";
           profiles = config.profiles;
-          cfg = builtins.removeAttrs config ["profiles"];
+          cfg = builtins.removeAttrs config [ "profiles" "arch" ];
         in
         {
+        specialArgs.system = arch;
         specialArgs.hostConfig = cfg;
         specialArgs.hostConfigs = hostConfigs;
         configuration.imports = (map (item:
@@ -69,7 +71,9 @@
       }) hostConfigs;
 
       toNixosConfig = hostName: host:
-        let system = "x86_64-linux"; in
+        let
+          inherit (host.specialArgs) system;
+        in
         makeOverridable nixosSystem {
           inherit system;
           specialArgs = {
@@ -88,9 +92,8 @@
           ];
         };
 
-      toPxeBootSystemConfig = hostName:
+      toPxeBootSystemConfig = hostName: system:
         let
-          system = "x86_64-linux";
           bootSystem = makeOverridable nixosSystem {
             inherit system;
             specialArgs = {
@@ -170,30 +173,39 @@
              preferLocalBuild = true;
           };
 
-      toDiskFormatter = hostName: config:
+      toDiskFormatter = hostName: config: system:
         inputs.nixpkgs.lib.nameValuePair "${hostName}-diskformat" (
-          pkgs.x86_64-linux.callPackage ./utils/diskformat.nix {
+          pkgs.${system}.callPackage ./utils/diskformat.nix {
             inherit hostName config;
           }
         );
 
-      worldUtils = let
-        f = import ./utils/world.nix;
-        args = listToAttrs (map (name: { inherit name; value = pkgs.x86_64-linux.${name}; }) (attrNames (functionArgs f)));
-      in f args;
+      worldUtils = forAllSystems (system:
+        let
+          f = import ./utils/world.nix;
+          args = listToAttrs (map (name: { inherit name; value = pkgs.${system}.${name}; }) (attrNames (functionArgs f)));
+        in f args
+      );
 
-      hostConfigurations = mapAttrs toNixosConfig hosts;
+      nixosConfigurations = mapAttrs toNixosConfig hosts;
 
-      nixosConfigurations = hostConfigurations;
+      diskFormatters = forAllSystems (system:
+        (mapAttrs' (hostName: config: toDiskFormatter hostName config system) nixosConfigurations)
+      );
 
-      diskFormatters = mapAttrs' toDiskFormatter hostConfigurations;
-      exportedPackages = (mapAttrs (name: _: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) inputs.packages.overlays)) // { pxebooter = toPxeBootSystemConfig "pxebooter"; };
+      exportedPackages = forAllSystems (system:
+        (mapAttrs (name: _: pkgs.${system}.${name})
+          (filterAttrs (name: _: (hasAttr name pkgs.${system}) && nixpkgs.lib.isDerivation pkgs.${system}.${name}) inputs.packages.overlays)
+        ) // {
+          pxebooter = toPxeBootSystemConfig "pxebooter" system;
+        }
+      );
 
     in
     {
       devShell = forAllSystems (system:
         pkgs.${system}.callPackage ./devshell.nix {
-          inherit worldUtils;
+          worldUtils = worldUtils.${system};
           agenix = pkgs.${system}.agenix.override { nix = pkgs.${system}.nixUnstable; };
           mkDevShell = pkgs.${system}.callPackage inputs.nix-misc.lib.mkSimpleShell { };
         }
@@ -201,7 +213,7 @@
 
       inherit nixosConfigurations hostConfigs;
 
-      packages.x86_64-linux = diskFormatters // exportedPackages // worldUtils;
+      packages = recursiveUpdate (recursiveUpdate diskFormatters exportedPackages) worldUtils;
 
       github-actions-package-matrix = {
         os = [ "ubuntu-latest" ];

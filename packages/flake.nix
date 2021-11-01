@@ -56,15 +56,19 @@
     let
       inherit (nixpkgs.lib) genAttrs listToAttrs mapAttrsToList filterAttrs;
       inherit (builtins) filter attrNames pathExists toString mapAttrs hasAttr;
-      supportedSystems = [ "x86_64-linux" ];
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = genAttrs supportedSystems;
       pkgs = forAllSystems (system: import nixpkgs {
         inherit system;
         overlays = mapAttrsToList (_: value: value) self.overlays;
       });
-      extraPkgs = [ "k3s-io" "meson-0591" ];
+      extraPkgs = [ "meson-0591" ];
       nonFlakePkgList = (filter (elem: ! (inputs.${elem} ? "sourceInfo") && pathExists (toString (./. + "/${elem}"))) (attrNames inputs)) ++ extraPkgs;
-      exportedPackages = mapAttrs (name: _: pkgs.x86_64-linux.${name}) (filterAttrs (name: _: (hasAttr name pkgs.x86_64-linux) && nixpkgs.lib.isDerivation pkgs.x86_64-linux.${name}) self.overlays);
+      exportedPackages = forAllSystems (system:
+        (mapAttrs (name: _: pkgs.${system}.${name})
+          (filterAttrs (name: _: (hasAttr name pkgs.${system}) && nixpkgs.lib.isDerivation pkgs.${system}.${name}) self.overlays)
+        )
+      );
     in
     {
       overlays = (
@@ -112,7 +116,7 @@
       }
       ###############################################
      ;
-     packages.x86_64-linux = exportedPackages;
+     packages = exportedPackages;
      devShell = forAllSystems (system:
        pkgs.${system}.callPackage ./devshell.nix {
          mkDevShell = pkgs.${system}.callPackage inputs.nix-misc.lib.mkSimpleShell {};
