@@ -1,3 +1,4 @@
+
 { config, lib, writeStrictShellScriptBin, ... }:
 
 let
@@ -57,8 +58,13 @@ in
     BOOTMODE="${bootMode}"
     DEVRANDOM=/dev/urandom
 
+    CRYPTSETUP_LUKSFORMAT_EXTRA_ARGS="''${CRYPTSETUP_LUKSFORMAT_EXTRA_ARGS:-}"
+
     if [ "$(systemd-detect-virt)" = "none" ]; then
       CRYPTKEYFILE="''${CRYPTKEYFILE:-/sys/class/dmi/id/product_uuid}"
+      if [ ! -e "$CRYPTKEYFILE" ]; then
+        CRYPTKEYFILE="/sys/firmware/devicetree/base/serial-number"
+      fi
     else
       CRYPTKEYFILE="''${CRYPTKEYFILE:-/sys/class/dmi/id/product_version}"
     fi
@@ -184,7 +190,9 @@ in
     fdisk -l "$DISK"
 
     echo Formatting cryptkey disk "$DISK_CRYPTKEY", using keyfile "$CRYPTKEYFILE"
-    cryptsetup luksFormat --label="$ENC_DISK_CRYPTKEY_LABEL" -q --key-file="$CRYPTKEYFILE" "$DISK_CRYPTKEY"
+
+    # shellcheck disable=SC2086
+    cryptsetup $CRYPTSETUP_LUKSFORMAT_EXTRA_ARGS luksFormat --label="$ENC_DISK_CRYPTKEY_LABEL" -q --key-file="$CRYPTKEYFILE" "$DISK_CRYPTKEY"
     DISK_CRYPTKEY=/dev/disk/by-label/"$ENC_DISK_CRYPTKEY_LABEL"
 
     echo Opening cryptkey disk "$DISK_CRYPTKEY", using keyfile "$CRYPTKEYFILE"
@@ -194,10 +202,12 @@ in
     dd if=$DEVRANDOM of=/dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL" bs=1024 count=14000 || true
 
     echo Creating encrypted swap
-    cryptsetup luksFormat --label="$ENC_DISK_SWAP_LABEL" -q --key-file=/dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL" "$DISK_SWAP"
+    # shellcheck disable=SC2086
+    cryptsetup $CRYPTSETUP_LUKSFORMAT_EXTRA_ARGS luksFormat --label="$ENC_DISK_SWAP_LABEL" -q --key-file=/dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL" "$DISK_SWAP"
 
     echo Creating encrypted root
-    cryptsetup luksFormat --label="$ENC_DISK_ROOT_LABEL" -q --key-file=/dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL" "$DISK_ROOT"
+    # shellcheck disable=SC2086
+    cryptsetup $CRYPTSETUP_LUKSFORMAT_EXTRA_ARGS luksFormat --label="$ENC_DISK_ROOT_LABEL" -q --key-file=/dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL" "$DISK_ROOT"
 
     echo Opening encrypted swap using keyfile
     cryptsetup luksOpen --key-file=/dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL" "$DISK_SWAP" "$ENC_DISK_SWAP_LABEL"
