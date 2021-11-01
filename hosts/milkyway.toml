@@ -2,6 +2,7 @@
 arch = "aarch64-linux"
 
 profiles = [
+  "hardware/raspberrypi4",
   "profiles/default_fs",
   "profiles/server",
   "profiles/state",
