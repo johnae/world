@@ -108,13 +108,6 @@
   services.fstrim.enable = true;
   services.btrfs.autoScrub.enable = true;
 
-  security.wrappers.netns-exec = {
-   source = "${pkgs.netns-exec}/bin/netns-exec";
-   owner = "root";
-   group = "root";
-   setuid = true;
-  };
-
   ## only allow declarative user management
   users.mutableUsers = false;
 
