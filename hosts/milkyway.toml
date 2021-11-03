@@ -1,6 +1,44 @@
 ## raspberry-pi 4 router
 arch = "aarch64-linux"
 
+fileSystems./.options = [ "defaults", "size=8G", "mode=755" ]
+
+boot.kernelParams = [
+  "8250.nr_uarts=1",
+  "console=ttyAMA0,115200",
+  "console=tty1",
+  "boot.shell_on_fail",
+]
+
+boot.initrd.luks.devices.cryptkey.keyFile = "/sys/firmware/devicetree/base/serial-number"
+
+boot.initrd.luks.devices.cryptkey.preOpenCommands = """
+echo just checking
+ls -lah /
+ls -lah /sys
+"""
+
+boot.initrd.luks.cryptoModules = [
+  "aes",
+  "aes_generic",
+  "blowfish",
+  "twofish",
+  "serpent",
+  "cbc",
+  "xts",
+  "lrw",
+  "sha1",
+  "sha256",
+  "sha512",
+  "af_alg",
+  "algif_skcipher",
+  "xchacha12",
+  "xchacha20",
+  "adiantum",
+]
+
+cryptsetup.luksFormat.extraParams = "--cipher xchacha12,aes-adiantum-plain64"
+
 profiles = [
   "hardware/raspberrypi4",
   "profiles/default_fs",
@@ -25,4 +63,4 @@ networking.interfaces.eth0.ipv4.addresses = [
   { address = "192.168.240.150", prefixLength = 24 }
 ]
 
-system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
+#system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }

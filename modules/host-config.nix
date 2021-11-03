@@ -17,5 +17,9 @@ in
       type = nullOr str;
       default = null;
     };
+    cryptsetup.luksFormat.extraParams = mkOption {
+      type = str;
+      default = "";
+    };
   };
 }
