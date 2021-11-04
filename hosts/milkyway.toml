@@ -3,6 +3,8 @@ arch = "aarch64-linux"
 
 fileSystems./.options = [ "defaults", "size=8G", "mode=755" ]
 
+networking.usePredictableInterfaceNames = true
+
 boot.kernelParams = [
   "8250.nr_uarts=1",
   "console=ttyAMA0,115200",
@@ -11,6 +13,8 @@ boot.kernelParams = [
 ]
 
 boot.initrd.luks.devices.cryptkey.keyFile = "/sys/firmware/devicetree/base/serial-number"
+
+boot.initrd.availableKernelModules = [ "xhci_pci", "usbhid", "uas", "usb_storage" ]
 
 boot.initrd.luks.devices.cryptkey.preOpenCommands = """
 echo just checking
