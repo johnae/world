@@ -102,7 +102,7 @@
               { system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}"; }
               { nixpkgs = { pkgs = pkgs.${system}; }; }
               inputs.nixpkgs.nixosModules.notDetected
-              ({ modulesPath, pkgs, ... }: {
+              ({ modulesPath, pkgs, lib, ... }: {
                  imports = [
                    "${modulesPath}/installer/netboot/netboot-minimal.nix"
                    ./cachix.nix
@@ -117,7 +117,7 @@
                  environment.systemPackages = with pkgs; [
                    git curl jq skim
                  ];
-                 boot.zfs.enableUnstable = true;
+                 boot.supportedFilesystems = lib.mkForce [ "btrfs" "vfat" ];
                  boot.kernelPackages = pkgs.linuxPackages_latest;
                  services.getty.autologinUser = mkForce "root";
                  hardware.video.hidpi.enable = true;
