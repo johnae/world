@@ -1,48 +1,6 @@
 ## raspberry-pi 4 router
 arch = "aarch64-linux"
 
-fileSystems./.options = [ "defaults", "size=8G", "mode=755" ]
-
-networking.usePredictableInterfaceNames = true
-
-boot.kernelParams = [
-  "8250.nr_uarts=1",
-  "console=ttyAMA0,115200",
-  "console=tty1",
-  "boot.shell_on_fail",
-]
-
-boot.initrd.luks.devices.cryptkey.keyFile = "/sys/firmware/devicetree/base/serial-number"
-
-boot.initrd.availableKernelModules = [ "xhci_pci", "usbhid", "uas", "usb_storage" ]
-
-boot.initrd.luks.devices.cryptkey.preOpenCommands = """
-echo just checking
-ls -lah /
-ls -lah /sys
-"""
-
-boot.initrd.luks.cryptoModules = [
-  "aes",
-  "aes_generic",
-  "blowfish",
-  "twofish",
-  "serpent",
-  "cbc",
-  "xts",
-  "lrw",
-  "sha1",
-  "sha256",
-  "sha512",
-  "af_alg",
-  "algif_skcipher",
-  "xchacha12",
-  "xchacha20",
-  "adiantum",
-]
-
-cryptsetup.luksFormat.extraParams = "--cipher xchacha12,aes-adiantum-plain64"
-
 profiles = [
   "hardware/raspberrypi4",
   "profiles/default_fs",
