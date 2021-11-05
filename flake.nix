@@ -215,9 +215,14 @@
 
       packages = recursiveUpdate (recursiveUpdate diskFormatters exportedPackages) worldUtils;
 
-      github-actions-package-matrix = {
+      github-actions-package-matrix-x86-64-linux = {
         os = [ "ubuntu-latest" ];
-        pkg = mapAttrsToList (name: _:  name) exportedPackages;
+        pkg = mapAttrsToList (name: _:  name) exportedPackages.x86_64-linux;
+      };
+
+      github-actions-package-matrix-aarch64-linux = {
+        os = [ "ubuntu-latest" ];
+        pkg = mapAttrsToList (name: _:  name) exportedPackages.aarch64-linux;
       };
 
       github-actions-host-matrix = {

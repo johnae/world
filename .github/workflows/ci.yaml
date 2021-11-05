@@ -21,7 +21,7 @@ jobs:
     - run: |
         nix shell .#world-lint -c world-lint
 
-  create_package_matrix:
+  create_package_matrix_x86_64_linux:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
@@ -36,7 +36,24 @@ jobs:
           experimental-features = nix-command flakes
     - id: job-matrix
       run: |
-        echo "::set-output name=matrix::$(nix eval .#github-actions-package-matrix --json)"
+        echo "::set-output name=matrix::$(nix eval .#github-actions-package-matrix-x86-64-linux --json)"
+
+  create_package_matrix_aarch64_linux:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.job-matrix.outputs.matrix }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v13
+      with:
+        install_url: https://nixos-nix-install-tests.cachix.org/serve/8d8xah1f6ypccpmw9cfsl8ziw1chj4cl/install
+        install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          experimental-features = nix-command flakes
+    - id: job-matrix
+      run: |
+        echo "::set-output name=matrix::$(nix eval .#github-actions-package-matrix-aarch64-linux --json)"
 
   create_host_matrix:
     runs-on: ubuntu-latest
@@ -55,11 +72,11 @@ jobs:
       run: |
         echo "::set-output name=matrix::$(nix eval .#github-actions-host-matrix --json)"
 
-  build_package:
-    needs: create_package_matrix
+  build_package_x86_64_linux:
+    needs: create_package_matrix_x86_64_linux
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: ${{ fromJson(needs.create_package_matrix.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.create_package_matrix_x86_64_linux.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v13
@@ -79,10 +96,43 @@ jobs:
     - env:
         PKG: ${{ matrix.pkg }}
       run: |
-        nix build .#$PKG -L
+        nix build .#packages.x86_64-linux.$PKG -L
+
+  build_package_aarch64_linux:
+    needs: create_package_matrix_aarch64_linux
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix: ${{ fromJson(needs.create_package_matrix_aarch64_linux.outputs.matrix) }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v13
+      with:
+        install_url: https://nixos-nix-install-tests.cachix.org/serve/8d8xah1f6ypccpmw9cfsl8ziw1chj4cl/install
+        install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          substituters = https://nixpkgs-wayland.cachix.org https://nix-community.cachix.org https://insane.cachix.org https://cachix.cachix.org https://cache.nixos.org/
+          trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+          experimental-features = nix-command flakes
+    - run: |
+        DEBIAN_FRONTEND=noninteractive
+        export DEBIAN_FRONTEND
+        sudo apt-get update -q -y && sudo apt-get install -q -y qemu-system-aarch64 qemu-efi binfmt-support qemu-user-static
+        sudo bash -c "echo extra-platforms = aarch64-linux arm-linux >> /etc/nix/nix.conf"
+        sudo systemctl restart nix-daemon
+    - uses: cachix/cachix-action@v10
+      if: ${{ matrix.pkg != 'pxebooter' }}
+      with:
+        name: insane
+        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+    - env:
+        PKG: ${{ matrix.pkg }}
+      run: |
+        cat /etc/nix/nix.conf
+        nix build .#packages.aarch64-linux.$PKG -L
 
   build_host:
-    needs: [create_host_matrix, build_package]
+    needs: [create_package_matrix_x86_64_linux, build_package_x86_64_linux]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix: ${{ fromJson(needs.create_host_matrix.outputs.matrix) }}
@@ -106,13 +156,16 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: Build (matrix)
-    needs: [build_package, build_host, nix_lint]
+    needs: [build_package_x86_64_linux, build_package_aarch64_linux, build_host, nix_lint]
     steps:
       - name: Check linting status
         if: ${{ needs.nix_lint.result != 'success' }}
         run: exit 1
-      - name: Check package build matrix status
-        if: ${{ needs.build_package.result != 'success' }}
+      - name: Check x86_64-linux package build matrix status
+        if: ${{ needs.build_package_x86_64_linux.result != 'success' }}
+        run: exit 1
+      - name: Check aarch64-linux package build matrix status
+        if: ${{ needs.build_package_aarch64_linux.result != 'success' }}
         run: exit 1
       - name: Check host build matrix status
         if: ${{ needs.build_host.result != 'success' }}
