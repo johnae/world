@@ -3,9 +3,10 @@
 let
   inherit (lib) mapAttrsToList listToAttrs splitString concatStringsSep last flatten;
   inherit (builtins) filter match head foldl' replaceStrings;
-  inherit (config.config) boot cryptsetup;
+  inherit (config.config) boot cryptsetup btrfs;
   bootMode = if boot.loader.systemd-boot.enable then "UEFI" else "Legacy";
   luksFormatExtraParams = cryptsetup.luksFormat.extraParams;
+  btrfsFormatExtraParams = btrfs.format.extraParams;
   diskLabels = {
     boot = "boot";
     encCryptkey = "cryptkey";
@@ -211,7 +212,7 @@ in
     cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "$DISK_ROOT" ${diskLabels.encRoot}
 
     echo Creating btrfs filesystem on /dev/mapper/${diskLabels.encRoot}
-    mkfs.btrfs -f -L ${diskLabels.root} /dev/mapper/${diskLabels.encRoot}
+    mkfs.btrfs ${btrfsFormatExtraParams} -f -L ${diskLabels.root} /dev/mapper/${diskLabels.encRoot}
 
     echo Creating vfat disk at "$DISK_EFI"
     mkfs.fat -F 32 -n ${diskLabels.boot} "$DISK_EFI"
