@@ -186,7 +186,7 @@ in
     fdisk -l "$DISK"
 
     echo Formatting cryptkey disk "$DISK_CRYPTKEY", using keyfile "$CRYPTKEYFILE"
-    cryptsetup luksFormat --label=${diskLabels.encCryptkey} -q --key-file="$CRYPTKEYFILE" "$DISK_CRYPTKEY"
+    cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encCryptkey} -q --key-file="$CRYPTKEYFILE" "$DISK_CRYPTKEY"
     DISK_CRYPTKEY=/dev/disk/by-label/${diskLabels.encCryptkey}
 
     echo Opening cryptkey disk "$DISK_CRYPTKEY", using keyfile "$CRYPTKEYFILE"
