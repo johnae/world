@@ -47,6 +47,6 @@
     "adiantum"
   ];
 
-  cryptsetup.luksFormat.extraParams = "--cipher xchacha12,aes-adiantum-plain64";
+  cryptsetup.luksFormat.extraParams = "--cipher xchacha12,aes-adiantum-plain64 --type luks2 --sector-size 4096";
 
 }
