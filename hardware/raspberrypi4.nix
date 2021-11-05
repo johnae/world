@@ -45,6 +45,7 @@
     "xchacha12"
     "xchacha20"
     "adiantum"
+    "nhpoly1305"
   ];
 
   cryptsetup.luksFormat.extraParams = "-v --type luks2 --sector-size 4096 --hash sha256 --key-size 256 --use-urandom --cipher xchacha12,aes-adiantum-plain64 --align-payload=2048";
