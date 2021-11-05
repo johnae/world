@@ -13,7 +13,7 @@
 
   fileSystems."/".options = [ "defaults" "size=4G" "mode=755" ];
 
-  networking.usePredictableInterfaceNames = true;
+  networking.usePredictableInterfaceNames = lib.mkForce true;
 
   boot.kernelParams = [
     "8250.nr_uarts=1"
