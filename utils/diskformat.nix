@@ -156,6 +156,9 @@ in
 
     partnum=0
 
+    end_position="$(sgdisk -E "$DISK")"
+    aligned_end="$((end_position - (end_position + 1) % 2048 ))"
+
     if [ "$BOOTMODE" = "Legacy" ]; then
       partnum=$((partnum + 1))
       sgdisk -n 0:0:+20M -t 0:ef02 -c 0:"biosboot" -u 0:"21686148-6449-6E6F-744E-656564454649" "$DISK" # 1
@@ -163,7 +166,7 @@ in
     sgdisk -n 0:0:+$efi_space -t 0:ef00 -c 0:"efi" "$DISK" # 1
     sgdisk -n 0:0:+$luks_key_space -t 0:8300 -c 0:"cryptkey" "$DISK" # 2
     sgdisk -n 0:0:+$swap_space -t 0:8300 -c 0:"swap" "$DISK" # 3
-    sgdisk -n 0:0:0 -t 0:8300 -c 0:"root" "$DISK" # 4
+    sgdisk -n 0:0:$aligned_end -t 0:8300 -c 0:"root" "$DISK" # 4
     partprobe "$DISK"
 
     echo "PREFIX: $PARTITION_PREFIX"
