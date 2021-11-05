@@ -183,9 +183,7 @@ in
     fdisk -l "$DISK"
 
     echo Formatting cryptkey disk "$DISK_CRYPTKEY", using keyfile "$CRYPTKEYFILE"
-
-    # shellcheck disable=SC2086
-    cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encCryptkey} -q --key-file="$CRYPTKEYFILE" "$DISK_CRYPTKEY"
+    cryptsetup luksFormat --label=${diskLabels.encCryptkey} -q --key-file="$CRYPTKEYFILE" "$DISK_CRYPTKEY"
     DISK_CRYPTKEY=/dev/disk/by-label/${diskLabels.encCryptkey}
 
     echo Opening cryptkey disk "$DISK_CRYPTKEY", using keyfile "$CRYPTKEYFILE"
