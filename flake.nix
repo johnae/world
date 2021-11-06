@@ -220,9 +220,42 @@
         pkg = mapAttrsToList (name: _:  name) exportedPackages.x86_64-linux;
       };
 
-      github-actions-package-matrix-aarch64-linux = {
+      github-actions-package-matrix-aarch64-linux = let
+        skip = [
+          "age-plugin-yubikey"
+          "blur"
+          "fire"
+          "git-branchless"
+          "grim"
+          "innernet"
+          "meson-0591"
+          "my-emacs"
+          "my-emacs-config"
+          "netns-dbus-proxy"
+          "netns-exec"
+          "nixpkgs-fmt"
+          "persway"
+          "pueue"
+          "rofi-wayland"
+          "slurp"
+          "slurp"
+          "sway"
+          "sway-unwrapped"
+          "swaybg"
+          "swayidle"
+          "swaylock"
+          "swaylock-dope"
+          "wayland-protocols-master"
+          "wf-cliboard"
+          "wf-cliboard-x11"
+          "wf-recorder"
+          "wlroots"
+          "xdg-desktop-portal-wlr"
+        ];
+      in
+        {
         os = [ "ubuntu-latest" ];
-        pkg = mapAttrsToList (name: _:  name) exportedPackages.aarch64-linux;
+        pkg = filter (elem: !(builtins.elem elem skip)) (mapAttrsToList (name: _:  name) exportedPackages.aarch64-linux);
       };
 
       github-actions-host-matrix = {
