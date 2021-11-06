@@ -235,6 +235,7 @@
           "netns-exec"
           "nixpkgs-fmt"
           "persway"
+          "pxebooter"
           "pueue"
           "rofi-wayland"
           "slurp"
