@@ -27,6 +27,10 @@
      url = "github:ryantm/agenix";
      inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix = {
+     url = "github:nixos/nix/2.4";
+     inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, ... } @ inputs:
@@ -42,6 +46,7 @@
         inherit system;
         config.allowUnfree = true;
         overlays = [
+          inputs.nix.overlay
           inputs.nix-misc.overlay
           inputs.nur.overlay
           inputs.agenix.overlay
@@ -105,7 +110,7 @@
               { system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}"; }
               { nixpkgs = { pkgs = pkgs.${system}; }; }
               inputs.nixpkgs.nixosModules.notDetected
-              ({ modulesPath, pkgs, lib, ... }: {
+              ({ modulesPath, pkgs, ... }: {
                  imports = [
                    "${modulesPath}/installer/netboot/netboot-minimal.nix"
                    ./cachix.nix
@@ -120,7 +125,7 @@
                  environment.systemPackages = with pkgs; [
                    git curl jq skim
                  ];
-                 boot.supportedFilesystems = lib.mkForce [ "btrfs" "vfat" ];
+                 boot.zfs.enableUnstable = true;
                  boot.kernelPackages = pkgs.linuxPackages_latest;
                  services.getty.autologinUser = mkForce "root";
                  hardware.video.hidpi.enable = true;
@@ -198,6 +203,8 @@
           (filterAttrs (name: _: (hasAttr name pkgs.${system}) && nixpkgs.lib.isDerivation pkgs.${system}.${name}) inputs.packages.overlays)
         ) // {
           pxebooter = toPxeBootSystemConfig "pxebooter" system;
+        } // {
+          nix = pkgs.${system}.nix;
         }
       );
 

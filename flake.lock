@@ -188,6 +188,22 @@
         "type": "github"
       }
     },
+    "lowdown-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1633514407,
+        "narHash": "sha256-Dw32tiMjdK9t3ETl5fzGrutQTzh2rufgZV4A/BbxuD4=",
+        "owner": "kristapsdz",
+        "repo": "lowdown",
+        "rev": "d2c2b44ff6c27b936ec27358a2653caaef8f73b8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kristapsdz",
+        "repo": "lowdown",
+        "type": "github"
+      }
+    },
     "netns-exec": {
       "flake": false,
       "locked": {
@@ -201,6 +217,28 @@
       "original": {
         "owner": "johnae",
         "repo": "netns-exec",
+        "type": "github"
+      }
+    },
+    "nix": {
+      "inputs": {
+        "lowdown-src": "lowdown-src",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1635794566,
+        "narHash": "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=",
+        "owner": "nixos",
+        "repo": "nix",
+        "rev": "9d5c985aedcf7d11a5310eae6f27dcde8eb7f608",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "2.4",
+        "repo": "nix",
         "type": "github"
       }
     },
@@ -447,6 +485,7 @@
         "agenix": "agenix",
         "fenix": "fenix",
         "home-manager": "home-manager",
+        "nix": "nix",
         "nix-misc": "nix-misc",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
