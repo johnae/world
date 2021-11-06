@@ -148,22 +148,6 @@
         "type": "github"
       }
     },
-    "innernet": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1632196221,
-        "narHash": "sha256-zy8iB2IcAH76pE0DXPAB74HS6U4nFFVZ7B7r8PMgwis=",
-        "owner": "tonarino",
-        "repo": "innernet",
-        "rev": "c09d828414788c063ed56ceb769d7cb638af994e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tonarino",
-        "repo": "innernet",
-        "type": "github"
-      }
-    },
     "netns-exec": {
       "flake": false,
       "locked": {
@@ -348,7 +332,6 @@
         "git-branchless": "git-branchless",
         "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
         "grim": "grim",
-        "innernet": "innernet",
         "netns-exec": "netns-exec",
         "nix-misc": "nix-misc",
         "nixos-generators": "nixos-generators",
