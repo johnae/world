@@ -112,4 +112,11 @@
     emacs-all-the-icons-fonts
   ];
 
+  security.wrappers.netns-exec = {
+   source = "${pkgs.netns-exec}/bin/netns-exec";
+   owner = "root";
+   group = "root";
+   setuid = true;
+  };
+
 }

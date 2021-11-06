@@ -1,14 +1,16 @@
+{lib, ...}:
+
 {
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
-    options = [ "defaults" "size=8G" "mode=755" ];
+    options = lib.mkDefault [ "defaults" "size=8G" "mode=755" ];
   };
 
   fileSystems."/nix" = {
     device = "/dev/disk/by-label/root";
     fsType = "btrfs";
-    options =
+    options = lib.mkDefault
       [ "subvol=@nix" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
   };
 
@@ -16,7 +18,7 @@
     device = "/dev/disk/by-label/root";
     fsType = "btrfs";
     neededForBoot = true;
-    options =
+    options = lib.mkDefault
       [ "subvol=@keep" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
   };
 

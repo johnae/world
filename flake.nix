@@ -259,9 +259,14 @@
         pkg = filter (elem: !(builtins.elem elem skip)) (mapAttrsToList (name: _:  name) exportedPackages.aarch64-linux);
       };
 
-      github-actions-host-matrix = {
+      github-actions-host-matrix-x86-64-linux = {
         os = [ "ubuntu-latest" ];
-        host = mapAttrsToList (name: _:  name) nixosConfigurations;
+        host = mapAttrsToList (name: _:  name) (filterAttrs (_: config: config.specialArgs.system == "x86_64-linux") hosts);
+      };
+
+      github-actions-host-matrix-aarch64-linux = {
+        os = [ "ubuntu-latest" ];
+        host = mapAttrsToList (name: _:  name) (filterAttrs (_: config: config.specialArgs.system == "aarch64-linux") hosts);
       };
     };
 }

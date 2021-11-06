@@ -3,7 +3,10 @@
 let
   inherit (lib) mapAttrsToList listToAttrs splitString concatStringsSep last flatten;
   inherit (builtins) filter match head foldl' replaceStrings;
-  bootMode = if config.config.boot.loader.systemd-boot.enable then "UEFI" else "Legacy";
+  inherit (config.config) boot cryptsetup btrfs;
+  bootMode = if boot.loader.systemd-boot.enable then "UEFI" else "Legacy";
+  luksFormatExtraParams = cryptsetup.luksFormat.extraParams;
+  btrfsFormatExtraParams = btrfs.format.extraParams;
   diskLabels = {
     boot = "boot";
     encCryptkey = "cryptkey";
@@ -59,6 +62,9 @@ in
 
     if [ "$(systemd-detect-virt)" = "none" ]; then
       CRYPTKEYFILE="''${CRYPTKEYFILE:-/sys/class/dmi/id/product_uuid}"
+      if [ ! -e "$CRYPTKEYFILE" ]; then
+        CRYPTKEYFILE="/sys/firmware/devicetree/base/serial-number"
+      fi
     else
       CRYPTKEYFILE="''${CRYPTKEYFILE:-/sys/class/dmi/id/product_version}"
     fi
@@ -151,6 +157,9 @@ in
 
     partnum=0
 
+    end_position="$(sgdisk -E "$DISK")"
+    aligned_end="$((end_position - (end_position + 1) % 2048 ))"
+
     if [ "$BOOTMODE" = "Legacy" ]; then
       partnum=$((partnum + 1))
       sgdisk -n 0:0:+20M -t 0:ef02 -c 0:"biosboot" -u 0:"21686148-6449-6E6F-744E-656564454649" "$DISK" # 1
@@ -158,23 +167,17 @@ in
     sgdisk -n 0:0:+$efi_space -t 0:ef00 -c 0:"efi" "$DISK" # 1
     sgdisk -n 0:0:+$luks_key_space -t 0:8300 -c 0:"cryptkey" "$DISK" # 2
     sgdisk -n 0:0:+$swap_space -t 0:8300 -c 0:"swap" "$DISK" # 3
-    sgdisk -n 0:0:0 -t 0:8300 -c 0:"root" "$DISK" # 4
+    sgdisk -n 0:0:$aligned_end -t 0:8300 -c 0:"root" "$DISK" # 4
     partprobe "$DISK"
 
     echo "PREFIX: $PARTITION_PREFIX"
 
-    DISK_EFI_LABEL=${diskLabels.boot}
     partnum=$((partnum + 1))
     DISK_EFI="$DISK$PARTITION_PREFIX$partnum"
-    ENC_DISK_CRYPTKEY_LABEL=${diskLabels.encCryptkey}
     partnum=$((partnum + 1))
     DISK_CRYPTKEY="$DISK$PARTITION_PREFIX$partnum"
-    DISK_SWAP_LABEL=${diskLabels.swap}
-    ENC_DISK_SWAP_LABEL=${diskLabels.encSwap}
     partnum=$((partnum + 1))
     DISK_SWAP="$DISK$PARTITION_PREFIX$partnum"
-    DISK_ROOT_LABEL=${diskLabels.root}
-    ENC_DISK_ROOT_LABEL=${diskLabels.encRoot}
     partnum=$((partnum + 1))
     DISK_ROOT="$DISK$PARTITION_PREFIX$partnum"
 
@@ -184,43 +187,45 @@ in
     fdisk -l "$DISK"
 
     echo Formatting cryptkey disk "$DISK_CRYPTKEY", using keyfile "$CRYPTKEYFILE"
-    cryptsetup luksFormat --label="$ENC_DISK_CRYPTKEY_LABEL" -q --key-file="$CRYPTKEYFILE" "$DISK_CRYPTKEY"
-    DISK_CRYPTKEY=/dev/disk/by-label/"$ENC_DISK_CRYPTKEY_LABEL"
+    cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encCryptkey} -q --key-file="$CRYPTKEYFILE" "$DISK_CRYPTKEY"
+    DISK_CRYPTKEY=/dev/disk/by-label/${diskLabels.encCryptkey}
 
     echo Opening cryptkey disk "$DISK_CRYPTKEY", using keyfile "$CRYPTKEYFILE"
-    cryptsetup luksOpen --key-file="$CRYPTKEYFILE" "$DISK_CRYPTKEY" "$ENC_DISK_CRYPTKEY_LABEL"
+    cryptsetup luksOpen --key-file="$CRYPTKEYFILE" "$DISK_CRYPTKEY" ${diskLabels.encCryptkey}
 
-    echo Writing random data to /dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL"
-    dd if=$DEVRANDOM of=/dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL" bs=1024 count=14000 || true
+    echo Writing random data to /dev/mapper/${diskLabels.encCryptkey}
+    dd if=$DEVRANDOM of=/dev/mapper/${diskLabels.encCryptkey} bs=1024 count=14000 || true
 
     echo Creating encrypted swap
-    cryptsetup luksFormat --label="$ENC_DISK_SWAP_LABEL" -q --key-file=/dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL" "$DISK_SWAP"
+    # shellcheck disable=SC2086
+    cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encSwap} -q --key-file=/dev/mapper/${diskLabels.encCryptkey} "$DISK_SWAP"
 
     echo Creating encrypted root
-    cryptsetup luksFormat --label="$ENC_DISK_ROOT_LABEL" -q --key-file=/dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL" "$DISK_ROOT"
+    # shellcheck disable=SC2086
+    cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encRoot} -q --key-file=/dev/mapper/${diskLabels.encCryptkey} "$DISK_ROOT"
 
     echo Opening encrypted swap using keyfile
-    cryptsetup luksOpen --key-file=/dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL" "$DISK_SWAP" "$ENC_DISK_SWAP_LABEL"
-    mkswap -L "$DISK_SWAP_LABEL" /dev/mapper/"$ENC_DISK_SWAP_LABEL"
+    cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "$DISK_SWAP" ${diskLabels.encSwap}
+    mkswap -L ${diskLabels.swap} /dev/mapper/${diskLabels.encSwap}
 
     echo Opening encrypted root using keyfile
-    cryptsetup luksOpen --key-file=/dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL" "$DISK_ROOT" "$ENC_DISK_ROOT_LABEL"
+    cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "$DISK_ROOT" ${diskLabels.encRoot}
 
-    echo Creating btrfs filesystem on /dev/mapper/"$ENC_DISK_ROOT_LABEL"
-    mkfs.btrfs -f -L "$DISK_ROOT_LABEL" /dev/mapper/"$ENC_DISK_ROOT_LABEL"
+    echo Creating btrfs filesystem on /dev/mapper/${diskLabels.encRoot}
+    mkfs.btrfs ${btrfsFormatExtraParams} -f -L ${diskLabels.root} /dev/mapper/${diskLabels.encRoot}
 
     echo Creating vfat disk at "$DISK_EFI"
-    mkfs.vfat -n "$DISK_EFI_LABEL" "$DISK_EFI"
+    mkfs.fat -F 32 -n ${diskLabels.boot} "$DISK_EFI"
 
-    partprobe /dev/mapper/"$ENC_DISK_SWAP_LABEL"
-    partprobe /dev/mapper/"$ENC_DISK_CRYPTKEY_LABEL"
-    partprobe /dev/mapper/"$ENC_DISK_ROOT_LABEL"
+    partprobe /dev/mapper/${diskLabels.encSwap}
+    partprobe /dev/mapper/${diskLabels.encCryptkey}
+    partprobe /dev/mapper/${diskLabels.encRoot}
 
     mount -t tmpfs none /mnt
     mkdir -p "/mnt/tmproot" ${concatStringsSep " " (map (v: "/mnt/${replaceStrings ["@"] [""] v}") subvolumes)} "/mnt/boot"
 
-    echo Temporarily mounting root btrfs volume from "/dev/disk/by-label/$DISK_ROOT_LABEL" to /mnt/tmproot
-    retryDefault mount -o rw,noatime,compress=zstd,ssd,space_cache /dev/disk/by-label/"$DISK_ROOT_LABEL" /mnt/tmproot
+    echo Temporarily mounting root btrfs volume from "/dev/disk/by-label/${diskLabels.root}" to /mnt/tmproot
+    retryDefault mount -o rw,noatime,compress=zstd,ssd,space_cache /dev/disk/by-label/${diskLabels.root} /mnt/tmproot
 
     # now create the btrfs subvolumes we're interested in having
     echo Creating btrfs subvolumes at /mnt/tmproot
@@ -239,9 +244,9 @@ in
     echo Devices with labels
     ls -lah /dev/disk/by-label/
 
-    ${concatStringsSep "\n" (map (v: ''mount -o rw,noatime,compress=zstd,ssd,space_cache,subvol=${v} /dev/disk/by-label/"$DISK_ROOT_LABEL" /mnt/${replaceStrings ["@"] [""] v}'') subvolumes)}
+    ${concatStringsSep "\n" (map (v: ''mount -o rw,noatime,compress=zstd,ssd,space_cache,subvol=${v} /dev/disk/by-label/${diskLabels.root} /mnt/${replaceStrings ["@"] [""] v}'') subvolumes)}
 
     # and mount the boot partition
     echo Mounting boot partition
-    mount /dev/disk/by-label/"$DISK_EFI_LABEL" /mnt/boot
+    mount /dev/disk/by-label/${diskLabels.boot} /mnt/boot
  ''

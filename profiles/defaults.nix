@@ -89,6 +89,10 @@
   console.keyMap = "us";
   time.timeZone = "Europe/Stockholm";
 
+  services.udev.extraRules = ''
+  ATTR{idVendor}=="2357", ATTR{idProduct}=="0600", RUN+="${pkgs.usb-modeswitch}/bin/usb_modeswitch -K -v 0x2357 -p 0x0600 -V 0x2357 -P 0x0601 -R"
+  '';
+
   environment.shells = [ pkgs.bashInteractive pkgs.zsh pkgs.fish ];
 
   programs.fish.enable = true;
@@ -107,13 +111,6 @@
   services.sshguard.enable = true;
   services.fstrim.enable = true;
   services.btrfs.autoScrub.enable = true;
-
-  security.wrappers.netns-exec = {
-   source = "${pkgs.netns-exec}/bin/netns-exec";
-   owner = "root";
-   group = "root";
-   setuid = true;
-  };
 
   ## only allow declarative user management
   users.mutableUsers = false;
