@@ -16,8 +16,9 @@ let
         extraGroups = if hasAttr "extraGroups" value then
           value.extraGroups
         else [ "wheel" "docker" "video" "audio" "kvm" "libvirtd" ];
-        isNormalUser = true;
-      }
+      } // (
+        if hasAttr "isSystemUser" value then {} else { isNormalUser = true; }
+      )
     );
   };
   mapConfig = path: mapAttrs (name: value:

@@ -7,7 +7,6 @@ profiles = [
   "profiles/k3s",
   "profiles/server",
   "profiles/state",
-  "profiles/unifi_controller",
   "profiles/uuid_disk_crypt",
   "profiles/zram",
 ]
@@ -51,3 +50,11 @@ services.k3s.flannelIface = "insane"
 services.k3s.nodeIP = "192.168.104.67"
 services.k3s.nodeExternalIP = "192.168.240.142"
 services.k3s.after = [ "innernet-client-insane.service" ]
+
+environment.state./keep.directories = [ "/var/lib/unifi" ]
+services.unifi.enable = true
+systemd.services.unifi.unitConfig.RequiresMountsFor = "/var/lib/unifi"
+networking.firewall.allowedTCPPorts = [ 8443 ]
+users.users.unifi.group = "unifi"
+users.users.unifi.isSystemUser = true
+users.groups.unifi = {}
