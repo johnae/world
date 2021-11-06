@@ -128,7 +128,6 @@ jobs:
     - env:
         PKG: ${{ matrix.pkg }}
       run: |
-        cat /etc/nix/nix.conf
         nix build .#packages.aarch64-linux.$PKG -L
 
   build_host:
