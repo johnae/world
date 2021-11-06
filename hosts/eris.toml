@@ -2,6 +2,7 @@ publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK
 syncthingDeviceID = "ZL2OU7Q-IRYWF7H-VNX6A65-RHWQXIF-AK2G22Y-KB43E2U-DAMNCFP-66IWKQX"
 
 virtualisation.libvirtd.enable = true
+boot.binfmt.emulatedSystems = [ "aarch64-linux" ]
 
 environment.state."/keep".directories = [
   "/var/lib/libvirt",
