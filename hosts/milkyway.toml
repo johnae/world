@@ -34,9 +34,9 @@ age.secrets.wg-home.file = "secrets/milkyway/wg-home.age"
 ## enp1s0u2 - external
 
 networking.useDHCP = false
-networking.vlans.wan = { id = 1000, interface = "enp1s0u2" }
-networking.vlans.lan = { id = 2000, interface = "eth0" }
-networking.vlans.dev = { id = 3000, interface = "eth0" }
+networking.vlans.wan = { id = 10, interface = "enp1s0u2" }
+networking.vlans.lan = { id = 100, interface = "eth0" }
+networking.vlans.dev = { id = 200, interface = "eth0" }
 
 networking.interfaces.eth0.useDHCP = false
 networking.interfaces.enp1s0u2.useDHCP = false
@@ -51,14 +51,14 @@ services.dhcpd4.extraConfig = """
 option domain-name-servers 1.0.0.1, 1.1.1.1, 2606:4700:4700::1111;
 option subnet-mask 255.255.255.0;
 
-subnet 192.168.100.0 255.255.255.0 {
+subnet 192.168.100.0 netmask 255.255.255.0 {
   option broadcast-address 192.168.100.255;
   option routers 192.168.100.1;
   interface lan;
   range 192.168.100.10 192.168.100.128;
 }
 
-subnet 192.168.200.0 255.255.255.0 {
+subnet 192.168.200.0 netmask 255.255.255.0 {
   option broadcast-address 192.168.200.255;
   option routers 192.168.200.1;
   interface dev;
