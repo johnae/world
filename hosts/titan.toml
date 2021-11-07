@@ -21,9 +21,9 @@ users.users.john.openssh.authorizedKeys.keys = [
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
 ]
 
-networking.defaultGateway = "192.168.240.1"
+networking.defaultGateway = "192.168.200.1"
 networking.interfaces.eth0.ipv4.addresses = [
-  { address = "192.168.240.142", prefixLength = 24 }
+  { address = "192.168.200.142", prefixLength = 24 }
 ]
 
 services.innernet.client.insane.enable = true
@@ -49,5 +49,5 @@ services.k3s.tokenFile = "/run/secrets/k3s-token"
 services.k3s.maxPodsPerNode = 30
 services.k3s.flannelIface = "insane"
 services.k3s.nodeIP = "192.168.104.67"
-services.k3s.nodeExternalIP = "192.168.240.142"
+services.k3s.nodeExternalIP = "192.168.200.142"
 services.k3s.after = [ "innernet-client-insane.service" ]
