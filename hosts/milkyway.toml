@@ -128,7 +128,7 @@ server=1.1.1.1
 server=2606:4700:4700::1111
 """
 
-networking.hosts."65.108.2.146" = "unifi"
+networking.hosts."65.108.2.146" = [ "unifi" ]
 
 boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = true
 boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true
