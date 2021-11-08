@@ -63,10 +63,13 @@ services.dhcpd4.enable = false
 services.dhcpd4.interfaces = [ "eth0", "lan", "dev", "iot", "guest" ]
 services.dhcpd4.extraConfig = """
 option subnet-mask 255.255.255.0;
+option space ubnt;
+option ubnt.unifi-address code 1 = ip-address;
 
 subnet 192.168.1.0 netmask 255.255.255.0 {
   option broadcast-address 192.168.1.255;
   option domain-name-servers 192.168.1.1;
+  option ubnt.unifi-address 65.108.2.146;
   option routers 192.168.1.1;
   interface eth0;
   range 192.168.1.10 192.168.1.128;
@@ -75,6 +78,7 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 subnet 192.168.100.0 netmask 255.255.255.0 {
   option broadcast-address 192.168.100.255;
   option domain-name-servers 192.168.100.1;
+  option ubnt.unifi-address 65.108.2.146;
   option routers 192.168.100.1;
   interface lan;
   range 192.168.100.10 192.168.100.128;
@@ -83,6 +87,7 @@ subnet 192.168.100.0 netmask 255.255.255.0 {
 subnet 192.168.200.0 netmask 255.255.255.0 {
   option broadcast-address 192.168.200.255;
   option domain-name-servers 192.168.200.1;
+  option ubnt.unifi-address 65.108.2.146;
   option routers 192.168.200.1;
   interface dev;
   range 192.168.200.10 192.168.200.128;
@@ -91,6 +96,7 @@ subnet 192.168.200.0 netmask 255.255.255.0 {
 subnet 192.168.300.0 netmask 255.255.255.0 {
   option broadcast-address 192.168.300.255;
   option domain-name-servers 192.168.300.1;
+  option ubnt.unifi-address 65.108.2.146;
   option routers 192.168.300.1;
   interface iot;
   range 192.168.300.10 192.168.300.128;
@@ -99,6 +105,7 @@ subnet 192.168.300.0 netmask 255.255.255.0 {
 subnet 192.168.400.0 netmask 255.255.255.0 {
   option broadcast-address 192.168.400.255;
   option domain-name-servers 192.168.400.1;
+  option ubnt.unifi-address 65.108.2.146;
   option routers 192.168.400.1;
   interface guest;
   range 192.168.400.10 192.168.400.128;
