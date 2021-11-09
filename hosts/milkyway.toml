@@ -33,7 +33,7 @@ age.secrets.wg-home.file = "secrets/milkyway/wg-home.age"
 networking.useDHCP = false
 
 networking.vlans.lan = { id = 100, interface = "eth0" }
-networking.vlans.dev = { id = 200, interface = "eth0" }
+networking.vlans.work = { id = 200, interface = "eth0" }
 networking.vlans.iot = { id = 300, interface = "eth0" }
 networking.vlans.guest = { id = 400, interface = "eth0" }
 
@@ -45,8 +45,8 @@ networking.interfaces.eth0.ipv4.addresses = [ { address = "192.168.1.1", prefixL
 networking.interfaces.lan.useDHCP = false
 networking.interfaces.lan.ipv4.addresses = [ { address = "192.168.100.1", prefixLength = 24 } ]
 
-networking.interfaces.dev.useDHCP = false
-networking.interfaces.dev.ipv4.addresses = [ { address = "192.168.200.1", prefixLength = 24 } ]
+networking.interfaces.work.useDHCP = false
+networking.interfaces.work.ipv4.addresses = [ { address = "192.168.200.1", prefixLength = 24 } ]
 
 networking.interfaces.iot.useDHCP = false
 networking.interfaces.iot.ipv4.addresses = [ { address = "192.168.300.1", prefixLength = 24 } ]
@@ -55,7 +55,7 @@ networking.interfaces.guest.useDHCP = false
 networking.interfaces.guest.ipv4.addresses = [ { address = "192.168.400.1", prefixLength = 24 } ]
 
 services.dhcpd4.enable = false
-services.dhcpd4.interfaces = [ "eth0", "lan", "dev", "iot", "guest" ]
+services.dhcpd4.interfaces = [ "eth0", "lan", "work", "iot", "guest" ]
 services.dhcpd4.extraConfig = """
 option subnet-mask 255.255.255.0;
 option space ubnt;
@@ -100,7 +100,7 @@ subnet 192.168.200.0 netmask 255.255.255.0 {
   option routers 192.168.200.1;
 	option domain-name "insane.lan";
 	option domain-search "insane.lan";
-  interface dev;
+  interface work;
 	default-lease-time 86400;
 	max-lease-time 86400;
   range 192.168.200.10 192.168.200.128;
@@ -145,7 +145,7 @@ listen-address=::1,127.0.0.1,192.168.1.1,192.168.100.1,192.168.200.1,192.168.300
 
 interface=eth0
 interface=lan
-interface=dev
+interface=work
 interface=iot
 interface=guest
 
