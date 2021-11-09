@@ -32,14 +32,12 @@ age.secrets.wg-home.file = "secrets/milkyway/wg-home.age"
 
 networking.useDHCP = false
 
-networking.vlans.wan = { id = 10, interface = "enp1s0u2" }
 networking.vlans.lan = { id = 100, interface = "eth0" }
 networking.vlans.dev = { id = 200, interface = "eth0" }
 networking.vlans.iot = { id = 300, interface = "eth0" }
 networking.vlans.guest = { id = 400, interface = "eth0" }
 
-networking.interfaces.enp1s0u2.useDHCP = false
-networking.interfaces.wan.useDHCP = true
+networking.interfaces.enp1s0u2.useDHCP = true
 
 networking.interfaces.eth0.useDHCP = false
 networking.interfaces.eth0.ipv4.addresses = [ { address = "192.168.1.1", prefixLength = 24 } ]
