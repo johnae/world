@@ -85,8 +85,8 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 	option domain-name "insane.lan";
 	option domain-search "insane.lan";
   interface eth0;
-	default-lease-time 8.40;
-	max-lease-time 8.40;
+	default-lease-time 86400;
+	max-lease-time 86400;
   range 192.168.1.10 192.168.1.128;
 }
 
@@ -98,8 +98,8 @@ subnet 192.168.10.0 netmask 255.255.255.0 {
 	option domain-name "insane.lan";
 	option domain-search "insane.lan";
   interface lan;
-	default-lease-time 8.40;
-	max-lease-time 8.40;
+	default-lease-time 86400;
+	max-lease-time 86400;
   range 192.168.10.10 192.168.10.128;
 }
 
@@ -111,8 +111,8 @@ subnet 192.168.20.0 netmask 255.255.255.0 {
 	option domain-name "insane.lan";
 	option domain-search "insane.lan";
   interface work;
-	default-lease-time 8.40;
-	max-lease-time 8.40;
+	default-lease-time 86400;
+	max-lease-time 86400;
   range 192.168.20.10 192.168.20.128;
 }
 
@@ -124,8 +124,8 @@ subnet 192.168.30.0 netmask 255.255.255.0 {
 	option domain-name "insane.lan";
 	option domain-search "insane.lan";
   interface iot;
-	default-lease-time 8.40;
-	max-lease-time 8.40;
+	default-lease-time 86400;
+	max-lease-time 86400;
   range 192.168.30.10 192.168.30.128;
 }
 
@@ -137,8 +137,8 @@ subnet 192.168.40.0 netmask 255.255.255.0 {
 	option domain-name "insane.lan";
 	option domain-search "insane.lan";
   interface guest;
-	default-lease-time 8.40;
-	max-lease-time 8.40;
+	default-lease-time 86400;
+	max-lease-time 86400;
   range 192.168.40.10 192.168.40.128;
 }
 """
