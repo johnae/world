@@ -54,6 +54,16 @@ networking.interfaces.iot.ipv4.addresses = [ { address = "192.168.30.1", prefixL
 networking.interfaces.guest.useDHCP = false
 networking.interfaces.guest.ipv4.addresses = [ { address = "192.168.40.1", prefixLength = 24 } ]
 
+networking.nat.enable = true
+networking.nat.externalInterface = "enp1s0u2"
+networking.nat.internalInterfaces = [
+  "eth0",
+  "lan",
+  "work",
+  "iot",
+  "guest"
+]
+
 services.dhcpd4.enable = false
 services.dhcpd4.interfaces = [ "eth0", "lan", "work", "iot", "guest" ]
 services.dhcpd4.extraConfig = """
