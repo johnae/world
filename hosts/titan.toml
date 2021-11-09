@@ -7,7 +7,7 @@ profiles = [
   "profiles/k3s",
   "profiles/server",
   "profiles/state",
-#  "profiles/unifi",
+  "profiles/unifi",
   "profiles/uuid_disk_crypt",
   "profiles/zram",
 ]
