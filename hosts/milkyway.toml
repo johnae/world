@@ -30,9 +30,6 @@ services.innernet.client.insane.settings.server = { publicKey = "XPWUeQ4N9zYcyWg
 
 age.secrets.wg-home.file = "secrets/milkyway/wg-home.age"
 
-## eth0 - internal
-## enp1s0u2 - external
-
 networking.useDHCP = false
 
 networking.vlans.wan = { id = 10, interface = "enp1s0u2" }
@@ -66,12 +63,22 @@ option subnet-mask 255.255.255.0;
 option space ubnt;
 option ubnt.unifi-address code 1 = ip-address;
 
+class "ubnt" {
+        match if substring (option vendor-class-identifier, 0, 4) = "ubnt";
+        option vendor-class-identifier "ubnt";
+        vendor-option-space ubnt;
+}
+
 subnet 192.168.1.0 netmask 255.255.255.0 {
   option broadcast-address 192.168.1.255;
   option domain-name-servers 192.168.1.1;
   option ubnt.unifi-address 65.108.2.146;
   option routers 192.168.1.1;
+	option domain-name "insane.lan";
+	option domain-search "insane.lan";
   interface eth0;
+	default-lease-time 86400;
+	max-lease-time 86400;
   range 192.168.1.10 192.168.1.128;
 }
 
@@ -80,7 +87,11 @@ subnet 192.168.100.0 netmask 255.255.255.0 {
   option domain-name-servers 192.168.100.1;
   option ubnt.unifi-address 65.108.2.146;
   option routers 192.168.100.1;
+	option domain-name "insane.lan";
+	option domain-search "insane.lan";
   interface lan;
+	default-lease-time 86400;
+	max-lease-time 86400;
   range 192.168.100.10 192.168.100.128;
 }
 
@@ -89,7 +100,11 @@ subnet 192.168.200.0 netmask 255.255.255.0 {
   option domain-name-servers 192.168.200.1;
   option ubnt.unifi-address 65.108.2.146;
   option routers 192.168.200.1;
+	option domain-name "insane.lan";
+	option domain-search "insane.lan";
   interface dev;
+	default-lease-time 86400;
+	max-lease-time 86400;
   range 192.168.200.10 192.168.200.128;
 }
 
@@ -98,7 +113,11 @@ subnet 192.168.300.0 netmask 255.255.255.0 {
   option domain-name-servers 192.168.300.1;
   option ubnt.unifi-address 65.108.2.146;
   option routers 192.168.300.1;
+	option domain-name "insane.lan";
+	option domain-search "insane.lan";
   interface iot;
+	default-lease-time 86400;
+	max-lease-time 86400;
   range 192.168.300.10 192.168.300.128;
 }
 
@@ -107,7 +126,11 @@ subnet 192.168.400.0 netmask 255.255.255.0 {
   option domain-name-servers 192.168.400.1;
   option ubnt.unifi-address 65.108.2.146;
   option routers 192.168.400.1;
+	option domain-name "insane.lan";
+	option domain-search "insane.lan";
   interface guest;
+	default-lease-time 86400;
+	max-lease-time 86400;
   range 192.168.400.10 192.168.400.128;
 }
 """
