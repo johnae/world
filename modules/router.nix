@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -25,7 +25,7 @@ let
       netmask = "255.255.255.0";
     };
   } // (
-    mapAttrs (name: vlan: rec {
+    mapAttrs (_: vlan: rec {
       base = "192.168.${toString vlan.id}";
       address = "${base}.1";
       network = "${base}.0";
@@ -71,7 +71,7 @@ in {
       description = "The internal interface ip.";
     };
     vlans = mkOption {
-      type = attrsOf (submodule ({name, ...}: {
+      type = attrsOf (submodule ({...}: {
         options = {
           id = mkOption {
             type = int;
