@@ -125,18 +125,19 @@ in
     boot.kernelModules = [ "br_netfilter" "ip_conntrack" "ip_vs" "ip_vs_rr" "ip_vs_wrr" "ip_vs_sh" "overlay" ];
     systemd.services.k3s.after = [ "network-online.service" "firewall.service" ] ++ cfg.after;
     ## Really stupid obviously
-    systemd.timers.restart-k3s-on-boot = {
-      description = "Hack for fixing k3s vxlan networking :-|";
-      enable = true;
-      wantedBy = [ "timers.target" ];
-      timerConfig.OnStartupSec = if cfg.role == "server" then "3m" else "15m";
-    };
-    systemd.services.restart-k3s-on-boot = {
-      description = "Hack for fixing k3s vxlan networking :-|";
-      script = ''
-        echo Restarting k3s
-        ${pkgs.systemd}/bin/systemctl restart k3s.service
-      '';
-    };
+    # This should have been fixed when updating flannel, so 1.22 should just work
+    # systemd.timers.restart-k3s-on-boot = {
+    #   description = "Hack for fixing k3s vxlan networking :-|";
+    #   enable = true;
+    #   wantedBy = [ "timers.target" ];
+    #   timerConfig.OnStartupSec = if cfg.role == "server" then "3m" else "15m";
+    # };
+    # systemd.services.restart-k3s-on-boot = {
+    #   description = "Hack for fixing k3s vxlan networking :-|";
+    #   script = ''
+    #     echo Restarting k3s
+    #     ${pkgs.systemd}/bin/systemctl restart k3s.service
+    #   '';
+    # };
   };
 }
