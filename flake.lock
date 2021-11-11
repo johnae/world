@@ -321,6 +321,22 @@
         "type": "github"
       }
     },
+    "notracking": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1636609411,
+        "narHash": "sha256-iIudbPXjT6QvR/pI9tK0Sj5jaiNVM+erKsnie+YAnRU=",
+        "owner": "notracking",
+        "repo": "hosts-blocklists",
+        "rev": "ea30bf4c05345f7b72101ab84fe42841cedae9b0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "notracking",
+        "repo": "hosts-blocklists",
+        "type": "github"
+      }
+    },
     "nur": {
       "locked": {
         "lastModified": 1636585870,
@@ -450,6 +466,7 @@
         "nix-misc": "nix-misc",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
+        "notracking": "notracking",
         "nur": "nur",
         "packages": "packages"
       }

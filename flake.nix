@@ -27,6 +27,10 @@
      url = "github:ryantm/agenix";
      inputs.nixpkgs.follows = "nixpkgs";
     };
+    notracking = {
+     url = "github:notracking/hosts-blocklists";
+     flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, ... } @ inputs:
@@ -45,6 +49,7 @@
           inputs.nix-misc.overlay
           inputs.nur.overlay
           inputs.agenix.overlay
+          (final: prev: { nix-direnv = prev.nix-direnv.override { enableFlakes = true; }; }) ## override until upstream sorts this out
         ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
       });
 
