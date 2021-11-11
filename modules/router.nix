@@ -49,6 +49,11 @@ in {
       example = "example.lan";
       description = "The local network domain.";
     };
+    dnsmasqAdditionalListenAddresses = mkOption {
+      type = listOf(str);
+      default = [];
+      description = "Additional ip:s where dnsmasq should listen";
+    };
     unifiAddress = mkOption {
       type = str;
       example = "1.2.3.4";
@@ -152,7 +157,7 @@ in {
       filterwin2k
       no-hosts
       addn-hosts=${config.environment.etc.hosts.source}
-      listen-address=::1,127.0.0.1,${concatStringsSep "," (mapAttrsToList (_: config: config.address) internalInterfaces)}
+      listen-address=::1,127.0.0.1,${concatStringsSep "," ((mapAttrsToList (_: config: config.address) internalInterfaces) ++ cfg.dnsmasqAdditionalListenAddresses)}
 
       ${concatStringsSep "\n" (map (iface: "interface=${iface}") internalInterfaceNames)}
 

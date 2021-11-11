@@ -37,6 +37,7 @@ services.jae.router.upstreamDnsServers = [
   "2606:4700:4700::1001",
 ]
 services.jae.router.domain = "insane.lan"
+services.jae.router.dnsmasqAdditionalListenAddresses = [ "192.168.104.100" ]
 services.jae.router.externalInterface = "enp1s0u2"
 services.jae.router.internalInterface = "eth0"
 services.jae.router.vlans.lan = { id = 10, interface = "eth0" }
