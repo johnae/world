@@ -145,8 +145,7 @@ in {
     services.dnsmasq.resolveLocalQueries = true;
     services.dnsmasq.servers = cfg.upstreamDnsServers;
     services.dnsmasq.extraConfig = ''
-      cache-size=1000
-      dns-forward-max=150
+      cache-size=10000
       log-queries
       domain-needed
       bogus-priv
