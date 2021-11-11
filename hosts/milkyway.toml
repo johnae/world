@@ -22,6 +22,7 @@ users.users.john.openssh.authorizedKeys.keys = [
 
 system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
 
+networking.firewall.trustedInterfaces = [ "insane" ]
 services.innernet.client.insane.enable = true
 services.innernet.client.insane.settings.interface = { address = "192.168.104.100/22", privateKeyFile = "/run/secrets/wg-home" }
 services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
