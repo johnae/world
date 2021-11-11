@@ -33,7 +33,8 @@ services.jae.router.unifiAddress = "65.108.2.146"
 services.jae.router.upstreamDnsServers = [
   "1.0.0.1",
   "1.1.1.1",
-  "2606:4700:4700::1111"
+  "2606:4700:4700::1111",
+  "2606:4700:4700::1001",
 ]
 services.jae.router.domain = "insane.lan"
 services.jae.router.externalInterface = "enp1s0u2"
