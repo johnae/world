@@ -49,6 +49,11 @@ in {
       example = "example.lan";
       description = "The local network domain.";
     };
+    dnsCrypt = mkOption {
+      type = bool;
+      default = false;
+      description = "Whether to use dnscrypt-proxy2";
+    };
     dnsmasqAdditionalListenAddresses = mkOption {
       type = listOf(str);
       default = [];
@@ -146,9 +151,37 @@ in {
     '') internalInterfaces));
 
     environment.state."/keep".directories = [ "/var/lib/dnsmasq" ];
+
+    services.dnscrypt-proxy2 = {
+      enable = cfg.dnsCrypt;
+      settings = {
+        ipv6_servers = true;
+        require_dnssec = true;
+        require_nolog = true;
+        require_nofilter = true;
+        timeout = 2500;
+        keepalive = 30;
+        fallback_resolver = "1.1.1.1:53";
+        ignore_system_dns = true;
+        dnscrypt_servers = true;
+        doh_servers = true;
+        listen_addresses = [ "127.0.0.1:5300" ];
+        sources.public-resolvers = {
+          urls = [
+            "https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md"
+            "https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md"
+          ];
+          cache_file = "/var/lib/dnscrypt-proxy2/public-resolvers.md";
+          minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
+        };
+        server_names = [ "cloudflare-security" "cloudflare-security-ipv6" ];
+        blacklist_file = "${inputs.notracking}/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt";
+      };
+    };
+
     services.dnsmasq.enable = true;
     services.dnsmasq.resolveLocalQueries = true;
-    services.dnsmasq.servers = cfg.upstreamDnsServers;
+    services.dnsmasq.servers = if cfg.dnsCrypt then [ "127.0.0.1:5300" ] else cfg.upstreamDnsServers;
     services.dnsmasq.extraConfig = ''
       cache-size=10000
       log-queries
