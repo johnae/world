@@ -31,6 +31,8 @@ age.secrets.wg-home.file = "secrets/milkyway/wg-home.age"
 
 services.jae.router.enable = true
 services.jae.router.unifiAddress = "65.108.2.146"
+services.jae.router.dnsCrypt = true
+## with dnsCrypt enabled, the below servers won't be used
 services.jae.router.upstreamDnsServers = [
   "1.0.0.1",
   "1.1.1.1",
