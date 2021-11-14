@@ -161,7 +161,6 @@ in {
         require_nofilter = true;
         timeout = 2500;
         keepalive = 30;
-        fallback_resolver = "1.1.1.1:53";
         ignore_system_dns = true;
         dnscrypt_servers = true;
         doh_servers = true;
