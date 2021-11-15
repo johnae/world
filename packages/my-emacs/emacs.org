@@ -896,20 +896,6 @@ Package setup.
        :config (counsel-projectile-mode)
      )
    #+END_SRC
-** Direnv integration
- Direnv integration for emacs.
- See: [[https://github.com/wbolster/emacs-direnv][https://github.com/wbolster/emacs-direnv]]
- and ofc
- https://direnv.net/
- #+BEGIN_SRC elisp
- (use-package direnv
-   :init
-   (add-hook 'prog-mode-hook #'direnv--maybe-update-environment)
-   :config
-   (direnv-mode)
-   (add-to-list 'direnv-non-file-modes 'eshell-mode)
- )
- #+END_SRC
 ** VTerm - a faster replacement for Term (when you need a real terminal)
 *** The vterm package
    When you need a real, reasonably fast terminal.
@@ -1080,7 +1066,6 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
    See: [[https://github.com/emacs-lsp/lsp-mode][emacs-lsp/lsp-mode]]
  #+BEGIN_SRC elisp
    (use-package lsp-mode
-     ;;:after (direnv evil)
      :init
      (setq lsp-keymap-prefix "C-c a"
            lsp-prefer-capf t
@@ -1118,7 +1103,6 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
        "[/\\\\]build-aux$"
        "[/\\\\]autom4te.cache$"
        "[/\\\\]\\.reference$"))
-     (advice-add 'lsp :before #'direnv-update-environment)
      :hook (
        (lsp-mode . lsp-enable-which-key-integration)
        (prog-mode . lsp-mode)
@@ -1150,14 +1134,11 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
 **** The mode itself
      On-the-fly syntax checking, see: [[https://www.flycheck.org/en/latest/][https://www.flycheck.org/en/latest/]]
      #+BEGIN_SRC elisp
-     (use-package flycheck
-       :config
-       (global-flycheck-mode)
-       (setq flycheck-idle-change-delay 2.0)
-       ;; we've wrapped executable-find so this will run direnv-update-environment before finding executable
-       (setq flycheck-executable-find
-             (lambda (cmd) (executable-find cmd)))
-     )
+        (use-package flycheck
+          :config
+          (global-flycheck-mode)
+          (setq flycheck-idle-change-delay 2.0)
+        )
      #+END_SRC
 **** Flycheck popups - error display
 ***** Popup tip
@@ -1412,3 +1393,21 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
        )
      #+END_SRC
      
+** Direnv integration
+ Direnv integration - per buffer - for emacs.
+ See: [[https://github.com/wbolster/emacs-direnv][https://github.com/purcell/envrc]]
+ and ofc
+ https://direnv.net/
+ #+BEGIN_SRC elisp
+   (use-package envrc
+    :init
+    (add-hook 'change-major-mode-after-body-hook
+      (defun +direnv-init-j ()
+        (unless (or envrc-mode
+                    (minibufferp)
+                    (file-remote-p default-directory))
+          (condition-case _
+              (envrc-mode 1)
+            (quit)))))
+   )
+ #+END_SRC
