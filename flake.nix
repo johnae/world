@@ -49,7 +49,7 @@
           inputs.nix-misc.overlay
           inputs.nur.overlay
           inputs.agenix.overlay
-          (final: prev: { tree = prev.tree.overrideAttrs (oldAttrs:
+          (final: prev: { tree = prev.tree.overrideAttrs (_:
               {
                 preConfigure = ''
                   sed -i Makefile -e 's|^OBJS=|OBJS=$(EXTRA_OBJS) |'
