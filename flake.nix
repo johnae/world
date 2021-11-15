@@ -49,7 +49,14 @@
           inputs.nix-misc.overlay
           inputs.nur.overlay
           inputs.agenix.overlay
-          (final: prev: { nix-direnv = prev.nix-direnv.override { enableFlakes = true; }; }) ## override until upstream sorts this out
+          (final: prev: { nix-direnv = prev.nix-direnv.overrideAttrs (oldAttrs:
+            {
+              postPatch = ''
+              ${oldAttrs.postPatch}
+              sed -i 's|sed.*shellHook.*||g' direnvrc
+              '';
+            }
+          );})
         ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
       });
 
