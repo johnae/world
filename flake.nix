@@ -49,6 +49,19 @@
           inputs.nix-misc.overlay
           inputs.nur.overlay
           inputs.agenix.overlay
+          (final: prev: { tree = prev.tree.overrideAttrs (oldAttrs:
+              {
+                preConfigure = ''
+                  sed -i Makefile -e 's|^OBJS=|OBJS=$(EXTRA_OBJS) |'
+                  makeFlags+=("CC=$CC")
+                '';
+                makeFlags = [
+                  "prefix=${placeholder "out"}"
+                  "MANDIR=${placeholder "out"}/share/man/man1"
+                ];
+              }
+            );
+          })
           (final: prev: { nix-direnv = prev.nix-direnv.overrideAttrs (oldAttrs:
             {
               postPatch = ''
