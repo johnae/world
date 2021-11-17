@@ -1,4 +1,4 @@
-{ writeShellScriptBin, writeStrictShellScriptBin, nix-linter, pixiecore, gnugrep, gnused, findutils, hostname }:
+{ buildEnv, writeShellScriptBin, writeStrictShellScriptBin, nix-linter, pixiecore, gnugrep, gnused, findutils, hostname }:
 
 let
 
@@ -109,7 +109,14 @@ let
 
 in
 
-{
-  inherit world world-pixieboot world-container
-    world-help world-lint world-repl;
+buildEnv {
+  name = "world";
+  paths = [
+    world
+    world-help
+    world-pixieboot
+    world-container
+    world-lint
+    world-repl
+  ];
 }

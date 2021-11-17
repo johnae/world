@@ -13,6 +13,10 @@
       url = "github:johnae/nix-misc";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    devsh = {
+      url = "github:johnae/devsh";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -47,6 +51,7 @@
         config.allowUnfree = true;
         overlays = [
           inputs.nix-misc.overlay
+          inputs.devsh.overlay
           inputs.nur.overlay
           inputs.agenix.overlay
           (final: prev: { tree = prev.tree.overrideAttrs (_:
@@ -65,8 +70,7 @@
           (final: prev: { nix-direnv = prev.nix-direnv.overrideAttrs (oldAttrs:
             {
               postPatch = ''
-              ${oldAttrs.postPatch}
-              sed -i 's|sed.*shellHook.*||g' direnvrc
+              ${oldAttrs.postPatch}sed -i "s|sed.*shellHook.*||g" direnvrc
               '';
             }
           );})
@@ -205,12 +209,12 @@
           }
         );
 
-      worldUtils = forAllSystems (system:
-        let
-          f = import ./utils/world.nix;
-          args = listToAttrs (map (name: { inherit name; value = pkgs.${system}.${name}; }) (attrNames (functionArgs f)));
-        in f args
-      );
+      worldUtils = forAllSystems (system: { world = pkgs.${system}.callPackage ./utils/world.nix { }; });
+      #  let
+      #    f = import ./utils/world.nix;
+      #    args = listToAttrs (map (name: { inherit name; value = pkgs.${system}.${name}; }) (attrNames (functionArgs f)));
+      #  in f args
+      #);
 
       nixosConfigurations = mapAttrs toNixosConfig hosts;
 
@@ -229,10 +233,11 @@
     in
     {
       devShell = forAllSystems (system:
-        pkgs.${system}.callPackage ./devshell.nix {
-          worldUtils = worldUtils.${system};
-          agenix = pkgs.${system}.agenix.override { nix = pkgs.${system}.nixUnstable; };
-          mkDevShell = pkgs.${system}.callPackage inputs.nix-misc.lib.mkSimpleShell { };
+        pkgs.${system}.devSh.loadTOML ./devshell.toml {
+          packages = [
+            pkgs.${system}.agenix
+            worldUtils.${system}.world
+          ];
         }
       );
 

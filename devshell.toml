@@ -1,0 +1,13 @@
+name = "world"
+
+packages = [
+  "yj",
+  "rage",
+  "age-plugin-yubikey",
+]
+
+intro = """
+
+  Hello, world!
+
+"""
