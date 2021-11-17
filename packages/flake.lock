@@ -32,6 +32,24 @@
         "type": "github"
       }
     },
+    "devsh": {
+      "inputs": {
+        "nixlib": "nixlib"
+      },
+      "locked": {
+        "lastModified": 1637078768,
+        "narHash": "sha256-Mzrhg8hNFsvZFfDdSDFwXMwwlGTcHlt9OokJCWjpXzo=",
+        "owner": "johnae",
+        "repo": "devsh",
+        "rev": "af4d9b5c5ce440c2374dd7a9bc7531310f27aa24",
+        "type": "github"
+      },
+      "original": {
+        "owner": "johnae",
+        "repo": "devsh",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "locked": {
         "lastModified": 1636996974,
@@ -166,7 +184,7 @@
     },
     "nix-misc": {
       "inputs": {
-        "nixlib": "nixlib"
+        "nixlib": "nixlib_2"
       },
       "locked": {
         "lastModified": 1628153879,
@@ -184,6 +202,21 @@
     },
     "nixlib": {
       "locked": {
+        "lastModified": 1636849918,
+        "narHash": "sha256-nzUK6dPcTmNVrgTAC1EOybSMsrcx+QrVPyqRdyKLkjA=",
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "rev": "28a5b0557f14124608db68d3ee1f77e9329e9dd5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "type": "github"
+      }
+    },
+    "nixlib_2": {
+      "locked": {
         "lastModified": 1627777762,
         "narHash": "sha256-Tiuvy3qzX0XYba5215U4x885y6QQrnFCEU6v7lZRn8A=",
         "owner": "nix-community",
@@ -197,7 +230,7 @@
         "type": "github"
       }
     },
-    "nixlib_2": {
+    "nixlib_3": {
       "locked": {
         "lastModified": 1635640270,
         "narHash": "sha256-7VRyUAgl/Aqh70fkx904zciroUnz1cIUu0MqMaVu1pU=",
@@ -214,7 +247,7 @@
     },
     "nixos-generators": {
       "inputs": {
-        "nixlib": "nixlib_2",
+        "nixlib": "nixlib_3",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -325,6 +358,7 @@
       "inputs": {
         "age-plugin-yubikey": "age-plugin-yubikey",
         "blur": "blur",
+        "devsh": "devsh",
         "emacs-overlay": "emacs-overlay",
         "fenix": "fenix",
         "fire": "fire",

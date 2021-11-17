@@ -11,6 +11,9 @@
       url = "github:johnae/nix-misc";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    devsh = {
+      url = "github:johnae/devsh";
+    };
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     spotnix = {
       url = "github:johnae/spotnix";
@@ -80,6 +83,8 @@
       )))
       //
       {
+        world-updaters = import ./world-updaters-overlay.nix;
+        devsh = inputs.devsh.overlay;
         nixos-generators = (final: prev: { inherit (inputs.nixos-generators.packages.${prev.system}) nixos-generators; });
         wlroots = (final: prev: { wlroots = prev.callpackage ./wlroots { wayland-protocols = final.wayland-protocols-master; }; });
         sway-unwrapped = (final: prev: { sway-unwrapped = prev.callpackage ./sway { wayland-protocols = final.wayland-protocols-master; }; });
@@ -118,9 +123,7 @@
      ;
      packages = exportedPackages;
      devShell = forAllSystems (system:
-       pkgs.${system}.callPackage ./devshell.nix {
-         mkDevShell = pkgs.${system}.callPackage inputs.nix-misc.lib.mkSimpleShell {};
-       }
+       pkgs.${system}.devsh.loadTOML ./devshell.toml {}
      );
     };
 }

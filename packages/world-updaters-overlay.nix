@@ -1,6 +1,7 @@
-{ writeStrictShellScriptBin, mkDevShell, ripgrep }:
+final: prev:
 
 let
+  inherit (final) writeStrictShellScriptBin ripgrep buildEnv;
 
   update-cargo-vendor-sha = writeStrictShellScriptBin "update-cargo-vendor-sha" ''
     if [ -z "$1" ]; then
@@ -58,13 +59,16 @@ let
       ${update-fixed-output-derivation-sha}/bin/update-fixed-output-derivation-sha "$fopkg"
     done
   '';
+
 in
-mkDevShell {
-  name = "world";
-  packages = [ update-all-fixed-output-derivation-shas update-all-cargo-vendor-shas ];
-  intro = ''
 
-    Packaging!
-
-  '';
+{
+  world-updaters = buildEnv {
+    name = "world-updaters";
+    paths = [
+      update-cargo-vendor-sha
+      update-all-cargo-vendor-shas
+      update-fixed-output-derivation-sha
+    ];
+  };
 }
