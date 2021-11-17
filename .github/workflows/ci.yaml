@@ -19,7 +19,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           experimental-features = nix-command flakes
     - run: |
-        nix shell .#world-lint -c world-lint
+        nix shell .#world -c world lint
 
   create_package_matrix_x86_64_linux:
     runs-on: ubuntu-latest
