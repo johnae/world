@@ -69,6 +69,7 @@ in
       update-cargo-vendor-sha
       update-all-cargo-vendor-shas
       update-fixed-output-derivation-sha
+      update-all-fixed-output-derivation-shas
     ];
   };
 }
