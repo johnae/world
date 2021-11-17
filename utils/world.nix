@@ -56,16 +56,6 @@ let
     done
   '';
 
-  ## requires docker configured on system since docker requires more than just the cli tools
-  world-container = writeShellScriptBin "world-container" ''
-    _WORLD_HELP=''${_WORLD_HELP:-}
-    if [ -n "$_WORLD_HELP" ]; then
-      echo run a nix container with this repo mounted at /world
-      exit 0
-    fi
-    docker run --privileged -v /etc/nix/nix.conf:/etc/nix/nix.conf -v ./:/world -w /world -ti --entrypoint bash --rm nixpkgs/nix-unstable -c bash
-  '';
-
   world-lint = writeShellScriptBin "world-lint" ''
     export PATH=${nix-linter}/bin:${gnugrep}/bin:${gnused}/bin:${findutils}/bin:$PATH
     _WORLD_HELP=''${_WORLD_HELP:-}
@@ -115,7 +105,6 @@ buildEnv {
     world
     world-help
     world-pixieboot
-    world-container
     world-lint
     world-repl
   ];
