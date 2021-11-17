@@ -11,8 +11,8 @@
       url = "github:johnae/nix-misc";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    devsh = {
-      url = "github:johnae/devsh";
+    devshell = {
+      url = "github:johnae/devshell";
     };
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     spotnix = {
@@ -59,17 +59,20 @@
     let
       inherit (nixpkgs.lib) genAttrs listToAttrs mapAttrsToList filterAttrs;
       inherit (builtins) filter attrNames pathExists toString mapAttrs hasAttr;
+
+      overlays = mapAttrsToList (_: value: value) self.overlays;
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
-      forAllSystems = genAttrs supportedSystems;
-      pkgs = forAllSystems (system: import nixpkgs {
-        inherit system;
-        overlays = mapAttrsToList (_: value: value) self.overlays;
-      });
+      forAllSystems = f: genAttrs supportedSystems (system:
+        f (import nixpkgs {
+          inherit system overlays;
+        })
+      );
+
       extraPkgs = [ "meson-0591" ];
       nonFlakePkgList = (filter (elem: ! (inputs.${elem} ? "sourceInfo") && pathExists (toString (./. + "/${elem}"))) (attrNames inputs)) ++ extraPkgs;
-      exportedPackages = forAllSystems (system:
-        (mapAttrs (name: _: pkgs.${system}.${name})
-          (filterAttrs (name: _: (hasAttr name pkgs.${system}) && nixpkgs.lib.isDerivation pkgs.${system}.${name}) self.overlays)
+      exportedPackages = forAllSystems (pkgs:
+        (mapAttrs (name: _: pkgs.${name})
+          (filterAttrs (name: _: (hasAttr name pkgs) && nixpkgs.lib.isDerivation pkgs.${name}) self.overlays)
         )
       );
     in
@@ -84,7 +87,7 @@
       //
       {
         world-updaters = import ./world-updaters-overlay.nix;
-        devsh = inputs.devsh.overlay;
+        devshell = inputs.devshell.overlay;
         nixos-generators = (final: prev: { inherit (inputs.nixos-generators.packages.${prev.system}) nixos-generators; });
         wlroots = (final: prev: { wlroots = prev.callpackage ./wlroots { wayland-protocols = final.wayland-protocols-master; }; });
         sway-unwrapped = (final: prev: { sway-unwrapped = prev.callpackage ./sway { wayland-protocols = final.wayland-protocols-master; }; });
@@ -122,8 +125,12 @@
       ###############################################
      ;
      packages = exportedPackages;
-     devShell = forAllSystems (system:
-       pkgs.${system}.devsh.loadTOML ./devshell.toml {}
+     devShell = forAllSystems (pkgs:
+       pkgs.devshell.mkShell {
+         imports = [
+           (pkgs.devshell.importTOML ./devshell.toml)
+         ];
+       }
      );
     };
 }

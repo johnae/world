@@ -1,13 +1,25 @@
+[devshell]
 name = "world"
 
+motd = """
+{bold}{106}The World{reset}
+
+This repo contains all my machine definitions and extra packages I like to keep up-to-date with upstream or that
+have been tweaked somehow.
+
+$(type -p menu &>/dev/null && menu)
+"""
+
+## You may add additional packages here. Please use "nix search nixpkgs some-search-string" to find packages.
 packages = [
+  "agenix",
   "yj",
   "rage",
   "age-plugin-yubikey",
+  "world"
 ]
 
-intro = """
-
-  Hello, world!
-
-"""
+[[commands]]
+package = "world"
+name = "world"
+help = "tend to this world"

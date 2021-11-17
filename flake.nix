@@ -13,10 +13,7 @@
       url = "github:johnae/nix-misc";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    devsh = {
-      url = "github:johnae/devsh";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    devshell.url = "github:johnae/devshell";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -42,40 +39,47 @@
       inherit (nixpkgs.lib) genAttrs filterAttrs mkOverride makeOverridable mkIf
         hasSuffix mapAttrs mapAttrs' removeSuffix nameValuePair nixosSystem
         mkForce mapAttrsToList splitString concatStringsSep last hasAttr recursiveUpdate;
-      inherit (builtins) replaceStrings attrNames functionArgs substring pathExists fromTOML readFile readDir listToAttrs filter;
+      inherit (builtins) replaceStrings attrNames functionArgs substring pathExists
+        fromTOML readFile readDir listToAttrs filter removeAttrs;
 
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
-      forAllSystems = genAttrs supportedSystems;
-      pkgs = forAllSystems (system: import nixpkgs {
+
+      overlays = [
+        inputs.nix-misc.overlay
+        inputs.devshell.overlay
+        inputs.nur.overlay
+        inputs.agenix.overlay
+        (final: prev: { tree = prev.tree.overrideAttrs (_:
+            {
+              preConfigure = ''
+                sed -i Makefile -e 's|^OBJS=|OBJS=$(EXTRA_OBJS) |'
+                makeFlags+=("CC=$CC")
+              '';
+              makeFlags = [
+                "prefix=${placeholder "out"}"
+                "MANDIR=${placeholder "out"}/share/man/man1"
+              ];
+            }
+          );
+        })
+        (final: prev: { nix-direnv = prev.nix-direnv.overrideAttrs (oldAttrs:
+          {
+            postPatch = ''
+            ${oldAttrs.postPatch}sed -i "s|sed.*shellHook.*||g" direnvrc
+            '';
+          }
+        );})
+      ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
+
+      worldOverlay = (final: prev: {
+        world = prev.callPackage ./utils/world.nix { };
+      });
+
+      forAllSystems = f: genAttrs supportedSystems (system: f (import nixpkgs {
         inherit system;
         config.allowUnfree = true;
-        overlays = [
-          inputs.nix-misc.overlay
-          inputs.devsh.overlay
-          inputs.nur.overlay
-          inputs.agenix.overlay
-          (final: prev: { tree = prev.tree.overrideAttrs (_:
-              {
-                preConfigure = ''
-                  sed -i Makefile -e 's|^OBJS=|OBJS=$(EXTRA_OBJS) |'
-                  makeFlags+=("CC=$CC")
-                '';
-                makeFlags = [
-                  "prefix=${placeholder "out"}"
-                  "MANDIR=${placeholder "out"}/share/man/man1"
-                ];
-              }
-            );
-          })
-          (final: prev: { nix-direnv = prev.nix-direnv.overrideAttrs (oldAttrs:
-            {
-              postPatch = ''
-              ${oldAttrs.postPatch}sed -i "s|sed.*shellHook.*||g" direnvrc
-              '';
-            }
-          );})
-        ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
-      });
+        inherit overlays;
+      }));
 
       hostConfigs = mapAttrs' (f: _:
         let hostname = replaceStrings [".toml"] [""] f;
@@ -86,7 +90,7 @@
         let
           arch = if hasAttr "arch" config then config.arch else "x86_64-linux";
           profiles = config.profiles;
-          cfg = builtins.removeAttrs config [ "profiles" "arch" ];
+          cfg = removeAttrs config [ "profiles" "arch" ];
         in
         {
         specialArgs.system = arch;
@@ -96,24 +100,22 @@
           if pathExists (toString (./. + "/${item}")) then
             (./. + "/${item}")
           else (./. + "/${item}.nix")
-        ) profiles) ++ [ ./modules ./profiles/disable-users-groups-dry-run.nix ]; ## disable-users-groups-dry-run is a temp fix
+        ) profiles) ++ [ ./modules ];
       }) hostConfigs;
 
       toNixosConfig = hostName: host:
-        let
-          inherit (host.specialArgs) system;
-        in
         makeOverridable nixosSystem {
-          inherit system;
+          inherit (host.specialArgs) system;
           specialArgs = {
-            pkgs = pkgs.${system};
             inherit hostName inputs;
             userProfiles = import ./users/profiles.nix { lib = inputs.nixpkgs.lib; };
           } // host.specialArgs;
           modules = [
-            { system.configurationRevision = mkIf (self ? rev) self.rev; }
-            { system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}"; }
-            { nixpkgs = { pkgs = pkgs.${system}; }; }
+            {
+              system.configurationRevision = mkIf (self ? rev) self.rev;
+              system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}";
+              nixpkgs.overlays = overlays;
+            }
             inputs.nixpkgs.nixosModules.notDetected
             inputs.home-manager.nixosModules.home-manager
             inputs.agenix.nixosModules.age
@@ -126,13 +128,14 @@
           bootSystem = makeOverridable nixosSystem {
             inherit system;
             specialArgs = {
-              pkgs = pkgs.${system};
               inherit hostName inputs;
             };
             modules = [
-              { system.configurationRevision = mkIf (self ? rev) self.rev; }
-              { system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}"; }
-              { nixpkgs = { pkgs = pkgs.${system}; }; }
+              {
+                system.configurationRevision = mkIf (self ? rev) self.rev;
+                system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}";
+                nixpkgs.overlays = overlays;
+              }
               inputs.nixpkgs.nixosModules.notDetected
               ({ modulesPath, pkgs, lib, ... }: {
                  imports = [
@@ -144,7 +147,6 @@
                    extraOptions = ''
                      experimental-features = nix-command flakes ca-references
                    '';
-                   package = pkgs.nixUnstable;
                  };
                  environment.systemPackages = with pkgs; [
                    git curl jq skim
@@ -192,7 +194,7 @@
             ];
           };
           in
-           pkgs.${system}.symlinkJoin {
+           bootSystem.pkgs.symlinkJoin {
              name = "netboot";
              paths = with bootSystem.config.system.build; [
                netbootRamdisk
@@ -202,41 +204,42 @@
              preferLocalBuild = true;
           };
 
-      toDiskFormatter = hostName: config: system:
+      toDiskFormatter = hostName: config: pkgs:
         inputs.nixpkgs.lib.nameValuePair "${hostName}-diskformat" (
-          pkgs.${system}.callPackage ./utils/diskformat.nix {
+          pkgs.callPackage ./utils/diskformat.nix {
             inherit hostName config;
           }
         );
 
-      worldUtils = forAllSystems (system: { world = pkgs.${system}.callPackage ./utils/world.nix { }; });
-      #  let
-      #    f = import ./utils/world.nix;
-      #    args = listToAttrs (map (name: { inherit name; value = pkgs.${system}.${name}; }) (attrNames (functionArgs f)));
-      #  in f args
-      #);
-
       nixosConfigurations = mapAttrs toNixosConfig hosts;
 
-      diskFormatters = forAllSystems (system:
-        (mapAttrs' (hostName: config: toDiskFormatter hostName config system) nixosConfigurations)
+      diskFormatters = forAllSystems (pkgs:
+        (mapAttrs' (hostName: config: toDiskFormatter hostName config pkgs) nixosConfigurations)
       );
 
-      exportedPackages = forAllSystems (system:
-        (mapAttrs (name: _: pkgs.${system}.${name})
-          (filterAttrs (name: _: (hasAttr name pkgs.${system}) && nixpkgs.lib.isDerivation pkgs.${system}.${name}) inputs.packages.overlays)
+      exportedPackages = forAllSystems (pkgs:
+        (mapAttrs (name: _: pkgs.${name})
+          (filterAttrs (name: _: (hasAttr name pkgs) && nixpkgs.lib.isDerivation pkgs.${name}) inputs.packages.overlays)
         ) // {
-          pxebooter = toPxeBootSystemConfig "pxebooter" system;
+          pxebooter = toPxeBootSystemConfig "pxebooter" pkgs.system;
+        }
+      );
+
+      worldUtils = forAllSystems (pkgs:
+        {
+          inherit (pkgs.extend worldOverlay) world;
         }
       );
 
     in
     {
-      devShell = forAllSystems (system:
-        pkgs.${system}.devSh.loadTOML ./devshell.toml {
-          packages = [
-            pkgs.${system}.agenix
-            worldUtils.${system}.world
+      devShell = forAllSystems (pkgs:
+        let
+          extendedPkgs = pkgs.extend worldOverlay;
+        in
+        extendedPkgs.devshell.mkShell {
+          imports = [
+            (extendedPkgs.devshell.importTOML ./devshell.toml)
           ];
         }
       );

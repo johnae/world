@@ -52,39 +52,33 @@
         "type": "github"
       }
     },
-    "devsh": {
-      "inputs": {
-        "nixlib": "nixlib"
-      },
+    "devshell": {
       "locked": {
-        "lastModified": 1637144292,
-        "narHash": "sha256-9cQwyjaVIkbYu+gmPwTahx8mkM8OM0rBrLSmLPn6Lag=",
+        "lastModified": 1637159427,
+        "narHash": "sha256-o5y/CgqHD49wpRnGn5Zjdp+bhJdqaFiNwfm0bJIhUuc=",
         "owner": "johnae",
-        "repo": "devsh",
-        "rev": "9f70c3f35a74ddb6ff08a9fb34e37ba48eb610c0",
+        "repo": "devshell",
+        "rev": "9a5bd518395550298301c81855981a31d870affc",
         "type": "github"
       },
       "original": {
         "owner": "johnae",
-        "repo": "devsh",
+        "repo": "devshell",
         "type": "github"
       }
     },
-    "devsh_2": {
-      "inputs": {
-        "nixlib": "nixlib_3"
-      },
+    "devshell_2": {
       "locked": {
-        "lastModified": 1637144292,
-        "narHash": "sha256-9cQwyjaVIkbYu+gmPwTahx8mkM8OM0rBrLSmLPn6Lag=",
+        "lastModified": 1637159427,
+        "narHash": "sha256-o5y/CgqHD49wpRnGn5Zjdp+bhJdqaFiNwfm0bJIhUuc=",
         "owner": "johnae",
-        "repo": "devsh",
-        "rev": "9f70c3f35a74ddb6ff08a9fb34e37ba48eb610c0",
+        "repo": "devshell",
+        "rev": "9a5bd518395550298301c81855981a31d870affc",
         "type": "github"
       },
       "original": {
         "owner": "johnae",
-        "repo": "devsh",
+        "repo": "devshell",
         "type": "github"
       }
     },
@@ -242,7 +236,7 @@
     },
     "nix-misc": {
       "inputs": {
-        "nixlib": "nixlib_2"
+        "nixlib": "nixlib"
       },
       "locked": {
         "lastModified": 1637058471,
@@ -275,36 +269,6 @@
     },
     "nixlib_2": {
       "locked": {
-        "lastModified": 1636849918,
-        "narHash": "sha256-nzUK6dPcTmNVrgTAC1EOybSMsrcx+QrVPyqRdyKLkjA=",
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "rev": "28a5b0557f14124608db68d3ee1f77e9329e9dd5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "type": "github"
-      }
-    },
-    "nixlib_3": {
-      "locked": {
-        "lastModified": 1636849918,
-        "narHash": "sha256-nzUK6dPcTmNVrgTAC1EOybSMsrcx+QrVPyqRdyKLkjA=",
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "rev": "28a5b0557f14124608db68d3ee1f77e9329e9dd5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "type": "github"
-      }
-    },
-    "nixlib_4": {
-      "locked": {
         "lastModified": 1635640270,
         "narHash": "sha256-7VRyUAgl/Aqh70fkx904zciroUnz1cIUu0MqMaVu1pU=",
         "owner": "nix-community",
@@ -320,7 +284,7 @@
     },
     "nixos-generators": {
       "inputs": {
-        "nixlib": "nixlib_4",
+        "nixlib": "nixlib_2",
         "nixpkgs": [
           "packages",
           "nixpkgs"
@@ -422,7 +386,7 @@
       "inputs": {
         "age-plugin-yubikey": "age-plugin-yubikey",
         "blur": "blur",
-        "devsh": "devsh_2",
+        "devshell": "devshell_2",
         "emacs-overlay": "emacs-overlay",
         "fenix": [
           "fenix"
@@ -458,7 +422,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-s5rLlUAS5GxTJitvcsC5TJgmX7slxPk0EeHiWvRwCGQ=",
+        "narHash": "sha256-8mUurW6/ctlBuhLKsHigy8XuMXOqWOrcHd6KMzJlwE8=",
         "path": "./packages",
         "type": "path"
       },
@@ -528,7 +492,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
-        "devsh": "devsh",
+        "devshell": "devshell",
         "fenix": "fenix",
         "home-manager": "home-manager",
         "nix-misc": "nix-misc",

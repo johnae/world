@@ -32,21 +32,18 @@
         "type": "github"
       }
     },
-    "devsh": {
-      "inputs": {
-        "nixlib": "nixlib"
-      },
+    "devshell": {
       "locked": {
-        "lastModified": 1637144292,
-        "narHash": "sha256-9cQwyjaVIkbYu+gmPwTahx8mkM8OM0rBrLSmLPn6Lag=",
+        "lastModified": 1637159427,
+        "narHash": "sha256-o5y/CgqHD49wpRnGn5Zjdp+bhJdqaFiNwfm0bJIhUuc=",
         "owner": "johnae",
-        "repo": "devsh",
-        "rev": "9f70c3f35a74ddb6ff08a9fb34e37ba48eb610c0",
+        "repo": "devshell",
+        "rev": "9a5bd518395550298301c81855981a31d870affc",
         "type": "github"
       },
       "original": {
         "owner": "johnae",
-        "repo": "devsh",
+        "repo": "devshell",
         "type": "github"
       }
     },
@@ -184,7 +181,7 @@
     },
     "nix-misc": {
       "inputs": {
-        "nixlib": "nixlib_2"
+        "nixlib": "nixlib"
       },
       "locked": {
         "lastModified": 1637058471,
@@ -217,21 +214,6 @@
     },
     "nixlib_2": {
       "locked": {
-        "lastModified": 1636849918,
-        "narHash": "sha256-nzUK6dPcTmNVrgTAC1EOybSMsrcx+QrVPyqRdyKLkjA=",
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "rev": "28a5b0557f14124608db68d3ee1f77e9329e9dd5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "type": "github"
-      }
-    },
-    "nixlib_3": {
-      "locked": {
         "lastModified": 1635640270,
         "narHash": "sha256-7VRyUAgl/Aqh70fkx904zciroUnz1cIUu0MqMaVu1pU=",
         "owner": "nix-community",
@@ -247,7 +229,7 @@
     },
     "nixos-generators": {
       "inputs": {
-        "nixlib": "nixlib_3",
+        "nixlib": "nixlib_2",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -358,7 +340,7 @@
       "inputs": {
         "age-plugin-yubikey": "age-plugin-yubikey",
         "blur": "blur",
-        "devsh": "devsh",
+        "devshell": "devshell",
         "emacs-overlay": "emacs-overlay",
         "fenix": "fenix",
         "fire": "fire",
