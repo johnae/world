@@ -169,9 +169,9 @@ in
 
       input = {
         "*" = {
-          xkb_layout = "us";
+          xkb_layout = "us,se";
           xkb_model = "pc105";
-          xkb_options = "ctrl:nocaps,lv3:lalt_switch,compose:ralt,lv3:ralt_alt";
+          xkb_options = "ctrl:nocaps,grp:switch";
           xkb_variant = "\"\"";
         };
         "1739:52804:MSFT0001:00_06CB:CE44_Touchpad" = {
