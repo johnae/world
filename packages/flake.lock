@@ -49,11 +49,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1637141278,
-        "narHash": "sha256-j4TTb8Df1DNhM7t5YwV0W61XHvwaNyrSjjc2rHUiQrM=",
+        "lastModified": 1637169894,
+        "narHash": "sha256-us2CZYE+3EWE+kpoZUCKo+x325NfT7sQkclTM1+VvAk=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "fc142bc7a508fb3e211fa08402355e3105a6f301",
+        "rev": "8e44c01a9cb4038806ca5941024467edb94e5f21",
         "type": "github"
       },
       "original": {
@@ -509,11 +509,11 @@
     "wayland-protocols-master": {
       "flake": false,
       "locked": {
-        "lastModified": 1636556494,
-        "narHash": "sha256-PnfDGZlM4lbREa2XKt7VWIyXZ3ypTwFDMmx4HM82GxE=",
+        "lastModified": 1637166105,
+        "narHash": "sha256-/1jmAbg5SrBCdeh9kLx1jsxUTiyS8RUWDpRP1OBn75U=",
         "ref": "main",
-        "rev": "40cb7d47e639f3f7e3a36963094fcef40cdf2f7c",
-        "revCount": 253,
+        "rev": "e5d63e9a3c0de658bf8d6604c7f4a773df93a097",
+        "revCount": 254,
         "type": "git",
         "url": "https://gitlab.freedesktop.org/wayland/wayland-protocols"
       },
