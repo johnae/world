@@ -558,17 +558,18 @@
     "wlroots": {
       "flake": false,
       "locked": {
-        "lastModified": 1635782940,
-        "narHash": "sha256-wKSJHYFIy6wEI90kmBx/YcgDk2OKmeAyWGSfFtfOqjk=",
-        "owner": "swaywm",
-        "repo": "wlroots",
-        "rev": "0855cdacb2eeeff35849e2e9c4db0aa996d78d10",
-        "type": "github"
+        "lastModified": 1637340134,
+        "narHash": "sha256-s8z+4xO6etE9saOgKUk3AE5WdKE9ItbEVRy+NrwGPdk=",
+        "ref": "master",
+        "rev": "d70d74ad4f3069687ed7f98f9cbbe9f6551e05c6",
+        "revCount": 5229,
+        "type": "git",
+        "url": "https://gitlab.freedesktop.org/wlroots/wlroots"
       },
       "original": {
-        "owner": "swaywm",
-        "repo": "wlroots",
-        "type": "github"
+        "ref": "master",
+        "type": "git",
+        "url": "https://gitlab.freedesktop.org/wlroots/wlroots"
       }
     },
     "xdg-desktop-portal-wlr": {
