@@ -56,15 +56,15 @@ services.syncthing.folders."/home/john/Sync".devices = [
   "triton",
   "eris"
 ]
-services.syncthing.cert = "/run/secrets/syncthing-cert"
-services.syncthing.key = "/run/secrets/syncthing-key"
+services.syncthing.cert = "/run/agenix/syncthing-cert"
+services.syncthing.key = "/run/agenix/syncthing-key"
 services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
 
 services.innernet.server.insane.enable = true
 services.innernet.server.insane.settings.openFirewall = true
 services.innernet.server.insane.settings.cidr = "192.168.104.0/22"
 services.innernet.server.insane.settings.listenPort = 51820
-services.innernet.server.insane.settings.privateKeyFile = "/run/secrets/wg-home"
+services.innernet.server.insane.settings.privateKeyFile = "/run/agenix/wg-home"
 services.innernet.server.insane.settings.publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY="
 services.innernet.server.insane.settings.externalEndpoint = "65.108.2.146:51820"
 services.innernet.server.insane.settings.cidrs.home = { cidr = "192.168.104.64/26", parent = "insane" }
@@ -89,7 +89,7 @@ networking.private-wireguard.ips = [
   "10.65.167.230/32",
   "fc00:bbbb:bbbb:bb01::2:a7e5/128"
 ]
-networking.private-wireguard.privateKeyFile = "/run/secrets/wg-net"
+networking.private-wireguard.privateKeyFile = "/run/agenix/wg-net"
 networking.private-wireguard.peers = [
   { allowedIPs = [ "0.0.0.0/0", "::0/0" ], endpoint = "185.65.135.70:51820", publicKey = "615mnBGkvjZnD/vRbyL/6da7YhtctfB+jimN+wfV724=" }
 ]
@@ -104,7 +104,7 @@ age.secrets.syncthing-key = { file = "secrets/polaris/syncthing-key.age", owner 
 
 networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
 services.k3s.role = "server"
-services.k3s.tokenFile = "/run/secrets/k3s-token"
+services.k3s.tokenFile = "/run/agenix/k3s-token"
 services.k3s.clusterCIDR = "10.128.128.0/21"
 services.k3s.serviceCIDR = "10.129.128.0/22"
 services.k3s.clusterDNS = "10.129.128.10"

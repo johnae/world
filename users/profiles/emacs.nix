@@ -13,7 +13,7 @@ in
   systemd.user.services.org-agenda-sync =
     let
       agenda-sync = pkgs.writeStrictShellScriptBin "agenda-sync" ''
-        ssh_identity="/run/secrets/id_ed25519_agenda_updater"
+        ssh_identity="/run/agenix/id_ed25519_agenda_updater"
         if [ ! -e "$ssh_identity" ]; then
           echo "$ssh_identity" missing
           exit 1

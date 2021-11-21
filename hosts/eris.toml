@@ -43,12 +43,12 @@ services.syncthing.folders."/home/john/Sync".devices = [
   "triton",
   "polaris"
 ]
-services.syncthing.cert = "/run/secrets/syncthing-cert"
-services.syncthing.key = "/run/secrets/syncthing-key"
+services.syncthing.cert = "/run/agenix/syncthing-cert"
+services.syncthing.key = "/run/agenix/syncthing-key"
 services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
 
 services.innernet.client.insane.enable = true
-services.innernet.client.insane.settings.interface = { address = "192.168.104.65/22", privateKeyFile = "/run/secrets/wg-home" }
+services.innernet.client.insane.settings.interface = { address = "192.168.104.65/22", privateKeyFile = "/run/agenix/wg-home" }
 services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
 
 users.groups.john.gid = 1337

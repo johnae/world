@@ -181,7 +181,7 @@ in {
                   privateKeyFile = mkOption {
                     type = path;
                     description = "The path to the private key file";
-                    example = "/run/secrets/private-key";
+                    example = "/run/agenix/private-key";
                   };
                 };
                 server = {
@@ -230,7 +230,7 @@ in {
                 privateKeyFile = mkOption {
                   type = path;
                   description = "The path to the private key file";
-                  example = "/run/secrets/server-private-key";
+                  example = "/run/agenix/server-private-key";
                 };
                 externalEndpoint = mkOption {
                   type = str;

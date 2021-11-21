@@ -26,7 +26,7 @@ networking.interfaces.eth0.ipv4.addresses = [
 ]
 
 services.innernet.client.insane.enable = true
-services.innernet.client.insane.settings.interface = { address = "192.168.104.68/22", privateKeyFile = "/run/secrets/wg-home" }
+services.innernet.client.insane.settings.interface = { address = "192.168.104.68/22", privateKeyFile = "/run/agenix/wg-home" }
 services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
 
 system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
@@ -36,7 +36,7 @@ age.secrets.wg-home.file = "secrets/hyperion/wg-home.age"
 networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
 services.k3s.role = "agent"
 services.k3s.serverAddr = "https://192.168.104.1:6443"
-services.k3s.tokenFile = "/run/secrets/k3s-token"
+services.k3s.tokenFile = "/run/agenix/k3s-token"
 services.k3s.maxPodsPerNode = 30
 services.k3s.flannelIface = "insane"
 services.k3s.nodeIP = "192.168.104.68"

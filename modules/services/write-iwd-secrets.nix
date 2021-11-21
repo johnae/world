@@ -19,7 +19,7 @@ in
       script = ''
         export PATH=${pkgs.jq}/bin''${PATH:+:}$PATH
         umask u=rw,g=,o=
-        SECRETS=/run/secrets/wifi-networks
+        SECRETS=/run/agenix/wifi-networks
         mkdir -p /var/lib/iwd
         if [ ! -e "$SECRETS" ]; then
           echo "WARNING - no wifi network secrets at $SECRETS"
