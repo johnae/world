@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage {
   version = inputs.age-plugin-yubikey.rev;
 
   src = inputs.age-plugin-yubikey;
-  cargoSha256 = "sha256-mbzd/iwtquUG4OeX4vx5PH3GBdpaXX3NUUo+siCdmQU=";
+  cargoSha256 = "sha256-BbfnKYk56p8s2R/KyT5VQdCjjIGNrWEtRiLNhFBzals=";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pcsclite ];
