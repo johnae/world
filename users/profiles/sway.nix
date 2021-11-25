@@ -33,9 +33,9 @@ let
     export PATH=${pkgs.jq}/bin''${PATH:+:}$PATH
     current_layout="$(swaymsg -t get_inputs -r | jq -r "[.[] | select(.xkb_active_layout_name != null)][0].xkb_active_layout_name")"
     if [ "$current_layout" = "English (US)" ]; then
-    swaymsg 'input "*" xkb_layout se'
+    swaymsg 'input "*" xkb_layout se,us'
     else
-    swaymsg 'input "*" xkb_layout us'
+    swaymsg 'input "*" xkb_layout us,se'
     fi
   '';
 
