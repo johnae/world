@@ -5,27 +5,13 @@ let
 in
 {
   options = {
-    userConfiguration = mkOption {
+    home = mkOption {
       type = attrsOf (submodule ({ name, ...}:
         {
           options = {
             name = mkOption {
               type = str;
               default = name;
-            };
-            email = mkOption {
-              type = str;
-              example = "example@example.com";
-            };
-            fullName = mkOption {
-              type = str;
-              example = "Recurse Recursson";
-            };
-            githubUser = mkOption {
-              type = str;
-            };
-            gitlabUser = mkOption {
-              type = str;
             };
             profiles = mkOption {
               type = listOf (str);

@@ -1,20 +1,20 @@
 { pkgs, config, ... }:
 
 let
-  extraConfig = config.home.extraConfig;
+  userinfo = config.userinfo;
 in
 {
   programs.git = {
-    userName = extraConfig.userFullName;
-    userEmail = extraConfig.userEmail;
+    userName = userinfo.fullName;
+    userEmail = userinfo.email;
     enable = true;
     delta = {
       enable = true;
       options.features = "decorations side-by-side line-numbers";
     };
     extraConfig = {
-      github.user = extraConfig.githubUser;
-      gitlab.user = extraConfig.gitlabUser;
+      github.user = userinfo.githubUser;
+      gitlab.user = userinfo.gitlabUser;
       core.editor = "${pkgs.my-emacs}/bin/emacsclient -c";
       push.default = "upstream";
       pull.rebase = true;

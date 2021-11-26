@@ -49,11 +49,14 @@ users.users.john.uid = 1337
 users.users.john.shell = "fish"
 users.users.john.hashedPassword = "$6$pUcetTdGMZMdzwx$ySPiZXgZUkIGO3jaEXIIEIh6ks8rea9uE5B08SHku2aJUolHeYKrMvhyFvNYcpvYQ/jf7kgOXL8dL0Yn.IuNS."
 
-userConfiguration.john.email = "john@insane.se"
-userConfiguration.john.fullName = "John Axel Eriksson"
-userConfiguration.john.githubUser = "johnae"
-userConfiguration.john.gitlabUser = "johnae"
-userConfiguration.john.profiles = [
+home-manager.users.john.programs.rbw.settings.device_id = "d99037cd-bcbb-47cc-ac3b-75642e10dbb8"
+
+home-manager.users.john.userinfo.email = "john@insane.se"
+home-manager.users.john.userinfo.fullName = "John Axel Eriksson"
+home-manager.users.john.userinfo.githubUser = "johnae"
+home-manager.users.john.userinfo.gitlabUser = "johnae"
+
+home.john.profiles = [
   "alacritty",
   "bat",
   "chromium",
@@ -75,7 +78,6 @@ userConfiguration.john.profiles = [
   "ssh",
   "starship",
   "sway",
-  "theme",
   "tmux",
   "wlsunset",
 ]

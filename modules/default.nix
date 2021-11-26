@@ -10,6 +10,6 @@
     ./private-wireguard.nix
     ./config-from-data.nix
     ./host-config.nix
-    ./user-config.nix
+    ./home.nix
   ];
 }

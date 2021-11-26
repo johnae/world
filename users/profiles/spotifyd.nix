@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ hostName, config, lib, pkgs, ... }:
 let
   home = config.home;
 in
@@ -11,7 +11,7 @@ in
       backend = "pulseaudio";
       mixer = "PCM";
       volume-control = "alsa";
-      device_name = home.extraConfig.hostName;
+      device_name = hostName;
       bitrate = 320;
       cache_path = "/home/${home.username}/.cache/spotifyd";
       volume-normalisation = "true";

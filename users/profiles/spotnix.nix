@@ -1,7 +1,4 @@
-{ pkgs, config, ... }:
-let
-  home = config.home;
-in
+{ hostName, pkgs, config, ... }:
 {
   systemd.user.services.spotnix = {
     Unit = {
@@ -12,7 +9,7 @@ in
     };
     Service = {
       ExecStart = ''
-        ${pkgs.stdenv.shell} -c 'RUST_LOG=info CLIENT_ID="$(head -1 /run/agenix/spotnix)" CLIENT_SECRET="$(tail -1 /run/agenix/spotnix)" REDIRECT_URI="http://localhost:8182/spotnix" ${pkgs.spotnix}/bin/spotnix -d ${home.extraConfig.hostName} -s $XDG_RUNTIME_DIR/spotnix_status -i $XDG_RUNTIME_DIR/spotnix_input -o $XDG_RUNTIME_DIR/spotnix_output -r 10'
+        ${pkgs.stdenv.shell} -c 'RUST_LOG=info CLIENT_ID="$(head -1 /run/agenix/spotnix)" CLIENT_SECRET="$(tail -1 /run/agenix/spotnix)" REDIRECT_URI="http://localhost:8182/spotnix" ${pkgs.spotnix}/bin/spotnix -d ${hostName} -s $XDG_RUNTIME_DIR/spotnix_status -i $XDG_RUNTIME_DIR/spotnix_input -o $XDG_RUNTIME_DIR/spotnix_output -r 10'
       '';
       Restart = "always";
       RestartSec = 3;

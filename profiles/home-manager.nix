@@ -4,20 +4,18 @@ let
   inherit (builtins) mapAttrs;
 in
 {
+  home-manager.extraSpecialArgs = { inherit hostName; };
+  home-manager.sharedModules = [
+    ../users/modules/userinfo.nix
+    ../users/modules/theme.nix
+  ];
+
   home-manager.users = mapAttrs (user: conf:
     { ... }:
     {
-      imports = [
-        ../users/profiles/home.nix
-        ../users/profiles/extra-config.nix
-        ../users/profiles/theme.nix
-      ] ++ conf.profiles;
+      imports = [ ../users/profiles/home.nix ] ++ conf.profiles;
+      home.stateVersion = "21.05";
       home.username = user;
-      home.extraConfig.hostName = hostName;
-      home.extraConfig.userEmail = conf.email;
-      home.extraConfig.userFullName = conf.fullName;
-      home.extraConfig.githubUser = conf.githubUser;
-      home.extraConfig.gitlabUser = conf.gitlabUser;
     }
-  ) config.userConfiguration;
+  ) config.home;
 }
