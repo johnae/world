@@ -1,7 +1,5 @@
 { lib
 , python3
-
-, writeTextDir
 , substituteAll
 , installShellFiles
 }:
