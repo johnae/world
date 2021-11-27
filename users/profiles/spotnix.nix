@@ -1,4 +1,4 @@
-{ hostName, pkgs, config, ... }:
+{ hostName, pkgs, ... }:
 {
   systemd.user.services.spotnix = {
     Unit = {
