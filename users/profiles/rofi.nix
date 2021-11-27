@@ -1,5 +1,8 @@
-{pkgs, config, ...}:
+{pkgs, lib, config, ...}:
 
+let
+  cfg = config.programs.rofi;
+in
 {
   programs.rofi = {
     enable = true;
@@ -135,4 +138,24 @@
       columns = 2;
     };
   };
+
+  ## currently broken in home-manager for rofi 1.7+ so I'm overriding it
+  home.file."${cfg.configPath}".text = lib.mkForce ''
+    configuration {
+      columns: ${toString cfg.extraConfig.columns};
+      display-combi: "${cfg.extraConfig.display-combi}";
+      display-drun: "${cfg.extraConfig.display-drun}";
+      display-run: "${cfg.extraConfig.display-run}";
+      display-ssh: "${cfg.extraConfig.display-ssh}";
+      font: "${cfg.font}";
+      line-margin: ${toString cfg.extraConfig.line-margin};
+      location: 0;
+      modi: "${cfg.extraConfig.modi}";
+      show-icons: ${if cfg.extraConfig.show-icons then "true" else "false"};
+      xoffset: 0;
+      yoffset: 0;
+    }
+
+    @theme "custom"
+  '';
 }
