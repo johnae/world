@@ -39,15 +39,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ meson ninja pkgconfig xwayland ];
 
-  mesonFlags = [
-    "-Dlibcap=enabled"
-    "-Dxwayland=enabled"
-    "-Dx11-backend=enabled"
-    "-Dxcb-icccm=enabled"
-    "-Dxcb-errors=enabled"
-    "-Dxcb-xkb=enabled"
-    "-Dlibseat=enabled"
-  ];
+  mesonFlags =
+    lib.optional (!enableXWayland) "-Dxwayland=disabled"
+  ;
 
   buildInputs = [
     wayland
