@@ -24,7 +24,7 @@
       options = "--delete-older-than 7d";
     };
 
-    package = pkgs.nix;
+    package = pkgs.nixUnstable;
   };
 
   nixpkgs.config.allowUnfree = true;
