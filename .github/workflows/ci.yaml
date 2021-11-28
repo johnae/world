@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v13
+    - uses: cachix/install-nix-action@v16
       with:
         install_url: https://nixos-nix-install-tests.cachix.org/serve/8d8xah1f6ypccpmw9cfsl8ziw1chj4cl/install 
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
@@ -27,7 +27,7 @@ jobs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
     steps:
     - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v13
+    - uses: cachix/install-nix-action@v16
       with:
         install_url: https://nixos-nix-install-tests.cachix.org/serve/8d8xah1f6ypccpmw9cfsl8ziw1chj4cl/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
@@ -44,7 +44,7 @@ jobs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
     steps:
     - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v13
+    - uses: cachix/install-nix-action@v16
       with:
         install_url: https://nixos-nix-install-tests.cachix.org/serve/8d8xah1f6ypccpmw9cfsl8ziw1chj4cl/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
@@ -61,7 +61,7 @@ jobs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
     steps:
     - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v13
+    - uses: cachix/install-nix-action@v16
       with:
         install_url: https://nixos-nix-install-tests.cachix.org/serve/8d8xah1f6ypccpmw9cfsl8ziw1chj4cl/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
@@ -78,7 +78,7 @@ jobs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
     steps:
     - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v13
+    - uses: cachix/install-nix-action@v16
       with:
         install_url: https://nixos-nix-install-tests.cachix.org/serve/8d8xah1f6ypccpmw9cfsl8ziw1chj4cl/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
@@ -96,7 +96,7 @@ jobs:
       matrix: ${{ fromJson(needs.create_package_matrix_x86_64_linux.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v13
+    - uses: cachix/install-nix-action@v16
       with:
         install_url: https://nixos-nix-install-tests.cachix.org/serve/8d8xah1f6ypccpmw9cfsl8ziw1chj4cl/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
@@ -122,7 +122,7 @@ jobs:
       matrix: ${{ fromJson(needs.create_package_matrix_aarch64_linux.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v13
+    - uses: cachix/install-nix-action@v16
       with:
         install_url: https://nixos-nix-install-tests.cachix.org/serve/8d8xah1f6ypccpmw9cfsl8ziw1chj4cl/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
@@ -155,7 +155,7 @@ jobs:
       matrix: ${{ fromJson(needs.create_host_matrix_x86_64_linux.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v13
+    - uses: cachix/install-nix-action@v16
       with:
         install_url: https://nixos-nix-install-tests.cachix.org/serve/8d8xah1f6ypccpmw9cfsl8ziw1chj4cl/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
@@ -176,7 +176,7 @@ jobs:
       matrix: ${{ fromJson(needs.create_host_matrix_aarch64_linux.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v13
+    - uses: cachix/install-nix-action@v16
       with:
         install_url: https://nixos-nix-install-tests.cachix.org/serve/8d8xah1f6ypccpmw9cfsl8ziw1chj4cl/install
         install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
