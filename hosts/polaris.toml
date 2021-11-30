@@ -103,6 +103,7 @@ age.secrets.syncthing-cert = { file = "secrets/polaris/syncthing-cert.age", owne
 age.secrets.syncthing-key = { file = "secrets/polaris/syncthing-key.age", owner = "1337" }
 
 networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
+services.k3s.extraFlagsList = [ "--node-label svccontroller.k3s.cattle.io/enablelb=true" ]
 services.k3s.role = "server"
 services.k3s.tokenFile = "/run/agenix/k3s-token"
 services.k3s.clusterCIDR = "10.128.128.0/21"
