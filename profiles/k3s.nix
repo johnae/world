@@ -4,7 +4,7 @@
   services.k3s.extraFlagsList = [
     "--node-label hostname=${hostName}"
   ];
-  services.k3s.disable = [ "traefik" "local-storage" ];
+  services.k3s.disable = [ "traefik" ];
   services.k3s.disableNetworkPolicy = true;
   networking.firewall.trustedInterfaces = [ "cni+" "flannel.1" "calico+" "cilium+" "lxc+" ];
   environment.state."/keep" = {
