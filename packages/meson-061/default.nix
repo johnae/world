@@ -2,6 +2,7 @@
 , python3
 , substituteAll
 , installShellFiles
+, inputs
 }:
 
 python3.pkgs.buildPythonApplication rec {
