@@ -10,7 +10,7 @@ apt-get install -y sudo
 #   https://github.com/NixOS/nix/issues/936#issuecomment-475795730
 mkdir -p /etc/nix
 echo "build-users-group =" > /etc/nix/nix.conf
-echo "experimental-features = flakes nix-command ca-references" >> /etc/nix/nix.conf
+echo "experimental-features = flakes nix-command" >> /etc/nix/nix.conf
 
 curl -L https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install | sh
 

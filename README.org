@@ -28,7 +28,7 @@ Installing without pxe booting should be quite easy as well, though slightly mor
 #+BEGIN_SRC sh
   mkdir -p /etc/nix
   cat<<EOF>>/etc/nix/nix.conf
-  experimental-features = nix-command flakes ca-references
+  experimental-features = nix-command flakes
   EOF
 #+END_SRC
 
