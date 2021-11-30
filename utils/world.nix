@@ -70,9 +70,10 @@ let
     nix-linter -W no-FreeLetInFunc -W no-SetLiteralUpdate ./**/*.nix | \
       grep -v 'Unused argument `final`' | \
       grep -v 'Unused argument `prev`' | \
-      grep -v 'Unused argument `plugins`' | \
-      grep -v 'Unused argument `isNixOS`' | \
-      grep -v 'Unused argument `enableXWayland`' \
+      grep -Ev 'Unused argument `plugins` at \.\/packages\/.*' | \
+      grep -Ev 'Unused argument `isNixOS` at \.\/packages\/.*' | \
+      grep -Ev 'Unused argument `enableXWayland` at \.\/packages\/.*' | \
+      grep -Ev 'Unused argument `inputs` at \.\/packages\/.*'
       > "$lintout"
     cat "$lintout"
     if [ -s "$lintout" ]; then
