@@ -36,8 +36,8 @@ age.secrets.wg-home.file = "secrets/hyperion/wg-home.age"
 networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
 services.k3s.role = "agent"
 services.k3s.extraFlagsList = [
-  "--node-label topology.kubernetes.io/region=home"
-  "--node-label topology.kubernetes.io/zone=home"
+  "--node-label topology.kubernetes.io/region=home",
+  "--node-label topology.kubernetes.io/zone=home",
 ]
 services.k3s.serverAddr = "https://192.168.104.1:6443"
 services.k3s.tokenFile = "/run/agenix/k3s-token"
