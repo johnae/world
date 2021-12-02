@@ -47,3 +47,5 @@ services.jae.router.vlans.lan = { id = 10, interface = "eth0" }
 services.jae.router.vlans.work = { id = 20, interface = "eth0" }
 services.jae.router.vlans.iot = { id = 30, interface = "eth0" }
 services.jae.router.vlans.guest = { id = 40, interface = "eth0" }
+
+services.prometheus.exporters.node.enable = true
