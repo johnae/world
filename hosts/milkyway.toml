@@ -73,6 +73,8 @@ environment.state."/keep".directories = [
 services.promtail.enable = true
 services.promtail.configuration.positions.filename = "/tmp/positions.yaml"
 
+services.promtail.configuration.server.disable = true
+
 [[services.promtail.configuration.clients]]
 url = "https://logs.insane.se/loki/api/v1/push"
 tls_config.ca_file = "/etc/ssl/certs/ca-bundle.crt"
