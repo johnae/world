@@ -60,6 +60,15 @@ services.nginx.recommendedProxySettings = true
 services.nginx.recommendedTlsSettings = true
 services.nginx.sslCiphers = "AES256+EECDH:AES256+EDH:!aNULL"
 services.nginx.virtualHosts."home.insane.se".enableACME = true
+security.acme.certs."home.insane.se".postRun = """
+  cp -r ./* /var/lib/promtail/
+  chown promtail:promtail /var/lib/promtail/*
+"""
+
+environment.state."/keep".directories = [
+  "/var/lib/acme",
+  "/var/lib/promtail",
+]
 
 services.promtail.enable = true
 services.promtail.configuration.positions.filename = "/tmp/positions.yaml"
@@ -67,8 +76,8 @@ services.promtail.configuration.positions.filename = "/tmp/positions.yaml"
 [[services.promtail.configuration.clients]]
 url = "https://logs.insane.se/loki/api/v1/push"
 tls_config.ca_file = "/etc/ssl/certs/ca-bundle.crt"
-tls_config.cert_file = "/var/lib/acme/home.insane.se/cert.pem"
-tls_config.key_file = "/var/lib/acme/home.insane.se/key.pem"
+tls_config.cert_file = "/var/lib/promtail/cert.pem"
+tls_config.key_file = "/var/lib/promtail/key.pem"
 tls_config.server_name = "logs.insane.se"
 
 [[services.promtail.configuration.scrape_configs]]
