@@ -50,6 +50,7 @@ services.jae.router.vlans.guest = { id = 40, interface = "eth0" }
 
 services.prometheus.exporters.node.enable = true
 
+networking.firewall.allowedTCPPorts = [ 80 443 ]
 services.nginx.enable = true
 security.acme.email = "john+milkyway@insane.se"
 security.acme.acceptTerms = true
