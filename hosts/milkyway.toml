@@ -51,6 +51,8 @@ services.jae.router.vlans.guest = { id = 40, interface = "eth0" }
 services.prometheus.exporters.node.enable = true
 
 services.nginx.enable = true
+security.acme.email = "john+milkyway@insane.se"
+security.acme.acceptTerms = true
 services.nginx.recommendedGzipSettings = true
 services.nginx.recommendedOptimisation = true
 services.nginx.recommendedProxySettings = true
