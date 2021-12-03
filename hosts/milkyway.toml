@@ -49,3 +49,11 @@ services.jae.router.vlans.iot = { id = 30, interface = "eth0" }
 services.jae.router.vlans.guest = { id = 40, interface = "eth0" }
 
 services.prometheus.exporters.node.enable = true
+
+services.nginx.enable = true
+services.nginx.recommendedGzipSettings = true
+services.nginx.recommendedOptimisation = true
+services.nginx.recommendedProxySettings = true
+services.nginx.recommendedTlsSettings = true
+services.nginx.sslCiphers = "AES256+EECDH:AES256+EDH:!aNULL"
+services.nginx.virtualHosts."home.insane.se".enableACME = true
