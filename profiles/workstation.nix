@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ config, pkgs, inputs, ... }:
 {
   imports = [
     ./defaults.nix
@@ -8,6 +8,17 @@
   boot.kernel.sysctl = {
     "fs.inotify.max_user_watches" = 12288;
   };
+
+  ## won't work just now
+  #boot.kernelModules = [ "v4l2loopback" ];
+  ## need to do this instead
+  boot.extraModulePackages = [
+      config.boot.kernelPackages.v4l2loopback.out
+  ];
+
+  boot.extraModprobeConfig = ''
+    options v4l2loopback nr_devices=1 exclusive_caps=1 video_nr=0 card_label=v4l2lo0
+  '';
 
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
