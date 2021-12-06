@@ -2,6 +2,7 @@
   description = "Packages";
 
   inputs = {
+    nixlib.url = "github:nix-community/nixpkgs.lib";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     fenix = {
       url = "github:nix-community/fenix";
@@ -9,7 +10,7 @@
     };
     nix-misc = {
       url = "github:johnae/nix-misc";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixlib.follows = "nixlib";
     };
     devshell = {
       url = "github:johnae/devshell";
@@ -28,6 +29,7 @@
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixlib.follows = "nixlib";
     };
 
     ## non flakes

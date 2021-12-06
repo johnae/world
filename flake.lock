@@ -67,21 +67,6 @@
         "type": "github"
       }
     },
-    "devshell_2": {
-      "locked": {
-        "lastModified": 1637159427,
-        "narHash": "sha256-o5y/CgqHD49wpRnGn5Zjdp+bhJdqaFiNwfm0bJIhUuc=",
-        "owner": "johnae",
-        "repo": "devshell",
-        "rev": "9a5bd518395550298301c81855981a31d870affc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "johnae",
-        "repo": "devshell",
-        "type": "github"
-      }
-    },
     "emacs-overlay": {
       "locked": {
         "lastModified": 1638668516,
@@ -236,7 +221,9 @@
     },
     "nix-misc": {
       "inputs": {
-        "nixlib": "nixlib"
+        "nixlib": [
+          "nixlib"
+        ]
       },
       "locked": {
         "lastModified": 1637058471,
@@ -254,26 +241,11 @@
     },
     "nixlib": {
       "locked": {
-        "lastModified": 1636849918,
-        "narHash": "sha256-nzUK6dPcTmNVrgTAC1EOybSMsrcx+QrVPyqRdyKLkjA=",
+        "lastModified": 1638664434,
+        "narHash": "sha256-qU/7kV5DqyloWDsoBcMbAhxUwZBdsG8APl1Ut7xDjKM=",
         "owner": "nix-community",
         "repo": "nixpkgs.lib",
-        "rev": "28a5b0557f14124608db68d3ee1f77e9329e9dd5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "type": "github"
-      }
-    },
-    "nixlib_2": {
-      "locked": {
-        "lastModified": 1636849918,
-        "narHash": "sha256-nzUK6dPcTmNVrgTAC1EOybSMsrcx+QrVPyqRdyKLkjA=",
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "rev": "28a5b0557f14124608db68d3ee1f77e9329e9dd5",
+        "rev": "4a0ff4394e28a5fd06f0801b3cbc0db6946ed3a0",
         "type": "github"
       },
       "original": {
@@ -284,7 +256,10 @@
     },
     "nixos-generators": {
       "inputs": {
-        "nixlib": "nixlib_2",
+        "nixlib": [
+          "packages",
+          "nixlib"
+        ],
         "nixpkgs": [
           "packages",
           "nixpkgs"
@@ -386,7 +361,9 @@
       "inputs": {
         "age-plugin-yubikey": "age-plugin-yubikey",
         "blur": "blur",
-        "devshell": "devshell_2",
+        "devshell": [
+          "devshell"
+        ],
         "emacs-overlay": "emacs-overlay",
         "fenix": [
           "fenix"
@@ -399,6 +376,9 @@
         "netns-exec": "netns-exec",
         "nix-misc": [
           "nix-misc"
+        ],
+        "nixlib": [
+          "nixlib"
         ],
         "nixos-generators": "nixos-generators",
         "nixpkgs": [
@@ -422,7 +402,7 @@
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       },
       "locked": {
-        "narHash": "sha256-lGgXNuAJoVf2QkWg8TCtgbQvugkH1MG2DEaFTAEhxPo=",
+        "narHash": "sha256-dpsmUOynSjkVq0XaNMAqkEqUR8WszT27uRZgknCj3A4=",
         "path": "./packages",
         "type": "path"
       },
@@ -496,6 +476,7 @@
         "fenix": "fenix",
         "home-manager": "home-manager",
         "nix-misc": "nix-misc",
+        "nixlib": "nixlib",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "notracking": "notracking",

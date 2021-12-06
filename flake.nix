@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixlib.url = "github:nix-community/nixpkgs.lib";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     nur.url = "github:nix-community/NUR";
     fenix = {
@@ -11,7 +12,7 @@
     };
     nix-misc = {
       url = "github:johnae/nix-misc";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixlib.follows = "nixlib";
     };
     devshell.url = "github:johnae/devshell";
     home-manager = {
@@ -23,10 +24,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.fenix.follows = "fenix";
       inputs.nix-misc.follows = "nix-misc";
+      inputs.devshell.follows = "devshell";
+      inputs.nixlib.follows = "nixlib";
     };
     agenix = {
      url = "github:ryantm/agenix";
      inputs.nixpkgs.follows = "nixpkgs";
+     inputs.nixlib.follows = "nixlib";
     };
     notracking = {
      url = "github:notracking/hosts-blocklists";

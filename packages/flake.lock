@@ -181,7 +181,9 @@
     },
     "nix-misc": {
       "inputs": {
-        "nixlib": "nixlib"
+        "nixlib": [
+          "nixlib"
+        ]
       },
       "locked": {
         "lastModified": 1637058471,
@@ -199,26 +201,11 @@
     },
     "nixlib": {
       "locked": {
-        "lastModified": 1636849918,
-        "narHash": "sha256-nzUK6dPcTmNVrgTAC1EOybSMsrcx+QrVPyqRdyKLkjA=",
+        "lastModified": 1638664434,
+        "narHash": "sha256-qU/7kV5DqyloWDsoBcMbAhxUwZBdsG8APl1Ut7xDjKM=",
         "owner": "nix-community",
         "repo": "nixpkgs.lib",
-        "rev": "28a5b0557f14124608db68d3ee1f77e9329e9dd5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "type": "github"
-      }
-    },
-    "nixlib_2": {
-      "locked": {
-        "lastModified": 1636849918,
-        "narHash": "sha256-nzUK6dPcTmNVrgTAC1EOybSMsrcx+QrVPyqRdyKLkjA=",
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "rev": "28a5b0557f14124608db68d3ee1f77e9329e9dd5",
+        "rev": "4a0ff4394e28a5fd06f0801b3cbc0db6946ed3a0",
         "type": "github"
       },
       "original": {
@@ -229,7 +216,9 @@
     },
     "nixos-generators": {
       "inputs": {
-        "nixlib": "nixlib_2",
+        "nixlib": [
+          "nixlib"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -350,6 +339,7 @@
         "grim": "grim",
         "netns-exec": "netns-exec",
         "nix-misc": "nix-misc",
+        "nixlib": "nixlib",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs",
         "nixpkgs-fmt": "nixpkgs-fmt",
