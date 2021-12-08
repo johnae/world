@@ -278,6 +278,11 @@
 
       inherit nixosConfigurations hostConfigs;
 
+      overlays = packageOverlays // {
+        spotnix = inputs.spotnix.overlay;
+        persway = inputs.persway.overlay;
+      };
+
       packages = recursiveUpdate (recursiveUpdate diskFormatters exportedPackages) worldUtils;
 
       github-actions-package-matrix-x86-64-linux = {
