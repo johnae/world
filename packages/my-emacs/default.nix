@@ -26,5 +26,4 @@ emacsWithPackagesFromUsePackage {
           --prefix PATH : ${pkgs.lib.makeBinPath [ fish notmuch pandoc pass wl-clipboard kubectl kubectx google-cloud-sdk texlive.combined.scheme-full ]}
       '';
     });
-  extraEmacsPackages = epkgs: [ epkgs.org-plus-contrib ];
 }

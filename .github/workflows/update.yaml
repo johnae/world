@@ -22,15 +22,15 @@ jobs:
     - run: |
         nix shell nixpkgs#git -c git config user.name 'NixBot'
         nix shell nixpkgs#git -c git config user.email 'johnae@users.noreply.github.com'
+
+        nix flake update
+
         (
           cd packages
-          nix flake update
           nix develop -c update-all-cargo-vendor-shas
           nix develop -c update-all-fixed-output-derivation-shas
         )
-        nix shell nixpkgs#git -c git commit -am "[Auto] update sub flake packages"
 
-        nix flake update
         nix shell nixpkgs#git -c git commit -am "[Auto] update all inputs"
       
     - name: Create Pull Request
