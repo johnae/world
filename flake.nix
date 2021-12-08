@@ -6,27 +6,30 @@
     nixlib.url = "github:nix-community/nixpkgs.lib";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     nur.url = "github:nix-community/NUR";
+
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nix-misc = {
       url = "github:johnae/nix-misc";
       inputs.nixlib.follows = "nixlib";
     };
+
     devshell.url = "github:johnae/devshell";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    packages = {
-      url = "path:./packages";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.fenix.follows = "fenix";
-      inputs.nix-misc.follows = "nix-misc";
-      inputs.devshell.follows = "devshell";
-      inputs.nixlib.follows = "nixlib";
-    };
+    #packages = {
+    #  url = "path:./packages";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #  inputs.fenix.follows = "fenix";
+    #  inputs.nix-misc.follows = "nix-misc";
+    #  inputs.devshell.follows = "devshell";
+    #  inputs.nixlib.follows = "nixlib";
+    #};
     agenix = {
      url = "github:ryantm/agenix";
      inputs.nixpkgs.follows = "nixpkgs";
@@ -36,23 +39,69 @@
      url = "github:notracking/hosts-blocklists";
      flake = false;
     };
+
+    ######################## packages ########################
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    spotnix = {
+      url = "github:johnae/spotnix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.fenix.follows = "fenix";
+    };
+    persway = {
+      url = "github:johnae/persway";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.fenix.follows = "fenix";
+    };
+
+    ## non flakes
+    rofi-wayland = { url = "github:lbonn/rofi/wayland"; flake = false; };
+    age-plugin-yubikey = { url = "github:str4d/age-plugin-yubikey"; flake = false; };
+    blur = { url = "github:johnae/blur"; flake = false; };
+    fire = { url = "github:johnae/fire"; flake = false; };
+    fish-kubectl-completions = { url = "github:evanlucas/fish-kubectl-completions"; flake = false; };
+    google-cloud-sdk-fish-completion = { url = "github:Doctusoft/google-cloud-sdk-fish-completion"; flake = false; };
+    grim = { url = "github:emersion/grim"; flake = false; };
+    nixpkgs-fmt = { url = "github:nix-community/nixpkgs-fmt"; flake = false; };
+    netns-exec = { url = "github:johnae/netns-exec"; flake = false; };
+    slurp = { url = "github:emersion/slurp"; flake = false; };
+    spotifyd = { url = "github:spotifyd/spotifyd"; flake = false; };
+    wayland-protocols-master = { url = "git+https://gitlab.freedesktop.org/wayland/wayland-protocols?ref=main"; flake = false; };
+    sway = { url = "github:swaywm/sway"; flake = false; };
+    swaybg = { url = "github:swaywm/swaybg"; flake = false; };
+    swayidle = { url = "github:swaywm/swayidle"; flake = false; };
+    swaylock = { url = "github:swaywm/swaylock"; flake = false; };
+    wlroots = { url = "git+https://gitlab.freedesktop.org/wlroots/wlroots?ref=master"; flake = false; };
+    wf-recorder = { url = "github:ammen99/wf-recorder"; flake = false; };
+    wl-clipboard = { url = "github:bugaevc/wl-clipboard"; flake = false; };
+    xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr/v0.5.0"; flake = false; };
+    git-branchless = { url = "github:arxanas/git-branchless"; flake = false; };
+    pueue = { url = "github:Nukesor/pueue"; flake = false; };
+    ########################################################
   };
 
   outputs = { self, nixpkgs, ... } @ inputs:
     let
+
       inherit (nixpkgs.lib) genAttrs filterAttrs mkOverride makeOverridable mkIf
         hasSuffix mapAttrs mapAttrs' removeSuffix nameValuePair nixosSystem
         mkForce mapAttrsToList splitString concatStringsSep last hasAttr recursiveUpdate;
+
       inherit (builtins) replaceStrings attrNames functionArgs substring pathExists
         fromTOML readFile readDir listToAttrs filter removeAttrs;
 
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
+
+      packageOverlays = import ./packages/overlays.nix { inherit inputs; lib = nixpkgs.lib; };
 
       overlays = [
         inputs.nix-misc.overlay
         inputs.devshell.overlay
         inputs.nur.overlay
         inputs.agenix.overlay
+        inputs.spotnix.overlay
+        inputs.persway.overlay
+        inputs.emacs-overlay.overlay
+        inputs.fenix.overlay
         (final: prev: { tree = prev.tree.overrideAttrs (_:
             {
               preConfigure = ''
@@ -73,7 +122,7 @@
             '';
           }
         );})
-      ] ++ mapAttrsToList (_: value: value) inputs.packages.overlays;
+      ] ++ mapAttrsToList (_: value: value) packageOverlays;
 
       worldOverlay = (final: prev: {
         world = prev.callPackage ./utils/world.nix { };
@@ -223,7 +272,7 @@
 
       exportedPackages = forAllSystems (pkgs:
         (mapAttrs (name: _: pkgs.${name})
-          (filterAttrs (name: _: (hasAttr name pkgs) && nixpkgs.lib.isDerivation pkgs.${name}) inputs.packages.overlays)
+          (filterAttrs (name: _: (hasAttr name pkgs) && nixpkgs.lib.isDerivation pkgs.${name}) packageOverlays)
         ) // {
           pxebooter = toPxeBootSystemConfig "pxebooter" pkgs.system;
         }

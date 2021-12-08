@@ -69,11 +69,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1638901808,
-        "narHash": "sha256-ZFZigHXO4DE/aX+ttvQ7px/zl9naVLuv8tS1UQM/dgI=",
+        "lastModified": 1638928498,
+        "narHash": "sha256-Y27XJzeJcGTHHqMyWCdXx1kvU2eI5NjKkgP20lRqs7Q=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "c77eefc7683c6c56694e4516f6bd5fc6b3b0cf48",
+        "rev": "2a3c3959436d97ff2db0cb765336f2747d875fb8",
         "type": "github"
       },
       "original": {
@@ -254,31 +254,6 @@
         "type": "github"
       }
     },
-    "nixos-generators": {
-      "inputs": {
-        "nixlib": [
-          "packages",
-          "nixlib"
-        ],
-        "nixpkgs": [
-          "packages",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1637655461,
-        "narHash": "sha256-kXZPbclN3gKwjhp2/RYFDFpAsSBwzX1iLF4EcnHZsPQ=",
-        "owner": "nix-community",
-        "repo": "nixos-generators",
-        "rev": "05a3eb158a9c7746a5d463726d7f7cccf07500e4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixos-generators",
-        "type": "github"
-      }
-    },
     "nixos-hardware": {
       "locked": {
         "lastModified": 1638440530,
@@ -357,68 +332,12 @@
         "type": "github"
       }
     },
-    "packages": {
-      "inputs": {
-        "age-plugin-yubikey": "age-plugin-yubikey",
-        "blur": "blur",
-        "devshell": [
-          "devshell"
-        ],
-        "emacs-overlay": "emacs-overlay",
-        "fenix": [
-          "fenix"
-        ],
-        "fire": "fire",
-        "fish-kubectl-completions": "fish-kubectl-completions",
-        "git-branchless": "git-branchless",
-        "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
-        "grim": "grim",
-        "netns-exec": "netns-exec",
-        "nix-misc": [
-          "nix-misc"
-        ],
-        "nixlib": [
-          "nixlib"
-        ],
-        "nixos-generators": "nixos-generators",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-fmt": "nixpkgs-fmt",
-        "persway": "persway",
-        "pueue": "pueue",
-        "rofi-wayland": "rofi-wayland",
-        "slurp": "slurp",
-        "spotifyd": "spotifyd",
-        "spotnix": "spotnix",
-        "sway": "sway",
-        "swaybg": "swaybg",
-        "swayidle": "swayidle",
-        "swaylock": "swaylock",
-        "wayland-protocols-master": "wayland-protocols-master",
-        "wf-recorder": "wf-recorder",
-        "wl-clipboard": "wl-clipboard",
-        "wlroots": "wlroots",
-        "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
-      },
-      "locked": {
-        "narHash": "sha256-XWZLfMsiy8lN/mcXh29ZGhkfUfAtwA/68q+F0xvhUzU=",
-        "path": "./packages",
-        "type": "path"
-      },
-      "original": {
-        "path": "./packages",
-        "type": "path"
-      }
-    },
     "persway": {
       "inputs": {
         "fenix": [
-          "packages",
           "fenix"
         ],
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },
@@ -471,17 +390,41 @@
     },
     "root": {
       "inputs": {
+        "age-plugin-yubikey": "age-plugin-yubikey",
         "agenix": "agenix",
+        "blur": "blur",
         "devshell": "devshell",
+        "emacs-overlay": "emacs-overlay",
         "fenix": "fenix",
+        "fire": "fire",
+        "fish-kubectl-completions": "fish-kubectl-completions",
+        "git-branchless": "git-branchless",
+        "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
+        "grim": "grim",
         "home-manager": "home-manager",
+        "netns-exec": "netns-exec",
         "nix-misc": "nix-misc",
         "nixlib": "nixlib",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-fmt": "nixpkgs-fmt",
         "notracking": "notracking",
         "nur": "nur",
-        "packages": "packages"
+        "persway": "persway",
+        "pueue": "pueue",
+        "rofi-wayland": "rofi-wayland",
+        "slurp": "slurp",
+        "spotifyd": "spotifyd",
+        "spotnix": "spotnix",
+        "sway": "sway",
+        "swaybg": "swaybg",
+        "swayidle": "swayidle",
+        "swaylock": "swaylock",
+        "wayland-protocols-master": "wayland-protocols-master",
+        "wf-recorder": "wf-recorder",
+        "wl-clipboard": "wl-clipboard",
+        "wlroots": "wlroots",
+        "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       }
     },
     "rust-analyzer-src": {
@@ -536,11 +479,9 @@
     "spotnix": {
       "inputs": {
         "fenix": [
-          "packages",
           "fenix"
         ],
         "nixpkgs": [
-          "packages",
           "nixpkgs"
         ]
       },
