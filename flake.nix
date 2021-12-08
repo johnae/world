@@ -22,14 +22,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    #packages = {
-    #  url = "path:./packages";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #  inputs.fenix.follows = "fenix";
-    #  inputs.nix-misc.follows = "nix-misc";
-    #  inputs.devshell.follows = "devshell";
-    #  inputs.nixlib.follows = "nixlib";
-    #};
     agenix = {
      url = "github:ryantm/agenix";
      inputs.nixpkgs.follows = "nixpkgs";
@@ -76,7 +68,7 @@
     xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr/v0.5.0"; flake = false; };
     git-branchless = { url = "github:arxanas/git-branchless"; flake = false; };
     pueue = { url = "github:Nukesor/pueue"; flake = false; };
-    ########################################################
+    ####################### end packages #######################
   };
 
   outputs = { self, nixpkgs, ... } @ inputs:
@@ -102,19 +94,6 @@
         inputs.persway.overlay
         inputs.emacs-overlay.overlay
         inputs.fenix.overlay
-        (final: prev: { tree = prev.tree.overrideAttrs (_:
-            {
-              preConfigure = ''
-                sed -i Makefile -e 's|^OBJS=|OBJS=$(EXTRA_OBJS) |'
-                makeFlags+=("CC=$CC")
-              '';
-              makeFlags = [
-                "prefix=${placeholder "out"}"
-                "MANDIR=${placeholder "out"}/share/man/man1"
-              ];
-            }
-          );
-        })
         (final: prev: { nix-direnv = prev.nix-direnv.overrideAttrs (oldAttrs:
           {
             postPatch = ''
