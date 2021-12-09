@@ -18,6 +18,17 @@ jobs:
     - run: |
         nix shell .#world -c world lint
 
+  nix_check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v16
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+    - run: |
+        nix flake check
+
   create_package_matrix_x86_64_linux:
     runs-on: ubuntu-latest
     outputs:
@@ -173,10 +184,13 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: Build (matrix)
-    needs: [build_package_x86_64_linux, build_package_aarch64_linux, build_host_aarch64_linux, build_host_x86_64_linux, nix_lint]
+    needs: [build_package_x86_64_linux, build_package_aarch64_linux, build_host_aarch64_linux, build_host_x86_64_linux, nix_lint, nix_check]
     steps:
       - name: Check linting status
         if: ${{ needs.nix_lint.result != 'success' }}
+        run: exit 1
+      - name: Check flake check status
+        if: ${{ needs.nix_check.result != 'success' }}
         run: exit 1
       - name: Check x86_64-linux package build matrix status
         if: ${{ needs.build_package_x86_64_linux.result != 'success' }}
