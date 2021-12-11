@@ -44,6 +44,9 @@ let
     in
       (mapAttrs' (name: conf: nameValuePair conf.ip [name]) peers) // {
         ${cfg.innernetServerInternalIp} = [ cfg.innernetServer ];
+        ${cfg.unifiAddress} = [ "unifi" ];
+        "127.0.0.2" = mkForce [ "localhost2" ];
+        "::1" = mkForce [ "localhost2" ];
       }
   );
 
@@ -219,11 +222,7 @@ in {
       conf-file=${inputs.notracking}/dnsmasq/dnsmasq.blacklist.txt
     '';
 
-    networking.hosts = recursiveUpdate {
-      ${cfg.unifiAddress} = [ "unifi" ];
-      "127.0.0.2" = mkForce [ "localhost" ];
-      "::1" = mkForce [ "localhost" ];
-    } hosts;
+    networking.hosts = hosts;
 
     boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = true;
     boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
