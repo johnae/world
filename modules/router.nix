@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkIf splitString nameValuePair
+  inherit (lib) mkIf mkForce splitString nameValuePair
     mapAttrs' mkOption mkEnableOption mapAttrsToList;
   inherit (builtins) head tail foldl'
     attrValues attrNames mapAttrs
@@ -221,6 +221,8 @@ in {
 
     networking.hosts = {
       ${cfg.unifiAddress} = [ "unifi" ];
+      "127.0.0.2" = mkForce [ "localhost" ];
+      "::1" = mkForce [ "localhost" ];
     } // hosts;
 
     boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = true;
