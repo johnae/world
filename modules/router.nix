@@ -3,7 +3,7 @@
 let
 
   inherit (lib) mkIf mkForce splitString nameValuePair
-    mapAttrs' mkOption mkEnableOption mapAttrsToList;
+    mapAttrs' mkOption mkEnableOption mapAttrsToList recursiveUpdate;
   inherit (builtins) head tail foldl'
     attrValues attrNames mapAttrs
     concatStringsSep;
@@ -219,11 +219,11 @@ in {
       conf-file=${inputs.notracking}/dnsmasq/dnsmasq.blacklist.txt
     '';
 
-    networking.hosts = {
+    networking.hosts = recursiveUpdate {
       ${cfg.unifiAddress} = [ "unifi" ];
       "127.0.0.2" = mkForce [ "localhost" ];
       "::1" = mkForce [ "localhost" ];
-    } // hosts;
+    } hosts;
 
     boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = true;
     boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
