@@ -30,6 +30,8 @@ services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVy
 age.secrets.wg-home.file = "secrets/milkyway/wg-home.age"
 
 services.jae.router.enable = true
+services.jae.router.innernetServerInternalIp = "192.168.104.1"
+services.jae.router.innernetServer = "polaris"
 services.jae.router.unifiAddress = "65.108.2.146"
 services.jae.router.dnsCrypt = true
 ## with dnsCrypt enabled, the below servers won't be used

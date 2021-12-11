@@ -1,10 +1,12 @@
-{ inputs, config, lib, ... }:
-
-with lib;
+{ inputs, config, lib, hostConfigs, ... }:
 
 let
 
-  inherit (lib) splitString;
+  inherit (lib) mkIf splitString nameValuePair
+    mapAttrs' mkOption mkEnableOption mapAttrsToList;
+  inherit (builtins) head tail foldl'
+    attrValues attrNames mapAttrs
+    concatStringsSep;
 
   cfg = config.services.jae.router;
 
@@ -36,6 +38,15 @@ let
 
   internalInterfaceNames = attrNames internalInterfaces;
 
+  hosts = mkIf (cfg.innernetServer != null) (
+    let
+      peers = foldl' (x: y: x // y.settings.peers) {} (attrValues hostConfigs.${cfg.innernetServer}.services.innernet.server);
+    in
+      (mapAttrs' (name: conf: nameValuePair conf.ip [name]) peers) // {
+        ${cfg.innernetServerInternalIp} = [ cfg.innernetServer ];
+      }
+  );
+
 in {
 
   options.services.jae.router = with lib.types; {
@@ -43,6 +54,16 @@ in {
     upstreamDnsServers = mkOption {
       type = listOf str;
       description = "List of upstream dns server addresses.";
+    };
+    innernetServer = mkOption {
+      type = nullOr str;
+      default = null;
+      description = "Name of innernet server host";
+    };
+    innernetServerInternalIp = mkOption {
+      type = nullOr str;
+      default = null;
+      description = "Internal IP of innernet server";
     };
     domain = mkOption {
       type = str;
@@ -198,7 +219,9 @@ in {
       conf-file=${inputs.notracking}/dnsmasq/dnsmasq.blacklist.txt
     '';
 
-    networking.hosts.${cfg.unifiAddress} = [ "unifi" ];
+    networking.hosts = {
+      ${cfg.unifiAddress} = [ "unifi" ];
+    } // hosts;
 
     boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = true;
     boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
