@@ -42,9 +42,9 @@ let
     let
       peers = foldl' (x: y: x // y.settings.peers) {} (attrValues hostConfigs.${cfg.innernetServer}.services.innernet.server);
     in
-      (mapAttrs' (name: conf: nameValuePair conf.ip [name]) peers) // {
-        ${cfg.innernetServerInternalIp} = [ cfg.innernetServer ];
-        ${cfg.unifiAddress} = [ "unifi" ];
+      (mapAttrs' (name: conf: nameValuePair conf.ip [name "${name}.${cfg.domain}"]) peers) // {
+        ${cfg.innernetServerInternalIp} = [ cfg.innernetServer "${cfg.innernetServer}.${cfg.domain}" ];
+        ${cfg.unifiAddress} = [ "unifi" "unifi.${cfg.domain}"];
         "127.0.0.2" = mkForce [ "localhost2" ];
         "::1" = mkForce [ "localhost2" ];
       }
