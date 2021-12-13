@@ -87,6 +87,9 @@
 
       nixos-upgrade = {pkgs, flags ? "--flake github:johnae/world --use-remote-sudo -L"}:
         pkgs.writeStrictShellScriptBin "nixos-upgrade" ''
+          echo Clearing fetcher cache
+          echo rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
+          rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
           echo nixos-rebuild boot ${flags}
           nixos-rebuild boot ${flags}
           booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
