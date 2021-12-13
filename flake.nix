@@ -85,6 +85,24 @@
 
       packageOverlays = import ./packages/overlays.nix { inherit inputs; lib = nixpkgs.lib; };
 
+      nixos-upgrade = {pkgs, flags ? "--flake github:johnae/world --use-remote-sudo -L"}:
+        pkgs.writeStrictShellScriptBin "nixos-upgrade" ''
+          echo nixos-rebuild boot ${flags}
+          nixos-rebuild boot ${flags}
+          booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
+          built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+          if [ "$booted" = "$built" ]; then
+            echo nixos-rebuild switch ${flags}
+            nixos-rebuild switch ${flags}
+          else
+            cat<<MSG
+            The system must be rebooted for the changes to take effect
+            this is because either all of or some of the kernel, the kernel
+            modules or initrd were updated
+          MSG
+          fi
+      '';
+
       overlays = [
         inputs.nix-misc.overlay
         inputs.devshell.overlay
@@ -94,6 +112,7 @@
         inputs.persway.overlay
         inputs.emacs-overlay.overlay
         inputs.fenix.overlay
+        (final: prev: { nixos-upgrade = nixos-upgrade { pkgs = prev; }; })
         (final: prev: { nix-direnv = prev.nix-direnv.overrideAttrs (oldAttrs:
           {
             postPatch = ''
@@ -148,6 +167,9 @@
               system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}";
               nixpkgs.overlays = overlays;
             }
+            ({pkgs, ...}: {
+              environment.systemPackages = [ pkgs.nixos-upgrade ];
+            })
             inputs.nixpkgs.nixosModules.notDetected
             inputs.home-manager.nixosModules.home-manager
             inputs.agenix.nixosModules.age
