@@ -20,6 +20,7 @@
 , libpng
 , libuuid
 , libseat
+, libdrm
 , ffmpeg
 , xwayland
 , vulkan-headers
@@ -54,6 +55,7 @@ stdenv.mkDerivation {
     libX11
     libcap
     libseat
+    libdrm
     xcbutilimage
     xcbutilerrors
     xcbutilrenderutil
