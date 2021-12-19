@@ -7,6 +7,52 @@ let
    pkgList = (filter (elem: ! (inputs.${elem} ? "sourceInfo") && pathExists (toString (./. + "/${elem}"))) (attrNames inputs)) ++ [
      "meson-061"
    ];
+
+   libdrm24109 = pkgs: pkgs.libdrm.overrideAttrs(old: {
+     version = "2.4.109";
+     src = pkgs.fetchurl {
+       url = "https://dri.freedesktop.org/libdrm/libdrm-2.4.109.tar.xz";
+       sha256 = "sha256-YpNS4Iwf6EhiygRlmNigjOFNJqsl7h9HBPmT0HTLfyY=";
+     };
+   });
+
+   wayland120 = pkgs: pkgs.wayland.overrideAttrs(old: {
+     version = "1.20.0";
+     src = pkgs.fetchFromGitLab {
+       domain = "gitlab.freedesktop.org";
+       owner = "wayland";
+       repo = "wayland";
+       rev = "1.20.0";
+       sha256 = "sha256-N+riSb3F3vcyUlNdlSnOUrKdDtBcGn9rUyCAi3nel6E=";
+     };
+     patches = [
+       (pkgs.writeText "patch.diff" ''
+           From 378623b0e39b12bb04d3a3a1e08e64b31bd7d99d Mon Sep 17 00:00:00 2001
+           From: Florian Klink <flokli@flokli.de>
+           Date: Fri, 27 Nov 2020 10:22:20 +0100
+           Subject: [PATCH] add placeholder for @nm@
+           ---
+           egl/meson.build | 2 +-
+           1 file changed, 1 insertion(+), 1 deletion(-)
+           diff --git a/egl/meson.build b/egl/meson.build
+           index dee9b1d..e477546 100644
+           --- a/egl/meson.build
+           +++ b/egl/meson.build
+           @@ -11,7 +11,7 @@ wayland_egl = library(
+
+            executable('wayland-egl-abi-check', 'wayland-egl-abi-check.c')
+
+           -nm_path = find_program('nm').path()
+           +nm_path = find_program('${pkgs.stdenv.cc.targetPrefix}nm').path()
+
+            test(
+             'wayland-egl symbols check',
+           --
+           2.29.2
+         '')
+     ];
+   });
+
 in
 
 (
@@ -18,9 +64,17 @@ in
 //
 
 {
+  libdrm24109 = (final: prev: { libdrm24109 = libdrm24109 prev; });
+  wayland120 = (final: prev: { wayland120 = wayland120 prev; });
+  wayland-protocols-master = (final: prev: { wayland-protocols-master = prev.callPackage ./wayland-protocols-master { wayland = final.wayland120; }; });
+}
+
+//
+
+{
   world-updaters = import ./world-updaters-overlay.nix;
-  wlroots = (final: prev: { wlroots = prev.callpackage ./wlroots { wayland-protocols = final.wayland-protocols-master; }; });
-  sway-unwrapped = (final: prev: { sway-unwrapped = prev.callpackage ./sway { wayland-protocols = final.wayland-protocols-master; }; });
+  wlroots = (final: prev: { wlroots = prev.callpackage ./wlroots { wayland-protocols = final.wayland-protocols-master; wayland = final.wayland120; }; });
+  sway-unwrapped = (final: prev: { sway-unwrapped = prev.callpackage ./sway { wayland = final.wayland120; wayland-protocols = final.wayland-protocols-master; }; });
   sway = (final: prev: { sway = prev.callPackage (prev.path + "/pkgs/applications/window-managers/sway/wrapper.nix") { }; } );
   inputs = (final: prev: { inherit inputs; });
   mynerdfonts = (final: prev: { mynerdfonts = prev.nerdfonts.override { fonts = [ "JetBrainsMono" "DroidSansMono" ]; }; });
@@ -37,7 +91,7 @@ in
 //
 
 {
-  wlroots = (final: prev: { wlroots = prev.callPackage ./wlroots { wayland-protocols = final.wayland-protocols-master; meson = prev.meson-061; }; });
-  sway-unwrapped = (final: prev: { sway-unwrapped = prev.callPackage ./sway { wayland-protocols = final.wayland-protocols-master; meson = prev.meson-061; }; });
-  swaylock = (final: prev: { swaylock = prev.callPackage ./swaylock { wayland-protocols = final.wayland-protocols-master; meson = prev.meson-061; }; });
+  wlroots = (final: prev: { wlroots = prev.callPackage ./wlroots { libdrm = final.libdrm24109; wayland = final.wayland120; wayland-protocols = final.wayland-protocols-master; meson = prev.meson-061; }; });
+  sway-unwrapped = (final: prev: { sway-unwrapped = prev.callPackage ./sway { wayland = final.wayland120; wayland-protocols = final.wayland-protocols-master; meson = prev.meson-061; }; });
+  swaylock = (final: prev: { swaylock = prev.callPackage ./swaylock { wayland = final.wayland120; wayland-protocols = final.wayland-protocols-master; meson = prev.meson-061; }; });
 }
