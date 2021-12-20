@@ -19,7 +19,6 @@ in
       push.default = "upstream";
       pull.rebase = true;
       rebase.autoStash = true;
-      url."git@github.com:".insteadOf = "https://github.com/";
       init.defaultBranch = "main";
       color = {
         ui = "auto";
