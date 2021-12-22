@@ -20,10 +20,15 @@ jobs:
         nix shell nixpkgs#git -c git config user.name 'NixBot'
         nix shell nixpkgs#git -c git config user.email 'johnae@users.noreply.github.com'
 
-        nix flake update
-
-        nix develop -c update-all-cargo-vendor-shas
-        nix develop -c update-all-fixed-output-derivation-shas
+        ## we have to enter a shell and run several commands within
+        ## because during the update the flake may be temporarily
+        ## "invalid" and then we can't run the commands by calling
+        ## the flake
+        nix develop -c bash<<BASH
+          nix flake update
+          nix develop -c update-all-cargo-vendor-shas
+          nix develop -c update-all-fixed-output-derivation-shas
+        BASH
 
         nix shell nixpkgs#git -c git commit -am "[Auto] update all inputs"
       
