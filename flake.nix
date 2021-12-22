@@ -85,8 +85,8 @@
 
       packageOverlays = import ./packages/overlays.nix { inherit inputs; lib = nixpkgs.lib; };
 
-      nixos-upgrade = {pkgs, flags ? "--flake github:johnae/world --use-remote-sudo -L"}:
-        pkgs.writeStrictShellScriptBin "nixos-upgrade" ''
+      nixos-upgrade = final: prev: {flags ? "--flake github:johnae/world --use-remote-sudo -L"}:
+        prev.writeStrictShellScriptBin "nixos-upgrade" ''
           echo Clearing fetcher cache
           echo rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
           rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
@@ -115,7 +115,7 @@
         inputs.persway.overlay
         inputs.emacs-overlay.overlay
         inputs.fenix.overlay
-        (final: prev: { nixos-upgrade = nixos-upgrade { pkgs = prev; }; })
+        (final: prev: { nixos-upgrade = nixos-upgrade final prev { }; })
         (final: prev: { nix-direnv = prev.nix-direnv.overrideAttrs (oldAttrs:
           {
             postPatch = ''

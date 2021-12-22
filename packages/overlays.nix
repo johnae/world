@@ -8,7 +8,7 @@ let
      "meson-061"
    ];
 
-   libdrm24109 = pkgs: pkgs.libdrm.overrideAttrs(old: {
+   libdrm24109 = pkgs: pkgs.libdrm.overrideAttrs(_: {
      version = "2.4.109";
      src = pkgs.fetchurl {
        url = "https://dri.freedesktop.org/libdrm/libdrm-2.4.109.tar.xz";
@@ -16,7 +16,7 @@ let
      };
    });
 
-   wayland120 = pkgs: pkgs.wayland.overrideAttrs(old: {
+   wayland120 = pkgs: pkgs.wayland.overrideAttrs(_: {
      version = "1.20.0";
      src = pkgs.fetchFromGitLab {
        domain = "gitlab.freedesktop.org";
