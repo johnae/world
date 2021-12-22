@@ -26,8 +26,8 @@ jobs:
         ## the flake
         nix develop -c bash<<BASH
           nix flake update
-          nix develop -c update-all-cargo-vendor-shas
-          nix develop -c update-all-fixed-output-derivation-shas
+          update-all-cargo-vendor-shas
+          update-all-fixed-output-derivation-shas
         BASH
 
         nix shell nixpkgs#git -c git commit -am "[Auto] update all inputs"
