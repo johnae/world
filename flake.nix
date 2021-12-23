@@ -311,18 +311,26 @@
     in
       (forAllDefaultSystems (_: pkgs:
         {
-          apps = mapAttrs (name: drv:
+          apps = (mapAttrs (name: drv:
             {
               type = "app";
               program = "${drv}/bin/${name}";
             }
           ) {
             nixos-upgrade = pkgs.nixos-upgrade;
-            world = pkgs.world;
             update-cargo-vendor-sha = pkgs.world-updaters;
             update-all-cargo-vendor-shas = pkgs.world-updaters;
             update-fixed-output-derivation-sha = pkgs.world-updaters;
             update-all-fixed-output-derivation-shas = pkgs.world-updaters;
+          }) // {
+            lint = {
+              type = "app";
+              program = "${pkgs.world}/bin/world-lint";
+            };
+            pixieboot = {
+              type = "app";
+              program = "${pkgs.world}/bin/world-pixieboot";
+            };
           };
           devShell = pkgs.devshell.mkShell {
             imports = [

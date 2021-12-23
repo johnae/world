@@ -16,7 +16,7 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - run: |
-        nix run .#world lint
+        nix run .#lint
 
   nix_check:
     runs-on: ubuntu-latest
