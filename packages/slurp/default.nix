@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    inherit (inputs.slurp) description homepage;
+    description = "Slurp";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };

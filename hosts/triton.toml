@@ -1,8 +1,12 @@
+system = "x86_64-linux"
+
+[config]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMqXrRzKxAJ7RkKIt+w98rVsT0RWsusdB2EsVd2OwylX"
 syncthingDeviceID = "5OGTM2O-IJQ4Z2I-DDMZD33-GIIQCID-VJY7E32-AMOS6JN-WOVZ5TO-CWE2OQM"
+
 profiles = [
-  "hardware/usbcore",
-  "hardware/yoga-slim-7-amd",
+  "profiles/hardware/usbcore",
+  "profiles/hardware/yoga-slim-7-amd",
   "profiles/bluez_autoswitch",
   "profiles/default_fs",
   "profiles/hidpi",
@@ -55,29 +59,28 @@ home-manager.users.john.userinfo.email = "john@insane.se"
 home-manager.users.john.userinfo.fullName = "John Axel Eriksson"
 home-manager.users.john.userinfo.githubUser = "johnae"
 home-manager.users.john.userinfo.gitlabUser = "johnae"
-
-home.john.profiles = [
-  "alacritty",
-  "bat",
-  "chromium",
-  "dconf",
-  "emacs",
-  "firefox",
-  "fish",
-  "git",
-  "i3status-laptop",
-  "kanshi",
-  "mako",
-  "obs",
-  "pueue",
-  "qutebrowser",
-  "rbw",
-  "rofi",
-  "spotifyd",
-  "spotnix",
-  "ssh",
-  "starship",
-  "sway",
-  "tmux",
-  "wlsunset",
+home-manager.users.john.profiles = [
+  "users/profiles/alacritty",
+  "users/profiles/bat",
+  "users/profiles/chromium",
+  "users/profiles/dconf",
+  "users/profiles/emacs",
+  "users/profiles/firefox",
+  "users/profiles/fish",
+  "users/profiles/git",
+  "users/profiles/i3status-laptop",
+  "users/profiles/kanshi",
+  "users/profiles/mako",
+  "users/profiles/obs",
+  "users/profiles/pueue",
+  "users/profiles/qutebrowser",
+  "users/profiles/rbw",
+  "users/profiles/rofi",
+  "users/profiles/spotifyd",
+  "users/profiles/spotnix",
+  "users/profiles/ssh",
+  "users/profiles/starship",
+  "users/profiles/sway",
+  "users/profiles/tmux",
+  "users/profiles/wlsunset",
 ]

@@ -1,4 +1,4 @@
-{hostConfig, config, lib, pkgs, ...}:
+{hostConfiguration, config, lib, pkgs, ...}:
 
 let
   inherit (builtins) hasAttr isAttrs mapAttrs attrNames length;
@@ -37,7 +37,7 @@ let
   hasSecrets = config.age.secrets != {};
 in
 {
-  config = recursiveUpdate (mapConfig [] hostConfig) {
+  config = recursiveUpdate (mapConfig [] hostConfiguration) {
 
     nix.trustedUsers = attrNames
       (filterAttrs (_: user: user.isNormalUser) config.users.users);

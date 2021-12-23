@@ -1,4 +1,4 @@
-{ buildEnv, writeShellScriptBin, writeStrictShellScriptBin, nix-linter, pixiecore, gnugrep, gnused, findutils, hostname }:
+{ buildEnv, writeShellScriptBin, writeStrictShellScriptBin, nix-linter, pixiecore, gnugrep, gnused, findutils }:
 
 let
 
@@ -16,21 +16,6 @@ let
     sudo ${pixiecore}/bin/pixiecore boot "$n/bzImage" "$n/initrd" \
       --cmdline "$init loglevel=4" \
       --debug --dhcp-no-bind --port 64172 --status-port 64172
-  '';
-
-  world-repl = writeStrictShellScriptBin "world-repl" ''
-    export PATH=${hostname}/bin:$PATH
-    _WORLD_HELP=''${_WORLD_HELP:-}
-    if [ -n "$_WORLD_HELP" ]; then
-      echo start a nix repl in host context
-      exit 0
-    fi
-    host="$(hostname)"
-    trap 'rm -f ./nix-repl.nix' EXIT
-    cat<<EOF>./nix-repl.nix
-    (builtins.getFlake (toString ./.)).nixosConfigurations.$host
-    EOF
-    nix repl ./nix-repl.nix
   '';
 
   world-help = writeStrictShellScriptBin "world-help" ''
@@ -107,6 +92,5 @@ buildEnv {
     world-help
     world-pixieboot
     world-lint
-    world-repl
   ];
 }

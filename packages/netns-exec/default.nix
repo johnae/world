@@ -12,6 +12,7 @@ rustPlatform.buildRustPackage {
     description = "Execute process within Linux network namespace";
     homepage = "https://github.com/johnae/netns-exec";
     license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [
       {
         email = "john@insane.se";

@@ -1,4 +1,4 @@
-{ stdenv, pkgs, ... }:
+{ stdenv, pkgs, lib, ... }:
 
 with pkgs;
 
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     description = "Btrfs snapshot and backup scripts";
     homepage = "https://github.com/johnae/btr-snap";
     license = "MIT";
+    platforms = lib.platforms.linux;
   };
 
 }

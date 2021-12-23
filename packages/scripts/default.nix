@@ -158,4 +158,5 @@ buildEnv {
     update-wireguard-keys spotify-cmd rofi-rbw
     rofi-spotify-search
   ];
+  meta.platforms = lib.platforms.linux;
 }

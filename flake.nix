@@ -1,23 +1,37 @@
 {
-  description = "John's NixOS configurations";
+  description = "John's Nixos Configurations, potions, packages and magical incantations";
+
+  nixConfig = {
+    extra-experimental-features = "nix-command flakes";
+    extra-substituters = [
+      "https://nixpkgs-wayland.cachix.org"
+      "https://nix-community.cachix.org"
+      "https://insane.cachix.org"
+      "https://cachix.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o="
+      "cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM="
+    ];
+  };
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixlib.url = "github:nix-community/nixpkgs.lib";
+    ## flakes
+    flake-utils.url = "github:numtide/flake-utils";
+    devshell.url = "github:johnae/devshell";
     nixos-hardware.url = "github:nixos/nixos-hardware";
+    nixlib.url = "github:nix-community/nixpkgs.lib";
     nur.url = "github:nix-community/NUR";
-
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     nix-misc = {
       url = "github:johnae/nix-misc";
-      inputs.nixlib.follows = "nixlib";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    devshell.url = "github:johnae/devshell";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -27,12 +41,7 @@
      inputs.nixpkgs.follows = "nixpkgs";
      inputs.nixlib.follows = "nixlib";
     };
-    notracking = {
-     url = "github:notracking/hosts-blocklists";
-     flake = false;
-    };
 
-    ######################## packages ########################
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     spotnix = {
       url = "github:johnae/spotnix";
@@ -46,6 +55,11 @@
     };
 
     ## non flakes
+    notracking = {
+     url = "github:notracking/hosts-blocklists";
+     flake = false;
+    };
+
     rofi-wayland = { url = "github:lbonn/rofi/wayland"; flake = false; };
     age-plugin-yubikey = { url = "github:str4d/age-plugin-yubikey"; flake = false; };
     blur = { url = "github:johnae/blur"; flake = false; };
@@ -68,125 +82,146 @@
     xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr/v0.5.0"; flake = false; };
     git-branchless = { url = "github:arxanas/git-branchless"; flake = false; };
     pueue = { url = "github:Nukesor/pueue"; flake = false; };
-    ####################### end packages #######################
   };
 
-  outputs = { self, nixpkgs, ... } @ inputs:
+  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
     let
 
-      inherit (nixpkgs.lib) genAttrs filterAttrs mkOverride makeOverridable mkIf
-        hasSuffix mapAttrs mapAttrs' removeSuffix nameValuePair nixosSystem
-        mkForce mapAttrsToList splitString concatStringsSep last hasAttr recursiveUpdate;
+      inherit (nixpkgs.lib) recursiveUpdate filterAttrsRecursive mapAttrsToList mapAttrs' nameValuePair
+        attrByPath makeOverridable nixosSystem mkIf mkForce mkOverride filterAttrs isDerivation;
+      inherit (builtins) replaceStrings readFile readDir filter
+        pathExists mapAttrs fromTOML substring hasAttr elem;
 
-      inherit (builtins) replaceStrings attrNames functionArgs substring pathExists
-        fromTOML readFile readDir listToAttrs filter removeAttrs;
-
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
-
-      packageOverlays = import ./packages/overlays.nix { inherit inputs; lib = nixpkgs.lib; };
-
-      nixos-upgrade = final: prev: {flags ? "--flake github:johnae/world --use-remote-sudo -L"}:
-        prev.writeStrictShellScriptBin "nixos-upgrade" ''
-          echo Clearing fetcher cache
-          echo rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
-          rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
-          echo nixos-rebuild boot ${flags}
-          nixos-rebuild boot ${flags}
-          booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
-          built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
-          if [ "$booted" = "$built" ]; then
-            echo nixos-rebuild switch ${flags}
-            nixos-rebuild switch ${flags}
-          else
-            cat<<MSG
-            The system must be rebooted for the changes to take effect
-            this is because either all of or some of the kernel, the kernel
-            modules or initrd were updated
-          MSG
-          fi
-      '';
+      packageOverlays = import ./packages/overlays.nix { inherit inputs; inherit (nixpkgs) lib; };
 
       overlays = [
-        inputs.nix-misc.overlay
-        inputs.devshell.overlay
-        inputs.nur.overlay
         inputs.agenix.overlay
-        inputs.spotnix.overlay
-        inputs.persway.overlay
+        inputs.devshell.overlay
         inputs.emacs-overlay.overlay
         inputs.fenix.overlay
-        (final: prev: { nixos-upgrade = nixos-upgrade final prev { }; })
-        (final: prev: { nix-direnv = prev.nix-direnv.overrideAttrs (oldAttrs:
-          {
-            postPatch = ''
-            ${oldAttrs.postPatch}sed -i "s|sed.*shellHook.*||g" direnvrc
-            '';
+        inputs.nix-misc.overlay
+        inputs.nur.overlay
+        inputs.persway.overlay
+        inputs.spotnix.overlay
+        (final: prev: {
+          world = prev.callPackage ./utils/world.nix { };
+        })
+        (final: prev: let flags = "--flake github:johnae/world --use-remote-sudo -L"; in
+          { nixos-upgrade = prev.writeStrictShellScriptBin "nixos-upgrade" ''
+              echo Clearing fetcher cache
+              echo rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
+              rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
+              echo nixos-rebuild boot ${flags}
+              nixos-rebuild boot ${flags}
+              booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
+              built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+              if [ "$booted" = "$built" ]; then
+                echo nixos-rebuild switch ${flags}
+                nixos-rebuild switch ${flags}
+              else
+                cat<<MSG
+                The system must be rebooted for the changes to take effect
+                this is because either all of or some of the kernel, the kernel
+                modules or initrd were updated
+              MSG
+              fi
+           '';
           }
-        );})
+        )
       ] ++ mapAttrsToList (_: value: value) packageOverlays;
 
-      worldOverlay = (final: prev: {
-        world = prev.callPackage ./utils/world.nix { };
-      });
+      pkgsFor = system: import nixpkgs {
+        inherit system overlays;
+      };
 
-      forAllSystems = f: genAttrs supportedSystems (system: f (import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-        inherit overlays;
-      }));
+      forAllNixosSystems = fn: flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ]
+        (system: fn system (pkgsFor system));
 
-      hostConfigs = mapAttrs' (f: _:
-        let hostname = replaceStrings [".toml"] [""] f;
-        in { name = hostname; value = fromTOML (readFile (./hosts + "/${f}")); }
+      forAllDefaultSystems = fn: flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] ## not bothering with darwin etc for now
+        (system: fn system (pkgsFor system));
+
+      hostConfigurations = mapAttrs' (filename: _:
+        let name = replaceStrings [".toml"] [""] filename;
+        in { inherit name; value = fromTOML (readFile (./hosts + "/${filename}")); }
       ) (readDir ./hosts);
 
-      hosts = mapAttrs (_: config:
+      nixosConfig = hostName: config:
         let
-          arch = if hasAttr "arch" config then config.arch else "x86_64-linux";
-          profiles = config.profiles;
-          cfg = removeAttrs config [ "profiles" "arch" ];
+          fileOrDir = path:
+            let basePath = toString (./. + "/${path}");
+            in if pathExists basePath then basePath else "${basePath}.nix";
+
+          hostConf = config.config;
+          profiles = map fileOrDir hostConf.profiles;
+
+          ## somewhat hacky way of making it seem as if we're
+          ## giving home-manager the profiles to load - that
+          ## can't actually happen within a module though
+          userProfiles = mapAttrs (_: user:
+            let profiles = attrByPath [ "profiles" ] {} user;
+            in map fileOrDir profiles
+          ) (attrByPath [ "home-manager" "users" ] {} hostConf);
+
+          modules = [ ./modules ];
+
+          system = config.system;
+
+          ## filter out all keys with name "profiles" from
+          ## TOML config
+          cfg = filterAttrsRecursive (name: _:
+            name != "profiles"
+          ) hostConf;
+
+        in
+          makeOverridable nixosSystem {
+            inherit system;
+            specialArgs = {
+              inherit hostName inputs userProfiles;
+              hostConfiguration = cfg;
+              hostConfigurations = mapAttrs (_: conf: conf.config) hostConfigurations;
+            };
+            modules = [
+              {
+                system.configurationRevision = mkIf (self ? rev) self.rev;
+                system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}";
+                nixpkgs.overlays = overlays;
+              }
+              (
+                {pkgs, ...}: {
+                  environment.systemPackages = [ pkgs.nixos-upgrade ];
+                }
+              )
+              inputs.nixpkgs.nixosModules.notDetected
+              inputs.home-manager.nixosModules.home-manager
+              inputs.agenix.nixosModules.age
+              {
+                imports = modules ++ profiles;
+              }
+            ];
+          };
+
+      nixosConfigurations = mapAttrs nixosConfig hostConfigurations;
+
+      exportedPackages = forAllDefaultSystems (system: pkgs:
+        let
+          pkgFilter = name: _:
+            hasAttr name pkgs &&
+            isDerivation pkgs.${name} &&
+            #builtins.trace ("${system} - ${name}: ${builtins.toJSON (attrByPath [ "meta" "platforms"] [ system ] pkgs.${name})}") true &&
+            elem system (attrByPath [ "meta" "platforms"] [ system ] pkgs.${name});
         in
         {
-        specialArgs.system = arch;
-        specialArgs.hostConfig = cfg;
-        specialArgs.hostConfigs = hostConfigs;
-        configuration.imports = (map (item:
-          if pathExists (toString (./. + "/${item}")) then
-            (./. + "/${item}")
-          else (./. + "/${item}.nix")
-        ) profiles) ++ [ ./modules ];
-      }) hostConfigs;
+          packages = (mapAttrs (name: _: pkgs.${name})
+            (filterAttrs pkgFilter packageOverlays)) // {
+              world = pkgs.world;
+            };
+        }
+      );
 
-      toNixosConfig = hostName: host:
-        makeOverridable nixosSystem {
-          inherit (host.specialArgs) system;
-          specialArgs = {
-            inherit hostName inputs;
-            userProfiles = import ./users/profiles.nix { lib = inputs.nixpkgs.lib; };
-          } // host.specialArgs;
-          modules = [
-            {
-              system.configurationRevision = mkIf (self ? rev) self.rev;
-              system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}";
-              nixpkgs.overlays = overlays;
-            }
-            ({pkgs, ...}: {
-              environment.systemPackages = [ pkgs.nixos-upgrade ];
-            })
-            inputs.nixpkgs.nixosModules.notDetected
-            inputs.home-manager.nixosModules.home-manager
-            inputs.agenix.nixosModules.age
-            host.configuration
-          ];
-        };
-
-      toPxeBootSystemConfig = hostName: system:
+      nixosPackages = forAllNixosSystems (system: _:
         let
           bootSystem = makeOverridable nixosSystem {
             inherit system;
-            specialArgs = {
-              inherit hostName inputs;
-            };
             modules = [
               {
                 system.configurationRevision = mkIf (self ? rev) self.rev;
@@ -205,9 +240,7 @@
                      experimental-features = nix-command flakes
                    '';
                  };
-                 environment.systemPackages = with pkgs; [
-                   git curl jq skim
-                 ];
+                 environment.systemPackages = with pkgs; [ git curl jq skim ];
                  boot.supportedFilesystems = lib.mkForce [ "btrfs" "vfat" ];
                  boot.kernelPackages = pkgs.linuxPackages_latest;
                  services.getty.autologinUser = mkForce "root";
@@ -219,7 +252,6 @@
                    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo="
                    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo="
                  ];
-
                  environment.etc."profile.local".text = ''
                    attempt=0
                    max_attempts=5
@@ -250,8 +282,9 @@
               })
             ];
           };
-          in
-           bootSystem.pkgs.symlinkJoin {
+        in
+        {
+          packages.pxebooter = bootSystem.pkgs.symlinkJoin {
              name = "netboot";
              paths = with bootSystem.config.system.build; [
                netbootRamdisk
@@ -260,108 +293,108 @@
              ];
              preferLocalBuild = true;
           };
+        });
 
-      toDiskFormatter = hostName: config: pkgs:
-        inputs.nixpkgs.lib.nameValuePair "${hostName}-diskformat" (
+      diskFormatter = hostName: config: pkgs:
+        nameValuePair "${hostName}-diskformat" (
           pkgs.callPackage ./utils/diskformat.nix {
             inherit hostName config;
           }
         );
 
-      nixosConfigurations = mapAttrs toNixosConfig hosts;
-
-      diskFormatters = forAllSystems (pkgs:
-        (mapAttrs' (hostName: config: toDiskFormatter hostName config pkgs) nixosConfigurations)
-      );
-
-      exportedPackages = forAllSystems (pkgs:
-        (mapAttrs (name: _: pkgs.${name})
-          (filterAttrs (name: _: (hasAttr name pkgs) && nixpkgs.lib.isDerivation pkgs.${name}) packageOverlays)
-        ) // {
-          pxebooter = toPxeBootSystemConfig "pxebooter" pkgs.system;
-        }
-      );
-
-      worldUtils = forAllSystems (pkgs:
+      diskFormatters = forAllNixosSystems (_: pkgs:
         {
-          inherit (pkgs.extend worldOverlay) world;
+          packages = (mapAttrs' (hostName: config: diskFormatter hostName config pkgs) nixosConfigurations);
         }
       );
 
     in
-    {
-      devShell = forAllSystems (pkgs:
-        let
-          extendedPkgs = pkgs.extend worldOverlay;
-        in
-        extendedPkgs.devshell.mkShell {
-          imports = [
-            (extendedPkgs.devshell.importTOML ./devshell.toml)
-          ];
-        }
-      );
-
-      inherit nixosConfigurations hostConfigs;
-
-      overlays = packageOverlays // {
-        spotnix = inputs.spotnix.overlay;
-        persway = inputs.persway.overlay;
-      };
-
-      packages = recursiveUpdate (recursiveUpdate diskFormatters exportedPackages) worldUtils;
-
-      github-actions-package-matrix-x86-64-linux = {
-        os = [ "ubuntu-latest" ];
-        pkg = mapAttrsToList (name: _:  name) exportedPackages.x86_64-linux;
-      };
-
-      github-actions-package-matrix-aarch64-linux = let
-        skip = [
-          "age-plugin-yubikey"
-          "blur"
-          "fire"
-          "git-branchless"
-          "grim"
-          "innernet"
-          "meson-0591"
-          "my-emacs"
-          "my-emacs-config"
-          "netns-dbus-proxy"
-          "netns-exec"
-          "nixpkgs-fmt"
-          "persway"
-          "pxebooter"
-          "pueue"
-          "rofi-wayland"
-          "slurp"
-          "slurp"
-          "sway"
-          "sway-unwrapped"
-          "swaybg"
-          "swayidle"
-          "swaylock"
-          "swaylock-dope"
-          "wayland-protocols-master"
-          "wf-cliboard"
-          "wf-cliboard-x11"
-          "wf-recorder"
-          "wlroots"
-          "xdg-desktop-portal-wlr"
-        ];
-      in
+      (forAllDefaultSystems (_: pkgs:
         {
-        os = [ "ubuntu-latest" ];
-        pkg = filter (elem: !(builtins.elem elem skip)) (mapAttrsToList (name: _:  name) exportedPackages.aarch64-linux);
-      };
+          apps = mapAttrs (name: drv:
+            {
+              type = "app";
+              program = "${drv}/bin/${name}";
+            }
+          ) {
+            nixos-upgrade = pkgs.nixos-upgrade;
+            world = pkgs.world;
+            update-cargo-vendor-sha = pkgs.world-updaters;
+            update-all-cargo-vendor-shas = pkgs.world-updaters;
+            update-fixed-output-derivation-sha = pkgs.world-updaters;
+            update-all-fixed-output-derivation-shas = pkgs.world-updaters;
+          };
+          devShell = pkgs.devshell.mkShell {
+            imports = [
+              (pkgs.devshell.importTOML ./devshell.toml)
+            ];
+          };
+        }
+      ))
+      //
+      {
+        inherit nixosConfigurations hostConfigurations;
+        packages = recursiveUpdate
+                     (recursiveUpdate nixosPackages.packages exportedPackages.packages)
+                        diskFormatters.packages;
+        overlays = packageOverlays // {
+          spotnix = inputs.spotnix.overlay;
+          persway = inputs.persway.overlay;
+        };
 
-      github-actions-host-matrix-x86-64-linux = {
-        os = [ "ubuntu-latest" ];
-        host = mapAttrsToList (name: _:  name) (filterAttrs (_: config: config.specialArgs.system == "x86_64-linux") hosts);
-      };
+        github-actions-package-matrix-x86-64-linux = {
+          os = [ "ubuntu-latest" ];
+          pkg = mapAttrsToList (name: _:  name) exportedPackages.x86_64-linux;
+        };
 
-      github-actions-host-matrix-aarch64-linux = {
-        os = [ "ubuntu-latest" ];
-        host = mapAttrsToList (name: _:  name) (filterAttrs (_: config: config.specialArgs.system == "aarch64-linux") hosts);
-      };
-    };
+        github-actions-package-matrix-aarch64-linux = let
+          skip = [
+            "age-plugin-yubikey"
+            "blur"
+            "fire"
+            "git-branchless"
+            "grim"
+            "innernet"
+            "meson-0591"
+            "my-emacs"
+            "my-emacs-config"
+            "netns-dbus-proxy"
+            "netns-exec"
+            "nixpkgs-fmt"
+            "persway"
+            "pxebooter"
+            "pueue"
+            "rofi-wayland"
+            "slurp"
+            "slurp"
+            "sway"
+            "sway-unwrapped"
+            "swaybg"
+            "swayidle"
+            "swaylock"
+            "swaylock-dope"
+            "wayland-protocols-master"
+            "wf-cliboard"
+            "wf-cliboard-x11"
+            "wf-recorder"
+            "wlroots"
+            "xdg-desktop-portal-wlr"
+          ];
+        in
+          {
+          os = [ "ubuntu-latest" ];
+          pkg = filter (elem: !(builtins.elem elem skip)) (mapAttrsToList (name: _:  name) exportedPackages.aarch64-linux);
+        };
+
+        github-actions-host-matrix-x86-64-linux = {
+          os = [ "ubuntu-latest" ];
+          host = mapAttrsToList (name: _:  name) (filterAttrs (_: config: config.system == "x86_64-linux") hostConfigurations);
+        };
+
+        github-actions-host-matrix-aarch64-linux = {
+          os = [ "ubuntu-latest" ];
+          host = mapAttrsToList (name: _:  name) (filterAttrs (_: config: config.system == "aarch64-linux") hostConfigurations);
+        };
+      }
+  ;
 }

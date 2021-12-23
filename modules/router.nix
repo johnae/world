@@ -1,4 +1,4 @@
-{ inputs, config, lib, hostConfigs, ... }:
+{ inputs, config, lib, hostConfigurations, ... }:
 
 let
 
@@ -40,7 +40,7 @@ let
 
   hosts = mkIf (cfg.innernetServer != null) (
     let
-      peers = foldl' (x: y: x // y.settings.peers) {} (attrValues hostConfigs.${cfg.innernetServer}.services.innernet.server);
+      peers = foldl' (x: y: x // y.settings.peers) {} (attrValues hostConfigurations.${cfg.innernetServer}.services.innernet.server);
     in
       (mapAttrs' (name: conf: nameValuePair conf.ip [name "${name}.${cfg.domain}"]) peers) // {
         ${cfg.innernetServerInternalIp} = [ cfg.innernetServer "${cfg.innernetServer}.${cfg.domain}" ];
