@@ -344,7 +344,7 @@
 
         github-actions-package-matrix-x86-64-linux = {
           os = [ "ubuntu-latest" ];
-          pkg = mapAttrsToList (name: _:  name) exportedPackages.x86_64-linux;
+          pkg = mapAttrsToList (name: _:  name) exportedPackages.packages.x86_64-linux;
         };
 
         github-actions-package-matrix-aarch64-linux = let
@@ -383,7 +383,7 @@
         in
           {
           os = [ "ubuntu-latest" ];
-          pkg = filter (elem: !(builtins.elem elem skip)) (mapAttrsToList (name: _:  name) exportedPackages.aarch64-linux);
+          pkg = filter (elem: !(builtins.elem elem skip)) (mapAttrsToList (name: _:  name) exportedPackages.packages.aarch64-linux);
         };
 
         github-actions-host-matrix-x86-64-linux = {
