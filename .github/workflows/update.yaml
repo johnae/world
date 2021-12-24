@@ -20,15 +20,13 @@ jobs:
         nix shell nixpkgs#git -c git config user.name 'NixBot'
         nix shell nixpkgs#git -c git config user.email 'johnae@users.noreply.github.com'
 
-        ## we have to enter a shell and run several commands within
-        ## because during the update the flake may be temporarily
-        ## "invalid" and then we can't run the commands by calling
-        ## the flake
-        nix develop -c bash<<BASH
-          nix flake update
-          update-all-cargo-vendor-shas
-          update-all-fixed-output-derivation-shas
-        BASH
+        ## by building this we can rely on it not being affected by
+        ## the flake being in some invalid state during updates
+        nix build .#world-updaters -o world-updaters
+
+        nix flake update
+        ./world-updaters/bin/update-all-cargo-vendor-shas
+        ./world-updaters/bin/update-all-fixed-output-derivation-shas
 
         nix shell nixpkgs#git -c git commit -am "[Auto] update all inputs"
       
