@@ -1,8 +1,11 @@
+system = "aarch64-linux"
+
+[config]
+
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAZaFbtnZfWQEbRSB2jIbznfDkqdFs+lvvpKB2RVsclM"
-arch = "aarch64-linux"
 
 profiles = [
-  "hardware/raspberrypi4",
+  "profiles/hardware/raspberrypi4",
   "profiles/default_fs",
   "profiles/hidpi",
   "profiles/server",

@@ -16,7 +16,7 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - run: |
-        nix shell .#world -c world lint
+        nix run .#lint
 
   nix_check:
     runs-on: ubuntu-latest
@@ -135,7 +135,6 @@ jobs:
     - env:
         PKG: ${{ matrix.pkg }}
       run: |
-        cat /etc/nix/nix.conf
         nix build .#packages.aarch64-linux.$PKG -L
 
   build_host_x86_64_linux:

@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux; ## in this case it's true
     maintainers = [
       {
         email = "john@insane.se";

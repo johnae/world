@@ -1,8 +1,11 @@
+system = "x86_64-linux"
+
+[config]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILOeY+TshjtBK5VQu4ZJVJ0ol1PsZxLvIy+YNCOtfZmd"
 syncthingDeviceID = "5RMZCHO-M3OA4UH-3PMKBWD-IVJGW4Q-VZBME6O-OCSPMK4-7YOVDAM-QOEDOQC"
 
 profiles = [
-  "hardware/ax41",
+  "profiles/hardware/ax41",
   "profiles/default_fs",
   "profiles/k3s",
   "profiles/server",

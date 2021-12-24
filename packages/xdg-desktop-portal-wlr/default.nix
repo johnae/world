@@ -56,7 +56,6 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    inherit (inputs.xdg-desktop-portal-wlr) description homepage;
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
