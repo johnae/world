@@ -22,11 +22,11 @@ jobs:
 
         ## by building this we can rely on it not being affected by
         ## the flake being in some invalid state during updates
-        nix build .#world-updaters -o world-updaters
+        nix build .#world-updaters
 
         nix flake update
-        ./world-updaters/bin/update-all-cargo-vendor-shas
-        ./world-updaters/bin/update-all-fixed-output-derivation-shas
+        ./result/bin/update-all-cargo-vendor-shas
+        ./result/bin/update-all-fixed-output-derivation-shas
 
         nix shell nixpkgs#git -c git commit -am "[Auto] update all inputs"
       
