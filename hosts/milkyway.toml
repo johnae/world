@@ -82,14 +82,14 @@ services.promtail.configuration.positions.filename = "/tmp/positions.yaml"
 
 services.promtail.configuration.server.disable = true
 
-[[services.promtail.configuration.clients]]
+[[config.services.promtail.configuration.clients]]
 url = "https://logs.insane.se/loki/api/v1/push"
 tls_config.ca_file = "/etc/ssl/certs/ca-bundle.crt"
 tls_config.cert_file = "/var/lib/promtail/cert.pem"
 tls_config.key_file = "/var/lib/promtail/key.pem"
 tls_config.server_name = "logs.insane.se"
 
-[[services.promtail.configuration.scrape_configs]]
+[[config.services.promtail.configuration.scrape_configs]]
 job_name = "journal"
 journal.max_age = "12h"
 journal.labels = { job = "systemd-journal", host = "milkyway", context = "home-network", component = "router" }
