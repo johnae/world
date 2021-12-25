@@ -28,7 +28,7 @@ jobs:
         ./world-updaters/bin/update-all-cargo-vendor-shas
         ./world-updaters/bin/update-all-fixed-output-derivation-shas
 
-        nix shell nixpkgs#git -c git commit -u -am "[Auto] update all inputs"
+        nix shell nixpkgs#git -c git commit -am "[Auto] update all inputs"
       
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
