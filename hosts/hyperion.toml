@@ -44,7 +44,7 @@ services.k3s.extraFlagsList = [
 ]
 services.k3s.serverAddr = "https://192.168.104.1:6443"
 services.k3s.tokenFile = "/run/agenix/k3s-token"
-services.k3s.maxPodsPerNode = 30
+services.k3s.maxPodsPerNode = 62
 services.k3s.flannelIface = "insane"
 services.k3s.nodeIP = "192.168.104.68"
 services.k3s.nodeExternalIP = "192.168.20.141"
