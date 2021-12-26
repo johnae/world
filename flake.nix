@@ -97,10 +97,6 @@
         lint = (final: prev: { inherit (prev.callPackage ./utils/world.nix { }) lint; });
       };
 
-      diskFormattersOverlays = mapAttrs' (hostName: config:
-        { name = "${hostName}-diskformat"; value = (final: prev: diskFormatter hostName config prev); }
-      ) nixosConfigurations;
-
       overlays = [
         inputs.agenix.overlay
         inputs.devshell.overlay
@@ -133,7 +129,7 @@
           }
         )
 
-      ] ++ mapAttrsToList (_: value: value) (packageOverlays // worldOverlays // diskFormattersOverlays);
+      ] ++ mapAttrsToList (_: value: value) (packageOverlays // worldOverlays);
 
       pkgsFor = system: import nixpkgs {
         inherit system overlays;
@@ -216,7 +212,7 @@
         in
         {
           packages = (mapAttrs (name: _: pkgs.${name})
-            (filterAttrs pkgFilter (packageOverlays // diskFormattersOverlays // worldOverlays)));
+            (filterAttrs pkgFilter (packageOverlays // worldOverlays)));
         }
       );
 
@@ -297,6 +293,10 @@
           };
         });
 
+      diskFormatters = forAllNixosSystems (_: pkgs:
+        { packages  = mapAttrs' (hostName: config: diskFormatter hostName config pkgs) nixosConfigurations; }
+      );
+
       diskFormatter = hostName: config: pkgs:
         nameValuePair "${hostName}-diskformat" (
           pkgs.callPackage ./utils/diskformat.nix {
@@ -331,8 +331,10 @@
       //
       {
         inherit nixosConfigurations hostConfigurations;
-        #packages = recursiveUpdate nixosPackages.packages exportedPackages.packages;
-        overlays = packageOverlays // diskFormattersOverlays // worldOverlays // {
+
+        packages = recursiveUpdate (recursiveUpdate nixosPackages.packages exportedPackages.packages) diskFormatters.packages;
+
+        overlays = packageOverlays // worldOverlays // {
           spotnix = inputs.spotnix.overlay;
           persway = inputs.persway.overlay;
         };
