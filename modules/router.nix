@@ -53,7 +53,7 @@ let
 in {
 
   options.services.jae.router = with lib.types; {
-    enable = mkEnableOption "Whether to enable the my router";
+    enable = mkEnableOption "Whether to enable the router";
     upstreamDnsServers = mkOption {
       type = listOf str;
       description = "List of upstream dns server addresses.";
