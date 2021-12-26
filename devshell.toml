@@ -16,7 +16,6 @@ packages = [
   "yj",
   "rage",
   "age-plugin-yubikey",
-  "world"
 ]
 
 [[commands]]
@@ -26,14 +25,14 @@ help = "evaluate flake attributes"
 category = "test"
 
 [[commands]]
-package = "world"
-name = "world pixieboot"
+package = "pixieboot"
+name = "pixieboot"
 help = "start pixiecore for automated network installation"
 category = "bootstrap"
 
 [[commands]]
-package = "world"
-name = "world lint"
+package = "lint"
+name = "lint"
 help = "run a linter on all nix files"
 category = "test"
 

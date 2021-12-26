@@ -2,7 +2,7 @@
 
 let
 
-  world-pixieboot = writeStrictShellScriptBin "world-pixieboot" ''
+  pixieboot = writeStrictShellScriptBin "pixieboot" ''
     export PATH=${gnugrep}/bin:$PATH
     _WORLD_HELP=''${_WORLD_HELP:-}
     if [ -n "$_WORLD_HELP" ]; then
@@ -18,30 +18,7 @@ let
       --debug --dhcp-no-bind --port 64172 --status-port 64172
   '';
 
-  world-help = writeStrictShellScriptBin "world-help" ''
-    export PATH=${gnugrep}/bin:${gnused}/bin:${findutils}/bin:$PATH
-    _WORLD_HELP=''${_WORLD_HELP:-}
-    if [ -n "$_WORLD_HELP" ]; then
-      echo this help text
-      exit 0
-    fi
-    cat<<HELP
-      Available sub commands:
-
-    HELP
-    export _WORLD_HELP=yes
-    # shellcheck disable=SC2086
-    for cmd in $(printf '%s\n' ''${PATH//:/\/* } | xargs -n 1 basename | \
-      grep -E '^world-' | sed 's|world-||g'); do
-    # shellcheck disable=SC1087
-      cat<<HELP
-          $cmd
-             - $(world-$cmd)
-    HELP
-    done
-  '';
-
-  world-lint = writeShellScriptBin "world-lint" ''
+  lint = writeShellScriptBin "lint" ''
     export PATH=${nix-linter}/bin:${gnugrep}/bin:${gnused}/bin:${findutils}/bin:$PATH
     _WORLD_HELP=''${_WORLD_HELP:-}
     if [ -n "$_WORLD_HELP" ]; then
@@ -66,31 +43,6 @@ let
     fi
   '';
 
-  world = writeShellScriptBin "world" ''
-    cmd=''${1:-help}
-    if [ "$cmd" = "help" ]; then
-      ${world-help}/bin/world-help
-      exit 0
-    fi
-    name="$(basename "$0")"
-    subcmd="$name-$cmd"
-    shift
-    if ! command -v "$subcmd" > /dev/null; then
-      echo Unknown command "\"$cmd\""
-      ${world-help}/bin/world-help
-      exit 1
-    fi
-    "$subcmd" "$@"
-  '';
-
 in
 
-buildEnv {
-  name = "world";
-  paths = [
-    world
-    world-help
-    world-pixieboot
-    world-lint
-  ];
-}
+{ inherit pixieboot lint; }
