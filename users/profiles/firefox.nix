@@ -21,7 +21,7 @@ in
       default = {
         settings = {
           "browser.compactmode.show" = true;
-          "browser.startup.homepage" = "https://duckduckgo.com";
+          "browser.startup.homepage" = "https://searx.insane.se";
           "browser.search.region" = "SE";
           "browser.search.isUS" = false;
           "distribution.searchplugins.defaultLocale" = "sv-SE";
