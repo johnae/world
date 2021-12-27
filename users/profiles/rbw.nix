@@ -9,5 +9,6 @@ in
     email = userinfo.email;
     lock_timeout = 3600;
     pinentry = "gnome3";
+    base_url = "https://bw.insane.se";
   };
 }
