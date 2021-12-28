@@ -69,12 +69,12 @@
     netns-exec = { url = "github:johnae/netns-exec"; flake = false; };
     slurp = { url = "github:emersion/slurp"; flake = false; };
     spotifyd = { url = "github:spotifyd/spotifyd"; flake = false; };
-    wayland-protocols-master = { url = "git+https://gitlab.freedesktop.org/wayland/wayland-protocols?ref=main"; flake = false; };
+    wayland-protocols-master = { url = "git+https://gitlab.freedesktop.org/wayland/wayland-protocols.git?ref=main"; flake = false; };
     sway = { url = "github:swaywm/sway"; flake = false; };
     swaybg = { url = "github:swaywm/swaybg"; flake = false; };
     swayidle = { url = "github:swaywm/swayidle"; flake = false; };
     swaylock = { url = "github:swaywm/swaylock"; flake = false; };
-    wlroots = { url = "git+https://gitlab.freedesktop.org/wlroots/wlroots?ref=master"; flake = false; };
+    wlroots = { url = "git+https://gitlab.freedesktop.org/wlroots/wlroots.git?ref=master"; flake = false; };
     wf-recorder = { url = "github:ammen99/wf-recorder"; flake = false; };
     wl-clipboard = { url = "github:bugaevc/wl-clipboard"; flake = false; };
     xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr/v0.5.0"; flake = false; };
