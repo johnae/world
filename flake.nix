@@ -155,9 +155,10 @@
           hostConf = config.config;
           profiles = map fileOrDir hostConf.profiles;
 
-          ## somewhat hacky way of making it seem as if we're
+          ## Somewhat hacky way of making it seem as if we're
           ## giving home-manager the profiles to load - that
-          ## can't actually happen within a module though
+          ## can't actually happen within a module though. I.e
+          ## in a module you can't add imports coming from an option.
           userProfiles = mapAttrs (_: user:
             let profiles = attrByPath [ "profiles" ] {} user;
             in map fileOrDir profiles
