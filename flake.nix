@@ -92,6 +92,11 @@
 
       packageOverlays = import ./packages/overlays.nix { inherit inputs; inherit (nixpkgs) lib; };
 
+      worldOverlays = {
+        pixieboot = (final: prev: { inherit (prev.callPackage ./utils/world.nix { }) pixieboot; });
+        lint = (final: prev: { inherit (prev.callPackage ./utils/world.nix { }) lint; });
+      };
+
       overlays = [
         inputs.agenix.overlay
         inputs.devshell.overlay
@@ -101,9 +106,6 @@
         inputs.nur.overlay
         inputs.persway.overlay
         inputs.spotnix.overlay
-        (final: prev: {
-          world = prev.callPackage ./utils/world.nix { };
-        })
         (final: prev: let flags = "--flake github:johnae/world --use-remote-sudo -L"; in
           { nixos-upgrade = prev.writeStrictShellScriptBin "nixos-upgrade" ''
               echo Clearing fetcher cache
@@ -126,7 +128,8 @@
            '';
           }
         )
-      ] ++ mapAttrsToList (_: value: value) packageOverlays;
+
+      ] ++ mapAttrsToList (_: value: value) (packageOverlays // worldOverlays);
 
       pkgsFor = system: import nixpkgs {
         inherit system overlays;
@@ -205,14 +208,11 @@
           pkgFilter = name: _:
             hasAttr name pkgs &&
             isDerivation pkgs.${name} &&
-            #builtins.trace ("${system} - ${name}: ${builtins.toJSON (attrByPath [ "meta" "platforms"] [ system ] pkgs.${name})}") true &&
             elem system (attrByPath [ "meta" "platforms"] [ system ] pkgs.${name});
         in
         {
           packages = (mapAttrs (name: _: pkgs.${name})
-            (filterAttrs pkgFilter packageOverlays)) // {
-              world = pkgs.world;
-            };
+            (filterAttrs pkgFilter (packageOverlays // worldOverlays)));
         }
       );
 
@@ -293,6 +293,10 @@
           };
         });
 
+      diskFormatters = forAllNixosSystems (_: pkgs:
+        { packages  = mapAttrs' (hostName: config: diskFormatter hostName config pkgs) nixosConfigurations; }
+      );
+
       diskFormatter = hostName: config: pkgs:
         nameValuePair "${hostName}-diskformat" (
           pkgs.callPackage ./utils/diskformat.nix {
@@ -300,35 +304,22 @@
           }
         );
 
-      diskFormatters = forAllNixosSystems (_: pkgs:
-        {
-          packages = (mapAttrs' (hostName: config: diskFormatter hostName config pkgs) nixosConfigurations);
-        }
-      );
-
     in
       (forAllDefaultSystems (_: pkgs:
         {
-          apps = (mapAttrs (name: drv:
+          apps = mapAttrs (name: drv:
             {
               type = "app";
               program = "${drv}/bin/${name}";
             }
           ) {
+            pixieboot = pkgs.pixieboot;
+            lint = pkgs.lint;
             nixos-upgrade = pkgs.nixos-upgrade;
             update-cargo-vendor-sha = pkgs.world-updaters;
             update-all-cargo-vendor-shas = pkgs.world-updaters;
             update-fixed-output-derivation-sha = pkgs.world-updaters;
             update-all-fixed-output-derivation-shas = pkgs.world-updaters;
-          }) // {
-            lint = {
-              type = "app";
-              program = "${pkgs.world}/bin/world-lint";
-            };
-            pixieboot = {
-              type = "app";
-              program = "${pkgs.world}/bin/world-pixieboot";
-            };
           };
           devShell = pkgs.devshell.mkShell {
             imports = [
@@ -340,10 +331,10 @@
       //
       {
         inherit nixosConfigurations hostConfigurations;
-        packages = recursiveUpdate
-                     (recursiveUpdate nixosPackages.packages exportedPackages.packages)
-                        diskFormatters.packages;
-        overlays = packageOverlays // {
+
+        packages = recursiveUpdate (recursiveUpdate nixosPackages.packages exportedPackages.packages) diskFormatters.packages;
+
+        overlays = packageOverlays // worldOverlays // {
           spotnix = inputs.spotnix.overlay;
           persway = inputs.persway.overlay;
         };
