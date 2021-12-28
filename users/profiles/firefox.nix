@@ -31,8 +31,11 @@ in
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
           "media.peerconnection.enabled" = true;
           "gfx.webrender.all" = true;
-          "media.ffmpeg.vaapi.enabled" = true;
-          "media.ffvpx.enabled" = true;
+          "media.ffmpeg.vaapi.enabled" = true; ## keep this with ff 96
+          "media.rdd-ffmpeg.enabled" = true; ## keep this with ff 96
+          "media.ffvpx.enabled" = false; ## remove on ff 96
+          "media.navigator.mediadatadecoder_vpx_enabled" = true; ## remove on ff 96
+          "media.rdd-vpx.enabled" = false; ## remove on ff 96
         };
 
         userChrome = ''
