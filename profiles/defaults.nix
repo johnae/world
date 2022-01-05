@@ -91,6 +91,8 @@
 
   services.udev.extraRules = ''
   ATTR{idVendor}=="2357", ATTR{idProduct}=="0600", RUN+="${pkgs.usb-modeswitch}/bin/usb_modeswitch -K -v 0x2357 -p 0x0600 -V 0x2357 -P 0x0601 -R"
+  ## allows using QMK/Via
+  KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"
   '';
 
   environment.shells = [ pkgs.bashInteractive pkgs.zsh pkgs.fish ];
