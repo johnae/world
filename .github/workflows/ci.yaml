@@ -27,7 +27,8 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - run: |
-        nix flake check
+        ## unfree and impure because of mongodb :-(
+        NIXPKGS_ALLOW_UNFREE=1 nix flake check --impure
 
   create_package_matrix_x86_64_linux:
     runs-on: ubuntu-latest
