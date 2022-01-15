@@ -305,12 +305,6 @@
           }
         );
 
-      ## it's not cached upstream, I assume because of the licensing
-      ## needed because unifi uses mongodb
-      additionalPackagesToCache = forAllNixosSystems (_: pkgs:
-        { packages.mongodb-4_2 = pkgs.mongodb-4_2; }
-      );
-
     in
       (forAllDefaultSystems (_: pkgs:
         {
@@ -339,7 +333,7 @@
       {
         inherit nixosConfigurations hostConfigurations;
 
-        packages = recursiveUpdate (recursiveUpdate (recursiveUpdate nixosPackages.packages exportedPackages.packages) diskFormatters.packages) additionalPackagesToCache.packages;
+        packages = recursiveUpdate (recursiveUpdate nixosPackages.packages exportedPackages.packages) diskFormatters.packages;
 
         overlays = packageOverlays // worldOverlays // {
           spotnix = inputs.spotnix.overlay;
@@ -348,7 +342,7 @@
 
         github-actions-package-matrix-x86-64-linux = {
           os = [ "ubuntu-latest" ];
-          pkg = mapAttrsToList (name: _:  name) (recursiveUpdate exportedPackages.packages additionalPackagesToCache.packages).x86_64-linux;
+          pkg = mapAttrsToList (name: _:  name) exportedPackages.packages;
         };
 
         github-actions-package-matrix-aarch64-linux = let
@@ -361,7 +355,6 @@
             "innernet"
             "libdrm24109"
             "meson-061"
-            "mongodb-4_2" ## won't actually be in the list but it doesn't hurt either
             "my-emacs"
             "my-emacs-config"
             "mynerdfonts"
