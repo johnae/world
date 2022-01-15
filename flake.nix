@@ -348,7 +348,7 @@
 
         github-actions-package-matrix-x86-64-linux = {
           os = [ "ubuntu-latest" ];
-          pkg = mapAttrsToList (name: _:  name) exportedPackages.packages.x86_64-linux;
+          pkg = mapAttrsToList (name: _:  name) (recursiveUpdate exportedPackages.packages additionalPackagesToCache.packages).x86_64-linux;
         };
 
         github-actions-package-matrix-aarch64-linux = let
@@ -361,7 +361,7 @@
             "innernet"
             "libdrm24109"
             "meson-061"
-            "mongodb-4_2"
+            "mongodb-4_2" ## won't actually be in the list but it doesn't hurt either
             "my-emacs"
             "my-emacs-config"
             "mynerdfonts"
