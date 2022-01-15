@@ -305,6 +305,12 @@
           }
         );
 
+      ## it's not cached upstream, I assume because of the licensing
+      ## needed because unifi uses mongodb
+      additionalPackagesToCache = forAllNixosSystems (_: pkgs:
+        { packages.mongodb-4_2 = pkgs.mongodb-4_2; }
+      );
+
     in
       (forAllDefaultSystems (_: pkgs:
         {
@@ -333,7 +339,7 @@
       {
         inherit nixosConfigurations hostConfigurations;
 
-        packages = recursiveUpdate (recursiveUpdate nixosPackages.packages exportedPackages.packages) diskFormatters.packages;
+        packages = recursiveUpdate (recursiveUpdate (recursiveUpdate nixosPackages.packages exportedPackages.packages) diskFormatters.packages) additionalPackagesToCache.packages;
 
         overlays = packageOverlays // worldOverlays // {
           spotnix = inputs.spotnix.overlay;
@@ -355,6 +361,7 @@
             "innernet"
             "libdrm24109"
             "meson-061"
+            "mongodb-4_2"
             "my-emacs"
             "my-emacs-config"
             "mynerdfonts"
