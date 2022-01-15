@@ -107,7 +107,7 @@ jobs:
     - env:
         PKG: ${{ matrix.pkg }}
       run: |
-        nix build .#packages.x86_64-linux.$PKG -L
+        env NIXPKGS_ALLOW_UNFREE=1 nix build --impure .#packages.x86_64-linux.$PKG -L
 
   build_package_aarch64_linux:
     needs: create_package_matrix_aarch64_linux
@@ -136,7 +136,7 @@ jobs:
     - env:
         PKG: ${{ matrix.pkg }}
       run: |
-        nix build .#packages.aarch64-linux.$PKG -L
+        env NIXPKGS_ALLOW_UNFREE=1 nix build --impure .#packages.aarch64-linux.$PKG -L
 
   build_host_x86_64_linux:
     needs: [create_host_matrix_x86_64_linux, build_package_x86_64_linux]
