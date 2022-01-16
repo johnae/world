@@ -342,7 +342,7 @@
 
         github-actions-package-matrix-x86-64-linux = {
           os = [ "ubuntu-latest" ];
-          pkg = mapAttrsToList (name: _:  name) exportedPackages.packages;
+          pkg = mapAttrsToList (name: _:  name) exportedPackages.packages.x86_64-linux;
         };
 
         github-actions-package-matrix-aarch64-linux = let
