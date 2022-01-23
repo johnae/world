@@ -6,6 +6,7 @@
   boot.loader.generic-extlinux-compatible.enable = false;
   ## must use a specific kernel, the lastest doesn't work as of 2021-11-04
   boot.kernelPackages = lib.mkForce pkgs.linuxPackages_rpi4;
+  boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.raspberryPi = {
     enable = true;
     version = 4;
