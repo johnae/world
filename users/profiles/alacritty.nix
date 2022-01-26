@@ -10,6 +10,7 @@
         dimensions.lines = 24;
         padding.x = 2;
         padding.y = 2;
+        opacity = 0.95;
       };
       draw_bold_text_with_bright_colors = true;
       scrolling = {
@@ -25,7 +26,6 @@
         glyph_offset.y = 0;
         use_thin_strokes = true; ## osx only but won't have a negative effect
       };
-      background_opacity = 0.95;
       mouse.hide_cursor_when_typing = true;
       cursor = {
         style.blinking = "Never";
