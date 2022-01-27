@@ -326,10 +326,6 @@ Package setup.
  #+BEGIN_SRC elisp
    (use-package no-littering)
  #+END_SRC
-** Integrates emacs with the pass password manager - disabled
- #+BEGIN_SRC elisp
- ;; (use-package pass)
- #+END_SRC
 ** Keybindings (general.el)
 *** General itself
   #+BEGIN_SRC elisp
@@ -379,6 +375,10 @@ Package setup.
   #+END_SRC
 *** General key bindings
   #+BEGIN_SRC elisp
+    (general-define-key
+     "C-=" 'text-scale-increase
+     "C--" 'text-scale-decrease
+    )
     (general-define-key
      :prefix "C-c"
      "k" (lambda ()
@@ -1411,3 +1411,4 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
             (quit)))))
    )
  #+END_SRC
+ 
