@@ -28,18 +28,21 @@ in
         OIFS="$IFS"
         IFS=$'\n'
         for file in $(jq -r ". | keys | .[]" "$SECRETS"); do
-            SSID="$(basename "$file" .psk)"
-            PreSharedKey="$(jq -r ".\"$file\".PreSharedKey" "$SECRETS")"
-            Passphrase="$(jq -r ".\"$file\".Passphrase" "$SECRETS")"
+            fileext="''${file##*.}"
+            SSID="$(basename "$file" .$fileext)"
             if echo -n "$SSID" | grep -vq '^[a-zA-Z_0-9-]' >/dev/null; then
-              file="=$(echo -n "$SSID" | od -A n -t x1 | sed 's| *||g').psk"
+              file="=$(echo -n "$SSID" | od -A n -t x1 | sed 's| *||g').$fileext"
             fi
             echo Writing wifi network secrets to /var/lib/iwd/"$file"
             cat<<EOF>/var/lib/iwd/"$file"
         [Security]
-        PreSharedKey=$PreSharedKey
-        Passphrase=$Passphrase
         EOF
+            for field in $(jq -r ".\"$file\" | keys | .[]" "$SECRETS"); do
+                value=$(jq -r ".\"$file\".\"$field\"" "$SECRETS")
+                cat<<EOF>>/var/lib/iwd/"$file"
+        $field=$value
+        EOF
+            done
         done
       '';
       wantedBy = [ "network.target" ];
