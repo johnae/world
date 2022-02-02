@@ -17,6 +17,7 @@
 
   inputs = {
     ## flakes
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     devshell.url = "github:johnae/devshell";
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -233,7 +234,7 @@
                    ./cachix.nix
                  ];
                  nix = {
-                   trustedUsers = [ "root" ];
+                   settings.trusted-users = [ "root" ];
                    extraOptions = ''
                      experimental-features = nix-command flakes
                    '';
