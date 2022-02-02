@@ -14,7 +14,6 @@ in
       pkgs.git-crypt
       pkgs.wl-clipboard
       pkgs.wl-clipboard-x11
-      pkgs.wf-recorder
       pkgs.nordic
       pkgs.nixpkgs-fmt
       pkgs.google-cloud-sdk

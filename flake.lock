@@ -448,7 +448,6 @@
         "swayidle": "swayidle",
         "swaylock": "swaylock",
         "wayland-protocols-master": "wayland-protocols-master",
-        "wf-recorder": "wf-recorder",
         "wl-clipboard": "wl-clipboard",
         "wlroots": "wlroots",
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
@@ -605,22 +604,6 @@
         "ref": "main",
         "type": "git",
         "url": "https://gitlab.freedesktop.org/wayland/wayland-protocols.git"
-      }
-    },
-    "wf-recorder": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1643479393,
-        "narHash": "sha256-akKDNwnEKREvNy1MOooyeWjaLW3Wcf1mubTKQEcNBKg=",
-        "owner": "ammen99",
-        "repo": "wf-recorder",
-        "rev": "9b9b4712329698a2526a6f909a2e64c035340157",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ammen99",
-        "repo": "wf-recorder",
-        "type": "github"
       }
     },
     "wl-clipboard": {
