@@ -39,7 +39,7 @@ in
 {
   config = recursiveUpdate (mapConfig [] hostConfiguration) {
 
-    nix.trustedUsers = attrNames
+    nix.settings.trusted-users = attrNames
       (filterAttrs (_: user: user.isNormalUser) config.users.users);
 
     system.activationScripts.agenixRoot = mkIf (hasSecrets && hasState) { deps = [ "stateSetup" ]; };
