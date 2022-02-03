@@ -29,7 +29,7 @@ jobs:
     - run: |
         nix flake check
 
-  create_package_matrix_x86_64_linux:
+  pkgs_x86_64_linux:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
@@ -43,7 +43,7 @@ jobs:
       run: |
         echo "::set-output name=matrix::$(nix eval .#github-actions-package-matrix-x86-64-linux --json)"
 
-  create_package_matrix_aarch64_linux:
+  pkgs_aarch64_linux:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
@@ -57,7 +57,7 @@ jobs:
       run: |
         echo "::set-output name=matrix::$(nix eval .#github-actions-package-matrix-aarch64-linux --json)"
 
-  create_host_matrix_x86_64_linux:
+  hosts_x86_64_linux:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
@@ -71,7 +71,7 @@ jobs:
       run: |
         echo "::set-output name=matrix::$(nix eval .#github-actions-host-matrix-x86-64-linux --json)"
 
-  create_host_matrix_aarch64_linux:
+  hosts_aarch64_linux:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
@@ -85,11 +85,11 @@ jobs:
       run: |
         echo "::set-output name=matrix::$(nix eval .#github-actions-host-matrix-aarch64-linux --json)"
 
-  build_package_x86_64_linux:
-    needs: create_package_matrix_x86_64_linux
+  pkg_x86_64_linux:
+    needs: pkgs_x86_64_linux
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: ${{ fromJson(needs.create_package_matrix_x86_64_linux.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.pkgs_x86_64_linux.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v16
@@ -108,11 +108,11 @@ jobs:
       run: |
         nix build .#packages.x86_64-linux.$PKG -L
 
-  build_package_aarch64_linux:
-    needs: create_package_matrix_aarch64_linux
+  pkg_aarch64_linux:
+    needs: pkgs_aarch64_linux
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: ${{ fromJson(needs.create_package_matrix_aarch64_linux.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.pkgs_aarch64_linux.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v16
@@ -137,11 +137,11 @@ jobs:
       run: |
         nix build .#packages.aarch64-linux.$PKG -L
 
-  build_host_x86_64_linux:
-    needs: [create_host_matrix_x86_64_linux, build_package_x86_64_linux]
+  host_x86_64_linux:
+    needs: [hosts_x86_64_linux, pkg_x86_64_linux]
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: ${{ fromJson(needs.create_host_matrix_x86_64_linux.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.hosts_x86_64_linux.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v16
@@ -155,11 +155,11 @@ jobs:
       run: |
         nix build .#nixosConfigurations.$HOST.config.system.build.toplevel -L
 
-  build_host_aarch64_linux:
-    needs: [create_host_matrix_aarch64_linux, build_package_aarch64_linux]
+  host_aarch64_linux:
+    needs: [hosts_aarch64_linux, pkg_aarch64_linux]
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: ${{ fromJson(needs.create_host_matrix_aarch64_linux.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.hosts_aarch64_linux.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v16
@@ -183,7 +183,7 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: Build (matrix)
-    needs: [build_package_x86_64_linux, build_package_aarch64_linux, build_host_aarch64_linux, build_host_x86_64_linux, nix_lint, nix_check]
+    needs: [pkg_x86_64_linux, pkg_aarch64_linux, host_aarch64_linux, host_x86_64_linux, nix_lint, nix_check]
     steps:
       - name: Check linting status
         if: ${{ needs.nix_lint.result != 'success' }}
@@ -192,14 +192,14 @@ jobs:
         if: ${{ needs.nix_check.result != 'success' }}
         run: exit 1
       - name: Check x86_64-linux package build matrix status
-        if: ${{ needs.build_package_x86_64_linux.result != 'success' }}
+        if: ${{ needs.pkg_x86_64_linux.result != 'success' }}
         run: exit 1
       - name: Check aarch64-linux package build matrix status
-        if: ${{ needs.build_package_aarch64_linux.result != 'success' }}
+        if: ${{ needs.pkg_aarch64_linux.result != 'success' }}
         run: exit 1
       - name: Check host aarch64-linux build matrix status
-        if: ${{ needs.build_host_aarch64_linux.result != 'success' }}
+        if: ${{ needs.host_aarch64_linux.result != 'success' }}
         run: exit 1
       - name: Check host x86_64-linux build matrix status
-        if: ${{ needs.build_host_x86_64_linux.result != 'success' }}
+        if: ${{ needs.host_x86_64_linux.result != 'success' }}
         run: exit 1
