@@ -213,7 +213,7 @@
         in
         {
           packages = (mapAttrs (name: _: pkgs.${name})
-            (filterAttrs pkgFilter (packageOverlays // worldOverlays)));
+            (filterAttrs pkgFilter (packageOverlays // worldOverlays // { spotnix = true; persway = true; })));
         }
       );
 
@@ -370,6 +370,7 @@
             "scripts"
             "slurp"
             "spotifyd"
+            "spotnix"
             "sway"
             "sway-unwrapped"
             "swaybg"
