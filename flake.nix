@@ -17,6 +17,7 @@
 
   inputs = {
     ## flakes
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     devshell.url = "github:johnae/devshell";
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -75,7 +76,6 @@
     swayidle = { url = "github:swaywm/swayidle"; flake = false; };
     swaylock = { url = "github:swaywm/swaylock"; flake = false; };
     wlroots = { url = "git+https://gitlab.freedesktop.org/wlroots/wlroots.git?ref=master"; flake = false; };
-    wf-recorder = { url = "github:ammen99/wf-recorder"; flake = false; };
     wl-clipboard = { url = "github:bugaevc/wl-clipboard"; flake = false; };
     xdg-desktop-portal-wlr = { url = "github:emersion/xdg-desktop-portal-wlr/v0.5.0"; flake = false; };
     git-branchless = { url = "github:arxanas/git-branchless"; flake = false; };
@@ -234,7 +234,7 @@
                    ./cachix.nix
                  ];
                  nix = {
-                   trustedUsers = [ "root" ];
+                   settings.trusted-users = [ "root" ];
                    extraOptions = ''
                      experimental-features = nix-command flakes
                    '';
@@ -378,7 +378,6 @@
             "swaylock-dope"
             "wayland-protocols-master"
             "wayland120"
-            "wf-recorder"
             "wl-cliboard"
             "wl-cliboard-x11"
             "wlroots"
