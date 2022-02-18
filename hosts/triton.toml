@@ -59,6 +59,7 @@ home-manager.users.john.userinfo.email = "john@insane.se"
 home-manager.users.john.userinfo.fullName = "John Axel Eriksson"
 home-manager.users.john.userinfo.githubUser = "johnae"
 home-manager.users.john.userinfo.gitlabUser = "johnae"
+home-manager.users.john.userinfo.gitIdMap."~/Development/planhat/" = "john.eriksson@planhat.com"
 home-manager.users.john.profiles = [
   "users/profiles/alacritty",
   "users/profiles/bat",
