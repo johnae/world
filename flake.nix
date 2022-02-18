@@ -128,6 +128,19 @@
            '';
           }
         )
+        (final: prev:
+          {
+            remarshal = prev.remarshal.overrideAttrs(_: {
+              ## temp fix until https://github.com/NixOS/nixpkgs/pull/159074 is in unstable
+              postPatch = ''
+                substituteInPlace pyproject.toml \
+                  --replace "poetry.masonry.api" "poetry.core.masonry.api" \
+                  --replace 'PyYAML = "^5.3"' 'PyYAML = "*"' \
+                  --replace 'tomlkit = "^0.7"' 'tomlkit = "*"'
+              '';
+            });
+          }
+        )
 
       ] ++ mapAttrsToList (_: value: value) (packageOverlays // worldOverlays);
 
