@@ -1,5 +1,8 @@
-{lib, ...}:
+{lib, config, ...}:
 
+let
+  btrfsDisks = config.btrfs.disks;
+in
 {
   fileSystems."/" = {
     device = "none";
@@ -29,7 +32,7 @@
 
   swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
 
-  boot.initrd.luks.devices = {
+  boot.initrd.luks.devices = (lib.recursiveUpdate {
     cryptkey.device = "/dev/disk/by-label/cryptkey";
 
     encrypted_root = {
@@ -45,5 +48,16 @@
       bypassWorkqueues = true;
       allowDiscards = true;
     };
-  };
+  }
+  (
+    builtins.listToAttrs (lib.imap1 (idx: device: {
+      name = "encrypted_root${toString idx}";
+      value = {
+        device = "/dev/disk/by-label/encrypted_root${toString idx}";
+        keyFile = "/dev/mapper/cryptkey";
+        bypassWorkqueues = true;
+        allowDiscards = true;
+      };
+    }) (builtins.tail btrfsDisks))
+  ));
 }

@@ -1,7 +1,7 @@
 {lib, ...}:
 let
   inherit (lib) mkOption;
-  inherit (lib.types) str nullOr;
+  inherit (lib.types) str nullOr listOf;
 in
 {
   options = {
@@ -24,6 +24,10 @@ in
     btrfs.format.extraParams = mkOption {
       type = str;
       default = "-s 4096";
+    };
+    btrfs.disks = mkOption {
+      type = listOf str;
+      default = [ "/dev/nvme0n1" ];
     };
   };
 }

@@ -7,6 +7,7 @@ let
   bootMode = if boot.loader.systemd-boot.enable then "UEFI" else "Legacy";
   luksFormatExtraParams = cryptsetup.luksFormat.extraParams;
   btrfsFormatExtraParams = btrfs.format.extraParams;
+  btrfsDisks = btrfs.disks;
   diskLabels = {
     boot = "boot";
     encCryptkey = "cryptkey";
@@ -44,6 +45,7 @@ in
          exit 1
       fi
       n=$((n - 1))
+      # shellcheck disable=SC2294
       if ! eval "$@"; then
         echo "\"$*\" failed, will retry in 5 seconds"
         sleep "$sleepwait"
@@ -111,7 +113,7 @@ in
         exit 1
     fi
 
-    DISK=/dev/nvme0n1
+    DISK=${builtins.head btrfsDisks}
     PARTITION_PREFIX="p"
 
     if [ ! -b "$DISK" ]; then
@@ -204,12 +206,31 @@ in
     # shellcheck disable=SC2086
     cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encRoot} -q --key-file=/dev/mapper/${diskLabels.encCryptkey} "$DISK_ROOT"
 
+    ${
+      lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
+        ''
+        echo Creating encrypted root - disk ${disk}
+        # shellcheck disable=SC2086
+        cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encRoot}${toString idx} -q --key-file=/dev/mapper/${diskLabels.encCryptkey} "${disk}"
+        ''
+      ) (builtins.tail btrfsDisks))
+    }
+
     echo Opening encrypted swap using keyfile
     cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "$DISK_SWAP" ${diskLabels.encSwap}
     mkswap -L ${diskLabels.swap} /dev/mapper/${diskLabels.encSwap}
 
     echo Opening encrypted root using keyfile
     cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "$DISK_ROOT" ${diskLabels.encRoot}
+
+    ${
+      lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
+        ''
+        echo Opening encrypted root - disk ${disk}
+        cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "${disk}" ${diskLabels.encRoot}${toString idx}
+        ''
+      ) (builtins.tail btrfsDisks))
+    }
 
     echo Creating btrfs filesystem on /dev/mapper/${diskLabels.encRoot}
     mkfs.btrfs ${btrfsFormatExtraParams} -f -L ${diskLabels.root} /dev/mapper/${diskLabels.encRoot}
@@ -226,6 +247,27 @@ in
 
     echo Temporarily mounting root btrfs volume from "/dev/disk/by-label/${diskLabels.root}" to /mnt/tmproot
     retryDefault mount -o rw,noatime,compress=zstd,ssd,space_cache /dev/disk/by-label/${diskLabels.root} /mnt/tmproot
+
+    ${
+      lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
+        let
+          device = "/dev/mapper/${diskLabels.encRoot}${toString idx}";
+        in
+          ''
+          echo Adding device ${device}
+          btrfs device add -f ${device} /mnt/tmproot
+          ''
+      ) (builtins.tail btrfsDisks))
+    }
+
+    ${
+      if builtins.length btrfsDisks > 1 then
+        ''
+        echo Balancing btrfs filesystem at /mnt/tmproot
+        btrfs balance start -dconvert=raid1 -mconvert=raid1 /mnt/tmproot
+        ''
+      else ""
+    }
 
     # now create the btrfs subvolumes we're interested in having
     echo Creating btrfs subvolumes at /mnt/tmproot
