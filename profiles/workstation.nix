@@ -130,4 +130,5 @@
    setuid = true;
   };
 
+  machinePurpose = "workstation";
 }
