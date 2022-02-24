@@ -56,7 +56,7 @@ in
       fi
     }
     retryDefault() {
-        retry 2 "$@"
+        retry 3 "$@"
     }
 
     BOOTMODE="${bootMode}"
@@ -260,6 +260,8 @@ in
     partprobe /dev/mapper/${diskLabels.encSwap}
     partprobe /dev/mapper/${diskLabels.encCryptkey}
     partprobe /dev/mapper/${diskLabels.encRoot}
+
+    systemctl restart systemd-udev-trigger.service
 
     mount -t tmpfs none /mnt
     mkdir -p "/mnt/tmproot" ${concatStringsSep " " (map (v: "/mnt/${replaceStrings ["@"] [""] v}") subvolumes)} "/mnt/boot"
