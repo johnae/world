@@ -263,6 +263,7 @@
                    settings.trusted-users = [ "root" ];
                    extraOptions = ''
                      experimental-features = nix-command flakes
+                     accept-flake-config = true
                    '';
                  };
                  environment.systemPackages = with pkgs; [ git curl jq skim ];
