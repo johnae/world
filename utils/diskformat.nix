@@ -3,7 +3,7 @@
 let
   inherit (lib) mapAttrsToList listToAttrs splitString concatStringsSep last flatten;
   inherit (builtins) filter match head foldl' replaceStrings;
-  inherit (config.config) boot cryptsetup btrfs;
+  inherit (config.config) boot cryptsetup btrfs machinePurpose;
   bootMode = if boot.loader.systemd-boot.enable then "UEFI" else "Legacy";
   luksFormatExtraParams = cryptsetup.luksFormat.extraParams;
   btrfsFormatExtraParams = btrfs.format.extraParams;
@@ -148,10 +148,20 @@ in
     swap_space="$((ramgb / 2))"
     if [ "$swap_space" = "0" ]; then
       swap_space="1"
-    else
-      swap_space="$((swap_space + ramgb))"
     fi
-    swap_space="$swap_space"G
+
+    ${if machinePurpose == "server" then
+      ''
+      ## no support for hibernation
+      swap_space="$ramgb"G
+      ''
+      else
+      ''
+      ## support hibernation
+      swap_space="$((swap_space + ramgb))"G
+      ''
+     }
+
     echo Will use a "$swap_space" swap space partition
 
     sgdisk -og "$DISK"
