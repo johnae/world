@@ -209,9 +209,18 @@ in
     ${
       lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
         ''
+        sgdisk -og "${disk}"
+        partprobe "${disk}"
+
+        end_position="$(sgdisk -E "${disk}")"
+        aligned_end="$((end_position - (end_position + 1) % 2048 ))"
+
+        sgdisk -n 0:0:$aligned_end -t 0:8300 -c 0:"root" "${disk}" # 1
+        partprobe "${disk}"
+
         echo Creating encrypted root - disk ${disk}
         # shellcheck disable=SC2086
-        cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encRoot}${toString idx} -q --key-file=/dev/mapper/${diskLabels.encCryptkey} "${disk}"
+        cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encRoot}${toString idx} -q --key-file=/dev/mapper/${diskLabels.encCryptkey} "${disk}$PARTITION_PREFIX"1
         ''
       ) (builtins.tail btrfsDisks))
     }
@@ -227,7 +236,7 @@ in
       lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
         ''
         echo Opening encrypted root - disk ${disk}
-        cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "${disk}" ${diskLabels.encRoot}${toString idx}
+        cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "${disk}$PARTITION_PREFIX"1 ${diskLabels.encRoot}${toString idx}
         ''
       ) (builtins.tail btrfsDisks))
     }
