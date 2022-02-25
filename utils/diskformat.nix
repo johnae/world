@@ -59,7 +59,7 @@ in
         retry 3 "$@"
     }
     waitForPath() {
-      systemctl restart systemd-udev-trigger.service
+      systemctl restart systemd-udev-trigger.service || true
       retryDefault test -e "$1"
     }
 
