@@ -247,6 +247,10 @@ in
         ''
         echo Opening encrypted root - disk ${disk}
         cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "${disk}$PARTITION_PREFIX"1 ${diskLabels.encRoot}${toString idx}
+
+        sgdisk -p "${disk}"
+        partprobe "${disk}"
+        fdisk -l "${disk}"
         ''
       ) (builtins.tail btrfsDisks))
     }
@@ -268,6 +272,12 @@ in
 
     echo Temporarily mounting root btrfs volume from "/dev/disk/by-label/${diskLabels.root}" to /mnt/tmproot
     retryDefault mount -o rw,noatime,compress=zstd /dev/disk/by-label/${diskLabels.root} /mnt/tmproot
+
+    echo Listing /dev/mapper
+    ls -lah /dev/mapper/
+
+    echo Listing /dev/disk/by-label
+    ls -lah /dev/disk/by-label/
 
     ${
       lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
