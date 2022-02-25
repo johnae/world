@@ -14,7 +14,7 @@ in
     device = "/dev/disk/by-label/root";
     fsType = "btrfs";
     options = lib.mkDefault
-      [ "subvol=@nix" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
+      [ "subvol=@nix" "rw" "noatime" "compress=zstd" ];
   };
 
   fileSystems."/keep" = {
@@ -22,7 +22,7 @@ in
     fsType = "btrfs";
     neededForBoot = true;
     options = lib.mkDefault
-      [ "subvol=@keep" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
+      [ "subvol=@keep" "rw" "noatime" "compress=zstd" ];
   };
 
   fileSystems."/boot" = {
