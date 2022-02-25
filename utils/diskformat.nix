@@ -267,7 +267,7 @@ in
     mkdir -p "/mnt/tmproot" ${concatStringsSep " " (map (v: "/mnt/${replaceStrings ["@"] [""] v}") subvolumes)} "/mnt/boot"
 
     echo Temporarily mounting root btrfs volume from "/dev/disk/by-label/${diskLabels.root}" to /mnt/tmproot
-    retryDefault mount -o rw,noatime,compress=zstd,ssd,space_cache /dev/disk/by-label/${diskLabels.root} /mnt/tmproot
+    retryDefault mount -o rw,noatime,compress=zstd /dev/disk/by-label/${diskLabels.root} /mnt/tmproot
 
     ${
       lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
@@ -307,7 +307,7 @@ in
     echo Devices with labels
     ls -lah /dev/disk/by-label/
 
-    ${concatStringsSep "\n" (map (v: ''mount -o rw,noatime,compress=zstd,ssd,space_cache,subvol=${v} /dev/disk/by-label/${diskLabels.root} /mnt/${replaceStrings ["@"] [""] v}'') subvolumes)}
+    ${concatStringsSep "\n" (map (v: ''mount -o rw,noatime,compress=zstd,subvol=${v} /dev/disk/by-label/${diskLabels.root} /mnt/${replaceStrings ["@"] [""] v}'') subvolumes)}
 
     # and mount the boot partition
     echo Mounting boot partition
