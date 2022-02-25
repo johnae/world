@@ -297,7 +297,7 @@
                      echo 'Which config should be installed?'
                      host="$(nix eval --apply builtins.attrNames .#nixosConfigurations --json | jq -r '.[]' | sk)"
                      nix build .#"$host"-diskformat
-                     ./result/bin/diskformat | tee -a diskformat.log
+                     ./result/bin/diskformat 2>&1 | tee -a diskformat.log
                      mount
                      nixos-install --flake .#"$host" --no-root-passwd --impure | tee -a nixos-install.log
                    else
