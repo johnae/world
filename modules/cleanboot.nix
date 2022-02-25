@@ -62,7 +62,7 @@ with lib; {
 
     boot.initrd.postDeviceCommands = lib.mkAfter ''
             mkdir -p /mnt
-            mount -o rw,noatime,compress=zstd,ssd,space_cache /dev/disk/by-label/root /mnt
+            mount -o rw,noatime,compress=zstd /dev/disk/by-label/root /mnt
             if test -e /mnt/@/nowipe; then
               echo Not wiping ephemeral data as /nowipe was detected
               rm -f /mnt/@/nowipe
