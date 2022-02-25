@@ -180,7 +180,6 @@ in
     sgdisk -n 0:0:+"$luks_key_space" -t 0:8300 -c 0:"cryptkey" "$DISK" # 2
     sgdisk -n 0:0:+"$swap_space" -t 0:8300 -c 0:"swap" "$DISK" # 3
     sgdisk -n 0:0:"$aligned_end" -t 0:8300 -c 0:"root" "$DISK" # 4
-    partprobe "$DISK"
 
     echo "PREFIX: $PARTITION_PREFIX"
 
@@ -193,9 +192,8 @@ in
     partnum=$((partnum + 1))
     DISK_ROOT="$DISK$PARTITION_PREFIX$partnum"
 
-    sgdisk -p "$DISK"
-
     partprobe "$DISK"
+    sgdisk -p "$DISK"
     fdisk -l "$DISK"
 
     echo Formatting cryptkey disk "$DISK_CRYPTKEY", using keyfile "$CRYPTKEYFILE"
@@ -219,6 +217,10 @@ in
     ${
       lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
         ''
+
+        wipefs -fa "${disk}"
+        sgdisk -z "${disk}"
+        partprobe "${disk}"
         sgdisk -og "${disk}"
         partprobe "${disk}"
 
@@ -227,6 +229,8 @@ in
 
         sgdisk -n 0:0:"$aligned_end" -t 0:8300 -c 0:"root" "${disk}" # 1
         partprobe "${disk}"
+        sgdisk -p "${disk}"
+        fdisk -l "${disk}"
 
         echo Creating encrypted root - disk ${disk}
         # shellcheck disable=SC2086
@@ -234,6 +238,12 @@ in
         ''
       ) (builtins.tail btrfsDisks))
     }
+
+    partprobe /dev/mapper/${diskLabels.encSwap}
+    partprobe /dev/mapper/${diskLabels.encCryptkey}
+    partprobe /dev/mapper/${diskLabels.encRoot}*
+
+    systemctl restart systemd-udev-trigger.service
 
     echo Opening encrypted swap using keyfile
     cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "$DISK_SWAP" ${diskLabels.encSwap}
@@ -263,21 +273,21 @@ in
 
     partprobe /dev/mapper/${diskLabels.encSwap}
     partprobe /dev/mapper/${diskLabels.encCryptkey}
-    partprobe /dev/mapper/${diskLabels.encRoot}
+    partprobe /dev/mapper/${diskLabels.encRoot}*
 
     systemctl restart systemd-udev-trigger.service
 
     mount -t tmpfs none /mnt
     mkdir -p "/mnt/tmproot" ${concatStringsSep " " (map (v: "/mnt/${replaceStrings ["@"] [""] v}") subvolumes)} "/mnt/boot"
 
-    echo Temporarily mounting root btrfs volume from "/dev/disk/by-label/${diskLabels.root}" to /mnt/tmproot
-    retryDefault mount -o rw,noatime,compress=zstd /dev/disk/by-label/${diskLabels.root} /mnt/tmproot
-
     echo Listing /dev/mapper
     ls -lah /dev/mapper/
 
     echo Listing /dev/disk/by-label
     ls -lah /dev/disk/by-label/
+
+    echo Temporarily mounting root btrfs volume from "/dev/disk/by-label/${diskLabels.root}" to /mnt/tmproot
+    retryDefault mount -o rw,noatime,compress=zstd /dev/disk/by-label/${diskLabels.root} /mnt/tmproot
 
     ${
       lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
