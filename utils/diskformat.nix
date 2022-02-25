@@ -58,6 +58,10 @@ in
     retryDefault() {
         retry 3 "$@"
     }
+    waitForPath() {
+      systemctl restart systemd-udev-trigger.service
+      retryDefault test -e "$1"
+    }
 
     BOOTMODE="${bootMode}"
     DEVRANDOM=/dev/urandom
@@ -176,10 +180,10 @@ in
       partnum=$((partnum + 1))
       sgdisk -n 0:0:+20M -t 0:ef02 -c 0:"biosboot" -u 0:"21686148-6449-6E6F-744E-656564454649" "$DISK" # 1
     fi
-    sgdisk -n 0:0:+"$efi_space" -t 0:ef00 -c 0:"efi" "$DISK" # 1
-    sgdisk -n 0:0:+"$luks_key_space" -t 0:8300 -c 0:"cryptkey" "$DISK" # 2
-    sgdisk -n 0:0:+"$swap_space" -t 0:8300 -c 0:"swap" "$DISK" # 3
-    sgdisk -n 0:0:"$aligned_end" -t 0:8300 -c 0:"root" "$DISK" # 4
+    sgdisk -n 0:0:+"$efi_space" -t 0:ef00 -c 0:"p_efi" "$DISK" # 1
+    sgdisk -n 0:0:+"$luks_key_space" -t 0:8300 -c 0:"p_cryptkey" "$DISK" # 2
+    sgdisk -n 0:0:+"$swap_space" -t 0:8300 -c 0:"p_swap" "$DISK" # 3
+    sgdisk -n 0:0:"$aligned_end" -t 0:8300 -c 0:"p_root" "$DISK" # 4
 
     echo "PREFIX: $PARTITION_PREFIX"
 
@@ -200,8 +204,12 @@ in
     cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encCryptkey} -q --key-file="$CRYPTKEYFILE" "$DISK_CRYPTKEY"
     DISK_CRYPTKEY=/dev/disk/by-label/${diskLabels.encCryptkey}
 
+    waitForPath "$DISK_CRYPTKEY"
+
     echo Opening cryptkey disk "$DISK_CRYPTKEY", using keyfile "$CRYPTKEYFILE"
     cryptsetup luksOpen --key-file="$CRYPTKEYFILE" "$DISK_CRYPTKEY" ${diskLabels.encCryptkey}
+
+    waitForPath "/dev/mapper/${diskLabels.encCryptkey}"
 
     echo Writing random data to /dev/mapper/${diskLabels.encCryptkey}
     dd if=$DEVRANDOM of=/dev/mapper/${diskLabels.encCryptkey} bs=1024 count=14000 || true
@@ -227,7 +235,7 @@ in
         end_position="$(sgdisk -E "${disk}")"
         aligned_end="$((end_position - (end_position + 1) % 2048 ))"
 
-        sgdisk -n 0:0:"$aligned_end" -t 0:8300 -c 0:"root" "${disk}" # 1
+        sgdisk -n 0:0:"$aligned_end" -t 0:8300 -c 0:"p_root${toString idx}" "${disk}" # 1
         partprobe "${disk}"
         sgdisk -p "${disk}"
         fdisk -l "${disk}"
@@ -239,18 +247,18 @@ in
       ) (builtins.tail btrfsDisks))
     }
 
-    partprobe /dev/mapper/${diskLabels.encSwap}
-    partprobe /dev/mapper/${diskLabels.encCryptkey}
-    partprobe /dev/mapper/${diskLabels.encRoot}*
-
-    systemctl restart systemd-udev-trigger.service
-
     echo Opening encrypted swap using keyfile
     cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "$DISK_SWAP" ${diskLabels.encSwap}
+
+    waitForPath "/dev/mapper/${diskLabels.encSwap}"
     mkswap -L ${diskLabels.swap} /dev/mapper/${diskLabels.encSwap}
+
+    waitForPath "/dev/disk/by-label/${diskLabels.swap}"
 
     echo Opening encrypted root using keyfile
     cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "$DISK_ROOT" ${diskLabels.encRoot}
+
+    waitForPath "/dev/mapper/${diskLabels.encRoot}"
 
     ${
       lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
@@ -261,21 +269,19 @@ in
         sgdisk -p "${disk}"
         partprobe "${disk}"
         fdisk -l "${disk}"
+
+        waitForPath "/dev/mapper/${diskLabels.encRoot}${toString idx}"
         ''
       ) (builtins.tail btrfsDisks))
     }
 
     echo Creating btrfs filesystem on /dev/mapper/${diskLabels.encRoot}
     mkfs.btrfs ${btrfsFormatExtraParams} -f -L ${diskLabels.root} /dev/mapper/${diskLabels.encRoot}
+    waitForPath "/dev/disk/by-label/${diskLabels.root}"
 
     echo Creating vfat disk at "$DISK_EFI"
     mkfs.fat -F 32 -n ${diskLabels.boot} "$DISK_EFI"
-
-    partprobe /dev/mapper/${diskLabels.encSwap}
-    partprobe /dev/mapper/${diskLabels.encCryptkey}
-    partprobe /dev/mapper/${diskLabels.encRoot}*
-
-    systemctl restart systemd-udev-trigger.service
+    waitForPath "/dev/disk/by-label/${diskLabels.boot}"
 
     mount -t tmpfs none /mnt
     mkdir -p "/mnt/tmproot" ${concatStringsSep " " (map (v: "/mnt/${replaceStrings ["@"] [""] v}") subvolumes)} "/mnt/boot"
