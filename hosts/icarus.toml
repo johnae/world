@@ -55,4 +55,4 @@ system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot
 
 btrfs.disks = [ "/dev/nvme0n1", "/dev/nvme1n1" ]
 btrfs.format.extraParams = ""
-cryptsetup.luksFormat.extraParams = "-v --type luks2 --hash sha256 --use-urandom --cipher aes-xts-plain64";
+cryptsetup.luksFormat.extraParams = "-v --type luks2 --hash sha256 --use-urandom --cipher aes-xts-plain64"
