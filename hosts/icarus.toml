@@ -29,6 +29,16 @@ networking.interfaces.eth0.ipv4.addresses = [
   { address = "192.168.20.143", prefixLength = 24 }
 ]
 
+networking.private-wireguard.enable = true
+networking.private-wireguard.ips = [
+  "10.66.134.216/32",
+  "fc00:bbbb:bbbb:bb01::3:86d7/128"
+]
+networking.private-wireguard.privateKeyFile = "/run/agenix/wg-net"
+networking.private-wireguard.peers = [
+  { allowedIPs = [ "0.0.0.0/0", "::0/0" ], endpoint = "185.204.1.219:51820", publicKey = "CYFNNfntzhRHn0+QHWv2eBOeU/sCZ5f6FLbTMUyIQHk=" }
+]
+
 services.innernet.client.insane.enable = true
 services.innernet.client.insane.settings.interface = { address = "192.168.104.70/22", privateKeyFile = "/run/agenix/wg-home" }
 services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
@@ -37,6 +47,7 @@ system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot
 
 age.secrets.k3s-token.file = "secrets/k3s/token.age"
 age.secrets.wg-home.file = "secrets/icarus/wg-home.age"
+age.secrets.wg-net.file = "secrets/icarus/wg-net.age"
 
 networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
 services.k3s.role = "agent"
