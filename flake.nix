@@ -147,8 +147,8 @@
         (final: prev:
           {
             ## part of 5.17 - enable ecc support for AMD 5650G/5750G processors
-            linux_5_16_eccPatch = prev.linux_5_16.overrideAttrs (oa: {
-              patches = oa.patches ++ [
+            linux_5_16_eccPatch = prev.linux_5_16.overrideDerivation (drv: {
+              patches = (drv.patches or []) ++ [
                 ./patches/linux/ecc-amd-cezanne.patch
               ];
             });
