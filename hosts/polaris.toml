@@ -75,6 +75,7 @@ services.innernet.server.insane.settings.peers.carbon = { ip = "192.168.104.66",
 services.innernet.server.insane.settings.peers.titan = { ip = "192.168.104.67", cidr = "home", publicKey = "vNfSS1HsbnRqV6V/RfG0Aq1IoNQPS+IP2O162UlVQQA=" }
 services.innernet.server.insane.settings.peers.hyperion = { ip = "192.168.104.68", cidr = "home", publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8=" }
 services.innernet.server.insane.settings.peers.triton = { ip = "192.168.104.69", cidr = "home", publicKey = "gq5yK4X2IqPz74Jc1GQlVb3rgmtuqn8yzlPMeN0UMVI=" }
+#services.innernet.server.insane.settings.peers.icarus = { ip = "192.168.104.70", cidr = "home", publicKey = "fixme" }
 services.innernet.server.insane.settings.peers.milkyway = { ip = "192.168.104.100", cidr = "home", publicKey = "XPWUeQ4N9zYcyWgIvvp+3eHSsBiqnHuuwu2J/1uHHkE=" }
 
 networking.defaultGateway = "65.108.2.129"
