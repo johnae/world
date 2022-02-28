@@ -147,11 +147,12 @@
         (final: prev:
           {
             ## part of 5.17 - enable ecc support for AMD 5650G/5750G processors
-            linux_latest = prev.linux_latest.overrideAttrs(oa: {
+            linux_5_16_eccPatch = prev.linux_5_16.overrideAttrs (oa: {
               patches = oa.patches ++ [
                 ./patches/linux/ecc-amd-cezanne.patch
               ];
             });
+            linuxPackages_5_16_eccPatch = prev.linuxPackagesFor (final.linux_5_16_eccPatch);
           }
         )
 
@@ -239,7 +240,7 @@
         in
         {
           packages = (mapAttrs (name: _: pkgs.${name})
-            (filterAttrs pkgFilter (packageOverlays // worldOverlays // { spotnix = true; persway = true; linux_latest = true; })));
+            (filterAttrs pkgFilter (packageOverlays // worldOverlays // { spotnix = true; persway = true; linux_5_16_eccPatch = true; })));
         }
       );
 
@@ -381,7 +382,7 @@
             "grim"
             "innernet"
             "libdrm24109"
-            "linux_latest"
+            "linux_5_16_eccPatch"
             "meson-061"
             "my-emacs"
             "my-emacs-config"
