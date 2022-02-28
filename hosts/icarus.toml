@@ -1,7 +1,7 @@
 system = "x86_64-linux"
 
 [config]
-publicKey = "xxxxxx"
+publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMfXrbXEQcJ85CGW9/qnm/jS8Vp6GP2yQ2piFF8+OFWR"
 
 profiles = [
   "profiles/hardware/b550",
@@ -28,31 +28,27 @@ networking.interfaces.eth0.ipv4.addresses = [
   { address = "192.168.20.143", prefixLength = 24 }
 ]
 
-#services.innernet.client.insane.enable = true
-#services.innernet.client.insane.settings.interface = { address = "192.168.104.70/22", privateKeyFile = "/run/agenix/wg-home" }
-#services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
+services.innernet.client.insane.enable = true
+services.innernet.client.insane.settings.interface = { address = "192.168.104.70/22", privateKeyFile = "/run/agenix/wg-home" }
+services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
 
 system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
 
-#age.secrets.k3s-token.file = "secrets/k3s/token.age"
-#age.secrets.wg-home.file = "secrets/icarus/wg-home.age"
-#age.secrets.remote-disk-password.file = "secrets/remote-disk-password.age"
-#age.secrets.id_ed25519_remote_unlock.file = "secrets/icarus/id_ed25519_remote_unlock.age"
+age.secrets.k3s-token.file = "secrets/k3s/token.age"
+age.secrets.wg-home.file = "secrets/icarus/wg-home.age"
 
-#networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
-#services.k3s.role = "agent"
-#services.k3s.extraFlagsList = [
-#  "--node-label topology.kubernetes.io/region=home",
-#  "--node-label topology.kubernetes.io/zone=home",
-#]
-#services.k3s.serverAddr = "https://192.168.104.1:6443"
-#services.k3s.tokenFile = "/run/agenix/k3s-token"
-#services.k3s.maxPodsPerNode = 62
-#services.k3s.flannelIface = "insane"
-#services.k3s.nodeIP = "192.168.104.67"
-#services.k3s.nodeExternalIP = "192.168.20.142"
-#services.k3s.after = [ "innernet-client-insane.service" ]
+networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
+services.k3s.role = "agent"
+services.k3s.extraFlagsList = [
+  "--node-label topology.kubernetes.io/region=home",
+  "--node-label topology.kubernetes.io/zone=home",
+]
+services.k3s.serverAddr = "https://192.168.104.1:6443"
+services.k3s.tokenFile = "/run/agenix/k3s-token"
+services.k3s.maxPodsPerNode = 62
+services.k3s.flannelIface = "insane"
+services.k3s.nodeIP = "192.168.104.70"
+services.k3s.nodeExternalIP = "192.168.20.143"
+services.k3s.after = [ "innernet-client-insane.service" ]
 
 btrfs.disks = [ "/dev/nvme0n1", "/dev/nvme1n1" ]
-btrfs.format.extraParams = ""
-cryptsetup.luksFormat.extraParams = "-v --type luks2 --hash sha256 --use-urandom --cipher aes-xts-plain64"
