@@ -38,7 +38,8 @@ services.syncthing.openDefaultPorts = true
 services.syncthing.folders."/home/john/Sync".id = "sync"
 services.syncthing.folders."/home/john/Sync".devices = [
   "eris",
-  "polaris"
+  "polaris",
+  "icarus"
 ]
 services.syncthing.cert = "/run/agenix/syncthing-cert"
 services.syncthing.key = "/run/agenix/syncthing-key"

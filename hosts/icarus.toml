@@ -2,6 +2,7 @@ system = "x86_64-linux"
 
 [config]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMfXrbXEQcJ85CGW9/qnm/jS8Vp6GP2yQ2piFF8+OFWR"
+syncthingDeviceID = "HBL5ZRB-R2STGW5-LMAYYHX-KOFTP3X-VO4IV6E-PEDKZ3N-WCRR7BY-F5C7AAP"
 
 profiles = [
   "profiles/hardware/b550",
@@ -43,11 +44,27 @@ services.innernet.client.insane.enable = true
 services.innernet.client.insane.settings.interface = { address = "192.168.104.70/22", privateKeyFile = "/run/agenix/wg-home" }
 services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
 
+services.syncthing.enable = true
+services.syncthing.user = "john"
+services.syncthing.group = "users"
+services.syncthing.openDefaultPorts = true
+services.syncthing.folders."/home/john/Sync".id = "sync"
+services.syncthing.folders."/home/john/Sync".devices = [
+  "triton",
+  "eris",
+  "polaris"
+]
+services.syncthing.cert = "/run/agenix/syncthing-cert"
+services.syncthing.key = "/run/agenix/syncthing-key"
+services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
+
 system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
 
 age.secrets.k3s-token.file = "secrets/k3s/token.age"
 age.secrets.wg-home.file = "secrets/icarus/wg-home.age"
 age.secrets.wg-net.file = "secrets/icarus/wg-net.age"
+age.secrets.syncthing-cert = { file = "secrets/icarus/syncthing-cert.age", owner = "1337" }
+age.secrets.syncthing-key = { file = "secrets/icarus/syncthing-key.age", owner = "1337" }
 
 networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
 services.k3s.role = "agent"
