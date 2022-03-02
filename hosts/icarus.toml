@@ -12,6 +12,7 @@ profiles = [
   "profiles/linux_516_ecc",
   "profiles/server",
   "profiles/state",
+  "profiles/syncthing",
   "profiles/uuid_disk_crypt",
   "profiles/zram",
 ]
@@ -45,6 +46,7 @@ services.innernet.client.insane.settings.interface = { address = "192.168.104.70
 services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
 
 services.syncthing.enable = true
+services.syncthing.devices.SM-G998B.id = "PCFNIXF-AR7YX2B-354IJQW-YP25QM7-N53ES5L-HKB337S-I6JZV34-55LQEAR"
 services.syncthing.user = "john"
 services.syncthing.group = "users"
 services.syncthing.openDefaultPorts = true
@@ -54,6 +56,14 @@ services.syncthing.folders."/home/john/Sync".devices = [
   "eris",
   "polaris"
 ]
+services.syncthing.folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
+services.syncthing.folders."/home/john/Photos".devices = [
+  "triton",
+  "eris",
+  "polaris",
+  "SM-G998B"
+]
+
 services.syncthing.cert = "/run/agenix/syncthing-cert"
 services.syncthing.key = "/run/agenix/syncthing-key"
 services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
