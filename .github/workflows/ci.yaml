@@ -10,7 +10,7 @@ jobs:
   nix_lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
@@ -21,7 +21,7 @@ jobs:
   nix_check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
@@ -34,7 +34,7 @@ jobs:
     outputs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
@@ -48,7 +48,7 @@ jobs:
     outputs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
@@ -62,7 +62,7 @@ jobs:
     outputs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
@@ -76,7 +76,7 @@ jobs:
     outputs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
@@ -91,7 +91,7 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.pkgs_x86_64_linux.outputs.matrix) }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
@@ -114,7 +114,7 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.pkgs_aarch64_linux.outputs.matrix) }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
@@ -143,7 +143,7 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.hosts_x86_64_linux.outputs.matrix) }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
@@ -161,7 +161,7 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.hosts_aarch64_linux.outputs.matrix) }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v16
       with:
         extra_nix_config: |
