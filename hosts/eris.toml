@@ -38,6 +38,7 @@ age.secrets.syncthing-cert = { file = "secrets/eris/syncthing-cert.age", owner =
 age.secrets.syncthing-key = { file = "secrets/eris/syncthing-key.age", owner = "1337" }
 
 services.syncthing.enable = true
+services.syncthing.devices.SM-G998B.id = "PCFNIXF-AR7YX2B-354IJQW-YP25QM7-N53ES5L-HKB337S-I6JZV34-55LQEAR"
 services.syncthing.user = "john"
 services.syncthing.group = "users"
 services.syncthing.openDefaultPorts = true
@@ -47,6 +48,14 @@ services.syncthing.folders."/home/john/Sync".devices = [
   "polaris",
   "icarus"
 ]
+services.syncthing.folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
+services.syncthing.folders."/home/john/Photos".devices = [
+  "triton",
+  "polaris",
+  "icarus",
+  "SM-G998B"
+]
+
 services.syncthing.cert = "/run/agenix/syncthing-cert"
 services.syncthing.key = "/run/agenix/syncthing-key"
 services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
