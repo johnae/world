@@ -8,7 +8,7 @@
 , wayland
 , wayland-protocols
 , cairo
-, gdk_pixbuf
+, gdk-pixbuf
 , inputs
 , buildDocs ? true
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ meson ninja pkgconfig git ]
     ++ lib.optional buildDocs [ scdoc ];
-  buildInputs = [ wayland wayland-protocols cairo gdk_pixbuf ];
+  buildInputs = [ wayland wayland-protocols cairo gdk-pixbuf ];
 
   mesonFlags = [ "-Dauto_features=enabled" ];
 

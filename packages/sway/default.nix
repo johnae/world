@@ -18,7 +18,7 @@
 , libcap
 , libdrm
 , pam
-, gdk_pixbuf
+, gdk-pixbuf
 , libevdev
 , librsvg
 , wlroots
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libinput
     libcap
     pam
-    gdk_pixbuf
+    gdk-pixbuf
     libevdev
     scdoc
     librsvg
