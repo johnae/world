@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, lib
 , unzip
   # To select only certain fonts, put a list of strings to `fonts`: every key in
   # ./shas.nix is an optional font
