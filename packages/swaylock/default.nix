@@ -13,7 +13,7 @@
 , libxkbcommon
 , cairo
 , pam
-, gdk_pixbuf
+, gdk-pixbuf
 , inputs
 , buildDocs ? true
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ meson ninja pkgconfig git ]
     ++ lib.optional buildDocs [ scdoc asciidoc libxslt docbook_xsl ];
-  buildInputs = [ wayland wayland-protocols cairo pam gdk_pixbuf libxkbcommon ];
+  buildInputs = [ wayland wayland-protocols cairo pam gdk-pixbuf libxkbcommon ];
 
   mesonFlags = [ "-Dauto_features=enabled" ];
 

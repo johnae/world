@@ -65,7 +65,7 @@
     pkgs.bluez
     pkgs.bluez-tools
     pkgs.fd
-    pkgs.wireguard
+    pkgs.wireguard-tools
     pkgs.hyperfine
     pkgs.procs
     pkgs.sd

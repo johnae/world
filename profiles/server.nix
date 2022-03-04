@@ -24,7 +24,7 @@ in
     pkgs.fd
     pkgs.lsof
     pkgs.fish
-    pkgs.wireguard
+    pkgs.wireguard-tools
     pkgs.nfs-utils
     pkgs.iptables
   ];
