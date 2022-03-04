@@ -295,7 +295,7 @@ in
           command = "${pkgs.gnome3.gnome-settings-daemon}/libexec/gsd-xsettings";
         }
         {
-          command = "${pkgs.dbus_tools}/bin/dbus-update-activation-environment 2>/dev/null && ${pkgs.dbus_tools}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK";
+          command = "${pkgs.dbus.out}/bin/dbus-update-activation-environment 2>/dev/null && ${pkgs.dbus.out}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK";
         }
         {
           command = "${swayOnReload}/bin/sway-on-reload";
