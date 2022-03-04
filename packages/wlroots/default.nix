@@ -15,7 +15,7 @@
 , xcbutilimage
 , xcbutilrenderutil
 , xcbutilerrors
-, mesa_noglu
+, mesa
 , libglvnd
 , libpng
 , libuuid
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     xcbutilimage
     xcbutilerrors
     xcbutilrenderutil
-    mesa_noglu
+    mesa
     libpng
     ffmpeg
     libglvnd
