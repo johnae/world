@@ -29,14 +29,19 @@ let
     "before-sleep '${pkgs.swaylock-dope}/bin/swaylock-dope'"
   ];
 
+  ## can be removed when grouped devices works (i.e yubikey is causing issues here), see: https://github.com/swaywm/sway/issues/6011
+  ## and: https://github.com/swaywm/sway/pull/6740
   toggleKeyboardLayouts = pkgs.writeStrictShellScriptBin "toggle-keyboard-layouts" ''
     export PATH=${pkgs.jq}/bin''${PATH:+:}$PATH
     current_layout="$(swaymsg -t get_inputs -r | jq -r "[.[] | select(.xkb_active_layout_name != null)][0].xkb_active_layout_name")"
     if [ "$current_layout" = "English (US)" ]; then
-    swaymsg 'input "*" xkb_layout se,us'
+    swaymsg 'input type:keyboard xkb_layout "se,us"'
     else
-    swaymsg 'input "*" xkb_layout us,se'
+    swaymsg 'input type:keyboard xkb_layout "us,se"'
     fi
+    swaymsg 'input type:keyboard xkb_model pc105'
+    swaymsg 'input type:keyboard xkb_options "ctrl:nocaps,grp:switch"'
+    swaymsg 'input type:keyboard xkb_variant ""'
   '';
 
   randomPicsumBackground = pkgs.writeStrictShellScriptBin "random-picsum-background" ''
@@ -168,7 +173,7 @@ in
       };
 
       input = {
-        "*" = {
+        "type:keyboard" = {
           xkb_layout = "us,se";
           xkb_model = "pc105";
           xkb_options = "ctrl:nocaps,grp:switch";
