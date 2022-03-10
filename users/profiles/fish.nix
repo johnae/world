@@ -31,6 +31,12 @@
     '';
   };
 
+  river = pkgs.writeStrictShellScriptBin "river" ''
+    PATH=${pkgs.river}/bin:$PATH
+    export XDG_SESSION_TYPE=wayland
+    exec river
+  '';
+
   privateSway = withinNetNS "${sway}/bin/sway" {};
   privateFish = withinNetNS "${pkgs.fish}/bin/fish" {};
 
@@ -70,6 +76,7 @@
 
   launcher = genLauncher [
     {"sway" = "${pkgs.udev}/bin/systemd-cat --identifier=sway ${sway}/bin/sway";}
+    {"river" = "${pkgs.udev}/bin/systemd-cat --identifier=river ${river}/bin/river";}
     {"sway private" = "${pkgs.udev}/bin/systemd-cat --identifier=sway ${privateSway}";}
     {"fish" = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.fish}/bin/fish";}
     {"fish private" = privateFish;}
