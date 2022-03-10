@@ -132,20 +132,6 @@
 
         (final: prev:
           {
-            remarshal = prev.remarshal.overrideAttrs(_: {
-              ## temp fix until https://github.com/NixOS/nixpkgs/pull/159074 is in unstable
-              postPatch = ''
-                substituteInPlace pyproject.toml \
-                  --replace "poetry.masonry.api" "poetry.core.masonry.api" \
-                  --replace 'PyYAML = "^5.3"' 'PyYAML = "*"' \
-                  --replace 'tomlkit = "^0.7"' 'tomlkit = "*"'
-              '';
-            });
-          }
-        )
-
-        (final: prev:
-          {
             ## part of 5.17 - enable ecc support for AMD 5650G/5750G processors
             linux_5_16_eccPatch = prev.linux_5_16.overrideDerivation (drv: {
               patches = (drv.patches or []) ++ [
@@ -410,7 +396,7 @@
             "wayland120"
             "wl-cliboard"
             "wl-cliboard-x11"
-            "wlroots"
+            "wlroots-master"
             "xdg-desktop-portal-wlr"
           ];
         in

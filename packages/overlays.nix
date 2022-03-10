@@ -73,8 +73,8 @@ in
 
 {
   world-updaters = import ./world-updaters-overlay.nix;
-  wlroots = (final: prev: { wlroots = prev.callpackage ./wlroots { wayland-protocols = final.wayland-protocols-master; wayland = final.wayland120; }; });
-  sway-unwrapped = (final: prev: { sway-unwrapped = prev.callpackage ./sway { wayland = final.wayland120; wayland-protocols = final.wayland-protocols-master; }; });
+  wlroots-master = (final: prev: { wlroots-master = prev.callPackage ./wlroots-master { wayland-protocols = final.wayland-protocols-master; wayland = final.wayland120; }; });
+  sway-unwrapped = (final: prev: { sway-unwrapped = prev.callPackage ./sway { wlroots = final.wlroots-master; wayland = final.wayland120; wayland-protocols = final.wayland-protocols-master; }; });
   sway = (final: prev: { sway = prev.callPackage (prev.path + "/pkgs/applications/window-managers/sway/wrapper.nix") { }; } );
   inputs = (final: prev: { inherit inputs; });
   mynerdfonts = (final: prev: { mynerdfonts = prev.nerdfonts.override { fonts = [ "JetBrainsMono" "DroidSansMono" ]; }; });
@@ -86,12 +86,4 @@ in
   rust-analyzer-bin = (final: prev: { rust-analyzer-bin = prev.callPackage ./wl-clipboard-x11 { }; });
   netns-dbus-proxy = (final: prev: { netns-dbus-proxy = prev.callPackage ./wl-clipboard-x11 { }; });
   scripts = (final: prev: { scripts = prev.callPackage ./scripts { }; });
-}
-
-//
-
-{
-  wlroots = (final: prev: { wlroots = prev.callPackage ./wlroots { libdrm = final.libdrm24109; wayland = final.wayland120; wayland-protocols = final.wayland-protocols-master; meson = prev.meson-061; }; });
-  sway-unwrapped = (final: prev: { sway-unwrapped = prev.callPackage ./sway { wayland = final.wayland120; wayland-protocols = final.wayland-protocols-master; meson = prev.meson-061; }; });
-  swaylock = (final: prev: { swaylock = prev.callPackage ./swaylock { wayland = final.wayland120; wayland-protocols = final.wayland-protocols-master; meson = prev.meson-061; }; });
 }
