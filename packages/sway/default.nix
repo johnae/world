@@ -9,7 +9,7 @@
 , wayland-protocols
 , libxkbcommon
 , swaybg
-, pcre
+, pcre2
 , json_c
 , dbus
 , pango
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     libxkbcommon
-    pcre
+    pcre2
     json_c
     dbus
     pango
