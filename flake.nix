@@ -147,34 +147,33 @@
     flake-utils,
     ...
   } @ inputs: let
+    l = nixpkgs.lib // builtins;
+
     inherit
-      (nixpkgs.lib)
-      recursiveUpdate
-      filterAttrsRecursive
-      mapAttrsToList
-      mapAttrs'
-      nameValuePair
+      (l)
       attrByPath
-      makeOverridable
-      nixosSystem
-      mkIf
-      mkForce
-      mkOverride
-      filterAttrs
-      isDerivation
-      ;
-    inherit
-      (builtins)
-      replaceStrings
-      readFile
-      readDir
-      filter
-      pathExists
-      mapAttrs
-      fromTOML
-      substring
-      hasAttr
       elem
+      filter
+      filterAttrs
+      filterAttrsRecursive
+      fromTOML
+      hasAttr
+      isDerivation
+      makeOverridable
+      mapAttrs
+      mapAttrs'
+      mapAttrsToList
+      mkForce
+      mkIf
+      mkOverride
+      nameValuePair
+      nixosSystem
+      pathExists
+      readDir
+      readFile
+      recursiveUpdate
+      replaceStrings
+      substring
       ;
 
     packageOverlays = import ./packages/overlays.nix {
@@ -250,8 +249,7 @@
       (system: fn system (pkgsFor system));
 
     forAllDefaultSystems = fn:
-      flake-utils.lib.eachSystem ["x86_64-linux" "aarch64-linux"] ## not bothering with darwin etc for now
-      
+      flake-utils.lib.eachSystem ["x86_64-linux" "aarch64-linux"]
       (system: fn system (pkgsFor system));
 
     hostConfigurations = mapAttrs' (
@@ -522,7 +520,7 @@
         ];
       in {
         os = ["ubuntu-latest"];
-        pkg = filter (elem: !(builtins.elem elem skip)) (mapAttrsToList (name: _: name) exportedPackages.packages.aarch64-linux);
+        pkg = filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) exportedPackages.packages.aarch64-linux);
       };
 
       github-actions-host-matrix-x86-64-linux = {
