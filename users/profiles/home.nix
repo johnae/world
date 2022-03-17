@@ -1,36 +1,37 @@
-{ pkgs, config, ... }:
-let
-  home = config.home;
-in
 {
-  home.packages =
-    [
-      pkgs.mako
-      pkgs.spotifyd
-      pkgs.spotnix
-      pkgs.my-emacs
-      pkgs.scripts
-      pkgs.nix-index
-      pkgs.git-crypt
-      pkgs.wl-clipboard
-      pkgs.wl-clipboard-x11
-      pkgs.nordic
-      pkgs.nixpkgs-fmt
-      pkgs.google-cloud-sdk
-      pkgs.kubectl
-      pkgs.kubectx
-      pkgs.kustomize
-      pkgs.fzf # # for certain utilities that depend on it
-      pkgs.rust-analyzer-bin
-      pkgs.rnix-lsp
-      pkgs.xdg_utils
-      pkgs.netns-dbus-proxy
-      pkgs.gnome3.nautilus
-      pkgs.cachix
-      pkgs.lm_sensors
-      pkgs.git-branchless
-      pkgs.pueue
-    ];
+  pkgs,
+  config,
+  ...
+}: let
+  home = config.home;
+in {
+  home.packages = [
+    pkgs.mako
+    pkgs.spotifyd
+    pkgs.spotnix
+    pkgs.my-emacs
+    pkgs.scripts
+    pkgs.nix-index
+    pkgs.git-crypt
+    pkgs.wl-clipboard
+    pkgs.wl-clipboard-x11
+    pkgs.nordic
+    pkgs.alejandra
+    pkgs.google-cloud-sdk
+    pkgs.kubectl
+    pkgs.kubectx
+    pkgs.kustomize
+    pkgs.fzf # # for certain utilities that depend on it
+    pkgs.rust-analyzer-bin
+    pkgs.rnix-lsp
+    pkgs.xdg_utils
+    pkgs.netns-dbus-proxy
+    pkgs.gnome3.nautilus
+    pkgs.cachix
+    pkgs.lm_sensors
+    pkgs.git-branchless
+    pkgs.pueue
+  ];
 
   home.sessionVariables = {
     EDITOR = "emacsclient -c -a=";
@@ -127,11 +128,10 @@ in
       OnCalendar = "daily";
       Unit = "nix-index.service";
     };
-    Install.WantedBy = [ "timers.target" ];
+    Install.WantedBy = ["timers.target"];
   };
 
   services.syncthing.enable = true;
 
   home.stateVersion = "21.05";
-
 }

@@ -1,9 +1,6 @@
-{config, ...}:
-
-let
+{config, ...}: let
   userinfo = config.userinfo;
-in
-{
+in {
   programs.rbw.enable = true;
   programs.rbw.settings = {
     email = userinfo.email;

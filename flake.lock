@@ -313,22 +313,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-fmt": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1646412819,
-        "narHash": "sha256-EPTN0qZiww6v3tauQ5ellIEJGXHFPIFCRQhxRO8bA4U=",
-        "owner": "nix-community",
-        "repo": "nixpkgs-fmt",
-        "rev": "79da650fa1a148fb759b40bf89d74a35284bceb8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs-fmt",
-        "type": "github"
-      }
-    },
     "notracking": {
       "flake": false,
       "locked": {
@@ -436,7 +420,6 @@
         "nixlib": "nixlib_2",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-fmt": "nixpkgs-fmt",
         "notracking": "notracking",
         "nur": "nur",
         "persway": "persway",

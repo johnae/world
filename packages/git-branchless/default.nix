@@ -1,13 +1,13 @@
-{ lib
-, git
-, ncurses
-, openssl
-, pkg-config
-, rustPlatform
-, sqlite
-, inputs
+{
+  lib,
+  git,
+  ncurses,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  sqlite,
+  inputs,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "git-branchless";
   version = inputs.git-branchless.rev;
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-RjYWdKeYh5v2m4K/k98TEKdFdv7aGBRUQcPQpR1d3H8=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [pkg-config];
 
   buildInputs = [
     ncurses
@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     description = "A suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
     homepage = "https://github.com/arxanas/git-branchless";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nh2 ];
+    maintainers = with maintainers; [nh2];
   };
 }

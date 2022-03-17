@@ -1,7 +1,4 @@
-{ lib, ... }:
-
-{
-
+{lib, ...}: {
   ## these must be present when running via libvirtd/qemu
   boot.initrd.kernelModules = [
     "virtio_pci"
@@ -16,5 +13,4 @@
       keyFile = lib.mkForce null; ## by forcing this to null, we also force setting an actual password for the encrypted drive, seems something is still wonky when booting a vm basically
     };
   };
-
 }

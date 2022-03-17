@@ -1,11 +1,13 @@
-{lib, config, ...}:
-let
+{
+  lib,
+  config,
+  ...
+}: let
   inherit (lib) mkOption mkIf mkMerge mkForce types optionals;
   inherit (builtins) concatStringsSep;
   cfg = config.services.k3s;
   k3sManifestsDir = "/var/lib/rancher/k3s/server/manifests";
-in
-{
+in {
   options.services.k3s.maxPodsPerNode = mkOption {
     type = types.int;
     default = 110;
@@ -68,7 +70,7 @@ in
     default = [];
   };
   options.services.k3s.disable = mkOption {
-    type = types.listOf (types.enum [ "coredns" "servicelb" "traefik" "local-storage" "metrics-server" ]);
+    type = types.listOf (types.enum ["coredns" "servicelb" "traefik" "local-storage" "metrics-server"]);
     default = [];
   };
   options.services.k3s.disableScheduler = mkOption {
@@ -93,36 +95,41 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.k3s.extraFlagsList = (optionals (cfg.disableFlannel && cfg.role == "server") [ "--flannel-backend=none" ])
-    ++ (optionals (cfg.disableScheduler && cfg.role == "server") [ "--disable-scheduler" ])
-    ++ (optionals (cfg.disableCloudController && cfg.role == "server") [ "--disable-cloud-controller" ])
-    ++ (optionals (cfg.disableKubeProxy && cfg.role == "server") [ "--disable-kube-proxy" ])
-    ++ (optionals (cfg.disableNetworkPolicy && cfg.role == "server") [ "--disable-network-policy" ])
-    ++ (optionals (cfg.clusterCIDR != null && cfg.role == "server") [ "--cluster-cidr ${cfg.clusterCIDR}" ])
-    ++ (optionals (cfg.serviceCIDR != null && cfg.role == "server") [ "--service-cidr ${cfg.serviceCIDR}" ])
-    ++ (optionals (cfg.clusterDNS != null && cfg.role == "server") [ "--cluster-dns ${cfg.clusterDNS}" ])
-    ++ (optionals (cfg.role == "server") [ "--kube-controller-manager-arg=\"node-cidr-mask-size=${toString cfg.nodeCIDRMaskSize}\"" ])
-    ++ (optionals (cfg.flannelIface != null) [ "--flannel-iface=\"${cfg.flannelIface}\"" ])
-    ++ (optionals (cfg.nodeIP != null) [ "--node-ip=\"${cfg.nodeIP}\"" ])
-    ++ (optionals (cfg.nodeExternalIP != null) [ "--node-external-ip=\"${cfg.nodeExternalIP}\"" ])
-    ++ (optionals (cfg.role == "server" && cfg.advertiseAddress != null) [ "--advertise-address=\"${cfg.advertiseAddress}\"" ])
-    ++ [ "--kubelet-arg=\"max-pods=${toString cfg.maxPodsPerNode}\"" ]
-    ++ (optionals (cfg.uniqueNodeNames) [ "--with-node-id" ]);
+    services.k3s.extraFlagsList =
+      (optionals (cfg.disableFlannel && cfg.role == "server") ["--flannel-backend=none"])
+      ++ (optionals (cfg.disableScheduler && cfg.role == "server") ["--disable-scheduler"])
+      ++ (optionals (cfg.disableCloudController && cfg.role == "server") ["--disable-cloud-controller"])
+      ++ (optionals (cfg.disableKubeProxy && cfg.role == "server") ["--disable-kube-proxy"])
+      ++ (optionals (cfg.disableNetworkPolicy && cfg.role == "server") ["--disable-network-policy"])
+      ++ (optionals (cfg.clusterCIDR != null && cfg.role == "server") ["--cluster-cidr ${cfg.clusterCIDR}"])
+      ++ (optionals (cfg.serviceCIDR != null && cfg.role == "server") ["--service-cidr ${cfg.serviceCIDR}"])
+      ++ (optionals (cfg.clusterDNS != null && cfg.role == "server") ["--cluster-dns ${cfg.clusterDNS}"])
+      ++ (optionals (cfg.role == "server") ["--kube-controller-manager-arg=\"node-cidr-mask-size=${toString cfg.nodeCIDRMaskSize}\""])
+      ++ (optionals (cfg.flannelIface != null) ["--flannel-iface=\"${cfg.flannelIface}\""])
+      ++ (optionals (cfg.nodeIP != null) ["--node-ip=\"${cfg.nodeIP}\""])
+      ++ (optionals (cfg.nodeExternalIP != null) ["--node-external-ip=\"${cfg.nodeExternalIP}\""])
+      ++ (optionals (cfg.role == "server" && cfg.advertiseAddress != null) ["--advertise-address=\"${cfg.advertiseAddress}\""])
+      ++ ["--kubelet-arg=\"max-pods=${toString cfg.maxPodsPerNode}\""]
+      ++ (optionals (cfg.uniqueNodeNames) ["--with-node-id"]);
     services.k3s.extraFlags = concatStringsSep " " cfg.extraFlagsList;
     systemd.services.k3s.preStart = mkIf (cfg.role == "server") ''
-    mkdir -p ${k3sManifestsDir}
-    ${concatStringsSep "\n" (map (manifestPath:
-      "cp ${manifestPath} ${k3sManifestsDir}/"
-      ) cfg.autoDeployList)
-    }
-    ${concatStringsSep "\n" (map (manifestName:
-      "touch ${k3sManifestsDir}/${manifestName}.yaml.skip"
-      ) cfg.disable)
-    }
+      mkdir -p ${k3sManifestsDir}
+      ${
+        concatStringsSep "\n" (map (
+            manifestPath: "cp ${manifestPath} ${k3sManifestsDir}/"
+          )
+          cfg.autoDeployList)
+      }
+      ${
+        concatStringsSep "\n" (map (
+            manifestName: "touch ${k3sManifestsDir}/${manifestName}.yaml.skip"
+          )
+          cfg.disable)
+      }
     '';
     ## Random fixes and hacks for k3s networking
     ## see: https://github.com/NixOS/nixpkgs/issues/98766
-    boot.kernelModules = [ "br_netfilter" "ip_conntrack" "ip_vs" "ip_vs_rr" "ip_vs_wrr" "ip_vs_sh" "overlay" ];
-    systemd.services.k3s.after = [ "network-online.service" "firewall.service" ] ++ cfg.after;
+    boot.kernelModules = ["br_netfilter" "ip_conntrack" "ip_vs" "ip_vs_rr" "ip_vs_wrr" "ip_vs_sh" "overlay"];
+    systemd.services.k3s.after = ["network-online.service" "firewall.service"] ++ cfg.after;
   };
 }

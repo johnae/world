@@ -1,12 +1,32 @@
-{ inputs, config, lib, hostConfigurations, ... }:
-
-let
-
-  inherit (lib) mkIf mkForce splitString nameValuePair
-    mapAttrs' mkOption mkEnableOption mapAttrsToList recursiveUpdate;
-  inherit (builtins) head tail foldl'
-    attrValues attrNames mapAttrs
-    concatStringsSep;
+{
+  inputs,
+  config,
+  lib,
+  hostConfigurations,
+  ...
+}: let
+  inherit
+    (lib)
+    mkIf
+    mkForce
+    splitString
+    nameValuePair
+    mapAttrs'
+    mkOption
+    mkEnableOption
+    mapAttrsToList
+    recursiveUpdate
+    ;
+  inherit
+    (builtins)
+    head
+    tail
+    foldl'
+    attrValues
+    attrNames
+    mapAttrs
+    concatStringsSep
+    ;
 
   cfg = config.services.jae.router;
 
@@ -15,26 +35,28 @@ let
     a = head s;
     b = head (tail s);
     c = head (tail (tail s));
-  in
-    "${a}.${b}.${c}";
+  in "${a}.${b}.${c}";
 
-  internalInterfaces = {
-    ${cfg.internalInterface} = rec {
-      base = ipBase cfg.internalInterfaceIP;
-      address = "${base}.1";
-      network = "${base}.0";
-      prefixLength = 24;
-      netmask = "255.255.255.0";
-    };
-  } // (
-    mapAttrs (_: vlan: rec {
-      base = "192.168.${toString vlan.id}";
-      address = "${base}.1";
-      network = "${base}.0";
-      prefixLength = 24;
-      netmask = "255.255.255.0";
-    }) cfg.vlans
-  );
+  internalInterfaces =
+    {
+      ${cfg.internalInterface} = rec {
+        base = ipBase cfg.internalInterfaceIP;
+        address = "${base}.1";
+        network = "${base}.0";
+        prefixLength = 24;
+        netmask = "255.255.255.0";
+      };
+    }
+    // (
+      mapAttrs (_: vlan: rec {
+        base = "192.168.${toString vlan.id}";
+        address = "${base}.1";
+        network = "${base}.0";
+        prefixLength = 24;
+        netmask = "255.255.255.0";
+      })
+      cfg.vlans
+    );
 
   internalInterfaceNames = attrNames internalInterfaces;
 
@@ -42,16 +64,15 @@ let
     let
       peers = foldl' (x: y: x // y.settings.peers) {} (attrValues hostConfigurations.${cfg.innernetServer}.services.innernet.server);
     in
-      (mapAttrs' (name: conf: nameValuePair conf.ip [name "${name}.${cfg.domain}"]) peers) // {
-        ${cfg.innernetServerInternalIp} = [ cfg.innernetServer "${cfg.innernetServer}.${cfg.domain}" ];
-        ${cfg.unifiAddress} = [ "unifi" "unifi.${cfg.domain}"];
-        "127.0.0.2" = mkForce [ "localhost2" ];
-        "::1" = mkForce [ "localhost2" ];
+      (mapAttrs' (name: conf: nameValuePair conf.ip [name "${name}.${cfg.domain}"]) peers)
+      // {
+        ${cfg.innernetServerInternalIp} = [cfg.innernetServer "${cfg.innernetServer}.${cfg.domain}"];
+        ${cfg.unifiAddress} = ["unifi" "unifi.${cfg.domain}"];
+        "127.0.0.2" = mkForce ["localhost2"];
+        "::1" = mkForce ["localhost2"];
       }
   );
-
 in {
-
   options.services.jae.router = with lib.types; {
     enable = mkEnableOption "Whether to enable the router";
     upstreamDnsServers = mkOption {
@@ -79,7 +100,7 @@ in {
       description = "Whether to use dnscrypt-proxy2";
     };
     dnsmasqAdditionalListenAddresses = mkOption {
-      type = listOf(str);
+      type = listOf str;
       default = [];
       description = "Additional ip:s where dnsmasq should listen";
     };
@@ -120,10 +141,10 @@ in {
         };
       }));
       example = ''
-      {
-        vlans.vlan10 = { id = 10; interface = "eth0"; };
-        vlans.vlan20 = { id = 20; interface = "eth0"; };
-      }
+        {
+          vlans.vlan10 = { id = 10; interface = "eth0"; };
+          vlans.vlan20 = { id = 20; interface = "eth0"; };
+        }
       '';
     };
   };
@@ -133,14 +154,17 @@ in {
     networking.vlans = cfg.vlans;
     networking.firewall.trustedInterfaces = internalInterfaceNames;
 
-    networking.interfaces = {
-      ${cfg.externalInterface}.useDHCP = true;
-    } // (
-      mapAttrs (_: net: {
-        useDHCP = false;
-        ipv4.addresses = [ { inherit (net) address prefixLength; } ];
-      }) internalInterfaces
-    );
+    networking.interfaces =
+      {
+        ${cfg.externalInterface}.useDHCP = true;
+      }
+      // (
+        mapAttrs (_: net: {
+          useDHCP = false;
+          ipv4.addresses = [{inherit (net) address prefixLength;}];
+        })
+        internalInterfaces
+      );
 
     networking.nat.enable = true;
     networking.nat.externalInterface = cfg.externalInterface;
@@ -148,38 +172,41 @@ in {
 
     services.dhcpd4.enable = true;
     services.dhcpd4.interfaces = internalInterfaceNames;
-    services.dhcpd4.extraConfig = ''
-      option subnet-mask 255.255.255.0;
-      option space ubnt;
-      option ubnt.unifi-address code 1 = ip-address;
+    services.dhcpd4.extraConfig =
+      ''
+        option subnet-mask 255.255.255.0;
+        option space ubnt;
+        option ubnt.unifi-address code 1 = ip-address;
 
-      class "ubnt" {
-              match if substring (option vendor-class-identifier, 0, 4) = "ubnt";
-              option vendor-class-identifier "ubnt";
-              vendor-option-space ubnt;
-      }
+        class "ubnt" {
+                match if substring (option vendor-class-identifier, 0, 4) = "ubnt";
+                option vendor-class-identifier "ubnt";
+                vendor-option-space ubnt;
+        }
 
-    '' + (concatStringsSep "\n" (mapAttrsToList (iface: config: ''
-      subnet ${config.network} netmask ${config.netmask} {
-        option broadcast-address ${config.base}.255;
-        option domain-name-servers ${config.address};
-        option ubnt.unifi-address ${cfg.unifiAddress};
-        option routers ${config.address};
-        option domain-name "${cfg.domain}";
-        option domain-search "${cfg.domain}";
-        interface ${iface};
-        default-lease-time 86400;
-        max-lease-time 86400;
-        range ${config.base}.10 ${config.base}.128;
-      }
-    '') internalInterfaces));
+      ''
+      + (concatStringsSep "\n" (mapAttrsToList (iface: config: ''
+          subnet ${config.network} netmask ${config.netmask} {
+            option broadcast-address ${config.base}.255;
+            option domain-name-servers ${config.address};
+            option ubnt.unifi-address ${cfg.unifiAddress};
+            option routers ${config.address};
+            option domain-name "${cfg.domain}";
+            option domain-search "${cfg.domain}";
+            interface ${iface};
+            default-lease-time 86400;
+            max-lease-time 86400;
+            range ${config.base}.10 ${config.base}.128;
+          }
+        '')
+        internalInterfaces));
 
-    environment.state."/keep".directories = [ "/var/lib/dnsmasq" ];
+    environment.state."/keep".directories = ["/var/lib/dnsmasq"];
 
     services.dnscrypt-proxy2 = {
       enable = cfg.dnsCrypt;
       settings = {
-        bootstrap_resolvers = [ "1.1.1.1:53" "1.0.0.1:53" ];
+        bootstrap_resolvers = ["1.1.1.1:53" "1.0.0.1:53"];
         ipv6_servers = true;
         require_dnssec = true;
         require_nolog = true;
@@ -189,7 +216,7 @@ in {
         ignore_system_dns = true;
         dnscrypt_servers = true;
         doh_servers = true;
-        listen_addresses = [ "127.0.0.1:5300" ];
+        listen_addresses = ["127.0.0.1:5300"];
         sources.public-resolvers = {
           urls = [
             "https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md"
@@ -198,14 +225,17 @@ in {
           cache_file = "/var/lib/dnscrypt-proxy2/public-resolvers.md";
           minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
         };
-        server_names = [ "cloudflare-security" "cloudflare-security-ipv6" ];
+        server_names = ["cloudflare-security" "cloudflare-security-ipv6"];
         blocked_names.blocked_names_file = "${inputs.notracking}/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt";
       };
     };
 
     services.dnsmasq.enable = true;
     services.dnsmasq.resolveLocalQueries = true;
-    services.dnsmasq.servers = if cfg.dnsCrypt then [ "127.0.0.1#5300" ] else cfg.upstreamDnsServers;
+    services.dnsmasq.servers =
+      if cfg.dnsCrypt
+      then ["127.0.0.1#5300"]
+      else cfg.upstreamDnsServers;
     services.dnsmasq.extraConfig = ''
       cache-size=10000
       log-queries

@@ -1,7 +1,12 @@
-{ writeShellScriptBin, writeStrictShellScriptBin, nix-linter, pixiecore, gnugrep, gnused, findutils }:
-
-let
-
+{
+  writeShellScriptBin,
+  writeStrictShellScriptBin,
+  nix-linter,
+  pixiecore,
+  gnugrep,
+  gnused,
+  findutils,
+}: let
   pixieboot = writeStrictShellScriptBin "pixieboot" ''
     export PATH=${gnugrep}/bin:$PATH
     _WORLD_HELP=''${_WORLD_HELP:-}
@@ -42,7 +47,4 @@ let
       exit 1
     fi
   '';
-
-in
-
-{ inherit pixieboot lint; }
+in {inherit pixieboot lint;}

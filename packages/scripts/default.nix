@@ -1,19 +1,18 @@
-{ stdenv
-, lib
-, writeStrictShellScriptBin
-, buildEnv
-, wl-clipboard
-, fire
-, fd
-, rbw
-, rofi-wayland
-, skim
-, pass
-, wpa_supplicant
-, hostname
-}:
-let
-
+{
+  stdenv,
+  lib,
+  writeStrictShellScriptBin,
+  buildEnv,
+  wl-clipboard,
+  fire,
+  fd,
+  rbw,
+  rofi-wayland,
+  skim,
+  pass,
+  wpa_supplicant,
+  hostname,
+}: let
   addToBinPath = pkgs: ''
     export PATH=${lib.makeBinPath pkgs}''${PATH:+:''${PATH}}
   '';
@@ -24,7 +23,7 @@ let
   '';
 
   sk-sk = writeStrictShellScriptBin "sk-sk" ''
-    ${addToBinPath [ skim ]}
+    ${addToBinPath [skim]}
     SK_MIN_HEIGHT=''${SK_MIN_HEIGHT:-100}
     SK_MARGIN=''${SK_MARGIN:-5,5,5,5}
     SK_PROMPT=''${SK_PROMPT:- >}
@@ -36,7 +35,7 @@ let
   '';
 
   project-select = writeStrictShellScriptBin "project-select" ''
-    ${addToBinPath [ sk-sk fd ]}
+    ${addToBinPath [sk-sk fd]}
     projects=$*
     if [ -z "$projects" ]; then
       echo "Please provide the project root directories to search as arguments"
@@ -62,7 +61,7 @@ let
   '';
 
   rofi-rbw = writeStrictShellScriptBin "rofi-rbw" ''
-    ${addToBinPath [ rofi-wayland rbw wl-clipboard ]}
+    ${addToBinPath [rofi-wayland rbw wl-clipboard]}
     passonly=''${passonly:-}
     selection="$(rbw list --fields name,user | \
        sed 's|\t|/|g' | \
@@ -85,7 +84,7 @@ let
   '';
 
   rofi-spotnix-play = writeStrictShellScriptBin "rofi-spotnix-play" ''
-    ${addToBinPath [ rofi-wayland wl-clipboard ]}
+    ${addToBinPath [rofi-wayland wl-clipboard]}
     t="$1"
     awk -F ' - spotify:' \
            '{print "<span size=\"medium\">"$1"</span><span size=\"0\">#spotify:"$2"</span>"}' \
@@ -95,7 +94,7 @@ let
   '';
 
   rofi-spotify-search = writeStrictShellScriptBin "rofi-spotify-search" ''
-    ${addToBinPath [ rofi-wayland wl-clipboard ]}
+    ${addToBinPath [rofi-wayland wl-clipboard]}
     t="$1"
     search="$(rofi -normal-window -dmenu -p "search $t >")"
     echo search_"$t" "$search" > "$XDG_RUNTIME_DIR"/spotnix_input
@@ -103,7 +102,7 @@ let
   '';
 
   update-wireguard-keys = writeStrictShellScriptBin "update-wireguard-keys" ''
-    ${addToBinPath [ hostname pass ]}
+    ${addToBinPath [hostname pass]}
     IFS=$'\n'
     HN="$(hostname)"
     for KEY in $(find "$PASSWORD_STORE_DIR"/vpn/wireguard/"$HN"/ -type f -print0 | xargs -0 -I{} basename {}); do
@@ -115,7 +114,7 @@ let
   '';
 
   update-wifi-networks = writeStrictShellScriptBin "update-wifi-networks" ''
-    ${addToBinPath [ pass ]}
+    ${addToBinPath [pass]}
     IFS=$'\n'
     for NET in $(find "$PASSWORD_STORE_DIR"/wifi/networks/ -type f -print0 | xargs -0 -I{} basename {}); do
       NETNAME=$(basename "$NET" .gpg)
@@ -125,7 +124,7 @@ let
   '';
 
   add-wifi-network = writeStrictShellScriptBin "add-wifi-network" ''
-    ${addToBinPath [ wpa_supplicant pass update-wifi-networks ]}
+    ${addToBinPath [wpa_supplicant pass update-wifi-networks]}
     NET=''${1:-}
     PASS=''${2:-}
     if [ -z "$NET" ]; then
@@ -148,15 +147,19 @@ let
     EOF
     update-wifi-networks
   '';
-
 in
-buildEnv {
-  name = "scripts";
-  paths = [
-    project-select launch git-credential-pass
-    add-wifi-network update-wifi-networks
-    update-wireguard-keys spotify-cmd rofi-rbw
-    rofi-spotify-search
-  ];
-  meta.platforms = lib.platforms.linux;
-}
+  buildEnv {
+    name = "scripts";
+    paths = [
+      project-select
+      launch
+      git-credential-pass
+      add-wifi-network
+      update-wifi-networks
+      update-wireguard-keys
+      spotify-cmd
+      rofi-rbw
+      rofi-spotify-search
+    ];
+    meta.platforms = lib.platforms.linux;
+  }

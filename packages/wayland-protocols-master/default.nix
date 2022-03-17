@@ -1,11 +1,14 @@
-{ lib
-, stdenv
-, pkg-config
-, meson, ninja, wayland-scanner
-, python3, wayland
-, inputs
+{
+  lib,
+  stdenv,
+  pkg-config,
+  meson,
+  ninja,
+  wayland-scanner,
+  python3,
+  wayland,
+  inputs,
 }:
-
 stdenv.mkDerivation rec {
   pname = "wayland-protocols";
   version = inputs.wayland-protocols-master.rev;
@@ -18,11 +21,11 @@ stdenv.mkDerivation rec {
     patchShebangs tests/
   '';
 
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja wayland-scanner ];
-  checkInputs = [ python3 wayland ];
+  depsBuildBuild = [pkg-config];
+  nativeBuildInputs = [meson ninja wayland-scanner];
+  checkInputs = [python3 wayland];
 
-  mesonFlags = [ "-Dtests=${lib.boolToString doCheck}" ];
+  mesonFlags = ["-Dtests=${lib.boolToString doCheck}"];
 
   meta = {
     description = "Wayland protocol extensions";
@@ -33,10 +36,10 @@ stdenv.mkDerivation rec {
       protocol either in Wayland core, or some other protocol in
       wayland-protocols.
     '';
-    homepage    = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
-    license     = lib.licenses.mit; # Expat version
-    platforms   = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ primeos ];
+    homepage = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [primeos];
   };
 
   passthru.version = version;

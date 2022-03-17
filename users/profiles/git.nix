@@ -1,9 +1,11 @@
-{ pkgs, config, lib, ... }:
-
-let
-  userinfo = config.userinfo;
-in
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
+  userinfo = config.userinfo;
+in {
   programs.git = {
     userName = userinfo.fullName;
     userEmail = userinfo.email;
@@ -12,10 +14,12 @@ in
       enable = true;
       options.features = "decorations side-by-side line-numbers";
     };
-    includes = lib.mapAttrsToList (dir: email: {
-      condition = "gitdir:${dir}";
-      contents.user = { inherit email; };
-    }) userinfo.gitIdMap;
+    includes =
+      lib.mapAttrsToList (dir: email: {
+        condition = "gitdir:${dir}";
+        contents.user = {inherit email;};
+      })
+      userinfo.gitIdMap;
     extraConfig = {
       github.user = userinfo.githubUser;
       gitlab.user = userinfo.gitlabUser;

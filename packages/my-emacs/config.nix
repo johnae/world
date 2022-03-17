@@ -1,6 +1,8 @@
-{ runCommand, emacs }:
-
-runCommand "emacs-config" { } ''
+{
+  runCommand,
+  emacs,
+}:
+runCommand "emacs-config" {} ''
   mkdir -p $out
   cp ${./emacs.org} $out/emacs.org
   cd $out

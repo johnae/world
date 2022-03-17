@@ -1,13 +1,11 @@
-{ pkgs, ... }:
-let
+{pkgs, ...}: let
   nordTheme = pkgs.fetchFromGitHub {
     owner = "arcticicestudio";
     repo = "nord-tmux";
     rev = "b0fd5838dbd5f3cf55eefd83ac84f3f9ac076610";
     sha256 = "14xhh49izvjw4ycwq5gx4if7a0bcnvgsf3irywc3qps6jjcf5ymk";
   };
-in
-{
+in {
   programs.tmux = {
     enable = true;
     clock24 = true;

@@ -1,8 +1,11 @@
-{ lib, pkgs, inputs, ... }:
-let
-  nixos-hardware = inputs.nixos-hardware;
-in
 {
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: let
+  nixos-hardware = inputs.nixos-hardware;
+in {
   imports = [
     "${nixos-hardware}/common/pc/ssd"
     ./defaults.nix
@@ -29,13 +32,13 @@ in
     pkgs.iptables
   ];
 
-  networking.search = lib.mkForce [ ];
+  networking.search = lib.mkForce [];
   networking.domain = lib.mkForce null;
 
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
 
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.allowedTCPPorts = [22];
 
   programs.fish.enable = true;
   security.sudo.wheelNeedsPassword = false;

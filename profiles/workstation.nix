@@ -1,5 +1,9 @@
-{ config, pkgs, inputs, ... }:
 {
+  config,
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
     ./defaults.nix
     inputs.nixos-hardware.nixosModules.common-pc-ssd
@@ -13,7 +17,7 @@
   #boot.kernelModules = [ "v4l2loopback" ];
   ## need to do this instead
   boot.extraModulePackages = [
-      config.boot.kernelPackages.v4l2loopback.out
+    config.boot.kernelPackages.v4l2loopback.out
   ];
 
   boot.extraModprobeConfig = ''
@@ -38,7 +42,7 @@
   hardware.bluetooth.enable = true;
   networking.wireless.iwd.enable = true;
 
-  environment.pathsToLink = [ "/etc/gconf" ];
+  environment.pathsToLink = ["/etc/gconf"];
 
   security.pam.services.swaylock = {
     text = ''
@@ -66,10 +70,10 @@
   services.fwupd.enable = true;
 
   services.printing.enable = true;
-  services.printing.drivers = [ pkgs.gutenprint pkgs.hplip pkgs.gutenprintBin ];
+  services.printing.drivers = [pkgs.gutenprint pkgs.hplip pkgs.gutenprintBin];
 
-  services.dbus.packages = with pkgs; [ gcr dconf gnome3.sushi ];
-  services.udev.packages = with pkgs; [ gnome3.gnome-settings-daemon ];
+  services.dbus.packages = with pkgs; [gcr dconf gnome3.sushi];
+  services.udev.packages = with pkgs; [gnome3.gnome-settings-daemon];
 
   environment.etc."systemd/sleep.conf".text = "HibernateDelaySec=8h";
 
@@ -84,11 +88,11 @@
     media-session.config.bluez-monitor.rules = [
       {
         # Matches all cards
-        matches = [ { "device.name" = "~bluez_card.*"; } ];
+        matches = [{"device.name" = "~bluez_card.*";}];
         actions = {
           "update-props" = {
-            "bluez5.auto-connect" = [ "hfp_hf" "hsp_hs" "a2dp_sink" ];
-            "bluez5.reconnect-profiles" = [ "hfp_hf" "hsp_hs" "a2dp_sink" ];
+            "bluez5.auto-connect" = ["hfp_hf" "hsp_hs" "a2dp_sink"];
+            "bluez5.reconnect-profiles" = ["hfp_hf" "hsp_hs" "a2dp_sink"];
             # mSBC is not expected to work on all headset + adapter combinations.
             "bluez5.msbc-support" = true;
             # SBC-XQ is not expected to work on all headset + adapter combinations.
@@ -99,9 +103,9 @@
       {
         matches = [
           # Matches all sources
-          { "node.name" = "~bluez_input.*"; }
+          {"node.name" = "~bluez_input.*";}
           # Matches all outputs
-          { "node.name" = "~bluez_output.*"; }
+          {"node.name" = "~bluez_output.*";}
         ];
         actions = {
           "node.pause-on-idle" = false;
@@ -111,7 +115,7 @@
   };
   xdg.portal.enable = true;
   xdg.portal.gtkUsePortal = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-wlr pkgs.xdg-desktop-portal-gtk];
 
   fonts.fonts = with pkgs; [
     google-fonts
@@ -124,10 +128,10 @@
   ];
 
   security.wrappers.netns-exec = {
-   source = "${pkgs.netns-exec}/bin/netns-exec";
-   owner = "root";
-   group = "root";
-   setuid = true;
+    source = "${pkgs.netns-exec}/bin/netns-exec";
+    owner = "root";
+    group = "root";
+    setuid = true;
   };
 
   machinePurpose = "workstation";

@@ -1,10 +1,13 @@
-{ hostName, pkgs, ... }:
 {
+  hostName,
+  pkgs,
+  ...
+}: {
   systemd.user.services.spotnix = {
     Unit = {
       Description = "Spotify for UNIX";
-      Wants = [ "spotifyd.service" ];
-      After = [ "sway-session.target" "spotifyd.service" ];
+      Wants = ["spotifyd.service"];
+      After = ["sway-session.target" "spotifyd.service"];
       BindsTo = "sway-session.target";
     };
     Service = {
@@ -15,7 +18,7 @@
       RestartSec = 3;
     };
     Install = {
-      WantedBy = [ "sway-session.target" ];
+      WantedBy = ["sway-session.target"];
     };
   };
 }

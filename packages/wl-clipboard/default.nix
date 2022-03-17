@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, coreutils
-, gnused
-, meson
-, ninja
-, pkgconfig
-, wayland
-, wayland-protocols
-, git
-, inputs
+{
+  stdenv,
+  lib,
+  coreutils,
+  gnused,
+  meson,
+  ninja,
+  pkgconfig,
+  wayland,
+  wayland-protocols,
+  git,
+  inputs,
 }:
-
 stdenv.mkDerivation {
   name = "wl-clipboard";
   version = inputs.wl-clipboard.rev;
@@ -26,8 +26,8 @@ stdenv.mkDerivation {
     "-Dfishcompletiondir=no"
   ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig git ];
-  buildInputs = [ wayland wayland-protocols ];
+  nativeBuildInputs = [meson ninja pkgconfig git];
+  buildInputs = [wayland wayland-protocols];
 
   enableParallelBuilding = true;
 

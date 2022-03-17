@@ -1,4 +1,8 @@
-{ lib, rustPlatform, inputs }:
+{
+  lib,
+  rustPlatform,
+  inputs,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "blur";
   version = inputs.blur.rev;

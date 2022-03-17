@@ -1,5 +1,8 @@
-{ stdenv, ghc, inputs }:
-
+{
+  stdenv,
+  ghc,
+  inputs,
+}:
 stdenv.mkDerivation rec {
   version = inputs.fire.rev;
   name = "fire-${version}";
@@ -17,11 +20,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  buildInputs = [ ghc ];
+  buildInputs = [ghc];
 
   meta = {
-    description =
-      "Simple launcher (creates new process group for exec'd process)";
+    description = "Simple launcher (creates new process group for exec'd process)";
     homepage = "https://github.com/johnae/fire";
     license = "MIT";
   };

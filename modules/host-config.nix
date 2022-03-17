@@ -1,9 +1,7 @@
-{lib, ...}:
-let
+{lib, ...}: let
   inherit (lib) mkOption;
   inherit (lib.types) str nullOr listOf enum;
-in
-{
+in {
   options = {
     publicKey = mkOption {
       type = str;
@@ -22,7 +20,7 @@ in
       default = "-v --type luks2 --hash sha256 --key-size 256 --use-urandom --cipher aes-xts-plain64";
     };
     machinePurpose = mkOption {
-      type = enum [ "server" "workstation" ];
+      type = enum ["server" "workstation"];
       default = "server";
     };
     btrfs.format.extraParams = mkOption {
@@ -31,7 +29,7 @@ in
     };
     btrfs.disks = mkOption {
       type = listOf str;
-      default = [ "/dev/nvme0n1" ];
+      default = ["/dev/nvme0n1"];
     };
   };
 }

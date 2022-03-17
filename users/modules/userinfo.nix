@@ -1,34 +1,38 @@
-{ lib, ... }:
-{
+{lib, ...}: {
   options = with lib; {
     userinfo = {
-      fullName = mkOption
+      fullName =
+        mkOption
         {
           type = types.str;
           example = "Someone Someonesson";
         };
-      email = mkOption
+      email =
+        mkOption
         {
           type = types.str;
           example = "some@email.com";
         };
-      githubUser = mkOption
+      githubUser =
+        mkOption
         {
           type = types.str;
           example = "someuser";
         };
-      gitlabUser = mkOption
+      gitlabUser =
+        mkOption
         {
           type = types.str;
           example = "someuser";
         };
-      gitIdMap = mkOption
+      gitIdMap =
+        mkOption
         {
           type = types.attrsOf types.str;
           example = ''
-          {
-            "~/path/to/dev/folder" = "some@email.com";
-          }
+            {
+              "~/path/to/dev/folder" = "some@email.com";
+            }
           '';
           default = {};
         };

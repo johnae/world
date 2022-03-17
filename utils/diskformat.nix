@@ -1,10 +1,16 @@
-{ config, lib, writeStrictShellScriptBin, ... }:
-
-let
+{
+  config,
+  lib,
+  writeStrictShellScriptBin,
+  ...
+}: let
   inherit (lib) mapAttrsToList listToAttrs splitString concatStringsSep last flatten;
   inherit (builtins) filter match head foldl' replaceStrings;
   inherit (config.config) boot cryptsetup btrfs machinePurpose;
-  bootMode = if boot.loader.systemd-boot.enable then "UEFI" else "Legacy";
+  bootMode =
+    if boot.loader.systemd-boot.enable
+    then "UEFI"
+    else "Legacy";
   luksFormatExtraParams = cryptsetup.luksFormat.extraParams;
   btrfsFormatExtraParams = btrfs.format.extraParams;
   btrfsDisks = btrfs.disks;
@@ -22,14 +28,18 @@ let
   luksKeySpace = "20M";
   ramGb = "$(free --giga | tail -n+2 | head -1 | awk '{print $2}')";
   uuidCryptKey = config.config.boot.initrd.luks.devices.cryptkey.keyFile != null;
-  subvolumes = lib.unique (filter (v: v != null)
-        (flatten
-            (map (match "^subvol=(.*)")
-              (foldl' (a: b: a ++ b.options) []
-                (filter (v: v.fsType == "btrfs") (mapAttrsToList (_: v: v) config.config.fileSystems))
-              )
-            )
+  subvolumes = lib.unique (
+    filter (v: v != null)
+    (
+      flatten
+      (
+        map (match "^subvol=(.*)")
+        (
+          foldl' (a: b: a ++ b.options) []
+          (filter (v: v.fsType == "btrfs") (mapAttrsToList (_: v: v) config.config.fileSystems))
         )
+      )
+    )
   );
 in
   writeStrictShellScriptBin "diskformat" ''
@@ -75,7 +85,11 @@ in
       CRYPTKEYFILE="''${CRYPTKEYFILE:-/sys/class/dmi/id/product_version}"
     fi
 
-    USER_DISK_PASSWORD=${if uuidCryptKey then "no" else "yes"}
+    USER_DISK_PASSWORD=${
+      if uuidCryptKey
+      then "no"
+      else "yes"
+    }
 
     DISK_PASSWORD=""
     if [ "$USER_DISK_PASSWORD" = "yes" ]; then
@@ -154,17 +168,17 @@ in
       swap_space="1"
     fi
 
-    ${if machinePurpose == "server" then
+    ${
+      if machinePurpose == "server"
+      then ''
+        ## no support for hibernation
+        swap_space="$ramgb"G
       ''
-      ## no support for hibernation
-      swap_space="$ramgb"G
+      else ''
+        ## support hibernation
+        swap_space="$((swap_space + ramgb))"G
       ''
-      else
-      ''
-      ## support hibernation
-      swap_space="$((swap_space + ramgb))"G
-      ''
-     }
+    }
 
     echo Will use a "$swap_space" swap space partition
 
@@ -220,23 +234,23 @@ in
     cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encRoot} -q --key-file=/dev/mapper/${diskLabels.encCryptkey} "$DISK_ROOT"
 
     ${
-      lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
-        ''
+      lib.concatStringsSep "\n" (lib.imap1 (
+        idx: disk: ''
 
-        wipefs -fa "${disk}"
-        sgdisk -z "${disk}"
-        partprobe "${disk}"
-        sgdisk -og "${disk}"
-        partprobe "${disk}"
+          wipefs -fa "${disk}"
+          sgdisk -z "${disk}"
+          partprobe "${disk}"
+          sgdisk -og "${disk}"
+          partprobe "${disk}"
 
-        sgdisk -n 0:0:0 -t 0:8300 -c 0:"p_root${toString idx}" "${disk}" # 1
-        partprobe "${disk}"
-        sgdisk -p "${disk}"
-        fdisk -l "${disk}"
+          sgdisk -n 0:0:0 -t 0:8300 -c 0:"p_root${toString idx}" "${disk}" # 1
+          partprobe "${disk}"
+          sgdisk -p "${disk}"
+          fdisk -l "${disk}"
 
-        echo Creating encrypted root - disk ${disk}
-        # shellcheck disable=SC2086
-        cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encRoot}${toString idx} -q --key-file=/dev/mapper/${diskLabels.encCryptkey} "${disk}$PARTITION_PREFIX"1
+          echo Creating encrypted root - disk ${disk}
+          # shellcheck disable=SC2086
+          cryptsetup ${luksFormatExtraParams} luksFormat --label=${diskLabels.encRoot}${toString idx} -q --key-file=/dev/mapper/${diskLabels.encCryptkey} "${disk}$PARTITION_PREFIX"1
         ''
       ) (builtins.tail btrfsDisks))
     }
@@ -255,16 +269,16 @@ in
     waitForPath "/dev/mapper/${diskLabels.encRoot}"
 
     ${
-      lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
-        ''
-        echo Opening encrypted root - disk ${disk}
-        cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "${disk}$PARTITION_PREFIX"1 ${diskLabels.encRoot}${toString idx}
+      lib.concatStringsSep "\n" (lib.imap1 (
+        idx: disk: ''
+          echo Opening encrypted root - disk ${disk}
+          cryptsetup luksOpen --key-file=/dev/mapper/${diskLabels.encCryptkey} "${disk}$PARTITION_PREFIX"1 ${diskLabels.encRoot}${toString idx}
 
-        sgdisk -p "${disk}"
-        partprobe "${disk}"
-        fdisk -l "${disk}"
+          sgdisk -p "${disk}"
+          partprobe "${disk}"
+          fdisk -l "${disk}"
 
-        waitForPath "/dev/mapper/${diskLabels.encRoot}${toString idx}"
+          waitForPath "/dev/mapper/${diskLabels.encRoot}${toString idx}"
         ''
       ) (builtins.tail btrfsDisks))
     }
@@ -290,23 +304,22 @@ in
     retryDefault mount -o rw,noatime,compress=zstd /dev/disk/by-label/${diskLabels.root} /mnt/tmproot
 
     ${
-      lib.concatStringsSep "\n" (lib.imap1 (idx: disk:
-        let
+      lib.concatStringsSep "\n" (lib.imap1 (
+        idx: disk: let
           device = "/dev/mapper/${diskLabels.encRoot}${toString idx}";
-        in
-          ''
+        in ''
           echo Adding device ${device}
           btrfs device add -f ${device} /mnt/tmproot
-          ''
+        ''
       ) (builtins.tail btrfsDisks))
     }
 
     ${
-      if builtins.length btrfsDisks > 1 then
-        ''
+      if builtins.length btrfsDisks > 1
+      then ''
         echo Balancing btrfs filesystem at /mnt/tmproot
         btrfs balance start -dconvert=raid1 -mconvert=raid1 /mnt/tmproot
-        ''
+      ''
       else ""
     }
 
@@ -332,4 +345,4 @@ in
     # and mount the boot partition
     echo Mounting boot partition
     mount /dev/disk/by-label/${diskLabels.boot} /mnt/boot
- ''
+  ''

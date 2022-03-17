@@ -1,5 +1,9 @@
-{pkgs, config, lib, ...}:
-
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 ## really just a wrapper so that it's easier to specify through toml (eg. the preSetup hook with a pkg ref)
 let
   inherit (lib) mkEnableOption mkOption mkIf types;
@@ -17,8 +21,7 @@ let
       };
     };
   };
-in
-{
+in {
   options.networking.private-wireguard = {
     enable = mkEnableOption "Enable private wireguard vpn connection";
     privateKeyFile = mkOption {

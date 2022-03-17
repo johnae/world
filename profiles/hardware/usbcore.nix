@@ -1,3 +1,3 @@
 {
-  boot.kernelParams = [ "usbcore.autosuspend=1800" ];
+  boot.kernelParams = ["usbcore.autosuspend=1800"];
 }

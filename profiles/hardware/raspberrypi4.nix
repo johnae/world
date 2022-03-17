@@ -1,5 +1,9 @@
-{inputs, pkgs, lib, ...}:
 {
+  inputs,
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     inputs.nixos-hardware.nixosModules.raspberry-pi-4
   ];
@@ -12,7 +16,7 @@
     version = 4;
   };
 
-  fileSystems."/".options = [ "defaults" "size=4G" "mode=755" ];
+  fileSystems."/".options = ["defaults" "size=4G" "mode=755"];
 
   networking.usePredictableInterfaceNames = lib.mkForce true;
 
@@ -27,7 +31,7 @@
 
   boot.initrd.luks.devices.cryptkey.keyFile = "/sys/firmware/devicetree/base/serial-number";
 
-  boot.initrd.availableKernelModules = [ "hid_generic" "usbhid" "uas" ];
+  boot.initrd.availableKernelModules = ["hid_generic" "usbhid" "uas"];
 
   boot.initrd.luks.cryptoModules = [
     "aes"
@@ -50,5 +54,4 @@
   ];
 
   cryptsetup.luksFormat.extraParams = "-v --type luks2 --sector-size 4096 --hash sha256 --key-size 256 --use-urandom --cipher xchacha12,aes-adiantum-plain64 --align-payload=2048";
-
 }

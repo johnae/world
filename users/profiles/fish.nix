@@ -1,5 +1,8 @@
-{ pkgs, lib, ... }:
-let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   commandNotFound = pkgs.writeShellScriptBin "command-not-found" ''
     # shellcheck disable=SC1091
     source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
@@ -8,7 +11,7 @@ let
   ## used to start "something" within a different network namespace
   ## I use it to start my compositor and other stuff within a namespace
   ## with only wireguard interface(s)
-  withinNetNS = executable: { netns ? "private" }:
+  withinNetNS = executable: {netns ? "private"}:
     lib.concatStringsSep " " [
       "${pkgs.dbus}/bin/dbus-run-session" ## sway is actually wrapped and does this, but fish doesn't for example. No harm doing it even for sway.
       "${pkgs.netns-dbus-proxy}/bin/netns-dbus-proxy"
@@ -28,16 +31,16 @@ let
     '';
   };
 
-  privateSway = withinNetNS "${sway}/bin/sway" { };
-  privateFish = withinNetNS "${pkgs.fish}/bin/fish" { };
+  privateSway = withinNetNS "${sway}/bin/sway" {};
+  privateFish = withinNetNS "${pkgs.fish}/bin/fish" {};
 
   genLaunchOptions = optionList:
     lib.concatStringsSep "\\n" (lib.flatten (
       map
-        (
-          lib.mapAttrsToList (k: v: "${k}\\texec ${v}")
-        )
-        optionList
+      (
+        lib.mapAttrsToList (k: v: "${k}\\texec ${v}")
+      )
+      optionList
     ));
 
   genLauncher = optionList: ''
@@ -66,22 +69,19 @@ let
   '';
 
   launcher = genLauncher [
-    { "sway" = "${pkgs.udev}/bin/systemd-cat --identifier=sway ${sway}/bin/sway"; }
-    { "sway private" = "${pkgs.udev}/bin/systemd-cat --identifier=sway ${privateSway}"; }
-    { "fish" = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.fish}/bin/fish"; }
-    { "fish private" = privateFish; }
-    { "sway debug" = "${sway}/bin/sway -d 2> ~/sway.log"; }
-    { "sway drm debug" = "${drmDebugLaunch}/bin/drm-debug-launch"; }
+    {"sway" = "${pkgs.udev}/bin/systemd-cat --identifier=sway ${sway}/bin/sway";}
+    {"sway private" = "${pkgs.udev}/bin/systemd-cat --identifier=sway ${privateSway}";}
+    {"fish" = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.fish}/bin/fish";}
+    {"fish private" = privateFish;}
+    {"sway debug" = "${sway}/bin/sway -d 2> ~/sway.log";}
+    {"sway drm debug" = "${drmDebugLaunch}/bin/drm-debug-launch";}
   ];
 
   emacs_tui_no_server = "emacs -nw";
   emacsclient = "emacsclient -c -n -a=";
   emacsclient_tui = "emacsclient -t -a=";
-
-in
-{
-
-  home.packages = [ pkgs.fishPlugins.foreign-env ];
+in {
+  home.packages = [pkgs.fishPlugins.foreign-env];
 
   xdg.configFile."fish/functions/gcloud_sdk_argcomplete.fish".source = "${pkgs.inputs.google-cloud-sdk-fish-completion}/functions/gcloud_sdk_argcomplete.fish";
   xdg.configFile."fish/completions/gcloud.fish".source = "${pkgs.inputs.google-cloud-sdk-fish-completion}/completions/gcloud.fish";

@@ -1,22 +1,20 @@
-{ config, lib, ... }:
-let
+{
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) types mkOption mkIf;
   cfg = config.sleepManagement;
-in
-{
-
+in {
   options = {
-
     sleepManagement = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
-        description =
-          ''
-            Whether to enable sleep management. This enables managing sleep specifically
-            rather than the more coarse-grained powerManagement options.
-          '';
+        description = ''
+          Whether to enable sleep management. This enables managing sleep specifically
+          rather than the more coarse-grained powerManagement options.
+        '';
       };
 
       wakeCommands = mkOption {
@@ -30,38 +28,28 @@ in
         default = "";
         description = "Commands executed before the system enters any sleep state including hibernation.";
       };
-
     };
-
   };
-
 
   config = mkIf cfg.enable {
+    systemd.services.sleep-mgmt-before-sleep = {
+      description = "Pre-Sleep Actions";
+      wantedBy = ["sleep.target"];
+      before = ["sleep.target"];
+      script = ''
+        ${cfg.sleepCommands}
+      '';
+      serviceConfig.Type = "oneshot";
+    };
 
-    systemd.services.sleep-mgmt-before-sleep =
-      {
-        description = "Pre-Sleep Actions";
-        wantedBy = [ "sleep.target" ];
-        before = [ "sleep.target" ];
-        script =
-          ''
-            ${cfg.sleepCommands}
-          '';
-        serviceConfig.Type = "oneshot";
-      };
-
-    systemd.services.sleep-mgmt-post-sleep =
-      {
-        description = "Post-Sleep Actions";
-        after = [ "sleep.target" ];
-        wantedBy = [ "sleep.target" ];
-        script =
-          ''
-            ${cfg.wakeCommands}
-          '';
-        serviceConfig.Type = "oneshot";
-      };
-
+    systemd.services.sleep-mgmt-post-sleep = {
+      description = "Post-Sleep Actions";
+      after = ["sleep.target"];
+      wantedBy = ["sleep.target"];
+      script = ''
+        ${cfg.wakeCommands}
+      '';
+      serviceConfig.Type = "oneshot";
+    };
   };
-
 }

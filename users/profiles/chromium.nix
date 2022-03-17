@@ -1,11 +1,8 @@
-{ pkgs, ... }:
-
-let
+{pkgs, ...}: let
   chromium = pkgs.chromium.override {
     commandLineArgs = "-enable-features=UseOzonePlatform -ozone-platform=wayland -enable-features=VaapiVideoDecoder";
   };
-in
-{
+in {
   programs.chromium = {
     enable = true;
     package = chromium;

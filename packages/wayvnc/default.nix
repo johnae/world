@@ -1,25 +1,25 @@
-{ stdenv
-, lib
-, pkgconfig
-, meson
-, ninja
-, wayland
-, wayland-protocols
-, scdoc
-, libxkbcommon
-, libvncserver
-, libpthreadstubs
-, pixman
-, aml
-, libglvnd
-, pam
-, mesa
-, neatvnc
-, libX11
-, libdrm
-, inputs
+{
+  stdenv,
+  lib,
+  pkgconfig,
+  meson,
+  ninja,
+  wayland,
+  wayland-protocols,
+  scdoc,
+  libxkbcommon,
+  libvncserver,
+  libpthreadstubs,
+  pixman,
+  aml,
+  libglvnd,
+  pam,
+  mesa,
+  neatvnc,
+  libX11,
+  libdrm,
+  inputs,
 }:
-
 stdenv.mkDerivation {
   name = "wayvnc";
   version = inputs.wayvnc.rev;
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   #  ./disable-input.patch
   #];
 
-  nativeBuildInputs = [ pkgconfig meson ninja scdoc ];
+  nativeBuildInputs = [pkgconfig meson ninja scdoc];
   buildInputs = [
     wayland
     wayland-protocols

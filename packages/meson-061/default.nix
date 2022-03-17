@@ -1,10 +1,10 @@
-{ lib
-, python3
-, substituteAll
-, installShellFiles
-, inputs
+{
+  lib,
+  python3,
+  substituteAll,
+  installShellFiles,
+  inputs,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
   version = "0.60.2";
@@ -76,7 +76,7 @@ python3.pkgs.buildPythonApplication rec {
     rm $out/nix-support/propagated-build-inputs
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   postInstall = ''
     installShellCompletion --zsh data/shell-completions/zsh/_meson
@@ -87,7 +87,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://mesonbuild.com";
     description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar mbe ];
+    maintainers = with maintainers; [jtojnar mbe];
     platforms = platforms.all;
   };
 }

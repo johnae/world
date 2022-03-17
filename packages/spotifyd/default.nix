@@ -1,13 +1,13 @@
-{ lib
-, rustPlatform
-, pkgconfig
-, dbus
-, libpulseaudio
-, alsaLib
-, openssl
-, inputs
+{
+  lib,
+  rustPlatform,
+  pkgconfig,
+  dbus,
+  libpulseaudio,
+  alsaLib,
+  openssl,
+  inputs,
 }:
-
 rustPlatform.buildRustPackage {
   pname = "spotifyd";
   version = inputs.spotifyd.rev;
@@ -15,13 +15,13 @@ rustPlatform.buildRustPackage {
   src = inputs.spotifyd;
   cargoSha256 = "sha256-KIWnHdeJFhrLjuMBEqrRWO6jJEU3+9JPXvNxMdJXVHM=";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [pkgconfig];
 
-  buildInputs = [ libpulseaudio openssl pkgconfig alsaLib dbus ];
+  buildInputs = [libpulseaudio openssl pkgconfig alsaLib dbus];
 
   doCheck = false;
   #cargoBuildFlags = [ "--features pulseaudio_backend,dbus_mpris" ];
-  cargoBuildFlags = [ "--features pulseaudio_backend" ];
+  cargoBuildFlags = ["--features pulseaudio_backend"];
 
   meta = {
     license = lib.licenses.gpl3;

@@ -1,6 +1,9 @@
-{ pkgs, config, lib, ... }:
-let
-
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   swayservice = Description: ExecStart: {
     Unit = {
       inherit Description;
@@ -13,7 +16,7 @@ let
       inherit ExecStart;
     };
 
-    Install.WantedBy = [ "sway-session.target" ];
+    Install.WantedBy = ["sway-session.target"];
   };
 
   swaylockTimeout = "300";
@@ -98,25 +101,23 @@ let
         swaymsg output eDP-1 disable
     fi
 
-    ${lib.optionalString config.services.kanshi.enable
-    ''
-    systemctl restart --user kanshi.service
-    ''
+    ${
+      lib.optionalString config.services.kanshi.enable
+      ''
+        systemctl restart --user kanshi.service
+      ''
     }
 
   '';
 
   fonts = {
-    names = [ "Roboto" "Font Awesome 5 Free" "Font Awesome 5 Brands" "Arial" "sans-serif" ];
+    names = ["Roboto" "Font Awesome 5 Free" "Font Awesome 5 Brands" "Arial" "sans-serif"];
     style = "Bold";
     size = 10.0;
   };
 
   modifier = "Mod4";
-
-in
-{
-
+in {
   home.sessionVariables = {
     GDK_BACKEND = "wayland";
     CLUTTER_BACKEND = "wayland";
@@ -147,25 +148,44 @@ in
 
       workspaceAutoBackAndForth = true;
 
-      window =
-        let
-          command = "floating enable, resize set width 100ppt height 120ppt";
-          floatCommand = "floating enable";
-        in
-        {
-          titlebar = false;
-          border = 3;
-          hideEdgeBorders = "smart";
-          commands = [
-            { inherit command; criteria.class = "scripts"; }
-            { inherit command; criteria.title = "scripts"; }
-            { inherit command; criteria.app_id = "scripts"; }
-            { command = floatCommand; criteria.class = "input-window"; }
-            { command = floatCommand; criteria.class = "gcr-prompter"; }
-            { command = "inhibit_idle fullscreen"; criteria.shell = ".*"; }
-            { command = "kill"; criteria.title = "Firefox - Sharing Indicator"; }
-          ];
-        };
+      window = let
+        command = "floating enable, resize set width 100ppt height 120ppt";
+        floatCommand = "floating enable";
+      in {
+        titlebar = false;
+        border = 3;
+        hideEdgeBorders = "smart";
+        commands = [
+          {
+            inherit command;
+            criteria.class = "scripts";
+          }
+          {
+            inherit command;
+            criteria.title = "scripts";
+          }
+          {
+            inherit command;
+            criteria.app_id = "scripts";
+          }
+          {
+            command = floatCommand;
+            criteria.class = "input-window";
+          }
+          {
+            command = floatCommand;
+            criteria.class = "gcr-prompter";
+          }
+          {
+            command = "inhibit_idle fullscreen";
+            criteria.shell = ".*";
+          }
+          {
+            command = "kill";
+            criteria.title = "Firefox - Sharing Indicator";
+          }
+        ];
+      };
 
       floating = {
         titlebar = false;
@@ -237,7 +257,6 @@ in
           Return = "mode default";
           Escape = "mode default";
         };
-
       };
 
       keybindings = lib.mkOptionDefault {
@@ -264,7 +283,7 @@ in
         "${modifier}+Shift+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle none'';
 
         "${modifier}+Shift+Return" = ''exec ${pkgs.my-emacs}/bin/emacsclient -c -n -a= --eval '(jae/eshell-new)' '';
-        "${modifier}+Return" = '' exec ${pkgs.alacritty}/bin/alacritty'';
+        "${modifier}+Return" = ''exec ${pkgs.alacritty}/bin/alacritty'';
         "${modifier}+d" = ''exec ${pkgs.rofi-wayland}/bin/rofi -show drun'';
 
         "${modifier}+minus" = ''exec ${pkgs.scripts}/bin/rofi-rbw'';
@@ -367,5 +386,4 @@ in
     rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
     swayidle = swayservice "Sway Idle Service - lock screen etc" swayidleCommand;
   };
-
 }

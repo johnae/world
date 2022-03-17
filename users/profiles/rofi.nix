@@ -1,15 +1,15 @@
-{pkgs, config, ...}:
-
 {
+  pkgs,
+  config,
+  ...
+}: {
   programs.rofi = {
     enable = true;
     package = pkgs.rofi-wayland;
     font = "Roboto Medium 14";
-    theme =
-      let
-        inherit (config.lib.formats.rasi) mkLiteral;
-      in
-      {
+    theme = let
+      inherit (config.lib.formats.rasi) mkLiteral;
+    in {
       "*" = {
         nord0 = mkLiteral "#2e3440";
         nord1 = mkLiteral "#3b4252";
@@ -27,8 +27,8 @@
         nord13 = mkLiteral "#ebcb8b";
         nord14 = mkLiteral "#a3be8c";
         nord15 = mkLiteral "#b48ead";
-        foreground =  mkLiteral "@nord9";
-        backlight =  mkLiteral "#ccffeedd";
+        foreground = mkLiteral "@nord9";
+        backlight = mkLiteral "#ccffeedd";
         background-color = mkLiteral "transparent";
         highlight = mkLiteral "underline bold #eceff4";
         transparent = mkLiteral "rgba(46,52,64,0)";
@@ -122,7 +122,6 @@
         border = mkLiteral "2px 0px 2px 2px";
         border-color = mkLiteral "@foreground";
       };
-
     };
     extraConfig = {
       modi = "run,ssh,drun";

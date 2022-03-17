@@ -1,14 +1,15 @@
-{ hostName, lib, hostConfigurations, ... }:
-
-let
+{
+  hostName,
+  lib,
+  hostConfigurations,
+  ...
+}: let
   inherit (builtins) hasAttr mapAttrs;
   inherit (lib) filterAttrs;
 
-  syncthingDevices = mapAttrs (_: value: { id = value.syncthingDeviceID; })
+  syncthingDevices =
+    mapAttrs (_: value: {id = value.syncthingDeviceID;})
     (filterAttrs (name: value: hasAttr "syncthingDeviceID" value && name != hostName) hostConfigurations);
-
-in
-
-{
+in {
   services.syncthing.devices = syncthingDevices;
 }

@@ -1,6 +1,4 @@
-final: prev:
-
-let
+final: prev: let
   inherit (final) writeStrictShellScriptBin ripgrep buildEnv;
 
   update-cargo-vendor-sha = writeStrictShellScriptBin "update-cargo-vendor-sha" ''
@@ -59,10 +57,7 @@ let
       ${update-fixed-output-derivation-sha}/bin/update-fixed-output-derivation-sha "$fopkg"
     done
   '';
-
-in
-
-{
+in {
   world-updaters = buildEnv {
     name = "world-updaters";
     paths = [
