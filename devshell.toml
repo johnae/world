@@ -19,6 +19,12 @@ packages = [
 ]
 
 [[commands]]
+package = "alejandra"
+name = "alejandra"
+help = "nix formatter"
+category = "dev"
+
+[[commands]]
 package = "nix"
 name = "nix flake check"
 help = "evaluate flake attributes"

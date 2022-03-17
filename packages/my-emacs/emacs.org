@@ -1295,17 +1295,11 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
 *** Nix
 **** The mode
    #+BEGIN_SRC elisp
-     (defun jae/nix-mode-format-before-save-hook ()
-       (when (eq major-mode 'nix-mode)
-         (nix-format-buffer)))
      (use-package nix-mode
        :mode "\\.nix$"
        :hook (
-              (nix-mode . jae/nix-mode-format-before-save)
               (nix-mode . lsp)
              )
-       :custom
-       (nix-nixfmt-bin "nixpkgs-fmt")
      )
    #+END_SRC
 *** Shell
@@ -1412,3 +1406,15 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
    )
  #+END_SRC
  
+** Code formatting
+#+BEGIN_SRC elisp
+  (use-package apheleia
+    :ensure t
+    :config
+    (apheleia-global-mode +1)
+    (progn ;; JavaScript/TypeScript
+      (cl-pushnew '(eslint . (npx "eslint_d" "--fix-to-stdout" "--stdin" "--stdin-filename" file)) apheleia-formatters :test #'equal))
+    (progn ;; Nix
+      (cl-pushnew '(alejandra . ("alejandra")) apheleia-formatters :test #'equal)
+      (cl-pushnew '(nix-mode . alejandra) apheleia-mode-alist :test #'equal)))
+  #+END_SRC
