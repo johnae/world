@@ -39,11 +39,6 @@ in {
     KUBECONFIG = "/home/${home.username}/.kube/config";
   };
 
-  xsession.pointerCursor = {
-    package = pkgs.arc-icon-theme;
-    name = "Arc";
-  };
-
   xdg.enable = true;
   ## because https://github.com/nix-community/home-manager/issues/1213
   xdg.configFile."mimeapps.list".force = true;
@@ -92,6 +87,10 @@ in {
     font = {
       package = pkgs.roboto;
       name = "Roboto Medium 11";
+    };
+    cursorTheme = {
+      package = pkgs.arc-icon-theme;
+      name = "Arc";
     };
     iconTheme = {
       package = pkgs.arc-icon-theme;
