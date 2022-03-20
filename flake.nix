@@ -453,7 +453,7 @@
             update-fixed-output-derivation-sha = pkgs.world-updaters;
             update-all-fixed-output-derivation-shas = pkgs.world-updaters;
           };
-        devShell = pkgs.devshell.mkShell {
+        devShells.default = pkgs.devshell.mkShell {
           imports = [
             (pkgs.devshell.importTOML ./devshell.toml)
           ];
