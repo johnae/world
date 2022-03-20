@@ -91,14 +91,12 @@
     if [ ! -e "$LID" ]; then
       LID=/proc/acpi/button/lid/LID0
     fi
-    if [ ! -e "$LID" ]; then
-       echo No lid found - skipping sway reload action
-       exit
-    fi
-    if grep -q open "$LID"/state; then
-        swaymsg output eDP-1 enable
-    else
-        swaymsg output eDP-1 disable
+    if [ -e "$LID" ]; then
+      if grep -q open "$LID"/state; then
+          swaymsg output eDP-1 enable
+      else
+          swaymsg output eDP-1 disable
+      fi
     fi
 
     ${
