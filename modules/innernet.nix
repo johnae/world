@@ -160,7 +160,9 @@ with lib; let
 
   writeClientCfg = cfg:
     pkgs.writeShellScript "innernet-write-client-cfg-${cfg.settings.interface.networkName}" ''
+      umask 077
       mkdir -p ${innernet-client-etc-path}
+      chmod 0700 ${innernet-client-etc-path} ## in case it was already there
       cat<<EOF>${innernet-client-etc-path}/${cfg.settings.interface.networkName}.conf
       [interface]
       network-name = "${cfg.settings.interface.networkName}"
