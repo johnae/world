@@ -198,6 +198,18 @@
         inputs.spotnix.overlay
 
         (
+          final: prev: {
+            innernet =
+              if prev.system != "aarch64-linux"
+              then prev.innernet
+              else
+                prev.innernet.overrideAttrs (oa: {
+                  doCheck = false; ## doc tests fail - at least under qemu
+                });
+          }
+        )
+
+        (
           final: prev: let
             flags = "--flake github:johnae/world --use-remote-sudo -L";
           in {
@@ -340,6 +352,7 @@
               spotnix = true;
               persway = true;
               linux_5_16_eccPatch = true;
+              innernet = true;
             }));
       }
     );
