@@ -80,7 +80,6 @@ services.innernet.server.insane.settings.publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnr
 services.innernet.server.insane.settings.externalEndpoint = "65.108.2.146:51820"
 services.innernet.server.insane.settings.cidrs.home = { cidr = "192.168.104.64/26", parent = "insane" }
 services.innernet.server.insane.settings.peers.eris = { ip = "192.168.104.65", cidr = "home", publicKey = "Oya0T0tzAV25A7/Qp3tqKP+2KgGjA/OVuUmKzsTFpRo=", isAdmin = true }
-services.innernet.server.insane.settings.peers.carbon = { ip = "192.168.104.66", cidr = "home", publicKey = "WiNYoRIrLjyeuRkD4uhKJ0qKS32up4wYJSviR5q8QnY=", isAdmin = true }
 services.innernet.server.insane.settings.peers.titan = { ip = "192.168.104.67", cidr = "home", publicKey = "vNfSS1HsbnRqV6V/RfG0Aq1IoNQPS+IP2O162UlVQQA=" }
 services.innernet.server.insane.settings.peers.hyperion = { ip = "192.168.104.68", cidr = "home", publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8=" }
 services.innernet.server.insane.settings.peers.triton = { ip = "192.168.104.69", cidr = "home", publicKey = "gq5yK4X2IqPz74Jc1GQlVb3rgmtuqn8yzlPMeN0UMVI=" }
