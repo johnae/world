@@ -36,11 +36,11 @@ in {
           "media.rdd-vpx.enabled" = false; ## remove on ff 96
         };
 
-        userChrome = ''
-          #TabsToolbar {
-          visibility: collapse;
-          }
-        '';
+        #userChrome = ''
+        #  #TabsToolbar {
+        #  visibility: collapse;
+        #  }
+        #'';
       };
     };
   };
