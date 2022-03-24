@@ -317,7 +317,7 @@ in {
           command = "${pkgs.gnome3.gnome-settings-daemon}/libexec/gsd-xsettings";
         }
         {
-          command = "${pkgs.dbus.out}/bin/dbus-update-activation-environment 2>/dev/null && ${pkgs.dbus.out}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK";
+          command = "${pkgs.dbus.out}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP";
         }
         {
           command = "${swayOnReload}/bin/sway-on-reload";
@@ -325,50 +325,7 @@ in {
         }
       ];
 
-      bars = [
-        {
-          inherit fonts;
-          extraConfig = ''
-            height 25
-          '';
-          statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config-default.toml";
-          colors = {
-            background = "#2E3440AA";
-            statusline = "#88C0D0";
-            separator = "#3B4252";
-
-            focusedWorkspace = {
-              border = "#88C0D0";
-              background = "#88C0D0";
-              text = "#2E3440";
-            };
-
-            activeWorkspace = {
-              border = "#4C566ADD";
-              background = "#4C566ADD";
-              text = "#D8DEE9";
-            };
-
-            inactiveWorkspace = {
-              border = "#3B4252DD";
-              background = "#3B4252DD";
-              text = "#E5E9F0";
-            };
-
-            urgentWorkspace = {
-              border = "#B48EAD";
-              background = "#B48EAD";
-              text = "#ECEFF4";
-            };
-
-            bindingMode = {
-              border = "#BF616A";
-              background = "#BF616A";
-              text = "#E5E9F0";
-            };
-          };
-        }
-      ];
+      bars = [];
     };
     extraConfig = ''
       no_focus [window_role="browser"]

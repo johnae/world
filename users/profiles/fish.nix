@@ -34,6 +34,8 @@
   river = pkgs.writeStrictShellScriptBin "river" ''
     PATH=${pkgs.river}/bin:$PATH
     export XDG_SESSION_TYPE=wayland
+    export XDG_CURRENT_DESKTOP=river
+    export XDG_SESSION_DESKTOP=river
     exec river
   '';
 

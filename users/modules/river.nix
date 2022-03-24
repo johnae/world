@@ -1,37 +1,60 @@
-{ pkgs, config, lib, ... }:
-let
-  inherit (lib) mkOption mkMerge mkIf mkEnableOption types flatten mapAttrsToList;
-  inherit (builtins) mapAttrs isString isList isAttrs;
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
+  l = lib // builtins;
+  inherit
+    (l)
+    mkOption
+    mkMerge
+    mkIf
+    mkEnableOption
+    types
+    flatten
+    mapAttrsToList
+    mapAttrs
+    isString
+    isList
+    isAttrs
+    ;
+
   cfg = config.wayland.windowManager.river;
 
-  mapSettings = s:
-    let
-      mapField = path: value:
-        if isAttrs value then
-          mapAttrsToList (k: v:
-            if isAttrs v then
-              mapField "${path} ${k}" v
-            else
-              "${path} ${k} ${v}"
-          ) value
-        else if isList value then
-          lib.concatStringsSep "\n" value
-        else "${path} ${toString value}";
-    in
-      flatten (mapAttrsToList mapField (lib.filterAttrs (k: v:
-        k != "additional-modes" &&
-        k != "layout-generator-exec"
-      ) s));
+  mapSettings = s: let
+    mapField = path: value:
+      if isAttrs value
+      then
+        mapAttrsToList (
+          k: v:
+            if isAttrs v
+            then mapField "${path} ${k}" v
+            else "riverctl ${path} ${k} ${v}"
+        )
+        value
+      else if isList value
+      then lib.concatStringsSep "\n" (map (v: "riverctl ${v}") value)
+      else "riverctl ${path} ${toString value}";
+  in
+    flatten (mapAttrsToList mapField (lib.filterAttrs (
+        k: v:
+          k
+          != "additional-modes"
+          && k != "layout-generator-exec"
+          && k != "exec"
+      )
+      s));
 
-  writeConfig = conf:
-  let
+  writeConfig = conf: let
     settings = conf.settings;
   in
     pkgs.writeStrictShellScript "init-xkcd9000" ''
       export PATH=${cfg.package}/bin:$PATH
+      set -x
 
       ${
-        lib.concatStringsSep "\n" settings.additional-modes
+        lib.concatStringsSep "\n" (map (mode: "riverctl ${mode}") settings.additional-modes)
       }
 
       ${
@@ -68,19 +91,25 @@ let
           riverctl map $mode None XF86MonBrightnessDown spawn 'light -U 5'
       done
 
+      ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources || true
       ${pkgs.gnome3.gnome-settings-daemon}/libexec/gsd-xsettings || true
-      ${pkgs.dbus.out}/bin/dbus-update-activation-environment 2>/dev/null && ${pkgs.dbus.out}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+      ${pkgs.dbus.out}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
-      systemctl --user import-environment; systemctl --user start graphical-session.target
+      systemctl --user import-environment
+      systemctl --user restart graphical-session.target
+      systemctl --user restart sway-session.target
+
+      ${
+        lib.concatStringsSep "\n" settings.exec
+      }
+
       exec ${settings.layout-generator-exec}
     '';
 
   rivercmd = types.str;
 
-  cnotation = builtins.replaceStrings [ "#" ] [ "0x" ];
-in
-
-{
+  cnotation = builtins.replaceStrings ["#"] ["0x"];
+in {
   options.wayland.windowManager.river = {
     enable = mkEnableOption "Enable the river compositor";
     package = mkOption {
@@ -116,21 +145,25 @@ in
         options.additional-modes = mkOption {
           type = types.listOf types.str;
           default = [];
-          apply = map (mode: "riverctl declare-mode ${mode}");
+          apply = map (mode: "declare-mode ${mode}");
         };
         options.float-filters = mkOption {
           type = types.attrsOf (types.listOf types.str);
           default = {};
-          apply = filters: flatten (mapAttrsToList (target: matchers: (map (matcher: "riverctl float-filter-add ${target} ${matcher}") matchers)) filters);
+          apply = filters: flatten (mapAttrsToList (target: matchers: (map (matcher: "float-filter-add ${target} \"${matcher}\"") matchers)) filters);
         };
         options.csd-filters = mkOption {
           type = types.attrsOf (types.listOf types.str);
           default = {};
-          apply = filters: flatten (mapAttrsToList (target: matchers: (map (matcher: "riverctl float-filter-add ${target} ${matcher}") matchers)) filters);
+          apply = filters: flatten (mapAttrsToList (target: matchers: (map (matcher: "float-filter-add ${target} \"${matcher}\"") matchers)) filters);
         };
         options.layout-generator-exec = mkOption {
           type = types.str;
           default = "exec rivertile -view-padding 4 -outer-padding 4";
+        };
+        options.exec = mkOption {
+          type = types.listOf (types.str);
+          default = [];
         };
       };
     };
@@ -144,6 +177,6 @@ in
       XKB_DEFAULT_MODEL = cfg.xkb.default_model;
       XKB_DEFAULT_VARIANT = cfg.xkb.default_variant;
     };
-    home.packages = [ cfg.package ];
+    home.packages = [cfg.package];
   };
 }
