@@ -207,19 +207,21 @@
 
         (
           final: prev: let
-            flags = "--flake github:johnae/world --use-remote-sudo -L";
+            default_flake = "github:johnae/world";
+            flags = "--use-remote-sudo -L";
           in {
             nixos-upgrade = prev.writeStrictShellScriptBin "nixos-upgrade" ''
               echo Clearing fetcher cache
               echo rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
               rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
-              echo nixos-rebuild boot ${flags}
+              flake=''${1:-${default_flake}}
+              echo nixos-rebuild boot --flake "$flake" ${flags}
               nixos-rebuild boot ${flags}
               booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
               built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
               if [ "$booted" = "$built" ]; then
-                echo nixos-rebuild switch ${flags}
-                nixos-rebuild switch ${flags}
+                echo nixos-rebuild switch --flake "$flake" ${flags}
+                nixos-rebuild switch --flake "$flake" ${flags}
               else
                 cat<<MSG
                 The system must be rebooted for the changes to take effect
