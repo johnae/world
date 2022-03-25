@@ -367,22 +367,6 @@
         "type": "github"
       }
     },
-    "pueue": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1648160170,
-        "narHash": "sha256-VfZymvWp5Cxwcs2NuSfpdPcu6EK05azzWr3UA7pTu+Y=",
-        "owner": "Nukesor",
-        "repo": "pueue",
-        "rev": "25eb1f642b6480c4b41af611b7c5e48edc7e5abc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Nukesor",
-        "repo": "pueue",
-        "type": "github"
-      }
-    },
     "rofi-wayland": {
       "flake": false,
       "locked": {
@@ -423,7 +407,6 @@
         "notracking": "notracking",
         "nur": "nur",
         "persway": "persway",
-        "pueue": "pueue",
         "rofi-wayland": "rofi-wayland",
         "slurp": "slurp",
         "spotifyd": "spotifyd",
