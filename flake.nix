@@ -135,10 +135,6 @@
       url = "github:arxanas/git-branchless";
       flake = false;
     };
-    pueue = {
-      url = "github:Nukesor/pueue";
-      flake = false;
-    };
   };
 
   outputs = {
@@ -510,7 +506,6 @@
           "nixpkgs-fmt"
           "persway"
           "pixieboot"
-          "pueue"
           "pxebooter"
           "rofi-wayland"
           "rust-analyzer-bin"
