@@ -63,6 +63,12 @@
       url = "github:lbonn/rofi/wayland";
       flake = false;
     };
+
+    kile = {
+      url = "gitlab:snakedye/kile";
+      flake = false;
+    };
+
     age-plugin-yubikey = {
       url = "github:str4d/age-plugin-yubikey";
       flake = false;
@@ -497,6 +503,7 @@
           "git-branchless"
           "grim"
           "innernet"
+          "kile"
           "libdrm24109"
           "linux_5_16_eccPatch"
           "meson-061"

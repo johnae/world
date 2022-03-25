@@ -9,6 +9,7 @@ in {
   home-manager.sharedModules = [
     ../users/modules/userinfo.nix
     ../users/modules/theme.nix
+    ../users/modules/river.nix
   ];
 
   home-manager.users =

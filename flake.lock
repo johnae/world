@@ -218,6 +218,22 @@
         "type": "github"
       }
     },
+    "kile": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1646262772,
+        "narHash": "sha256-9Zciz2wpfcBCWzC1CGLXAaFwXm3cYL1m3R7fKHXm+Kg=",
+        "owner": "snakedye",
+        "repo": "kile",
+        "rev": "6e9af67f58e078adffb16a7d37187ca4d750c7ff",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "snakedye",
+        "repo": "kile",
+        "type": "gitlab"
+      }
+    },
     "netns-exec": {
       "flake": false,
       "locked": {
@@ -399,6 +415,7 @@
         "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
         "grim": "grim",
         "home-manager": "home-manager",
+        "kile": "kile",
         "netns-exec": "netns-exec",
         "nix-misc": "nix-misc",
         "nixlib": "nixlib_2",
