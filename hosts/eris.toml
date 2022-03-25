@@ -69,8 +69,6 @@ users.users.john.uid = 1337
 users.users.john.shell = "fish"
 users.users.john.hashedPassword = "$6$RG3QgdVr6A5s524$FRVNXOYWYCNXf6cH/gV4u7g6sffffznBnbXZGHysuWVHGYPpeLfuDuXEJHK.KUrkVCfPXFTTsCLJaj2Q6ATkC1"
 
-home-manager.users.john.programs.rbw.settings.device_id = "f3268147-1e9d-46da-b431-11fe011f5dfe"
-
 home-manager.users.john.userinfo.email = "john@insane.se"
 home-manager.users.john.userinfo.fullName = "John Axel Eriksson"
 home-manager.users.john.userinfo.githubUser = "johnae"
@@ -103,3 +101,5 @@ home-manager.users.john.profiles = [
   "users/profiles/waybar",
   "users/profiles/wlsunset",
 ]
+
+home-manager.users.john.programs.rbw.settings.device_id = "f3268147-1e9d-46da-b431-11fe011f5dfe"
