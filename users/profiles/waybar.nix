@@ -8,7 +8,7 @@
     position = "bottom";
     spacing = 8;
     modules-left = ["river/tags" "sway/workspaces" "sway/mode" "custom/media"];
-    modules-right = ["idle_inhibitor" "pulseaudio" "network" "network#wifi" "cpu" "temperature" "backlight" "battery" "battery#bat2" "clock" "tray"];
+    modules-right = ["network" "network#wifi" "idle_inhibitor" "pulseaudio" "cpu" "temperature" "backlight" "battery" "battery#bat2" "clock" "tray"];
     idle_inhibitor = {
       format = "{icon}";
       format-icons = {
@@ -16,10 +16,26 @@
         deactivated = "";
       };
     };
+    pulseaudio = {
+      format = "{volume}% {icon}";
+      format-bluetooth = "{volume}% {icon}";
+      format-muted = "";
+      format-icons = {
+        headphone = "";
+        hands-free = "";
+        headset = "";
+        phone = "";
+        portable = "";
+        car = "";
+        default = ["" ""];
+      };
+      scroll-step = 1;
+      on-click = "pavucontrol";
+    };
     network = {
       interface = lib.mkDefault "enp*";
-      format-wifi = lib.mkDefault " {bandwidthDownOctets}  {bandwidthUpOctets} {essid} ({signalStrength}%) ";
-      format-ethernet = lib.mkDefault " {bandwidthDownOctets}  {bandwidthUpOctets} {ipaddr}/{cidr} ";
+      format-wifi = lib.mkDefault " {bandwidthDownOctets:>}  {bandwidthUpOctets:>} {essid} ({signalStrength}%) ";
+      format-ethernet = lib.mkDefault " {bandwidthDownOctets:>}  {bandwidthUpOctets:>} {ipaddr}/{cidr} ";
       tooltip-format = lib.mkDefault "{ifname} via {gwaddr} ";
       format-linked = lib.mkDefault "{ifname} (No IP) ";
       format-disconnected = lib.mkDefault "";
@@ -28,8 +44,8 @@
     };
     "network#wifi" = {
       interface = lib.mkDefault "wlan*";
-      format-wifi = lib.mkDefault " {bandwidthDownOctets}  {bandwidthUpOctets} {essid} ({signalStrength}%) ";
-      format-ethernet = lib.mkDefault " {bandwidthDownOctets}  {bandwidthUpOctets} {ipaddr}/{cidr} ";
+      format-wifi = lib.mkDefault " {bandwidthDownOctets:>}  {bandwidthUpOctets:>} {essid} ({signalStrength}%) ";
+      format-ethernet = lib.mkDefault " {bandwidthDownOctets:>}  {bandwidthUpOctets:>} {ipaddr}/{cidr} ";
       tooltip-format = lib.mkDefault "{ifname} via {gwaddr} ";
       format-linked = lib.mkDefault "{ifname} (No IP) ";
       format-disconnected = lib.mkDefault "";
@@ -42,7 +58,7 @@
     * {
         border: none;
         border-radius: 0;
-        font-family: "Roboto, Font Awesome 5 Free, Font Awesome 5 Brands, Arial, sans-serif";
+        font-family: "Roboto Mono, Font Awesome 5 Free, Font Awesome 5 Brands, Arial, sans-serif";
         font-size: 18px;
         min-height: 30px;
     }
@@ -54,7 +70,7 @@
 
     #window {
         font-weight: bold;
-        font-family: "Roboto, Font Awesome 5 Free, Font Awesome 5 Brands, Arial, sans-serif";
+        font-family: "Roboto Mono, Font Awesome 5 Free, Font Awesome 5 Brands, Arial, sans-serif";
     }
 
     #workspaces button {
