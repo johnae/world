@@ -216,7 +216,7 @@
               rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
               flake=''${1:-${default_flake}}
               echo nixos-rebuild boot --flake "$flake" ${flags}
-              nixos-rebuild boot ${flags}
+              nixos-rebuild boot --flake "$flake" ${flags}
               booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
               built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
               if [ "$booted" = "$built" ]; then
