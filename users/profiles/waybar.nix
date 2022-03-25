@@ -1,17 +1,40 @@
-{config, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
   programs.waybar.enable = true;
   programs.waybar.settings.mainBar = {
     position = "bottom";
     spacing = 8;
     modules-left = ["river/tags" "sway/workspaces" "sway/mode" "custom/media"];
-    modules-right = ["idle_inhibitor" "pulseaudio" "network" "cpu" "temperature" "backlight" "battery" "battery#bat2" "clock" "tray"];
+    modules-right = ["idle_inhibitor" "pulseaudio" "network" "network#wifi" "cpu" "temperature" "backlight" "battery" "battery#bat2" "clock" "tray"];
+    idle_inhibitor = {
+      format = "{icon}";
+      format-icons = {
+        activated = "";
+        deactivated = "";
+      };
+    };
     network = {
-      format-wifi = " {bandwidthDownOctets}  {bandwidthUpOctets} {essid} ({signalStrength}%) ";
-      format-ethernet = " {bandwidthDownOctets}  {bandwidthUpOctets} {ipaddr}/{cidr} ";
-      tooltip-format = "{ifname} via {gwaddr} ";
-      format-linked = "{ifname} (No IP) ";
-      format-disconnected = "Disconnected ⚠";
-      format-alt = "{ifname}: {ipaddr}/{cidr}";
+      interface = lib.mkDefault "enp*";
+      format-wifi = lib.mkDefault " {bandwidthDownOctets}  {bandwidthUpOctets} {essid} ({signalStrength}%) ";
+      format-ethernet = lib.mkDefault " {bandwidthDownOctets}  {bandwidthUpOctets} {ipaddr}/{cidr} ";
+      tooltip-format = lib.mkDefault "{ifname} via {gwaddr} ";
+      format-linked = lib.mkDefault "{ifname} (No IP) ";
+      format-disconnected = lib.mkDefault "";
+      format-alt = lib.mkDefault "{ifname}: {ipaddr}/{cidr}";
+      interval = 1;
+    };
+    "network#wifi" = {
+      interface = lib.mkDefault "wlan*";
+      format-wifi = lib.mkDefault " {bandwidthDownOctets}  {bandwidthUpOctets} {essid} ({signalStrength}%) ";
+      format-ethernet = lib.mkDefault " {bandwidthDownOctets}  {bandwidthUpOctets} {ipaddr}/{cidr} ";
+      tooltip-format = lib.mkDefault "{ifname} via {gwaddr} ";
+      format-linked = lib.mkDefault "{ifname} (No IP) ";
+      format-disconnected = lib.mkDefault "";
+      format-alt = lib.mkDefault "{ifname}: {ipaddr}/{cidr}";
+      interval = 1;
     };
   };
   programs.waybar.systemd.enable = true;
