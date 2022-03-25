@@ -85,6 +85,7 @@ home-manager.users.john.profiles = [
   "users/profiles/pueue",
   "users/profiles/qutebrowser",
   "users/profiles/rbw",
+  "users/profiles/river",
   "users/profiles/rofi",
   "users/profiles/spotifyd",
   "users/profiles/spotnix",
@@ -92,5 +93,6 @@ home-manager.users.john.profiles = [
   "users/profiles/starship",
   "users/profiles/sway",
   "users/profiles/tmux",
+  "users/profiles/waybar",
   "users/profiles/wlsunset",
 ]
