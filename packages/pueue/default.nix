@@ -15,7 +15,7 @@ in
 
     src = inputs.pueue;
 
-    cargoSha256 = "sha256-7frZeEUyCZC6t4pI9z75fWgFTXoEPSDDpQAWfn3VPZ8=";
+    cargoSha256 = "sha256-TwOWAwlbljWzj3FC/RT4mgPpGwHyqmLS+oXfzNBLrG0=";
 
     nativeBuildInputs = [installShellFiles];
 
