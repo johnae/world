@@ -100,5 +100,6 @@ home-manager.users.john.profiles = [
   "users/profiles/starship",
   "users/profiles/sway",
   "users/profiles/tmux",
+  "users/profiles/waybar",
   "users/profiles/wlsunset",
 ]
