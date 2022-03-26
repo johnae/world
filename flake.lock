@@ -69,11 +69,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1648177168,
-        "narHash": "sha256-rSq1pfoVgt6Z6V0gu1RSHjG0b9QKvMEidjgvA3P3b5s=",
+        "lastModified": 1648234020,
+        "narHash": "sha256-Z73Vfa3cmUAxvxihSJ9jl7WEauSPlvkTz8zhGxvtPPg=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "c5e33a703a354af02481e2affc1f5155b867cc94",
+        "rev": "290037a17d773073bd4237f92732f850c7b9a160",
         "type": "github"
       },
       "original": {
@@ -315,11 +315,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1647893727,
-        "narHash": "sha256-pOi7VdCb+s5Cwh5CS7YEZVRgH9uCmE87J5W7iXv29Ck=",
+        "lastModified": 1648069223,
+        "narHash": "sha256-BXzQV8p/RR440EB9qY0ULYfTH0zSW1stjUCYeP4SF+E=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "1ec61dd4167f04be8d05c45780818826132eea0d",
+        "rev": "1d08ea2bd83abef174fb43cbfb8a856b8ef2ce26",
         "type": "github"
       },
       "original": {
@@ -332,11 +332,11 @@
     "notracking": {
       "flake": false,
       "locked": {
-        "lastModified": 1648112122,
-        "narHash": "sha256-4UEQ4BgLNIyIR8417rQb95zf2vGchImoV4r7yMpVrxU=",
+        "lastModified": 1648198238,
+        "narHash": "sha256-ib/SnAHXeP0p7LdyLcX+ybWwuWMXrjSb7FaWr0sKpbY=",
         "owner": "notracking",
         "repo": "hosts-blocklists",
-        "rev": "606d61848a0ce9fc0f831edeb4a98706822bf454",
+        "rev": "2192d87c1ae246e92565f35062e3b595fadfecd3",
         "type": "github"
       },
       "original": {
@@ -347,11 +347,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1648191473,
-        "narHash": "sha256-JdOfvKQkd+x/eErYvPSH0JGEcKb5w1SJk50ilMDWIYg=",
+        "lastModified": 1648252526,
+        "narHash": "sha256-tyZDfp7afMWtkXWF7V+b2cGTmm1xw0jWyiAfbeoUcgc=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "3b29585f08001d06ef6c90b8b7b63bc22409366f",
+        "rev": "00525e4d2604ddb25fd8dc2df25ac5c46a254774",
         "type": "github"
       },
       "original": {
@@ -577,11 +577,11 @@
     "wayland-protocols-master": {
       "flake": false,
       "locked": {
-        "lastModified": 1645824140,
-        "narHash": "sha256-LrkXXr0l0u3btvfiAwQuFWsuUYhVbsAyuYWzvJd2x9k=",
+        "lastModified": 1648200504,
+        "narHash": "sha256-UMEttAoqRgs3f84n3fgtYoRkF5rUbxUawqmIQHJV61M=",
         "ref": "main",
-        "rev": "1293ff146ee851ca3f513509f216d9f3adc89916",
-        "revCount": 270,
+        "rev": "39c014cc9de007ab1adf7940862dce9025f183d5",
+        "revCount": 271,
         "type": "git",
         "url": "https://gitlab.freedesktop.org/wayland/wayland-protocols.git"
       },
