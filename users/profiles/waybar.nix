@@ -9,6 +9,17 @@
     spacing = 8;
     modules-left = ["river/tags" "sway/workspaces" "sway/mode" "custom/media"];
     modules-right = ["network" "network#wifi" "idle_inhibitor" "pulseaudio" "cpu" "temperature" "backlight" "battery" "battery#bat2" "clock" "tray"];
+    "custom/media" = {
+      format = "{icon}{}";
+      return-type = "json";
+      format-icons = {
+        Playing = " ";
+        Paused = " ";
+      };
+      max-length = 70;
+      exec = "playerctl -a metadata --format '{\"text\": \"{{playerName}}: {{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
+      on-click = "playerctl play-pause";
+    };
     idle_inhibitor = {
       format = "{icon}";
       format-icons = {
