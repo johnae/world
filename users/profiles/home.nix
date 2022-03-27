@@ -11,6 +11,7 @@ in {
     pkgs.spotnix
     pkgs.my-emacs
     pkgs.scripts
+    pkgs.playerctl
     pkgs.nix-index
     pkgs.git-crypt
     pkgs.wl-clipboard
