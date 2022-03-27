@@ -30,6 +30,8 @@
           k: v:
             if isAttrs v
             then mapField "${path} ${k}" v
+            else if isList v
+            then "riverctl ${path} ${k} spawn '${lib.concatStringsSep ";" (map (c: "riverctl ${c}") v)}'"
             else "riverctl ${path} ${k} ${v}"
         )
         value
