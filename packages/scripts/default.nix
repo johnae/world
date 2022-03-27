@@ -87,7 +87,7 @@
     ${addToBinPath [rofi-wayland wl-clipboard]}
     t="$1"
     awk -F ' - spotify:' \
-           '{print "<span size=\"medium\">"$1"</span><span size=\"0\">#spotify:"$2"</span>"}' \
+           '{print "<span size=\"medium\">"$1"</span><span size=\"1\" alpha=\"1\">#spotify:"$2"</span>"}' \
            < "$XDG_RUNTIME_DIR"/spotnix_output | \
            rofi -normal-window -matching fuzzy -i -dmenu -markup-rows -format p -p "$t >" | \
            awk -F'#' '{print "play "$2}' > "$XDG_RUNTIME_DIR"/spotnix_input
