@@ -3,7 +3,27 @@
   lib,
   pkgs,
   ...
-}: {
+}: let
+  inherit
+    (lib // builtins)
+    listToAttrs
+    ;
+
+  input = listToAttrs (map (name: {
+      inherit name;
+      value = {
+        disable-while-typing = "enabled";
+        natural-scroll = "enabled";
+        tap = "enabled";
+      };
+    }) [
+      "1739:52804:MSFT0001:00_06CB:CE44_Touchpad"
+      "1739:30383:DLL075B:01_06CB:76AF_Touchpad"
+      "1739:30383:DELL07E6:00_06CB:76AF_Touchpad"
+      "1739:52710:DLL096D:01_06CB:CDE6_Touchpad"
+      "1739:52620:SYNA8005:00_06CB:CD8C_Touchpad"
+    ]);
+in {
   home.packages = [
     pkgs.kile
   ];
@@ -25,7 +45,9 @@
     default_variant = "";
   };
   wayland.windowManager.river.settings = {
-    map.normal."Super+Shift" = "Return spawn alacritty";
+    inherit input;
+
+    map.normal."Super Return" = "spawn alacritty";
     map.normal."Super D" = "spawn 'rofi -show drun'";
     map.normal."Super Q" = "close";
     map.normal."Super+Shift E " = "exit";
@@ -33,8 +55,14 @@
     map.normal."Super J" = "focus-view next";
     map.normal."Super K" = "focus-view previous";
 
+    map.normal."Super Left" = "focus-view next";
+    map.normal."Super Right" = "focus-view previous";
+
     map.normal."Super+Shift J" = "swap next";
     map.normal."Super+Shift K" = "swap previous";
+
+    map.normal."Super+Control J" = ["focus-view next" "zoom"];
+    map.normal."Super+Control K" = ["focus-view previous" "zoom"];
 
     map.normal."Super Period" = "focus-output next";
     map.normal."Super Comma" = "focus-output previous";
@@ -42,7 +70,7 @@
     map.normal."Super+Shift Period" = "send-to-output next";
     map.normal."Super+Shift Comma" = "send-to-output previous";
 
-    map.normal."Super Return" = "zoom";
+    map.normal."Super Z" = "zoom";
 
     map.normal."Super+Alt H" = "move left 100";
     map.normal."Super+Alt J" = "move down 100";
@@ -64,7 +92,7 @@
     map.normal."Super Space" = "toggle-float";
     map.normal."Super F" = "toggle-fullscreen";
 
-    ### kile layouts
+    ### kile layouts ###
 
     map.normal."Super+Control Up" = ''send-layout-cmd kile "focused U ((h: v v) 1 0.65 0)"'';
     map.normal."Super+Control Down" = ''send-layout-cmd kile "focused D ((h: v v) 1 0.65 1)"'';
@@ -73,7 +101,7 @@
     map.normal."Super+Control D" = ''send-layout-cmd kile "focused Deck deck"'';
     map.normal."Super+Control F" = ''send-layout-cmd kile "focused Full full"'';
 
-    ################
+    ####################
 
     additional-modes = ["passthrough"];
     map.normal."Super F11" = "enter-mode passthrough";
