@@ -78,7 +78,7 @@ in {
     map.normal."Super+Shift P" = "spawn 'spotify-cmd prev'";
     map.normal."Super+Shift M" = "spawn 'spotify-cmd pause'";
 
-    map.normal."Super+Shift R" = "spawn 'systemctl --user restart graphical-session'";
+    map.normal."Super+Shift R" = "spawn 'systemctl --user restart graphical-session.target'";
 
     map.normal."Super Period" = "focus-output next";
     map.normal."Super Comma" = "focus-output previous";
@@ -137,8 +137,8 @@ in {
 
     default-layout = "kile";
     exec = [
+      "systemctl restart --user xdg-desktop-portal-gtk || true"
       "systemctl restart --user kanshi.service || true"
-      "systemctl restart --user waybar.service || true"
       "${pkgs.swaybg}/bin/swaybg -o '*' -i /home/john/Pictures/wallpaper.jpg -m fill &"
     ];
     layout-generator-exec = "kile --namespace kile --layout '((v: h h) 1 0.65 1)'";
