@@ -125,10 +125,10 @@ in {
 
     map.normal.Super.Escape = "enter-mode wmctl";
     map.wmctl.Super.Escape = "enter-mode normal";
-    map.wmctl.Super.P = ["enter-mode normal" "systemctl poweroff"];
-    map.wmctl.Super.H = ["enter-mode normal" "systemctl hibernate"];
-    map.wmctl.Super.R = ["enter-mode normal" "systemctl reboot"];
-    map.wmctl.Super.S = ["enter-mode normal" "systemctl suspend-then-hibernate"];
+    map.wmctl.Super.P = ["enter-mode normal" "spawn \"systemctl poweroff\""];
+    map.wmctl.Super.H = ["enter-mode normal" "spawn \"systemctl hibernate\""];
+    map.wmctl.Super.R = ["enter-mode normal" "spawn \"systemctl reboot\""];
+    map.wmctl.Super.S = ["enter-mode normal" "spawn \"systemctl suspend-then-hibernate\""];
     map.wmctl.Super.L = ["enter-mode normal" "exit"];
 
     background-color = "0x002b36";
