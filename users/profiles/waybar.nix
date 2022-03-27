@@ -5,7 +5,7 @@
 }: {
   programs.waybar.enable = true;
   programs.waybar.settings.mainBar = {
-    position = "bottom";
+    position = "top";
     spacing = 8;
     modules-left = ["river/tags" "sway/workspaces" "sway/mode" "custom/media"];
     modules-right = ["network" "network#wifi" "idle_inhibitor" "pulseaudio" "cpu" "temperature" "backlight" "battery" "battery#bat2" "clock" "tray"];
