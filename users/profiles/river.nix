@@ -26,6 +26,8 @@
 in {
   home.packages = [
     pkgs.kile
+    pkgs.rofi-wayland
+    pkgs.scripts
   ];
   home.sessionVariables = {
     GDK_BACKEND = "wayland";
@@ -44,13 +46,16 @@ in {
     default_model = "pc105";
     default_variant = "";
   };
+
   wayland.windowManager.river.settings = {
     inherit input;
 
     map.normal."Super Return" = "spawn alacritty";
     map.normal."Super D" = "spawn 'rofi -show drun'";
     map.normal."Super Q" = "close";
-    map.normal."Super+Shift E " = "exit";
+    map.normal."Super+Shift Q" = "exit";
+
+    map.normal."Super+Shift E" = "spawn 'emacsclient -c -n -a='";
 
     map.normal."Super J" = "focus-view next";
     map.normal."Super K" = "focus-view previous";
@@ -64,13 +69,24 @@ in {
     map.normal."Super+Control J" = ["focus-view next" "zoom"];
     map.normal."Super+Control K" = ["focus-view previous" "zoom"];
 
+    map.normal."Super Minus" = "spawn 'rofi-rbw'";
+    map.normal."Super+Shift Minus" = "spawn 'passonly=y rofi-rbw'";
+
+    map.normal."Super T" = "spawn 'rofi-spotify-search track'";
+    map.normal."Super P" = "spawn 'rofi-spotify-search playlist'";
+    map.normal."Super+Shift N" = "spawn 'spotify-cmd next'";
+    map.normal."Super+Shift P" = "spawn 'spotify-cmd prev'";
+    map.normal."Super+Shift M" = "spawn 'spotify-cmd pause'";
+
+    map.normal."Super+Shift R" = "spawn 'systemctl --user restart graphical-session'";
+
     map.normal."Super Period" = "focus-output next";
     map.normal."Super Comma" = "focus-output previous";
 
     map.normal."Super+Shift Period" = "send-to-output next";
     map.normal."Super+Shift Comma" = "send-to-output previous";
 
-    map.normal."Super Z" = "zoom";
+    map.normal."Super Space" = "zoom";
 
     map.normal."Super+Alt H" = "move left 100";
     map.normal."Super+Alt J" = "move down 100";
@@ -89,7 +105,7 @@ in {
     map-pointer.normal."Super BTN_LEFT" = "move-view";
     map-pointer.normal."Super BTN_RIGHT" = "resize-view";
 
-    map.normal."Super Space" = "toggle-float";
+    map.normal."Super+Control Space" = "toggle-float";
     map.normal."Super F" = "toggle-fullscreen";
 
     ### kile layouts ###
