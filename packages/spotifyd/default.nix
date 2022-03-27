@@ -20,8 +20,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [libpulseaudio openssl pkgconfig alsaLib dbus];
 
   doCheck = false;
-  #cargoBuildFlags = [ "--features pulseaudio_backend,dbus_mpris" ];
-  cargoBuildFlags = ["--features pulseaudio_backend"];
+  cargoBuildFlags = ["--features pulseaudio_backend,dbus_mpris"];
 
   meta = {
     license = lib.licenses.gpl3;
