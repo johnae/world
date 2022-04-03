@@ -23,6 +23,27 @@
       "1739:52710:DLL096D:01_06CB:CDE6_Touchpad"
       "1739:52620:SYNA8005:00_06CB:CD8C_Touchpad"
     ]);
+
+  river-menu = pkgs.writeStrictShellScriptBin "river-menu" ''
+    export PATH=${pkgs.rofi-wayland}/bin''${PATH:+:}$PATH
+
+    ACTION="$(echo -e "logout\nshutdown\nhibernate\nsuspend" | rofi -normal-window -matching fuzzy -i -dmenu)"
+    if [ "$ACTION" = "logout" ]; then
+      riverctl exit
+    elif [ "$ACTION" = "poweroff" ]; then
+      systemctl poweroff
+    elif [ "$ACTION" = "hibernate" ]; then
+      systemctl hibernate
+    elif [ "$ACTION" = "reboot" ]; then
+      systemctl reboot
+    elif [ "$ACTION" = "suspend" ]; then
+      systemctl suspend-then-hibernate
+    else
+      echo "Unknown action" 1>&2
+    fi
+
+
+  '';
 in {
   home.packages = [
     pkgs.kile
@@ -123,13 +144,15 @@ in {
     map.normal.Super.F11 = "enter-mode passthrough";
     map.passthrough.Super.F11 = "enter-mode normal";
 
-    map.normal.Super.Escape = "enter-mode wmctl";
-    map.wmctl.Super.Escape = "enter-mode normal";
-    map.wmctl.Super.P = ["enter-mode normal" "spawn \"systemctl poweroff\""];
-    map.wmctl.Super.H = ["enter-mode normal" "spawn \"systemctl hibernate\""];
-    map.wmctl.Super.R = ["enter-mode normal" "spawn \"systemctl reboot\""];
-    map.wmctl.Super.S = ["enter-mode normal" "spawn \"systemctl suspend-then-hibernate\""];
-    map.wmctl.Super.L = ["enter-mode normal" "exit"];
+    map.normal.Super.Escape = "spawn '${river-menu}/bin/river-menu'";
+
+    #map.normal.Super.Escape = "enter-mode wmctl";
+    #map.wmctl.Super.Escape = "enter-mode normal";
+    #map.wmctl.Super.P = ["enter-mode normal" "spawn \"systemctl poweroff\""];
+    #map.wmctl.Super.H = ["enter-mode normal" "spawn \"systemctl hibernate\""];
+    #map.wmctl.Super.R = ["enter-mode normal" "spawn \"systemctl reboot\""];
+    #map.wmctl.Super.S = ["enter-mode normal" "spawn \"systemctl suspend-then-hibernate\""];
+    #map.wmctl.Super.L = ["enter-mode normal" "exit"];
 
     background-color = "0x002b36";
     border-color-focused = "0x93a1a1";
