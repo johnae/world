@@ -69,6 +69,11 @@
       flake = false;
     };
 
+    ristate = {
+      url = "gitlab:snakedye/ristate";
+      flake = false;
+    };
+
     age-plugin-yubikey = {
       url = "github:str4d/age-plugin-yubikey";
       flake = false;
@@ -516,6 +521,7 @@
           "persway"
           "pixieboot"
           "pxebooter"
+          "ristate"
           "rofi-wayland"
           "rust-analyzer-bin"
           "scripts"
