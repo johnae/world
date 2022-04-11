@@ -237,6 +237,8 @@ in {
       then ["127.0.0.1#5300"]
       else cfg.upstreamDnsServers;
     services.dnsmasq.extraConfig = ''
+      dnssec
+      conf-file=${pkgs.dnsmasq}/share/dnsmasq/trust-anchors.conf
       cache-size=10000
       log-queries
       domain-needed
