@@ -27,7 +27,7 @@
   river-menu = pkgs.writeStrictShellScriptBin "river-menu" ''
     export PATH=${pkgs.rofi-wayland}/bin''${PATH:+:}$PATH
 
-    ACTION="$(echo -e "logout\nshutdown\nhibernate\nsuspend" | rofi -normal-window -matching fuzzy -i -dmenu)"
+    ACTION="$(echo -e "logout\npoweroff\nreboot\nhibernate\nsuspend" | rofi -normal-window -matching fuzzy -i -dmenu)"
     if [ "$ACTION" = "logout" ]; then
       riverctl exit
     elif [ "$ACTION" = "poweroff" ]; then
@@ -171,6 +171,7 @@ in {
       "systemctl restart --user xdg-desktop-portal-gtk || true"
       "systemctl restart --user kanshi.service || true"
       "${pkgs.swaybg}/bin/swaybg -o '*' -i /home/john/Pictures/wallpaper.jpg -m fill &"
+      "${pkgs.eww-wayland}/bin/eww kill && ${pkgs.eww-wayland}/bin/eww open bar"
     ];
     layout-generator-exec = "kile --namespace kile --layout '((v: h h) 1 0.65 1)'";
   };

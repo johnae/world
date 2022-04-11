@@ -107,10 +107,6 @@
 
       exec ${settings.layout-generator-exec}
     '';
-
-  rivercmd = types.str;
-
-  cnotation = builtins.replaceStrings ["#"] ["0x"];
 in {
   options.wayland.windowManager.river = {
     enable = mkEnableOption "Enable the river compositor";

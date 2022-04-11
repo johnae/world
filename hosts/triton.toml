@@ -75,6 +75,7 @@ home-manager.users.john.profiles = [
   "users/profiles/chromium",
   "users/profiles/dconf",
   "users/profiles/emacs",
+  "users/profiles/eww",
   "users/profiles/firefox",
   "users/profiles/fish",
   "users/profiles/git",

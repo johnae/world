@@ -383,6 +383,22 @@
         "type": "github"
       }
     },
+    "ristate": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1646783380,
+        "narHash": "sha256-GKRDW6o0kC5ZAKVTWqxGGcFOvc0AJT0v4spi+ix6RVE=",
+        "owner": "snakedye",
+        "repo": "ristate",
+        "rev": "2c499eda6131a87f2eaab17a07524e1c727fe65a",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "snakedye",
+        "repo": "ristate",
+        "type": "gitlab"
+      }
+    },
     "rofi-wayland": {
       "flake": false,
       "locked": {
@@ -424,6 +440,7 @@
         "notracking": "notracking",
         "nur": "nur",
         "persway": "persway",
+        "ristate": "ristate",
         "rofi-wayland": "rofi-wayland",
         "slurp": "slurp",
         "spotifyd": "spotifyd",
