@@ -11,6 +11,12 @@ in {
     ./defaults.nix
   ];
 
+  boot.kernel.sysctl = {
+    "fs.inotify.max_queued_events" = lib.mkDefault 32768;
+    "fs.inotify.max_user_instances" = lib.mkDefault 8192;
+    "fs.inotify.max_user_watches" = lib.mkDefault 495486;
+  };
+
   networking.usePredictableInterfaceNames = false; ## works when there's only one ethernet port
   networking.useDHCP = false;
 
