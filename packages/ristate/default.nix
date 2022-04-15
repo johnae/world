@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = inputs.ristate;
 
-  cargoSha256 = "sha256-9b59zPgEiobDuHEA90tLbShI+U6lJdk5YyUl+SxgtC4=";
+  cargoSha256 = "sha256-3kv9Z9y7SGplV8xkCq72XaIousZhT6H/4bMqrLttX5M=";
 
   doCheck = false;
 
