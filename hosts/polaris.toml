@@ -118,6 +118,8 @@ services.k3s.extraFlagsList = [
   "--node-label svccontroller.k3s.cattle.io/enablelb=true",
   "--node-label topology.kubernetes.io/region=hetzner",
   "--node-label topology.kubernetes.io/zone=hetzner-fi",
+  "--cluster-init",
+  "--secrets-encryption",
 ]
 services.k3s.role = "server"
 services.k3s.tokenFile = "/run/agenix/k3s-token"
