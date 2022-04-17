@@ -110,6 +110,7 @@ spec:
           command:
             - /usr/bin/kured
             - --reboot-command="/run/current-system/sw/bin/systemctl reboot"
+            - --period=10m
 #            - --force-reboot=false
 #            - --drain-grace-period=-1
 #            - --skip-wait-for-delete-timeout=0
