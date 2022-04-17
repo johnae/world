@@ -67,7 +67,7 @@ services.syncthing.cert = "/run/agenix/syncthing-cert"
 services.syncthing.key = "/run/agenix/syncthing-key"
 services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
 
-system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
+system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min", enableSentinel = true }
 
 age.secrets.k3s-token.file = "secrets/k3s/token.age"
 age.secrets.wg-home.file = "secrets/icarus/wg-home.age"

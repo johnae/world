@@ -105,7 +105,7 @@ networking.private-wireguard.peers = [
   { allowedIPs = [ "0.0.0.0/0", "::0/0" ], endpoint = "185.65.135.70:51820", publicKey = "615mnBGkvjZnD/vRbyL/6da7YhtctfB+jimN+wfV724=" }
 ]
 
-system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
+system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min", enableSentinel = true }
 
 age.secrets.k3s-token.file = "secrets/k3s/token.age"
 age.secrets.wg-home.file = "secrets/polaris/wg-home.age"

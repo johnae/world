@@ -36,7 +36,7 @@ services.remote-unlock = [
   { enable = true, host = "65.108.2.146", port = 2222, identityFile = "/run/agenix/id_ed25519_remote_unlock", passwordFile = "/run/agenix/remote-disk-password" }
 ]
 
-system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min" }
+system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min", enableSentinel = true }
 
 age.secrets.k3s-token.file = "secrets/k3s/token.age"
 age.secrets.ubnt-api-user-password.file = "secrets/ubnt-api-user-password.age"

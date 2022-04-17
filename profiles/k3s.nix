@@ -5,6 +5,9 @@
   ];
   services.k3s.disable = ["traefik"];
   services.k3s.disableNetworkPolicy = true;
+  services.k3s.autoDeployList = [
+    ../files/kubernetes/kured.yaml
+  ];
   networking.firewall.trustedInterfaces = ["cni+" "flannel.1" "calico+" "cilium+" "lxc+"];
   environment.state."/keep" = {
     directories = [
