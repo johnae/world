@@ -91,7 +91,7 @@ defaults
     timeout tunnel       86400s
 
 frontend k8s-api
-    bind 192.168.104.100:8443
+    bind 192.168.104.100:443
     mode tcp
     default_backend k8s-api
 
