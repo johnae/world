@@ -109,7 +109,7 @@ spec:
               value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin
           command:
             - /usr/bin/kured
-            - --reboot-command="/run/current-system/sw/bin/systemctl reboot"
+            - --reboot-command=/run/current-system/sw/bin/systemctl reboot
             - --period=10m
 #            - --force-reboot=false
 #            - --drain-grace-period=-1
