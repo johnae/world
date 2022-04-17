@@ -101,6 +101,8 @@ spec:
           env:
             # Pass in the name of the node on which this pod is scheduled
             # for use with drain/uncordon operations and lock acquisition
+            - name: PATH
+              value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/run/current-system/sw/bin
             - name: KURED_NODE_ID
               valueFrom:
                 fieldRef:
