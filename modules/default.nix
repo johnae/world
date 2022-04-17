@@ -1,15 +1,16 @@
 {
   imports = [
-    ./services.nix
+    ./auto-upgrade-enhanced.nix
     ./cleanboot.nix
-    ./state.nix
-    ./sleep-management.nix
-    ./k3s.nix
-    ./innernet.nix
-    ./router.nix
-    ./private-wireguard.nix
     ./config-from-data.nix
-    ./host-config.nix
     ./home.nix
+    ./host-config.nix
+    ./innernet.nix
+    ./k3s.nix
+    ./private-wireguard.nix
+    ./router.nix
+    ./services.nix
+    ./sleep-management.nix
+    ./state.nix
   ];
 }
