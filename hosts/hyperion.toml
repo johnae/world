@@ -42,6 +42,7 @@ services.k3s.extraFlagsList = [
   "--node-label topology.kubernetes.io/region=home",
   "--node-label topology.kubernetes.io/zone=home",
   "--secrets-encryption",
+  "--tls-san 192.168.104.100",
 ]
 services.k3s.serverAddr = "https://192.168.104.1:6443"
 services.k3s.clusterCIDR = "10.128.128.0/21"
