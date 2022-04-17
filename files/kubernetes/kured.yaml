@@ -112,7 +112,7 @@ spec:
           securityContext:
             privileged: true # Give permission to nsenter /proc/1/ns/mnt
           volumeMounts:
-            - name: config
+            - name: config-volume
               mountPath: /etc/profile.d/nixpath.sh
               subPath: nixpath.sh
           env:
