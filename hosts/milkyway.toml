@@ -93,9 +93,9 @@ defaults
 frontend k8s-api
     bind 192.168.104.100:8443
     mode tcp
-    default_backend k8s-apibackend
+    default_backend k8s-api
 
-k8s-api
+backend k8s-api
     option  httpchk GET /readyz HTTP/1.0
     option  log-health-checks
     http-check expect status 200
