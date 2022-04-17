@@ -116,7 +116,7 @@ in {
       mkdir -p ${k3sManifestsDir}
       ${
         concatStringsSep "\n" (map (
-            manifestPath: "cp ${manifestPath} ${k3sManifestsDir}/"
+            manifestPath: "cp ${manifestPath} ${k3sManifestsDir}/$(basename ${manifestPath} | cut -c 34-)"
           )
           cfg.autoDeployList)
       }
