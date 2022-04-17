@@ -68,6 +68,15 @@ metadata:
   name: kured
   namespace: kube-system
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kured-config
+  namespace: kube-system
+data:
+  nixpath.sh: |
+    export PATH=$PATH:/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin
+---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -90,6 +99,10 @@ spec:
           effect: NoSchedule
       hostPID: true # Facilitate entering the host mount namespace via init
       restartPolicy: Always
+      volumes:
+        - name: config-volume
+          configMap:
+            name: kured-config
       containers:
         - name: kured
           image: docker.io/weaveworks/kured:1.9.2
@@ -98,11 +111,13 @@ spec:
           imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true # Give permission to nsenter /proc/1/ns/mnt
+          volumeMounts:
+            - name: config
+              mountPath: /etc/profile.d
+              subPath: nixpath.sh
           env:
             # Pass in the name of the node on which this pod is scheduled
             # for use with drain/uncordon operations and lock acquisition
-            - name: PATH
-              value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/run/current-system/sw/bin
             - name: KURED_NODE_ID
               valueFrom:
                 fieldRef:
