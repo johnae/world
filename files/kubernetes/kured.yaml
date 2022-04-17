@@ -113,7 +113,7 @@ spec:
             privileged: true # Give permission to nsenter /proc/1/ns/mnt
           volumeMounts:
             - name: config
-              mountPath: /etc/profile.d
+              mountPath: /etc/profile.d/nixpath.sh
               subPath: nixpath.sh
           env:
             # Pass in the name of the node on which this pod is scheduled
