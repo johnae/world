@@ -77,6 +77,36 @@ environment.state."/keep".directories = [
   "/var/lib/promtail",
 ]
 
+services.haproxy.enable = true
+services.haproxy.config = """
+defaults
+    maxconn 20000
+    mode    tcp
+    option  dontlognull
+    timeout http-request 10s
+    timeout queue        1m
+    timeout connect      10s
+    timeout client       86400s
+    timeout server       86400s
+    timeout tunnel       86400s
+
+frontend k8s-api
+    bind 192.168.104.100:8443
+    mode tcp
+    default_backend k8s-apibackend
+
+k8s-api
+    option  httpchk GET /readyz HTTP/1.0
+    option  log-health-checks
+    http-check expect status 200
+    mode tcp
+    balance roundrobin
+    default-server verify none check-ssl inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 5000 maxqueue 5000 weight 100
+    server node1 192.168.104.1:6443 check
+    server node2 192.168.104.67:6443 check
+    server node3 192.168.104.68:6443 check
+"""
+
 services.promtail.enable = true
 services.promtail.configuration.positions.filename = "/tmp/positions.yaml"
 
