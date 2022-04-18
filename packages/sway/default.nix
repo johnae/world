@@ -18,6 +18,7 @@
   libinput,
   libcap,
   libdrm,
+  xcbutilwm,
   pam,
   gdk-pixbuf,
   libevdev,
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     libxkbcommon
+    xcbutilwm
     pcre2
     json_c
     dbus
