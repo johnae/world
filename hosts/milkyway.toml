@@ -67,9 +67,9 @@ services.nginx.sslCiphers = "AES256+EECDH:AES256+EDH:!aNULL"
 services.nginx.virtualHosts."home.insane.se".enableACME = true
 security.acme.certs."home.insane.se".postRun = """
   set -x
-  echo Copying certificates to /var/lib/promtail/
-  cp -r ./* /var/lib/promtail/
-  chown -R promtail:promtail /var/lib/promtail/*
+  echo Copying certificates to /keep/var/lib/promtail/
+  cp -r ./* /keep/var/lib/promtail/
+  chown -R promtail:promtail /keep/var/lib/promtail
 """
 
 environment.state."/keep".directories = [
