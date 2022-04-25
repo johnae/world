@@ -19,7 +19,7 @@ emacsWithPackagesFromUsePackage {
   alwaysTangle = true;
   config = ./emacs.org;
   package =
-    pkgs.emacsPgtkGcc.overrideAttrs
+    pkgs.emacsPgtkNativeComp.overrideAttrs
     (oa: {
       nativeBuildInputs = oa.nativeBuildInputs ++ [makeWrapper];
       postInstall = ''
