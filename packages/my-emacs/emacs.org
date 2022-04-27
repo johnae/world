@@ -1189,7 +1189,6 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
 **** Rustic
      #+BEGIN_SRC elisp
        (use-package rustic
-         :demand
          :mode ("\\.rs$" . rustic-mode)
          :bind (:map rustic-mode-map
                      ("C-c C-c j" . lsp-ui-imenu)
