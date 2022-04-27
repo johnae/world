@@ -6,6 +6,7 @@
   inherit (lib) mkOption mkMerge mkIf mkEnableOption types;
   cfg = config.base16-theme;
   cnotation = builtins.replaceStrings ["#"] ["0x"];
+  footclr = builtins.replaceStrings ["#"] [""];
   color = default:
     mkOption {
       inherit default;
@@ -64,9 +65,45 @@ in {
           };
         };
 
+        programs.foot.settings = {
+          cursor = {
+            color = "${footclr cfg.base00} ${footclr cfg.base04}";
+          };
+
+          colors = {
+            background = "00374e"; ## special - not part of theme
+            foreground = footclr cfg.base04;
+
+            regular0 = footclr cfg.base01;
+            regular1 = footclr cfg.base0B;
+            regular2 = footclr cfg.base0E;
+            regular3 = footclr cfg.base0D;
+            regular4 = footclr cfg.base09;
+            regular5 = footclr cfg.base0F;
+            regular6 = footclr cfg.base08;
+            regular7 = footclr cfg.base05;
+            bright0 = footclr cfg.base03;
+            bright1 = footclr cfg.base0B;
+            bright2 = footclr cfg.base0E;
+            bright3 = footclr cfg.base0D;
+            bright4 = footclr cfg.base09;
+            bright5 = footclr cfg.base0F;
+            bright6 = footclr cfg.base07;
+            bright7 = footclr cfg.base06;
+            dim0 = footclr "373e4d";
+            dim1 = footclr "94545d";
+            dim2 = footclr "809575";
+            dim3 = footclr "b29e75";
+            dim4 = footclr "68809a";
+            dim5 = footclr "8c738c";
+            dim6 = footclr "6d96a5";
+            dim7 = footclr "aeb3bb";
+          };
+        };
+
         programs.alacritty.settings.colors = {
           primary.background = "0x00374e"; ## special - not part of theme
-          primary.foreground = "0xD8DEE9";
+          primary.foreground = cnotation cfg.base04;
 
           cursor.text = cnotation cfg.base00;
           cursor.cursor = cnotation cfg.base04;
