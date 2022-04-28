@@ -59,6 +59,7 @@ in {
             "/home/${userName}/.config/qutebrowser"
             "/home/${userName}/.cache/qutebrowser"
             "/home/${userName}/.config/obs-studio"
+            "/home/${userName}/.config/Element"
             "/home/${userName}/.gnupg"
             "/home/${userName}/.config/gcloud"
             "/home/${userName}/.emacs.d"
