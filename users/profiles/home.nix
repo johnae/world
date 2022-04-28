@@ -32,6 +32,7 @@ in {
     pkgs.lm_sensors
     pkgs.git-branchless
     pkgs.pueue
+    pkgs.element-desktop-wayland
   ];
 
   home.sessionVariables = {
