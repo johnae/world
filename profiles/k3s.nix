@@ -16,7 +16,7 @@ in {
       "--kube-apiserver-arg=\"oidc-issuer-url=https://dex.insane.se\""
       "--kube-apiserver-arg=\"oidc-username-claim=email\""
       "--kube-apiserver-arg=\"oidc-groups-claim=groups\""
-      "--kube-apiserver-arg=\"oidc-client-id=dex-k8s-authenticator\""
+      "--kube-apiserver-arg=\"oidc-client-id=dex-auth\""
     ]);
   services.k3s.disable = ["traefik"];
   services.k3s.disableNetworkPolicy = true;
