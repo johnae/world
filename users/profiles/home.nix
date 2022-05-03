@@ -20,6 +20,7 @@ in {
     pkgs.alejandra
     pkgs.google-cloud-sdk
     pkgs.kubectl
+    pkgs.kubelogin-oidc
     pkgs.kubectx
     pkgs.kustomize
     pkgs.fzf # # for certain utilities that depend on it
