@@ -114,25 +114,29 @@ age.secrets.syncthing-cert = { file = "secrets/polaris/syncthing-cert.age", owne
 age.secrets.syncthing-key = { file = "secrets/polaris/syncthing-key.age", owner = "1337" }
 
 networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
-services.k3s.extraFlagsList = [
-  "--node-label svccontroller.k3s.cattle.io/enablelb=true",
-  "--node-label topology.kubernetes.io/region=hetzner",
-  "--node-label topology.kubernetes.io/zone=hetzner-fi",
-  "--cluster-init",
-  "--secrets-encryption",
-  "--tls-san 192.168.104.100",
-]
+
 services.k3s.role = "server"
-services.k3s.tokenFile = "/run/agenix/k3s-token"
-services.k3s.clusterCIDR = "10.128.128.0/21"
-services.k3s.serviceCIDR = "10.129.128.0/22"
-services.k3s.clusterDNS = "10.129.128.10"
-services.k3s.maxPodsPerNode = 62
-services.k3s.nodeCIDRMaskSize = 25
-services.k3s.flannelIface = "insane"
-services.k3s.nodeIP = "192.168.104.1"
-services.k3s.nodeExternalIP = "65.108.2.146"
-services.k3s.advertiseAddress = "192.168.104.1"
+services.k3s.settings.cluster-init = true
+services.k3s.settings.token-file = "/run/agenix/k3s-token"
+services.k3s.settings.flannel-iface = "insane"
+services.k3s.settings.node-ip = "192.168.104.1"
+services.k3s.settings.node-external-ip = "65.108.2.146"
+services.k3s.settings.with-node-id = true
+services.k3s.settings.advertise-address = "192.168.104.1"
+services.k3s.settings.cluster-cidr = "10.128.128.0/21"
+services.k3s.settings.service-cidr = "10.129.128.0/22"
+services.k3s.settings.cluster-dns = "10.129.128.10"
+services.k3s.settings.kubelet-arg.maxPodsPerNode = 62
+services.k3s.settings.kube-controller-manager-arg.node-cidr-mask-size = 25
+services.k3s.settings.kube-apiserver-arg.oidc-issuer-url = "https://dex.insane.se"
+services.k3s.settings.kube-apiserver-arg.oidc-username-claim = "email"
+services.k3s.settings.kube-apiserver-arg.oidc-groups-claim = "groups"
+services.k3s.settings.kube-apiserver-arg.oidc-client-id = "dex-auth"
+services.k3s.settings.node-label."svccontroller.k3s.cattle.io/enablelb" = "true"
+services.k3s.settings.node-label."topology.kubernetes.io/region" = "hetzner"
+services.k3s.settings.node-label."topology.kubernetes.io/zone" = "hetzner-fi"
+services.k3s.settings.secrets-encryption = true
+services.k3s.settings.tls-san = "192.168.104.100"
 services.k3s.after = [ "innernet-server-insane.service" ]
 
 services.plex = { enable = true, openFirewall = true }

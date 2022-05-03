@@ -76,17 +76,16 @@ age.secrets.syncthing-cert = { file = "secrets/icarus/syncthing-cert.age", owner
 age.secrets.syncthing-key = { file = "secrets/icarus/syncthing-key.age", owner = "1337" }
 
 networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
+
 services.k3s.role = "agent"
-services.k3s.extraFlagsList = [
-  "--node-label topology.kubernetes.io/region=home",
-  "--node-label topology.kubernetes.io/zone=home",
-]
-services.k3s.serverAddr = "https://192.168.104.1:6443"
-services.k3s.tokenFile = "/run/agenix/k3s-token"
-services.k3s.maxPodsPerNode = 62
-services.k3s.flannelIface = "insane"
-services.k3s.nodeIP = "192.168.104.70"
-services.k3s.nodeExternalIP = "192.168.20.143"
+services.k3s.settings.server = "https://192.168.104.1:6443"
+services.k3s.settings.token-file = "/run/agenix/k3s-token"
+services.k3s.settings.flannel-iface = "insane"
+services.k3s.settings.node-ip = "192.168.104.70"
+services.k3s.settings.node-external-ip = "192.168.20.143"
+services.k3s.settings.kubelet-arg.maxPodsPerNode = 62
+services.k3s.settings.node-label."topology.kubernetes.io/region" = "home"
+services.k3s.settings.node-label."topology.kubernetes.io/zone" = "home"
 services.k3s.after = [ "innernet-client-insane.service" ]
 
 btrfs.disks = [ "/dev/nvme0n1", "/dev/nvme1n1" ]

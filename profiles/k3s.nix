@@ -4,22 +4,12 @@
   hostName,
   ...
 }: let
-  inherit (lib) optionals;
+  inherit (lib) optionals mkIf;
   cfg = config.services.k3s;
 in {
   services.k3s.enable = true;
-  services.k3s.extraFlagsList =
-    [
-      "--node-label hostname=${hostName}"
-    ]
-    ++ (optionals (cfg.role == "server") [
-      "--kube-apiserver-arg=\"oidc-issuer-url=https://dex.insane.se\""
-      "--kube-apiserver-arg=\"oidc-username-claim=email\""
-      "--kube-apiserver-arg=\"oidc-groups-claim=groups\""
-      "--kube-apiserver-arg=\"oidc-client-id=dex-auth\""
-    ]);
+  services.k3s.settings.node-label.hostname = hostName;
   services.k3s.disable = ["traefik"];
-  services.k3s.disableNetworkPolicy = true;
   services.k3s.autoDeployList = [
     ../files/kubernetes/kured.yaml
   ];
