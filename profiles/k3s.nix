@@ -54,10 +54,10 @@ in {
       prometheus_remote_write_url = lib.mkDefault "https://metrics.insane.se/api/v1/push";
       loki_remote_write_url = lib.mkDefault "https://logs.insane.se/loki/api/v1/push";
       grafana_dns = lib.mkDefault "grafana.insane.se";
-      loki_bucket = lib.mkDefault "minio.minio.svc.cluster.local/loki-d78f";
+      loki_bucket = lib.mkDefault "loki-d78f";
       cortex_bucket = lib.mkDefault "cortex-d78f";
-      cortex_bucket_host = lib.mkDefault "minio.miniosvc.cluster.local";
-      pod_subnet = lib.mkDefault cfg.k3s.settings.cluster-cidr;
+      minio_host = lib.mkDefault "minio.minio.svc.cluster.local";
+      pod_subnet = lib.mkDefault "10.128.128.0/21";
     };
   };
 
