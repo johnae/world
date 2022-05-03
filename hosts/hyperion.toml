@@ -69,9 +69,9 @@ services.k3s.autoDeploy.cluster-vars.data.prometheus_remote_write_url = "https:/
 services.k3s.autoDeploy.cluster-vars.data.loki_remote_write_url = "https://logs.insane.se/loki/api/v1/push"
 services.k3s.autoDeploy.cluster-vars.data.grafana_dns = "grafana.insane.se"
 services.k3s.autoDeploy.cluster-vars.data.pod_subnet = "10.128.128.0/21"
-services.k3s.autoDeploy.cluster-vars.data.loki_bucket = "minio.minio.svc.cluster.local/loki-d78f"
+services.k3s.autoDeploy.cluster-vars.data.minio_host = "minio.minio.svc.cluster.local"
+services.k3s.autoDeploy.cluster-vars.data.loki_bucket = "loki-d78f"
 services.k3s.autoDeploy.cluster-vars.data.cortex_bucket = "cortex-d78f"
-services.k3s.autoDeploy.cluster-vars.data.cortex_bucket_host = "minio.miniosvc.cluster.local"
 
 services.k3s.after = [ "innernet-client-insane.service" ]
 
