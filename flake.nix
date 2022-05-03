@@ -203,7 +203,7 @@
         inputs.nur.overlay
         inputs.persway.overlay
         inputs.spotnix.overlay
-
+        (import ./kubernetes/overlay.nix)
         (
           final: prev: {
             innernet =
@@ -241,20 +241,6 @@
               MSG
               fi
             '';
-          }
-        )
-
-        (
-          final: prev: {
-            ## part of 5.17 - enable ecc support for AMD 5650G/5750G processors
-            linux_5_16_eccPatch = prev.linux_5_16.overrideDerivation (drv: {
-              patches =
-                (drv.patches or [])
-                ++ [
-                  ./patches/linux/ecc-amd-cezanne.patch
-                ];
-            });
-            linuxPackages_5_16_eccPatch = prev.linuxPackagesFor (final.linux_5_16_eccPatch);
           }
         )
       ]
@@ -362,6 +348,7 @@
               persway = true;
               linux_5_16_eccPatch = true;
               innernet = true;
+              fluxcd-yaml = true;
             }));
       }
     );

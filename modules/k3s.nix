@@ -1,10 +1,11 @@
 {
   lib,
+  pkgs,
   config,
   ...
 }: let
   inherit (lib) mkOption mkIf mkMerge mkForce types optionals mapAttrsToList flatten;
-  inherit (builtins) concatStringsSep isAttrs isBool mapAttrs sort lessThan;
+  inherit (builtins) concatStringsSep isPath isAttrs isBool mapAttrs sort lessThan;
   cfg = config.services.k3s;
   k3sManifestsDir = "/var/lib/rancher/k3s/server/manifests";
   mapSettings = s: let
@@ -28,9 +29,22 @@
   in
     flatten (mapAttrsToList mapField s);
 in {
-  options.services.k3s.autoDeployList = mkOption {
-    type = types.listOf types.path;
-    default = [];
+  options.services.k3s.autoDeploy = mkOption {
+    type = types.attrsOf (
+      types.either
+      types.path
+      (types.attrsOf types.anything)
+    );
+    default = {};
+    apply = mapAttrs (name: value:
+      if isPath value
+      then value
+      else
+        pkgs.runCommand "${name}.yaml" {} ''
+          cat<<EOF>$out
+          ${builtins.toJSON value}
+          EOF
+        '');
   };
 
   options.services.k3s.after = mkOption {
@@ -44,7 +58,7 @@ in {
   };
 
   options.services.k3s.settings = mkOption {
-    type = types.attrsOf (types.anything);
+    type = types.attrsOf types.anything;
     default = {};
   };
 
@@ -54,10 +68,10 @@ in {
     systemd.services.k3s.preStart = mkIf (cfg.role == "server") ''
       mkdir -p ${k3sManifestsDir}
       ${
-        concatStringsSep "\n" (map (
-            manifestPath: "cp ${manifestPath} ${k3sManifestsDir}/$(basename ${manifestPath} | cut -c 34-)"
+        concatStringsSep "\n" (mapAttrsToList (
+            name: path: "cp ${path} ${k3sManifestsDir}/${name}.yaml"
           )
-          cfg.autoDeployList)
+          cfg.autoDeploy)
       }
       ${
         concatStringsSep "\n" (map (
