@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (lib) mkOption mkIf mkMerge mkForce types optionals mapAttrsToList flatten;
-  inherit (builtins) concatStringsSep isPath isAttrs isBool mapAttrs sort lessThan;
+  inherit (builtins) concatStringsSep isString isPath isAttrs isBool mapAttrs sort lessThan;
   cfg = config.services.k3s;
   k3sManifestsDir = "/var/lib/rancher/k3s/server/manifests";
   mapSettings = s: let
@@ -37,7 +37,7 @@ in {
     );
     default = {};
     apply = mapAttrs (name: value:
-      if isPath value
+      if (isPath value || isString value)
       then value
       else
         pkgs.runCommand "${name}.yaml" {} ''
