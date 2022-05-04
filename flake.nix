@@ -292,7 +292,7 @@
 
       modules = [./modules];
 
-      system = config.system;
+      inherit (config) system;
 
       ## filter out all keys with name "profiles" from
       ## TOML config
@@ -454,9 +454,9 @@
               program = "${drv}/bin/${name}";
             }
           ) {
-            pixieboot = pkgs.pixieboot;
-            lint = pkgs.lint;
-            nixos-upgrade = pkgs.nixos-upgrade;
+            inherit (pkgs) pixieboot;
+            inherit (pkgs) lint;
+            inherit (pkgs) nixos-upgrade;
             update-cargo-vendor-sha = pkgs.world-updaters;
             update-all-cargo-vendor-shas = pkgs.world-updaters;
             update-fixed-output-derivation-sha = pkgs.world-updaters;

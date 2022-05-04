@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  home = config.home;
+  inherit (config) home;
 in {
   home.packages = [
     pkgs.mako

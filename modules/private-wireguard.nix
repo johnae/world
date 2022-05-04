@@ -39,7 +39,7 @@ in {
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = mkIf cfg.enable {
     networking.wireguard.interfaces.private = {
       inherit (cfg) privateKeyFile interfaceNamespace peers ips;
       preSetup = ''

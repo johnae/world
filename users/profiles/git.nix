@@ -4,7 +4,7 @@
   lib,
   ...
 }: let
-  userinfo = config.userinfo;
+  inherit (config) userinfo;
 in {
   programs.git = {
     userName = userinfo.fullName;

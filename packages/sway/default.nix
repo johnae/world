@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "i3-compatible tiling Wayland compositor";
-    homepage = https://swaywm.org;
+    homepage = "https://swaywm.org";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [

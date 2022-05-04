@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  home = config.home;
+  inherit (config) home;
 in {
   services.emacs = {
     enable = true;

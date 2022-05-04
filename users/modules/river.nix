@@ -49,7 +49,7 @@
       s));
 
   writeConfig = conf: let
-    settings = conf.settings;
+    inherit (conf) settings;
   in
     pkgs.writeStrictShellScript "init-xkcd9000" ''
       export PATH=${cfg.package}/bin:$PATH
@@ -160,7 +160,7 @@ in {
           default = "exec rivertile -view-padding 4 -outer-padding 4";
         };
         options.exec = mkOption {
-          type = types.listOf (types.str);
+          type = types.listOf types.str;
           default = [];
         };
       };

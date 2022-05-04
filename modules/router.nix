@@ -127,7 +127,7 @@ in {
       description = "The internal interface ip.";
     };
     vlans = mkOption {
-      type = attrsOf (submodule ({...}: {
+      type = attrsOf (submodule (_: {
         options = {
           id = mkOption {
             type = int;
