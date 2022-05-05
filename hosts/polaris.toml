@@ -138,6 +138,10 @@ services.k3s.settings.node-label."topology.kubernetes.io/zone" = "hetzner-fi"
 services.k3s.settings.secrets-encryption = true
 services.k3s.settings.tls-san = "192.168.104.100"
 
+services.k3s.autoDeploy.cluster-vars.apiVersion = "v1"
+services.k3s.autoDeploy.cluster-vars.kind = "ConfigMap"
+services.k3s.autoDeploy.cluster-vars.metadata.name = "cluster-vars"
+services.k3s.autoDeploy.cluster-vars.metadata.namespace = "flux-system"
 services.k3s.autoDeploy.cluster-vars.data.cluster = "home"
 services.k3s.autoDeploy.cluster-vars.data.context = "default"
 services.k3s.autoDeploy.cluster-vars.data.dns_zone = "insane.se"
@@ -150,6 +154,31 @@ services.k3s.autoDeploy.cluster-vars.data.minio_host = "minio.minio.svc.cluster.
 services.k3s.autoDeploy.cluster-vars.data.loki_bucket = "loki-d78f"
 services.k3s.autoDeploy.cluster-vars.data.cortex_bucket = "cortex-d78f"
 services.k3s.autoDeploy.cluster-vars.data.github_org = "0b2ce"
+
+services.k3s.autoDeploy.flux-system-repo.apiVersion = "source.toolkit.fluxcd.io/v1beta1"
+services.k3s.autoDeploy.flux-system-repo.kind = "GitRepository"
+services.k3s.autoDeploy.flux-system-repo.metadata.name = "flux-system"
+services.k3s.autoDeploy.flux-system-repo.metadata.namespace = "flux-system"
+services.k3s.autoDeploy.flux-system-repo.spec.gitImplementation = "go-git"
+services.k3s.autoDeploy.flux-system-repo.spec.interval = "1m0s"
+services.k3s.autoDeploy.flux-system-repo.spec.ref.branch = "main"
+services.k3s.autoDeploy.flux-system-repo.spec.secretRef.name = "flux-system"
+services.k3s.autoDeploy.flux-system-repo.spec.timeout = "20s"
+services.k3s.autoDeploy.flux-system-repo.spec.url = "ssh://git@github.com/johnae/flux-system.git"
+
+services.k3s.autoDeploy.flux-system-kustomization.apiVersion = "kustomize.toolkit.fluxcd.io/v1beta1"
+services.k3s.autoDeploy.flux-system-kustomization.kind = "Kustomization"
+services.k3s.autoDeploy.flux-system-kustomization.metadata.name = "flux"
+services.k3s.autoDeploy.flux-system-kustomization.metadata.namespace = "flux-system"
+services.k3s.autoDeploy.flux-system-kustomization.spec.interval = "5m0s"
+services.k3s.autoDeploy.flux-system-kustomization.spec.sourceRef.kind = "GitRepository"
+services.k3s.autoDeploy.flux-system-kustomization.spec.sourceRef.name = "flux-system"
+services.k3s.autoDeploy.flux-system-kustomization.spec.path = "./components/flux"
+services.k3s.autoDeploy.flux-system-kustomization.spec.prune = true
+services.k3s.autoDeploy.flux-system-kustomization.spec.validation = "client"
+
+services.k3s.autoDeploy.kured = "pkg:kured-yaml/kured.yaml"
+services.k3s.autoDeploy.flux = "pkg:fluxcd-yaml/flux.yaml"
 
 age.secrets.flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
 age.secrets.sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }

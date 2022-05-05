@@ -5,8 +5,8 @@
   pkgs,
   ...
 }: let
-  inherit (builtins) hasAttr isAttrs mapAttrs attrNames length;
-  inherit (lib) mkIf concatStringsSep filterAttrs recursiveUpdate;
+  inherit (builtins) hasAttr isAttrs isString mapAttrs attrNames length tail head;
+  inherit (lib) mkIf concatStringsSep filterAttrs recursiveUpdate hasPrefix splitString last;
 
   cfgMapper = {
     "age.secrets" = mapAttrs (
@@ -33,6 +33,17 @@
         )
     );
   };
+  mapString = str:
+    if hasPrefix "pkg:" str
+    then let
+      spec = last (splitString "pkg:" str);
+      path = tail (splitString "/" spec);
+      pkg = head (splitString "/" spec);
+    in
+      if (length path) == 0
+      then pkgs.${pkg}
+      else concatStringsSep "/" (["${pkgs.${pkg}}"] ++ path)
+    else str;
   mapConfig = path:
     mapAttrs (
       name: value: let
@@ -42,6 +53,8 @@
         then cfgMapper.${stringPath} value
         else if isAttrs value
         then mapConfig (path ++ [name]) value
+        else if isString value
+        then mapString value
         else value
     );
 

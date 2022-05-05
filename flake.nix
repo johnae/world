@@ -146,6 +146,10 @@
       url = "github:arxanas/git-branchless";
       flake = false;
     };
+    kured = {
+      url = "github:weaveworks/kured";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -203,7 +207,7 @@
         inputs.nur.overlay
         inputs.persway.overlay
         inputs.spotnix.overlay
-        (import ./kubernetes/overlay.nix)
+        (import ./kubernetes/overlay.nix {inherit inputs;})
         (
           final: prev: {
             innernet =
@@ -349,6 +353,7 @@
               linux_5_16_eccPatch = true;
               innernet = true;
               fluxcd-yaml = true;
+              kured-yaml = true;
             }));
       }
     );

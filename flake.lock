@@ -234,6 +234,22 @@
         "type": "gitlab"
       }
     },
+    "kured": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1650995438,
+        "narHash": "sha256-nn4JooDlH5Q/Z5Kfn1qtQkwwHsCTw1CgAhFXwlGhrgk=",
+        "owner": "weaveworks",
+        "repo": "kured",
+        "rev": "d771013cdebcff0c39cd98798ce0fa657111666a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "weaveworks",
+        "repo": "kured",
+        "type": "github"
+      }
+    },
     "netns-exec": {
       "flake": false,
       "locked": {
@@ -432,6 +448,7 @@
         "grim": "grim",
         "home-manager": "home-manager",
         "kile": "kile",
+        "kured": "kured",
         "netns-exec": "netns-exec",
         "nix-misc": "nix-misc",
         "nixlib": "nixlib_2",
