@@ -61,18 +61,6 @@ services.k3s.settings.node-label."topology.kubernetes.io/zone" = "home"
 services.k3s.settings.secrets-encryption = true
 services.k3s.settings.tls-san = "192.168.104.100"
 
-services.k3s.autoDeploy.cluster-vars.data.cluster = "home"
-services.k3s.autoDeploy.cluster-vars.data.context = "default"
-services.k3s.autoDeploy.cluster-vars.data.dns_zone = "insane.se"
-services.k3s.autoDeploy.cluster-vars.data.environment = "production"
-services.k3s.autoDeploy.cluster-vars.data.prometheus_remote_write_url = "https://metrics.insane.se/api/v1/push"
-services.k3s.autoDeploy.cluster-vars.data.loki_remote_write_url = "https://logs.insane.se/loki/api/v1/push"
-services.k3s.autoDeploy.cluster-vars.data.grafana_dns = "grafana.insane.se"
-services.k3s.autoDeploy.cluster-vars.data.pod_subnet = "10.128.128.0/21"
-services.k3s.autoDeploy.cluster-vars.data.minio_host = "minio.minio.svc.cluster.local"
-services.k3s.autoDeploy.cluster-vars.data.loki_bucket = "loki-d78f"
-services.k3s.autoDeploy.cluster-vars.data.cortex_bucket = "cortex-d78f"
-
 services.k3s.after = [ "innernet-client-insane.service" ]
 
 age.secrets.flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }

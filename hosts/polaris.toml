@@ -149,6 +149,7 @@ services.k3s.autoDeploy.cluster-vars.data.pod_subnet = "10.128.128.0/21"
 services.k3s.autoDeploy.cluster-vars.data.minio_host = "minio.minio.svc.cluster.local"
 services.k3s.autoDeploy.cluster-vars.data.loki_bucket = "loki-d78f"
 services.k3s.autoDeploy.cluster-vars.data.cortex_bucket = "cortex-d78f"
+services.k3s.autoDeploy.cluster-vars.data.github-org = "0b2ce"
 
 age.secrets.flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
 age.secrets.sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
