@@ -69,7 +69,3 @@ services.k3s.settings.secrets-encryption = true
 services.k3s.settings.tls-san = "192.168.104.100"
 
 services.k3s.after = [ "innernet-client-insane.service" ]
-
-age.secrets.flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
-age.secrets.sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
-age.secrets.cluster-secrets = { file = "secrets/k3s/cluster-secrets.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml" }
