@@ -5,29 +5,34 @@
   ...
 }: let
   inherit (lib) mkOption mkIf mkMerge mkForce types optionals mapAttrsToList flatten;
-  inherit (builtins) concatStringsSep isString isPath isAttrs isBool mapAttrs sort lessThan;
+  inherit (builtins) concatStringsSep isList isString isPath isAttrs isBool mapAttrs sort lessThan;
   cfg = config.services.k3s;
   k3sManifestsDir = "/var/lib/rancher/k3s/server/manifests";
-  mapSettings = s: let
-    mapBool = path: value:
+  settingsToCli = s: let
+    boolToCli = path: value:
       if value
       then "--${path}"
       else "";
-    mapField = path: value:
+    listToCli = path: value:
+      concatStringsSep " "
+      (map (item: "--${path} \"${toString item}\"") value);
+    attrsToCli = path:
+      mapAttrsToList (
+        k: v:
+          if isBool v
+          then boolToCli path v
+          else "--${path} \"${k}=${toString v}\""
+      );
+    fieldToCli = path: value:
       if isAttrs value
-      then
-        mapAttrsToList (
-          k: v:
-            if isBool v
-            then mapBool path v
-            else "--${path} \"${k}=${toString v}\""
-        )
-        value
+      then attrsToCli path value
       else if isBool value
-      then mapBool path value
+      then boolToCli path value
+      else if isList value
+      then listToCli path value
       else "--${path} \"${toString value}\"";
   in
-    flatten (mapAttrsToList mapField s);
+    flatten (mapAttrsToList fieldToCli s);
 in {
   options.services.k3s.autoDeploy = mkOption {
     type = types.attrsOf (
@@ -64,7 +69,7 @@ in {
 
   config = mkIf cfg.enable {
     assertions = mkForce [];
-    services.k3s.extraFlags = concatStringsSep " " (sort lessThan (mapSettings cfg.settings));
+    services.k3s.extraFlags = concatStringsSep " " (sort lessThan (settingsToCli cfg.settings));
     systemd.services.k3s.preStart = mkIf (cfg.role == "server") ''
       mkdir -p ${k3sManifestsDir}
       ${
