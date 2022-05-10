@@ -33,7 +33,7 @@ in {
         description = "The Kubie package to install";
       };
       settings = mkOption {
-        type = yamlFormat.type;
+        inherit (yamlFormat) type;
         default = {};
         example = literalExpression ''
           {
