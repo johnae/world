@@ -7,9 +7,10 @@
 in {
   home-manager.extraSpecialArgs = {inherit hostName;};
   home-manager.sharedModules = [
-    ../users/modules/userinfo.nix
-    ../users/modules/theme.nix
+    ../users/modules/kubie.nix
     ../users/modules/river.nix
+    ../users/modules/theme.nix
+    ../users/modules/userinfo.nix
   ];
 
   home-manager.users =

@@ -159,7 +159,7 @@ in {
         end
 
         function kubectx-select -d "Select kubernetes cluster"
-          ${pkgs.kubectx}/bin/kubectx
+          ${pkgs.kubie}/bin/kubie ctx
         end
         bind \ck kubectx-select
 
@@ -168,7 +168,7 @@ in {
         end
 
         function kubens-select -d "Select kubernetes namespace"
-          ${pkgs.kubectx}/bin/kubens
+          ${pkgs.kubie}/bin/kubie ns
         end
         bind \cn kubectx-select
 
