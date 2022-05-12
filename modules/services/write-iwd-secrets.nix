@@ -30,9 +30,10 @@ in {
         fi
         OIFS="$IFS"
         IFS=$'\n'
-        for file in $(jq -r ". | keys | .[]" "$SECRETS"); do
-            fileext="''${file##*.}"
-            SSID="$(basename "$file" .$fileext)"
+        for key in $(jq -r ". | keys | .[]" "$SECRETS"); do
+            file="$key"
+            fileext="''${key##*.}"
+            SSID="$(basename "$key" .$fileext)"
             if echo -n "$SSID" | grep -vq '^[a-zA-Z_0-9-]' >/dev/null; then
               file="=$(echo -n "$SSID" | od -A n -t x1 | sed 's| *||g').$fileext"
             fi
@@ -40,8 +41,8 @@ in {
             cat<<EOF>/var/lib/iwd/"$file"
         [Security]
         EOF
-            for field in $(jq -r ".\"$file\" | keys | .[]" "$SECRETS"); do
-                value=$(jq -r ".\"$file\".\"$field\"" "$SECRETS")
+            for field in $(jq -r ".\"$key\" | keys | .[]" "$SECRETS"); do
+                value=$(jq -r ".\"$key\".\"$field\"" "$SECRETS")
                 cat<<EOF>>/var/lib/iwd/"$file"
         $field=$value
         EOF
