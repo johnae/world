@@ -371,6 +371,15 @@ Package setup.
       "ot" '(counsel-projectile-org-capture :which-key "task capture")
       "on" '(org-narrow-to-subtree :which-key "narrow to subtree")
       "ow" '(widen :which-key "widen buffer to remove narrowing")
+
+      "n" '(:ignore n :which-key "org-roam")
+      "nf" '(org-roam-node-find :which-key "roam node find")
+      "nr" '(org-roam-node-random :which-key "go to random node")
+      "ni" '(org-roam-node-insert :which-key "insert roam node")
+      "no" '(org-id-get-create :which-key "create org id")
+      "nt" '(org-roam-tag-add :which-key "add roam tag")
+      "na" '(org-roam-alias-add :which-key "add roam alias")
+      "nl" '(org-roam-buffer-toggle :which-key "toggle the roam buffer")
      )
   #+END_SRC
 *** General key bindings
@@ -378,21 +387,6 @@ Package setup.
     (general-define-key
      "C-=" 'text-scale-increase
      "C--" 'text-scale-decrease
-    )
-    (general-define-key
-     :prefix "C-c"
-     "k" (lambda ()
-            (interactive)
-            (jae/pick-kubectx)
-         )
-     "n" (lambda ()
-            (interactive)
-            (jae/pick-kubens)
-         )
-     "w" (lambda ()
-            (interactive)
-            (jae/pick-gcp-project)
-         )
     )
   #+END_SRC
 ** Org mode packages
@@ -1417,3 +1411,4 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
       (cl-pushnew '(alejandra . ("alejandra")) apheleia-formatters :test #'equal)
       (cl-pushnew '(nix-mode . alejandra) apheleia-mode-alist :test #'equal)))
   #+END_SRC
+  
