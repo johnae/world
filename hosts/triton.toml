@@ -27,6 +27,7 @@ age.secrets.wifi-networks.file = "secrets/wifi-networks.age"
 age.secrets.wg-home.file = "secrets/triton/wg-home.age"
 age.secrets.wg-net.file = "secrets/triton/wg-net.age"
 age.secrets.id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", owner = "1337" }
+age.secrets.id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner = "1337" }
 age.secrets.id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
 age.secrets.syncthing-cert = { file = "secrets/triton/syncthing-cert.age", owner = "1337" }
 age.secrets.syncthing-key = { file = "secrets/triton/syncthing-key.age", owner = "1337" }
