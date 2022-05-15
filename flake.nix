@@ -30,6 +30,7 @@
     nix-misc = {
       url = "github:johnae/nix-misc";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixlib.follows = "nixlib";
     };
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -41,7 +42,12 @@
       inputs.nixlib.follows = "nixlib";
     };
 
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     spotnix = {
       url = "github:johnae/spotnix";
       inputs.nixpkgs.follows = "nixpkgs";
