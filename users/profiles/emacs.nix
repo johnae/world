@@ -6,8 +6,12 @@
 }: let
   inherit (config) home;
   inherit (lib) mkMerge;
+  ## it used to be a service unit, a path unit and a timer unit but that doesn't
+  ## work well when new files are added or when keeping files in a tree structure
+  ## - path units aren't recursvide and don't detect new files/folders
   repo-sync = name: key: let
     sync-script = pkgs.writeStrictShellScriptBin "repo-sync-${name}" ''
+      export PATH=${pkgs.inotifyTools}/bin:${pkgs.gitMinimal}/bin:$PATH
       ssh_identity="/run/agenix/${key}"
       if [ ! -e "$ssh_identity" ]; then
         echo "$ssh_identity" missing
@@ -24,36 +28,33 @@
 
       echo Starting ${name} git sync
       cd ~/Development/${name}
-      git add .
-      git commit -m "Auto-commit" || true
-      echo Pulling changes from remote
-      git pull
-      echo Pushing changes to remote
-      git push
-      git status
+
+      while inotifywait -e create,move_self,attrib,delete,moved_to,close_write,delete_self,moved_from,modify,move -t 300 -r .; do
+        echo Changes detected
+        git add -A .
+        if ! git diff --staged --quiet; then
+          echo Committing changes
+          git commit -m "Auto-commit"
+        else
+          echo No changes to commit
+        fi
+        echo Pulling changes from remote
+        git pull
+        echo Pushing changes to remote
+        git push
+        git status
+      done
     '';
   in {
     systemd.user.services."${name}-sync" = {
       Unit.Description = "Continuously git commit push/pull ${name}";
-      Service.ExecStart = "${sync-script}/bin/repo-sync-${name}";
-    };
+      Install.WantedBy = ["default.target"];
 
-    systemd.user.paths."${name}-sync" = {
-      Unit.Description = "Continuously git commit push/pull ${name}";
-      Path = {
-        PathChanged = "/home/${home.username}/Development/${name}";
-        Unit = "${name}-sync.service";
+      Service = {
+        ExecStart = "${sync-script}/bin/repo-sync-${name}";
+        Restart = "always";
+        RestartSec = 3;
       };
-      Install.WantedBy = ["paths.target"];
-    };
-
-    systemd.user.timers."${name}-sync" = {
-      Unit.Description = "Continuously git commit push/pull ${name}";
-      Timer = {
-        OnCalendar = "*:0/5";
-        Unit = "${name}-sync.service";
-      };
-      Install.WantedBy = ["timers.target"];
     };
   };
 in
