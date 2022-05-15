@@ -11,7 +11,7 @@
   ## - path units aren't recursvide and don't detect new files/folders
   repo-sync = name: key: let
     sync-script = pkgs.writeStrictShellScriptBin "repo-sync-${name}" ''
-      export PATH=${pkgs.inotifyTools}/bin:${pkgs.gitMinimal}/bin:$PATH
+      export PATH=${pkgs.inotifyTools}/bin:${pkgs.gitMinimal}/bin:${pkgs.openssh}/bin:$PATH
       ssh_identity="/run/agenix/${key}"
       if [ ! -e "$ssh_identity" ]; then
         echo "$ssh_identity" missing
