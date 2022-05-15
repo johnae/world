@@ -560,17 +560,20 @@ Package setup.
 ** Evil Packages - Vim for emacs.
 *** Evil itself
    #+BEGIN_SRC elisp
-     (use-package evil
-       :init
-       (setq evil-undo-system 'undo-redo
-             evil-want-keybinding nil
-             evil-want-integration t
-             evil-want-C-i-jump nil
-       )
-       :config
-       (evil-mode 1)
-       (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-     )
+                    (use-package evil
+                      :init
+                      (setq evil-undo-system 'undo-redo
+                            evil-want-keybinding nil
+                            evil-want-integration t
+                            evil-want-C-i-jump nil
+                      )
+                      :config
+                      (evil-mode 1)
+                      (general-define-key
+                       :keymaps 'evil-insert-state-map
+                       "C-g" 'evil-normal-state
+                       )
+                    )
    #+END_SRC
 *** Evil collection - evil keybindings for different parts of Emacs and packages
    #+BEGIN_SRC elisp
@@ -629,10 +632,17 @@ Package setup.
       (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
       ;; Better performance
       (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
-      (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
+      (general-define-key
+       :states '(normal insert visual)
+       :keymaps 'eshell-mode-map
+       "C-r" 'counsel-esh-history
+       "C-l" 'eshell/clear
+       "C-u" 'kill-whole-line
+       )
+      ;;(evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
       (evil-normalize-keymaps)
-      (define-key eshell-mode-map (kbd "C-l") 'eshell/clear)
-      (define-key eshell-mode-map (kbd "C-u") 'kill-whole-line)
+      ;;(define-key eshell-mode-map (kbd "C-l") 'eshell/clear)
+      ;;(define-key eshell-mode-map (kbd "C-u") 'kill-whole-line)
     (setq
         eshell-where-to-jump 'begin
         eshell-review-quick-commands nil
@@ -961,14 +971,16 @@ Package setup.
 See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
 *** Ivy itself
    #+BEGIN_SRC elisp
-  (use-package ivy
-    :config
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t
-             ivy-do-completion-in-region t
-             ivy-count-format "%d/%d ")
-    (add-hook 'shell-mode-hook (lambda ()
-      (define-key shell-mode-map "\t" 'completion-at-point))))
+            (use-package ivy
+              :config
+              (ivy-mode 1)
+              (setq ivy-use-virtual-buffers t
+                       ivy-do-completion-in-region t
+                       ivy-count-format "%d/%d ")
+              (add-hook 'shell-mode-hook (lambda ()
+                (general-define-key
+                 :keymaps 'shell-mode-map "\t" 'completion-at-point
+                 ))))
   #+END_SRC
 *** Rich
    #+BEGIN_SRC elisp
@@ -1411,4 +1423,5 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
       (cl-pushnew '(alejandra . ("alejandra")) apheleia-formatters :test #'equal)
       (cl-pushnew '(nix-mode . alejandra) apheleia-mode-alist :test #'equal)))
   #+END_SRC
+  
   
