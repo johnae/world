@@ -75,6 +75,10 @@ home-manager.users.john.userinfo.fullName = "John Axel Eriksson"
 home-manager.users.john.userinfo.githubUser = "johnae"
 home-manager.users.john.userinfo.gitlabUser = "johnae"
 home-manager.users.john.userinfo.gitIdMap."~/Development/planhat/" = "john.eriksson@planhat.com"
+
+home-manager.users.john.services.gitAutoSync.repos."~/Development/org-roam" = { repository = "git@github.com:johnae/org-roam", sshKey = "/run/agenix/id_ed25519_roam_updater"}
+home-manager.users.john.services.gitAutoSync.repos."~/Development/org-agenda" = { repository = "git@github.com:johnae/org-agenda", sshKey = "/run/agenix/id_ed25519_agenda_updater"}
+
 home-manager.users.john.profiles = [
   "users/profiles/alacritty",
   "users/profiles/bat",

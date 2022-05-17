@@ -7,6 +7,7 @@
 in {
   home-manager.extraSpecialArgs = {inherit hostName;};
   home-manager.sharedModules = [
+    ../users/modules/git-auto-sync.nix
     ../users/modules/kubie.nix
     ../users/modules/river.nix
     ../users/modules/theme.nix
