@@ -34,7 +34,7 @@
     ${prev.kustomize}/bin/kustomize build . > $out/kured.yaml
   '';
   fluxcd-yaml = prev.runCommand "flux.yaml" {} ''
-    ${prev.fluxcd}/bin/flux install --export > flux.yaml
+    ${prev.fluxcd}/bin/flux install --components-extra=image-reflector-controller,image-automation-controller --export > flux.yaml
     cat <<PATCH>patch.yaml
     ---
     apiVersion: apps/v1
@@ -104,7 +104,40 @@
                 requests:
                   cpu: 20m
                   memory: 64Mi
-
+    ---
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: image-automation-controller
+      namespace: flux-system
+    spec:
+      template:
+        spec:
+          containers:
+            - name: manager
+              resources:
+                limits:
+                  memory: 256Mi
+                requests:
+                  cpu: 20m
+                  memory: 64Mi
+    ---
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: image-reflector-controller
+      namespace: flux-system
+    spec:
+      template:
+        spec:
+          containers:
+            - name: manager
+              resources:
+                limits:
+                  memory: 256Mi
+                requests:
+                  cpu: 20m
+                  memory: 64Mi
     PATCH
 
     cat <<KUSTOMIZATION>kustomization.yaml
