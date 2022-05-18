@@ -166,17 +166,17 @@ services.k3s.autoDeploy.flux-system-repo.spec.secretRef.name = "flux-system"
 services.k3s.autoDeploy.flux-system-repo.spec.timeout = "20s"
 services.k3s.autoDeploy.flux-system-repo.spec.url = "ssh://git@github.com/johnae/flux-system.git"
 
-services.k3s.autoDeploy.flux-system-kustomization.apiVersion = "kustomize.toolkit.fluxcd.io/v1beta1"
-services.k3s.autoDeploy.flux-system-kustomization.kind = "Kustomization"
-services.k3s.autoDeploy.flux-system-kustomization.metadata.name = "components"
-services.k3s.autoDeploy.flux-system-kustomization.metadata.namespace = "flux-system"
-services.k3s.autoDeploy.flux-system-kustomization.spec.interval = "5m0s"
-services.k3s.autoDeploy.flux-system-kustomization.spec.sourceRef.kind = "GitRepository"
-services.k3s.autoDeploy.flux-system-kustomization.spec.sourceRef.name = "flux-system"
-services.k3s.autoDeploy.flux-system-kustomization.spec.path = "./clusters/home/components"
-services.k3s.autoDeploy.flux-system-kustomization.spec.prune = true
-services.k3s.autoDeploy.flux-system-kustomization.spec.validation = "client"
-services.k3s.autoDeploy.flux-system-kustomization.spec.postBuild.substituteFrom = [
+services.k3s.autoDeploy.flux-components-kustomization.apiVersion = "kustomize.toolkit.fluxcd.io/v1beta1"
+services.k3s.autoDeploy.flux-components-kustomization.kind = "Kustomization"
+services.k3s.autoDeploy.flux-components-kustomization.metadata.name = "components"
+services.k3s.autoDeploy.flux-components-kustomization.metadata.namespace = "flux-system"
+services.k3s.autoDeploy.flux-components-kustomization.spec.interval = "5m0s"
+services.k3s.autoDeploy.flux-components-kustomization.spec.sourceRef.kind = "GitRepository"
+services.k3s.autoDeploy.flux-components-kustomization.spec.sourceRef.name = "flux-system"
+services.k3s.autoDeploy.flux-components-kustomization.spec.path = "./clusters/home/components"
+services.k3s.autoDeploy.flux-components-kustomization.spec.prune = true
+services.k3s.autoDeploy.flux-components-kustomization.spec.validation = "client"
+services.k3s.autoDeploy.flux-components-kustomization.spec.postBuild.substituteFrom = [
   { kind = "ConfigMap", name = "cluster-vars" },
   { kind = "Secret", name = "cluster-secrets" }
 ]
