@@ -480,6 +480,13 @@
         };
       }
     ))
+    // (
+      forAllDefaultSystems (
+        _: pkgs: {
+          formatter = pkgs.alejandra;
+        }
+      )
+    )
     // {
       inherit nixosConfigurations hostConfigurations;
 
