@@ -228,7 +228,7 @@ in {
           minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
         };
         server_names = ["cloudflare-security" "cloudflare-security-ipv6"];
-        blocked_names.blocked_names_file = "${inputs.notracking}/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt";
+        blocked_names.blocked_names_file = "${pkgs.notracking}/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt";
       };
     };
 
@@ -253,7 +253,7 @@ in {
       ${concatStringsSep "\n" (map (iface: "interface=${iface}") internalInterfaceNames)}
 
       domain=${cfg.domain}
-      conf-file=${inputs.notracking}/dnsmasq/dnsmasq.blacklist.txt
+      conf-file=${pkgs.notracking}/dnsmasq/dnsmasq.blacklist.txt
     '';
 
     networking.hosts = hosts;
