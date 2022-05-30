@@ -213,6 +213,15 @@
         inputs.nur.overlay
         inputs.persway.overlay
         inputs.spotnix.overlay
+        (
+          final: prev: {
+            notracking = prev.runCommand "notracking" {} ''
+              mkdir -p "$out"/{dnsmasq,dnscrypt-proxy}
+              grep -v upsales ${inputs.notracking}/dnsmasq/dnsmasq.blacklist.txt > "$out"/dnsmasq/dnsmasq.blacklist.txt
+              grep -v upsales ${inputs.notracking}/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt > "$out"/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
+            '';
+          }
+        )
         (import ./kubernetes/overlay.nix {inherit inputs;})
         (
           final: prev: {
@@ -360,6 +369,7 @@
               innernet = true;
               fluxcd-yaml = true;
               kured-yaml = true;
+              notracking = true;
             }));
       }
     );
