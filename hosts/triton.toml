@@ -42,6 +42,8 @@ services.syncthing.folders."/home/john/Sync".devices = [
   "eris",
   "polaris",
   "icarus",
+  "titan",
+  "hyperion"
 ]
 services.syncthing.folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
 services.syncthing.folders."/home/john/Photos".devices = [

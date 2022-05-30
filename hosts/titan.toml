@@ -2,6 +2,7 @@ system = "x86_64-linux"
 
 [config]
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOteEiVr+H3Q1tSw1bGQfjbVWuPggc/+w1vVXSFde0Rt"
+syncthingDeviceID = "53R5CPY-RVICTGR-AEXNKZU-RMCKC32-JNON7PH-4VEFCRB-KRPLP3M-AIEQPA6"
 
 profiles = [
   "profiles/hardware/nuc",
@@ -10,6 +11,7 @@ profiles = [
   "profiles/k3s",
   "profiles/server",
   "profiles/state",
+  "profiles/syncthing",
   "profiles/uuid_disk_crypt",
   "profiles/zram",
 ]
@@ -28,6 +30,22 @@ networking.interfaces.eth0.ipv4.addresses = [
   { address = "192.168.20.142", prefixLength = 24 }
 ]
 
+services.syncthing.enable = true
+services.syncthing.user = "john"
+services.syncthing.group = "users"
+services.syncthing.openDefaultPorts = true
+services.syncthing.folders."/home/john/Sync".id = "sync"
+services.syncthing.folders."/home/john/Sync".devices = [
+  "triton",
+  "eris",
+  "icarus",
+  "polaris",
+  "hyperion"
+]
+services.syncthing.cert = "/run/agenix/syncthing-cert"
+services.syncthing.key = "/run/agenix/syncthing-key"
+services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
+
 services.innernet.client.insane.enable = true
 services.innernet.client.insane.settings.interface = { address = "192.168.104.67/22", privateKeyFile = "/run/agenix/wg-home" }
 services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
@@ -43,6 +61,8 @@ age.secrets.ubnt-api-user-password.file = "secrets/ubnt-api-user-password.age"
 age.secrets.wg-home.file = "secrets/titan/wg-home.age"
 age.secrets.remote-disk-password.file = "secrets/remote-disk-password.age"
 age.secrets.id_ed25519_remote_unlock.file = "secrets/titan/id_ed25519_remote_unlock.age"
+age.secrets.syncthing-cert = { file = "secrets/titan/syncthing-cert.age", owner = "1337" }
+age.secrets.syncthing-key = { file = "secrets/titan/syncthing-key.age", owner = "1337" }
 
 networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
 
