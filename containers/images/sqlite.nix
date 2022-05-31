@@ -2,7 +2,7 @@
   dockerTools,
   pkgs,
   lib,
-  dockerRegistry ? "ghcr.io/0b2ce",
+  dockerRegistry ? "ghcr.io/johnae",
   dockerTag ? null,
   ...
 }:

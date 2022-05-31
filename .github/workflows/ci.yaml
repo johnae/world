@@ -33,12 +33,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    -
+      name: Login to GHCR
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
     - uses: cachix/install-nix-action@v17
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - run: |
-        echo '${{ github.token }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         nix build .#images/push/all
         ./result "$GITHUB_RUN_NUMBER"
 
