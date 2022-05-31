@@ -39,7 +39,7 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ github.token }}
     - uses: cachix/install-nix-action@v17
       with:
         extra_nix_config: |
