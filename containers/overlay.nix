@@ -75,7 +75,7 @@
       ${concatStringsSep "\n" (mapAttrsToList (
           name: value: ''
             echo building and pushing ${name}
-            ${value}
+            ${value} "$@"
           ''
         )
         pushers)}
