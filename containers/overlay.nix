@@ -21,11 +21,7 @@
       final.writeStrictShellScript "build-and-push-${attr}" ''
         export PATH=${final.skopeo}/bin''${PATH:+:}$PATH
         IMAGE_VERSION="''${1:-}"
-        CHECK="${imageTag}"
-        if [ "$IMAGE_VERSION" != "" ]; then
-          CHECK="$IMAGE_VERSION-${imageTag}"
-        fi
-        if ! skopeo list-tags docker://${imageName} | grep -q "$CHECK" >/dev/null; then
+        if ! skopeo list-tags docker://${imageName} | grep -q "${imageTag}" >/dev/null; then
           echo building image ${imageName}:${imageTag}
           outname="image-$(basename ${attr})"
           trap 'rm -f $outname' EXIT
