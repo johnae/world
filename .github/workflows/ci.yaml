@@ -46,6 +46,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - run: |
         nix build .#images/push/all
+        echo run number "$GITHUB_RUN_NUMBER"
         ./result "$GITHUB_RUN_NUMBER"
 
   pkgs_x86_64_linux:
