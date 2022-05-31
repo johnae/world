@@ -175,6 +175,7 @@
       filterAttrsRecursive
       fromTOML
       hasAttr
+      hasPrefix
       isDerivation
       makeOverridable
       mapAttrs
@@ -222,6 +223,7 @@
             '';
           }
         )
+        (import ./containers/overlay.nix {inherit self inputs;})
         (import ./kubernetes/overlay.nix {inherit inputs;})
         (
           final: prev: {
@@ -313,8 +315,6 @@
 
       inherit (config) system;
 
-      ## filter out all keys with name "profiles" from
-      ## TOML config
       cfg =
         filterAttrsRecursive (
           name: _:
@@ -361,6 +361,7 @@
         packages =
           mapAttrs (name: _: pkgs.${name})
           (filterAttrs pkgFilter (packageOverlays
+            // (filterAttrs (name: _: hasPrefix "images/" name) pkgs)
             // worldOverlays
             // {
               spotnix = true;
@@ -510,52 +511,58 @@
           persway = inputs.persway.overlay;
         };
 
-      github-actions-package-matrix-x86-64-linux = {
+      github-actions-package-matrix-x86-64-linux = let
+        pkgs = pkgsFor "x86_64-linux";
+        skip = mapAttrsToList (name: _: name) (filterAttrs (name: _: hasPrefix "images/" name) pkgs);
+      in {
         os = ["ubuntu-latest"];
-        pkg = mapAttrsToList (name: _: name) exportedPackages.packages.x86_64-linux;
+        pkg = filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) exportedPackages.packages.x86_64-linux);
       };
 
       github-actions-package-matrix-aarch64-linux = let
-        skip = [
-          "age-plugin-yubikey"
-          "blur"
-          "fire"
-          "git-branchless"
-          "grim"
-          "innernet"
-          "kile"
-          "libdrm24109"
-          "linux_5_16_eccPatch"
-          "meson-061"
-          "my-emacs"
-          "my-emacs-config"
-          "mynerdfonts"
-          "netns-dbus-proxy"
-          "netns-exec"
-          "nixpkgs-fmt"
-          "persway"
-          "pixieboot"
-          "pxebooter"
-          "ristate"
-          "rofi-wayland"
-          "rust-analyzer-bin"
-          "scripts"
-          "slurp"
-          "spotifyd"
-          "spotnix"
-          "sway"
-          "sway-unwrapped"
-          "swaybg"
-          "swayidle"
-          "swaylock"
-          "swaylock-dope"
-          "wayland-protocols-master"
-          "wayland120"
-          "wl-cliboard"
-          "wl-cliboard-x11"
-          "wlroots-master"
-          "xdg-desktop-portal-wlr"
-        ];
+        pkgs = pkgsFor "x86_64-linux";
+        skip =
+          (mapAttrsToList (name: _: name) (filterAttrs (name: _: hasPrefix "images/" name) pkgs))
+          ++ [
+            "age-plugin-yubikey"
+            "blur"
+            "fire"
+            "git-branchless"
+            "grim"
+            "innernet"
+            "kile"
+            "libdrm24109"
+            "linux_5_16_eccPatch"
+            "meson-061"
+            "my-emacs"
+            "my-emacs-config"
+            "mynerdfonts"
+            "netns-dbus-proxy"
+            "netns-exec"
+            "nixpkgs-fmt"
+            "persway"
+            "pixieboot"
+            "pxebooter"
+            "ristate"
+            "rofi-wayland"
+            "rust-analyzer-bin"
+            "scripts"
+            "slurp"
+            "spotifyd"
+            "spotnix"
+            "sway"
+            "sway-unwrapped"
+            "swaybg"
+            "swayidle"
+            "swaylock"
+            "swaylock-dope"
+            "wayland-protocols-master"
+            "wayland120"
+            "wl-cliboard"
+            "wl-cliboard-x11"
+            "wlroots-master"
+            "xdg-desktop-portal-wlr"
+          ];
       in {
         os = ["ubuntu-latest"];
         pkg = filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) exportedPackages.packages.aarch64-linux);
