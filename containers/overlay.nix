@@ -20,7 +20,7 @@
     in
       final.writeStrictShellScript "build-and-push-${attr}" ''
         export PATH=${final.skopeo}/bin''${PATH:+:}$PATH
-        IMAGE_VERSION="''${1:-}"
+        EXTRA_TAG="''${1:-}"
         if ! skopeo list-tags docker://${imageName} | grep -q "${imageTag}" >/dev/null; then
           echo building image ${imageName}:${imageTag}
           outname="image-$(basename ${attr})"
@@ -30,19 +30,19 @@
           skopeo --insecure-policy copy \
             docker-archive:./"$outname" \
             docker://${imageName}:${imageTag}
-          if [ "$IMAGE_VERSION" != "" ]; then
-            echo pushing ${imageName}:"$IMAGE_VERSION"
+          if [ "$EXTRA_TAG" != "" ]; then
+            echo pushing ${imageName}:"$EXTRA_TAG"
             skopeo --insecure-policy copy \
               docker-archive:./"$outname" \
-              docker://${imageName}:"$IMAGE_VERSION"
+              docker://${imageName}:"$EXTRA_TAG"
           fi
           echo pushing ${imageName}:latest
           skopeo --insecure-policy copy \
             docker-archive:./"$outname" \
             docker://${imageName}:latest
           echo pushed to ${imageName}:${imageTag}
-          if [ "$IMAGE_VERSION" != "" ]; then
-            echo pushed to ${imageName}:"$IMAGE_VERSION"
+          if [ "$EXTRA_TAG" != "" ]; then
+            echo pushed to ${imageName}:"$EXTRA_TAG"
           fi
           echo pushed to ${imageName}:latest
         else
