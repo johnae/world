@@ -27,17 +27,17 @@
           trap 'rm -f $outname' EXIT
           nix build ${self}#${attr} -o "$outname"
           echo pushing ${imageName}:${imageTag}
-          skopeo --insecure-policy copy "$@" \
+          skopeo --insecure-policy copy \
             docker-archive:./"$outname" \
             docker://${imageName}:${imageTag}
           if [ "$IMAGE_VERSION" != "" ]; then
             echo pushing ${imageName}:"$IMAGE_VERSION"
-            skopeo --insecure-policy copy "$@" \
+            skopeo --insecure-policy copy \
               docker-archive:./"$outname" \
               docker://${imageName}:"$IMAGE_VERSION"
           fi
           echo pushing ${imageName}:latest
-          skopeo --insecure-policy copy "$@" \
+          skopeo --insecure-policy copy \
             docker-archive:./"$outname" \
             docker://${imageName}:latest
           echo pushed to ${imageName}:${imageTag}
