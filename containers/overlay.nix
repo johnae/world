@@ -20,6 +20,7 @@
     in
       final.writeStrictShellScript "build-and-push-${attr}" ''
         export PATH=${final.skopeo}/bin''${PATH:+:}$PATH
+        set -x
         IMAGE_VERSION="''${1:-}"
         if ! skopeo list-tags docker://${imageName} | grep -q "${imageTag}" >/dev/null; then
           echo building image ${imageName}:${imageTag}
