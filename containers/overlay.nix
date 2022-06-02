@@ -25,7 +25,7 @@
           echo building image ${imageName}:${imageTag}
           outname="image-$(basename ${attr})"
           trap 'rm -f $outname' EXIT
-          nix build ${self}#${attr} -o "$outname"
+          nix build -L ${self}#${attr} -o "$outname"
           echo pushing ${imageName}:${imageTag}
           skopeo --insecure-policy copy \
             docker-archive:./"$outname" \
