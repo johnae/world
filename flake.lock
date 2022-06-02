@@ -639,16 +639,16 @@
     "wlroots": {
       "flake": false,
       "locked": {
-        "lastModified": 1654100334,
-        "narHash": "sha256-zzDni+bYyGwe3SH/Se6F4+4BMDDbmeFsbfYAFWemdXA=",
+        "lastModified": 1653903634,
+        "narHash": "sha256-pXozbWn0X1YY4soUsAQy2CbpyaT95tdjq86kCxAqvPU=",
         "ref": "master",
-        "rev": "e383c1f1db37c6d2de8f070603a89230f876bc80",
-        "revCount": 5560,
+        "rev": "501ac5398d6f9a85dfdeeb9bf60a342bcff35adc",
+        "revCount": 5538,
         "type": "git",
         "url": "https://gitlab.freedesktop.org/wlroots/wlroots.git"
       },
       "original": {
-        "ref": "master",
+        "rev": "501ac5398d6f9a85dfdeeb9bf60a342bcff35adc",
         "type": "git",
         "url": "https://gitlab.freedesktop.org/wlroots/wlroots.git"
       }
