@@ -258,6 +258,22 @@
         "type": "github"
       }
     },
+    "matrix-conduit": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1653770835,
+        "narHash": "sha256-QZt7riq/sGO4R/DyYPtuOgfajxzT1D0E4F9cHstjRXg=",
+        "owner": "famedly",
+        "repo": "conduit",
+        "rev": "39bc84d81c07049f803ec75c8cd706e8099b8481",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "famedly",
+        "repo": "conduit",
+        "type": "gitlab"
+      }
+    },
     "netns-exec": {
       "flake": false,
       "locked": {
@@ -444,6 +460,7 @@
         "home-manager": "home-manager",
         "kile": "kile",
         "kured": "kured",
+        "matrix-conduit": "matrix-conduit",
         "netns-exec": "netns-exec",
         "nix-misc": "nix-misc",
         "nixlib": "nixlib",

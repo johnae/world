@@ -75,6 +75,11 @@
       flake = false;
     };
 
+    matrix-conduit = {
+      url = "gitlab:famedly/conduit";
+      flake = false;
+    };
+
     ristate = {
       url = "gitlab:snakedye/ristate";
       flake = false;
@@ -533,6 +538,7 @@
             "kile"
             "libdrm24109"
             "linux_5_16_eccPatch"
+            "matrix-conduit"
             "meson-061"
             "my-emacs"
             "my-emacs-config"

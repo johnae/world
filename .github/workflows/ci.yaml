@@ -31,6 +31,7 @@ jobs:
 
   container_images_x86_64_linux:
     runs-on: ubuntu-latest
+    needs: [pkg_x86_64_linux]
     steps:
     - uses: actions/checkout@v3
     -
