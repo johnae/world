@@ -231,18 +231,6 @@
         (import ./containers/overlay.nix {inherit self inputs;})
         (import ./kubernetes/overlay.nix {inherit inputs;})
         (
-          final: prev: {
-            innernet =
-              if prev.system != "aarch64-linux"
-              then prev.innernet
-              else
-                prev.innernet.overrideAttrs (oa: {
-                  doCheck = false; ## doc tests fail - at least under qemu
-                });
-          }
-        )
-
-        (
           final: prev: let
             default_flake = "github:johnae/world";
             flags = "--use-remote-sudo -L";
