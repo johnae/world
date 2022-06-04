@@ -359,8 +359,6 @@
             // {
               spotnix = true;
               persway = true;
-              linux_5_16_eccPatch = true;
-              innernet = true;
               fluxcd-yaml = true;
               kured-yaml = true;
               notracking = true;
@@ -522,10 +520,8 @@
             "fire"
             "git-branchless"
             "grim"
-            "innernet"
             "kile"
             "libdrm24109"
-            "linux_5_16_eccPatch"
             "matrix-conduit"
             "meson-061"
             "my-emacs"
