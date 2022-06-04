@@ -231,18 +231,6 @@
         (import ./containers/overlay.nix {inherit self inputs;})
         (import ./kubernetes/overlay.nix {inherit inputs;})
         (
-          final: prev: {
-            innernet =
-              if prev.system != "aarch64-linux"
-              then prev.innernet
-              else
-                prev.innernet.overrideAttrs (oa: {
-                  doCheck = false; ## doc tests fail - at least under qemu
-                });
-          }
-        )
-
-        (
           final: prev: let
             default_flake = "github:johnae/world";
             flags = "--use-remote-sudo -L";
@@ -371,8 +359,6 @@
             // {
               spotnix = true;
               persway = true;
-              linux_5_16_eccPatch = true;
-              innernet = true;
               fluxcd-yaml = true;
               kured-yaml = true;
               notracking = true;
@@ -534,10 +520,8 @@
             "fire"
             "git-branchless"
             "grim"
-            "innernet"
             "kile"
             "libdrm24109"
-            "linux_5_16_eccPatch"
             "matrix-conduit"
             "meson-061"
             "my-emacs"
