@@ -6,34 +6,34 @@
   inherit (config) home;
 in {
   home.packages = [
-    pkgs.mako
-    pkgs.spotifyd
-    pkgs.spotnix
-    pkgs.my-emacs
-    pkgs.scripts
-    pkgs.playerctl
-    pkgs.nix-index
-    pkgs.git-crypt
-    pkgs.wl-clipboard
-    pkgs.wl-clipboard-x11
-    pkgs.nordic
     pkgs.alejandra
+    pkgs.cachix
+    pkgs.element-desktop-wayland
+    pkgs.fzf # # for certain utilities that depend on it
+    pkgs.git-branchless
+    pkgs.git-crypt
+    pkgs.gnome3.nautilus
     pkgs.google-cloud-sdk
     pkgs.kubectl
-    pkgs.kubelogin-oidc
     pkgs.kubectx
+    pkgs.kubelogin-oidc
     pkgs.kustomize
-    pkgs.fzf # # for certain utilities that depend on it
-    pkgs.rust-analyzer-bin
-    pkgs.rnix-lsp
-    pkgs.xdg_utils
-    pkgs.netns-dbus-proxy
-    pkgs.gnome3.nautilus
-    pkgs.cachix
     pkgs.lm_sensors
-    pkgs.git-branchless
+    pkgs.mako
+    pkgs.my-emacs
+    pkgs.netns-dbus-proxy
+    pkgs.nix-index
+    pkgs.nordic
+    pkgs.playerctl
     pkgs.pueue
-    pkgs.element-desktop-wayland
+    pkgs.rnix-lsp
+    pkgs.rust-analyzer-bin
+    pkgs.scripts
+    pkgs.spotifyd
+    pkgs.spotnix
+    pkgs.wl-clipboard
+    pkgs.wl-clipboard-x11
+    pkgs.xdg_utils
   ];
 
   home.sessionVariables = {
