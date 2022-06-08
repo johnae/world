@@ -117,8 +117,8 @@ age.secrets.syncthing-key = { file = "secrets/polaris/syncthing-key.age", owner 
 
 networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
 
-networking.firewall.allowedUDPPorts = [ 5349 3478 ]
-networking.firewall.allowedTCPPorts = [ 5349 3478 ]
+networking.firewall.allowedUDPPorts = [ 5349, 3478 ]
+networking.firewall.allowedTCPPorts = [ 5349, 3478 ]
 networking.firewall.allowedUDPPortRanges = [ { from = 49160, to = 49200 } ]
 
 services.k3s.role = "server"
