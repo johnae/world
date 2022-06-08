@@ -282,7 +282,7 @@ in {
 
         "${modifier}+Shift+Return" = ''exec ${pkgs.my-emacs}/bin/emacsclient -c -n -a= --eval '(jae/eshell-new)' '';
         "${modifier}+Return" = ''exec ${pkgs.alacritty}/bin/alacritty'';
-        "${modifier}+d" = ''exec ${pkgs.rofi-wayland}/bin/rofi -show drun'';
+        "${modifier}+d" = ''exec ${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes "drun,run"'';
 
         "${modifier}+minus" = ''exec ${pkgs.scripts}/bin/rofi-rbw'';
         "${modifier}+Shift+minus" = ''exec passonly=y ${pkgs.scripts}/bin/rofi-rbw'';

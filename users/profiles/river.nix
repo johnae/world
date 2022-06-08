@@ -72,7 +72,7 @@ in {
     inherit input;
 
     map.normal.Super.Return = "spawn alacritty";
-    map.normal.Super.D = "spawn 'rofi -show drun'";
+    map.normal.Super.D = "spawn 'rofi -show combi -modes combi -combi-modes \"drun,run\"'";
     map.normal.Super.Q = "close";
 
     map.normal."Super+Shift".E = "spawn 'emacsclient -c -n -a='";
