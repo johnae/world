@@ -41,6 +41,13 @@
       ''
     )
   ];
+  turn = pkgs.writeStrictShellScript "turn" ''
+    export PATH=${pkgs.dig}/bin:${pkgs.coturn}/bin:$PATH
+    turnserver \
+      --log-file=stdout \
+      --external-ip="$(dig @resolver1.opendns.com myip.opendns.com A -4 +short)" \
+      "$@"
+  '';
 in
   dockerTools.buildLayeredImage {
     name = "${dockerRegistry}/coturn";
@@ -48,11 +55,7 @@ in
     maxLayers = 6;
     config = {
       WorkingDir = workingDir;
-      EntryPoint = ["${pkgs.coturn}/bin/turnserver"];
-      Cmd = [
-        "--log-file=stdout"
-        "--external-ip=$(dig @resolver1.opendns.com myip.opendns.com A -4 +short)"
-      ];
+      EntryPoint = ["${turn}"];
       ExposedPorts = {
         "${toString plainPort}/tcp" = {};
         "${toString securePort}/tcp" = {};
