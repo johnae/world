@@ -43,7 +43,7 @@
   ];
   turn = pkgs.writeStrictShellScript "turn" ''
     export PATH=${pkgs.dig}/bin:${pkgs.coturn}/bin:$PATH
-    turnserver \
+    exec turnserver \
       --log-file=stdout \
       --external-ip="$(dig @resolver1.opendns.com myip.opendns.com A -4 +short)" \
       "$@"
