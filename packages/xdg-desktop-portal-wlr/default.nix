@@ -1,12 +1,14 @@
 {
   stdenv,
   lib,
+  cmake,
   grim,
   inih,
   iniparser,
   inputs,
   libdrm,
   makeWrapper,
+  mesa,
   meson,
   ninja,
   pipewire,
@@ -29,12 +31,14 @@ stdenv.mkDerivation {
     ninja
     pkg-config
     wayland-protocols
+    cmake
   ];
 
   buildInputs = [
     inih
     iniparser
     libdrm
+    mesa
     pipewire
     scdoc
     systemd
