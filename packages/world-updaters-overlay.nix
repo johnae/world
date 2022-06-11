@@ -67,9 +67,7 @@ final: prev: let
     fi
     for ghpkg in $(${ripgrep}/bin/rg -N "gh-release-update" ./flake.nix); do
       if echo "$ghpkg" | grep -q "releases"; then
-        echo releases
         uri="$(echo "$ghpkg" | awk -F'"' '{print $2}' | awk -F'github.com/' '{print $2}')"
-        echo "uri: $uri"
         owner="$(echo "$uri" | awk -F'/' '{print $1}')"
         repo="$(echo "$uri" | awk -F'/' '{print $2}')"
         latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
@@ -77,7 +75,6 @@ final: prev: let
         sed -i -E "s|$owner/$repo/releases/download/[0-9v.]+|$owner/$repo/releases/download/$latest|g" flake.nix
       else
         uri="$(echo "$ghpkg" | awk -F'"' '{print $2}' | awk -F':' '{print $2}')"
-        echo "uri: $uri"
         owner="$(echo "$uri" | awk -F'/' '{print $1}')"
         repo="$(echo "$uri" | awk -F'/' '{print $2}')"
         latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
