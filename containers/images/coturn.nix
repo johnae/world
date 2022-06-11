@@ -45,7 +45,6 @@
     export PATH=${pkgs.dig}/bin:${pkgs.coturn}/bin:$PATH
     exec turnserver \
       --log-file=stdout \
-      --external-ip="$(dig @resolver1.opendns.com myip.opendns.com A -4 +short)" \
       "$@"
   '';
 in
@@ -77,7 +76,6 @@ in
         pkgs.coreutils-full
         pkgs.cacert.out
         pkgs.coturn
-        pkgs.dig
       ]
       ++ nonRootShadowSetup {
         inherit user uid;
