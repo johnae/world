@@ -1,5 +1,5 @@
 final: prev: let
-  inherit (final) writeStrictShellScriptBin ripgrep buildEnv;
+  inherit (final) writeStrictShellScriptBin ripgrep buildEnv curl jq;
 
   update-cargo-vendor-sha = writeStrictShellScriptBin "update-cargo-vendor-sha" ''
     if [ -z "$1" ]; then
@@ -57,10 +57,40 @@ final: prev: let
       ${update-fixed-output-derivation-sha}/bin/update-fixed-output-derivation-sha "$fopkg"
     done
   '';
+
+  update-github-release-flake-inputs = writeStrictShellScriptBin "update-github-release-flake-inputs" ''
+    IFS=$'\n'
+    TOKEN=''${1:-}
+    curlargs=()
+    if [ "$TOKEN" != "" ]; then
+      curlargs=(-H "Authorization: token $TOKEN")
+    fi
+    for ghpkg in $(${ripgrep}/bin/rg -N "gh-release-update" ./flake.nix); do
+      if echo "$ghpkg" | grep -q "releases"; then
+        echo releases
+        uri="$(echo "$ghpkg" | awk -F'"' '{print $2}' | awk -F'github.com/' '{print $2}')"
+        echo "uri: $uri"
+        owner="$(echo "$uri" | awk -F'/' '{print $1}')"
+        repo="$(echo "$uri" | awk -F'/' '{print $2}')"
+        latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
+          ${jq}/bin/jq '[.[] | select(.draft == false) | select(.prerelease == false)][0].tag_name' -r)"
+        echo sed -i -E "s|$owner/$repo/releases/download/[0-9v.]+|$owner/$repo/releases/download/$latest|g" flake.nix
+      else
+        uri="$(echo "$ghpkg" | awk -F'"' '{print $2}' | awk -F':' '{print $2}')"
+        echo "uri: $uri"
+        owner="$(echo "$uri" | awk -F'/' '{print $1}')"
+        repo="$(echo "$uri" | awk -F'/' '{print $2}')"
+        latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
+          ${jq}/bin/jq '[.[] | select(.draft == false) | select(.prerelease == false)][0].tag_name' -r)"
+        echo sed -i -E "s|$owner/$repo/[0-9v.]+|$owner/$repo/$latest|g" flake.nix
+      fi
+    done
+  '';
 in {
   world-updaters = buildEnv {
     name = "world-updaters";
     paths = [
+      update-github-release-flake-inputs
       update-cargo-vendor-sha
       update-all-cargo-vendor-shas
       update-fixed-output-derivation-sha

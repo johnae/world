@@ -65,3 +65,9 @@ package = "world-updaters"
 name = "update-all-fixed-output-derivation-shas"
 help = "update all fixed output derivation shas in all such packages"
 category = "updates"
+
+[[commands]]
+package = "world-updaters"
+name = "update-github-release-flake-inputs"
+help = "update flake input github releases/tags"
+category = "updates"

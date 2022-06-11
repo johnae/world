@@ -474,6 +474,7 @@
             inherit (pkgs) pixieboot;
             inherit (pkgs) lint;
             inherit (pkgs) nixos-upgrade;
+            update-github-release-flake-inputs = pkgs.world-updaters;
             update-cargo-vendor-sha = pkgs.world-updaters;
             update-all-cargo-vendor-shas = pkgs.world-updaters;
             update-fixed-output-derivation-sha = pkgs.world-updaters;
