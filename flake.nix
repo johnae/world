@@ -150,7 +150,7 @@
       flake = false;
     };
     xdg-desktop-portal-wlr = {
-      url = "github:emersion/xdg-desktop-portal-wlr/v0.5.0";
+      url = "github:emersion/xdg-desktop-portal-wlr/v0.5.0"; # gh-release-update
       flake = false;
     };
     git-branchless = {
@@ -159,6 +159,10 @@
     };
     kured = {
       url = "github:weaveworks/kured";
+      flake = false;
+    };
+    fluxcd-install = {
+      url = "https://github.com/fluxcd/flux2/releases/download/v0.31.1/install.yaml"; # gh-release-update
       flake = false;
     };
   };
