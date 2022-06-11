@@ -74,7 +74,7 @@ final: prev: let
         repo="$(echo "$uri" | awk -F'/' '{print $2}')"
         latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
           ${jq}/bin/jq '[.[] | select(.draft == false) | select(.prerelease == false)][0].tag_name' -r)"
-        echo sed -i -E "s|$owner/$repo/releases/download/[0-9v.]+|$owner/$repo/releases/download/$latest|g" flake.nix
+        sed -i -E "s|$owner/$repo/releases/download/[0-9v.]+|$owner/$repo/releases/download/$latest|g" flake.nix
       else
         uri="$(echo "$ghpkg" | awk -F'"' '{print $2}' | awk -F':' '{print $2}')"
         echo "uri: $uri"
@@ -82,7 +82,7 @@ final: prev: let
         repo="$(echo "$uri" | awk -F'/' '{print $2}')"
         latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
           ${jq}/bin/jq '[.[] | select(.draft == false) | select(.prerelease == false)][0].tag_name' -r)"
-        echo sed -i -E "s|$owner/$repo/[0-9v.]+|$owner/$repo/$latest|g" flake.nix
+        sed -i -E "s|$owner/$repo/[0-9v.]+|$owner/$repo/$latest|g" flake.nix
       fi
     done
   '';
