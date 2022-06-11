@@ -24,7 +24,7 @@ jobs:
         ## the flake being in some invalid state during updates
         nix build .#world-updaters
 
-        ./result/bin/update-github-release-flake-inputs
+        ./result/bin/update-github-release-flake-inputs ${{ secrets.GITHUB_TOKEN }}
         nix flake update
         ./result/bin/update-all-cargo-vendor-shas
         ./result/bin/update-all-fixed-output-derivation-shas
