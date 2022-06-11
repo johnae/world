@@ -34,7 +34,7 @@
     ${prev.kustomize}/bin/kustomize build . > $out/kured.yaml
   '';
   fluxcd-yaml = prev.runCommand "flux.yaml" {} ''
-    ${prev.fluxcd}/bin/flux install --components-extra=image-reflector-controller,image-automation-controller --export > flux.yaml
+    cp ${inputs.fluxcd-install} ./flux.yaml
     cat <<PATCH>patch.yaml
     ---
     apiVersion: apps/v1
