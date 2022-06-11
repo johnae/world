@@ -150,7 +150,7 @@
       flake = false;
     };
     xdg-desktop-portal-wlr = {
-      url = "github:emersion/xdg-desktop-portal-wlr/v0.5.0"; # gh-release-update
+      url = "github:emersion/xdg-desktop-portal-wlr/v0.6.0"; # gh-release-update
       flake = false;
     };
     git-branchless = {
