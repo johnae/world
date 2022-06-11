@@ -142,7 +142,7 @@
       flake = false;
     };
     wlroots = {
-      url = "git+https://gitlab.freedesktop.org/wlroots/wlroots.git?rev=501ac5398d6f9a85dfdeeb9bf60a342bcff35adc";
+      url = "git+https://gitlab.freedesktop.org/wlroots/wlroots.git?ref=master";
       flake = false;
     };
     wl-clipboard = {
