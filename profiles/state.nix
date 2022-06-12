@@ -38,6 +38,7 @@ in {
             "/home/${userName}/Pictures"
             "/home/${userName}/Games"
             "/home/${userName}/Sync"
+            "/home/${userName}/Mail"
             "/home/${userName}/.local/share/direnv"
             "/home/${userName}/.local/share/password-store"
             "/home/${userName}/.local/share/fish"
