@@ -126,9 +126,9 @@ Some basic useful settings.
    (eval-when-compile
      (require 'use-package))
    #+END_SRC
-*** Add notmuch to load-path
+*** Add mu4e to load-path
    #+BEGIN_SRC elisp
-     (add-to-list 'load-path (getenv "NOTMUCH_LOAD_PATH"))
+     (add-to-list 'load-path (getenv "MU4E_LOAD_PATH"))
    #+END_SRC
 *** Setup auth sources so we use can use pass gpg files
    #+BEGIN_SRC elisp
@@ -876,6 +876,69 @@ Package setup.
      (global-fish-completion-mode)
    )
    #+END_SRC
+** Mu4e
+#+BEGIN_SRC elisp
+  (use-package mu4e
+    :defer 10
+    :config
+    (require 'org-mu4e)
+    (require 'smtpmail)
+    (setq
+     ;; Fetch mail every 10 mins
+     mu4e-update-interval (* 10 60)
+     mu4e-get-mail-command "mbsync -a"
+     mu4e-maildir "~/Mail"
+     mu4e-completing-read-function #'ivy-completing-read
+     mu4e-change-filenames-when-moving t
+     mu4e-view-show-images t
+     mu4e-view-show-addresses t
+     mu4e-compose-dont-reply-to-self t
+     message-kill-buffer-on-exit t
+     mu4e-context-policy 'pick-first
+     mu4e-compose-dont-reply-to-self t
+
+     mail-user-agent 'mu4e-user-agent
+     message-send-mail-function 'smtpmail-send-it
+     smtpmail-smtp-server "smtp.gmail.com"
+     smtpmail-smtp-service 465
+     smtpmail-stream-type  'ssl
+    )
+
+    (setq mu4e-contexts
+          `(,(make-mu4e-context
+              :name "Insane"
+              :match-func (lambda (msg) (when msg
+                                          (string-prefix-p "/insane" (mu4e-message-field msg :maildir))))
+              :vars '(
+                       (user-full-name . "John Axel Eriksson") 
+                       (user-mail-address . "john@insane.se") 
+                       (mu4e-drafts-folder . "/insane/Drafts") 
+                       (mu4e-refile-folder . "/insane/All") 
+                       (mu4e-sent-folder . "/insane/Sent") 
+                       (mu4e-trash-folder . "/insane/Trash") 
+                       ;; gmail handles this
+                       (mu4e-sent-messages-behavior . delete)
+                     )
+             )
+            ,(make-mu4e-context
+              :name "9000"
+              :match-func (lambda (msg) (when msg
+                                          (string-prefix-p "/9000" (mu4e-message-field msg :maildir))))
+              :vars '(
+                       (user-full-name . "John Axel Eriksson") 
+                       (user-mail-address . "john@9000.dev") 
+                       (mu4e-drafts-folder . "/9000/Drafts") 
+                       (mu4e-refile-folder . "/9000/All") 
+                       (mu4e-sent-folder . "/9000/Sent") 
+                       (mu4e-trash-folder . "/9000/Trash") 
+                       ;; gmail handles this
+                       (mu4e-sent-messages-behavior . delete)
+                     )
+             )
+          )
+    )
+  )
+#+END_SRC
 ** Projectile
 *** The package itself
    #+BEGIN_SRC elisp
@@ -1423,5 +1486,6 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
       (cl-pushnew '(alejandra . ("alejandra")) apheleia-formatters :test #'equal)
       (cl-pushnew '(nix-mode . alejandra) apheleia-mode-alist :test #'equal)))
   #+END_SRC
+  
   
   
