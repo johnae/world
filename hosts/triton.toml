@@ -21,62 +21,65 @@ profiles = [
   "profiles/zram",
 ]
 
-age.secrets.spotnix = { file = "secrets/spotnix.age", owner = "1337" }
-age.secrets.spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
-age.secrets.wifi-networks.file = "secrets/wifi-networks.age"
-age.secrets.wg-home.file = "secrets/triton/wg-home.age"
-age.secrets.wg-net.file = "secrets/triton/wg-net.age"
-age.secrets.id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", owner = "1337" }
-age.secrets.id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner = "1337" }
-age.secrets.id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
-age.secrets.syncthing-cert = { file = "secrets/triton/syncthing-cert.age", owner = "1337" }
-age.secrets.syncthing-key = { file = "secrets/triton/syncthing-key.age", owner = "1337" }
+[config.age.secrets]
+spotnix = { file = "secrets/spotnix.age", owner = "1337" }
+spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
+wifi-networks.file = "secrets/wifi-networks.age"
+wg-home.file = "secrets/triton/wg-home.age"
+wg-net.file = "secrets/triton/wg-net.age"
+id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", owner = "1337" }
+id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner = "1337" }
+id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
+syncthing-cert = { file = "secrets/triton/syncthing-cert.age", owner = "1337" }
+syncthing-key = { file = "secrets/triton/syncthing-key.age", owner = "1337" }
 
-services.syncthing.enable = true
-services.syncthing.devices.SM-G998B.id = "PCFNIXF-AR7YX2B-354IJQW-YP25QM7-N53ES5L-HKB337S-I6JZV34-55LQEAR"
-services.syncthing.user = "john"
-services.syncthing.group = "users"
-services.syncthing.openDefaultPorts = true
-services.syncthing.folders."/home/john/Sync".id = "sync"
-services.syncthing.folders."/home/john/Sync".devices = [
+[config.services.syncthing]
+enable = true
+devices.SM-G998B.id = "PCFNIXF-AR7YX2B-354IJQW-YP25QM7-N53ES5L-HKB337S-I6JZV34-55LQEAR"
+user = "john"
+group = "users"
+openDefaultPorts = true
+folders."/home/john/Sync".id = "sync"
+folders."/home/john/Sync".devices = [
   "eris",
   "polaris",
   "icarus",
   "titan",
   "hyperion"
 ]
-services.syncthing.folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
-services.syncthing.folders."/home/john/Photos".devices = [
+folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
+folders."/home/john/Photos".devices = [
   "eris",
   "polaris",
   "icarus",
   "SM-G998B"
 ]
-services.syncthing.cert = "/run/agenix/syncthing-cert"
-services.syncthing.key = "/run/agenix/syncthing-key"
-services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
+cert = "/run/agenix/syncthing-cert"
+key = "/run/agenix/syncthing-key"
+dataDir = "/home/john/.local/share/syncthing-data"
 
-services.innernet.client.insane.enable = true
-services.innernet.client.insane.settings.interface = { address = "192.168.104.69/22", privateKeyFile = "/run/agenix/wg-home" }
-services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
+[config.services.innernet.client.insane]
+enable = true
 
-users.groups.john.gid = 1337
-users.users.john.uid = 1337
-users.users.john.shell = "fish"
-users.users.john.hashedPassword = "$6$pUcetTdGMZMdzwx$ySPiZXgZUkIGO3jaEXIIEIh6ks8rea9uE5B08SHku2aJUolHeYKrMvhyFvNYcpvYQ/jf7kgOXL8dL0Yn.IuNS."
+[config.services.innernet.client.insane.settings.interface]
+address = "192.168.104.69/22"
+privateKeyFile = "/run/agenix/wg-home"
 
-home-manager.users.john.programs.rbw.settings.device_id = "d99037cd-bcbb-47cc-ac3b-75642e10dbb8"
+[config.services.innernet.client.insane.settings.server]
+publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY="
+externalEndpoint = "65.108.2.146:51820"
+internalEndpoint = "192.168.104.1:51820"
 
-home-manager.users.john.userinfo.email = "john@insane.se"
-home-manager.users.john.userinfo.fullName = "John Axel Eriksson"
-home-manager.users.john.userinfo.githubUser = "johnae"
-home-manager.users.john.userinfo.gitlabUser = "johnae"
-home-manager.users.john.userinfo.gitIdMap."~/Development/planhat/" = "john.eriksson@planhat.com"
+[config.users.groups.john]
+gid = 1337
 
-home-manager.users.john.services.gitAutoSync.repos."~/Development/org-roam" = { repository = "git@github.com:johnae/org-roam", sshKey = "/run/agenix/id_ed25519_roam_updater"}
-home-manager.users.john.services.gitAutoSync.repos."~/Development/org-agenda" = { repository = "git@github.com:johnae/org-agenda", sshKey = "/run/agenix/id_ed25519_agenda_updater"}
+[config.users.users.john]
+uid = 1337
+shell = "fish"
+hashedPassword = "$6$pUcetTdGMZMdzwx$ySPiZXgZUkIGO3jaEXIIEIh6ks8rea9uE5B08SHku2aJUolHeYKrMvhyFvNYcpvYQ/jf7kgOXL8dL0Yn.IuNS."
 
-home-manager.users.john.profiles = [
+[config.home-manager.users.john]
+profiles = [
   "users/profiles/alacritty",
   "users/profiles/bat",
   "users/profiles/chromium",
@@ -105,3 +108,60 @@ home-manager.users.john.profiles = [
   "users/profiles/waybar",
   "users/profiles/wlsunset",
 ]
+
+[config.home-manager.users.john.programs]
+mbsync.enable = true
+rbw.settings.device_id = "d99037cd-bcbb-47cc-ac3b-75642e10dbb8"
+
+[config.home-manager.users.john.userinfo]
+email = "john@insane.se"
+fullName = "John Axel Eriksson"
+githubUser = "johnae"
+gitlabUser = "johnae"
+gitIdMap."~/Development/planhat/" = "john.eriksson@planhat.com"
+
+[config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-roam"]
+repository = "git@github.com:johnae/org-roam"
+sshKey = "/run/agenix/id_ed25519_roam_updater"
+
+[config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-agenda"]
+repository = "git@github.com:johnae/org-agenda"
+sshKey = "/run/agenix/id_ed25519_agenda_updater"
+
+[config.home-manager.users.john.accounts.email]
+maildirBasePath = "Mail"
+
+[config.home-manager.users.john.accounts.email.accounts.insane]
+address = "john@insane.se"
+primary = true
+flavor = "gmail.com"
+mbsync.enable = true
+mbsync.create = "both"
+mbsync.extraConfig.account.PipelineDepth = 10
+passwordCommand = "rbw get gmail.com -- john@insane.se-mbsync"
+
+[config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.gmail.channels]
+
+inbox.patterns = ["INBOX"]
+inbox.extraConfig.Create = "both"
+inbox.extraConfig.SyncState = "*"
+
+all.farPattern = "[Gmail]/All Mail"
+all.nearPattern = "All"
+all.extraConfig.Create = "near"
+all.extraConfig.SyncState = "*"
+
+sent.farPattern = "[Gmail]/Sent Mail"
+sent.nearPattern = "Sent"
+sent.extraConfig.Create = "near"
+sent.extraConfig.SyncState = "*"
+
+trash.farPattern = "[Gmail]/Trash"
+trash.nearPattern = "Trash"
+trash.extraConfig.Create = "near"
+trash.extraConfig.SyncState = "*"
+
+drafts.farPattern = "[Gmail]/Drafts"
+drafts.nearPattern = "Drafts"
+drafts.extraConfig.Create = "near"
+drafts.extraConfig.SyncState = "*"

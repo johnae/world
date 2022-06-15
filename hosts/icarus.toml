@@ -16,79 +16,108 @@ profiles = [
   "profiles/zram",
 ]
 
-users.groups.john.gid = 1337
-users.users.john.uid = 1337
-users.users.john.hashedPassword = "$6$cmSsVS0s3nFkd4IE$y4g2KLxUCwQFej/LvrNkF57cdw.VYWPN3x4HQ5XCz34wAiCaBrLO2..OIPSu60/Gxr9uY44PYlimOeHs3Ma5a0"
-users.users.john.openssh.authorizedKeys.keys = [
+[config.btrfs]
+disks = [ "/dev/nvme0n1", "/dev/nvme1n1" ]
+
+[config.system.autoUpgrade]
+enable = true
+flake = "github:johnae/world"
+allowReboot = true
+dates = "*:0/15"
+randomizedDelaySec = "5min"
+enableSentinel = true
+
+[config.users.groups.john]
+gid = 1337
+
+[config.users.users.john]
+uid = 1337
+hashedPassword = "$6$cmSsVS0s3nFkd4IE$y4g2KLxUCwQFej/LvrNkF57cdw.VYWPN3x4HQ5XCz34wAiCaBrLO2..OIPSu60/Gxr9uY44PYlimOeHs3Ma5a0"
+openssh.authorizedKeys.keys = [
   "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ==",
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo=",
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
 ]
 
-networking.defaultGateway = "192.168.20.1"
-networking.interfaces.eth0.ipv4.addresses = [
-  { address = "192.168.20.143", prefixLength = 24 }
-]
+[config.networking]
+defaultGateway = "192.168.20.1"
 
-networking.private-wireguard.enable = true
-networking.private-wireguard.ips = [
+[config.networking.firewall]
+trustedInterfaces = [ "insane" ] ## trust the vpn mesh
+
+[[config.networking.interfaces.eth0.ipv4.addresses]]
+address = "192.168.20.143"
+prefixLength = 24
+
+[config.networking.private-wireguard]
+enable = true
+ips = [
   "10.66.134.216/32",
   "fc00:bbbb:bbbb:bb01::3:86d7/128"
 ]
-networking.private-wireguard.privateKeyFile = "/run/agenix/wg-net"
-networking.private-wireguard.peers = [
-  { allowedIPs = [ "0.0.0.0/0", "::0/0" ], endpoint = "185.204.1.219:51820", publicKey = "CYFNNfntzhRHn0+QHWv2eBOeU/sCZ5f6FLbTMUyIQHk=" }
-]
+privateKeyFile = "/run/agenix/wg-net"
 
-services.innernet.client.insane.enable = true
-services.innernet.client.insane.settings.interface = { address = "192.168.104.70/22", privateKeyFile = "/run/agenix/wg-home" }
-services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
+[[config.networking.private-wireguard.peers]]
+allowedIPs = [ "0.0.0.0/0", "::0/0" ]
+endpoint = "185.204.1.219:51820"
+publicKey = "CYFNNfntzhRHn0+QHWv2eBOeU/sCZ5f6FLbTMUyIQHk="
 
-services.syncthing.enable = true
-services.syncthing.devices.SM-G998B.id = "PCFNIXF-AR7YX2B-354IJQW-YP25QM7-N53ES5L-HKB337S-I6JZV34-55LQEAR"
-services.syncthing.user = "john"
-services.syncthing.group = "users"
-services.syncthing.openDefaultPorts = true
-services.syncthing.folders."/home/john/Sync".id = "sync"
-services.syncthing.folders."/home/john/Sync".devices = [
+[config.services.innernet.client.insane]
+enable = true
+
+[config.services.innernet.client.insane.settings.interface]
+address = "192.168.104.70/22"
+privateKeyFile = "/run/agenix/wg-home"
+
+[config.services.innernet.client.insane.settings.server]
+publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY="
+externalEndpoint = "65.108.2.146:51820"
+internalEndpoint = "192.168.104.1:51820"
+
+[config.services.syncthing]
+enable = true
+devices.SM-G998B.id = "PCFNIXF-AR7YX2B-354IJQW-YP25QM7-N53ES5L-HKB337S-I6JZV34-55LQEAR"
+user = "john"
+group = "users"
+openDefaultPorts = true
+folders."/home/john/Sync".id = "sync"
+folders."/home/john/Sync".devices = [
   "triton",
   "eris",
   "polaris",
   "titan",
   "hyperion"
 ]
-services.syncthing.folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
-services.syncthing.folders."/home/john/Photos".devices = [
+folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
+folders."/home/john/Photos".devices = [
   "triton",
   "eris",
   "polaris",
   "SM-G998B"
 ]
 
-services.syncthing.cert = "/run/agenix/syncthing-cert"
-services.syncthing.key = "/run/agenix/syncthing-key"
-services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
+cert = "/run/agenix/syncthing-cert"
+key = "/run/agenix/syncthing-key"
+dataDir = "/home/john/.local/share/syncthing-data"
 
-system.autoUpgrade = { enable = true, flake = "github:johnae/world", allowReboot = true, dates = "*:0/15", randomizedDelaySec = "5min", enableSentinel = true }
+[config.age.secrets]
+k3s-token.file = "secrets/k3s/token.age"
+wg-home.file = "secrets/icarus/wg-home.age"
+wg-net.file = "secrets/icarus/wg-net.age"
+syncthing-cert = { file = "secrets/icarus/syncthing-cert.age", owner = "1337" }
+syncthing-key = { file = "secrets/icarus/syncthing-key.age", owner = "1337" }
 
-age.secrets.k3s-token.file = "secrets/k3s/token.age"
-age.secrets.wg-home.file = "secrets/icarus/wg-home.age"
-age.secrets.wg-net.file = "secrets/icarus/wg-net.age"
-age.secrets.syncthing-cert = { file = "secrets/icarus/syncthing-cert.age", owner = "1337" }
-age.secrets.syncthing-key = { file = "secrets/icarus/syncthing-key.age", owner = "1337" }
+[config.services.k3s]
+role = "agent"
+after = [ "innernet-client-insane.service" ]
 
-networking.firewall.trustedInterfaces = [ "insane" ] ## trust the vpn mesh
-
-services.k3s.role = "agent"
-services.k3s.settings.server = "https://192.168.104.1:6443"
-services.k3s.settings.token-file = "/run/agenix/k3s-token"
-services.k3s.settings.flannel-iface = "insane"
-services.k3s.settings.node-ip = "192.168.104.70"
-services.k3s.settings.node-external-ip = "192.168.20.143"
-services.k3s.settings.with-node-id = true
-services.k3s.settings.kubelet-arg.max-pods = 62
-services.k3s.settings.node-label."topology.kubernetes.io/region" = "home"
-services.k3s.settings.node-label."topology.kubernetes.io/zone" = "home"
-services.k3s.after = [ "innernet-client-insane.service" ]
-
-btrfs.disks = [ "/dev/nvme0n1", "/dev/nvme1n1" ]
+[config.services.k3s.settings]
+server = "https://192.168.104.1:6443"
+token-file = "/run/agenix/k3s-token"
+flannel-iface = "insane"
+node-ip = "192.168.104.70"
+node-external-ip = "192.168.20.143"
+with-node-id = true
+kubelet-arg.max-pods = 62
+node-label."topology.kubernetes.io/region" = "home"
+node-label."topology.kubernetes.io/zone" = "home"

@@ -1,15 +1,9 @@
 system = "x86_64-linux"
 
 [config]
+
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
 syncthingDeviceID = "ZL2OU7Q-IRYWF7H-VNX6A65-RHWQXIF-AK2G22Y-KB43E2U-DAMNCFP-66IWKQX"
-
-virtualisation.libvirtd.enable = true
-boot.binfmt.emulatedSystems = [ "aarch64-linux" ]
-
-environment.state."/keep".directories = [
-  "/var/lib/libvirt",
-]
 
 profiles = [
   "profiles/hardware/usbcore",
@@ -27,61 +21,77 @@ profiles = [
   "profiles/zram",
 ]
 
-age.secrets.spotnix = { file = "secrets/spotnix.age", owner = "1337" }
-age.secrets.spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
-age.secrets.wifi-networks.file = "secrets/wifi-networks.age"
-age.secrets.wg-home.file = "secrets/eris/wg-home.age"
-age.secrets.wg-net.file = "secrets/eris/wg-net.age"
-age.secrets.id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", owner = "1337" }
-age.secrets.id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner = "1337" }
-age.secrets.id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
-age.secrets.syncthing-cert = { file = "secrets/eris/syncthing-cert.age", owner = "1337" }
-age.secrets.syncthing-key = { file = "secrets/eris/syncthing-key.age", owner = "1337" }
+[config.virtualisation.libvirtd]
+enable = true
 
-services.syncthing.enable = true
-services.syncthing.devices.SM-G998B.id = "PCFNIXF-AR7YX2B-354IJQW-YP25QM7-N53ES5L-HKB337S-I6JZV34-55LQEAR"
-services.syncthing.user = "john"
-services.syncthing.group = "users"
-services.syncthing.openDefaultPorts = true
-services.syncthing.folders."/home/john/Sync".id = "sync"
-services.syncthing.folders."/home/john/Sync".devices = [
+[config.boot.binfmt]
+emulatedSystems = [ "aarch64-linux" ]
+
+[config.environment.state."/keep"]
+directories = [
+  "/var/lib/libvirt",
+]
+
+[config.age.secrets]
+spotnix = { file = "secrets/spotnix.age", owner = "1337" }
+spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
+wifi-networks.file = "secrets/wifi-networks.age"
+wg-home.file = "secrets/eris/wg-home.age"
+wg-net.file = "secrets/eris/wg-net.age"
+id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", owner = "1337" }
+id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner = "1337" }
+id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
+syncthing-cert = { file = "secrets/eris/syncthing-cert.age", owner = "1337" }
+syncthing-key = { file = "secrets/eris/syncthing-key.age", owner = "1337" }
+
+[config.services.syncthing]
+enable = true
+devices.SM-G998B.id = "PCFNIXF-AR7YX2B-354IJQW-YP25QM7-N53ES5L-HKB337S-I6JZV34-55LQEAR"
+user = "john"
+group = "users"
+openDefaultPorts = true
+folders."/home/john/Sync".id = "sync"
+folders."/home/john/Sync".devices = [
   "triton",
   "polaris",
   "icarus",
   "titan",
   "hyperion"
 ]
-services.syncthing.folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
-services.syncthing.folders."/home/john/Photos".devices = [
+folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
+folders."/home/john/Photos".devices = [
   "triton",
   "polaris",
   "icarus",
   "SM-G998B"
 ]
 
-services.syncthing.cert = "/run/agenix/syncthing-cert"
-services.syncthing.key = "/run/agenix/syncthing-key"
-services.syncthing.dataDir = "/home/john/.local/share/syncthing-data"
+cert = "/run/agenix/syncthing-cert"
+key = "/run/agenix/syncthing-key"
+dataDir = "/home/john/.local/share/syncthing-data"
 
-services.innernet.client.insane.enable = true
-services.innernet.client.insane.settings.interface = { address = "192.168.104.65/22", privateKeyFile = "/run/agenix/wg-home" }
-services.innernet.client.insane.settings.server = { publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY=", externalEndpoint = "65.108.2.146:51820", internalEndpoint = "192.168.104.1:51820" }
+[config.services.innernet.client.insane]
+enable = true
 
-users.groups.john.gid = 1337
-users.users.john.uid = 1337
-users.users.john.shell = "fish"
-users.users.john.hashedPassword = "$6$RG3QgdVr6A5s524$FRVNXOYWYCNXf6cH/gV4u7g6sffffznBnbXZGHysuWVHGYPpeLfuDuXEJHK.KUrkVCfPXFTTsCLJaj2Q6ATkC1"
+[config.services.innernet.client.insane.settings.interface]
+address = "192.168.104.65/22"
+privateKeyFile = "/run/agenix/wg-home"
 
-home-manager.users.john.userinfo.email = "john@insane.se"
-home-manager.users.john.userinfo.fullName = "John Axel Eriksson"
-home-manager.users.john.userinfo.githubUser = "johnae"
-home-manager.users.john.userinfo.gitlabUser = "johnae"
-home-manager.users.john.userinfo.gitIdMap."~/Development/planhat/" = "john.eriksson@planhat.com"
+[config.services.innernet.client.insane.settings.server]
+publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY="
+externalEndpoint = "65.108.2.146:51820"
+internalEndpoint = "192.168.104.1:51820"
 
-home-manager.users.john.services.gitAutoSync.repos."~/Development/org-roam" = { repository = "git@github.com:johnae/org-roam", sshKey = "/run/agenix/id_ed25519_roam_updater"}
-home-manager.users.john.services.gitAutoSync.repos."~/Development/org-agenda" = { repository = "git@github.com:johnae/org-agenda", sshKey = "/run/agenix/id_ed25519_agenda_updater"}
+[config.users.groups.john]
+gid = 1337
 
-home-manager.users.john.profiles = [
+[config.users.users.john]
+uid = 1337
+shell = "fish"
+hashedPassword = "$6$RG3QgdVr6A5s524$FRVNXOYWYCNXf6cH/gV4u7g6sffffznBnbXZGHysuWVHGYPpeLfuDuXEJHK.KUrkVCfPXFTTsCLJaj2Q6ATkC1"
+
+[config.home-manager.users.john]
+profiles = [
   "users/profiles/alacritty",
   "users/profiles/bat",
   "users/profiles/chromium",
@@ -110,4 +120,20 @@ home-manager.users.john.profiles = [
   "users/profiles/wlsunset",
 ]
 
-home-manager.users.john.programs.rbw.settings.device_id = "f3268147-1e9d-46da-b431-11fe011f5dfe"
+[config.home-manager.users.john.programs]
+rbw.settings.device_id = "f3268147-1e9d-46da-b431-11fe011f5dfe"
+
+[config.home-manager.users.john.userinfo]
+email = "john@insane.se"
+fullName = "John Axel Eriksson"
+githubUser = "johnae"
+gitlabUser = "johnae"
+gitIdMap."~/Development/planhat/" = "john.eriksson@planhat.com"
+
+[config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-roam"]
+repository = "git@github.com:johnae/org-roam"
+sshKey = "/run/agenix/id_ed25519_roam_updater"
+
+[config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-agenda"]
+repository = "git@github.com:johnae/org-agenda"
+sshKey = "/run/agenix/id_ed25519_agenda_updater"
