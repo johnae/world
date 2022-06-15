@@ -3,7 +3,7 @@
   services.kanshi.profiles = {
     default.outputs = [
       {
-        criteria = "SDC 0x4152 0x00000000";
+        criteria = "SDC 0x4152 Unknown";
         mode = "2880x1800";
         position = "0,0";
         scale = 1.5;
