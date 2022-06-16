@@ -884,9 +884,10 @@ Package setup.
     (require 'org-mu4e)
     (require 'smtpmail)
     (setq
-     ;; Fetch mail every 10 mins
+     ;; Update mail every 10 mins
      mu4e-update-interval (* 10 60)
-     mu4e-get-mail-command "mbsync -a"
+     ;; systemd runs mbsync - default is "true"
+     ;; mu4e-get-mail-command "mbsync -a"
      mu4e-maildir "~/Mail"
      mu4e-completing-read-function #'ivy-completing-read
      mu4e-change-filenames-when-moving t
