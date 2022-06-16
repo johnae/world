@@ -109,16 +109,22 @@ profiles = [
   "users/profiles/wlsunset",
 ]
 
-[config.home-manager.users.john.programs]
-mbsync.enable = true
-rbw.settings.device_id = "d99037cd-bcbb-47cc-ac3b-75642e10dbb8"
-
 [config.home-manager.users.john.userinfo]
 email = "john@insane.se"
 fullName = "John Axel Eriksson"
 githubUser = "johnae"
 gitlabUser = "johnae"
 gitIdMap."~/Development/planhat/" = "john.eriksson@planhat.com"
+
+[config.home-manager.users.john.programs.mbsync]
+enable = true
+
+[config.home-manager.users.john.programs.rbw]
+settings.device_id = "d99037cd-bcbb-47cc-ac3b-75642e10dbb8"
+
+[config.home-manager.users.john.services.mbsync]
+enable = true
+frequency = "*:0/5"
 
 [config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-roam"]
 repository = "git@github.com:johnae/org-roam"
@@ -141,7 +147,6 @@ mbsync.extraConfig.account.PipelineDepth = 10
 passwordCommand = "rbw get gmail.com -- john@insane.se-mbsync"
 
 [config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.gmail.channels]
-
 inbox.patterns = ["INBOX"]
 inbox.extraConfig.Create = "both"
 inbox.extraConfig.SyncState = "*"

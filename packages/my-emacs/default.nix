@@ -11,6 +11,7 @@
   wl-clipboard,
   emacsWithPackagesFromUsePackage,
   pkgs,
+  inputs,
   lib,
   makeWrapper,
   ...
