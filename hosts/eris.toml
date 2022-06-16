@@ -120,8 +120,8 @@ profiles = [
   "users/profiles/wlsunset",
 ]
 
-[config.home-manager.users.john.programs]
-rbw.settings.device_id = "f3268147-1e9d-46da-b431-11fe011f5dfe"
+[config.home-manager.users.john.programs.rbw]
+settings.device_id = "f3268147-1e9d-46da-b431-11fe011f5dfe"
 
 [config.home-manager.users.john.userinfo]
 email = "john@insane.se"
