@@ -1,7 +1,6 @@
 system = "x86_64-linux"
 
 [config]
-
 publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH1j+f+Y4nOQvyLq1B9YiB2LxR/ttmK2TTHVEEFX/3ST"
 syncthingDeviceID = "ZL2OU7Q-IRYWF7H-VNX6A65-RHWQXIF-AK2G22Y-KB43E2U-DAMNCFP-66IWKQX"
 
@@ -123,6 +122,13 @@ profiles = [
 [config.home-manager.users.john.programs.rbw]
 settings.device_id = "f3268147-1e9d-46da-b431-11fe011f5dfe"
 
+[config.home-manager.users.john.programs.mbsync]
+enable = true
+
+[config.home-manager.users.john.services.mbsync]
+enable = true
+frequency = "*:0/5"
+
 [config.home-manager.users.john.userinfo]
 email = "john@insane.se"
 fullName = "John Axel Eriksson"
@@ -137,3 +143,40 @@ sshKey = "/run/agenix/id_ed25519_roam_updater"
 [config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-agenda"]
 repository = "git@github.com:johnae/org-agenda"
 sshKey = "/run/agenix/id_ed25519_agenda_updater"
+
+[config.home-manager.users.john.accounts.email]
+maildirBasePath = "Mail"
+
+[config.home-manager.users.john.accounts.email.accounts.insane]
+address = "john@insane.se"
+primary = true
+flavor = "gmail.com"
+mbsync.enable = true
+mbsync.create = "both"
+mbsync.extraConfig.account.PipelineDepth = 10
+passwordCommand = "rbw get gmail.com -- john@insane.se-mbsync"
+
+[config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.gmail.channels]
+inbox.patterns = ["INBOX"]
+inbox.extraConfig.Create = "both"
+inbox.extraConfig.SyncState = "*"
+
+all.farPattern = "[Gmail]/All Mail"
+all.nearPattern = "All"
+all.extraConfig.Create = "near"
+all.extraConfig.SyncState = "*"
+
+sent.farPattern = "[Gmail]/Sent Mail"
+sent.nearPattern = "Sent"
+sent.extraConfig.Create = "near"
+sent.extraConfig.SyncState = "*"
+
+trash.farPattern = "[Gmail]/Trash"
+trash.nearPattern = "Trash"
+trash.extraConfig.Create = "near"
+trash.extraConfig.SyncState = "*"
+
+drafts.farPattern = "[Gmail]/Drafts"
+drafts.nearPattern = "Drafts"
+drafts.extraConfig.Create = "near"
+drafts.extraConfig.SyncState = "*"
