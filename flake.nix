@@ -165,10 +165,6 @@
       url = "https://github.com/fluxcd/flux2/releases/download/v0.31.1/install.yaml"; # gh-release-update
       flake = false;
     };
-    mu4e-dashboard = {
-      url = "github:rougier/mu4e-dashboard";
-      flake = false;
-    };
   };
 
   outputs = {

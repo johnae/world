@@ -306,22 +306,6 @@
         "type": "gitlab"
       }
     },
-    "mu4e-dashboard": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1652352637,
-        "narHash": "sha256-QzWg9rYDqxc8n+FNfQm0VEYvZooOr/nCtl7NCxVpLrQ=",
-        "owner": "rougier",
-        "repo": "mu4e-dashboard",
-        "rev": "a7bd92334ac02f45b045911b566a428ee98b322b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rougier",
-        "repo": "mu4e-dashboard",
-        "type": "github"
-      }
-    },
     "netns-exec": {
       "flake": false,
       "locked": {
@@ -542,7 +526,6 @@
         "kile": "kile",
         "kured": "kured",
         "matrix-conduit": "matrix-conduit",
-        "mu4e-dashboard": "mu4e-dashboard",
         "netns-exec": "netns-exec",
         "nix-misc": "nix-misc",
         "nixlib": "nixlib",
