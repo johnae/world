@@ -879,7 +879,7 @@ Package setup.
 ** Mu4e
 #+BEGIN_SRC elisp
   (use-package mu4e
-    :defer 10
+    :defer 2
     :config
     (require 'org-mu4e)
     (require 'smtpmail)
