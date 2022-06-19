@@ -612,6 +612,10 @@ Package setup.
        (doom-modeline-mode)
        )
    #+END_SRC
+*** Tao Theme
+  #+BEGIN_SRC elisp
+     (use-package tao-theme)
+  #+END_SRC
 *** Set default theme
    #+BEGIN_SRC elisp
      (defvar jae:theme 'doom-oceanic-next)
@@ -1490,3 +1494,4 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
   
   
   
+
