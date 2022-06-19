@@ -49,7 +49,7 @@
     };
 
     spotnix = {
-      url = "github:johnae/spotnix";
+      url = "github:johnae/spotnix/dream2nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.fenix.follows = "fenix";
     };
@@ -222,7 +222,7 @@
         inputs.nix-misc.overlay
         inputs.nur.overlay
         inputs.persway.overlay
-        inputs.spotnix.overlay
+        inputs.spotnix.overlays.default
         (
           final: prev: {
             notracking = prev.runCommand "notracking" {} ''
@@ -503,7 +503,7 @@
         packageOverlays
         // worldOverlays
         // {
-          spotnix = inputs.spotnix.overlay;
+          spotnix = inputs.spotnix.overlays.default;
           persway = inputs.persway.overlay;
         };
 
