@@ -130,9 +130,9 @@ Some basic useful settings.
    #+BEGIN_SRC elisp
      (add-to-list 'load-path (getenv "MU4E_LOAD_PATH"))
    #+END_SRC
-*** Setup auth sources so we use can use pass gpg files
+*** Setup auth sources
    #+BEGIN_SRC elisp
-     (setq auth-sources '((:source "~/.local/share/password-store/emacs/auth/authinfo.gpg")))
+     (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
    #+END_SRC
 *** Set utf8 everywhere
    #+BEGIN_SRC elisp
