@@ -42,6 +42,8 @@ id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner 
 id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
 syncthing-cert = { file = "secrets/eris/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/eris/syncthing-key.age", owner = "1337" }
+mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337", path = "/home/john/.mbsync-insane" }
+authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
 
 [config.services.syncthing]
 enable = true
@@ -154,7 +156,7 @@ flavor = "gmail.com"
 mbsync.enable = true
 mbsync.create = "both"
 mbsync.extraConfig.account.PipelineDepth = 10
-passwordCommand = "rbw get gmail.com -- john@insane.se-mbsync"
+passwordCommand = "cat ~/.mbsync-insane"
 
 [config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.gmail.channels]
 inbox.patterns = ["INBOX"]
