@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = inputs.matrix-conduit;
 
-  cargoSha256 = "sha256-i0Chdz5GorQ/aBJCykZopCY3QbQEz8q/8tbKXGrpGeE=";
+  cargoSha256 = "sha256-Sxv2ecfLdo3eJG6w545oVA3Cm3QkWUx0NPCi8j6bQ4w=";
 
   doCheck = false;
 
