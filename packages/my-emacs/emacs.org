@@ -916,6 +916,7 @@ Package setup.
                                           (string-prefix-p "/insane" (mu4e-message-field msg :maildir))))
               :vars '(
                        (user-full-name . "John Axel Eriksson") 
+                       (smtpmail-smtp-user . "john@insane.se")
                        (user-mail-address . "john@insane.se") 
                        (mu4e-drafts-folder . "/insane/Drafts") 
                        (mu4e-refile-folder . "/insane/All") 
@@ -931,6 +932,7 @@ Package setup.
                                           (string-prefix-p "/9000" (mu4e-message-field msg :maildir))))
               :vars '(
                        (user-full-name . "John Axel Eriksson") 
+                       (smtpmail-smtp-user . "john@9000.dev")
                        (user-mail-address . "john@9000.dev") 
                        (mu4e-drafts-folder . "/9000/Drafts") 
                        (mu4e-refile-folder . "/9000/All") 
