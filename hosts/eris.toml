@@ -66,6 +66,10 @@ folders."/home/john/Photos".devices = [
   "icarus",
   "SM-G998B"
 ]
+folders."/home/john/Photos".versioning.type = "staggered"
+folders."/home/john/Photos".versioning.params.cleanInterval = "3600"
+folders."/home/john/Photos".versioning.params.maxAge = "0"
+folders."/home/john/Photos".versioning.params.versionsPath = "/home/john/Photos/stbackup"
 
 cert = "/run/agenix/syncthing-cert"
 key = "/run/agenix/syncthing-key"
