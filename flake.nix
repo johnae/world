@@ -18,7 +18,6 @@
   inputs = {
     ## flakes
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-k3s-124-2-rc1.url = "github:johnae/nixpkgs/k3s-124-2-rc1";
     flake-utils.url = "github:numtide/flake-utils";
     devshell.url = "github:johnae/devshell";
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -226,11 +225,6 @@
         inputs.spotnix.overlays.default
         (
           final: prev: {
-            k3s-124-2-rc1 = (pkgsForRcK3s prev.system).k3s;
-          }
-        )
-        (
-          final: prev: {
             notracking = prev.runCommand "notracking" {} ''
               mkdir -p "$out"/{dnsmasq,dnscrypt-proxy}
               grep -v upsales ${inputs.notracking}/dnsmasq/dnsmasq.blacklist.txt > "$out"/dnsmasq/dnsmasq.blacklist.txt
@@ -269,11 +263,6 @@
         )
       ]
       ++ mapAttrsToList (_: value: value) (packageOverlays // worldOverlays);
-
-    pkgsForRcK3s = system:
-      import inputs.nixpkgs-k3s-124-2-rc1 {
-        inherit system overlays;
-      };
 
     pkgsFor = system:
       import nixpkgs {
@@ -377,7 +366,6 @@
               fluxcd-yaml = true;
               kured-yaml = true;
               notracking = true;
-              k3s-124-2-rc1 = true;
             }));
       }
     );
