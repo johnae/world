@@ -8,7 +8,7 @@
   inherit (lib) optionals mkIf;
   cfg = config.services.k3s;
 in {
-  services.k3s.package = pkgs.k3s-124-2-rc1;
+  services.k3s.package = pkgs.k3s-123;
   services.k3s.settings.node-label.hostname = hostName;
   services.k3s.disable = ["traefik"];
 

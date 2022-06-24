@@ -587,19 +587,19 @@
         "type": "github"
       }
     },
-    "nixpkgs-k3s-124-2-rc1": {
+    "nixpkgs-k3s-123": {
       "locked": {
-        "lastModified": 1656077782,
-        "narHash": "sha256-YK15vVzgfw4I/3nDvUUf2aMUZkFh10BlBYf5T2n8bwI=",
-        "owner": "johnae",
+        "lastModified": 1655451431,
+        "narHash": "sha256-mufdKxyVsPkCE7YJb3Qy6xWiu0PvhIb3TE5jhe9oFvI=",
+        "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "614145f337c5576801b2f474adbf63d7d3df3d08",
+        "rev": "046a25e32edad68e578b5fa3dceebbea16c887c5",
         "type": "github"
       },
       "original": {
-        "owner": "johnae",
-        "ref": "k3s-124-2-rc1",
+        "owner": "nixos",
         "repo": "nixpkgs",
+        "rev": "046a25e32edad68e578b5fa3dceebbea16c887c5",
         "type": "github"
       }
     },
@@ -806,7 +806,7 @@
         "nixlib": "nixlib",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-k3s-124-2-rc1": "nixpkgs-k3s-124-2-rc1",
+        "nixpkgs-k3s-123": "nixpkgs-k3s-123",
         "notracking": "notracking",
         "nur": "nur",
         "persway": "persway",
