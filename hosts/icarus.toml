@@ -117,7 +117,7 @@ role = "agent"
 after = [ "innernet-client-insane.service" ]
 
 [config.services.k3s.settings]
-server = "https://192.168.104.1:6443"
+server = "https://192.168.104.100:6443"
 token-file = "/run/agenix/k3s-token"
 flannel-iface = "insane"
 node-ip = "192.168.104.70"
