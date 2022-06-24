@@ -126,4 +126,3 @@ with-node-id = true
 kubelet-arg.max-pods = 62
 node-label."topology.kubernetes.io/region" = "home"
 node-label."topology.kubernetes.io/zone" = "home"
-kubelet-arg.v=4

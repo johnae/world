@@ -103,6 +103,7 @@ token-file = "/run/agenix/k3s-token"
 flannel-iface = "insane"
 node-ip = "192.168.104.67"
 node-external-ip = "192.168.20.142"
+egress-selector-mode = "agent"
 with-node-id = true
 advertise-address = "192.168.104.67"
 cluster-cidr = "10.128.128.0/21"
