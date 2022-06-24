@@ -18,8 +18,6 @@
   inputs = {
     ## flakes
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    ## determine if 1.23 does not exhibit the issues I've seen with 1.24
-    nixpkgs-k3s-123.url = "github:nixos/nixpkgs/046a25e32edad68e578b5fa3dceebbea16c887c5";
     flake-utils.url = "github:numtide/flake-utils";
     devshell.url = "github:johnae/devshell";
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -225,11 +223,6 @@
         inputs.nur.overlay
         inputs.persway.overlay
         inputs.spotnix.overlays.default
-        (
-          final: prev: {
-            k3s-123 = (pkgsForOldK3s prev.system).k3s;
-          }
-        )
         (
           final: prev: {
             notracking = prev.runCommand "notracking" {} ''
