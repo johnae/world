@@ -113,7 +113,7 @@ syncthing-key = { file = "secrets/icarus/syncthing-key.age", owner = "1337" }
 
 [config.services.k3s]
 enable = true
-role = "agent"
+role = "server"
 after = [ "innernet-client-insane.service" ]
 
 [config.services.k3s.settings]
@@ -126,4 +126,14 @@ with-node-id = true
 kubelet-arg.max-pods = 62
 node-label."topology.kubernetes.io/region" = "home"
 node-label."topology.kubernetes.io/zone" = "home"
-kubelet-arg.v=4
+secrets-encryption = true
+tls-san = "192.168.104.100"
+kube-controller-manager-arg.node-cidr-mask-size = 25
+kube-apiserver-arg.oidc-issuer-url = "https://dex.insane.se"
+kube-apiserver-arg.oidc-username-claim = "email"
+kube-apiserver-arg.oidc-groups-claim = "groups"
+kube-apiserver-arg.oidc-client-id = "dex-auth"
+advertise-address = "192.168.104.67"
+cluster-cidr = "10.128.128.0/21"
+service-cidr = "10.129.128.0/22"
+cluster-dns = "10.129.128.10"
