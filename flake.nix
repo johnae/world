@@ -49,7 +49,7 @@
     };
 
     spotnix = {
-      url = "github:johnae/spotnix/dream2nix";
+      url = "github:johnae/spotnix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.fenix.follows = "fenix";
     };
