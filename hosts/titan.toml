@@ -94,7 +94,6 @@ syncthing-cert = { file = "secrets/titan/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/titan/syncthing-key.age", owner = "1337" }
 
 [config.services.k3s]
-enable = false
 role = "server"
 after = [ "innernet-client-insane.service" ]
 
