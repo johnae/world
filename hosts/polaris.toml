@@ -178,6 +178,7 @@ sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/
 cluster-secrets = { file = "secrets/k3s/cluster-secrets.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml" }
 
 [config.services.k3s]
+enable = false
 role = "server"
 after = [ "innernet-server-insane.service" ]
 
