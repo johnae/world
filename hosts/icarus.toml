@@ -112,6 +112,7 @@ syncthing-cert = { file = "secrets/icarus/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/icarus/syncthing-key.age", owner = "1337" }
 
 [config.services.k3s]
+enable = true
 role = "agent"
 after = [ "innernet-client-insane.service" ]
 
