@@ -131,11 +131,11 @@ configuration.positions.filename = "/tmp/positions.yaml"
 configuration.server.disable = true
 
 [[config.services.promtail.configuration.clients]]
-url = "https://logs.insane.se/loki/api/v1/push"
+url = "https://logs.home.k.ill.dev/loki/api/v1/push"
 tls_config.ca_file = "/etc/ssl/certs/ca-bundle.crt"
 tls_config.cert_file = "/var/lib/promtail/cert.pem"
 tls_config.key_file = "/var/lib/promtail/key.pem"
-tls_config.server_name = "logs.insane.se"
+tls_config.server_name = "logs.home.k.ill.dev"
 
 [[config.services.promtail.configuration.scrape_configs]]
 job_name = "journal"

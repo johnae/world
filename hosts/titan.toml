@@ -94,6 +94,7 @@ syncthing-cert = { file = "secrets/titan/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/titan/syncthing-key.age", owner = "1337" }
 
 [config.services.k3s]
+enable = true
 role = "server"
 after = [ "innernet-client-insane.service" ]
 
@@ -110,7 +111,7 @@ service-cidr = "10.129.128.0/22"
 cluster-dns = "10.129.128.10"
 kubelet-arg.max-pods = 62
 kube-controller-manager-arg.node-cidr-mask-size = 25
-kube-apiserver-arg.oidc-issuer-url = "https://dex.insane.se"
+kube-apiserver-arg.oidc-issuer-url = "https://auth.9000.dev"
 kube-apiserver-arg.oidc-username-claim = "email"
 kube-apiserver-arg.oidc-groups-claim = "groups"
 kube-apiserver-arg.oidc-client-id = "dex-auth"
