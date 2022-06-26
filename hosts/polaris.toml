@@ -207,57 +207,57 @@ tls-san = "192.168.104.100"
 
 [config.services.k3s.autoDeploy]
 kured = "pkg:kured-yaml/kured.yaml"
-#flux = "pkg:fluxcd-yaml/flux.yaml"
-#
-#[config.services.k3s.autoDeploy.cluster-vars]
-#apiVersion = "v1"
-#kind = "ConfigMap"
-#metadata.name = "cluster-vars"
-#metadata.namespace = "flux-system"
-#data.cluster = "home"
-#data.context = "default"
-#data.coturn_relay_ip = "192.168.104.1"
-#data.cluster_dns_zone = "home.k.ill.dev"
-#data.main_dns_zone = "9000.dev"
-#data.private_dns_zone = "insane.se"
-#data.personal_dns_zone = "johnae.dev"
-#data.environment = "production"
-#data.prometheus_remote_write_url = "https://metrics.home.k.ill.dev/api/v1/push"
-#data.loki_remote_write_url = "https://logs.home.k.ill.dev/loki/api/v1/push"
-#data.grafana_dns = "grafana.9000.dev"
-#data.pod_subnet = "10.128.128.0/21"
-#data.minio_host = "minio.minio.svc.cluster.local"
-#data.loki_bucket = "loki-d78f"
-#data.cortex_bucket = "cortex-d78f"
-#data.github_org = "9k-dev"
-#
-#[config.services.k3s.autoDeploy.flux-system-repo]
-#apiVersion = "source.toolkit.fluxcd.io/v1beta1"
-#kind = "GitRepository"
-#metadata.name = "flux-system"
-#metadata.namespace = "flux-system"
-#spec.gitImplementation = "go-git"
-#spec.interval = "1m0s"
-#spec.ref.branch = "main"
-#spec.secretRef.name = "flux-system"
-#spec.timeout = "20s"
-#spec.url = "ssh://git@github.com/johnae/flux-system.git"
-#
-#[config.services.k3s.autoDeploy.flux-components-kustomization]
-#apiVersion = "kustomize.toolkit.fluxcd.io/v1beta1"
-#kind = "Kustomization"
-#metadata.name = "components"
-#metadata.namespace = "flux-system"
-#spec.interval = "5m0s"
-#spec.sourceRef.kind = "GitRepository"
-#spec.sourceRef.name = "flux-system"
-#spec.path = "./clusters/home/components"
-#spec.prune = true
-#spec.validation = "client"
-#spec.postBuild.substituteFrom = [
-#  { kind = "ConfigMap", name = "cluster-vars" },
-#  { kind = "Secret", name = "cluster-secrets" }
-#]
+flux = "pkg:fluxcd-yaml/flux.yaml"
+
+[config.services.k3s.autoDeploy.cluster-vars]
+apiVersion = "v1"
+kind = "ConfigMap"
+metadata.name = "cluster-vars"
+metadata.namespace = "flux-system"
+data.cluster = "home"
+data.context = "default"
+data.coturn_relay_ip = "192.168.104.1"
+data.cluster_dns_zone = "home.k.ill.dev"
+data.main_dns_zone = "9000.dev"
+data.private_dns_zone = "insane.se"
+data.personal_dns_zone = "johnae.dev"
+data.environment = "production"
+data.prometheus_remote_write_url = "https://metrics.home.k.ill.dev/api/v1/push"
+data.loki_remote_write_url = "https://logs.home.k.ill.dev/loki/api/v1/push"
+data.grafana_dns = "grafana.9000.dev"
+data.pod_subnet = "10.128.128.0/21"
+data.minio_host = "minio.minio.svc.cluster.local"
+data.loki_bucket = "loki-d78f"
+data.cortex_bucket = "cortex-d78f"
+data.github_org = "9k-dev"
+
+[config.services.k3s.autoDeploy.flux-system-repo]
+apiVersion = "source.toolkit.fluxcd.io/v1beta1"
+kind = "GitRepository"
+metadata.name = "flux-system"
+metadata.namespace = "flux-system"
+spec.gitImplementation = "go-git"
+spec.interval = "1m0s"
+spec.ref.branch = "main"
+spec.secretRef.name = "flux-system"
+spec.timeout = "20s"
+spec.url = "ssh://git@github.com/johnae/flux-system.git"
+
+[config.services.k3s.autoDeploy.flux-components-kustomization]
+apiVersion = "kustomize.toolkit.fluxcd.io/v1beta1"
+kind = "Kustomization"
+metadata.name = "components"
+metadata.namespace = "flux-system"
+spec.interval = "5m0s"
+spec.sourceRef.kind = "GitRepository"
+spec.sourceRef.name = "flux-system"
+spec.path = "./clusters/home/components"
+spec.prune = true
+spec.validation = "client"
+spec.postBuild.substituteFrom = [
+  { kind = "ConfigMap", name = "cluster-vars" },
+  { kind = "Secret", name = "cluster-secrets" }
+]
 
 [config.services.plex]
 enable = true
