@@ -6,6 +6,6 @@ in {
     inherit (userinfo) email;
     lock_timeout = 3600;
     pinentry = "gnome3";
-    base_url = "https://bw.insane.se";
+    base_url = "https://bw.9000.dev";
   };
 }
