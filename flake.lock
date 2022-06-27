@@ -184,11 +184,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1656181377,
-        "narHash": "sha256-sOoBpKipCApCVIwF+Zo/xJwbP/gk7XYxPsABap5u1Vs=",
+        "lastModified": 1656268767,
+        "narHash": "sha256-5/iFlVpb94WhZrbY+lDvvC1VOdMzYIHNxrn6h5TxjKc=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "a04bc2fc2b6bc9c1ba738cf8de3d33768d298c7c",
+        "rev": "b9464569ca17c8b4942bea5f9531b78e01806782",
         "type": "github"
       },
       "original": {
@@ -205,11 +205,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1656138322,
-        "narHash": "sha256-ZHh/3So9OvOH/A+axJowVcjDmPmQ/aZAFbhvfWYln/I=",
+        "lastModified": 1656224696,
+        "narHash": "sha256-V1xlRG+30OMd48TEtyC7OehKqg7exG3NPiVfRAamJfg=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "2f1c9a040c790f9ed13ae933b748a55578138777",
+        "rev": "a5b11b8d6bce93078491465193e41df15583ade7",
         "type": "github"
       },
       "original": {
@@ -247,22 +247,6 @@
       "original": {
         "owner": "evanlucas",
         "repo": "fish-kubectl-completions",
-        "type": "github"
-      }
-    },
-    "flake-compat": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1650374568,
-        "narHash": "sha256-Z+s0J8/r907g149rllvwhb4pKi8Wam5ij0st8PwAh+E=",
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "rev": "b4a34015c698c7793d592d66adbab377907a2be8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "edolstra",
-        "repo": "flake-compat",
         "type": "github"
       }
     },
@@ -357,11 +341,11 @@
     "git-branchless": {
       "flake": false,
       "locked": {
-        "lastModified": 1655798229,
-        "narHash": "sha256-uQiZYu6PETpUm/tcux6g5WUiwFngQ6xo/Q4XkOutiaU=",
+        "lastModified": 1656281532,
+        "narHash": "sha256-9C8FLvnA3f0ruz6IEKmYjLl/LUK+GHnNEl187svFIh8=",
         "owner": "arxanas",
         "repo": "git-branchless",
-        "rev": "ea94c052d0b1f1ab1def6fd6d9a802fcbb42434c",
+        "rev": "24b0c837104a7f600feafa2f5153a027ef862e1d",
         "type": "github"
       },
       "original": {
@@ -420,20 +404,17 @@
     },
     "home-manager": {
       "inputs": {
-        "flake-compat": "flake-compat",
         "nixpkgs": [
           "nixpkgs"
         ],
-        "nmd": "nmd",
-        "nmt": "nmt",
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1656199469,
-        "narHash": "sha256-17t4qc016C1p6oNSKOrYbOCErWhQI4dr4nzJKrGO8VE=",
+        "lastModified": 1656274966,
+        "narHash": "sha256-jU+OTSvUbvKKmbNNl4XkUyW3EGdqZDNEZtGs++NbDlM=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "1dbac84b846e4bfa21a08e31e95e11f0965ed042",
+        "rev": "9550595502bf437be7eb32f312a924ec891872d1",
         "type": "github"
       },
       "original": {
@@ -558,11 +539,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1655789751,
-        "narHash": "sha256-DbL2gn7YwkuX10OdlWfZ/A7zEJztwHh9NMeau1JMTdk=",
+        "lastModified": 1656241064,
+        "narHash": "sha256-+jWwBt515aFGukeX8WSafg9CM3Ju3FD0XrF+X4ph0mU=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "f9d8dff4e621f2d7f2b84d9e84bc6359715f971c",
+        "rev": "99e33a57149916ebede78ec13edd9ba310c10f2f",
         "type": "github"
       },
       "original": {
@@ -573,11 +554,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1655983783,
-        "narHash": "sha256-0h1FzkYWei24IdKNpCX93onkF/FMiXQG8SdEbTc0r8A=",
+        "lastModified": 1656239181,
+        "narHash": "sha256-wW1xRFBn376yGloXZ4QzBE4hjipMawpV18Lshd9QSPw=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "6141b8932a5cf376fe18fcd368cecd9ad946cb68",
+        "rev": "f2537a505d45c31fe5d9c27ea9829b6f4c4e6ac5",
         "type": "github"
       },
       "original": {
@@ -585,38 +566,6 @@
         "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
-      }
-    },
-    "nmd": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1653339422,
-        "narHash": "sha256-RNLq09vfj21TyYuUCeD6BNTNC6Ew8bLhQULZytN4Xx8=",
-        "owner": "rycee",
-        "repo": "nmd",
-        "rev": "91dee681dd1c478d6040a00835d73c0f4a4c5c29",
-        "type": "gitlab"
-      },
-      "original": {
-        "owner": "rycee",
-        "repo": "nmd",
-        "type": "gitlab"
-      }
-    },
-    "nmt": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1648075362,
-        "narHash": "sha256-u36WgzoA84dMVsGXzml4wZ5ckGgfnvS0ryzo/3zn/Pc=",
-        "owner": "rycee",
-        "repo": "nmt",
-        "rev": "d83601002c99b78c89ea80e5e6ba21addcfe12ae",
-        "type": "gitlab"
-      },
-      "original": {
-        "owner": "rycee",
-        "repo": "nmt",
-        "type": "gitlab"
       }
     },
     "node2nix": {
@@ -638,11 +587,11 @@
     "notracking": {
       "flake": false,
       "locked": {
-        "lastModified": 1656144722,
-        "narHash": "sha256-Kb2llr171e72+4OSe4ChktNvknDWSnHRWeKk/meQUoY=",
+        "lastModified": 1656232024,
+        "narHash": "sha256-1AWj7mHMYJtDGrNu72MQNVKAbLzemfFE/sf8f4szPnY=",
         "owner": "notracking",
         "repo": "hosts-blocklists",
-        "rev": "cf0d25d87200c89e05bc30f56866ce5956e3832a",
+        "rev": "46ebfb246e13bd76980c37f4a32f6bcf930ea42b",
         "type": "github"
       },
       "original": {
@@ -653,11 +602,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1656200495,
-        "narHash": "sha256-vjTBDo/509clvC+/HGITDlO8wk8aAZ16R7bXVMyDJ1o=",
+        "lastModified": 1656277200,
+        "narHash": "sha256-6z1eLdYaJbN1K1A6wJaGBwhOsFSQFktrhzJJsJLNGFU=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "f3c58475206979fa4e8477f5fd6827fc1396d4d4",
+        "rev": "2b15f00595c7234ece4c657094cee2ddcaea14e7",
         "type": "github"
       },
       "original": {
