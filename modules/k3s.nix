@@ -26,6 +26,7 @@
     lessThan
     ;
   cfg = config.services.k3s;
+  enableUnifiedCgroupHierarchy = config.systemd.enableUnifiedCgroupHierarchy;
   k3sManifestsDir = "/var/lib/rancher/k3s/server/manifests";
   containerdConfigDir = "/var/lib/rancher/k3s/agent/etc/containerd";
   containerdConfig = pkgs.writeText "config.toml.tmpl" ''
@@ -105,7 +106,11 @@
       runtime_type = "io.containerd.runc.v2"
 
     [plugins.cri.containerd.runtimes.runc.options]
-      SystemdCgroup = true
+      SystemdCgroup = ${
+      if enableUnifiedCgroupHierarchy
+      then "true"
+      else "false"
+    }
 
     {{ if .PrivateRegistryConfig }}
     {{ if .PrivateRegistryConfig.Mirrors }}
