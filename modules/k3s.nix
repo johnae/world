@@ -25,8 +25,8 @@
     sort
     lessThan
     ;
+  inherit (config.systemd) enableUnifiedCgroupHierarchy;
   cfg = config.services.k3s;
-  enableUnifiedCgroupHierarchy = config.systemd.enableUnifiedCgroupHierarchy;
   k3sManifestsDir = "/var/lib/rancher/k3s/server/manifests";
   containerdConfigDir = "/var/lib/rancher/k3s/agent/etc/containerd";
   containerdConfig = pkgs.writeText "config.toml.tmpl" ''
