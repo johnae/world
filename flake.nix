@@ -162,7 +162,7 @@
       flake = false;
     };
     fluxcd-install = {
-      url = "https://github.com/fluxcd/flux2/releases/download/v0.31.2/install.yaml"; # gh-release-update
+      url = "https://github.com/fluxcd/flux2/releases/download/v0.31.3/install.yaml"; # gh-release-update
       flake = false;
     };
   };
