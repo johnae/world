@@ -165,6 +165,10 @@
       url = "https://github.com/fluxcd/flux2/releases/download/v0.31.3/install.yaml"; # gh-release-update
       flake = false;
     };
+    mosh = {
+      url = "github:mobile-shell/mosh";
+      flake = false;
+    };
   };
 
   outputs = {
