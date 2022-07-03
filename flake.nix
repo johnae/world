@@ -534,6 +534,7 @@
             "libdrm24109"
             "matrix-conduit"
             "meson-061"
+            "mosh"
             "my-emacs"
             "my-emacs-config"
             "mynerdfonts"
