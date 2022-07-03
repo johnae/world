@@ -229,6 +229,21 @@
         inputs.spotnix.overlays.default
         (
           final: prev: {
+            mosh = prev.mosh.overrideAttrs (oa: {
+              patches =
+                oa.patches
+                ++ [
+                  ## truecolor support
+                  (prev.fetchpatch {
+                    url = "https://github.com/mobile-shell/mosh/commit/ac0492cb5a703ae979b5c923182671d2688b025a.patch";
+                    sha256 = "sha256-bOA96fnutrFOAbAFDhMkeLJ/7ERL30m3FSCdU5GSh2o=";
+                  })
+                ];
+            });
+          }
+        )
+        (
+          final: prev: {
             notracking = prev.runCommand "notracking" {} ''
               mkdir -p "$out"/{dnsmasq,dnscrypt-proxy}
               grep -v upsales ${inputs.notracking}/dnsmasq/dnsmasq.blacklist.txt > "$out"/dnsmasq/dnsmasq.blacklist.txt
@@ -370,7 +385,7 @@
               fluxcd-yaml = true;
               kured-yaml = true;
               notracking = true;
-              k3s-124-2-rc1 = true;
+              mosh = true;
             }));
       }
     );
