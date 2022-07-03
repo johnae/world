@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://mosh.org/";
-    description = "Mobile shell (ssh replacement)";
+    description = "Mobile shell (ssh replacement) - built from git master";
     longDescription = ''
       Remote terminal application that allows roaming, supports intermittent
       connectivity, and provides intelligent local echo and line editing of
