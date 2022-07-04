@@ -193,20 +193,22 @@ Some basic useful settings.
    #+END_SRC
 *** Use wl-clipboard for interprocess copy/paste
    #+BEGIN_SRC elisp
-   (setq wl-copy-process nil)
-   (defun wl-copy (text)
-     (setq wl-copy-process (make-process :name "wl-copy"
-                                         :buffer nil
-                                         :command '("wl-copy" "-f" "-n")
-                                         :connection-type 'pipe))
-     (process-send-string wl-copy-process text)
-     (process-send-eof wl-copy-process))
-   (defun wl-paste ()
-     (if (and wl-copy-process (process-live-p wl-copy-process))
-         nil ; should return nil if we're the current paste owner
-         (shell-command-to-string "wl-paste -n | tr -d \r")))
-   (setq interprogram-cut-function 'wl-copy)
-   (setq interprogram-paste-function 'wl-paste)
+     (setq wl-copy-process nil)
+     (defun wl-copy (text)
+       (setq wl-copy-process (make-process :name "wl-copy"
+                                           :buffer nil
+                                           :command '("wl-copy" "-f" "-n")
+                                           :connection-type 'pipe))
+       (process-send-string wl-copy-process text)
+       (process-send-eof wl-copy-process))
+     (defun wl-paste ()
+       (if (and wl-copy-process (process-live-p wl-copy-process))
+           nil ; should return nil if we're the current paste owner
+           (shell-command-to-string "wl-paste -n | tr -d \r")))
+     (when (display-graphic-p) 
+       (setq interprogram-cut-function 'wl-copy)
+       (setq interprogram-paste-function 'wl-paste)
+     )
    #+END_SRC
 *** Editor settings (tabs, spaces, newlines etc)
    #+BEGIN_SRC elisp
