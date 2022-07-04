@@ -350,6 +350,7 @@
             system.configurationRevision = mkIf (self ? rev) self.rev;
             system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}";
             nixpkgs.overlays = overlays;
+            registry.nixpkgs.flake = nixpkgs;
           }
           (
             {pkgs, ...}: {
@@ -398,6 +399,7 @@
             system.configurationRevision = mkIf (self ? rev) self.rev;
             system.nixos.versionSuffix = mkForce "git.${substring 0 11 nixpkgs.rev}";
             nixpkgs.overlays = overlays;
+            registry.nixpkgs.flake = nixpkgs;
           }
           inputs.nixpkgs.nixosModules.notDetected
           ({
