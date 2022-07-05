@@ -21,6 +21,9 @@ profiles = [
   "profiles/zram",
 ]
 
+[config.programs.mosh]
+enable = true
+
 [config.age.secrets]
 spotnix = { file = "secrets/spotnix.age", owner = "1337" }
 spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
