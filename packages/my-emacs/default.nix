@@ -14,6 +14,7 @@
   inputs,
   lib,
   makeWrapper,
+  emacsPkg ? pkgs.emacsPgtkNativeComp,
   ...
 }:
 emacsWithPackagesFromUsePackage {
@@ -33,7 +34,7 @@ emacsWithPackagesFromUsePackage {
     ))
   ];
   package =
-    pkgs.emacsPgtkNativeComp.overrideAttrs
+    emacsPkg.overrideAttrs
     (oa: {
       nativeBuildInputs = oa.nativeBuildInputs ++ [makeWrapper];
       postInstall = ''
