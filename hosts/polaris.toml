@@ -309,6 +309,9 @@ githubUser = "johnae"
 gitlabUser = "johnae"
 gitIdMap."~/Development/planhat/" = "john.eriksson@planhat.com"
 
+[config.home-manager.users.john.dconf]
+enable = true
+
 [config.home-manager.users.john.programs.mbsync]
 enable = true
 
