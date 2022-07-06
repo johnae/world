@@ -7,6 +7,7 @@ syncthingDeviceID = "5RMZCHO-M3OA4UH-3PMKBWD-IVJGW4Q-VZBME6O-OCSPMK4-7YOVDAM-QOE
 profiles = [
   "profiles/hardware/ax41",
   "profiles/default_fs",
+  "profiles/home-manager",
   "profiles/k3s",
   "profiles/server",
   "profiles/state",
@@ -67,6 +68,16 @@ openssh.authorizedKeys.keys = [
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo=",
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
 ]
+
+#[config.services.headscale]
+#enable = true
+#address = "https://polaris.insane.se:8443"
+#dns.domains = [ "insane.lan" ]
+#tls.letsencrypt.hostname = "polaris.insane.se"
+#openIdConnect.issuer = "https://auth.9000.dev"
+#openIdConnect.domainMap.".*" = "default-namespace"
+#openIdConnect.clientId = "123"
+#openIdConnect.clientSecretFile = "/path/to/file"
 
 [config.services.syncthing]
 enable = true
@@ -180,6 +191,9 @@ flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = 
 sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
 cluster-secrets = { file = "secrets/k3s/cluster-secrets.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml" }
 
+mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337", path = "/home/john/.mbsync-insane" }
+authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
+
 [config.services.k3s]
 enable = true
 role = "server"
@@ -271,4 +285,81 @@ openFirewall = true
 directories = [
   "/var/lib/plex",
   "/var/lib/media",
+  "/var/lib/headscale",
 ]
+
+[config.home-manager.users.john]
+profiles = [
+  "users/profiles/bat",
+  "users/profiles/emacs-tui",
+  "users/profiles/fish",
+  "users/profiles/git",
+  "users/profiles/kubie",
+  "users/profiles/pueue",
+  "users/profiles/rbw",
+  "users/profiles/ssh",
+  "users/profiles/starship",
+  "users/profiles/tmux",
+]
+
+[config.home-manager.users.john.userinfo]
+email = "john@insane.se"
+fullName = "John Axel Eriksson"
+githubUser = "johnae"
+gitlabUser = "johnae"
+gitIdMap."~/Development/planhat/" = "john.eriksson@planhat.com"
+
+[config.home-manager.users.john.programs.mbsync]
+enable = true
+
+[config.home-manager.users.john.programs.rbw]
+settings.device_id = "d99037cd-bcbb-47cc-ac3b-75642e10dbb8"
+
+[config.home-manager.users.john.services.mbsync]
+enable = true
+frequency = "*:0/5"
+
+[config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-roam"]
+repository = "git@github.com:johnae/org-roam"
+sshKey = "/run/agenix/id_ed25519_roam_updater"
+
+[config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-agenda"]
+repository = "git@github.com:johnae/org-agenda"
+sshKey = "/run/agenix/id_ed25519_agenda_updater"
+
+[config.home-manager.users.john.accounts.email]
+maildirBasePath = "Mail"
+
+[config.home-manager.users.john.accounts.email.accounts.insane]
+address = "john@insane.se"
+primary = true
+flavor = "gmail.com"
+mbsync.enable = true
+mbsync.create = "both"
+mbsync.extraConfig.account.PipelineDepth = 10
+passwordCommand = "cat ~/.mbsync-insane"
+
+[config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.gmail.channels]
+inbox.patterns = ["INBOX"]
+inbox.extraConfig.Create = "both"
+inbox.extraConfig.SyncState = "*"
+
+all.farPattern = "[Gmail]/All Mail"
+all.nearPattern = "All"
+all.extraConfig.Create = "near"
+all.extraConfig.SyncState = "*"
+
+sent.farPattern = "[Gmail]/Sent Mail"
+sent.nearPattern = "Sent"
+sent.extraConfig.Create = "near"
+sent.extraConfig.SyncState = "*"
+
+trash.farPattern = "[Gmail]/Trash"
+trash.nearPattern = "Trash"
+trash.extraConfig.Create = "near"
+trash.extraConfig.SyncState = "*"
+
+drafts.farPattern = "[Gmail]/Drafts"
+drafts.nearPattern = "Drafts"
+drafts.extraConfig.Create = "near"
+drafts.extraConfig.SyncState = "*"
