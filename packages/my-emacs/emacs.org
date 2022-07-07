@@ -948,6 +948,13 @@ Package setup.
     )
   )
 #+END_SRC
+** EyeBrowse
+#+BEGIN_SRC elisp
+  (use-package eyebrowse
+    :init
+    (eyebrowse-mode t)
+  )
+#+END_SRC
 ** Projectile
 *** The package itself
    #+BEGIN_SRC elisp
