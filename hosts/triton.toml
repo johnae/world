@@ -154,7 +154,7 @@ flavor = "gmail.com"
 mbsync.enable = true
 mbsync.create = "both"
 mbsync.extraConfig.account.PipelineDepth = 10
-passwordCommand = "cat ~/.mbsync-insane"
+passwordCommand = "/run/current-system/sw/bin/cat ~/.mbsync-insane"
 
 [config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.gmail.channels]
 inbox.patterns = ["INBOX"]
