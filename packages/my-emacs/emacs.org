@@ -948,12 +948,19 @@ Package setup.
     )
   )
 #+END_SRC
-** EyeBrowse
+** Perspective
 #+BEGIN_SRC elisp
-  (use-package eyebrowse
-    :init
-    (eyebrowse-mode t)
-  )
+  (customize-set-variable 'display-buffer-base-action
+  '((display-buffer-reuse-window display-buffer-same-window)
+    (reusable-frames . t)))
+  (customize-set-variable 'even-window-sizes nil)     ; avoid resizing 
+  (use-package perspective
+  :bind (("C-x b" . persp-switch-to-buffer*)
+         ("C-x k" . persp-kill-buffer*))
+  :custom
+  (persp-mode-prefix-key (kbd "C-c C-p"))
+  :config
+  (persp-mode)) 
 #+END_SRC
 ** Projectile
 *** The package itself
