@@ -1,14 +1,14 @@
 system = "x86_64-linux"
 
 [config]
-publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILOeY+TshjtBK5VQu4ZJVJ0ol1PsZxLvIy+YNCOtfZmd"
-syncthingDeviceID = "5RMZCHO-M3OA4UH-3PMKBWD-IVJGW4Q-VZBME6O-OCSPMK4-7YOVDAM-QOEDOQC"
+publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII0l+4wC4sriwV+yhyqdUdyYzS44HVYmCksi2n9iomh/"
+syncthingDeviceID = "6RLYSEA-GD5XMME-6FSTB3E-3TVZ5BZ-RO66VNC-B72TUJM-HU72Y7E-SHWK3AH"
 
 profiles = [
-  "profiles/hardware/ax41",
+  "profiles/hardware/ax101",
   "profiles/default_fs",
   "profiles/home-manager",
-  "profiles/k3s",
+  #"profiles/k3s",
   "profiles/server",
   "profiles/state",
   "profiles/syncthing",
@@ -22,21 +22,21 @@ disks = [ "/dev/nvme0n1", "/dev/nvme1n1" ]
 enable = true
 
 [config.system.autoUpgrade]
-enable = true
+enable = false
 flake = "github:johnae/world"
 allowReboot = true
 dates = "*:0/15"
 randomizedDelaySec = "5min"
-enableSentinel = true
+#enableSentinel = true
 
 [config.boot]
 kernelParams = [
-  "ip=65.108.2.146::65.108.2.129:255.255.255.192:polaris:eth0:none",
+  "ip=65.108.238.134::65.108.238.129:255.255.255.192:orion:eth0:none",
 ]
 
 [config.boot.initrd]
 availableKernelModules = [
-  "r8169",
+  "igb",
   "nvme",
   "ahci",
   "usbhid",
@@ -66,7 +66,7 @@ gid = 1337
 [config.users.users.john]
 uid = 1337
 shell = "fish"
-hashedPassword = "$6$MY8KAtdXlQP5.$TEZbPueD71fYUGviybTjFWCD5s1eWmr9FK9WtoLFKFy3yfLu18KPJ2wAbK8ZVJDo52hsc0vGa4LKYbzb.pwPk0"
+hashedPassword = "$6$dufD6j1MvTFu9f8D$quHkM0IjMcqaBrvq2SzNj/fOBZf0QnX7wHdG6C1pLntLEw0U9AbIM8oN.nxA4gwyYeNmfREQv32AEQP/1q.79."
 openssh.authorizedKeys.keys = [
   "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ==",
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo=",
@@ -91,6 +91,7 @@ group = "users"
 openDefaultPorts = true
 folders."/home/john/Sync".id = "sync"
 folders."/home/john/Sync".devices = [
+  "polaris",
   "triton",
   "eris",
   "icarus",
@@ -99,6 +100,7 @@ folders."/home/john/Sync".devices = [
 ]
 folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
 folders."/home/john/Photos".devices = [
+  "polaris",
   "triton",
   "eris",
   "icarus",
@@ -112,75 +114,29 @@ cert = "/run/agenix/syncthing-cert"
 key = "/run/agenix/syncthing-key"
 dataDir = "/home/john/.local/share/syncthing-data"
 
-[config.services.innernet.server.insane]
+[config.services.innernet.client.insane]
 enable = true
 
-[config.services.innernet.server.insane.settings]
-openFirewall = true
-cidr = "192.168.104.0/22"
-listenPort = 51820
+[config.services.innernet.client.insane.settings.interface]
+address = "192.168.104.71/22"
 privateKeyFile = "/run/agenix/wg-home"
+
+[config.services.innernet.client.insane.settings.server]
 publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY="
 externalEndpoint = "65.108.2.146:51820"
-
-[config.services.innernet.server.insane.settings.cidrs.home]
-cidr = "192.168.104.64/26"
-parent = "insane"
-
-[config.services.innernet.server.insane.settings.peers]
-eris.ip = "192.168.104.65"
-eris.cidr = "home"
-eris.publicKey = "Oya0T0tzAV25A7/Qp3tqKP+2KgGjA/OVuUmKzsTFpRo="
-eris.isAdmin = true
-
-titan.ip = "192.168.104.67"
-titan.cidr = "home"
-titan.publicKey = "vNfSS1HsbnRqV6V/RfG0Aq1IoNQPS+IP2O162UlVQQA="
-
-hyperion.ip = "192.168.104.68"
-hyperion.cidr = "home"
-hyperion.publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8="
-
-triton.ip = "192.168.104.69"
-triton.cidr = "home"
-triton.publicKey = "gq5yK4X2IqPz74Jc1GQlVb3rgmtuqn8yzlPMeN0UMVI="
-
-icarus.ip = "192.168.104.70"
-icarus.cidr = "home"
-icarus.publicKey = "mDghZTpKQTGgeWYZzHiylgAvGY2yYnPdPaN5ja2V9Qw="
-
-milkyway.ip = "192.168.104.100"
-milkyway.cidr = "home"
-milkyway.publicKey = "XPWUeQ4N9zYcyWgIvvp+3eHSsBiqnHuuwu2J/1uHHkE="
-
-orion.ip = "192.168.104.71"
-orion.cidr = "home"
-orion.publicKey = "8cdTaGzyEz/tmU/foEH2tLo4CySvGWR1s9mHHeB9vS8="
+internalEndpoint = "192.168.104.1:51820"
 
 [config.networking]
-defaultGateway = "65.108.2.129"
+defaultGateway = "65.108.238.129"
 defaultGateway6 = { address = "fe80::1", interface = "eth0" }
 
 [[config.networking.interfaces.eth0.ipv4.addresses]]
-address = "65.108.2.146"
+address = "65.108.238.134"
 prefixLength = 26
 
 [[config.networking.interfaces.eth0.ipv6.addresses]]
-address = "2a01:4f9:6a:51ed::2"
+address = "2a01:4f9:1a:b288::2"
 prefixLength = 64
-
-[config.networking.private-wireguard]
-enable = true
-ips = [
-  "10.65.167.230/32",
-  "fc00:bbbb:bbbb:bb01::2:a7e5/128"
-]
-privateKeyFile = "/run/agenix/wg-net"
-
-[[config.networking.private-wireguard.peers]]
-allowedIPs = [ "0.0.0.0/0", "::0/0" ]
-endpoint = "185.65.135.70:51820"
-publicKey = "615mnBGkvjZnD/vRbyL/6da7YhtctfB+jimN+wfV724="
 
 [config.networking.firewall]
 trustedInterfaces = [ "insane" ] ## trust the vpn mesh
@@ -189,105 +145,18 @@ allowedTCPPorts = [ 5349, 3478 ]
 allowedUDPPortRanges = [ { from = 49160, to = 49200 } ]
 
 [config.age.secrets]
-k3s-token.file = "secrets/k3s/token.age"
-wg-home.file = "secrets/polaris/wg-home.age"
-wg-net.file = "secrets/polaris/wg-net.age"
-syncthing-cert = { file = "secrets/polaris/syncthing-cert.age", owner = "1337" }
-syncthing-key = { file = "secrets/polaris/syncthing-key.age", owner = "1337" }
+#k3s-token.file = "secrets/k3s/token.age"
+wg-home.file = "secrets/orion/wg-home.age"
+#wg-net.file = "secrets/orion/wg-net.age"
+syncthing-cert = { file = "secrets/orion/syncthing-cert.age", owner = "1337" }
+syncthing-key = { file = "secrets/orion/syncthing-key.age", owner = "1337" }
 
-flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
-sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
-cluster-secrets = { file = "secrets/k3s/cluster-secrets.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml" }
+#flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
+#sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
+#cluster-secrets = { file = "secrets/k3s/cluster-secrets.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml" }
 
 mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337", path = "/home/john/.mbsync-insane" }
 authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
-
-[config.services.k3s]
-enable = true
-role = "server"
-after = [ "innernet-server-insane.service" ]
-
-[config.services.k3s.settings]
-cluster-init = true
-token-file = "/run/agenix/k3s-token"
-flannel-iface = "insane"
-node-ip = "192.168.104.1"
-node-external-ip = "65.108.2.146"
-with-node-id = true
-advertise-address = "192.168.104.1"
-cluster-cidr = "10.128.128.0/21"
-service-cidr = "10.129.128.0/22"
-cluster-dns = "10.129.128.10"
-kubelet-arg.max-pods = 62
-kube-controller-manager-arg.node-cidr-mask-size = 25
-kube-apiserver-arg.oidc-issuer-url = "https://auth.9000.dev"
-kube-apiserver-arg.oidc-username-claim = "email"
-kube-apiserver-arg.oidc-groups-claim = "groups"
-kube-apiserver-arg.oidc-client-id = "dex-auth"
-node-label."svccontroller.k3s.cattle.io/enablelb" = "true"
-node-label."topology.kubernetes.io/region" = "hetzner"
-node-label."topology.kubernetes.io/zone" = "hetzner-fi"
-secrets-encryption = true
-tls-san = "192.168.104.100"
-
-[config.services.k3s.autoDeploy]
-kured = "pkg:kured-yaml/kured.yaml"
-flux = "pkg:fluxcd-yaml/flux.yaml"
-
-[config.services.k3s.autoDeploy.cluster-vars]
-apiVersion = "v1"
-kind = "ConfigMap"
-metadata.name = "cluster-vars"
-metadata.namespace = "flux-system"
-data.cluster = "home"
-data.context = "default"
-data.coturn_relay_ip = "192.168.104.1"
-data.cluster_dns_zone = "home.k.ill.dev"
-data.cluster_dns_root_zone = "ill.dev"
-data.main_dns_zone = "9000.dev"
-data.private_dns_zone = "insane.se"
-data.personal_dns_zone = "johnae.dev"
-data.environment = "production"
-data.prometheus_remote_write_url = "https://metrics.home.k.ill.dev/api/v1/push"
-data.loki_remote_write_url = "https://logs.home.k.ill.dev/loki/api/v1/push"
-data.grafana_dns = "grafana.9000.dev"
-data.pod_subnet = "10.128.128.0/21"
-data.minio_host = "minio.minio.svc.cluster.local"
-data.loki_bucket = "loki-d78f"
-data.cortex_bucket = "cortex-d78f"
-data.github_org = "9k-dev"
-
-[config.services.k3s.autoDeploy.flux-system-repo]
-apiVersion = "source.toolkit.fluxcd.io/v1beta1"
-kind = "GitRepository"
-metadata.name = "flux-system"
-metadata.namespace = "flux-system"
-spec.gitImplementation = "go-git"
-spec.interval = "1m0s"
-spec.ref.branch = "main"
-spec.secretRef.name = "flux-system"
-spec.timeout = "20s"
-spec.url = "ssh://git@github.com/johnae/flux-system.git"
-
-[config.services.k3s.autoDeploy.flux-components-kustomization]
-apiVersion = "kustomize.toolkit.fluxcd.io/v1beta1"
-kind = "Kustomization"
-metadata.name = "components"
-metadata.namespace = "flux-system"
-spec.interval = "5m0s"
-spec.sourceRef.kind = "GitRepository"
-spec.sourceRef.name = "flux-system"
-spec.path = "./clusters/home/components"
-spec.prune = true
-spec.validation = "client"
-spec.postBuild.substituteFrom = [
-  { kind = "ConfigMap", name = "cluster-vars" },
-  { kind = "Secret", name = "cluster-secrets" }
-]
-
-[config.services.plex]
-enable = true
-openFirewall = true
 
 [config.environment.state."/keep"]
 directories = [
@@ -329,11 +198,11 @@ enable = true
 [config.home-manager.users.john.programs.mbsync]
 enable = true
 
-[config.home-manager.users.john.programs.rbw]
-settings.device_id = "d99037cd-bcbb-47cc-ac3b-75642e10dbb8"
+#[config.home-manager.users.john.programs.rbw]
+#settings.device_id = "d99037cd-bcbb-47cc-ac3b-75642e10dbb8"
 
 [config.home-manager.users.john.services.mbsync]
-enable = true
+enable = false
 frequency = "*:0/5"
 
 [config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-roam"]

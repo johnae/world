@@ -23,7 +23,7 @@ in {
     extraConfig = {
       github.user = userinfo.githubUser;
       gitlab.user = userinfo.gitlabUser;
-      core.editor = "${pkgs.my-emacs}/bin/emacsclient -c";
+      core.editor = "emacsclient -c";
       push.default = "upstream";
       pull.rebase = true;
       rebase.autoStash = true;

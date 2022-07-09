@@ -280,7 +280,7 @@ in {
         "${modifier}+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle open'';
         "${modifier}+Shift+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle none'';
 
-        "${modifier}+Shift+Return" = ''exec ${pkgs.my-emacs}/bin/emacsclient -c -n -a= --eval '(jae/eshell-new)' '';
+        "${modifier}+Shift+Return" = ''exec emacsclient -c -n -a= --eval '(jae/eshell-new)' '';
         "${modifier}+Return" = ''exec ${pkgs.alacritty}/bin/alacritty'';
         "${modifier}+d" = ''exec ${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes "drun,run"'';
 
@@ -289,7 +289,7 @@ in {
 
         "${modifier}+b" = ''exec ${swayBackground}/bin/sway-background'';
 
-        "${modifier}+Shift+e" = ''exec ${pkgs.my-emacs}/bin/emacsclient -c -n -a='';
+        "${modifier}+Shift+e" = ''exec emacsclient -c -n -a='';
 
         "${modifier}+Shift+v" = ''splith'';
 

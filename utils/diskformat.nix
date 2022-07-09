@@ -293,6 +293,8 @@ in
 
     mount -t tmpfs none /mnt
     mkdir -p "/mnt/tmproot" ${concatStringsSep " " (map (v: "/mnt/${replaceStrings ["@"] [""] v}") subvolumes)} "/mnt/boot"
+    mkdir -p /mnt/tmp
+    chmod 777 /mnt/tmp
 
     echo Listing /dev/mapper
     ls -lah /dev/mapper/
