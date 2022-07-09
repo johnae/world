@@ -20,7 +20,6 @@ in {
     pkgs.kustomize
     pkgs.lm_sensors
     pkgs.mako
-    pkgs.my-emacs
     pkgs.netns-dbus-proxy
     pkgs.nix-index
     pkgs.nordic
