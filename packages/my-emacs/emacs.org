@@ -348,6 +348,8 @@ Package setup.
       "p" '(:ignore p :which-key "project")
       "pp" '(counsel-projectile :which-key "open file in project")
       "ps" '(projectile-switch-project :which-key "switch project")
+      "pb" '(persp-switch-to-buffer* :which-key "switch perspective buffer")
+      "pe" '(persp-switch :which-key "switch perspective/new perspective")
 
       "e" '(:ignore e :which-key "shells")
       "ee" '(projectile-run-eshell :which-key "open eshell in project")
@@ -959,6 +961,7 @@ Package setup.
          ("C-x k" . persp-kill-buffer*))
   :custom
   (persp-mode-prefix-key (kbd "C-c C-p"))
+  :defer 5
   :config
   (persp-mode)) 
 #+END_SRC
