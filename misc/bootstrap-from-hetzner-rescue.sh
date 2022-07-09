@@ -12,14 +12,15 @@ mkdir -p /etc/nix
 echo "build-users-group =" > /etc/nix/nix.conf
 echo "experimental-features = flakes nix-command" >> /etc/nix/nix.conf
 
-curl -L https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install | sh
+sh <(curl -L https://nixos.org/nix/install) --no-daemon
 
 set +u +x
 . $HOME/.nix-profile/etc/profile.d/nix.sh
 set -u -x
 
-nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
-nix-channel --update
+cat<<INFO
+Now run:
 
-# Getting NixOS installation tools
-nix-env -iE "_: with import <nixpkgs/nixos> { configuration = {}; }; with config.system.build; [ nixos-generate-config nixos-install nixos-enter manual.manpages ]"
+nix shell nixpkgs#nixos-install-tools
+nixos-install --flake .#<hostname> --no-root-passwd --impure
+INFO
