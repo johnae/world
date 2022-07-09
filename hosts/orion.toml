@@ -22,7 +22,7 @@ disks = [ "/dev/nvme0n1", "/dev/nvme1n1" ]
 enable = true
 
 [config.system.autoUpgrade]
-enable = true
+enable = false
 flake = "github:johnae/world"
 allowReboot = true
 dates = "*:0/15"
