@@ -169,6 +169,22 @@
       url = "github:mobile-shell/mosh";
       flake = false;
     };
+    wayvnc = {
+      url = "github:any1/wayvnc";
+      flake = false;
+    };
+    neatvnc = {
+      url = "github:any1/neatvnc";
+      flake = false;
+    };
+    wlvncc = {
+      url = "github:any1/wlvncc";
+      flake = false;
+    };
+    aml = {
+      url = "github:any1/aml";
+      flake = false;
+    };
   };
 
   outputs = {

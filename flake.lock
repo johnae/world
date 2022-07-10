@@ -59,6 +59,22 @@
         "type": "github"
       }
     },
+    "aml": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1656879534,
+        "narHash": "sha256-WhhjK9uzKyvnzpGtAWXXo0upfZTPINHVk0qmzNXwobE=",
+        "owner": "any1",
+        "repo": "aml",
+        "rev": "3afc3aacce6d0342bdff71c38cc477d6e23b9be3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "any1",
+        "repo": "aml",
+        "type": "github"
+      }
+    },
     "blur": {
       "flake": false,
       "locked": {
@@ -502,6 +518,22 @@
         "type": "github"
       }
     },
+    "neatvnc": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1657461212,
+        "narHash": "sha256-nbwfvXahpJgqVigQSf+BTeCuG+AHh72FGnut3lJnTF4=",
+        "owner": "any1",
+        "repo": "neatvnc",
+        "rev": "b9a5b9a3f1e13d585e01b53a14dca9b29cfeb80b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "any1",
+        "repo": "neatvnc",
+        "type": "github"
+      }
+    },
     "netns-exec": {
       "flake": false,
       "locked": {
@@ -735,6 +767,7 @@
       "inputs": {
         "age-plugin-yubikey": "age-plugin-yubikey",
         "agenix": "agenix",
+        "aml": "aml",
         "blur": "blur",
         "devshell": "devshell",
         "emacs-overlay": "emacs-overlay",
@@ -751,6 +784,7 @@
         "kured": "kured",
         "matrix-conduit": "matrix-conduit",
         "mosh": "mosh",
+        "neatvnc": "neatvnc",
         "netns-exec": "netns-exec",
         "nix-misc": "nix-misc",
         "nixlib": "nixlib",
@@ -769,8 +803,10 @@
         "swayidle": "swayidle",
         "swaylock": "swaylock",
         "wayland-protocols-master": "wayland-protocols-master",
+        "wayvnc": "wayvnc",
         "wl-clipboard": "wl-clipboard",
         "wlroots": "wlroots",
+        "wlvncc": "wlvncc",
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
       }
     },
@@ -945,6 +981,22 @@
         "url": "https://gitlab.freedesktop.org/wayland/wayland-protocols.git"
       }
     },
+    "wayvnc": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1657389799,
+        "narHash": "sha256-/OKkQKt43lR0UCmQeSDMl1hXh03k+dX3UweigMWEUx4=",
+        "owner": "any1",
+        "repo": "wayvnc",
+        "rev": "f851f4fb8912cab40af2a6a046701f23b2f5219e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "any1",
+        "repo": "wayvnc",
+        "type": "github"
+      }
+    },
     "wl-clipboard": {
       "flake": false,
       "locked": {
@@ -976,6 +1028,22 @@
         "ref": "master",
         "type": "git",
         "url": "https://gitlab.freedesktop.org/wlroots/wlroots.git"
+      }
+    },
+    "wlvncc": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1657464556,
+        "narHash": "sha256-Deon/8VF8g5Zdi/IVMaOOawBHr5w36MAdtIV3oz3w5k=",
+        "owner": "any1",
+        "repo": "wlvncc",
+        "rev": "df203e5908613bf447bf53d8c4495ad6d76611f8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "any1",
+        "repo": "wlvncc",
+        "type": "github"
       }
     },
     "xdg-desktop-portal-wlr": {

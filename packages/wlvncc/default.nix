@@ -1,31 +1,52 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   meson,
   pkg-config,
   ninja,
   scdoc,
-  wayland-scanner,
+  wayland,
+  wayland-protocols,
   pixman,
   libxkbcommon,
-  wayland,
-  neatvnc,
   libdrm,
-  libX11,
+  cmake,
+  ffmpeg,
   aml,
-  pam,
+  libGL,
+  zlib,
+  lzo,
+  libpng,
+  libjpeg,
   mesa,
+  openssl,
   inputs,
 }:
 stdenv.mkDerivation rec {
-  pname = "wayvnc";
-  version = inputs.wayvnc.rev;
+  pname = "wlvncc";
+  version = inputs.wlvncc.rev;
 
-  src = inputs.wayvnc;
+  src = inputs.wlvncc;
 
-  nativeBuildInputs = [meson pkg-config ninja scdoc wayland-scanner];
-  buildInputs = [pixman libxkbcommon wayland neatvnc libdrm libX11 aml pam mesa];
+  nativeBuildInputs = [meson pkg-config ninja scdoc cmake];
+  buildInputs = [
+    pixman
+    libxkbcommon
+    wayland
+    wayland-protocols
+    libdrm
+    aml
+    ffmpeg
+    mesa
+    libGL
+    openssl
+    zlib
+    lzo
+    libpng
+    libjpeg
+  ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-unused-variable";
 
   meta = with lib; {
     description = "A VNC server for wlroots based Wayland compositors";
