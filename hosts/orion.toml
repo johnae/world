@@ -202,7 +202,7 @@ enable = true
 #settings.device_id = "d99037cd-bcbb-47cc-ac3b-75642e10dbb8"
 
 [config.home-manager.users.john.services.mbsync]
-enable = false
+enable = true
 frequency = "*:0/5"
 
 [config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-roam"]
