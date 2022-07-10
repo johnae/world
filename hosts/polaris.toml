@@ -15,8 +15,8 @@ profiles = [
   "profiles/zram",
 ]
 
-[config.btrfs]
-disks = [ "/dev/nvme0n1", "/dev/nvme1n1" ]
+#[config.btrfs]
+#disks = [ "/dev/nvme0n1", "/dev/nvme1n1" ]
 
 [config.programs.mosh]
 enable = true
