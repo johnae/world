@@ -21,6 +21,9 @@ profiles = [
 [config.programs.mosh]
 enable = true
 
+[config.hardware.opengl]
+enable = true
+
 [config.system.autoUpgrade]
 enable = true
 flake = "github:johnae/world"
