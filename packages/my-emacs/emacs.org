@@ -348,7 +348,7 @@ Package setup.
       "p" '(:ignore p :which-key "project")
       "pp" '(counsel-projectile :which-key "open file in project")
       "ps" '(projectile-switch-project :which-key "switch project")
-      "pb" '(persp-switch-to-buffer* :which-key "switch perspective buffer")
+      "pb" '(persp-switch-to-buffer :which-key "switch perspective buffer")
       "pe" '(persp-switch :which-key "switch perspective/new perspective")
 
       "e" '(:ignore e :which-key "shells")
@@ -950,20 +950,19 @@ Package setup.
     )
   )
 #+END_SRC
-** Perspective
+** Persp-mode
 #+BEGIN_SRC elisp
   (customize-set-variable 'display-buffer-base-action
   '((display-buffer-reuse-window display-buffer-same-window)
     (reusable-frames . t)))
   (customize-set-variable 'even-window-sizes nil)     ; avoid resizing 
-  (use-package perspective
-  :bind (("C-x b" . persp-switch-to-buffer*)
-         ("C-x k" . persp-kill-buffer*))
-  :custom
-  (persp-mode-prefix-key (kbd "C-c C-p"))
-  :defer 5
+  (use-package persp-mode
+  :bind (("C-x b" . persp-switch-to-buffer)
+         ("C-x k" . persp-kill-buffer))
+  ;:custom
+  ;(persp-mode-prefix-key (kbd "C-c C-p"))
   :config
-  (persp-mode)) 
+  (persp-mode 1)) 
 #+END_SRC
 ** Projectile
 *** The package itself
