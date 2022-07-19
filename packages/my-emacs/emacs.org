@@ -1486,6 +1486,10 @@ See: [[https://github.com/abo-abo/swiper][https://github.com/abo-abo/swiper]]
  and ofc
  https://direnv.net/
  #+BEGIN_SRC elisp
+   (use-package inheritenv
+     :config
+     (inheritenv-add-advice 'rustic-compilation)
+     )
    (use-package envrc
     :init
     (add-hook 'change-major-mode-after-body-hook
