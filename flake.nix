@@ -241,7 +241,7 @@
         inputs.fenix.overlay
         inputs.nix-misc.overlay
         inputs.nur.overlay
-        inputs.persway.overlay
+        inputs.persway.overlays.default
         inputs.spotnix.overlays.default
         (
           final: prev: {
@@ -540,7 +540,7 @@
         // worldOverlays
         // {
           spotnix = inputs.spotnix.overlays.default;
-          persway = inputs.persway.overlay;
+          persway = inputs.persway.overlays.default;
         };
 
       github-actions-package-matrix-x86-64-linux = let
