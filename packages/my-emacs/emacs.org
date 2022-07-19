@@ -779,7 +779,7 @@ Package setup.
        (let ((
               gcloud-project (
                  jae/shell-command-to-string-nows
-                    "cat ~/.config/gcloud/configurations/config_default | grep 'project =' | awk '{print $NF}'")
+                    "test -e ~/.config/gcloud/configurations/config_default && cat ~/.config/gcloud/configurations/config_default | grep 'project =' | awk '{print $NF}'")
                              ))
          (if (string= gcloud-project "")
              nil
