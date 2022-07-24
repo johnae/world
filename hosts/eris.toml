@@ -29,6 +29,9 @@ enable = true
 [config.boot.binfmt]
 emulatedSystems = [ "aarch64-linux" ]
 
+[config.boot.initrd.luks.devices]
+cryptkey.keyFile = "/dev/disk/by-partlabel/alt_key"
+
 [config.environment.state."/keep"]
 directories = [
   "/var/lib/libvirt",
