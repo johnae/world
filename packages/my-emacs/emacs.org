@@ -355,7 +355,7 @@ Package setup.
       "ee" '(projectile-run-eshell :which-key "open eshell in project")
       "en" '(jae/eshell-new :which-key "open a new eshell instance")
       "et" '(multi-vterm-project :which-key "open vterm in project")
-      "ey" '(multi-vterm-dedicated-open :which-key "open new dedicated vterm instance ")
+      "ey" '(multi-vterm :which-key "open new vterm instance ")
 
       "s" '(:ignore s :which-key "search")
       "ss" '(swiper :which-key "search buffer")
