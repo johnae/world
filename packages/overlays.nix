@@ -39,6 +39,4 @@ in
     rust-analyzer-bin = final: prev: {rust-analyzer-bin = prev.callPackage ./wl-clipboard-x11 {};};
     netns-dbus-proxy = final: prev: {netns-dbus-proxy = prev.callPackage ./wl-clipboard-x11 {};};
     scripts = final: prev: {scripts = prev.callPackage ./scripts {};};
-    my-emacs-tui = final: prev: {my-emacs-tui = prev.callPackage ./my-emacs {emacsPkg = prev.emacsNativeComp;};};
-    my-emacs-tui-config = final: prev: {my-emacs-tui-config = prev.callPackage ./my-emacs/config.nix {generalGlobalPrefix = "C-@";};};
   }

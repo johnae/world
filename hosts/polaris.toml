@@ -304,7 +304,7 @@ directories = [
 [config.home-manager.users.john]
 profiles = [
   "users/profiles/bat",
-  "users/profiles/emacs-tui",
+  "users/profiles/emacs",
   "users/profiles/fish",
   "users/profiles/git",
   "users/profiles/kubie",
@@ -314,12 +314,6 @@ profiles = [
   "users/profiles/starship",
   "users/profiles/tmux",
 ]
-
-## on a local machine alacritty or terminator etc would set this
-## if they support 24-bit color, on a remote system however it doesn't
-## automatically get set
-[config.home-manager.users.john.home.sessionVariables]
-COLORTERM = "truecolor"
 
 [config.home-manager.users.john.userinfo]
 email = "john@insane.se"

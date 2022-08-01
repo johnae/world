@@ -168,7 +168,7 @@ directories = [
 [config.home-manager.users.john]
 profiles = [
   "users/profiles/bat",
-  "users/profiles/emacs-tui",
+  "users/profiles/emacs",
   "users/profiles/fish",
   "users/profiles/git",
   "users/profiles/kubie",

@@ -568,7 +568,6 @@
             "mosh"
             "my-emacs"
             "my-emacs-config"
-            "my-emacs-tui"
             "mynerdfonts"
             "netns-dbus-proxy"
             "netns-exec"
