@@ -337,7 +337,7 @@ Package setup.
       (general-create-definer jae/leader-keys
         :keymaps '(normal insert visual emacs)
         :prefix "SPC"
-        :global-prefix "C-SPC"))
+        :global-prefix "M-SPC"))
   #+END_SRC
 *** Leader key bindings
   #+BEGIN_SRC elisp
@@ -348,8 +348,7 @@ Package setup.
       "p" '(:ignore p :which-key "project")
       "pp" '(consult-projectile :which-key "open file in project")
       "ps" '(projectile-switch-project :which-key "switch project")
-      "pb" '(persp-switch-to-buffer :which-key "switch perspective buffer")
-      "pe" '(persp-switch :which-key "switch perspective/new perspective")
+      "pb" '(consult-buffer :which-key "switch buffer")
 
       "e" '(:ignore e :which-key "shells")
       "ee" '(projectile-run-eshell :which-key "open eshell in project")
@@ -1683,3 +1682,4 @@ Package setup.
   
   
 
+  
