@@ -9,4 +9,7 @@
     enable = true;
     package = pkgs.my-emacs;
   };
+  systemd.user.services.emacs.Service.Environment = [
+    ''COLORTERM="truecolor"''
+  ];
 }

@@ -39,6 +39,7 @@ in {
     EDITOR = "emacsclient -c -a=";
     VISUAL = "emacsclient -c -a=";
     KUBECONFIG = "/home/${home.username}/.kube/config";
+    COLORTERM = "truecolor";
   };
 
   xdg.enable = true;
