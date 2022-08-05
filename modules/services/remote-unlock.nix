@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (builtins) filter getAttr length foldl';
-  inherit (lib) mkEnableOption mkOption mkIf;
+  inherit (lib) mkEnableOption mkOption mkIf recursiveUpdate;
   inherit (lib.types) port str listOf submodule;
   cfg = config.services.remote-unlock;
   enabledCfgs = filter (getAttr "enable") cfg;
@@ -45,7 +45,7 @@
     };
   };
   mkRemoteDiskUnlockers = cfgs:
-    foldl' (a: b: a // b) {} (map mkRemoteDiskUnlock cfgs);
+    foldl' recursiveUpdate {} (map mkRemoteDiskUnlock cfgs);
 in {
   options.services.remote-unlock = with lib;
     mkOption {
