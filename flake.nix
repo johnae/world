@@ -19,23 +19,46 @@
     ## flakes
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    devshell.url = "github:numtide/devshell";
+
     nixos-hardware.url = "github:nixos/nixos-hardware";
     nixlib.url = "github:nix-community/nixpkgs.lib";
     nur.url = "github:nix-community/NUR";
+
+    alejandra = {
+      url = "github:kamadorueda/alejandra";
+      inputs.fenix.follows = "fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    devshell = {
+      url = "github:numtide/devshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
+    dream2nix = {
+      url = "github:nix-community/dream2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.alejandra.follows = "alejandra";
+      inputs.devshell.follows = "devshell";
+    };
+
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nix-misc = {
       url = "github:johnae/nix-misc";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixlib.follows = "nixlib";
     };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -52,11 +75,17 @@
       url = "github:johnae/spotnix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.fenix.follows = "fenix";
+      inputs.dream2nix.follows = "dream2nix";
+      inputs.devshell.follows = "devshell";
+      inputs.flake-utils.follows = "flake-utils";
     };
     persway = {
       url = "github:johnae/persway";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.fenix.follows = "fenix";
+      inputs.dream2nix.follows = "dream2nix";
+      inputs.devshell.follows = "devshell";
+      inputs.flake-utils.follows = "flake-utils";
     };
 
     ## non flakes
