@@ -19,7 +19,7 @@
     ## flakes
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    devshell.url = "github:johnae/devshell";
+    devshell.url = "github:numtide/devshell";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     nixlib.url = "github:nix-community/nixpkgs.lib";
     nur.url = "github:nix-community/NUR";
