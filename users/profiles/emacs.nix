@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  home.file.".emacs".source = "${pkgs.my-emacs-config}/emacs.el";
+  home.file.".emacs".source = pkgs.my-emacs-config;
   services.emacs = {
     enable = true;
     package = pkgs.my-emacs;

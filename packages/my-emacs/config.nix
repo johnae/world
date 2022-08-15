@@ -3,10 +3,10 @@
   emacs,
 }:
 runCommand "emacs-config" {} ''
-  mkdir -p $out
-  cp ${./emacs.org} $out/emacs.org
-  cd $out
+  cp ${./emacs.org} $TMPDIR/emacs.org
+  cd $TMPDIR
   ${emacs}/bin/emacs --batch -Q \
                      -l org emacs.org \
                      -f org-babel-tangle
+  mv emacs.el $out
 ''

@@ -546,7 +546,20 @@ Package setup.
        (require 'org-roam-protocol)
      )
    #+END_SRC
-
+*** Org-mime
+   #+BEGIN_SRC elisp
+     (use-package org-mime
+       :config
+       (setq org-mime-export-options '(:section-numbers nil
+                                       :with-author nil
+                                       :with-toc nil
+                                       ))
+       (add-hook 'message-send-hook 'org-mime-htmlize)
+       (add-hook 'org-mime-html-hook (lambda () (
+                                                 org-mime-change-element-style "pre" (format "color: %s; background-color: %s; padding: 0.5em;", "#E6E1DC", "#232323")
+                                                 ))
+     ))
+   #+END_SRC
 ** Helpful
  #+BEGIN_SRC elisp
    (use-package helpful
@@ -1129,7 +1142,7 @@ Package setup.
      (use-package vterm
        :commands vterm
        :config
-       (setq vterm-shell "fish"
+       (setq vterm-shell "nu"
                 vterm-max-scrollback 10000
         )
       )
@@ -1669,7 +1682,6 @@ Package setup.
 ** Code formatting
 #+BEGIN_SRC elisp
   (use-package apheleia
-    :ensure t
     :config
     (apheleia-global-mode +1)
     (progn ;; JavaScript/TypeScript

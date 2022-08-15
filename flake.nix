@@ -37,7 +37,7 @@
     };
 
     dream2nix = {
-      url = "github:nix-community/dream2nix";
+      url = "github:nix-community/dream2nix/4a92c17f9579fa49667cb6cba8ad63acdfb1eb32";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.alejandra.follows = "alejandra";
       inputs.devshell.follows = "devshell";
@@ -66,7 +66,8 @@
     };
 
     emacs-overlay = {
-      url = "github:nix-community/emacs-overlay";
+      # url = "github:nix-community/emacs-overlay/ce91eb0560fd6e315cc245ee97c10baebdf2678e"; # turns bad
+      url = "github:nix-community/emacs-overlay/f4d60d03ea621634ab3091f2c7c036b6a4ad49c3"; # still good
       inputs.flake-utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -198,6 +199,10 @@
       url = "github:mobile-shell/mosh";
       flake = false;
     };
+    nushell = {
+      url = "github:nushell/nushell/0.66.2"; # gh-release-update
+      flake = false;
+    };
     wayvnc = {
       url = "github:any1/wayvnc";
       flake = false;
@@ -220,6 +225,7 @@
     self,
     nixpkgs,
     flake-utils,
+    dream2nix,
     ...
   } @ inputs: let
     l = nixpkgs.lib // builtins;
@@ -272,6 +278,9 @@
         inputs.nur.overlay
         inputs.persway.overlays.default
         inputs.spotnix.overlays.default
+        (final: prev: {
+          nu = self.packages.${prev.system}.nu;
+        })
         (
           final: prev: {
             mosh = prev.mosh.overrideAttrs (oa: {
@@ -333,13 +342,53 @@
         inherit system overlays;
       };
 
+    defaultSystems = ["x86_64-linux" "aarch64-linux"];
+    nixosSystems = defaultSystems;
+
     forAllNixosSystems = fn:
-      flake-utils.lib.eachSystem ["x86_64-linux" "aarch64-linux"]
+      flake-utils.lib.eachSystem nixosSystems
       (system: fn system (pkgsFor system));
 
     forAllDefaultSystems = fn:
-      flake-utils.lib.eachSystem ["x86_64-linux" "aarch64-linux"]
+      flake-utils.lib.eachSystem defaultSystems
       (system: fn system (pkgsFor system));
+
+    d2n = rec {
+      init = pkgs:
+        dream2nix.lib.init {
+          inherit pkgs;
+          config.projectRoot = ./.;
+        };
+      makeOutputs = {
+        pkgs,
+        source,
+        packageOverrides ? {},
+      }: let
+        outputs = (init pkgs).makeOutputs {
+          inherit source packageOverrides;
+        };
+      in {
+        packages.nu = outputs.packages.nu;
+      };
+    };
+
+    d2nPackages = forAllDefaultSystems (
+      _: pkgs:
+        d2n.makeOutputs {
+          inherit pkgs;
+          source = inputs.nushell;
+          packageOverrides."^.*".addDeps = {
+            nativeBuildInputs = old: old ++ [pkgs.pkgconfig pkgs.python3];
+            buildInputs = old: old ++ [pkgs.openssl pkgs.zstd pkgs.xorg.libX11];
+            doCheck = false;
+            buildFeatures = ["extra"];
+            cargoUpdateHook = ''
+              cargo add zstd-sys --features pkg-config --offline
+              cargo update --package zstd-sys --offline
+            '';
+          };
+        }
+    );
 
     hostConfigurations = mapAttrs' (
       filename: _: let
@@ -559,10 +608,17 @@
         }
       )
     )
-    // {
+    // rec {
       inherit nixosConfigurations hostConfigurations;
 
-      packages = recursiveUpdate (recursiveUpdate nixosPackages.packages exportedPackages.packages) diskFormatters.packages;
+      packages =
+        recursiveUpdate
+        (recursiveUpdate
+          (recursiveUpdate
+            nixosPackages.packages
+            exportedPackages.packages)
+          diskFormatters.packages)
+        d2nPackages.packages;
 
       overlays =
         packageOverlays
@@ -577,7 +633,7 @@
         skip = mapAttrsToList (name: _: name) (filterAttrs (name: _: hasPrefix "images/" name) pkgs);
       in {
         os = ["ubuntu-latest"];
-        pkg = filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) exportedPackages.packages.x86_64-linux);
+        pkg = [d2nPackages.packages.x86_64-linux.nu.name] ++ filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) exportedPackages.packages.x86_64-linux);
       };
 
       github-actions-package-matrix-aarch64-linux = let
