@@ -633,7 +633,7 @@
         skip = mapAttrsToList (name: _: name) (filterAttrs (name: _: hasPrefix "images/" name) pkgs);
       in {
         os = ["ubuntu-latest"];
-        pkg = [d2nPackages.packages.x86_64-linux.nu.name] ++ filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) exportedPackages.packages.x86_64-linux);
+        pkg = [d2nPackages.packages.x86_64-linux.nu.pname] ++ filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) exportedPackages.packages.x86_64-linux);
       };
 
       github-actions-package-matrix-aarch64-linux = let
