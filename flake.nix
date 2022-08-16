@@ -37,7 +37,7 @@
     };
 
     dream2nix = {
-      url = "github:nix-community/dream2nix/4a92c17f9579fa49667cb6cba8ad63acdfb1eb32";
+      url = "github:nix-community/dream2nix/07547c2284e9f521013556f361996be9aba3a3fd";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.alejandra.follows = "alejandra";
       inputs.devshell.follows = "devshell";
@@ -279,7 +279,7 @@
         inputs.persway.overlays.default
         inputs.spotnix.overlays.default
         (final: prev: {
-          nu = self.packages.${prev.system}.nu;
+          inherit (self.packages.${prev.system}) nu;
         })
         (
           final: prev: {
