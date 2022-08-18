@@ -546,20 +546,6 @@ Package setup.
        (require 'org-roam-protocol)
      )
    #+END_SRC
-*** Org-mime
-   #+BEGIN_SRC elisp
-     (use-package org-mime
-       :config
-       (setq org-mime-export-options '(:section-numbers nil
-                                       :with-author nil
-                                       :with-toc nil
-                                       ))
-       (add-hook 'message-send-hook 'org-mime-htmlize)
-       (add-hook 'org-mime-html-hook (lambda () (
-                                                 org-mime-change-element-style "pre" (format "color: %s; background-color: %s; padding: 0.5em;", "#E6E1DC", "#232323")
-                                                 ))
-     ))
-   #+END_SRC
 ** Helpful
  #+BEGIN_SRC elisp
    (use-package helpful
@@ -903,6 +889,7 @@ Package setup.
     :config
     (require 'org-mu4e)
     (require 'smtpmail)
+    (add-hook 'mu4e-compose-mode-hook (lambda () (use-hard-newlines -1)))
     (setq
      ;; Update mail every 10 mins
      mu4e-update-interval (* 10 60)
@@ -923,6 +910,9 @@ Package setup.
      smtpmail-smtp-server "smtp.gmail.com"
      smtpmail-smtp-service 465
      smtpmail-stream-type  'ssl
+
+
+     mu4e-compose-format-flowed t
     )
 
     (setq mu4e-contexts
