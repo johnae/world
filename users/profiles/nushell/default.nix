@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   programs.nushell = {
     enable = true;
-    package = pkgs.nu;
+    package = pkgs.nushell;
     configFile.source = ./config.nu;
     envFile.source = ./env.nu;
   };
