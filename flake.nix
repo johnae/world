@@ -200,7 +200,7 @@
       flake = false;
     };
     nushell = {
-      url = "github:nushell/nushell/0.66.2"; # gh-release-update
+      url = "github:nushell/nushell/0.67.0"; # gh-release-update
       flake = false;
     };
     wayvnc = {
