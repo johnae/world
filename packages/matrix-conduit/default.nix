@@ -1,37 +1,18 @@
 {
-  stdenv,
   lib,
-  fetchFromGitLab,
-  rustPlatform,
+  d2n,
   pkgs,
   inputs,
 }:
-rustPlatform.buildRustPackage rec {
-  pname = "matrix-conduit";
-  version = inputs.matrix-conduit.rev;
-
-  src = inputs.matrix-conduit;
-
-  cargoSha256 = "sha256-TAcLiSOr7vdIFJ3gNWaMoaMBxMeDWbJa/T0pSeihOXo=";
-
-  doCheck = false;
-
-  nativeBuildInputs = with pkgs; [
-    rustPlatform.bindgenHook
-  ];
-
-  buildInputs = with pkgs; [
-    pkg-config
-    rocksdb
-  ];
-
-  cargoBuildFlags = "--bin conduit";
-
-  meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A Matrix homeserver written in Rust";
-    homepage = "https://conduit.rs/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [pstn piegames pimeys];
+(d2n.makeOutputs {
+  inherit pkgs;
+  source = inputs.matrix-conduit;
+  packageOverrides."^.*".addDeps = {
+    nativeBuildInputs = old: old ++ [pkgs.rustPlatform.bindgenHook pkgs.pkgconfig];
+    buildInputs = old: old ++ [pkgs.rocksdb];
+    doCheck = false;
+    cargoBuildFlags = "--bin conduit";
   };
-}
+})
+.packages
+.conduit

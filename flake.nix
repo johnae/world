@@ -16,209 +16,108 @@
   };
 
   inputs = {
-    ## flakes
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    age-plugin-yubikey.flake = false;
+    age-plugin-yubikey.url = "github:str4d/age-plugin-yubikey";
+    agenix.inputs.nixlib.follows = "nixlib";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
+    agenix.url = "github:ryantm/agenix";
+    alejandra.inputs.fenix.follows = "fenix";
+    alejandra.inputs.nixpkgs.follows = "nixpkgs";
+    alejandra.url = "github:kamadorueda/alejandra";
+    aml.flake = false;
+    aml.url = "github:any1/aml";
+    blur.flake = false;
+    blur.url = "github:johnae/blur";
+    devshell.inputs.flake-utils.follows = "flake-utils";
+    devshell.inputs.nixpkgs.follows = "nixpkgs";
+    devshell.url = "github:numtide/devshell";
+    dream2nix.inputs.alejandra.follows = "alejandra";
+    dream2nix.inputs.devshell.follows = "devshell";
+    dream2nix.inputs.nixpkgs.follows = "nixpkgs";
+    dream2nix.url = "github:nix-community/dream2nix/07547c2284e9f521013556f361996be9aba3a3fd";
+    emacs-overlay.inputs.flake-utils.follows = "flake-utils";
+    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    emacs-overlay.url = "github:nix-community/emacs-overlay/f4d60d03ea621634ab3091f2c7c036b6a4ad49c3";
+    fenix.inputs.nixpkgs.follows = "nixpkgs";
+    fenix.url = "github:nix-community/fenix";
+    fire.flake = false;
+    fire.url = "github:johnae/fire";
+    fish-kubectl-completions.flake = false;
+    fish-kubectl-completions.url = "github:evanlucas/fish-kubectl-completions";
     flake-utils.url = "github:numtide/flake-utils";
-
-    nixos-hardware.url = "github:nixos/nixos-hardware";
+    fluxcd-install.flake = false;
+    fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v0.32.0/install.yaml"; # gh-release-update
+    git-branchless.flake = false;
+    git-branchless.url = "github:arxanas/git-branchless";
+    google-cloud-sdk-fish-completion.flake = false;
+    google-cloud-sdk-fish-completion.url = "github:Doctusoft/google-cloud-sdk-fish-completion";
+    grim.flake = false;
+    grim.url = "github:emersion/grim";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager.url = "github:nix-community/home-manager";
+    kile.flake = false;
+    kile.url = "gitlab:snakedye/kile";
+    kured.flake = false;
+    kured.url = "github:weaveworks/kured";
+    matrix-conduit.flake = false;
+    matrix-conduit.url = "gitlab:famedly/conduit";
+    mosh.flake = false;
+    mosh.url = "github:mobile-shell/mosh";
+    neatvnc.flake = false;
+    neatvnc.url = "github:any1/neatvnc";
+    netns-exec.flake = false;
+    netns-exec.url = "github:johnae/netns-exec";
+    nix-misc.inputs.nixlib.follows = "nixlib";
+    nix-misc.inputs.nixpkgs.follows = "nixpkgs";
+    nix-misc.url = "github:johnae/nix-misc";
     nixlib.url = "github:nix-community/nixpkgs.lib";
+    nixos-hardware.url = "github:nixos/nixos-hardware";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    notracking.flake = false;
+    notracking.url = "github:notracking/hosts-blocklists";
     nur.url = "github:nix-community/NUR";
-
-    alejandra = {
-      url = "github:kamadorueda/alejandra";
-      inputs.fenix.follows = "fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    devshell = {
-      url = "github:numtide/devshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-
-    dream2nix = {
-      url = "github:nix-community/dream2nix/07547c2284e9f521013556f361996be9aba3a3fd";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.alejandra.follows = "alejandra";
-      inputs.devshell.follows = "devshell";
-    };
-
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nix-misc = {
-      url = "github:johnae/nix-misc";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixlib.follows = "nixlib";
-    };
-
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    agenix = {
-      url = "github:ryantm/agenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixlib.follows = "nixlib";
-    };
-
-    emacs-overlay = {
-      # url = "github:nix-community/emacs-overlay/ce91eb0560fd6e315cc245ee97c10baebdf2678e"; # turns bad
-      url = "github:nix-community/emacs-overlay/f4d60d03ea621634ab3091f2c7c036b6a4ad49c3"; # still good
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    spotnix = {
-      url = "github:johnae/spotnix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.fenix.follows = "fenix";
-      inputs.dream2nix.follows = "dream2nix";
-      inputs.devshell.follows = "devshell";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    persway = {
-      url = "github:johnae/persway";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.fenix.follows = "fenix";
-      inputs.dream2nix.follows = "dream2nix";
-      inputs.devshell.follows = "devshell";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-
-    ## non flakes
-    notracking = {
-      url = "github:notracking/hosts-blocklists";
-      flake = false;
-    };
-
-    rofi-wayland = {
-      url = "github:lbonn/rofi/wayland";
-      flake = false;
-    };
-
-    kile = {
-      url = "gitlab:snakedye/kile";
-      flake = false;
-    };
-
-    matrix-conduit = {
-      url = "gitlab:famedly/conduit";
-      flake = false;
-    };
-
-    ristate = {
-      url = "gitlab:snakedye/ristate";
-      flake = false;
-    };
-
-    age-plugin-yubikey = {
-      url = "github:str4d/age-plugin-yubikey";
-      flake = false;
-    };
-    blur = {
-      url = "github:johnae/blur";
-      flake = false;
-    };
-    fire = {
-      url = "github:johnae/fire";
-      flake = false;
-    };
-    fish-kubectl-completions = {
-      url = "github:evanlucas/fish-kubectl-completions";
-      flake = false;
-    };
-    google-cloud-sdk-fish-completion = {
-      url = "github:Doctusoft/google-cloud-sdk-fish-completion";
-      flake = false;
-    };
-    grim = {
-      url = "github:emersion/grim";
-      flake = false;
-    };
-    netns-exec = {
-      url = "github:johnae/netns-exec";
-      flake = false;
-    };
-    slurp = {
-      url = "github:emersion/slurp";
-      flake = false;
-    };
-    spotifyd = {
-      url = "github:spotifyd/spotifyd";
-      flake = false;
-    };
-    wayland-protocols-master = {
-      url = "git+https://gitlab.freedesktop.org/wayland/wayland-protocols.git?ref=main";
-      flake = false;
-    };
-    sway = {
-      url = "github:swaywm/sway";
-      flake = false;
-    };
-    swaybg = {
-      url = "github:swaywm/swaybg";
-      flake = false;
-    };
-    swayidle = {
-      url = "github:swaywm/swayidle";
-      flake = false;
-    };
-    swaylock = {
-      url = "github:swaywm/swaylock";
-      flake = false;
-    };
-    wlroots = {
-      url = "git+https://gitlab.freedesktop.org/wlroots/wlroots.git?ref=master";
-      flake = false;
-    };
-    wl-clipboard = {
-      url = "github:bugaevc/wl-clipboard";
-      flake = false;
-    };
-    xdg-desktop-portal-wlr = {
-      url = "github:emersion/xdg-desktop-portal-wlr/v0.6.0"; # gh-release-update
-      flake = false;
-    };
-    git-branchless = {
-      url = "github:arxanas/git-branchless";
-      flake = false;
-    };
-    kured = {
-      url = "github:weaveworks/kured";
-      flake = false;
-    };
-    fluxcd-install = {
-      url = "https://github.com/fluxcd/flux2/releases/download/v0.32.0/install.yaml"; # gh-release-update
-      flake = false;
-    };
-    mosh = {
-      url = "github:mobile-shell/mosh";
-      flake = false;
-    };
-    nushell = {
-      url = "github:nushell/nushell/0.66.2"; # gh-release-update
-      flake = false;
-    };
-    wayvnc = {
-      url = "github:any1/wayvnc";
-      flake = false;
-    };
-    neatvnc = {
-      url = "github:any1/neatvnc";
-      flake = false;
-    };
-    wlvncc = {
-      url = "github:any1/wlvncc";
-      flake = false;
-    };
-    aml = {
-      url = "github:any1/aml";
-      flake = false;
-    };
+    nushell.flake = false;
+    nushell.url = "github:nushell/nushell/0.66.2"; # gh-release-update
+    persway.inputs.devshell.follows = "devshell";
+    persway.inputs.dream2nix.follows = "dream2nix";
+    persway.inputs.fenix.follows = "fenix";
+    persway.inputs.flake-utils.follows = "flake-utils";
+    persway.inputs.nixpkgs.follows = "nixpkgs";
+    persway.url = "github:johnae/persway";
+    ristate.flake = false;
+    ristate.url = "gitlab:snakedye/ristate";
+    rofi-wayland.flake = false;
+    rofi-wayland.url = "github:lbonn/rofi/wayland";
+    slurp.flake = false;
+    slurp.url = "github:emersion/slurp";
+    spotifyd.flake = false;
+    spotifyd.url = "github:spotifyd/spotifyd";
+    spotnix.inputs.devshell.follows = "devshell";
+    spotnix.inputs.dream2nix.follows = "dream2nix";
+    spotnix.inputs.fenix.follows = "fenix";
+    spotnix.inputs.flake-utils.follows = "flake-utils";
+    spotnix.inputs.nixpkgs.follows = "nixpkgs";
+    spotnix.url = "github:johnae/spotnix";
+    sway.flake = false;
+    sway.url = "github:swaywm/sway";
+    swaybg.flake = false;
+    swaybg.url = "github:swaywm/swaybg";
+    swayidle.flake = false;
+    swayidle.url = "github:swaywm/swayidle";
+    swaylock.flake = false;
+    swaylock.url = "github:swaywm/swaylock";
+    wayland-protocols-master.flake = false;
+    wayland-protocols-master.url = "git+https://gitlab.freedesktop.org/wayland/wayland-protocols.git?ref=main";
+    wayvnc.flake = false;
+    wayvnc.url = "github:any1/wayvnc";
+    wl-clipboard.flake = false;
+    wl-clipboard.url = "github:bugaevc/wl-clipboard";
+    wlroots.flake = false;
+    wlroots.url = "git+https://gitlab.freedesktop.org/wlroots/wlroots.git?ref=master";
+    wlvncc.flake = false;
+    wlvncc.url = "github:any1/wlvncc";
+    xdg-desktop-portal-wlr.flake = false;
+    xdg-desktop-portal-wlr.url = "github:emersion/xdg-desktop-portal-wlr/v0.6.0"; # gh-release-update
   };
 
   outputs = {
@@ -278,6 +177,9 @@
         inputs.nur.overlay
         inputs.persway.overlays.default
         inputs.spotnix.overlays.default
+        (final: prev: {
+          inherit d2n;
+        })
         (final: prev: {
           inherit (self.packages.${prev.system}) nu;
         })
@@ -363,32 +265,11 @@
         pkgs,
         source,
         packageOverrides ? {},
-      }: let
-        outputs = (init pkgs).makeOutputs {
+      }:
+        (init pkgs).makeOutputs {
           inherit source packageOverrides;
         };
-      in {
-        packages.nu = outputs.packages.nu;
-      };
     };
-
-    d2nPackages = forAllDefaultSystems (
-      _: pkgs:
-        d2n.makeOutputs {
-          inherit pkgs;
-          source = inputs.nushell;
-          packageOverrides."^.*".addDeps = {
-            nativeBuildInputs = old: old ++ [pkgs.pkgconfig pkgs.python3];
-            buildInputs = old: old ++ [pkgs.openssl pkgs.zstd pkgs.xorg.libX11];
-            doCheck = false;
-            buildFeatures = ["extra"];
-            cargoUpdateHook = ''
-              cargo add zstd-sys --features pkg-config --offline
-              cargo update --package zstd-sys --offline
-            '';
-          };
-        }
-    );
 
     hostConfigurations = mapAttrs' (
       filename: _: let
@@ -614,11 +495,9 @@
       packages =
         recursiveUpdate
         (recursiveUpdate
-          (recursiveUpdate
-            nixosPackages.packages
-            exportedPackages.packages)
-          diskFormatters.packages)
-        d2nPackages.packages;
+          nixosPackages.packages
+          exportedPackages.packages)
+        diskFormatters.packages;
 
       overlays =
         packageOverlays
@@ -633,7 +512,7 @@
         skip = mapAttrsToList (name: _: name) (filterAttrs (name: _: hasPrefix "images/" name) pkgs);
       in {
         os = ["ubuntu-latest"];
-        pkg = [d2nPackages.packages.x86_64-linux.nu.pname] ++ filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) exportedPackages.packages.x86_64-linux);
+        pkg = filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) exportedPackages.packages.x86_64-linux);
       };
 
       github-actions-package-matrix-aarch64-linux = let
@@ -657,6 +536,7 @@
             "netns-dbus-proxy"
             "netns-exec"
             "nixpkgs-fmt"
+            "nushell"
             "persway"
             "pixieboot"
             "pxebooter"
