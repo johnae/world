@@ -536,6 +536,7 @@
             "netns-dbus-proxy"
             "netns-exec"
             "nixpkgs-fmt"
+            "nushell"
             "persway"
             "pixieboot"
             "pxebooter"
