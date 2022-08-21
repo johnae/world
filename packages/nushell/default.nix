@@ -16,6 +16,7 @@
       cargo add zstd-sys --features pkg-config --offline
       cargo update --package zstd-sys --offline
     '';
+    shellPath = "/bin/nu";
   };
 })
 .packages
