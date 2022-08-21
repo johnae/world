@@ -19,7 +19,7 @@ in {
       default = {
         settings = {
           "browser.compactmode.show" = true;
-          "browser.startup.homepage" = "https://searx.insane.se";
+          "browser.startup.homepage" = "";
           "browser.search.region" = "SE";
           "browser.search.isUS" = false;
           "distribution.searchplugins.defaultLocale" = "sv-SE";
