@@ -75,6 +75,10 @@ in {
   #home.file.".icons/default".source = "${pkgs.arc-icon-theme}/share/icons/Arc";
   home.file."Pictures/default-background.jpg".source = "${pkgs.adapta-backgrounds}/share/backgrounds/adapta/tri-fadeno.jpg";
 
+  xdg.configFile."wireplumber/main.lua.d/50-libcamera-config.lua".source = pkgs.writeText "50-libcamera-config.lua" ''
+    libcamera_monitor.enabled = false
+  '';
+
   base16-theme.enable = true;
 
   qt = {
