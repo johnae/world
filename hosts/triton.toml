@@ -86,7 +86,7 @@ gid = 1337
 
 [config.users.users.john]
 uid = 1337
-shell = "fish"
+shell = "nushell"
 hashedPassword = "$6$pUcetTdGMZMdzwx$ySPiZXgZUkIGO3jaEXIIEIh6ks8rea9uE5B08SHku2aJUolHeYKrMvhyFvNYcpvYQ/jf7kgOXL8dL0Yn.IuNS."
 
 [config.home-manager.users.john]
