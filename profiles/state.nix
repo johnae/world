@@ -69,6 +69,7 @@ in {
             "/home/${userName}/.kube/config"
             "/home/${userName}/.ssh/known_hosts"
             "/home/${userName}/.spotify_token_cache.json"
+            "/home/${userName}/.config/nushell/history.txt"
           ];
         }
     ) (filterAttrs (_: user: user.isNormalUser) users);
