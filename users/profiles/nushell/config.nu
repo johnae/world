@@ -406,6 +406,39 @@ let-env config = {
   ]
   keybindings: [
     {
+      name: select_gcloud_project_with_sk
+      modifier: control
+      keycode: char_w
+      mode: [emacs, vi_normal, vi_insert] # Options: emacs vi_normal vi_insert
+      event: [
+        { send: executehostcommand,
+          cmd: "gcloud config set project (gcloud projects list --format=json | from json | get projectId | to text | sk)"
+        }
+      ]
+    }
+    {
+      name: select_kubernetes_ns
+      modifier: control
+      keycode: char_n
+      mode: [emacs, vi_normal, vi_insert] # Options: emacs vi_normal vi_insert
+      event: [
+        { send: executehostcommand,
+          cmd: "kubens"
+        }
+      ]
+    }
+    {
+      name: select_kubernetes_ctx
+      modifier: control
+      keycode: char_k
+      mode: [emacs, vi_normal, vi_insert] # Options: emacs vi_normal vi_insert
+      event: [
+        { send: executehostcommand,
+          cmd: "kubectx"
+        }
+      ]
+    }
+    {
       name: completion_menu
       modifier: none
       keycode: tab
@@ -472,17 +505,17 @@ let-env config = {
         ]
       }
     }
-    {
-      name: kill-line
-      modifier: control
-      keycode: char_k
-      mode: [emacs, vi_normal, vi_insert]
-      event: {
-        until: [
-          {edit: cuttolineend}
-        ]
-      }
-    }
+    #{
+    #  name: kill-line
+    #  modifier: control
+    #  keycode: char_k
+    #  mode: [emacs, vi_normal, vi_insert]
+    #  event: {
+    #    until: [
+    #      {edit: cuttolineend}
+    #    ]
+    #  }
+    #}
     # Keybindings used to trigger the user defined menus
     {
       name: commands_menu
@@ -510,11 +543,4 @@ let-env config = {
 
 alias cat = bat
 alias l = (ls | grid -c)
-## don't want this
-# def fat [path?: string] {
-#   if $path == null {
-#     bat ($in)
-#   } else {
-#     bat $path
-#   }
-# }
+alias e = emacsclient -t
