@@ -11,7 +11,7 @@ in {
     enable = true;
     settings.global = {
       username = "binx";
-      password_cmd = "cat /run/agenix/spotifyd";
+      password_cmd = "${pkgs.coreutils}/bin/cat /run/agenix/spotifyd";
       backend = "pulseaudio";
       mixer = "PCM";
       volume-control = "alsa";
