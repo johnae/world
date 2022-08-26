@@ -14,6 +14,7 @@ in {
     pkgs.git-crypt
     pkgs.gnome3.nautilus
     pkgs.google-cloud-sdk
+    pkgs.kanshi
     pkgs.kubectl
     pkgs.kubectx
     pkgs.kubelogin-oidc

@@ -55,6 +55,8 @@
     grim.url = "github:emersion/grim";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
+    kanshi.flake = false;
+    kanshi.url = "sourcehut:~emersion/kanshi";
     kile.flake = false;
     kile.url = "gitlab:snakedye/kile";
     kured.flake = false;
@@ -182,6 +184,13 @@
         })
         (final: prev: {
           inherit (self.packages.${prev.system}) nu;
+        })
+        (final: prev: {
+          kanshi = prev.kanshi.overrideAttrs (oa: {
+            version = "1.3.0";
+            src = inputs.kanshi;
+            buildInputs = oa.buildInputs ++ [prev.libvarlink];
+          });
         })
         (
           final: prev: {
@@ -361,6 +370,7 @@
               kured-yaml = true;
               notracking = true;
               mosh = true;
+              kanshi = true;
             }));
       }
     );
@@ -525,6 +535,7 @@
             "fire"
             "git-branchless"
             "grim"
+            "kanshi"
             "kile"
             "matrix-conduit"
             "mosh"

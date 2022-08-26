@@ -384,6 +384,22 @@
         "type": "github"
       }
     },
+    "kanshi": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1661350559,
+        "narHash": "sha256-kqTRJhLd9vLGAPO5U5cWeZgzWzne+0Cr4TIS0ciZSGk=",
+        "owner": "~emersion",
+        "repo": "kanshi",
+        "rev": "6869e2e9e8a9c32977c0c3546e10c9f0098c7ef0",
+        "type": "sourcehut"
+      },
+      "original": {
+        "owner": "~emersion",
+        "repo": "kanshi",
+        "type": "sourcehut"
+      }
+    },
     "kile": {
       "flake": false,
       "locked": {
@@ -735,6 +751,7 @@
         "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
         "grim": "grim",
         "home-manager": "home-manager",
+        "kanshi": "kanshi",
         "kile": "kile",
         "kured": "kured",
         "matrix-conduit": "matrix-conduit",
