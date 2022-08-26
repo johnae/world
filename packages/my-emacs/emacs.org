@@ -884,6 +884,41 @@ Package setup.
    #+END_SRC
 ** Mu4e
 #+BEGIN_SRC elisp
+  (defcustom mu4e-bookmarks
+    '(( :name  "Unread messages"
+        :query "flag:unread AND NOT flag:trashed AND NOT flag:list"
+        :key ?u)
+      ( :name "Today's messages"
+        :query "date:today..now AND NOT flag:list"
+        :key ?t)
+      ( :name "Last 7 days"
+        :query "date:7d..now AND NOT flag:list"
+        :hide-unread t
+        :key ?w)
+      ( :name "Last 7 days of lists"
+        :query "date:7d..now AND flag:list"
+        :hide-unread t
+        :key ?l)
+      ( :name "Messages with images"
+        :query "mime:image/*"
+        :key ?p))
+    "List of pre-defined queries that are shown on the main screen.
+
+    Each of the list elements is a plist with at least:
+    :name  - the name of the query
+    :query - the query expression
+    :key   - the shortcut key.
+
+    Optionally, you add the following:
+    :hide  - if t, bookmark is hdden from the main-view and speedbar.
+    :hide-unread - do not show the counts of unread/total number
+     of matches for the query. This can be useful if a bookmark uses
+     a very slow query. :hide-unread is implied from :hide.
+    "
+    :type '(repeat (plist))
+    :group 'mu4e
+  )
+
   (use-package mu4e
     :defer 2
     :config
@@ -911,44 +946,43 @@ Package setup.
      smtpmail-smtp-service 465
      smtpmail-stream-type  'ssl
 
-
      mu4e-compose-format-flowed t
-    )
+   )
 
     (setq mu4e-contexts
-          `(,(make-mu4e-context
-              :name "Insane"
-              :match-func (lambda (msg) (when msg
-                                          (string-prefix-p "/insane" (mu4e-message-field msg :maildir))))
-              :vars '(
-                       (user-full-name . "John Axel Eriksson") 
-                       (smtpmail-smtp-user . "john@insane.se")
-                       (user-mail-address . "john@insane.se") 
-                       (mu4e-drafts-folder . "/insane/Drafts") 
-                       (mu4e-refile-folder . "/insane/All") 
-                       (mu4e-sent-folder . "/insane/Sent") 
-                       (mu4e-trash-folder . "/insane/Trash") 
-                       ;; gmail handles this
-                       (mu4e-sent-messages-behavior . delete)
-                     )
-             )
-            ,(make-mu4e-context
-              :name "9000"
-              :match-func (lambda (msg) (when msg
-                                          (string-prefix-p "/9000" (mu4e-message-field msg :maildir))))
-              :vars '(
-                       (user-full-name . "John Axel Eriksson") 
-                       (smtpmail-smtp-user . "john@9000.dev")
-                       (user-mail-address . "john@9000.dev") 
-                       (mu4e-drafts-folder . "/9000/Drafts") 
-                       (mu4e-refile-folder . "/9000/All") 
-                       (mu4e-sent-folder . "/9000/Sent") 
-                       (mu4e-trash-folder . "/9000/Trash") 
-                       ;; gmail handles this
-                       (mu4e-sent-messages-behavior . delete)
-                     )
-             )
-          )
+      `(,(make-mu4e-context
+          :name "Insane"
+          :match-func (lambda (msg) (when msg
+                                      (string-prefix-p "/insane" (mu4e-message-field msg :maildir))))
+          :vars '(
+                   (user-full-name . "John Axel Eriksson")
+                   (smtpmail-smtp-user . "john@insane.se")
+                   (user-mail-address . "john@insane.se")
+                   (mu4e-drafts-folder . "/insane/Drafts")
+                   (mu4e-refile-folder . "/insane/All")
+                   (mu4e-sent-folder . "/insane/Sent")
+                   (mu4e-trash-folder . "/insane/Trash")
+                   ;; gmail handles this
+                   (mu4e-sent-messages-behavior . delete)
+                 )
+         )
+        ,(make-mu4e-context
+          :name "9000"
+          :match-func (lambda (msg) (when msg
+                                      (string-prefix-p "/9000" (mu4e-message-field msg :maildir))))
+          :vars '(
+                   (user-full-name . "John Axel Eriksson")
+                   (smtpmail-smtp-user . "john@9000.dev")
+                   (user-mail-address . "john@9000.dev")
+                   (mu4e-drafts-folder . "/9000/Drafts")
+                   (mu4e-refile-folder . "/9000/All")
+                   (mu4e-sent-folder . "/9000/Sent")
+                   (mu4e-trash-folder . "/9000/Trash")
+                   ;; gmail handles this
+                   (mu4e-sent-messages-behavior . delete)
+                 )
+         )
+      )
     )
   )
 #+END_SRC
