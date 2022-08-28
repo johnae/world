@@ -32,6 +32,7 @@ emulatedSystems = [ "aarch64-linux" ]
 
 [config.boot.initrd.luks.devices]
 cryptkey.keyFile = "/dev/disk/by-partlabel/alt_key"
+cryptkey.fallbackToPassword = true
 
 [config.environment.state."/keep"]
 directories = [
@@ -163,6 +164,9 @@ enable = true
 [config.home-manager.users.john.services.mbsync]
 enable = true
 frequency = "*:0/5"
+
+[config.home-manager.users.john.services.imapnotify]
+enable = true
 
 [config.home-manager.users.john.userinfo]
 email = "john@insane.se"
