@@ -109,10 +109,8 @@ openssh.authorizedKeys.keys = [
 [config.home-manager.users.john]
 profiles = [
   "users/profiles/alacritty",
-  "users/profiles/bat",
   "users/profiles/chromium",
   "users/profiles/dconf",
-  "users/profiles/emacs",
   "users/profiles/firefox",
   "users/profiles/fish",
   "users/profiles/git",
@@ -136,6 +134,25 @@ profiles = [
   "users/profiles/waybar",
   "users/profiles/wlsunset",
 ]
+
+[config.home-manager.users.john.home.file.".emacs"]
+source = "${pkgs.my-emacs-config}"
+
+[config.home-manager.users.john.programs.bat]
+enable = true
+
+[config.home-manager.users.john.programs.emacs]
+enable = true
+package = "${pkgs.my-emacs}"
+
+[config.home-manager.users.john.services.emacs]
+enable = true
+package = "${pkgs.my-emacs}"
+socketActivation.enable = true
+
+[config.home-manager.users.john.systemd.user.services.emacs.Service]
+Environment = [ "COLORTERM=truecolor" ]
+LimitNOFILE = 16384
 
 [config.home-manager.users.john.programs.rbw]
 settings.device_id = "f3268147-1e9d-46da-b431-11fe011f5dfe"
@@ -172,9 +189,13 @@ flavor = "gmail.com"
 mbsync.enable = true
 mbsync.create = "both"
 mbsync.extraConfig.account.PipelineDepth = 10
-passwordCommand = "/run/current-system/sw/bin/cat ~/.mbsync-insane"
+passwordCommand = "${pkgs.coreutils}/bin/cat ~/.mbsync-insane"
+imapnotify.enable = true
+imapnotify.boxes = [ "Inbox" ]
+imapnotify.onNotify = "${pkgs.isync}/bin/mbsync insane"
+imapnotify.onNotifyPost = "${pkgs.mu}/bin/mu index"
 
-[config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.gmail.channels]
+[config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.insane.channels]
 inbox.patterns = ["INBOX"]
 inbox.extraConfig.Create = "both"
 inbox.extraConfig.SyncState = "*"

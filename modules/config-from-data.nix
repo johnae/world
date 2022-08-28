@@ -4,8 +4,8 @@
   lib,
   pkgs,
   ...
-}: let
-  inherit (builtins) hasAttr isAttrs isString mapAttrs attrNames length tail head;
+} @ args: let
+  inherit (builtins) hasAttr isAttrs isString mapAttrs attrNames length tail head split filter isList;
   inherit (lib) mkIf concatStringsSep filterAttrs recursiveUpdate hasPrefix splitString last;
 
   cfgMapper = {
@@ -33,17 +33,34 @@
         )
     );
   };
-  mapString = str:
-    if hasPrefix "pkg:" str
-    then let
-      spec = last (splitString "pkg:" str);
-      path = tail (splitString "/" spec);
-      pkg = head (splitString "/" spec);
-    in
-      if (length path) == 0
-      then pkgs.${pkg}
-      else concatStringsSep "/" (["${pkgs.${pkg}}"] ++ path)
-    else str;
+  ## really just does package interpolation... sort of - needs a bit of further work really
+  mapString = str: let
+    itemized = s: filter (item: item != "") (split "(\\$\\{[a-zA-Z0-9_-]+\.[a-zA-Z0-9/._-]+})" s);
+    pkgref = p:
+      map (item: let
+        p = args.${head item};
+        pkg = p.${head (tail item)};
+        path = head (tail (tail item));
+      in (
+        if path != ""
+        then "${pkg}${path}"
+        else pkg
+      )) (filter (item: isList item) (split "\\$\\{([a-zA-Z0-9_-]+)\.([a-zA-Z0-9._-]+)(.*)}" p));
+    items = itemized str;
+  in
+    if length items == 1
+    then
+      if hasPrefix "\${" str
+      then head (pkgref str)
+      else str
+    else
+      concatStringsSep "" (map (
+          item:
+            if isList item
+            then head (pkgref (head item))
+            else item
+        )
+        items);
   mapConfig = path:
     mapAttrs (
       name: value: let

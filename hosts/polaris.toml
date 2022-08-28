@@ -236,8 +236,8 @@ secrets-encryption = true
 tls-san = "192.168.104.100"
 
 [config.services.k3s.autoDeploy]
-kured = "pkg:kured-yaml/kured.yaml"
-flux = "pkg:fluxcd-yaml/flux.yaml"
+kured = "${pkgs.kured-yaml}/kured.yaml"
+flux = "${pkgs.fluxcd-yaml}/flux.yaml"
 
 [config.services.k3s.autoDeploy.cluster-vars]
 apiVersion = "v1"
