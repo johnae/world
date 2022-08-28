@@ -620,7 +620,7 @@ Package setup.
   #+END_SRC
 *** Set default theme
    #+BEGIN_SRC elisp
-     (defvar jae:theme 'modus-vivendi)
+     (defvar jae:theme 'doom-oceanic-next)
      (load-theme jae:theme t)
    #+END_SRC
 ** Term
