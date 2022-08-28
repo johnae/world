@@ -34,7 +34,7 @@
     dream2nix.inputs.alejandra.follows = "alejandra";
     dream2nix.inputs.devshell.follows = "devshell";
     dream2nix.inputs.nixpkgs.follows = "nixpkgs";
-    dream2nix.url = "github:nix-community/dream2nix/07547c2284e9f521013556f361996be9aba3a3fd";
+    dream2nix.url = "github:nix-community/dream2nix";
     emacs-overlay.inputs.flake-utils.follows = "flake-utils";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay/f4d60d03ea621634ab3091f2c7c036b6a4ad49c3";
