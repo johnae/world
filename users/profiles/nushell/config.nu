@@ -408,7 +408,7 @@ let-env config = {
     {
       name: select_gcloud_project_with_sk
       modifier: control
-      keycode: char_w
+      keycode: char_f
       mode: [emacs, vi_normal, vi_insert] # Options: emacs vi_normal vi_insert
       event: [
         { send: executehostcommand,
