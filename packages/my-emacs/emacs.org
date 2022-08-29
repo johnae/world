@@ -1726,3 +1726,17 @@ Package setup.
   
 
   
+
+** Use OSC 52 Escape sequence for copying to system clipboard
+#+BEGIN_SRC elisp
+    (use-package clipetty
+     :config
+      (when (not (display-graphic-p))
+       (add-hook 'after-init-hook
+         (lambda ()
+           (global-clipetty-mode)
+           )
+         )
+      )
+    )
+#+END_SRC
