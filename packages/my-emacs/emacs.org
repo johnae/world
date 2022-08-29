@@ -89,7 +89,7 @@ Here we do some basic optimizations to make emacs load faster and do "stuff" mor
    (setq auto-mode-case-fold nil)
    #+END_SRC
 **** Enable so-long mode
-      Emacs has problems with very long lines (eg. minified js, json for example). So long helps with that.
+Emacs has problems with very long lines (eg. minified js, json for example). So long helps with that.
    #+BEGIN_SRC elisp
    (global-so-long-mode 1)
    #+END_SRC
