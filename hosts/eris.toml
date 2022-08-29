@@ -50,7 +50,7 @@ id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner 
 id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
 syncthing-cert = { file = "secrets/eris/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/eris/syncthing-key.age", owner = "1337" }
-mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337", path = "/home/john/.mbsync-insane" }
+mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
 authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
 
 [config.services.syncthing]
@@ -193,7 +193,7 @@ flavor = "gmail.com"
 mbsync.enable = true
 mbsync.create = "both"
 mbsync.extraConfig.account.PipelineDepth = 10
-passwordCommand = "${pkgs.coreutils}/bin/cat ~/.mbsync-insane"
+passwordCommand = "${pkgs.coreutils}/bin/cat /run/agenix/mbsync-insane"
 imapnotify.enable = true
 imapnotify.boxes = [ "Inbox" ]
 imapnotify.onNotify = "${pkgs.isync}/bin/mbsync insane"
