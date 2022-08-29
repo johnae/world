@@ -290,15 +290,15 @@ spec.postBuild.substituteFrom = [
   { kind = "Secret", name = "cluster-secrets" }
 ]
 
-[config.services.plex]
+[config.services.jellyfin]
 enable = true
 openFirewall = true
 
 [config.environment.state."/keep"]
 directories = [
-  "/var/lib/plex",
-  "/var/lib/media",
   "/var/lib/headscale",
+  "/var/lib/jellyfin",
+  "/var/lib/media",
 ]
 
 [config.home-manager.users.john]
