@@ -345,6 +345,13 @@ Package setup.
       "t" '(:ignore t :which-key "toggles")
       "tt" '(consult-theme :which-key "switch-theme")
 
+      "<SPC>" '(:ignore p :which-key "tab")
+      "<SPC><right>" '(tab-next :which-key "next tab")
+      "<SPC><left>" '(tab-next :which-key "next tab")
+      "<SPC><up>" '(tab-new :which-key "new tab")
+      "<SPC><down>" '(tab-close :which-key "close tab")
+      "<SPC>s" '(tab-switch :which-key "switch to tab")
+
       "p" '(:ignore p :which-key "project")
       "pp" '(consult-projectile :which-key "open file in project")
       "ps" '(projectile-switch-project :which-key "switch project")
