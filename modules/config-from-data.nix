@@ -6,7 +6,7 @@
   ...
 } @ args: let
   inherit (builtins) hasAttr isAttrs isString mapAttrs attrNames length tail head split filter isList;
-  inherit (lib) mkIf concatStringsSep filterAttrs recursiveUpdate hasPrefix splitString last attrByPath take last;
+  inherit (lib) mkIf concatStringsSep filterAttrs recursiveUpdate hasPrefix splitString last attrByPath take;
 
   cfgMapper = {
     "age.secrets" = mapAttrs (
