@@ -92,10 +92,8 @@ hashedPassword = "$6$pUcetTdGMZMdzwx$ySPiZXgZUkIGO3jaEXIIEIh6ks8rea9uE5B08SHku2a
 [config.home-manager.users.john]
 profiles = [
   "users/profiles/alacritty",
-  "users/profiles/bat",
   "users/profiles/chromium",
   "users/profiles/dconf",
-  "users/profiles/emacs",
   "users/profiles/eww",
   "users/profiles/firefox",
   "users/profiles/fish",
@@ -120,6 +118,25 @@ profiles = [
   "users/profiles/waybar",
   "users/profiles/wlsunset",
 ]
+
+[config.home-manager.users.john.home.file.".emacs"]
+source = "${pkgs.my-emacs-config}"
+
+[config.home-manager.users.john.programs.bat]
+enable = true
+
+[config.home-manager.users.john.programs.emacs]
+enable = true
+package = "${pkgs.my-emacs}"
+
+[config.home-manager.users.john.services.emacs]
+enable = true
+package = "${pkgs.my-emacs}"
+socketActivation.enable = true
+
+[config.home-manager.users.john.systemd.user.services.emacs.Service]
+Environment = [ "COLORTERM=truecolor" ]
+LimitNOFILE = 16384
 
 [config.home-manager.users.john.userinfo]
 email = "john@insane.se"
