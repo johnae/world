@@ -6,7 +6,7 @@
   ...
 } @ args: let
   inherit (builtins) hasAttr isAttrs isString mapAttrs attrNames length tail head split filter isList;
-  inherit (lib) mkIf concatStringsSep filterAttrs recursiveUpdate hasPrefix splitString last;
+  inherit (lib) mkIf concatStringsSep filterAttrs recursiveUpdate hasPrefix splitString last attrByPath take last;
 
   cfgMapper = {
     "age.secrets" = mapAttrs (
@@ -36,16 +36,16 @@
   ## really just does package interpolation... sort of - needs a bit of further work really
   mapString = str: let
     itemized = s: filter (item: item != "") (split "(\\$\\{[a-zA-Z0-9_-]+\.[a-zA-Z0-9/._-]+})" s);
-    pkgref = p:
-      map (item: let
-        p = args.${head item};
-        pkg = p.${head (tail item)};
-        path = head (tail (tail item));
-      in (
-        if path != ""
-        then "${pkg}${path}"
-        else pkg
-      )) (filter (item: isList item) (split "\\$\\{([a-zA-Z0-9_-]+)\.([a-zA-Z0-9._-]+)(.*)}" p));
+    pkgref = ref:
+      map (
+        items: let
+          pkg = attrByPath (take 2 items) null args;
+          path = last items;
+        in
+          if path != ""
+          then "${pkg}${path}"
+          else pkg
+      ) (filter isList (split "\\$\\{([a-zA-Z0-9_-]+)\.([a-zA-Z0-9._-]+)(.*)}" ref));
     items = itemized str;
   in
     if length items == 1
