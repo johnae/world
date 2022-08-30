@@ -224,28 +224,6 @@ Some basic useful settings.
    #+BEGIN_SRC elisp
    (setq shell-file-name "bash")
    #+END_SRC
-** User interface
-*** Set the default font
-#+BEGIN_SRC elisp
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 14"))
-#+END_SRC
-*** Set background alpha
-#+BEGIN_SRC elisp
-(set-frame-parameter (selected-frame) 'alpha '(96 . 96))
-(add-to-list 'default-frame-alist '(alpha . (96 . 96)))
-#+END_SRC
-*** Display line numbers
-   Display relative line numbers actually.
- #+BEGIN_SRC elisp
-   (setq display-line-numbers-type 'relative
-         display-line-numbers-current-absolute t
-   )
-   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
- #+END_SRC
-*** Tweak modeline
-#+BEGIN_SRC elisp
-  (setq global-mode-string (string-join (list (jae/shell-command-to-string-nows "whoami") "@" (jae/shell-command-to-string-nows "hostname") " ") ""))
-#+END_SRC
 ** Utility functions
 Utility functions used here and there.
 *** Returns the output of a shell command without trailing whitespace
@@ -315,6 +293,28 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
        )
 
    #+END_SRC
+** User interface
+*** Set the default font
+#+BEGIN_SRC elisp
+  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 14"))
+#+END_SRC
+*** Set background alpha
+#+BEGIN_SRC elisp
+(set-frame-parameter (selected-frame) 'alpha '(96 . 96))
+(add-to-list 'default-frame-alist '(alpha . (96 . 96)))
+#+END_SRC
+*** Display line numbers
+   Display relative line numbers actually.
+ #+BEGIN_SRC elisp
+   (setq display-line-numbers-type 'relative
+         display-line-numbers-current-absolute t
+   )
+   (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+ #+END_SRC
+*** Tweak modeline
+#+BEGIN_SRC elisp
+  (setq global-mode-string (string-join (list (jae/shell-command-to-string-nows "whoami") "@" (jae/shell-command-to-string-nows "hostname") " ") ""))
+#+END_SRC
 * Packages
 Package setup.
 
