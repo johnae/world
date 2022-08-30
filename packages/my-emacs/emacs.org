@@ -242,6 +242,10 @@ Some basic useful settings.
    )
    (add-hook 'prog-mode-hook 'display-line-numbers-mode)
  #+END_SRC
+*** Tweak modeline
+#+BEGIN_SRC elisp
+  (setq global-mode-string (string-join (list (jae/shell-command-to-string-nows "whoami") "@" (jae/shell-command-to-string-nows "hostname") " ") ""))
+#+END_SRC
 ** Utility functions
 Utility functions used here and there.
 *** Returns the output of a shell command without trailing whitespace
