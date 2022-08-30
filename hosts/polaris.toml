@@ -292,7 +292,6 @@ spec.postBuild.substituteFrom = [
 
 [config.services.jellyfin]
 enable = true
-openFirewall = true
 
 [config.environment.state."/keep"]
 directories = [
