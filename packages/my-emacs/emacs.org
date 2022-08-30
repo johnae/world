@@ -205,7 +205,7 @@ Some basic useful settings.
        (if (and wl-copy-process (process-live-p wl-copy-process))
            nil ; should return nil if we're the current paste owner
            (shell-command-to-string "wl-paste -n | tr -d \r")))
-     (when (display-graphic-p) 
+     (when (display-graphic-p)
        (setq interprogram-cut-function 'wl-copy)
        (setq interprogram-paste-function 'wl-paste)
      )
@@ -313,7 +313,7 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
  #+END_SRC
 *** Tweak modeline
 #+BEGIN_SRC elisp
-  (setq global-mode-string (string-join (list (jae/shell-command-to-string-nows "whoami") "@" (jae/shell-command-to-string-nows "hostname") " ") ""))
+  (add-to-list 'mode-line-misc-info (list (jae/shell-command-to-string-nows "whoami") "@" (jae/shell-command-to-string-nows "hostname") " "))
 #+END_SRC
 * Packages
 Package setup.
@@ -1690,7 +1690,7 @@ Package setup.
          )
        )
      #+END_SRC
-     
+
 ** Direnv integration
  Direnv integration - per buffer - for emacs.
  See: [[https://github.com/wbolster/emacs-direnv][https://github.com/purcell/envrc]]
@@ -1713,7 +1713,7 @@ Package setup.
             (quit)))))
    )
  #+END_SRC
- 
+
 ** Code formatting
 #+BEGIN_SRC elisp
   (use-package apheleia
@@ -1725,11 +1725,11 @@ Package setup.
       (cl-pushnew '(alejandra . ("alejandra")) apheleia-formatters :test #'equal)
       (cl-pushnew '(nix-mode . alejandra) apheleia-mode-alist :test #'equal)))
   #+END_SRC
-  
-  
-  
 
-  
+
+
+
+
 
 ** Use OSC 52 Escape sequence for copying to system clipboard
 #+BEGIN_SRC elisp
