@@ -289,23 +289,23 @@
     "fluxcd-install": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-ntzPoM7vCWAJQB051U1IKaLWJbTHC6OirryBf2Bcaqg=",
+        "narHash": "sha256-o3oof57Fd7Z58reKFiSCCArNsud5bxVJxRqQbMNMttc=",
         "type": "file",
-        "url": "https://github.com/fluxcd/flux2/releases/download/v0.32.0/install.yaml"
+        "url": "https://github.com/fluxcd/flux2/releases/download/v0.33.0/install.yaml"
       },
       "original": {
         "type": "file",
-        "url": "https://github.com/fluxcd/flux2/releases/download/v0.32.0/install.yaml"
+        "url": "https://github.com/fluxcd/flux2/releases/download/v0.33.0/install.yaml"
       }
     },
     "git-branchless": {
       "flake": false,
       "locked": {
-        "lastModified": 1661573333,
-        "narHash": "sha256-WGbTaljAHxQ5bnBbUU4irq0tkC8M7vLYcL7K9ZrI1IQ=",
+        "lastModified": 1661824345,
+        "narHash": "sha256-wI0VZes82qt0OTLGPgzOLJFsZGk9dxkLkfhTuyBnfV4=",
         "owner": "arxanas",
         "repo": "git-branchless",
-        "rev": "7be9b87bdda92d2d182300ac4645acc64e44d535",
+        "rev": "70b63c0fce04ecb570590f35cc890901df888994",
         "type": "github"
       },
       "original": {
@@ -370,11 +370,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1661573386,
-        "narHash": "sha256-pBEg8iY00Af/SAtU2dlmOAv+2x7kScaGlFRDjNoVJO8=",
+        "lastModified": 1661824092,
+        "narHash": "sha256-nSWLWytlXbeLrx5A+r5Pso7CvVrX5EgmIIXW/EXvPHQ=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "d89bdff445eadff03fe414e9c30486bc8166b72b",
+        "rev": "5bd66dc6cd967033489c69d486402b75d338eeb6",
         "type": "github"
       },
       "original": {
@@ -562,11 +562,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1661628722,
-        "narHash": "sha256-oR/7NhG7pPkACToUtaaT6hH+rONE2z5/4NzjoUwEZt8=",
+        "lastModified": 1661720780,
+        "narHash": "sha256-AJNGyaB2eKZAYaPNjBZOzap87yL+F9ZLaFzzMkvega0=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "324c8aaf25b2f2027af7798e5582ce3040a793b6",
+        "rev": "a63021a330d8d33d862a8e29924b42d73037dd37",
         "type": "github"
       },
       "original": {
@@ -579,11 +579,11 @@
     "notracking": {
       "flake": false,
       "locked": {
-        "lastModified": 1661679749,
-        "narHash": "sha256-kMxEP4hdgYulZsH7Ul56YJaNILRkj2BQQiWjJ81XgmA=",
+        "lastModified": 1661766341,
+        "narHash": "sha256-/38oRZOZ+2sSDND3ThM3ZjdnDmWqM+VVj1tgl485+dg=",
         "owner": "notracking",
         "repo": "hosts-blocklists",
-        "rev": "de01d2b87aad735f58ad54c8ee1eb4c6f0e71a0d",
+        "rev": "ffe4606366cad9247ce9f4785b9854953eb2d4c7",
         "type": "github"
       },
       "original": {
@@ -594,11 +594,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1661759587,
-        "narHash": "sha256-2bqKqcAMflaQp4gsMVLOwc5t+NWkE2HlaRni86e2RFo=",
+        "lastModified": 1661824642,
+        "narHash": "sha256-S7NNcWRlIw4zk3yc6m8kUv+Npmm8p+m+R9OBhmQ1BuM=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "4af65dab0d1099c5f0201a0a66eac5f0a8bd66c6",
+        "rev": "8c300a690914cb6bc08cd5c53a42986da2dfd12f",
         "type": "github"
       },
       "original": {
@@ -994,11 +994,11 @@
     "wlroots": {
       "flake": false,
       "locked": {
-        "lastModified": 1661715129,
-        "narHash": "sha256-PcxlIVbqiFrG0Kl5HBWnff/23Tmb6B9lPGo1XDKt46g=",
+        "lastModified": 1661789970,
+        "narHash": "sha256-0DRL3RthNaL0A1jaEehFPwMbCpHqzXHfH7WIwtjsdsA=",
         "ref": "master",
-        "rev": "eee0f5e71f4e3a6ded27d2d5046a243277c00ab8",
-        "revCount": 5673,
+        "rev": "78cf39b6bd7e82f6d55bb6ef2707f69da150e109",
+        "revCount": 5677,
         "type": "git",
         "url": "https://gitlab.freedesktop.org/wlroots/wlroots.git"
       },
