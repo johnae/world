@@ -204,7 +204,7 @@ flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = 
 sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
 cluster-secrets = { file = "secrets/k3s/cluster-secrets.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml" }
 
-mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337", path = "/home/john/.mbsync-insane" }
+mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
 authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
 
 [config.services.k3s]
@@ -302,8 +302,6 @@ directories = [
 
 [config.home-manager.users.john]
 profiles = [
-  "users/profiles/bat",
-  "users/profiles/emacs",
   "users/profiles/fish",
   "users/profiles/git",
   "users/profiles/kubie",
@@ -314,6 +312,25 @@ profiles = [
   "users/profiles/starship",
   "users/profiles/tmux",
 ]
+
+[config.home-manager.users.john.home.file.".emacs"]
+source = "${pkgs.my-emacs-config}"
+
+[config.home-manager.users.john.programs.bat]
+enable = true
+
+[config.home-manager.users.john.programs.emacs]
+enable = true
+package = "${pkgs.my-emacs}"
+
+[config.home-manager.users.john.services.emacs]
+enable = true
+package = "${pkgs.my-emacs}"
+socketActivation.enable = true
+
+[config.home-manager.users.john.systemd.user.services.emacs.Service]
+Environment = [ "COLORTERM=truecolor" ]
+LimitNOFILE = 16384
 
 [config.home-manager.users.john.userinfo]
 email = "john@insane.se"
@@ -335,6 +352,9 @@ settings.device_id = "d99037cd-bcbb-47cc-ac3b-75642e10dbb8"
 enable = true
 frequency = "*:0/5"
 
+[config.home-manager.users.john.services.imapnotify]
+enable = true
+
 [config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-roam"]
 repository = "git@github.com:johnae/org-roam"
 sshKey = "/run/agenix/id_ed25519_roam_updater"
@@ -353,7 +373,11 @@ flavor = "gmail.com"
 mbsync.enable = true
 mbsync.create = "both"
 mbsync.extraConfig.account.PipelineDepth = 10
-passwordCommand = "/run/current-system/sw/bin/cat ~/.mbsync-insane"
+passwordCommand = "${pkgs.coreutils}/bin/cat /run/agenix/mbsync-insane"
+imapnotify.enable = true
+imapnotify.boxes = [ "Inbox" ]
+imapnotify.onNotify = "${pkgs.isync}/bin/mbsync insane"
+imapnotify.onNotifyPost = "${pkgs.mu}/bin/mu index"
 
 [config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.gmail.channels]
 inbox.patterns = ["INBOX"]
