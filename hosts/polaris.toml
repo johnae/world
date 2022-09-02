@@ -8,6 +8,7 @@ profiles = [
   "profiles/hardware/ax41",
   "profiles/default_fs",
   "profiles/home-manager",
+  "profiles/jellyfin",
   "profiles/k3s",
   "profiles/server",
   "profiles/state",
@@ -19,9 +20,6 @@ profiles = [
 #disks = [ "/dev/nvme0n1", "/dev/nvme1n1" ]
 
 [config.programs.mosh]
-enable = true
-
-[config.hardware.opengl]
 enable = true
 
 [config.system.autoUpgrade]
@@ -289,9 +287,6 @@ spec.postBuild.substituteFrom = [
   { kind = "ConfigMap", name = "cluster-vars" },
   { kind = "Secret", name = "cluster-secrets" }
 ]
-
-[config.services.jellyfin]
-enable = true
 
 [config.environment.state."/keep"]
 directories = [
