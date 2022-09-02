@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: {
   services.jellyfin.enable = true;
   hardware.opengl = {
     enable = true;
