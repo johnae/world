@@ -315,6 +315,16 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
 #+BEGIN_SRC elisp
   (add-to-list 'mode-line-misc-info (list (jae/shell-command-to-string-nows "whoami") "@" (jae/shell-command-to-string-nows "hostname") " "))
 #+END_SRC
+*** Tab bar tweaks
+#+BEGIN_SRC elisp
+  (tab-bar-mode 1)
+  (tab-line-mode 1)
+  (set-face-attribute 'tab-bar-tab nil :inherit 'doom-modeline-panel :foreground nil :background nil)
+#+END_SRC
+*** Desktop save
+#+BEGIN_SRC elisp
+  (desktop-save-mode 1)
+#+END_SRC
 * Packages
 Package setup.
 
@@ -1725,7 +1735,6 @@ Package setup.
       (cl-pushnew '(alejandra . ("alejandra")) apheleia-formatters :test #'equal)
       (cl-pushnew '(nix-mode . alejandra) apheleia-mode-alist :test #'equal)))
   #+END_SRC
-
 
 
 
