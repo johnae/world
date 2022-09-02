@@ -96,6 +96,15 @@
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"
   '';
 
+  security.pam.loginLimits = [
+    {
+      domain = "*";
+      type = "-";
+      item = "nofile";
+      value = "16384";
+    }
+  ];
+
   environment.shells = [pkgs.bashInteractive pkgs.zsh pkgs.fish];
 
   programs.fish.enable = true;
