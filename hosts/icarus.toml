@@ -8,6 +8,7 @@ profiles = [
   "profiles/hardware/b550",
   "profiles/default_fs",
   "profiles/hidpi",
+  "profiles/jellyfin",
   "profiles/k3s",
   "profiles/server",
   "profiles/state",
@@ -134,3 +135,9 @@ with-node-id = true
 kubelet-arg.max-pods = 62
 node-label."topology.kubernetes.io/region" = "home"
 node-label."topology.kubernetes.io/zone" = "home"
+
+[config.environment.state."/keep"]
+directories = [
+  "/var/lib/jellyfin",
+  "/var/lib/media",
+]
