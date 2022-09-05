@@ -18,7 +18,6 @@
   inputs = {
     age-plugin-yubikey.flake = false;
     age-plugin-yubikey.url = "github:str4d/age-plugin-yubikey";
-    agenix.inputs.nixlib.follows = "nixlib";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
     alejandra.inputs.fenix.follows = "fenix";
@@ -70,7 +69,6 @@
     netns-exec.flake = false;
     netns-exec.url = "github:johnae/netns-exec";
     nix-misc.inputs.nixlib.follows = "nixlib";
-    nix-misc.inputs.nixpkgs.follows = "nixpkgs";
     nix-misc.url = "github:johnae/nix-misc";
     nixlib.url = "github:nix-community/nixpkgs.lib";
     nixos-hardware.url = "github:nixos/nixos-hardware";

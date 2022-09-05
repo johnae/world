@@ -11,7 +11,7 @@
     nativeBuildInputs = old: old ++ [pkgs.rustPlatform.bindgenHook pkgs.pkgconfig];
     buildInputs = old: old ++ [pkgs.rocksdb];
     doCheck = false;
-    cargoBuildFlags = "--bin conduit";
+    cargoBuildFlags = "--no-default-features --features conduit_bin,backend_sqlite,backend_rocksdb";
   };
 })
 .packages
