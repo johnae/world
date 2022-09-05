@@ -367,12 +367,12 @@ Package setup.
       "<SPC>s" '(tab-switch :which-key "switch to tab")
 
       "p" '(:ignore p :which-key "project")
-      "pp" '(consult-projectile :which-key "open file in project")
-      "ps" '(projectile-switch-project :which-key "switch project")
-      "pb" '(consult-buffer :which-key "switch buffer")
+      "pp" '(consult-project-extra-find :which-key "open file in project")
+      "ps" '(project-switch-project :which-key "switch project")
+      "pb" '(consult-project-buffer :which-key "switch buffer")
 
       "e" '(:ignore e :which-key "shells")
-      "ee" '(projectile-run-eshell :which-key "open eshell in project")
+      "ee" '(project-eshell :which-key "open eshell in project")
       "en" '(jae/eshell-new :which-key "open a new eshell instance")
       "et" '(multi-vterm-project :which-key "open vterm in project")
       "ey" '(multi-vterm :which-key "open new vterm instance ")
@@ -1117,41 +1117,34 @@ Package setup.
   ;;;; 1. project.el (the default)
   ;; (setq consult-project-function #'consult--default-project--function)
   ;;;; 2. projectile.el (projectile-project-root)
-  (autoload 'projectile-project-root "projectile")
-  (setq consult-project-function (lambda (_) (projectile-project-root)))
+  ;;(autoload 'projectile-project-root "projectile")
+  ;;(setq consult-project-function (lambda (_) (projectile-project-root)))
   ;;;; 3. vc.el (vc-root-dir)
   ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
   ;;;; 4. locate-dominating-file
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
 )
 #+END_SRC
-** Projectile
-*** The package itself
-   #+BEGIN_SRC elisp
-     (use-package projectile
-       :diminish projectile-mode
-       :demand t
-       :config (projectile-mode)
-       ;;:custom ((projectile-completion-system 'ivy))
-       :bind-keymap
-       ("C-c p" . projectile-command-map)
-       :init
-       (when (file-directory-p "~/Development")
-         (setq projectile-project-search-path '("~/Development"))
-        )
-       (setq projectile-switch-project-action #'projectile-dired)
-     )
-  #+END_SRC
-*** Consult projectile
-   #+BEGIN_SRC elisp
-     (use-package consult-projectile
-       :after projectile)
-   #+END_SRC
+** Consult project extra
+#+BEGIN_SRC elisp
+  (use-package consult-project-extra)
+#+END_SRC
+** Project
+The built-in emacs project.el
+#+BEGIN_SRC elisp
+  ;; I don't do anything but this
+  (setq project-switch-commands 'project-find-file)
+#+END_SRC
+
+Project tab groups build on top of project and tabs
+#+BEGIN_SRC elisp
+ (use-package project-tab-groups
+  :config
+  (project-tab-groups-mode 1))
+#+END_SRC
 ** Embark
 #+BEGIN_SRC elisp
   (use-package embark
-  :ensure t
-
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
    ("C-;" . embark-dwim)        ;; good alternative: M-.
@@ -1172,7 +1165,6 @@ Package setup.
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
-  :ensure t
   :after (embark consult)
   :demand t ; only necessary if you have the hook below
   ;; if you want to have consult previews as you move around an
