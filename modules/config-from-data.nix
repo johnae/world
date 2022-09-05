@@ -85,8 +85,6 @@ in {
       attrNames
       (filterAttrs (_: user: user.isNormalUser) config.users.users);
 
-    system.activationScripts.agenixRoot = mkIf (hasSecrets && hasState) {deps = ["stateSetup"];};
-
-    system.activationScripts.agenix = mkIf (hasSecrets && hasState) {deps = ["stateSetup"];};
+    system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState) {deps = ["stateSetup"];};
   };
 }
