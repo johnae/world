@@ -1142,6 +1142,18 @@ Project tab groups build on top of project and tabs
   :config
   (project-tab-groups-mode 1))
 #+END_SRC
+
+Tab bar groups to customize appearance of tabs
+#+BEGIN_SRC elisp
+      (use-package tab-bar-groups
+        :init
+        (setq
+         tab-bar-groups-colors '("white")
+         tab-bar-groups-appearances '(1)
+        )
+        :config
+        (tab-bar-groups-activate))
+#+END_SRC
 ** Embark
 #+BEGIN_SRC elisp
   (use-package embark
