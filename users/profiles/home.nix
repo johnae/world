@@ -13,7 +13,7 @@ in {
     pkgs.git-branchless
     pkgs.git-crypt
     pkgs.gnome3.nautilus
-    pkgs.google-cloud-sdk
+    pkgs.google-cloud-sdk-gke
     pkgs.kanshi
     pkgs.kubectl
     pkgs.kubectx

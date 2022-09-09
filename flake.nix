@@ -184,6 +184,9 @@
           inherit (self.packages.${prev.system}) nu;
         })
         (final: prev: {
+          google-cloud-sdk-gke = prev.google-cloud-sdk.withExtraComponents [prev.google-cloud-sdk.components.gke-gcloud-auth-plugin];
+        })
+        (final: prev: {
           kanshi = prev.kanshi.overrideAttrs (oa: {
             version = "1.3.0";
             src = inputs.kanshi;
