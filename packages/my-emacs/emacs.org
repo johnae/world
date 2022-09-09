@@ -320,10 +320,12 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
   (tab-bar-mode 1)
   (tab-line-mode 1)
   (set-face-attribute 'tab-bar-tab nil :inherit 'doom-modeline-panel :foreground nil :background nil)
+  (setq tab-bar-format 'tab-bar-format-tabs-groups)
 #+END_SRC
 *** Desktop save
 #+BEGIN_SRC elisp
   (desktop-save-mode 1)
+  (add-hook 'server-after-make-frame-hook 'desktop-read)
 #+END_SRC
 * Packages
 Package setup.
@@ -638,6 +640,10 @@ Package setup.
 *** Tao Theme
   #+BEGIN_SRC elisp
      (use-package tao-theme)
+  #+END_SRC
+*** Nano Theme
+  #+BEGIN_SRC elisp
+     (use-package nano-theme)
   #+END_SRC
 *** Set default theme
    #+BEGIN_SRC elisp
@@ -1135,24 +1141,12 @@ The built-in emacs project.el
   ;; I don't do anything but this
   (setq project-switch-commands 'project-find-file)
 #+END_SRC
-
+** Project Tab Groups
 Project tab groups build on top of project and tabs
 #+BEGIN_SRC elisp
- (use-package project-tab-groups
-  :config
-  (project-tab-groups-mode 1))
-#+END_SRC
-
-Tab bar groups to customize appearance of tabs
-#+BEGIN_SRC elisp
-      (use-package tab-bar-groups
-        :init
-        (setq
-         tab-bar-groups-colors '("white")
-         tab-bar-groups-appearances '(1)
-        )
-        :config
-        (tab-bar-groups-activate))
+  (use-package project-tab-groups
+   :config
+   (project-tab-groups-mode 1))
 #+END_SRC
 ** Embark
 #+BEGIN_SRC elisp
@@ -1739,7 +1733,6 @@ Tab bar groups to customize appearance of tabs
       (cl-pushnew '(alejandra . ("alejandra")) apheleia-formatters :test #'equal)
       (cl-pushnew '(nix-mode . alejandra) apheleia-mode-alist :test #'equal)))
   #+END_SRC
-
 
 
 
