@@ -318,9 +318,10 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
 *** Tab bar tweaks
 #+BEGIN_SRC elisp
   (tab-bar-mode 1)
-  (tab-line-mode 1)
+  ;;(tab-line-mode)
   (set-face-attribute 'tab-bar-tab nil :inherit 'doom-modeline-panel :foreground nil :background nil)
-  (setq tab-bar-format 'tab-bar-format-tabs-groups)
+  ;;(setq tab-bar-show nil)
+  ;;(setq tab-bar-format 'tab-bar-format-tabs-groups)
 #+END_SRC
 *** Desktop save
 #+BEGIN_SRC elisp
@@ -357,56 +358,61 @@ Package setup.
   #+END_SRC
 *** Leader key bindings
   #+BEGIN_SRC elisp
-    (jae/leader-keys
-      "t" '(:ignore t :which-key "toggles")
-      "tt" '(consult-theme :which-key "switch-theme")
+      (jae/leader-keys
+        "t" '(:ignore t :which-key "toggles")
+        "tt" '(consult-theme :which-key "switch-theme")
 
-      "<SPC>" '(:ignore p :which-key "tab")
-      "<SPC><right>" '(tab-next :which-key "next tab")
-      "<SPC><left>" '(tab-next :which-key "next tab")
-      "<SPC><up>" '(tab-new :which-key "new tab")
-      "<SPC><down>" '(tab-close :which-key "close tab")
-      "<SPC>s" '(tab-switch :which-key "switch to tab")
+        "<SPC>" '(:ignore p :which-key "tab")
+        "<SPC><right>" '(tab-next :which-key "next tab")
+        "<SPC><left>" '(tab-next :which-key "next tab")
+        "<SPC><up>" '(tab-new :which-key "new tab")
+        "<SPC><down>" '(tab-close :which-key "close tab")
+        "<SPC>s" '(tab-switch :which-key "switch to tab")
 
-      "p" '(:ignore p :which-key "project")
-      "pp" '(consult-project-extra-find :which-key "open file in project")
-      "ps" '(project-switch-project :which-key "switch project")
-      "pb" '(consult-project-buffer :which-key "switch buffer")
+        "a" '(:ignore p :which-key "embark")
+        "aa" '(embark-act :which-key "act")
+        "ad" '(embark-dwim :which-key "dwim")
+        "ab" '(embark-bindings :which-key "bindings")
 
-      "e" '(:ignore e :which-key "shells")
-      "ee" '(project-eshell :which-key "open eshell in project")
-      "en" '(jae/eshell-new :which-key "open a new eshell instance")
-      "et" '(multi-vterm-project :which-key "open vterm in project")
-      "ey" '(multi-vterm :which-key "open new vterm instance ")
+        "p" '(:ignore p :which-key "project")
+        "pp" '(consult-project-extra-find :which-key "open file in project")
+        "ps" '(project-switch-project :which-key "switch project")
+        "pb" '(consult-project-buffer :which-key "switch buffer")
 
-      "s" '(:ignore s :which-key "search")
-      "ss" '(consult-line :which-key "search buffer")
-      "sa" '(consult-ripgrep :which-key "search project")
+        "e" '(:ignore e :which-key "shells")
+        "ee" '(project-eshell :which-key "open eshell in project")
+        "en" '(jae/eshell-new :which-key "open a new eshell instance")
+        "et" '(multi-vterm-project :which-key "open vterm in project")
+        "ey" '(multi-vterm :which-key "open new vterm instance ")
 
-      "g" '(:ignore g :which-key "magit")
-      "gg" '(magit-status :which-key "magit status")
-      "gd" '(magit-dispatch :which-key "magit dispatch")
-      "gf" '(magit-file-dispatch :which-key "magit file dispatch")
+        "s" '(:ignore s :which-key "search")
+        "ss" '(consult-line :which-key "search buffer")
+        "sa" '(consult-ripgrep :which-key "search project")
 
-      "w" '(whitespace-cleanup :which-key "whitespace cleanup")
-      "b" '(previous-buffer :which-key "previous buffer")
-      "f" '(next-buffer :which-key "next buffer")
+        "g" '(:ignore g :which-key "magit")
+        "gg" '(magit-status :which-key "magit status")
+        "gd" '(magit-dispatch :which-key "magit dispatch")
+        "gf" '(magit-file-dispatch :which-key "magit file dispatch")
 
-      "o" '(:ignore o :which-key "orgmode")
-      ;"oa" '(counsel-projectile-org-agenda :which-key "org agenda")
-      ;"ot" '(counsel-projectile-org-capture :which-key "task capture")
-      "on" '(org-narrow-to-subtree :which-key "narrow to subtree")
-      "ow" '(widen :which-key "widen buffer to remove narrowing")
+        "w" '(whitespace-cleanup :which-key "whitespace cleanup")
+        "b" '(previous-buffer :which-key "previous buffer")
+        "f" '(next-buffer :which-key "next buffer")
 
-      "n" '(:ignore n :which-key "org-roam")
-      "nf" '(org-roam-node-find :which-key "roam node find")
-      "nr" '(org-roam-node-random :which-key "go to random node")
-      "ni" '(org-roam-node-insert :which-key "insert roam node")
-      "no" '(org-id-get-create :which-key "create org id")
-      "nt" '(org-roam-tag-add :which-key "add roam tag")
-      "na" '(org-roam-alias-add :which-key "add roam alias")
-      "nl" '(org-roam-buffer-toggle :which-key "toggle the roam buffer")
-     )
+        "o" '(:ignore o :which-key "orgmode")
+        ;"oa" '(counsel-projectile-org-agenda :which-key "org agenda")
+        ;"ot" '(counsel-projectile-org-capture :which-key "task capture")
+        "on" '(org-narrow-to-subtree :which-key "narrow to subtree")
+        "ow" '(widen :which-key "widen buffer to remove narrowing")
+
+        "n" '(:ignore n :which-key "org-roam")
+        "nf" '(org-roam-node-find :which-key "roam node find")
+        "nr" '(org-roam-node-random :which-key "go to random node")
+        "ni" '(org-roam-node-insert :which-key "insert roam node")
+        "no" '(org-id-get-create :which-key "create org id")
+        "nt" '(org-roam-tag-add :which-key "add roam tag")
+        "na" '(org-roam-alias-add :which-key "add roam alias")
+        "nl" '(org-roam-buffer-toggle :which-key "toggle the roam buffer")
+       )
   #+END_SRC
 *** General key bindings
   #+BEGIN_SRC elisp
@@ -1151,10 +1157,10 @@ Project tab groups build on top of project and tabs
 ** Embark
 #+BEGIN_SRC elisp
   (use-package embark
-  :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
-   ("C-;" . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+  ;:bind
+  ;(("C-a" . embark-act))         ;; pick some comfortable binding
+   ;; ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ;; ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
   :init
 
@@ -1733,7 +1739,6 @@ Project tab groups build on top of project and tabs
       (cl-pushnew '(alejandra . ("alejandra")) apheleia-formatters :test #'equal)
       (cl-pushnew '(nix-mode . alejandra) apheleia-mode-alist :test #'equal)))
   #+END_SRC
-
 
 
 
