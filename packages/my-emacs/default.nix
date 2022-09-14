@@ -14,9 +14,17 @@
   inputs,
   lib,
   makeWrapper,
-  emacsPkg ? pkgs.emacsPgtkNativeComp,
+  emacsPkg ? pkgs.emacsNativeComp.override { 
+              nativeComp = true;
+              withNS = false;
+              withX = false;
+              withGTK2 = false;
+              withGTK3 = false;
+              withWebP = false;
+  },
   ...
 }:
+
 emacsWithPackagesFromUsePackage {
   alwaysEnsure = true;
   alwaysTangle = true;
