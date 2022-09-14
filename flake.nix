@@ -45,7 +45,7 @@
     fish-kubectl-completions.url = "github:evanlucas/fish-kubectl-completions";
     flake-utils.url = "github:numtide/flake-utils";
     fluxcd-install.flake = false;
-    fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v0.33.0/install.yaml"; # gh-release-update
+    fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v0.34.0/install.yaml"; # gh-release-update
     git-branchless.flake = false;
     git-branchless.url = "github:arxanas/git-branchless";
     google-cloud-sdk-fish-completion.flake = false;
