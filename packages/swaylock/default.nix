@@ -1,20 +1,21 @@
 {
   stdenv,
   lib,
+  asciidoc,
+  cairo,
+  docbook_xsl,
+  gdk-pixbuf,
+  git,
+  libdrm,
+  libxkbcommon,
+  libxslt,
   meson,
   ninja,
+  pam,
   pkgconfig,
-  git,
-  asciidoc,
-  libxslt,
-  docbook_xsl,
   scdoc,
   wayland,
   wayland-protocols,
-  libxkbcommon,
-  cairo,
-  pam,
-  gdk-pixbuf,
   inputs,
   buildDocs ? true,
 }: let
@@ -29,7 +30,7 @@ in
     nativeBuildInputs =
       [meson ninja pkgconfig git]
       ++ lib.optional buildDocs [scdoc asciidoc libxslt docbook_xsl];
-    buildInputs = [wayland wayland-protocols cairo pam gdk-pixbuf libxkbcommon];
+    buildInputs = [wayland wayland-protocols cairo pam gdk-pixbuf libdrm libxkbcommon];
 
     mesonFlags = ["-Dauto_features=enabled"];
 
