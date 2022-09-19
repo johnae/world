@@ -251,7 +251,7 @@ in {
           s = "exec swaymsg 'mode default' && systemctl suspend-then-hibernate";
           h = "exec swaymsg 'mode default' && systemctl hibernate";
           r = "exec swaymsg 'mode default' && systemctl reboot";
-          l = "exec swaymsg 'mode default' && swaymsg exit";
+          l = "exec swaymsg 'mode default' && systemctl --user stop sway-session.target && swaymsg exit";
           Return = "mode default";
           Escape = "mode default";
         };
