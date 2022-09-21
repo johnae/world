@@ -178,6 +178,20 @@
         inputs.persway.overlays.default
         inputs.spotnix.overlays.default
         (final: prev: {
+          libdrm = prev.libdrm.overrideAttrs (oa: rec {
+            version = "2.4.113";
+            src = prev.fetchurl {
+              url = "https://dri.freedesktop.org/${oa.pname}/${oa.pname}-${version}.tar.xz";
+              sha256 = "sha256-f9frKWf2O+tGBvItUOJ32ZNIDQXvdd2Iqb2OZ3Mj5eE=";
+            };
+            mesonFlags = [
+              "-Dinstall-test-programs=true"
+              "-Domap=enabled"
+              "-Dcairo-tests=disabled"
+            ];
+          });
+        })
+        (final: prev: {
           inherit d2n;
         })
         (final: prev: {
@@ -372,6 +386,7 @@
               notracking = true;
               mosh = true;
               kanshi = true;
+              libdrm = true;
             }));
       }
     );
