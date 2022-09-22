@@ -7,6 +7,7 @@
 in {
   home.packages = [
     pkgs.alejandra
+    pkgs.bpb
     pkgs.cachix
     pkgs.element-desktop-wayland
     pkgs.fzf # # for certain utilities that depend on it

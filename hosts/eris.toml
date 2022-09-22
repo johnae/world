@@ -52,6 +52,7 @@ syncthing-cert = { file = "secrets/eris/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/eris/syncthing-key.age", owner = "1337" }
 mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
 authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
+bpb_keys = { file = "secrets/bpb_keys.toml.age", owner = "1337", path = "/home/john/.bpb_keys.toml" }
 
 [config.services.syncthing]
 enable = true
