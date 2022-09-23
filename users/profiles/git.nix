@@ -28,9 +28,6 @@ in {
       pull.rebase = true;
       rebase.autoStash = true;
       init.defaultBranch = "main";
-      gpg.program = "${pkgs.bpb}/bin/bpb";
-      commit.gpgSign = true;
-      tag.forceSignAnnotated = true;
       color = {
         ui = "auto";
         branch = "auto";
