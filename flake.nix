@@ -220,13 +220,16 @@
         (import ./containers/overlay.nix {inherit self inputs;})
         (import ./kubernetes/overlay.nix {inherit inputs;})
         (
+          final: prev: {
+            inherit (prev.callPackage ./utils/world.nix {}) world;
+          }
+        )
+        (
           final: prev: let
             default_flake = "github:johnae/world";
             flags = "--use-remote-sudo -L";
           in {
             nixos-upgrade = prev.writeStrictShellScriptBin "nixos-upgrade" ''
-              echo Clearing fetcher cache
-              echo rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
               rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
               flake=''${1:-${default_flake}}
               echo nixos-rebuild boot --flake "$flake" ${flags}
@@ -338,7 +341,7 @@
           }
           (
             {pkgs, ...}: {
-              environment.systemPackages = [pkgs.nixos-upgrade];
+              environment.systemPackages = [pkgs.nixos-upgrade pkgs.world];
             }
           )
           inputs.nixpkgs.nixosModules.notDetected
