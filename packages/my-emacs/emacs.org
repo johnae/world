@@ -572,6 +572,16 @@ Package setup.
        (require 'org-roam-protocol)
      )
    #+END_SRC
+** Denote
+#+BEGIN_SRC elisp
+  (use-package denote
+    :init
+    (setq denote-directory (expand-file-name "~/Development/denote/"))
+    (setq denote-known-keywords '("programming" "organization" "teams" "infrastructure" "devops"))
+    (setq denote-file-type nil)
+    :hook (dired-mode . denote-dired-mode)
+  )
+#+END_SRC
 ** Helpful
  #+BEGIN_SRC elisp
    (use-package helpful
@@ -1151,7 +1161,7 @@ Taken from: https://christiantietze.de/posts/2022/03/mark-local-project.el-direc
   "Local, non-VC-backed project.el root directories."
   :group 'project)
 
-(defcustom project-local-identifier ".project"
+(defcustom project-local-identifier '(".project" "flake.nix")
 "You can specify a single filename or a list of names."
   :type '(choice (string :tag "Single file")
                  (repeat (string :tag "Filename")))
@@ -1737,6 +1747,12 @@ Project tab groups build on top of project and tabs
             (typescript-mode . prettier-js-mode)
          )
        )
+     #+END_SRC
+
+*** Justfile
+**** The mode
+     #+BEGIN_SRC elisp
+       (use-package just-mode)
      #+END_SRC
 
 ** Direnv integration
