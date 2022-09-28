@@ -231,8 +231,13 @@ let light_theme = {
     shape_nothing: light_cyan
 }
 
+let carapace_completer = { |spans|
+    carapace $spans.0 nushell $spans | from json
+}
+
 # The default config record. This is where much of your global configuration is setup.
 let-env config = {
+  external_completer: $carapace_completer
   show_banner: false
   filesize_metric: false
   table_mode: rounded # basic, compact, compact_double, light, thin, with_love, rounded, reinforced, heavy, none, other
