@@ -14,6 +14,8 @@
   justfile = writeText "justfile" ''
     set shell := ["${nushell}/bin/nu", "-c"]
 
+    alias help := default
+
     default:
       @${just}/bin/just --list -f {{justfile()}} -d {{invocation_directory()}}
 
