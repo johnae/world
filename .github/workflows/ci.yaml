@@ -49,7 +49,7 @@ jobs:
           trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
     - run: |
         nix build .#images/push/all
-        ./result "$GITHUB_RUN_NUMBER"
+        ./result/bin/push-all-images "$GITHUB_RUN_NUMBER"
 
   pkgs_x86_64_linux:
     runs-on: ubuntu-latest
