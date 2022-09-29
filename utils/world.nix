@@ -48,7 +48,7 @@
       fi
       shopt -s globstar
       action="''${1:-}"
-      shift
+      shift || true
       if [ -z "$action" ]; then
          statix check
       else
