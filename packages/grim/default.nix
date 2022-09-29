@@ -3,7 +3,7 @@
   lib,
   meson,
   ninja,
-  pkgconfig,
+  pkg-config,
   wayland,
   wayland-protocols,
   cairo,
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = inputs.grim;
 
-  nativeBuildInputs = [meson ninja pkgconfig git scdoc];
+  nativeBuildInputs = [meson ninja pkg-config git scdoc];
   buildInputs = [wayland wayland-protocols cairo libjpeg systemd];
 
   meta = {

@@ -5,7 +5,7 @@
   gnused,
   meson,
   ninja,
-  pkgconfig,
+  pkg-config,
   wayland,
   wayland-protocols,
   git,
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     "-Dfishcompletiondir=no"
   ];
 
-  nativeBuildInputs = [meson ninja pkgconfig git];
+  nativeBuildInputs = [meson ninja pkg-config git];
   buildInputs = [wayland wayland-protocols];
 
   enableParallelBuilding = true;

@@ -3,7 +3,7 @@
   lib,
   meson,
   ninja,
-  pkgconfig,
+  pkg-config,
   substituteAll,
   scdoc,
   wayland,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [pkgconfig meson ninja scdoc];
+  nativeBuildInputs = [pkg-config meson ninja scdoc];
 
   buildInputs = [
     wayland

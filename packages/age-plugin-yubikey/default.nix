@@ -8,7 +8,7 @@
   inherit pkgs;
   source = inputs.age-plugin-yubikey;
   packageOverrides."^.*".addDeps = {
-    nativeBuildInputs = old: old ++ [pkgs.pkgconfig];
+    nativeBuildInputs = old: old ++ [pkgs.pkg-config];
     buildInputs = old: old ++ [pkgs.pcsclite];
     doCheck = false;
   };

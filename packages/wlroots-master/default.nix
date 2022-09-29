@@ -3,7 +3,7 @@
   lib,
   meson,
   ninja,
-  pkgconfig,
+  pkg-config,
   wayland,
   libGL,
   wayland-protocols,
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   outputs = ["out"];
 
-  nativeBuildInputs = [meson ninja pkgconfig xwayland];
+  nativeBuildInputs = [meson ninja pkg-config xwayland];
 
   mesonFlags =
     lib.optional (!enableXWayland) "-Dxwayland=disabled";

@@ -8,7 +8,7 @@
   inherit pkgs;
   source = inputs.spotifyd;
   packageOverrides."^.*".addDeps = {
-    nativeBuildInputs = old: old ++ [pkgs.pkgconfig];
+    nativeBuildInputs = old: old ++ [pkgs.pkg-config];
     buildInputs = old: old ++ [pkgs.libpulseaudio pkgs.openssl pkgs.alsaLib pkgs.dbus];
     doCheck = false;
     cargoBuildFlags = ["--features pulseaudio_backend,dbus_mpris"];

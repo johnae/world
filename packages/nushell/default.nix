@@ -8,7 +8,7 @@
   inherit pkgs;
   source = inputs.nushell;
   packageOverrides."^.*".addDeps = {
-    nativeBuildInputs = old: old ++ [pkgs.pkgconfig pkgs.python3];
+    nativeBuildInputs = old: old ++ [pkgs.pkg-config pkgs.python3];
     buildInputs = old: old ++ [pkgs.openssl pkgs.zstd pkgs.xorg.libX11];
     doCheck = false;
     buildFeatures = ["extra"];

@@ -3,7 +3,7 @@
   lib,
   meson,
   ninja,
-  pkgconfig,
+  pkg-config,
   git,
   scdoc,
   wayland,
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   src = inputs.swaybg;
 
   nativeBuildInputs =
-    [meson ninja pkgconfig git]
+    [meson ninja pkg-config git]
     ++ lib.optional buildDocs [scdoc];
   buildInputs = [wayland wayland-protocols cairo gdk-pixbuf];
 
