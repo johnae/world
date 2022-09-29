@@ -1,18 +1,11 @@
 {
   bash,
   wl-clipboard,
-  mkStrictShellScript,
+  writeShellApplication,
   lib,
-}: let
-  wl-copy = "${wl-clipboard}/bin/wl-copy";
-  wl-paste = "${wl-clipboard}/bin/wl-paste";
-in
-  mkStrictShellScript {
-    name = "xclip";
-    src = ./xclip.sh;
-    substitutions = {inherit bash wl-copy wl-paste;};
-    meta = {
-      license = lib.licenses.gpl3;
-      platforms = lib.platforms.linux;
-    };
-  }
+}:
+writeShellApplication {
+  name = "xclip";
+  text = builtins.readFile ./xclip.sh;
+  runtimeInputs = [bash wl-clipboard];
+}

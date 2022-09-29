@@ -68,8 +68,6 @@
     neatvnc.url = "github:any1/neatvnc";
     netns-exec.flake = false;
     netns-exec.url = "github:johnae/netns-exec";
-    nix-misc.inputs.nixlib.follows = "nixlib";
-    nix-misc.url = "github:johnae/nix-misc";
     nixlib.url = "github:nix-community/nixpkgs.lib";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -173,7 +171,6 @@
         inputs.devshell.overlay
         inputs.emacs-overlay.overlay
         inputs.fenix.overlay
-        inputs.nix-misc.overlay
         inputs.nur.overlay
         inputs.persway.overlays.default
         inputs.spotnix.overlays.default
@@ -225,28 +222,32 @@
           }
         )
         (
-          final: prev: let
-            default_flake = "github:johnae/world";
-            flags = "--use-remote-sudo -L";
-          in {
-            nixos-upgrade = prev.writeStrictShellScriptBin "nixos-upgrade" ''
-              rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
-              flake=''${1:-${default_flake}}
-              echo nixos-rebuild boot --flake "$flake" ${flags}
-              nixos-rebuild boot --flake "$flake" ${flags}
-              booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
-              built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
-              if [ "$booted" = "$built" ]; then
-                echo nixos-rebuild switch --flake "$flake" ${flags}
-                nixos-rebuild switch --flake "$flake" ${flags}
-              else
-                cat<<MSG
-                The system must be rebooted for the changes to take effect
-                this is because either all of or some of the kernel, the kernel
-                modules or initrd were updated
-              MSG
-              fi
-            '';
+          final: prev: {
+            nixos-upgrade = let
+              default_flake = "github:johnae/world";
+              flags = "--use-remote-sudo -L";
+            in
+              prev.writeShellApplication {
+                name = "nixos-upgrade";
+                text = ''
+                  rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
+                  flake=''${1:-${default_flake}}
+                  echo nixos-rebuild boot --flake "$flake" ${flags}
+                  nixos-rebuild boot --flake "$flake" ${flags}
+                  booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
+                  built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+                  if [ "$booted" = "$built" ]; then
+                    echo nixos-rebuild switch --flake "$flake" ${flags}
+                    nixos-rebuild switch --flake "$flake" ${flags}
+                  else
+                    cat<<MSG
+                    The system must be rebooted for the changes to take effect
+                    this is because either all of or some of the kernel, the kernel
+                    modules or initrd were updated
+                  MSG
+                  fi
+                '';
+              };
           }
         )
       ]

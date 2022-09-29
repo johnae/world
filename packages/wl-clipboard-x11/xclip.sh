@@ -1,7 +1,5 @@
-#!@bash@/bin/bash
-
-WL_COPY=@wl-copy@
-WL_PASTE=@wl-paste@
+WL_COPY=wl-copy
+WL_PASTE=wl-paste
 
 CLIPBOARD_BACKEND="WL_CLIPBOARD"
 CLIPBOARD_COMMAND="${WL_COPY}"

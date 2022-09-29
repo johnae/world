@@ -6,14 +6,11 @@
   grim,
   sway,
   swaylock,
-  mkStrictShellScript,
+  writeShellApplication,
   lib,
 }:
-mkStrictShellScript {
+writeShellApplication {
   name = "swaylock-dope";
-  src = ./swaylock-dope;
-  substitutions = {inherit stdenv blur bash jq grim sway swaylock;};
-  meta = {
-    platforms = lib.platforms.linux;
-  };
+  text = builtins.readFile ./swaylock-dope;
+  runtimeInputs = [blur jq grim sway swaylock];
 }

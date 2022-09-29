@@ -41,12 +41,15 @@
       ''
     )
   ];
-  turn = pkgs.writeStrictShellScript "turn" ''
-    export PATH=${pkgs.dig}/bin:${pkgs.coturn}/bin:$PATH
-    exec turnserver \
-      --log-file=stdout \
-      "$@"
-  '';
+  turn = pkgs.writeShellApplication {
+    name = "turn";
+    runtimeInputs = [pkgs.dig pkgs.coturn];
+    text = ''
+      exec turnserver \
+        --log-file=stdout \
+        "$@"
+    '';
+  };
 in
   dockerTools.buildLayeredImage {
     name = "${dockerRegistry}/coturn";
@@ -54,7 +57,7 @@ in
     maxLayers = 6;
     config = {
       WorkingDir = workingDir;
-      EntryPoint = ["${turn}"];
+      EntryPoint = ["${turn}/bin/turn"];
       ExposedPorts = {
         "${toString plainPort}/tcp" = {};
         "${toString securePort}/tcp" = {};

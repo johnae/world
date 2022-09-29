@@ -31,13 +31,16 @@
     '';
   };
 
-  river = pkgs.writeStrictShellScriptBin "river" ''
-    PATH=${pkgs.river}/bin:$PATH
-    export XDG_SESSION_TYPE=wayland
-    export XDG_CURRENT_DESKTOP=river
-    export XDG_SESSION_DESKTOP=river
-    exec river
-  '';
+  river = pkgs.writeShellApplication {
+    name = "river";
+    runtimeInputs = [pkgs.river];
+    text = ''
+      export XDG_SESSION_TYPE=wayland
+      export XDG_CURRENT_DESKTOP=river
+      export XDG_SESSION_DESKTOP=river
+      exec river
+    '';
+  };
 
   privateSway = withinNetNS "${sway}/bin/sway" {};
   privateFish = withinNetNS "${pkgs.fish}/bin/fish" {};
@@ -61,20 +64,26 @@
     eval "$RUN"
   '';
 
-  swayDrmDebug = pkgs.writeStrictShellScriptBin "sway-drm-debug" ''
-    echo 0xFE | sudo tee /sys/module/drm/parameters/debug # Enable verbose DRM logging
-    sudo dmesg -C
-    dmesg -w >dmesg.log & # Continuously write DRM logs to a file
-    sway -d >sway.log 2>&1 # Reproduce the bug, then exit sway
-    fg # Kill dmesg with Ctrl+C
-    echo 0x00 | sudo tee /sys/module/drm/parameters/debug
-  '';
+  swayDrmDebug = pkgs.writeShellApplication {
+    name = "sway-drm-debug";
+    text = ''
+      echo 0xFE | sudo tee /sys/module/drm/parameters/debug # Enable verbose DRM logging
+      sudo dmesg -C
+      dmesg -w >dmesg.log & # Continuously write DRM logs to a file
+      sway -d >sway.log 2>&1 # Reproduce the bug, then exit sway
+      fg # Kill dmesg with Ctrl+C
+      echo 0x00 | sudo tee /sys/module/drm/parameters/debug
+    '';
+  };
 
-  drmDebugLaunch = pkgs.writeStrictShellScriptBin "drm-debug-launch" ''
-    ln -s ${swayDrmDebug}/bin/sway-drm-debug ~/sway-drm-debug
-    echo Please execute ~/sway-drm-debug
-    ${pkgs.fish}/bin/fish
-  '';
+  drmDebugLaunch = pkgs.writeShellApplication {
+    name = "drm-debug-launch";
+    text = ''
+      ln -s ${swayDrmDebug}/bin/sway-drm-debug ~/sway-drm-debug
+      echo Please execute ~/sway-drm-debug
+      ${pkgs.fish}/bin/fish
+    '';
+  };
 
   launcher = genLauncher [
     {"sway" = "${pkgs.udev}/bin/systemd-cat --identifier=sway ${sway}/bin/sway";}

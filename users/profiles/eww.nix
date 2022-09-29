@@ -6,43 +6,52 @@
 }: let
   eww = pkgs.eww-wayland;
   ewwbin = "${eww}/bin/eww";
-  volumeListener = pkgs.writeStrictShellScriptBin "volume-listener" ''
-    PATH=${pkgs.pulseaudio}/bin:${pkgs.pamixer}/bin:$PATH
-    pamixer --get-volume
-    # shellcheck disable=SC2034
-    pactl subscribe | grep --line-buffered "sink" | while read -r line; do
+  volumeListener = pkgs.writeShellApplication {
+    name = "volume-listener";
+    text = ''
+      PATH=${pkgs.pulseaudio}/bin:${pkgs.pamixer}/bin:$PATH
       pamixer --get-volume
-    done
-  '';
+      # shellcheck disable=SC2034
+      pactl subscribe | grep --line-buffered "sink" | while read -r line; do
+        pamixer --get-volume
+      done
+    '';
+  };
 
-  setVolume = pkgs.writeStrictShellScriptBin "set-volume" ''
-    PATH=${pkgs.pamixer}/bin:$PATH
-    pamixer --set-volume "$(printf '%.0f' "$1")"
-  '';
+  setVolume = pkgs.writeShellApplication {
+    name = "set-volume";
+    text = ''
+      PATH=${pkgs.pamixer}/bin:$PATH
+      pamixer --set-volume "$(printf '%.0f' "$1")"
+    '';
+  };
 
-  rivertags = pkgs.writeStrictShellScriptBin "rivertags" ''
-    toyuck() {
-        active="$1"
-        shift
-        printf "(box :orientation \"h\" :class \"tags\" :space-evenly false :spacing 0 "
-        for ws in "$@"; do
-            tags=$((1 << (ws - 1)))
-            if [ "$ws" = "$active" ]; then
-              printf "(button :onclick \"${pkgs.river}/bin/riverctl set-focused-tags %s\" :class \"wsbutton wsactive\" \"$ws\")" "$tags"
-            else
-              printf "(button :onclick \"${pkgs.river}/bin/riverctl set-focused-tags %s\" :class \"wsbutton\" \"$ws\")" "$tags"
-            fi
-        done
-        printf ")\n"
-    }
+  rivertags = pkgs.writeShellApplication {
+    name = "rivertags";
+    text = ''
+      toyuck() {
+          active="$1"
+          shift
+          printf "(box :orientation \"h\" :class \"tags\" :space-evenly false :spacing 0 "
+          for ws in "$@"; do
+              tags=$((1 << (ws - 1)))
+              if [ "$ws" = "$active" ]; then
+                printf "(button :onclick \"${pkgs.river}/bin/riverctl set-focused-tags %s\" :class \"wsbutton wsactive\" \"$ws\")" "$tags"
+              else
+                printf "(button :onclick \"${pkgs.river}/bin/riverctl set-focused-tags %s\" :class \"wsbutton\" \"$ws\")" "$tags"
+              fi
+          done
+          printf ")\n"
+      }
 
-    while read -r state;
-    do
-        tags="$(echo "$state" | ${pkgs.jq}/bin/jq -r '"\(.tags[0].Unknown[0]) \([.viewstag[0].Unknown[], .tags[0].Unknown[]] | unique | join(" "))"' 2>/dev/null)"
-        # shellcheck disable=SC2086
-        toyuck $tags
-    done < <(${pkgs.ristate}/bin/ristate -vt -t -w)
-  '';
+      while read -r state;
+      do
+          tags="$(echo "$state" | ${pkgs.jq}/bin/jq -r '"\(.tags[0].Unknown[0]) \([.viewstag[0].Unknown[], .tags[0].Unknown[]] | unique | join(" "))"' 2>/dev/null)"
+          # shellcheck disable=SC2086
+          toyuck $tags
+      done < <(${pkgs.ristate}/bin/ristate -vt -t -w)
+    '';
+  };
 
   ewwYuck = pkgs.writeText "eww.yuck" ''
     (defvar wifi_reveal false)

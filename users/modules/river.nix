@@ -51,62 +51,65 @@
   writeConfig = conf: let
     inherit (conf) settings;
   in
-    pkgs.writeStrictShellScript "init-xkcd9000" ''
-      export PATH=${cfg.package}/bin:$PATH
-      set -x
+    pkgs.writeShellApplication {
+      name = "init-xkcd9000";
+      runtimeInputs = [cfg.package];
+      text = ''
+        set -x
 
-      ${
-        lib.concatStringsSep "\n" (map (mode: "riverctl ${mode}") settings.additional-modes)
-      }
+        ${
+          lib.concatStringsSep "\n" (map (mode: "riverctl ${mode}") settings.additional-modes)
+        }
 
-      ${
-        lib.concatStringsSep "\n" (mapSettings settings)
-      }
+        ${
+          lib.concatStringsSep "\n" (mapSettings settings)
+        }
 
-      for i in $(seq 1 9)
-      do
-          tags=$((1 << (i - 1)))
-          riverctl map normal Super "$i" set-focused-tags $tags
-          riverctl map normal Super+Shift "$i" set-view-tags $tags
-          riverctl map normal Super+Control "$i" toggle-focused-tags $tags
-          riverctl map normal Super+Shift+Control "$i" toggle-view-tags $tags
-      done
+        for i in $(seq 1 9)
+        do
+            tags=$((1 << (i - 1)))
+            riverctl map normal Super "$i" set-focused-tags $tags
+            riverctl map normal Super+Shift "$i" set-view-tags $tags
+            riverctl map normal Super+Control "$i" toggle-focused-tags $tags
+            riverctl map normal Super+Shift+Control "$i" toggle-view-tags $tags
+        done
 
-      all_tags=$(((1 << 32) - 1))
-      riverctl map normal Super 0 set-focused-tags "$all_tags"
-      riverctl map normal Super+Shift 0 set-view-tags "$all_tags"
+        all_tags=$(((1 << 32) - 1))
+        riverctl map normal Super 0 set-focused-tags "$all_tags"
+        riverctl map normal Super+Shift 0 set-view-tags "$all_tags"
 
-      for mode in normal locked
-      do
-          riverctl map $mode None XF86Eject spawn 'eject -T'
+        for mode in normal locked
+        do
+            riverctl map $mode None XF86Eject spawn 'eject -T'
 
-          riverctl map $mode None XF86AudioRaiseVolume  spawn 'pamixer -i 5'
-          riverctl map $mode None XF86AudioLowerVolume  spawn 'pamixer -d 5'
-          riverctl map $mode None XF86AudioMute         spawn 'pamixer --toggle-mute'
+            riverctl map $mode None XF86AudioRaiseVolume  spawn 'pamixer -i 5'
+            riverctl map $mode None XF86AudioLowerVolume  spawn 'pamixer -d 5'
+            riverctl map $mode None XF86AudioMute         spawn 'pamixer --toggle-mute'
 
-          riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
-          riverctl map $mode None XF86AudioPlay  spawn 'playerctl play-pause'
-          riverctl map $mode None XF86AudioPrev  spawn 'playerctl previous'
-          riverctl map $mode None XF86AudioNext  spawn 'playerctl next'
+            riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
+            riverctl map $mode None XF86AudioPlay  spawn 'playerctl play-pause'
+            riverctl map $mode None XF86AudioPrev  spawn 'playerctl previous'
+            riverctl map $mode None XF86AudioNext  spawn 'playerctl next'
 
-          riverctl map $mode None XF86MonBrightnessUp   spawn 'light -A 5'
-          riverctl map $mode None XF86MonBrightnessDown spawn 'light -U 5'
-      done
+            riverctl map $mode None XF86MonBrightnessUp   spawn 'light -A 5'
+            riverctl map $mode None XF86MonBrightnessDown spawn 'light -U 5'
+        done
 
-      ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources || true
-      ${pkgs.gnome3.gnome-settings-daemon}/libexec/gsd-xsettings || true
-      ${pkgs.dbus.out}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+        ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources || true
+        ${pkgs.gnome3.gnome-settings-daemon}/libexec/gsd-xsettings || true
+        ${pkgs.dbus.out}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
-      systemctl --user import-environment
-      systemctl --user restart graphical-session.target
-      systemctl --user restart sway-session.target
+        systemctl --user import-environment
+        systemctl --user restart graphical-session.target
+        systemctl --user restart sway-session.target
 
-      ${
-        lib.concatStringsSep "\n" settings.exec
-      }
+        ${
+          lib.concatStringsSep "\n" settings.exec
+        }
 
-      exec ${settings.layout-generator-exec}
-    '';
+        exec ${settings.layout-generator-exec}
+      '';
+    };
 in {
   options.wayland.windowManager.river = {
     enable = mkEnableOption "Enable the river compositor";

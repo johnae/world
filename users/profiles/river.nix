@@ -24,26 +24,27 @@
       "1739:52620:SYNA8005:00_06CB:CD8C_Touchpad"
     ]);
 
-  river-menu = pkgs.writeStrictShellScriptBin "river-menu" ''
-    export PATH=${pkgs.rofi-wayland}/bin''${PATH:+:}$PATH
+  river-menu = pkgs.writeShellApplication {
+    name = "river-menu";
+    runtimeInputs = [pkgs.rofi-wayland];
+    text = ''
 
-    ACTION="$(echo -e "logout\npoweroff\nreboot\nhibernate\nsuspend" | rofi -normal-window -matching fuzzy -i -dmenu)"
-    if [ "$ACTION" = "logout" ]; then
-      riverctl exit
-    elif [ "$ACTION" = "poweroff" ]; then
-      systemctl poweroff
-    elif [ "$ACTION" = "hibernate" ]; then
-      systemctl hibernate
-    elif [ "$ACTION" = "reboot" ]; then
-      systemctl reboot
-    elif [ "$ACTION" = "suspend" ]; then
-      systemctl suspend-then-hibernate
-    else
-      echo "Unknown action" 1>&2
-    fi
-
-
-  '';
+      ACTION="$(echo -e "logout\npoweroff\nreboot\nhibernate\nsuspend" | rofi -normal-window -matching fuzzy -i -dmenu)"
+      if [ "$ACTION" = "logout" ]; then
+        riverctl exit
+      elif [ "$ACTION" = "poweroff" ]; then
+        systemctl poweroff
+      elif [ "$ACTION" = "hibernate" ]; then
+        systemctl hibernate
+      elif [ "$ACTION" = "reboot" ]; then
+        systemctl reboot
+      elif [ "$ACTION" = "suspend" ]; then
+        systemctl suspend-then-hibernate
+      else
+        echo "Unknown action" 1>&2
+      fi
+    '';
+  };
 in {
   home.packages = [
     pkgs.kile

@@ -34,79 +34,97 @@
 
   ## can be removed when grouped devices works (i.e yubikey is causing issues here), see: https://github.com/swaywm/sway/issues/6011
   ## and: https://github.com/swaywm/sway/pull/6740
-  toggleKeyboardLayouts = pkgs.writeStrictShellScriptBin "toggle-keyboard-layouts" ''
-    export PATH=${pkgs.jq}/bin''${PATH:+:}$PATH
-    current_layout="$(swaymsg -t get_inputs -r | jq -r "[.[] | select(.xkb_active_layout_name != null)][0].xkb_active_layout_name")"
-    if [ "$current_layout" = "English (US)" ]; then
-    swaymsg 'input type:keyboard xkb_layout "se,us"'
-    else
-    swaymsg 'input type:keyboard xkb_layout "us,se"'
-    fi
-    swaymsg 'input type:keyboard xkb_model pc105'
-    swaymsg 'input type:keyboard xkb_options "ctrl:nocaps,grp:switch"'
-    swaymsg 'input type:keyboard xkb_variant ""'
-  '';
-
-  randomPicsumBackground = pkgs.writeStrictShellScriptBin "random-picsum-background" ''
-    category=''${1:-nature}
-    ${pkgs.curl}/bin/curl --silent --fail-with-body -Lo /tmp/wallpaper.jpg 'https://source.unsplash.com/featured/3200x1800/?'"$category" 2>/dev/null
-    if [ -e "$HOME"/Pictures/wallpaper.jpg ]; then
-    mv "$HOME"/Pictures/wallpaper.jpg "$HOME"/Pictures/previous-wallpaper.jpg
-    fi
-    mv /tmp/wallpaper.jpg "$HOME"/Pictures/wallpaper.jpg
-    echo "$HOME"/Pictures/wallpaper.jpg
-  '';
-
-  swayBackground = pkgs.writeStrictShellScriptBin "sway-background" ''
-    category=''${1:-nature,abstract,space}
-    BG=$(${randomPicsumBackground}/bin/random-picsum-background "$category")
-    exec swaymsg "output * bg '$BG' fill"
-  '';
-
-  rotatingBackground = pkgs.writeStrictShellScriptBin "rotating-background" ''
-    category=''${1:-art,abstract,space}
-    while true; do
-    if ! ${swayBackground}/bin/sway-background "$category"; then
-      if [ -e "$HOME/Pictures/wallpaper.jpg" ] && [ "$(stat -c "$HOME/Pictures/wallpaper.jpg")" -ge 50000 ]; then
-        exec swaymsg "output * bg '$HOME/Pictures/wallpaper.jpg' fill"
+  toggleKeyboardLayouts = pkgs.writeShellApplication {
+    name = "toggle-keyboard-layouts";
+    text = ''
+      export PATH=${pkgs.jq}/bin''${PATH:+:}$PATH
+      current_layout="$(swaymsg -t get_inputs -r | jq -r "[.[] | select(.xkb_active_layout_name != null)][0].xkb_active_layout_name")"
+      if [ "$current_layout" = "English (US)" ]; then
+      swaymsg 'input type:keyboard xkb_layout "se,us"'
       else
-        exec swaymsg "output * bg '$HOME/Pictures/default-background.jpg' fill"
+      swaymsg 'input type:keyboard xkb_layout "us,se"'
       fi
-    fi
-    sleep 600
-    done
-  '';
+      swaymsg 'input type:keyboard xkb_model pc105'
+      swaymsg 'input type:keyboard xkb_options "ctrl:nocaps,grp:switch"'
+      swaymsg 'input type:keyboard xkb_variant ""'
+    '';
+  };
 
-  swayFocusWindow = pkgs.writeStrictShellScriptBin "sway-focus-window" ''
-    export SK_OPTS="--no-bold --color=bw  --height=40 --reverse --no-hscroll --no-mouse"
-    window="$(${pkgs.sway}/bin/swaymsg -t get_tree | \
-              ${pkgs.jq}/bin/jq -r '.nodes | .[] | .nodes | . [] | select(.nodes != null) | .nodes | .[] | select(.name != null) | "\(.id?) \(.name?)"' | \
-              ${pkgs.scripts}/bin/sk-sk | \
-              awk '{print $1}')"
-    ${pkgs.sway}/bin/swaymsg "[con_id=$window] focus"
-  '';
-
-  swayOnReload = pkgs.writeStrictShellScriptBin "sway-on-reload" ''
-    LID=/proc/acpi/button/lid/LID
-    if [ ! -e "$LID" ]; then
-      LID=/proc/acpi/button/lid/LID0
-    fi
-    if [ -e "$LID" ]; then
-      if grep -q open "$LID"/state; then
-          swaymsg output eDP-1 enable
-      else
-          swaymsg output eDP-1 disable
+  randomPicsumBackground = pkgs.writeShellApplication {
+    name = "random-picsum-background";
+    text = ''
+      category=''${1:-nature}
+      ${pkgs.curl}/bin/curl --silent --fail-with-body -Lo /tmp/wallpaper.jpg 'https://source.unsplash.com/featured/3200x1800/?'"$category" 2>/dev/null
+      if [ -e "$HOME"/Pictures/wallpaper.jpg ]; then
+      mv "$HOME"/Pictures/wallpaper.jpg "$HOME"/Pictures/previous-wallpaper.jpg
       fi
-    fi
+      mv /tmp/wallpaper.jpg "$HOME"/Pictures/wallpaper.jpg
+      echo "$HOME"/Pictures/wallpaper.jpg
+    '';
+  };
 
-    ${
-      lib.optionalString config.services.kanshi.enable
-      ''
-        systemctl restart --user kanshi.service
-      ''
-    }
+  swayBackground = pkgs.writeShellApplication {
+    name = "sway-background";
+    text = ''
+      category=''${1:-nature,abstract,space}
+      BG=$(${randomPicsumBackground}/bin/random-picsum-background "$category")
+      exec swaymsg "output * bg '$BG' fill"
+    '';
+  };
 
-  '';
+  rotatingBackground = pkgs.writeShellApplication {
+    name = "rotating-background";
+    text = ''
+      category=''${1:-art,abstract,space}
+      while true; do
+      if ! ${swayBackground}/bin/sway-background "$category"; then
+        if [ -e "$HOME/Pictures/wallpaper.jpg" ] && [ "$(stat -c "$HOME/Pictures/wallpaper.jpg")" -ge 50000 ]; then
+          exec swaymsg "output * bg '$HOME/Pictures/wallpaper.jpg' fill"
+        else
+          exec swaymsg "output * bg '$HOME/Pictures/default-background.jpg' fill"
+        fi
+      fi
+      sleep 600
+      done
+    '';
+  };
+
+  swayFocusWindow = pkgs.writeShellApplication {
+    name = "sway-focus-window";
+    text = ''
+      export SK_OPTS="--no-bold --color=bw  --height=40 --reverse --no-hscroll --no-mouse"
+      window="$(${pkgs.sway}/bin/swaymsg -t get_tree | \
+                ${pkgs.jq}/bin/jq -r '.nodes | .[] | .nodes | . [] | select(.nodes != null) | .nodes | .[] | select(.name != null) | "\(.id?) \(.name?)"' | \
+                ${pkgs.scripts}/bin/sk-sk | \
+                awk '{print $1}')"
+      ${pkgs.sway}/bin/swaymsg "[con_id=$window] focus"
+    '';
+  };
+
+  swayOnReload = pkgs.writeShellApplication {
+    name = "sway-on-reload";
+    text = ''
+      LID=/proc/acpi/button/lid/LID
+      if [ ! -e "$LID" ]; then
+        LID=/proc/acpi/button/lid/LID0
+      fi
+      if [ -e "$LID" ]; then
+        if grep -q open "$LID"/state; then
+            swaymsg output eDP-1 enable
+        else
+            swaymsg output eDP-1 disable
+        fi
+      fi
+
+      ${
+        lib.optionalString config.services.kanshi.enable
+        ''
+          systemctl restart --user kanshi.service
+        ''
+      }
+
+    '';
+  };
 
   fonts = {
     names = ["Roboto" "Font Awesome 5 Free" "Font Awesome 5 Brands" "Arial" "sans-serif"];

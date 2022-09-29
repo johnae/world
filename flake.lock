@@ -509,26 +509,6 @@
         "type": "github"
       }
     },
-    "nix-misc": {
-      "inputs": {
-        "nixlib": [
-          "nixlib"
-        ]
-      },
-      "locked": {
-        "lastModified": 1640300519,
-        "narHash": "sha256-kZvGxEoqxagLiYpEf0Vfnp9UTb5CJKH/PZKsFw5EihY=",
-        "owner": "johnae",
-        "repo": "nix-misc",
-        "rev": "eb9de1a757cf17432310c38404ca823c5498bf26",
-        "type": "github"
-      },
-      "original": {
-        "owner": "johnae",
-        "repo": "nix-misc",
-        "type": "github"
-      }
-    },
     "nixlib": {
       "locked": {
         "lastModified": 1662858143,
@@ -756,7 +736,6 @@
         "mosh": "mosh",
         "neatvnc": "neatvnc",
         "netns-exec": "netns-exec",
-        "nix-misc": "nix-misc",
         "nixlib": "nixlib",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",

@@ -2,14 +2,11 @@
   bash,
   gnugrep,
   socat,
-  mkStrictShellScript,
+  writeShellApplication,
   lib,
 }:
-mkStrictShellScript {
+writeShellApplication {
   name = "netns-dbus-proxy";
-  src = ./netns-dbus-proxy.sh;
-  substitutions = {inherit bash gnugrep socat;};
-  meta = {
-    platforms = lib.platforms.linux;
-  };
+  text = builtins.readFile ./netns-dbus-proxy.sh;
+  runtimeInputs = [bash gnugrep socat];
 }

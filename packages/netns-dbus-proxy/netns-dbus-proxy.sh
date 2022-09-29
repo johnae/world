@@ -1,8 +1,3 @@
-#!@bash@/bin/bash
-
-PATH=@gnugrep@/bin:@socat@/bin${PATH:+:}$PATH
-export PATH
-
 dbus_addr="$DBUS_SESSION_BUS_ADDRESS"
 
 is_abstract() {

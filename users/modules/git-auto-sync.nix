@@ -27,41 +27,44 @@
     name = baseNameOf path;
     parent = dirOf path;
   in
-    pkgs.writeStrictShellScriptBin "repo-sync" ''
-      export PATH=${pkgs.inotifyTools}/bin:${pkgs.gitMinimal}/bin:${pkgs.openssh}/bin:$PATH
-      ssh_identity="${sshKey}"
-      if [ ! -e "$ssh_identity" ]; then
-        echo "$ssh_identity" missing
-        exit 1
-      fi
-      GIT_SSH_COMMAND="ssh -i $ssh_identity -o IdentitiesOnly=yes -o ControlMaster=no -o ControlPath=/dev/null"
-      export GIT_SSH_COMMAND
-
-      if [ ! -d ${path} ]; then
-        cd ${parent}
-        git clone ${repository}
-        cd ~
-      fi
-
-      echo Starting ${name} git sync
-      cd ${path}
-
-      while inotifywait -e create,move_self,attrib,delete,moved_to,close_write,delete_self,moved_from,modify,move -t 300 -r .; do
-        echo Changes detected
-        git add -A .
-        if ! git diff --staged --quiet; then
-          echo Committing changes
-          git commit -m "Auto-commit"
-        else
-          echo No changes to commit
+    pkgs.writeShellApplication {
+      name = "repo-sync";
+      runtimeInputs = with pkgs; [inotifyTools gitMinimal openssh];
+      text = ''
+        ssh_identity="${sshKey}"
+        if [ ! -e "$ssh_identity" ]; then
+          echo "$ssh_identity" missing
+          exit 1
         fi
-        echo Pulling changes from remote
-        git pull
-        echo Pushing changes to remote
-        git push
-        git status
-      done
-    '';
+        GIT_SSH_COMMAND="ssh -i $ssh_identity -o IdentitiesOnly=yes -o ControlMaster=no -o ControlPath=/dev/null"
+        export GIT_SSH_COMMAND
+
+        if [ ! -d ${path} ]; then
+          cd ${parent}
+          git clone ${repository}
+          cd ~
+        fi
+
+        echo Starting ${name} git sync
+        cd ${path}
+
+        while inotifywait -e create,move_self,attrib,delete,moved_to,close_write,delete_self,moved_from,modify,move -t 300 -r .; do
+          echo Changes detected
+          git add -A .
+          if ! git diff --staged --quiet; then
+            echo Committing changes
+            git commit -m "Auto-commit"
+          else
+            echo No changes to commit
+          fi
+          echo Pulling changes from remote
+          git pull
+          echo Pushing changes to remote
+          git push
+          git status
+        done
+      '';
+    };
 in {
   options.services.gitAutoSync = {
     repos = mkOption {
