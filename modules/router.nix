@@ -209,7 +209,6 @@ in {
       enable = cfg.dnsCrypt;
       settings = {
         bootstrap_resolvers = ["1.1.1.1:53" "1.0.0.1:53"];
-        ipv6_servers = true;
         require_dnssec = true;
         require_nolog = true;
         require_nofilter = true;
