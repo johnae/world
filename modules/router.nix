@@ -213,6 +213,13 @@ in {
         require_dnssec = true;
         require_nolog = true;
         require_nofilter = true;
+        block_ipv6 = true;
+        ipv6_servers = false;
+        cache_size = 4096;
+        cache_min_ttl = 2400;
+        cache_max_ttl = 86400;
+        cache_neg_min_ttl = 30;
+        cache_neg_max_ttl = 600;
         timeout = 2500;
         keepalive = 30;
         ignore_system_dns = true;
@@ -241,12 +248,14 @@ in {
     services.dnsmasq.extraConfig = ''
       dnssec
       conf-file=${pkgs.dnsmasq}/share/dnsmasq/trust-anchors.conf
-      cache-size=10000
+      cache-size=150
       log-queries
       domain-needed
       bogus-priv
       filterwin2k
       no-hosts
+      neg-ttl=5
+      clear-on-reload
       addn-hosts=${config.environment.etc.hosts.source}
       listen-address=::1,127.0.0.1,${concatStringsSep "," ((mapAttrsToList (_: config: config.address) internalInterfaces) ++ cfg.dnsmasqAdditionalListenAddresses)}
 
