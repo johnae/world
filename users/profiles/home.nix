@@ -5,36 +5,38 @@
 }: let
   inherit (config) home;
 in {
-  home.packages = [
-    pkgs.alejandra
-    pkgs.carapace
-    pkgs.cachix
-    pkgs.element-desktop-wayland
-    pkgs.fzf # # for certain utilities that depend on it
-    pkgs.git-branchless
-    pkgs.git-crypt
-    pkgs.gnome3.nautilus
-    pkgs.google-cloud-sdk-gke
-    pkgs.kanshi
-    pkgs.kubectl
-    pkgs.kubectx
-    pkgs.kubelogin-oidc
-    pkgs.kustomize
-    pkgs.lm_sensors
-    pkgs.mako
-    pkgs.netns-dbus-proxy
-    pkgs.nix-index
-    pkgs.nordic
-    pkgs.playerctl
-    pkgs.pueue
-    pkgs.rnix-lsp
-    pkgs.rust-analyzer-bin
-    pkgs.scripts
-    pkgs.spotifyd
-    pkgs.spotnix
-    pkgs.wl-clipboard
-    pkgs.wl-clipboard-x11
-    pkgs.xdg_utils
+  home.packages = with pkgs; [
+    alejandra
+    carapace
+    cachix
+    element-desktop-wayland
+    fzf # # for certain utilities that depend on it
+    git-branchless
+    git-crypt
+    gnome3.nautilus
+    google-cloud-sdk-gke
+    kanshi
+    kubectl
+    kubectx
+    kubelogin-oidc
+    kustomize
+    lm_sensors
+    mako
+    netns-dbus-proxy
+    nix-index
+    nordic
+    playerctl
+    pueue
+    rnix-lsp
+    rust-analyzer-bin
+    scripts
+    spotifyd
+    spotnix
+    wl-clipboard
+    wl-clipboard-x11
+    xdg_utils
+    jellyfin-media-player
+    jftui
   ];
 
   home.sessionVariables = {
