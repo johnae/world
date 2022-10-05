@@ -1,9 +1,22 @@
-{pkgs, ...}: {
+{pkgs, ...}: let
+  runSway = pkgs.writeShellApplication {
+    name = "run-sway";
+    text = ''
+      exec ${pkgs.udev}/bin/systemd-cat --identifier=sway sway
+    '';
+  };
+  runSwayViaShell = pkgs.writeShellApplication {
+    name = "run-sway-via-shell";
+    text = ''
+      "$SHELL" -l -c "exec ${runSway}/bin/run-sway"
+    '';
+  };
+in {
   services.greetd = {
     enable = true;
     restart = true;
     settings = {
-      default_session.command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway";
+      default_session.command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd ${runSwayViaShell}/bin/run-sway-via-shell";
     };
   };
   ## prevents systemd spewing the console with log messages when greeter is active
