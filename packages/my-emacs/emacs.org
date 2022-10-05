@@ -417,6 +417,10 @@ Package setup.
      "C-a" 'embark-act
      "C-c C-p" 'wgrep-change-to-wgrep-mode
     )
+    (general-define-key
+     :keymaps 'normal
+     "<right>" 'string-inflection-all-cycle
+     )
   #+END_SRC
 ** Org mode packages
 *** Org mode itself
@@ -1754,7 +1758,10 @@ Project tab groups build on top of project and tabs
      #+BEGIN_SRC elisp
        (use-package just-mode)
      #+END_SRC
-
+** String inflection
+#+BEGIN_SRC elisp
+  (use-package string-inflection)
+#+END_SRC
 ** Direnv integration
  Direnv integration - per buffer - for emacs.
  See: [[https://github.com/wbolster/emacs-direnv][https://github.com/purcell/envrc]]
