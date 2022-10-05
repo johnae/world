@@ -4,7 +4,7 @@
   config,
   ...
 }: let
-  home = config.home;
+  inherit (config) home;
 in {
   programs.nushell = {
     enable = true;
