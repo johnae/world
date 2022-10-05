@@ -41,10 +41,11 @@ in {
   ];
 
   home.sessionVariables = {
-    EDITOR = "emacsclient -c -a=";
-    VISUAL = "emacsclient -c -a=";
+    EDITOR = "emacsclient -t -a=";
+    VISUAL = "emacsclient -t -a=";
     KUBECONFIG = "/home/${home.username}/.kube/config";
     COLORTERM = "truecolor";
+    NIXOS_OZONE_WL = "1";
   };
 
   xdg.enable = true;
