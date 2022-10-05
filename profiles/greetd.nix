@@ -8,7 +8,7 @@
   runSwayViaShell = pkgs.writeShellApplication {
     name = "run-sway-via-shell";
     text = ''
-      "$SHELL" -l -c "exec ${runSway}/bin/run-sway"
+      exec "$SHELL" -l -c "exec ${runSway}/bin/run-sway"
     '';
   };
 in {
