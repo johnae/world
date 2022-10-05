@@ -30,6 +30,7 @@ in {
     rnix-lsp
     rust-analyzer-bin
     scripts
+    slack
     spotifyd
     spotnix
     wl-clipboard
