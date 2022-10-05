@@ -280,7 +280,14 @@ in {
         "${modifier}+x" = ''mode "disabled keybindings"'';
         "${modifier}+r" = ''mode "resize"'';
 
-        "${modifier}+Tab" = ''exec ${pkgs.scripts}/bin/scripts ${swayFocusWindow}/bin/sway-focus-window'';
+        "${modifier}+Tab" = ''exec ${swayFocusWindow}/bin/sway-focus-window'';
+
+        "${modifier}+Control+Tab" = "[con_mark=_swap] unmark _swap; mark --add _swap; [con_mark=_prev] focus; swap container with mark _swap; [con_mark=_swap] unmark _swap";
+        "${modifier}+Control+Left" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus left; swap container with mark _swap; [con_mark=_swap] unmark _swap";
+        "${modifier}+Control+Right" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus right; swap container with mark _swap; [con_mark=_swap] unmark _swap";
+        "${modifier}+Control+Down" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus down; swap container with mark _swap; [con_mark=_swap] unmark _swap";
+        "${modifier}+Control+x" = "[con_mark=_swap] unmark _swap; mark --add _swap";
+        "${modifier}+Control+s" = "swap container with mark _swap; [con_mark=_swap] unmark _swap";
 
         "${modifier}+t" = ''exec ${pkgs.scripts}/bin/rofi-spotify-search track'';
         "${modifier}+p" = ''exec ${pkgs.scripts}/bin/rofi-spotify-search playlist'';
@@ -298,7 +305,6 @@ in {
         "${modifier}+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle open'';
         "${modifier}+Shift+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle none'';
 
-        "${modifier}+Shift+Return" = ''exec emacsclient -c -n -a= --eval '(jae/eshell-new)' '';
         "${modifier}+Return" = ''exec ${pkgs.alacritty}/bin/alacritty'';
         "${modifier}+d" = ''exec ${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes "drun,run"'';
 
@@ -307,7 +313,9 @@ in {
 
         "${modifier}+b" = ''exec ${swayBackground}/bin/sway-background'';
 
-        "${modifier}+Shift+e" = ''exec emacsclient -c -n -a='';
+        "${modifier}+Shift+e" = ''exec ${pkgs.alacritty}/bin/alacritty --class emacs -e emacsclient -t -a=""'';
+
+        "${modifier}+Shift+s" = ''exec ${pkgs.alacritty}/bin/alacritty --class emacs -e emacsclient -t -a=""'';
 
         "${modifier}+Shift+v" = ''splith'';
 
@@ -355,7 +363,7 @@ in {
   };
 
   systemd.user.services = {
-    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -a -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1'";
+    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -a -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev'";
     rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
     swayidle = swayservice "Sway Idle Service - lock screen etc" swayidleCommand;
   };
