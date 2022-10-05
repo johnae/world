@@ -4,6 +4,7 @@
   ...
 }: {
   services.jellyfin.enable = true;
+  services.jellyfin.openFirewall = true;
   hardware.opengl = {
     enable = true;
     extraPackages = [
