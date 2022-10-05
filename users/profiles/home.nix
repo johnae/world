@@ -45,7 +45,6 @@ in {
     VISUAL = "emacsclient -t -a=";
     KUBECONFIG = "/home/${home.username}/.kube/config";
     COLORTERM = "truecolor";
-    NIXOS_OZONE_WL = "1";
   };
 
   xdg.enable = true;
