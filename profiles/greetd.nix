@@ -11,7 +11,13 @@
       export XDG_SESSION_TYPE=wayland
       export XDG_CURRENT_DESKTOP=sway
       export XDG_SESSION_DESKTOP=sway
-      exec "$SHELL" -l -c "exec ${runSway}/bin/run-sway"
+      if [ -e /etc/profiles/per-user/"$USER"/etc/profile.d/hm-session-vars.sh ]; then
+        set +u
+        # shellcheck disable=SC1090
+        source /etc/profiles/per-user/"$USER"/etc/profile.d/hm-session-vars.sh
+        set -u
+      fi
+      exec ${runSway}/bin/run-sway
     '';
   };
 in {
