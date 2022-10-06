@@ -7,14 +7,16 @@
 in {
   home.packages = with pkgs; [
     alejandra
-    carapace
     cachix
+    carapace
     element-desktop-wayland
     fzf # # for certain utilities that depend on it
     git-branchless
     git-crypt
     gnome3.nautilus
     google-cloud-sdk-gke
+    jellyfin-media-player
+    jftui
     kanshi
     kubectl
     kubectx
@@ -33,11 +35,10 @@ in {
     slack
     spotifyd
     spotnix
+    teams
     wl-clipboard
     wl-clipboard-x11
     xdg_utils
-    jellyfin-media-player
-    jftui
   ];
 
   home.sessionVariables = {
