@@ -8,6 +8,9 @@
   runSwayViaShell = pkgs.writeShellApplication {
     name = "run-sway-via-shell";
     text = ''
+      export XDG_SESSION_TYPE=wayland
+      export XDG_CURRENT_DESKTOP=sway
+      export XDG_SESSION_DESKTOP=sway
       exec "$SHELL" -l -c "exec ${runSway}/bin/run-sway"
     '';
   };
