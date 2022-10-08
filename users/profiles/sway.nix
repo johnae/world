@@ -22,41 +22,37 @@
   swaylockTimeout = "300";
   swaylockSleepTimeout = "310";
 
-  swayidleCommand = lib.concatStringsSep " " [
-    "${pkgs.swayidle}/bin/swayidle -w"
-    "timeout ${swaylockTimeout}"
-    "'${pkgs.swaylock-dope}/bin/swaylock-dope'"
-    "timeout ${swaylockSleepTimeout}"
-    "'${pkgs.sway}/bin/swaymsg \"output * dpms off\"'"
-    "resume '${pkgs.sway}/bin/swaymsg \"output * dpms on\"'"
-    "before-sleep '${pkgs.swaylock-dope}/bin/swaylock-dope'"
-  ];
-
-  ## can be removed when grouped devices works (i.e yubikey is causing issues here), see: https://github.com/swaywm/sway/issues/6011
-  ## and: https://github.com/swaywm/sway/pull/6740
-  toggleKeyboardLayouts = pkgs.writeShellApplication {
-    name = "toggle-keyboard-layouts";
+  swayidleCommand = pkgs.writeShellApplication {
+    name = "swayidle";
+    runtimeInputs = [pkgs.sway pkgs.bash pkgs.swaylock-dope pkgs.swayidle];
     text = ''
-      export PATH=${pkgs.jq}/bin''${PATH:+:}$PATH
-      current_layout="$(swaymsg -t get_inputs -r | jq -r "[.[] | select(.xkb_active_layout_name != null)][0].xkb_active_layout_name")"
-      if [ "$current_layout" = "English (US)" ]; then
-      swaymsg 'input type:keyboard xkb_layout "se,us"'
+      swayidle -d -w timeout ${swaylockTimeout} swaylock-dope \
+                     timeout ${swaylockSleepTimeout} 'swaymsg "output * dpms off"' \
+                     resume 'swaymsg "output * dpms on"' \
+                     before-sleep swaylock-dope
+    '';
+  };
+
+  swapContainers = pkgs.writeShellApplication {
+    name = "swap-containers";
+    runtimeInputs = [pkgs.jq pkgs.sway];
+    text = ''
+      if swaymsg -t get_marks | jq -e 'any(.[] == "_swap"; .)'; then
+        exec swaymsg 'swap container with mark _swap; [con_mark=_swap] focus; [con_mark=_swap] unmark _swap'
       else
-      swaymsg 'input type:keyboard xkb_layout "us,se"'
+        exec swaymsg '[con_mark=_swap] unmark _swap; mark --add _swap'
       fi
-      swaymsg 'input type:keyboard xkb_model pc105'
-      swaymsg 'input type:keyboard xkb_options "ctrl:nocaps,grp:switch"'
-      swaymsg 'input type:keyboard xkb_variant ""'
     '';
   };
 
   randomPicsumBackground = pkgs.writeShellApplication {
     name = "random-picsum-background";
+    runtimeInputs = [pkgs.curl];
     text = ''
       category=''${1:-nature}
-      ${pkgs.curl}/bin/curl --silent --fail-with-body -Lo /tmp/wallpaper.jpg 'https://source.unsplash.com/featured/3200x1800/?'"$category" 2>/dev/null
+      curl --silent --fail-with-body -Lo /tmp/wallpaper.jpg 'https://source.unsplash.com/featured/3200x1800/?'"$category" 2>/dev/null
       if [ -e "$HOME"/Pictures/wallpaper.jpg ]; then
-      mv "$HOME"/Pictures/wallpaper.jpg "$HOME"/Pictures/previous-wallpaper.jpg
+        mv "$HOME"/Pictures/wallpaper.jpg "$HOME"/Pictures/previous-wallpaper.jpg
       fi
       mv /tmp/wallpaper.jpg "$HOME"/Pictures/wallpaper.jpg
       echo "$HOME"/Pictures/wallpaper.jpg
@@ -65,19 +61,21 @@
 
   swayBackground = pkgs.writeShellApplication {
     name = "sway-background";
+    runtimeInputs = [randomPicsumBackground];
     text = ''
       category=''${1:-nature,abstract,space}
-      BG=$(${randomPicsumBackground}/bin/random-picsum-background "$category")
+      BG=$(random-picsum-background "$category")
       exec swaymsg "output * bg '$BG' fill"
     '';
   };
 
   rotatingBackground = pkgs.writeShellApplication {
     name = "rotating-background";
+    runtimeInputs = [swayBackground pkgs.sway];
     text = ''
       category=''${1:-art,abstract,space}
       while true; do
-      if ! ${swayBackground}/bin/sway-background "$category"; then
+      if ! sway-background "$category"; then
         if [ -e "$HOME/Pictures/wallpaper.jpg" ] && [ "$(stat -c "$HOME/Pictures/wallpaper.jpg")" -ge 50000 ]; then
           exec swaymsg "output * bg '$HOME/Pictures/wallpaper.jpg' fill"
         else
@@ -89,20 +87,21 @@
     '';
   };
 
-  swayFocusWindow = pkgs.writeShellApplication {
-    name = "sway-focus-window";
-    text = ''
-      export SK_OPTS="--no-bold --color=bw  --height=40 --reverse --no-hscroll --no-mouse"
-      window="$(${pkgs.sway}/bin/swaymsg -t get_tree | \
-                ${pkgs.jq}/bin/jq -r '.nodes | .[] | .nodes | . [] | select(.nodes != null) | .nodes | .[] | select(.name != null) | "\(.id?) \(.name?)"' | \
-                ${pkgs.scripts}/bin/sk-sk | \
-                awk '{print $1}')"
-      ${pkgs.sway}/bin/swaymsg "[con_id=$window] focus"
-    '';
-  };
+  #swayFocusWindow = pkgs.writeShellApplication {
+  #  name = "sway-focus-window";
+  #  text = ''
+  #    export SK_OPTS="--no-bold --color=bw  --height=40 --reverse --no-hscroll --no-mouse"
+  #    window="$(${pkgs.sway}/bin/swaymsg -t get_tree | \
+  #              ${pkgs.jq}/bin/jq -r '.nodes | .[] | .nodes | . [] | select(.nodes != null) | .nodes | .[] | select(.name != null) | "\(.id?) \(.name?)"' | \
+  #              ${pkgs.scripts}/bin/sk-sk | \
+  #              awk '{print $1}')"
+  #    ${pkgs.sway}/bin/swaymsg "[con_id=$window] focus"
+  #  '';
+  #};
 
   swayOnReload = pkgs.writeShellApplication {
     name = "sway-on-reload";
+    runtimeInputs = [pkgs.sway];
     text = ''
       LID=/proc/acpi/button/lid/LID
       if [ ! -e "$LID" ]; then
@@ -284,23 +283,19 @@ in {
         "${modifier}+x" = ''mode "disabled keybindings"'';
         "${modifier}+r" = ''mode "resize"'';
 
-        "${modifier}+Tab" = ''exec ${swayFocusWindow}/bin/sway-focus-window'';
-
         "${modifier}+Control+Tab" = "[con_mark=_swap] unmark _swap; mark --add _swap; [con_mark=_prev] focus; swap container with mark _swap; [con_mark=_swap] unmark _swap";
         "${modifier}+Control+Left" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus left; swap container with mark _swap; [con_mark=_swap] unmark _swap";
         "${modifier}+Control+Right" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus right; swap container with mark _swap; [con_mark=_swap] unmark _swap";
         "${modifier}+Control+Down" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus down; swap container with mark _swap; [con_mark=_swap] unmark _swap";
-        "${modifier}+Control+x" = "[con_mark=_swap] unmark _swap; mark --add _swap";
-        "${modifier}+Control+s" = "swap container with mark _swap; [con_mark=_swap] unmark _swap";
+        "${modifier}+space" = "exec ${swapContainers}/bin/swap-containers";
 
-        "${modifier}+t" = ''exec ${pkgs.scripts}/bin/rofi-spotify-search track'';
-        "${modifier}+p" = ''exec ${pkgs.scripts}/bin/rofi-spotify-search playlist'';
-        "${modifier}+Shift+n" = ''exec ${pkgs.scripts}/bin/spotify-cmd next'';
-        "${modifier}+Shift+p" = ''exec ${pkgs.scripts}/bin/spotify-cmd prev'';
-        "${modifier}+Shift+m" = ''exec ${pkgs.scripts}/bin/spotify-cmd pause'';
+        "${modifier}+t" = ''exec rofi-spotify-search track'';
+        "${modifier}+p" = ''exec rofi-spotify-search playlist'';
+        "${modifier}+Shift+n" = ''exec spotify-cmd next'';
+        "${modifier}+Shift+p" = ''exec spotify-cmd prev'';
+        "${modifier}+Shift+m" = ''exec spotify-cmd pause'';
 
-        "${modifier}+Shift+k" = ''exec ${pkgs.systemd}/bin/systemctl --user restart kanshi'';
-        "${modifier}+Control+k" = ''exec ${toggleKeyboardLayouts}/bin/toggle-keyboard-layouts'';
+        "${modifier}+Shift+k" = ''exec systemctl --user restart kanshi'';
 
         "${modifier}+Control+l" = ''exec ${pkgs.swaylock-dope}/bin/swaylock-dope'';
 
@@ -318,8 +313,6 @@ in {
         "${modifier}+b" = ''exec ${swayBackground}/bin/sway-background'';
 
         "${modifier}+Shift+e" = ''exec ${pkgs.alacritty}/bin/alacritty --class emacs -e emacsclient -t -a=""'';
-
-        "${modifier}+Shift+s" = ''exec ${pkgs.alacritty}/bin/alacritty --class emacs -e emacsclient -t -a=""'';
 
         "${modifier}+Shift+v" = ''splith'';
 
@@ -369,6 +362,6 @@ in {
   systemd.user.services = {
     persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -a -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev'";
     rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
-    swayidle = swayservice "Sway Idle Service - lock screen etc" swayidleCommand;
+    swayidle = swayservice "Sway Idle Service - lock screen etc" "${swayidleCommand}/bin/swayidle";
   };
 }
