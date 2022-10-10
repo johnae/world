@@ -51,8 +51,8 @@ id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path =
 syncthing-cert = { file = "secrets/eris/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/eris/syncthing-key.age", owner = "1337" }
 mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
+mbsync-9000 = { file = "secrets/mbsync-9000.age", owner = "1337" }
 authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
-bpb_keys = { file = "secrets/bpb_keys.toml.age", owner = "1337", path = "/home/john/.bpb_keys.toml" }
 
 [config.services.syncthing]
 enable = true
@@ -230,3 +230,23 @@ drafts.farPattern = "[Gmail]/Drafts"
 drafts.nearPattern = "Drafts"
 drafts.extraConfig.Create = "near"
 drafts.extraConfig.SyncState = "*"
+
+[config.home-manager.users.john.accounts.email.accounts.9000]
+address = "john@9000.dev"
+userName = "john@9000.dev"
+primary = false
+imap.host = "mail.9000.dev"
+mbsync.enable = true
+mbsync.create = "both"
+mbsync.extraConfig.account.PipelineDepth = 10
+passwordCommand = "${pkgs.coreutils}/bin/cat /run/agenix/mbsync-9000"
+imapnotify.enable = true
+imapnotify.boxes = [ "Inbox" ]
+imapnotify.onNotify = "${pkgs.isync}/bin/mbsync 9000"
+imapnotify.onNotifyPost = "${pkgs.mu}/bin/mu index"
+
+[config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.9000.channels]
+all.patterns = ["*"]
+all.extraConfig.Create = "near"
+all.extraConfig.SyncState = "*"
+all.extraConfig.CopyArrivalDate = "yes"
