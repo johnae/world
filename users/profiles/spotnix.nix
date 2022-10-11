@@ -2,7 +2,19 @@
   hostName,
   pkgs,
   ...
-}: {
+}: let
+  runSpotnix = pkgs.writeShellApplication {
+    name = "run-spotnix";
+    runtimeInputs = with pkgs; [coreutils spotnix];
+    text = ''
+      RUST_LOG=info \
+      CLIENT_ID="$(head -1 /run/agenix/spotnix)" \
+      CLIENT_SECRET="$(tail -1 /run/agenix/spotnix)" \
+      REDIRECT_URI="http://localhost:8182/spotnix" \
+      exec spotnix -d ${hostName} -s "$XDG_RUNTIME_DIR"/spotnix_status -i "$XDG_RUNTIME_DIR"/spotnix_input -o "$XDG_RUNTIME_DIR"/spotnix_output -r 10
+    '';
+  };
+in {
   systemd.user.services.spotnix = {
     Unit = {
       Description = "Spotify for UNIX";
@@ -11,9 +23,7 @@
       BindsTo = "sway-session.target";
     };
     Service = {
-      ExecStart = ''
-        ${pkgs.stdenv.shell} -c 'RUST_LOG=info CLIENT_ID="$(head -1 /run/agenix/spotnix)" CLIENT_SECRET="$(tail -1 /run/agenix/spotnix)" REDIRECT_URI="http://localhost:8182/spotnix" ${pkgs.spotnix}/bin/spotnix -d ${hostName} -s $XDG_RUNTIME_DIR/spotnix_status -i $XDG_RUNTIME_DIR/spotnix_input -o $XDG_RUNTIME_DIR/spotnix_output -r 10'
-      '';
+      ExecStart = "${runSpotnix}/bin/run-spotnix";
       Restart = "always";
       RestartSec = 3;
     };
