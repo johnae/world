@@ -20,7 +20,7 @@
   libglvnd,
   libpng,
   libuuid,
-  libseat,
+  seatd,
   libdrm,
   ffmpeg,
   xwayland,
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     xcbutilwm
     libX11
     libcap
-    libseat
+    seatd
     libdrm
     xcbutilimage
     xcbutilerrors
