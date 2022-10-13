@@ -73,7 +73,7 @@
     pkgs.procs
     pkgs.sd
     pkgs.bottom
-    pkgs.virtmanager
+    pkgs.virt-manager
   ];
 
   home-manager.useUserPackages = true;
