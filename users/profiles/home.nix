@@ -13,7 +13,7 @@ in {
     fzf # # for certain utilities that depend on it
     git-branchless
     git-crypt
-    gnome3.nautilus
+    gnome.nautilus
     google-cloud-sdk-gke
     jellyfin-media-player
     jftui
@@ -38,7 +38,7 @@ in {
     teams
     wl-clipboard
     wl-clipboard-x11
-    xdg_utils
+    xdg-utils
     (pkgs.writeShellApplication {
       name = "mail";
       text = ''
