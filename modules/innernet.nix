@@ -323,7 +323,7 @@ in {
             after = ["network-online.target" "nss-lookup.target"];
             wantedBy = ["multi-user.target"];
 
-            path = [pkgs.iproute];
+            path = [pkgs.iproute2];
             environment = {RUST_LOG = "info";};
             serviceConfig = {
               Restart = "always";
@@ -343,7 +343,7 @@ in {
             after = ["network-online.target" "nss-lookup.target"];
             wantedBy = ["multi-user.target"];
 
-            path = [pkgs.iproute];
+            path = [pkgs.iproute2];
             environment = {RUST_LOG = "info";};
             serviceConfig = {
               Restart = "always";
