@@ -24,7 +24,6 @@
         offset.y = 0;
         glyph_offset.x = 0;
         glyph_offset.y = 0;
-        use_thin_strokes = true; ## osx only but won't have a negative effect
       };
       mouse.hide_cursor_when_typing = true;
       cursor = {
