@@ -29,7 +29,7 @@
   in
     pkgs.writeShellApplication {
       name = "repo-sync";
-      runtimeInputs = with pkgs; [inotifyTools gitMinimal openssh];
+      runtimeInputs = with pkgs; [inotify-tools gitMinimal openssh];
       text = ''
         ssh_identity="${sshKey}"
         if [ ! -e "$ssh_identity" ]; then
