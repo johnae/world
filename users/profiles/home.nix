@@ -38,7 +38,7 @@ in {
     teams
     wl-clipboard
     wl-clipboard-x11
-    xdg_utils
+    xdg-utils
     (pkgs.writeShellApplication {
       name = "mail";
       text = ''
