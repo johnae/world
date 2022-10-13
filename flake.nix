@@ -53,6 +53,7 @@
     grim.flake = false;
     grim.url = "github:emersion/grim";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager.inputs.utils.follows = "flake-utils";
     home-manager.url = "github:nix-community/home-manager";
     kanshi.flake = false;
     kanshi.url = "sourcehut:~emersion/kanshi";
