@@ -5,7 +5,7 @@ in {
   programs.rbw.settings = {
     inherit (userinfo) email;
     lock_timeout = 3600;
-    pinentry = "gnome3";
+    pinentry = "gnome";
     base_url = "https://bw.9000.dev";
   };
 }

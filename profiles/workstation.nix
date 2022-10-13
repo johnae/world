@@ -72,8 +72,8 @@
   services.printing.enable = true;
   services.printing.drivers = [pkgs.gutenprint pkgs.hplip pkgs.gutenprintBin];
 
-  services.dbus.packages = with pkgs; [gcr dconf gnome3.sushi];
-  services.udev.packages = with pkgs; [gnome3.gnome-settings-daemon];
+  services.dbus.packages = with pkgs; [gcr dconf gnome.sushi];
+  services.udev.packages = with pkgs; [gnome.gnome-settings-daemon];
 
   environment.etc."systemd/sleep.conf".text = "HibernateDelaySec=8h";
 
