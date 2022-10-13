@@ -24,4 +24,4 @@ gc:
 upgrade flake="github:johnae/world":
   rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
   nixos-rebuild boot --flake {{flake}} --use-remote-sudo -L
-  if (echo initrd kernel kernel-modules | all { |it| (readlink $"/run/booted-system/($it)") != (readlink $"/nix/var/nix/profiles/system/($it)") }) { echo The system must be rebooted for the changes to take effect } else { nixos-rebuild switch --flake {{flake}} --use-remote-sudo -L }
+  if (echo initrd kernel kernel-modules | all { |it| (readlink $"/run/booted-system/($it)") != (readlink $"/nix/var/nix/profiles/system/($it)") }) { echo "The system must be rebooted for the changes to take effect" } else { nixos-rebuild switch --flake {{flake}} --use-remote-sudo -L }
