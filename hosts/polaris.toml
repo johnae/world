@@ -96,16 +96,14 @@ folders."/home/john/Sync".devices = [
   "eris",
   "icarus",
   "titan",
-  "hyperion",
-  "orion"
+  "hyperion"
 ]
 folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
 folders."/home/john/Photos".devices = [
   "triton",
   "eris",
   "icarus",
-  "SM-G998B",
-  "orion"
+  "SM-G998B"
 ]
 folders."/home/john/Photos".versioning.type = "staggered"
 folders."/home/john/Photos".versioning.params.cleanInterval = "3600"
@@ -155,10 +153,6 @@ icarus.publicKey = "mDghZTpKQTGgeWYZzHiylgAvGY2yYnPdPaN5ja2V9Qw="
 milkyway.ip = "192.168.104.100"
 milkyway.cidr = "home"
 milkyway.publicKey = "XPWUeQ4N9zYcyWgIvvp+3eHSsBiqnHuuwu2J/1uHHkE="
-
-orion.ip = "192.168.104.71"
-orion.cidr = "home"
-orion.publicKey = "8cdTaGzyEz/tmU/foEH2tLo4CySvGWR1s9mHHeB9vS8="
 
 [config.networking]
 defaultGateway = "65.108.2.129"
