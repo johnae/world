@@ -48,6 +48,7 @@ wg-net.file = "secrets/eris/wg-net.age"
 id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", owner = "1337" }
 id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner = "1337" }
 id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
+id_ed25519_alt = { file = "secrets/id_ed25519_alt.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_alt" }
 syncthing-cert = { file = "secrets/eris/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/eris/syncthing-key.age", owner = "1337" }
 mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
