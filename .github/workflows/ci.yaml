@@ -18,16 +18,16 @@ jobs:
     - run: |
         nix run .#lint
 
-  #nix_check:
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #  - uses: actions/checkout@v3
-  #  - uses: cachix/install-nix-action@v18
-  #    with:
-  #      extra_nix_config: |
-  #        access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-  #  - run: |
-  #      nix flake check
+  nix_check:
+    runs-on: 9k
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v18
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+    - run: |
+        nix flake check
 
   container_images_x86_64_linux:
     runs-on: ubuntu-latest
@@ -205,14 +205,14 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: Build (matrix)
-    needs: [container_images_x86_64_linux, pkg_x86_64_linux, pkg_aarch64_linux, nix_lint] #, nix_check] # host_aarch64_linux, host_x86_64_linux, 
+    needs: [container_images_x86_64_linux, pkg_x86_64_linux, pkg_aarch64_linux, nix_lint, nix_check] # host_aarch64_linux, host_x86_64_linux, 
     steps:
       - name: Check linting status
         if: ${{ needs.nix_lint.result != 'success' }}
         run: exit 1
-      #- name: Check flake check status
-      #  if: ${{ needs.nix_check.result != 'success' }}
-      #  run: exit 1
+      - name: Check flake check status
+        if: ${{ needs.nix_check.result != 'success' }}
+        run: exit 1
       - name: Check container image build and push status
         if: ${{ needs.container_images_x86_64_linux.result != 'success' }}
         run: exit 1
