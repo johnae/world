@@ -12,7 +12,7 @@
   writeU2fKeys = userConfigs:
     pkgs.writeText "u2f_keys" (lib.concatStringsSep "\n" (
       lib.mapAttrsToList (
-        user: configs: "${user}:${lib.concatStringsSep ": " configs}"
+        user: configs: "${user}:${lib.concatStringsSep ":" configs}"
       )
       userConfigs
     ));
