@@ -1,6 +1,6 @@
 {lib, ...}: let
   inherit (lib) mkOption;
-  inherit (lib.types) str nullOr listOf enum;
+  inherit (lib.types) str nullOr attrsOf listOf enum;
 in {
   options = {
     publicKey = mkOption {
@@ -10,6 +10,10 @@ in {
     syncthingDeviceID = mkOption {
       type = nullOr str;
       default = null;
+    };
+    u2fMappings = mkOption {
+      type = attrsOf (listOf str);
+      default = [];
     };
     wgPublicKey = mkOption {
       type = nullOr str;

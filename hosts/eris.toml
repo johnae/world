@@ -14,6 +14,7 @@ profiles = [
   "profiles/home-manager",
   "profiles/homedns",
   "profiles/interception-tools",
+  "profiles/pamu2f",
   "profiles/pcscd",
   "profiles/state",
   "profiles/syncthing",
@@ -109,6 +110,9 @@ openssh.authorizedKeys.keys = [
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo=",
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
 ]
+
+[config.u2fMappings]
+john = ["soJksM/D33aDVQt6vTGxPvwFmF3uQoYKLYfDXSaYxfroe6E4AXBK0wkAy7LfTACF1un1aYp58fNl0pLmVj/9yg==,JPuH+MSpS0DRYeg2+zFrvzeXgM5xcpKTdn7TwDqARz80iR5LXywWXuzMCo8Kw8snoPcm2rYedXXq3YzWdgDl+w==,es256,+presence"]
 
 [config.home-manager.users.john]
 profiles = [
