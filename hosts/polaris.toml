@@ -6,10 +6,12 @@ syncthingDeviceID = "5RMZCHO-M3OA4UH-3PMKBWD-IVJGW4Q-VZBME6O-OCSPMK4-7YOVDAM-QOE
 
 profiles = [
   "profiles/hardware/ax41",
+  "profiles/acme",
   "profiles/default_fs",
   "profiles/home-manager",
   "profiles/jellyfin",
   "profiles/k3s",
+  "profiles/mailserver",
   "profiles/server",
   "profiles/state",
   "profiles/syncthing",
@@ -197,6 +199,8 @@ wg-home.file = "secrets/polaris/wg-home.age"
 wg-net.file = "secrets/polaris/wg-net.age"
 syncthing-cert = { file = "secrets/polaris/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/polaris/syncthing-key.age", owner = "1337" }
+mailserver-john = { file = "secrets/mail/mailserver-john.age"}
+cloudflare-env = { file = "secrets/cloudflare-env.age" }
 
 flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
 sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
@@ -205,6 +209,17 @@ cluster-secrets = { file = "secrets/k3s/cluster-secrets.yaml.age", path = "/var/
 mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
 mbsync-9000 = { file = "secrets/mbsync-9000.age", owner = "1337" }
 authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
+
+[config.mailserver]
+enable = true
+fqdn = "mail.9000.dev"
+sendingFqdn = "polaris.9000.dev"
+domains = [ "9000.dev" ]
+certificateScheme = 3
+
+[config.mailserver.loginAccounts."john@9000.dev"]
+hashedPasswordFile = "/run/agenix/mailserver-john"
+aliases = ["postmaster@9000.dev", "abuse@9000.dev", "certs@9000.dev"]
 
 [config.services.k3s]
 enable = true
