@@ -120,7 +120,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           substituters = https://nixpkgs-wayland.cachix.org https://nix-community.cachix.org https://insane.cachix.org https://cachix.cachix.org https://cache.nixos.org/
           trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
-    - uses: cachix/cachix-action@v11
+    - uses: cachix/cachix-action@v12
       if: ${{ matrix.pkg != 'pxebooter' }}
       with:
         name: insane
@@ -149,7 +149,7 @@ jobs:
         sudo apt-get update -q -y && sudo apt-get install -q -y qemu-system-aarch64 qemu-efi binfmt-support qemu-user-static
         sudo bash -c "echo extra-platforms = aarch64-linux arm-linux >> /etc/nix/nix.conf"
         sudo systemctl restart nix-daemon
-    - uses: cachix/cachix-action@v11
+    - uses: cachix/cachix-action@v12
       if: ${{ matrix.pkg != 'pxebooter' }}
       with:
         name: insane
