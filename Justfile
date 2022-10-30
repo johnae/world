@@ -10,7 +10,7 @@ default:
 
 # search for packages
 search query:
-  nix search nixpkgs {{query}} --json | from json | transpose | flatten | select pname version description
+  nix search nixpkgs {{query}} --json | from json | transpose | flatten | select column0 version description
 
 # open a shell with given packages available
 shell +args:
