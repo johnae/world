@@ -514,22 +514,6 @@
         "type": "gitlab"
       }
     },
-    "mosh": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1666833491,
-        "narHash": "sha256-tlSsHu7JnXO+sorVuWWubNUNdb9X0/pCaiGG5Y0X/g8=",
-        "owner": "mobile-shell",
-        "repo": "mosh",
-        "rev": "bc73a26316ede2a79259d859f8ee309b32412420",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mobile-shell",
-        "repo": "mosh",
-        "type": "github"
-      }
-    },
     "neatvnc": {
       "flake": false,
       "locked": {
@@ -816,7 +800,6 @@
         "kile": "kile",
         "kured": "kured",
         "matrix-conduit": "matrix-conduit",
-        "mosh": "mosh",
         "neatvnc": "neatvnc",
         "netns-exec": "netns-exec",
         "nixlib": "nixlib",
