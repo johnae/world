@@ -361,6 +361,7 @@
               kured-yaml = true;
               notracking = true;
               kanshi = true;
+              waybar = true;
             }));
       }
     );
@@ -551,6 +552,7 @@
             "swayidle"
             "swaylock"
             "swaylock-dope"
+            "waybar"
             "wayland-protocols-master"
             "wayland120"
             "wl-cliboard"
