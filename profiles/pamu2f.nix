@@ -8,7 +8,7 @@
   ##   user1 = ["keyHandle,publicKey,es256,+presence" "keyHandle,publicKey,es256,+presence"];
   ## }
   ##
-  u2fMappings = config.u2fMappings;
+  inherit (config) u2fMappings;
   writeU2fKeys = userConfigs:
     pkgs.writeText "u2f_keys" (lib.concatStringsSep "\n" (
       lib.mapAttrsToList (
