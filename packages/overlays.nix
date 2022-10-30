@@ -29,6 +29,11 @@ in
       };
     };
     sway = final: prev: {sway = prev.callPackage (prev.path + "/pkgs/applications/window-managers/sway/wrapper.nix") {};};
+    swayidle = final: prev: {
+      swayidle = prev.callPackage ./swayidle {
+        wayland-protocols = final.wayland-protocols-master;
+      };
+    };
     inputs = final: prev: {inherit inputs;};
     mynerdfonts = final: prev: {mynerdfonts = prev.nerdfonts.override {fonts = ["JetBrainsMono" "DroidSansMono"];};};
     swaylock-dope = final: prev: {swaylock-dope = prev.callPackage ./swaylock-dope {};};
