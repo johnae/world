@@ -51,6 +51,9 @@
     text = ''
       category=''${1:-nature}
       curl --silent --fail-with-body -Lo /tmp/wallpaper.jpg 'https://source.unsplash.com/featured/3200x1800/?'"$category" 2>/dev/null
+      if [ "$(stat -c "%s" "tmp/wallpaper.jpg")" -le 50000 ]; then
+        exit 1
+      fi
       if [ -e "$HOME"/Pictures/wallpaper.jpg ]; then
         mv "$HOME"/Pictures/wallpaper.jpg "$HOME"/Pictures/previous-wallpaper.jpg
       fi
@@ -76,7 +79,7 @@
       category=''${1:-art,abstract,space}
       while true; do
       if ! sway-background "$category"; then
-        if [ -e "$HOME/Pictures/wallpaper.jpg" ] && [ "$(stat -c "$HOME/Pictures/wallpaper.jpg")" -ge 50000 ]; then
+        if [ -e "$HOME/Pictures/wallpaper.jpg" ]; then
           exec swaymsg "output * bg '$HOME/Pictures/wallpaper.jpg' fill"
         else
           exec swaymsg "output * bg '$HOME/Pictures/default-background.jpg' fill"

@@ -45,7 +45,7 @@
     fish-kubectl-completions.url = "github:evanlucas/fish-kubectl-completions";
     flake-utils.url = "github:numtide/flake-utils";
     fluxcd-install.flake = false;
-    fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v0.35.0/install.yaml"; # gh-release-update
+    fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v0.36.0/install.yaml"; # gh-release-update
     git-branchless.flake = false;
     git-branchless.url = "github:arxanas/git-branchless";
     google-cloud-sdk-fish-completion.flake = false;
@@ -63,8 +63,6 @@
     kured.url = "github:weaveworks/kured";
     matrix-conduit.flake = false;
     matrix-conduit.url = "gitlab:famedly/conduit";
-    mosh.flake = false;
-    mosh.url = "github:mobile-shell/mosh";
     neatvnc.flake = false;
     neatvnc.url = "github:any1/neatvnc";
     netns-exec.flake = false;
@@ -76,7 +74,7 @@
     notracking.url = "github:notracking/hosts-blocklists";
     nur.url = "github:nix-community/NUR";
     nushell.flake = false;
-    nushell.url = "github:nushell/nushell/0.69.1"; # gh-release-update
+    nushell.url = "github:nushell/nushell/0.70.0"; # gh-release-update
     persway.inputs.devshell.follows = "devshell";
     persway.inputs.dream2nix.follows = "dream2nix";
     persway.inputs.fenix.follows = "fenix";
@@ -192,21 +190,6 @@
             buildInputs = oa.buildInputs ++ [prev.libvarlink];
           });
         })
-        (
-          final: prev: {
-            mosh = prev.mosh.overrideAttrs (oa: {
-              patches =
-                oa.patches
-                ++ [
-                  ## truecolor support
-                  (prev.fetchpatch {
-                    url = "https://github.com/mobile-shell/mosh/commit/ac0492cb5a703ae979b5c923182671d2688b025a.patch";
-                    sha256 = "sha256-bOA96fnutrFOAbAFDhMkeLJ/7ERL30m3FSCdU5GSh2o=";
-                  })
-                ];
-            });
-          }
-        )
         (
           final: prev: {
             notracking = prev.runCommand "notracking" {} ''
@@ -377,7 +360,6 @@
               fluxcd-yaml = true;
               kured-yaml = true;
               notracking = true;
-              mosh = true;
               kanshi = true;
             }));
       }
@@ -546,7 +528,6 @@
             "kanshi"
             "kile"
             "matrix-conduit"
-            "mosh"
             "my-emacs"
             "my-emacs-config"
             "mynerdfonts"
