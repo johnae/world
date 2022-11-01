@@ -251,7 +251,7 @@ imapnotify.boxes = [ "Inbox" ]
 imapnotify.onNotify = "${pkgs.isync}/bin/mbsync 9000"
 imapnotify.onNotifyPost = "${pkgs.mu}/bin/mu index"
 
-[config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.9000.channels]
+[config.home-manager.users.john.accounts.email.accounts.9000.mbsync.groups.9000.channels]
 all.patterns = ["*"]
 all.extraConfig.Create = "near"
 all.extraConfig.SyncState = "*"
