@@ -1024,7 +1024,7 @@ Package setup.
                    (mu4e-trash-folder . "/9000/Trash")
                    (smtpmail-smtp-server . "mail.9000.dev")
                    ;; gmail handles this
-                   (mu4e-sent-messages-behavior . delete)
+                   (mu4e-sent-messages-behavior . sent)
                  )
          )
       )
