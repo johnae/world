@@ -223,11 +223,10 @@ drafts.extraConfig.SyncState = "*"
 [config.home-manager.users.john.accounts.email.accounts.9000]
 address = "john@9000.dev"
 userName = "john@9000.dev"
+flavor = "fastmail.com"
 primary = false
-imap.host = "mail.9000.dev"
 mbsync.enable = true
 mbsync.create = "both"
-mbsync.extraConfig.account.PipelineDepth = 10
 passwordCommand = "${pkgs.coreutils}/bin/cat /run/agenix/mbsync-9000"
 imapnotify.enable = true
 imapnotify.boxes = [ "Inbox" ]
