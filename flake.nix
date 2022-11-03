@@ -506,6 +506,7 @@
         // {
           spotnix = inputs.spotnix.overlays.default;
           persway = inputs.persway.overlays.default;
+          d2n = final: prev: {inherit d2n;};
         };
 
       github-actions-package-matrix-x86-64-linux = let
