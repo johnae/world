@@ -85,7 +85,6 @@
     ristate.url = "gitlab:snakedye/ristate";
     rofi-wayland.flake = false;
     rofi-wayland.url = "github:lbonn/rofi/wayland";
-    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
     slurp.flake = false;
     slurp.url = "github:emersion/slurp";
     spotifyd.flake = false;
@@ -333,7 +332,6 @@
           inputs.nixpkgs.nixosModules.notDetected
           inputs.home-manager.nixosModules.home-manager
           inputs.agenix.nixosModules.age
-          inputs.simple-nixos-mailserver.nixosModules.mailserver
           {
             imports = modules ++ profiles;
           }
