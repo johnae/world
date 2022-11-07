@@ -33,6 +33,15 @@
     '';
   };
 
+  screenshot = pkgs.writeShellApplication {
+    name = "screenshot";
+    runtimeInputs = [pkgs.slurp pkgs.grim];
+    text = ''
+      mkdir -p ~/Pictures/screenshots
+      slurp | grim -g - ~/Pictures/screenshots/"$(date +'%Y-%m-%dT%H.%M.%S.png')"
+    '';
+  };
+
   swapContainers = pkgs.writeShellApplication {
     name = "swap-containers";
     runtimeInputs = [pkgs.jq pkgs.sway];
@@ -297,6 +306,8 @@ in {
         "${modifier}+Shift+n" = ''exec spotify-cmd next'';
         "${modifier}+Shift+p" = ''exec spotify-cmd prev'';
         "${modifier}+Shift+m" = ''exec spotify-cmd pause'';
+
+        "${modifier}+Shift+s" = ''exec ${screenshot}/bin/screenshot'';
 
         "${modifier}+Shift+k" = ''exec systemctl --user restart kanshi'';
 
