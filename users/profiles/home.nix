@@ -7,6 +7,7 @@
 in {
   home.packages = with pkgs; [
     alejandra
+    azure-cli
     cachix
     carapace
     element-desktop-wayland
