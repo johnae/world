@@ -145,13 +145,13 @@ hyperion.ip = "192.168.104.68"
 hyperion.cidr = "home"
 hyperion.publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8="
 
-antares.ip = "192.168.104.71"
-antares.cidr = "home"
-antares.publicKey = "CR6tb4DACdqyera100yhvSZ9FuwFRyrPL/bMIf1Of28="
-
 icarus.ip = "192.168.104.70"
 icarus.cidr = "home"
 icarus.publicKey = "mDghZTpKQTGgeWYZzHiylgAvGY2yYnPdPaN5ja2V9Qw="
+
+antares.ip = "192.168.104.71"
+antares.cidr = "home"
+antares.publicKey = "CR6tb4DACdqyera100yhvSZ9FuwFRyrPL/bMIf1Of28="
 
 milkyway.ip = "192.168.104.100"
 milkyway.cidr = "home"
