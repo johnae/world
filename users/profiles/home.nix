@@ -40,6 +40,7 @@ in {
     wl-clipboard
     wl-clipboard-x11
     xdg-utils
+    rbw-git-creds
     (pkgs.writeShellApplication {
       name = "mail";
       text = ''

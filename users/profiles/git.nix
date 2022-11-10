@@ -14,12 +14,10 @@ in {
       enable = true;
       options.features = "decorations side-by-side line-numbers";
     };
-    includes =
-      lib.mapAttrsToList (dir: email: {
-        condition = "gitdir:${dir}";
-        contents.user = {inherit email;};
-      })
-      userinfo.gitIdMap;
+    ignores = [
+      "*~"
+      ".direnv"
+    ];
     extraConfig = {
       github.user = userinfo.githubUser;
       gitlab.user = userinfo.gitlabUser;

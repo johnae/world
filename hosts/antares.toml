@@ -1,19 +1,20 @@
 system = "x86_64-linux"
 
 [config]
-publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKW2RBUkd9iB3Gs2Krxi9aB3XZE78Qd3RPvA8emXtCpD"
-syncthingDeviceID = "ZL2OU7Q-IRYWF7H-VNX6A65-RHWQXIF-AK2G22Y-KB43E2U-DAMNCFP-66IWKQX"
+#publicKey = "xxx"
+syncthingDeviceID = "CI5DK5E-JLWEOXB-6TUV244-SV6MLGO-R6AY7XQ-ZOFCIQW-G3U2DAS-BK5EXAL"
 
 profiles = [
   "profiles/hardware/usbcore",
-  "profiles/hardware/x570",
+  "profiles/hardware/z16",
+  "profiles/bluez_autoswitch",
   "profiles/default_fs",
-  "profiles/desktop",
   "profiles/greetd",
   "profiles/hidpi",
   "profiles/home-manager",
   "profiles/homedns",
   "profiles/interception-tools",
+  "profiles/laptop",
   "profiles/pamu2f",
   "profiles/pcscd",
   "profiles/state",
@@ -25,37 +26,22 @@ profiles = [
 [config.programs.mosh]
 enable = true
 
-[config.virtualisation.libvirtd]
-enable = true
-
-[config.boot.binfmt]
-emulatedSystems = [ "aarch64-linux" ]
-
-[config.boot.initrd.luks.devices]
-cryptkey.keyFile = "/dev/disk/by-partlabel/alt_key"
-cryptkey.fallbackToPassword = true
-
-[config.environment.state."/keep"]
-directories = [
-  "/var/lib/libvirt",
-]
-
 [config.age.secrets]
-spotnix = { file = "secrets/spotnix.age", owner = "1337" }
-spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
-wifi-networks.file = "secrets/wifi-networks.age"
-wg-home.file = "secrets/eris/wg-home.age"
-wg-net.file = "secrets/eris/wg-net.age"
-id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", owner = "1337" }
-id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner = "1337" }
-id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
-id_ed25519_alt = { file = "secrets/id_ed25519_alt.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_alt" }
-id_ed25519_alt_root = { file = "secrets/id_ed25519_alt.age", owner = "0", path = "/root/.ssh/id_ed25519" }
-syncthing-cert = { file = "secrets/eris/syncthing-cert.age", owner = "1337" }
-syncthing-key = { file = "secrets/eris/syncthing-key.age", owner = "1337" }
-mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
-mbsync-9000 = { file = "secrets/mbsync-9000.age", owner = "1337" }
-authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
+#spotnix = { file = "secrets/spotnix.age", owner = "1337" }
+#spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
+#wifi-networks.file = "secrets/wifi-networks.age"
+#wg-home.file = "secrets/antares/wg-home.age"
+#wg-net.file = "secrets/antares/wg-net.age"
+#id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", owner = "1337" }
+#id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner = "1337" }
+#id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
+#id_ed25519_alt = { file = "secrets/id_ed25519_alt.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_alt" }
+#id_ed25519_alt_root = { file = "secrets/id_ed25519_alt.age", owner = "0", path = "/root/.ssh/id_ed25519" }
+#syncthing-cert = { file = "secrets/antares/syncthing-cert.age", owner = "1337" }
+#syncthing-key = { file = "secrets/antares/syncthing-key.age", owner = "1337" }
+#mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
+#mbsync-9000 = { file = "secrets/mbsync-9000.age", owner = "1337" }
+#authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
 
 [config.services.syncthing]
 enable = true
@@ -65,7 +51,7 @@ group = "users"
 openDefaultPorts = true
 folders."/home/john/Sync".id = "sync"
 folders."/home/john/Sync".devices = [
-  "antares",
+  "eris",
   "polaris",
   "icarus",
   "titan",
@@ -73,7 +59,7 @@ folders."/home/john/Sync".devices = [
 ]
 folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
 folders."/home/john/Photos".devices = [
-  "antares",
+  "eris",
   "polaris",
   "icarus",
   "SM-G998B"
@@ -91,7 +77,7 @@ dataDir = "/home/john/.local/share/syncthing-data"
 enable = true
 
 [config.services.innernet.client.insane.settings.interface]
-address = "192.168.104.65/22"
+address = "192.168.104.71/22"
 privateKeyFile = "/run/agenix/wg-home"
 
 [config.services.innernet.client.insane.settings.server]
@@ -105,11 +91,7 @@ gid = 1337
 [config.users.users.john]
 uid = 1337
 shell = "nushell"
-hashedPassword = "$6$RG3QgdVr6A5s524$FRVNXOYWYCNXf6cH/gV4u7g6sffffznBnbXZGHysuWVHGYPpeLfuDuXEJHK.KUrkVCfPXFTTsCLJaj2Q6ATkC1"
-openssh.authorizedKeys.keys = [
-  "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo=",
-  "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
-]
+hashedPassword = "$6$4nxtQ.7ukf3PCK4W$Jo74tGFkCoa.DEj.YlPMbbCseyoWtOkk4weSMZnX081gjDkWYJ7596JbqFaw29PxSBPKz2M75q0pqSydARDZ4."
 
 [config.u2fMappings]
 john = ["soJksM/D33aDVQt6vTGxPvwFmF3uQoYKLYfDXSaYxfroe6E4AXBK0wkAy7LfTACF1un1aYp58fNl0pLmVj/9yg==,JPuH+MSpS0DRYeg2+zFrvzeXgM5xcpKTdn7TwDqARz80iR5LXywWXuzMCo8Kw8snoPcm2rYedXXq3YzWdgDl+w==,es256,+presence", "CN6G3r3mfj74PIn5GidBvoT3TLs1nmbmKeyWo7uwY+rodWhxRzTwo4VeKopmQsSPkN1a2nKj6hDDfHUeZujjbQ==,PEvtpD3217glOzMzJMz7sPMEkH6WVljrdyQNLtdxdNFO8zpNAaVRRFXAVUXSza54srl5Iv86TqmjA1iv7Mp8gQ==,es256,+presence"]
@@ -119,10 +101,11 @@ profiles = [
   "users/profiles/alacritty",
   "users/profiles/chromium",
   "users/profiles/dconf",
+  "users/profiles/eww",
   "users/profiles/firefox",
   "users/profiles/fish",
   "users/profiles/git",
-  "users/profiles/i3status-desktop",
+  "users/profiles/i3status-laptop",
   "users/profiles/kanshi",
   "users/profiles/kubie",
   "users/profiles/mako",
@@ -162,6 +145,18 @@ socketActivation.enable = true
 Environment = [ "COLORTERM=truecolor" ]
 LimitNOFILE = 16384
 
+[config.home-manager.users.john.userinfo]
+email = "john@insane.se"
+fullName = "John Axel Eriksson"
+githubUser = "johnae"
+gitlabUser = "johnae"
+
+[config.home-manager.users.john.programs.git]
+extraConfig.user.signingKey = "key::sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo="
+extraConfig.gpg.format = "ssh"
+extraConfig.commit.gpgSign = true
+extraConfig.tag.forceSignAnnotated = true
+
 [config.home-manager.users.john.programs.mbsync]
 enable = true
 
@@ -171,26 +166,6 @@ frequency = "*:0/5"
 
 [config.home-manager.users.john.services.imapnotify]
 enable = true
-
-[config.home-manager.users.john.userinfo]
-email = "john@insane.se"
-fullName = "John Axel Eriksson"
-githubUser = "johnae"
-gitlabUser = "johnae"
-
-[config.home-manager.users.john.programs.git]
-extraConfig.user.signingKey = "key::sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo="
-extraConfig.gpg.format = "ssh"
-extraConfig.commit.gpgSign = true
-extraConfig.tag.forceSignAnnotated = true
-
-[[config.home-manager.users.john.programs.git.includes]]
-condition = "gitdir:~/Development/volvo/" ## note the IMPORTANT trailing slash
-contents.user.email = "john.axel.eriksson@consultant.volvo.com"
-contents.user.signingKey = "key::sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJsVshwPSDDs5lgly2P6Hv5t96NgASRezs66KvgLR99ZAAAACXNzaDp2b2x2bw=="
-contents.commit.gpgSign = true
-contents.credential."https://github.com".helper = "${pkgs.rbw-git-creds}/bin/rbw-git-creds github.com john.axel.eriksson@consultant.volvo.com"
-contents.url."https://github.com".insteadOf = "ssh://git@github.com"
 
 [config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-roam"]
 repository = "git@github.com:johnae/org-roam"

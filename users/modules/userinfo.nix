@@ -25,17 +25,6 @@
           type = types.str;
           example = "someuser";
         };
-      gitIdMap =
-        mkOption
-        {
-          type = types.attrsOf types.str;
-          example = ''
-            {
-              "~/path/to/dev/folder" = "some@email.com";
-            }
-          '';
-          default = {};
-        };
     };
   };
 }

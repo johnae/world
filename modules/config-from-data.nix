@@ -70,6 +70,18 @@
         then cfgMapper.${stringPath} value
         else if isAttrs value
         then mapConfig (path ++ [name]) value
+        else if isList value
+        then let
+          mapValues = v:
+            if isAttrs v
+            then mapAttrs (name: value: mapValues value) v
+            else if isList v
+            then map mapValues v
+            else if isString v
+            then mapString v
+            else v;
+        in
+          mapValues value
         else if isString value
         then mapString value
         else value

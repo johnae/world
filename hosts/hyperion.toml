@@ -52,7 +52,7 @@ group = "users"
 openDefaultPorts = true
 folders."/home/john/Sync".id = "sync"
 folders."/home/john/Sync".devices = [
-  "triton",
+  "antares",
   "eris",
   "icarus",
   "polaris",

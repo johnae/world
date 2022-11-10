@@ -174,6 +174,33 @@
         inputs.persway.overlays.default
         inputs.spotnix.overlays.default
         (final: prev: {
+          rbw-git-creds = prev.writeShellApplication {
+            name = "rbw-git-creds";
+            runtimeInputs = [prev.rbw];
+            text = ''
+              record=''${1:-}
+              item=''${2:-}
+              if [ "$record" = "" ]; then
+                echo Please provide the record the item is stored in
+                exit 1
+              fi
+              if [ "$item" = "" ]; then
+                echo Please provide the item name to get
+                exit 1
+              fi
+              password="$(rbw get "$record" "$item" | head -1)"
+              username="$(rbw get --full "$record" "$item" | grep "Username:" | awk '{print $2}')"
+              cat<<CREDS
+              username=$username
+              password=$password
+              CREDS
+            '';
+          };
+        })
+        (final: prev: {
+          mapConfig = prev.callPackage ./lib/map-config.nix {};
+        })
+        (final: prev: {
           inherit d2n;
         })
         (final: prev: {
