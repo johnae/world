@@ -157,6 +157,9 @@ extraConfig.gpg.format = "ssh"
 extraConfig.commit.gpgSign = true
 extraConfig.tag.forceSignAnnotated = true
 
+[config.home-manager.users.john.services.kanshi]
+enable = true
+
 [config.home-manager.users.john.programs.mbsync]
 enable = true
 
