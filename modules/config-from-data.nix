@@ -61,31 +61,19 @@
             else item
         )
         items);
-  mapConfig = path:
-    mapAttrs (
-      name: value: let
-        stringPath = concatStringsSep "." (path ++ [name]);
-      in
-        if path != [] && hasAttr stringPath cfgMapper
-        then cfgMapper.${stringPath} value
-        else if isAttrs value
-        then mapConfig (path ++ [name]) value
-        else if isList value
-        then let
-          mapValues = v:
-            if isAttrs v
-            then mapAttrs (name: mapValues) v
-            else if isList v
-            then map mapValues v
-            else if isString v
-            then mapString v
-            else v;
-        in
-          mapValues value
-        else if isString value
-        then mapString value
-        else value
-    );
+
+  mapConfig = path: value: let
+    stringPath = concatStringsSep "." path;
+  in
+    if path != [] && hasAttr stringPath cfgMapper
+    then cfgMapper.${stringPath} value
+    else if isAttrs value
+    then mapAttrs (k: mapConfig (path ++ [k])) value
+    else if isList value
+    then map (mapConfig (path ++ ["[]"])) value
+    else if isString value
+    then mapString value
+    else value;
 
   hasState =
     hasAttr "state" config.environment
