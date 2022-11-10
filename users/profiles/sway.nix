@@ -250,6 +250,11 @@ in {
           natural_scroll = "true";
           tap = "true";
         };
+        "1267:12850:ELAN06A1:00_04F3:3232_Touchpad" = {
+          dwt = "true";
+          natural_scroll = "true";
+          tap = "true";
+        };
         "1739:52620:SYNA8005:00_06CB:CD8C_Touchpad" = {
           dwt = "true";
           natural_scroll = "true";
