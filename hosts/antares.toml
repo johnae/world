@@ -1,7 +1,7 @@
 system = "x86_64-linux"
 
 [config]
-#publicKey = "xxx"
+publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJgkTCs3JTN934N8RkPhuDwijFgFOEXt734tB7aQz57Z"
 syncthingDeviceID = "CI5DK5E-JLWEOXB-6TUV244-SV6MLGO-R6AY7XQ-ZOFCIQW-G3U2DAS-BK5EXAL"
 
 profiles = [
@@ -27,21 +27,21 @@ profiles = [
 enable = true
 
 [config.age.secrets]
-#spotnix = { file = "secrets/spotnix.age", owner = "1337" }
-#spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
-#wifi-networks.file = "secrets/wifi-networks.age"
-#wg-home.file = "secrets/antares/wg-home.age"
-#wg-net.file = "secrets/antares/wg-net.age"
-#id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", owner = "1337" }
-#id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner = "1337" }
-#id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
-#id_ed25519_alt = { file = "secrets/id_ed25519_alt.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_alt" }
-#id_ed25519_alt_root = { file = "secrets/id_ed25519_alt.age", owner = "0", path = "/root/.ssh/id_ed25519" }
-#syncthing-cert = { file = "secrets/antares/syncthing-cert.age", owner = "1337" }
-#syncthing-key = { file = "secrets/antares/syncthing-key.age", owner = "1337" }
-#mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
-#mbsync-9000 = { file = "secrets/mbsync-9000.age", owner = "1337" }
-#authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
+spotnix = { file = "secrets/spotnix.age", owner = "1337" }
+spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
+wifi-networks.file = "secrets/wifi-networks.age"
+wg-home.file = "secrets/antares/wg-home.age"
+wg-net.file = "secrets/antares/wg-net.age"
+id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", owner = "1337" }
+id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner = "1337" }
+id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
+id_ed25519_alt = { file = "secrets/id_ed25519_alt.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_alt" }
+id_ed25519_alt_root = { file = "secrets/id_ed25519_alt.age", owner = "0", path = "/root/.ssh/id_ed25519" }
+syncthing-cert = { file = "secrets/antares/syncthing-cert.age", owner = "1337" }
+syncthing-key = { file = "secrets/antares/syncthing-key.age", owner = "1337" }
+mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
+mbsync-9000 = { file = "secrets/mbsync-9000.age", owner = "1337" }
+authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
 
 [config.services.syncthing]
 enable = true
