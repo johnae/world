@@ -31,7 +31,7 @@ spotnix = { file = "secrets/spotnix.age", owner = "1337" }
 spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
 wifi-networks.file = "secrets/wifi-networks.age"
 wg-home.file = "secrets/antares/wg-home.age"
-wg-net.file = "secrets/antares/wg-net.age"
+#wg-net.file = "secrets/antares/wg-net.age"
 id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", owner = "1337" }
 id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner = "1337" }
 id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
