@@ -74,7 +74,7 @@
         then let
           mapValues = v:
             if isAttrs v
-            then mapAttrs (name: value: mapValues value) v
+            then mapAttrs (name: mapValues) v
             else if isList v
             then map mapValues v
             else if isString v
