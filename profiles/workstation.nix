@@ -53,6 +53,8 @@
   powerManagement.enable = true;
   powerManagement.powertop.enable = true;
 
+  environment.state."/keep".directories = ["/var/cache/powertop"];
+
   virtualisation.docker.enable = false;
   virtualisation.podman.enable = true;
   virtualisation.podman.dockerCompat = true;
