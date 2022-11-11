@@ -17,6 +17,8 @@
   hardware.trackpoint.device = lib.mkDefault "TPPS/2 Elan TrackPoint";
   services.fprintd.enable = lib.mkDefault true;
 
+  environment.state."/keep".directories = ["/var/lib/fprint"];
+
   boot = {
     kernelModules = ["acpi_call"];
     extraModulePackages = with config.boot.kernelPackages; [acpi_call];
