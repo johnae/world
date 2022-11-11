@@ -371,6 +371,9 @@ in {
           command = "${pkgs.dbus.out}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP";
         }
         {
+          command = "${pkgs.polkit_gnome.out}/libexec/polkit-gnome-authentication-agent-1";
+        }
+        {
           command = "${swayOnReload}/bin/sway-on-reload";
           always = true;
         }
