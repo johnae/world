@@ -144,6 +144,8 @@
   };
 
   modifier = "Mod4";
+
+  xcursor_theme = "default";
 in {
   home.sessionVariables = {
     GDK_BACKEND = "wayland";
@@ -154,7 +156,7 @@ in {
     SDL_VIDEODRIVER = "wayland";
     MOZ_ENABLE_WAYLAND = "1";
     MOZ_USE_XINPUT2 = "1";
-    XCURSOR_THEME = "default";
+    XCURSOR_THEME = xcursor_theme;
     QT_STYLE_OVERRIDE = "gtk";
     _JAVA_AWT_WM_NONREPARENTING = "1";
     NIXOS_OZONE_WL = "1";
@@ -168,6 +170,13 @@ in {
       output = {
         "*" = {
           bg = "~/Pictures/wallpaper.jpg fill";
+        };
+      };
+
+      seat = {
+        "*" = {
+          hide_cursor = "when-typing enable";
+          xcursor_theme = xcursor_theme;
         };
       };
 
