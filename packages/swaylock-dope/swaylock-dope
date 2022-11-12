@@ -5,7 +5,7 @@ while read -r line; do
     sway_outputs+=("$line")
 done <<< "$(swaymsg -t get_outputs | jq -r .[].name)"
 
-swaylock_params+=("-f" "-e" "-K" "-s" "fill" "--font=Roboto" "--inside-color=00000066" "--inside-clear-color=00660099" "--inside-ver-color=00006699" "--inside-wrong-color=66000099" "--key-hl-color=FFFFFF99" "--ring-color=GGGGGGBB" "--ring-wrong-color=FF6666BB" "--ring-ver-color=6666FFBB" "--text-color=FFFFFFFF" "--text-clear-color=FFFFFFFF" "--text-wrong-color=FFFFFFFF" "--text-ver-color=FFFFFFFF" "--indicator-radius=80")
+swaylock_params+=("-f" "-K" "-s" "fill" "--font=Roboto" "--inside-color=00000066" "--inside-clear-color=00660099" "--inside-ver-color=00006699" "--inside-wrong-color=66000099" "--key-hl-color=FFFFFF99" "--ring-color=GGGGGGBB" "--ring-wrong-color=FF6666BB" "--ring-ver-color=6666FFBB" "--text-color=FFFFFFFF" "--text-clear-color=FFFFFFFF" "--text-wrong-color=FFFFFFFF" "--text-ver-color=FFFFFFFF" "--indicator-radius=80")
 
 trap 'rm -f /tmp/bg-dope-*.*' EXIT
 
