@@ -176,7 +176,7 @@ in {
       seat = {
         "*" = {
           hide_cursor = "when-typing enable";
-          xcursor_theme = xcursor_theme;
+          inherit xcursor_theme;
         };
       };
 
