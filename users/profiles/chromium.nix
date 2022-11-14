@@ -1,6 +1,6 @@
 {pkgs, ...}: let
   chromium = pkgs.chromium.override {
-    commandLineArgs = "-enable-features=UseOzonePlatform -ozone-platform=wayland -enable-features=VaapiVideoDecoder";
+    commandLineArgs = "-enable-features=UseOzonePlatform -ozone-platform=wayland -enable-features=VaapiVideoDecoder --enable-gpu";
   };
 in {
   programs.chromium = {
@@ -10,10 +10,6 @@ in {
       {
         ## vimium
         id = "dbepggeogbaibhgnhhndojpepiihcmeb";
-      }
-      {
-        ## stadia plus
-        id = "bbhmnnecicphphjamhdefpagipoegijd";
       }
     ];
   };
