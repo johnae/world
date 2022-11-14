@@ -1,32 +1,34 @@
 {
   stdenv,
   lib,
-  meson,
-  ninja,
-  pkg-config,
-  wayland,
+  cmake,
+  ffmpeg,
+  glslang,
+  hwdata,
   libGL,
-  wayland-protocols,
-  libinput,
-  libxkbcommon,
-  pixman,
-  xcbutilwm,
   libX11,
   libcap,
-  xcbutilimage,
-  xcbutilrenderutil,
-  xcbutilerrors,
-  mesa,
+  libdrm,
   libglvnd,
+  libinput,
   libpng,
   libuuid,
+  libxkbcommon,
+  mesa,
+  meson,
+  ninja,
+  pixman,
+  pkg-config,
   seatd,
-  libdrm,
-  ffmpeg,
-  xwayland,
   vulkan-headers,
   vulkan-loader,
-  glslang,
+  wayland,
+  wayland-protocols,
+  xcbutilerrors,
+  xcbutilimage,
+  xcbutilrenderutil,
+  xcbutilwm,
+  xwayland,
   enableXWayland ? true,
   inputs,
 }:
@@ -38,34 +40,35 @@ stdenv.mkDerivation {
 
   outputs = ["out"];
 
-  nativeBuildInputs = [meson ninja pkg-config xwayland];
+  nativeBuildInputs = [meson cmake ninja pkg-config xwayland];
 
   mesonFlags =
     lib.optional (!enableXWayland) "-Dxwayland=disabled";
 
   buildInputs = [
-    wayland
+    ffmpeg
+    glslang
+    hwdata
     libGL
-    wayland-protocols
-    libinput
-    libxkbcommon
-    pixman
-    xcbutilwm
     libX11
     libcap
-    seatd
     libdrm
-    xcbutilimage
-    xcbutilerrors
-    xcbutilrenderutil
-    mesa
-    libpng
-    ffmpeg
     libglvnd
+    libinput
+    libpng
     libuuid
+    libxkbcommon
+    mesa
+    pixman
+    seatd
     vulkan-headers
     vulkan-loader
-    glslang
+    wayland
+    wayland-protocols
+    xcbutilerrors
+    xcbutilimage
+    xcbutilrenderutil
+    xcbutilwm
   ];
 
   meta = {
