@@ -1,21 +1,23 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  meson,
-  pkg-config,
-  ninja,
-  scdoc,
-  wayland-scanner,
-  pixman,
-  libxkbcommon,
-  wayland,
-  neatvnc,
-  libdrm,
-  libX11,
   aml,
-  pam,
+  cmake,
+  fetchFromGitHub,
+  jansson,
+  libX11,
+  libdrm,
+  libxkbcommon,
   mesa,
+  meson,
+  neatvnc,
+  ninja,
+  pam,
+  pixman,
+  pkg-config,
+  scdoc,
+  wayland,
+  wayland-scanner,
   inputs,
 }:
 stdenv.mkDerivation rec {
@@ -24,8 +26,8 @@ stdenv.mkDerivation rec {
 
   src = inputs.wayvnc;
 
-  nativeBuildInputs = [meson pkg-config ninja scdoc wayland-scanner];
-  buildInputs = [pixman libxkbcommon wayland neatvnc libdrm libX11 aml pam mesa];
+  nativeBuildInputs = [meson pkg-config ninja scdoc wayland-scanner cmake];
+  buildInputs = [pixman libxkbcommon wayland neatvnc libdrm libX11 aml pam mesa jansson];
 
   meta = with lib; {
     description = "A VNC server for wlroots based Wayland compositors";

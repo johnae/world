@@ -419,6 +419,22 @@
         "type": "github"
       }
     },
+    "hwdata": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1668158462,
+        "narHash": "sha256-wkKOc8NlhR/RQV6IRrXmrD2lyWkc9rthqSEpUMgkGWg=",
+        "owner": "vcrhonek",
+        "repo": "hwdata",
+        "rev": "f1e2eeb482abf7345c4f7926f82d97612de9ce42",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vcrhonek",
+        "repo": "hwdata",
+        "type": "github"
+      }
+    },
     "kanshi": {
       "flake": false,
       "locked": {
@@ -485,15 +501,16 @@
     "matrix-conduit": {
       "flake": false,
       "locked": {
-        "lastModified": 1668025642,
-        "narHash": "sha256-7q306WF2Snd/6h4k4UGH/tFkmKnGZFlMG6mwi9yutC8=",
+        "lastModified": 1667407668,
+        "narHash": "sha256-CdjhxOzIEadTsM8mjA/LAFb0e1sfOuKwO2w/5tMj3CE=",
         "owner": "famedly",
         "repo": "conduit",
-        "rev": "cf993160828fe3041e2a179b24812cc105915630",
+        "rev": "ccdaaceb3311a0972c3c23a11c4a81fa7329518a",
         "type": "gitlab"
       },
       "original": {
         "owner": "famedly",
+        "ref": "ccdaace",
         "repo": "conduit",
         "type": "gitlab"
       }
@@ -750,6 +767,7 @@
         "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
         "grim": "grim",
         "home-manager": "home-manager",
+        "hwdata": "hwdata",
         "kanshi": "kanshi",
         "kile": "kile",
         "kured": "kured",

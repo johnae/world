@@ -52,6 +52,8 @@
     google-cloud-sdk-fish-completion.url = "github:Doctusoft/google-cloud-sdk-fish-completion";
     grim.flake = false;
     grim.url = "github:emersion/grim";
+    hwdata.url = "github:vcrhonek/hwdata";
+    hwdata.flake = false;
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.inputs.utils.follows = "flake-utils";
     home-manager.url = "github:nix-community/home-manager";
@@ -62,7 +64,7 @@
     kured.flake = false;
     kured.url = "github:weaveworks/kured";
     matrix-conduit.flake = false;
-    matrix-conduit.url = "gitlab:famedly/conduit";
+    matrix-conduit.url = "gitlab:famedly/conduit/ccdaace"; ## Update when tooling allows
     neatvnc.flake = false;
     neatvnc.url = "github:any1/neatvnc";
     netns-exec.flake = false;
@@ -387,6 +389,7 @@
               notracking = true;
               kanshi = true;
               waybar = true;
+              hwdata-master = true;
             }));
       }
     );

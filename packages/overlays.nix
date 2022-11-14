@@ -16,10 +16,35 @@ in
     wayland-protocols-master = final: prev: {wayland-protocols-master = prev.callPackage ./wayland-protocols-master {};};
   }
   // {
+    hwdata-master = final: prev: {
+      hwdata-master = prev.stdenv.mkDerivation rec {
+        pname = "hwdata";
+        version = inputs.hwdata.rev;
+        src = inputs.hwdata;
+
+        postPatch = ''
+          patchShebangs ./configure
+        '';
+
+        configureFlags = ["--datadir=${placeholder "out"}/share"];
+
+        doCheck = false;
+
+        meta = with lib; {
+          homepage = "https://github.com/vcrhonek/hwdata";
+          description = "Hardware Database, including Monitors, pci.ids, usb.ids, and video cards";
+          license = licenses.gpl2Plus;
+          platforms = platforms.all;
+          maintainers = with maintainers; [lovesegfault];
+        };
+      };
+    };
+
     world-updaters = import ./world-updaters-overlay.nix;
     wlroots-master = final: prev: {
       wlroots-master = prev.callPackage ./wlroots-master {
         wayland-protocols = final.wayland-protocols-master;
+        hwdata = final.hwdata-master;
       };
     };
     sway-unwrapped = final: prev: {
