@@ -26,6 +26,12 @@ profiles = [
 [config.programs.mosh]
 enable = true
 
+[config.boot.initrd.systemd]
+enable = true
+
+[config.boot.initrd.luks.devices]
+cryptkey.crypttabExtraOpts = [ "fido2-device=auto" ]
+
 [config.age.secrets]
 spotnix = { file = "secrets/spotnix.age", owner = "1337" }
 spotifyd = { file = "secrets/spotifyd.age", owner = "1337" }
