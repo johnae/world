@@ -171,7 +171,7 @@
         inputs.agenix.overlay
         inputs.devshell.overlay
         inputs.emacs-overlay.overlay
-        inputs.fenix.overlay
+        inputs.fenix.overlays.default
         inputs.nur.overlay
         inputs.persway.overlays.default
         inputs.spotnix.overlays.default

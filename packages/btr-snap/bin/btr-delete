@@ -1,16 +1,16 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 snap=$1
 
-if [ ! -e $snap ]; then
+if [ ! -e "$snap" ]; then
   echo >&2 "$snap does not exist so can't delete it, sorry."
   exit 1
 fi
 
-if [ $(stat --format=%i $snap) -ne 256 ]; then
+if [ "$(stat --format=%i "$snap")" -ne 256 ]; then
   echo >&2 "$snap is not a btrfs snapshot can't delete it, sorry."
   exit 1
 fi
 
 echo "removing snapshot: '$snap'"
-btrfs subvolume delete $snap
+btrfs subvolume delete "$snap"

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 set -- $SSH_ORIGINAL_COMMAND
 
 cmd=$1
@@ -94,8 +94,8 @@ check() {
 setup() {
   backup=$1
   echo "setting up backup '$backup'"
-  echo "sudo mkdir -p \"$(dirname $backup)\""
-  sudo mkdir -p "$(dirname $backup)"
+  echo "sudo mkdir -p \"$(dirname "$backup")\""
+  sudo mkdir -p "$(dirname "$backup")"
   echo "sudo btrfs subvolume create \"$backup\""
   sudo btrfs subvolume create "$backup" || true
   exit 0
@@ -108,18 +108,18 @@ nocommand() {
 
 case "$cmd" in
   receive)
-    receive $dest
+    receive "$dest"
     ;;
   setup)
-    setup $dest
+    setup "$dest"
     ;;
   exists)
-    exists $dest
+    exists "$dest"
     ;;
   check)
-    check $dest
+    check "$dest"
     ;;
   *)
-    nocommand $dest
+    nocommand "$dest"
     ;;
 esac

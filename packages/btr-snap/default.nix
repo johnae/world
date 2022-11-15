@@ -17,18 +17,18 @@ with pkgs;
       runHook preInstall
       for scpt in $(ls ${./bin}); do
         install -D ${./bin}/$scpt $out/script/$scpt
+        ${pkgs.shellcheck}/bin/shellcheck $out/script/$scpt
       done
       for scpt in $out/script/*; do
           local sname=$(basename "$scpt")
           makeWrapper "$scpt" "$out/bin/$sname" --prefix PATH ":" \
-          "${openssh}/bin:${btrfs-progs}/bin:${coreutils}/bin:${pv}/bin:${hostname}/bin"
+          "${bashInteractive}/bin:${openssh}/bin:${btrfs-progs}/bin:${coreutils}/bin:${pv}/bin:${hostname}/bin:$out/bin"
       done
       runHook postInstall
     '';
 
     meta = {
       description = "Btrfs snapshot and backup scripts";
-      homepage = "https://github.com/johnae/btr-snap";
       license = "MIT";
       platforms = lib.platforms.linux;
     };
