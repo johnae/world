@@ -31,9 +31,12 @@ enable = true
 [config.boot.binfmt]
 emulatedSystems = [ "aarch64-linux" ]
 
+[config.boot.initrd.systemd]
+enable = true
+
 [config.boot.initrd.luks.devices]
-cryptkey.keyFile = "/dev/disk/by-partlabel/alt_key"
-cryptkey.fallbackToPassword = true
+#cryptkey.keyFile = "/dev/disk/by-partlabel/alt_key"
+cryptkey.crypttabExtraOpts = [ "fido2-device=auto" ]
 
 [config.environment.state."/keep"]
 directories = [
