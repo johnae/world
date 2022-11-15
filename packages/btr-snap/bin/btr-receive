@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2086
 set -- $SSH_ORIGINAL_COMMAND
 
 cmd=$1
 dest=$2
 maxdaily=5
 keepdaily=1
-today=$(date +%y%m%d)
+today="$(date +%y%m%d)"
 
 for i in {0..7}; do ((keep[$(date +%Y%m%d -d "-$i day")]++)); done
 
@@ -16,44 +17,44 @@ fi
 
 cleanup() {
   backup=$1
-  if [ -e $backup/.backup-new ]; then
-    latest=$(date +%Y%m%d%H%M -d @$(stat -c %Z $backup/.backup-latest))
-    if [ -e $backup/.backup-$latest ]; then
+  if [ -e "$backup"/.backup-new ]; then
+    latest="$(date +%Y%m%d%H%M -d @"$(stat -c %Z "$backup"/.backup-latest)")"
+    if [ -e "$backup"/.backup-"$latest" ]; then
       echo "preexisting $backup/.backup-$latest, removing first"
-      sudo btrfs subvolume delete $backup/.backup-$latest
+      sudo btrfs subvolume delete "$backup"/.backup-"$latest"
     fi
     echo "move $backup/.backup-latest to $backup/.backup-$latest"
-    sudo mv $backup/.backup-latest $backup/.backup-$latest
+    sudo mv "$backup"/.backup-latest "$backup"/.backup-"$latest"
 
     echo "moving new remote backup $backup/.backup-new to $backup/.backup-latest..."
-    sudo mv $backup/.backup-new $backup/.backup-latest
+    sudo mv "$backup"/.backup-new "$backup"/.backup-latest
 
     echo "cleaning out old daily snapshots"
-    for snap in $((ls -da $backup/.backup-$today* || true) | sort -r | tail -n +$((maxdaily+1))); do
+    for snap in $( (ls -da "$backup"/.backup-"$today"* || true) | sort -r | tail -n +$((maxdaily+1))); do
       echo "removing old daily snapshot: '$snap'"
       echo "sudo btrfs subvolume delete $snap"
-      sudo btrfs subvolume delete $snap
+      sudo btrfs subvolume delete "$snap"
     done
 
     echo "cleaning out snapshots older than today, keeping a weeks worth ($keepdaily per day)"
-    for snap in $((ls -da $backup/.backup-2* || true) | sort -r); do
-      name=$(basename $snap)
-      when=$(echo $name | sed 's|\.backup-||g')
-      day=$(echo $when | cut -c1-8)
+    for snap in $( (ls -da "$backup"/.backup-2* || true) | sort -r); do
+      name="$(basename "$snap")"
+      when=${name//.backup-/}
+      day="$(echo "$when" | cut -c1-8)"
       if [ "$day" = "$today" ]; then
         echo "skip $snap (today)"
         continue
       fi
-      k=${keep[$day]}
+      k=${keep["$day"]}
       if [ "$k" != "1" ]; then
         echo "removing snap older than a week: $snap"
         echo "sudo btrfs subvolume delete $snap"
-        sudo btrfs subvolume delete $snap
+        sudo btrfs subvolume delete "$snap"
       else
-        for dailysnap in $((ls -da $backup/.backup-$day* || true) | sort -r | tail -n +$((keepdaily+1))); do
+        for dailysnap in $( (ls -da "$backup"/.backup-"$day"* || true) | sort -r | tail -n +$((keepdaily+1))); do
           echo "remove old snap $dailysnap (keeping one per day)"
           echo "sudo btrfs subvolume delete $dailysnap"
-          sudo btrfs subvolume delete $dailysnap
+          sudo btrfs subvolume delete "$dailysnap"
         done
       fi
     done
@@ -62,9 +63,9 @@ cleanup() {
 
 receive() {
   backup=$1
-  if [ -e $backup/.backup-new ]; then
+  if [ -e "$backup"/.backup-new ]; then
     echo "preexisting $backup/.backup-new, removing before receiving..."
-    sudo btrfs subvolume delete $backup/.backup-new
+    sudo btrfs subvolume delete "$backup"/.backup-new
   fi
   echo "sudo btrfs receive \"$backup\""
   if ! sudo btrfs receive "$backup"; then
@@ -72,7 +73,7 @@ receive() {
     exit 1
   fi
   sync
-  cleanup $backup
+  cleanup "$backup"
 }
 
 exists() {

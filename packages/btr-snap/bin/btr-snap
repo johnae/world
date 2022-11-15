@@ -3,7 +3,7 @@
 ## always use UTC
 export TZ=UTC
 
-self=$(cd $(dirname $0) && pwd)
+self="$(cd "$(dirname "$0")" && pwd)"
 
 volume=$1
 shift
@@ -34,18 +34,16 @@ if [ -z "$sshkey" ]; then
     exit 1
 fi
 
-snapshot=.snapshot
-current=current
 maxstatusretries=3
 statusretries=$maxstatusretries
 statusretrywait=10 # seconds
 
 ## Check if remote is reachable at all (the hello argument is required but not used at remote because "reasons") - will retry a number of times
 while true; do
-    if $self/btr-remote-status $host $port $sshkey check hello; then
+    if "$self"/btr-remote-status "$host" "$port" "$sshkey" check hello; then
         break
     else
-        statusretries=$(($statusretries - 1))
+        statusretries=$((statusretries - 1))
         if [ $statusretries -le 0 ]; then
             echo >&2 "cannot reach remote $host:$port using key $sshkey after $maxstatusretries retries, giving up"
             exit 1
@@ -55,13 +53,13 @@ while true; do
     fi
 done
 
-if [ $(stat --format=%i $volume) -ne 256 ]; then
+if [ "$(stat --format=%i "$volume")" -ne 256 ]; then
   echo >&2 "$volume is not a btrfs subvolume, sorry."
   exit 1
 fi
 
 ## Ensure we have an initial snapshot
-if msg=$($self/btr-init $volume); then
+if msg=$("$self"/btr-init "$volume"); then
     if [ "$msg" = "nop" ]; then
         echo >&2 "initial snapshot of '$volume' already created"
     else
@@ -73,20 +71,20 @@ else
 fi
 
 ## Now make new snapshot with the difference between current and new
-if ! $self/btr-snap-new $volume; then
+if ! "$self"/btr-snap-new "$volume"; then
   echo >&2 "something went wrong when snapshotting diff between old/new"
   exit 1
 fi
 
-if ! $self/btr-snap-send $volume $host $port $sshkey /storage; then
+if ! "$self"/btr-snap-send "$volume" "$host" "$port" "$sshkey" /storage; then
    echo >&2 "something went wrong when sending snapshot to remote"
    exit 1
 fi
 
 ## Now rename local current to whenever it was made and rename new to current
 
-$self/btr-snap-promote $volume
+"$self"/btr-snap-promote "$volume"
 
 ## Finally rotate out those backups we're no longer interested in keeping
 
-$self/btr-gc $volume
+"$self"/btr-gc "$volume"

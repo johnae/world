@@ -29,6 +29,7 @@ ssh="ssh -p $port"
 if [ "$sshkey" != "card" ]; then
     ssh="$ssh -i $sshkey"
 fi
-ssh="$ssh -C $ssh_options $host $@"
+# shellcheck disable=SC2154
+ssh="$ssh -C $ssh_options $host $*"
 
 exec $ssh

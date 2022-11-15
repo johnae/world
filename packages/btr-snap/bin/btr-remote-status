@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-self=$(cd $(dirname $0) && pwd)
+self="$(cd "$(dirname "$0")" && pwd)"
 host=$1
 shift
 port=$1
@@ -24,10 +24,10 @@ if [ -z "$sshkey" ]; then
 fi
 
 export ssh_options="-o BatchMode=yes -o ConnectTimeout=2"
-if msg=$($self/btr-ssh $host $port $sshkey $@); then
-  echo >&2 "'$@' - MSG: '$msg'"
+if msg="$("$self"/btr-ssh "$host" "$port" "$sshkey" "$@")"; then
+  echo >&2 "'$*' - MSG: '$msg'"
   exit 0
 else
-  echo >&2 "'$@' failed on $host:$port - MSG: '$msg'"
+  echo >&2 "'$*' failed on $host:$port - MSG: '$msg'"
   exit 1
 fi
