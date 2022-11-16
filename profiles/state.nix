@@ -66,6 +66,7 @@ in {
             "/home/${userName}/.gnupg"
             "/home/${userName}/.config/gcloud"
             "/home/${userName}/.emacs.d"
+            "/home/${userName}/.terraform.d"
           ];
           files = [
             "/home/${userName}/.kube/config"
