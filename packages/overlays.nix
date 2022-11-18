@@ -14,6 +14,16 @@ in
   )
   // {
     wayland-protocols-master = final: prev: {wayland-protocols-master = prev.callPackage ./wayland-protocols-master {};};
+    libdrm-24114 = final: prev: {
+      libdrm-24114 = prev.libdrm.overrideAttrs (oa: rec {
+        pname = "libdrm";
+        version = "2.4.114";
+        src = prev.fetchurl {
+          url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
+          hash = "sha256-MEnPhDpH0S5e7vvDvjSW14L6CfQjRr8Lfe/j0eWY0CY=";
+        };
+      });
+    };
   }
   // {
     hwdata-master = final: prev: {
@@ -45,12 +55,14 @@ in
       wlroots-master = prev.callPackage ./wlroots-master {
         wayland-protocols = final.wayland-protocols-master;
         hwdata = final.hwdata-master;
+        libdrm = final.libdrm-24114;
       };
     };
     sway-unwrapped = final: prev: {
       sway-unwrapped = prev.callPackage ./sway {
         wlroots = final.wlroots-master;
         wayland-protocols = final.wayland-protocols-master;
+        libdrm = final.libdrm-24114;
       };
     };
     sway = final: prev: {sway = prev.callPackage (prev.path + "/pkgs/applications/window-managers/sway/wrapper.nix") {};};
