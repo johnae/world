@@ -63,7 +63,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - id: job-matrix
       run: |
-        echo "::set-output name=matrix::$(nix eval .#github-actions-package-matrix-x86-64-linux --json)"
+        echo "matrix=$(nix eval .#github-actions-package-matrix-x86-64-linux --json)" >> "$GITHUB_OUTPUT"
 
   pkgs_aarch64_linux:
     runs-on: ubuntu-latest
@@ -77,7 +77,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - id: job-matrix
       run: |
-        echo "::set-output name=matrix::$(nix eval .#github-actions-package-matrix-aarch64-linux --json)"
+        echo "matrix=$(nix eval .#github-actions-package-matrix-aarch64-linux --json)" >> "$GITHUB_OUTPUT"
 
   hosts_x86_64_linux:
     runs-on: ubuntu-latest
@@ -91,7 +91,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - id: job-matrix
       run: |
-        echo "::set-output name=matrix::$(nix eval .#github-actions-host-matrix-x86-64-linux --json)"
+        echo "matrix=$(nix eval .#github-actions-host-matrix-x86-64-linux --json)" >> "$GITHUB_OUTPUT"
 
   hosts_aarch64_linux:
     runs-on: ubuntu-latest
@@ -105,7 +105,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - id: job-matrix
       run: |
-        echo "::set-output name=matrix::$(nix eval .#github-actions-host-matrix-aarch64-linux --json)"
+        echo "matrix=$(nix eval .#github-actions-host-matrix-aarch64-linux --json)" >> "$GITHUB_OUTPUT"
 
   pkg_x86_64_linux:
     needs: pkgs_x86_64_linux
