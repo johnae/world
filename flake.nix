@@ -293,7 +293,7 @@
         source,
         packageOverrides ? {},
       }:
-        (init pkgs).makeOutputs {
+        (init pkgs).dream2nix-interface.makeOutputs {
           inherit source packageOverrides;
         };
     };
