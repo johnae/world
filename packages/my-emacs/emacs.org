@@ -658,10 +658,6 @@ Package setup.
   #+BEGIN_SRC elisp
      (use-package tao-theme)
   #+END_SRC
-*** Nano Theme
-  #+BEGIN_SRC elisp
-     (use-package nano-theme)
-  #+END_SRC
 *** Set default theme
    #+BEGIN_SRC elisp
      (defvar jae:theme 'doom-oceanic-next)
