@@ -15,6 +15,7 @@ in {
     "fs.inotify.max_queued_events" = lib.mkDefault 32768;
     "fs.inotify.max_user_instances" = lib.mkDefault 8192;
     "fs.inotify.max_user_watches" = lib.mkDefault 495486;
+    "net.core.rmem_max" = lib.mkDefault 2500000; ## https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
   };
 
   networking.usePredictableInterfaceNames = false; ## works when there's only one ethernet port
