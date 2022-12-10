@@ -521,15 +521,16 @@
     "matrix-conduit": {
       "flake": false,
       "locked": {
-        "lastModified": 1669650612,
-        "narHash": "sha256-O5m863BNAw9t6QKaogYKPGhISwaI0bepm5Zt/HrElfI=",
+        "lastModified": 1667407668,
+        "narHash": "sha256-CdjhxOzIEadTsM8mjA/LAFb0e1sfOuKwO2w/5tMj3CE=",
         "owner": "famedly",
         "repo": "conduit",
-        "rev": "f4dd051a1db65498bdf93601f66ab591d8362626",
+        "rev": "ccdaaceb3311a0972c3c23a11c4a81fa7329518a",
         "type": "gitlab"
       },
       "original": {
         "owner": "famedly",
+        "ref": "ccdaace",
         "repo": "conduit",
         "type": "gitlab"
       }
