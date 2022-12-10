@@ -82,7 +82,7 @@
     persway.inputs.fenix.follows = "fenix";
     persway.inputs.flake-utils.follows = "flake-utils";
     persway.inputs.nixpkgs.follows = "nixpkgs";
-    persway.url = "github:johnae/persway";
+    persway.url = "github:johnae/persway/master-stack";
     ristate.flake = false;
     ristate.url = "gitlab:snakedye/ristate";
     rofi-wayland.flake = false;

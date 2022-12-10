@@ -99,18 +99,6 @@
     '';
   };
 
-  #swayFocusWindow = pkgs.writeShellApplication {
-  #  name = "sway-focus-window";
-  #  text = ''
-  #    export SK_OPTS="--no-bold --color=bw  --height=40 --reverse --no-hscroll --no-mouse"
-  #    window="$(${pkgs.sway}/bin/swaymsg -t get_tree | \
-  #              ${pkgs.jq}/bin/jq -r '.nodes | .[] | .nodes | . [] | select(.nodes != null) | .nodes | .[] | select(.name != null) | "\(.id?) \(.name?)"' | \
-  #              ${pkgs.scripts}/bin/sk-sk | \
-  #              awk '{print $1}')"
-  #    ${pkgs.sway}/bin/swaymsg "[con_id=$window] focus"
-  #  '';
-  #};
-
   swayOnReload = pkgs.writeShellApplication {
     name = "sway-on-reload";
     runtimeInputs = [pkgs.sway];
@@ -313,7 +301,12 @@ in {
         "${modifier}+Control+Left" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus left; swap container with mark _swap; [con_mark=_swap] unmark _swap";
         "${modifier}+Control+Right" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus right; swap container with mark _swap; [con_mark=_swap] unmark _swap";
         "${modifier}+Control+Down" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus down; swap container with mark _swap; [con_mark=_swap] unmark _swap";
-        "${modifier}+space" = "exec ${swapContainers}/bin/swap-containers";
+
+        "${modifier}+space" = "exec echo swap_visible > $XDG_RUNTIME_DIR/persway"; # "exec SWAP_VISIBLE=yes ${swayMasterStack2}/bin/sway-master-stack2";
+        "${modifier}+Control+space" = "exec echo master_cycle_next > $XDG_RUNTIME_DIR/persway"; # "exec ${swayMasterStack2}/bin/sway-master-stack2";
+
+        "${modifier}+Tab" = "exec echo stack_focus_next > $XDG_RUNTIME_DIR/persway";
+        "${modifier}+Shift+Tab" = "exec echo stack_focus_prev > $XDG_RUNTIME_DIR/persway";
 
         "${modifier}+t" = ''exec rofi-spotify-search track'';
         "${modifier}+p" = ''exec rofi-spotify-search playlist'';
@@ -391,7 +384,7 @@ in {
   };
 
   systemd.user.services = {
-    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -a -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev'";
+    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev' -d master_stack -a spiral";
     rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
     swayidle = swayservice "Sway Idle Service - lock screen etc" "${swayidleCommand}/bin/swayidle";
   };

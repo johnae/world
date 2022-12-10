@@ -521,16 +521,15 @@
     "matrix-conduit": {
       "flake": false,
       "locked": {
-        "lastModified": 1667407668,
-        "narHash": "sha256-CdjhxOzIEadTsM8mjA/LAFb0e1sfOuKwO2w/5tMj3CE=",
+        "lastModified": 1669650612,
+        "narHash": "sha256-O5m863BNAw9t6QKaogYKPGhISwaI0bepm5Zt/HrElfI=",
         "owner": "famedly",
         "repo": "conduit",
-        "rev": "ccdaaceb3311a0972c3c23a11c4a81fa7329518a",
+        "rev": "f4dd051a1db65498bdf93601f66ab591d8362626",
         "type": "gitlab"
       },
       "original": {
         "owner": "famedly",
-        "ref": "ccdaace",
         "repo": "conduit",
         "type": "gitlab"
       }
@@ -714,15 +713,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1669390133,
-        "narHash": "sha256-A2/QhUm4en2tmaNhCwnyDqURfU8tODQbyBBvhGhdl8w=",
+        "lastModified": 1670597379,
+        "narHash": "sha256-kWvl8drRH8kWlWwjAjBDfDbtqHzPjr3TNuaPYYrE5+4=",
         "owner": "johnae",
         "repo": "persway",
-        "rev": "71223197e03a00d5173d3530cffbbbfbd7c7eeaf",
+        "rev": "57ad2d3fce44ce14ad8189cf8c1f632a85cb9530",
         "type": "github"
       },
       "original": {
         "owner": "johnae",
+        "ref": "master-stack",
         "repo": "persway",
         "type": "github"
       }
