@@ -96,10 +96,10 @@ openIdConnect.issuer = "https://9000.eu.auth0.com/"
 openIdConnect.domainMap.".*" = "default-namespace"
 openIdConnect.clientId = "OkvvzmPd9AzS93lOTSp61g1v5EU4A9eg"
 openIdConnect.clientSecretFile = "/run/agenix/9000-auth0"
+logLevel = "debug"
 
 [config.services.headscale.settings]
 logtail.enabled = false
-log.level = "debug"
 oidc.allowed_domains = [ "insane.se", "9000.dev" ]
 oidc.allowed_users = [ "john@insane.se", "john@9000.dev" ]
 
