@@ -75,23 +75,20 @@ openssh.authorizedKeys.keys = [
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
 ]
 
-[config.users.users.headscale]
-uid = 1010
-
-#[config.services.headscale]
-#enable = true
-#address = "0.0.0.0"
-#port = 8088
-#serverUrl = "https://tailscale.9000.dev"
-#dns.baseDomain = "9000.dev"
-#dns.domains = [ "ts.9000.dev" ]
-#dns.nameservers = [ "1.1.1.1" ]
-#dns.magicDns = true
-#tls.letsencrypt.hostname = "tailscale.9000.dev"
-#openIdConnect.issuer = "https://9000.eu.auth0.com"
-#openIdConnect.domainMap.".*" = "default-namespace"
-#openIdConnect.clientId = "OkvvzmPd9AzS93lOTSp61g1v5EU4A9eg"
-#openIdConnect.clientSecretFile = "/run/agenix/9000-auth0"
+[config.services.headscale]
+enable = true
+address = "0.0.0.0"
+port = 8088
+serverUrl = "https://tailscale.9000.dev"
+dns.baseDomain = "9000.dev"
+dns.domains = [ "ts.9000.dev" ]
+dns.nameservers = [ "1.1.1.1" ]
+dns.magicDns = true
+tls.letsencrypt.hostname = "tailscale.9000.dev"
+openIdConnect.issuer = "https://9000.eu.auth0.com"
+openIdConnect.domainMap.".*" = "default-namespace"
+openIdConnect.clientId = "OkvvzmPd9AzS93lOTSp61g1v5EU4A9eg"
+openIdConnect.clientSecretFile = "/run/agenix/9000-auth0"
 
 [config.services.headscale.settings]
 logtail.enabled = false
@@ -208,7 +205,7 @@ syncthing-cert = { file = "secrets/polaris/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/polaris/syncthing-key.age", owner = "1337" }
 mailserver-john = { file = "secrets/mail/mailserver-john.age"}
 cloudflare-env = { file = "secrets/cloudflare-env.age" }
-9000-auth0 = { file = "secrets/9000-auth0.age", owner = "1010" }
+9000-auth0 = { file = "secrets/9000-auth0.age", owner = "headscale", group = "headscale" }
 
 flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
 sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
