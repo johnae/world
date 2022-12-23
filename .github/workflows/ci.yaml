@@ -195,7 +195,6 @@ jobs:
         export DEBIAN_FRONTEND
         sudo apt-get update -q -y && sudo apt-get install -q -y qemu-system-aarch64 qemu-efi binfmt-support qemu-user-static
         sudo bash -c "echo extra-platforms = aarch64-linux arm-linux >> /etc/nix/nix.conf"
-        sudo systemctl restart nix-daemon
     - env:
         HOST: ${{ matrix.host }}
       run: |
