@@ -73,16 +73,6 @@ openssh.authorizedKeys.keys = [
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
 ]
 
-#[config.services.headscale]
-#enable = true
-#address = "https://polaris.insane.se:8443"
-#dns.domains = [ "insane.lan" ]
-#tls.letsencrypt.hostname = "polaris.insane.se"
-#openIdConnect.issuer = "https://auth.9000.dev"
-#openIdConnect.domainMap.".*" = "default-namespace"
-#openIdConnect.clientId = "123"
-#openIdConnect.clientSecretFile = "/path/to/file"
-
 [config.services.syncthing]
 enable = true
 devices.SM-G998B.id = "PCFNIXF-AR7YX2B-354IJQW-YP25QM7-N53ES5L-HKB337S-I6JZV34-55LQEAR"
