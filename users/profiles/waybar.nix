@@ -5,6 +5,8 @@
 }: {
   programs.waybar.enable = true;
   programs.waybar.settings.mainBar = {
+    bar_id = "main";
+    ipc = true;
     position = "top";
     spacing = 8;
     modules-left = ["river/tags" "sway/workspaces" "sway/mode" "custom/media"];
