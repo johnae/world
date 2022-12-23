@@ -99,15 +99,15 @@ web.http = "127.0.0.1:5556"
 id = "github"
 name = "GitHub"
 type = "github"
-config.clientID = "$GITHUB_CLIENT_ID"
-config.clientSecret = "$GITHUB_CLIENT_SECRET"
+config.clientID = "'{{ .Env.GITHUB_CLIENT_ID }}'"
+config.clientSecret = "{{ .Env.GITHUB_CLIENT_SECRET }}"
 config.orgs = [ { name = "9k-dev", teams = [ "Admins", "Viewers" ] } ]
 config.redirectURI = "https://id.9000.dev/callback"
 
 [[config.services.dex.settings.staticClients]]
 id = "dex-auth"
 name = "dex-auth"
-secret = "$DEX_STATIC_CLIENT_SECRET"
+secret = "{{ .Env.DEX_STATIC_CLIENT_SECRET }}"
 redirectURIs = [ "http://localhost:8000", "http://localhost:18000", "https://johnae.cloudflareaccess.com/cdn-cgi/access/callback", "https://tailscale.9000.dev/oidc/callback" ]
 
 [config.systemd.services.dex.serviceConfig]
