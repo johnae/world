@@ -198,7 +198,7 @@ publicKey = "615mnBGkvjZnD/vRbyL/6da7YhtctfB+jimN+wfV724="
 [config.networking.firewall]
 trustedInterfaces = [ "insane" ] ## trust the vpn mesh
 allowedUDPPorts = [ 5349, 3478 ]
-allowedTCPPorts = [ 5349, 3478 ]
+allowedTCPPorts = [ 5349, 3478, 80, 443 ]
 allowedUDPPortRanges = [ { from = 49160, to = 49200 } ]
 
 [config.age.secrets]
