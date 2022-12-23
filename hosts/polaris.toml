@@ -75,6 +75,14 @@ openssh.authorizedKeys.keys = [
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
 ]
 
+[config.services.nginx]
+enable = true
+recommendedTlsSettings = true
+recommendedProxySettings = true
+recommendedGzipSettings = true
+recommendedOptimisation = true
+clientMaxBodySize = "300m"
+
 [config.services.headscale]
 enable = true
 address = "0.0.0.0"
