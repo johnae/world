@@ -99,7 +99,7 @@ openIdConnect.clientSecretFile = "/run/agenix/9000-auth0"
 
 [config.services.headscale.settings]
 logtail.enabled = false
-log.level = "WARN"
+log.level = "DEBUG"
 oidc.allowed_domains = [ "insane.se", "9000.dev" ]
 oidc.allowed_users = [ "john@insane.se", "john@9000.dev" ]
 
