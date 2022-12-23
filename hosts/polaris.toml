@@ -85,6 +85,7 @@ clientMaxBodySize = "300m"
 
 [config.services.dex]
 enable = true
+environmentFile = "/var/run/agenix/dex-environment"
 
 [config.services.dex.settings]
 issuer = "https://id.9000.dev"
@@ -93,7 +94,6 @@ oauth2.skipApprovalScreen = true
 storage.type = "sqlite3"
 storage.config.file = "/var/lib/dex/dex.db"
 web.http = "127.0.0.1:5556"
-environmentFile = "/var/run/agenix/dex-environment"
 
 [[config.services.dex.settings.connectors]]
 id = "github"
@@ -128,7 +128,7 @@ dns.baseDomain = "9000.dev"
 dns.domains = [ "ts.9000.dev" ]
 dns.nameservers = [ "1.1.1.1" ]
 dns.magicDns = true
-openIdConnect.issuer = "https://auth.9000.dev"
+openIdConnect.issuer = "https://id.9000.dev"
 openIdConnect.domainMap.".*" = "9000"
 openIdConnect.clientId = "dex-auth"
 openIdConnect.clientSecretFile = "/run/agenix/auth-9000-headscale"
