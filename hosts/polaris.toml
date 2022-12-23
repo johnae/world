@@ -107,7 +107,7 @@ config.redirectURI = "https://id.9000.dev/callback"
 [[config.services.dex.settings.staticClients]]
 id = "dex-auth"
 name = "dex-auth"
-secret = "$DEX_STATIC_CLIENT_SECRET"
+secretEnv = "DEX_STATIC_CLIENT_SECRET"
 redirectURIs = [ "http://localhost:8000", "http://localhost:18000", "https://johnae.cloudflareaccess.com/cdn-cgi/access/callback", "https://tailscale.9000.dev/oidc/callback" ]
 
 [config.systemd.services.dex.serviceConfig]
