@@ -96,11 +96,12 @@ openIdConnect.issuer = "https://9000.eu.auth0.com/"
 openIdConnect.domainMap.".*" = "9000"
 openIdConnect.clientId = "OkvvzmPd9AzS93lOTSp61g1v5EU4A9eg"
 openIdConnect.clientSecretFile = "/run/agenix/9000-auth0"
-logLevel = "debug"
+logLevel = "info"
 
 [config.services.headscale.settings]
 logtail.enabled = false
 oidc.allowed_domains = [ "insane.se", "9000.dev" ]
+ip_prefixes = [ "172.27.0.0/18" ]
 
 [config.services.nginx.virtualHosts."tailscale.9000.dev"]
 forceSSL = true
