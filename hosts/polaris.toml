@@ -78,20 +78,20 @@ openssh.authorizedKeys.keys = [
 [config.users.users.headscale]
 uid = 1010
 
-[config.services.headscale]
-enable = true
-address = "0.0.0.0"
-port = 8088
-serverUrl = "https://tailscale.9000.dev"
-dns.baseDomain = "9000.dev"
-dns.domains = [ "ts.9000.dev" ]
-dns.nameservers = [ "1.1.1.1" ]
-dns.magicDns = true
-tls.letsencrypt.hostname = "tailscale.9000.dev"
-openIdConnect.issuer = "https://9000.eu.auth0.com"
-openIdConnect.domainMap.".*" = "default-namespace"
-openIdConnect.clientId = "OkvvzmPd9AzS93lOTSp61g1v5EU4A9eg"
-openIdConnect.clientSecretFile = "/run/agenix/9000-auth0"
+#[config.services.headscale]
+#enable = true
+#address = "0.0.0.0"
+#port = 8088
+#serverUrl = "https://tailscale.9000.dev"
+#dns.baseDomain = "9000.dev"
+#dns.domains = [ "ts.9000.dev" ]
+#dns.nameservers = [ "1.1.1.1" ]
+#dns.magicDns = true
+#tls.letsencrypt.hostname = "tailscale.9000.dev"
+#openIdConnect.issuer = "https://9000.eu.auth0.com"
+#openIdConnect.domainMap.".*" = "default-namespace"
+#openIdConnect.clientId = "OkvvzmPd9AzS93lOTSp61g1v5EU4A9eg"
+#openIdConnect.clientSecretFile = "/run/agenix/9000-auth0"
 
 [config.services.headscale.settings]
 logtail.enabled = false
