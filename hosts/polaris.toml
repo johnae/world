@@ -100,6 +100,8 @@ openIdConnect.clientSecretFile = "/run/agenix/9000-auth0"
 [config.services.headscale.settings]
 logtail.enabled = false
 log.level = "WARN"
+oidc.allowed_domains = [ "insane.se", "9000.dev" ]
+oidc.allowed_users = [ "john@insane.se", "john@9000.dev" ]
 
 [config.services.nginx.virtualHosts."tailscale.9000.dev"]
 forceSSL = true
