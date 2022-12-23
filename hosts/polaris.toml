@@ -83,6 +83,39 @@ recommendedGzipSettings = true
 recommendedOptimisation = true
 clientMaxBodySize = "300m"
 
+[config.services.dex]
+enable = true
+
+[config.services.dex.settings]
+issuer = "https://id.9000.dev"
+oauth2.responseTypes = [ "code", "token", "id_token" ]
+oauth2.skipApprovalScreen = true
+storage.type = "sqlite3"
+storage.config.file = "/var/lib/dex/dex.db"
+web.http = "127.0.0.1:5556"
+environmentFile = "/var/run/agenix/dex-environment"
+
+[[config.services.dex.settings.connectors]]
+config.id = "github"
+config.name = "GitHub"
+config.type = "github"
+config.clientID = "$GITHUB_CLIENT_ID"
+config.clientSecret = "$GITHUB_CLIENT_SECRET"
+config.orgs = [ { name = "9k-dev", teams = [ "Admins", "Viewers" ] } ]
+config.redirectURI = "https://id.9000.dev/callback"
+
+[[config.services.dex.settings.staticClients]]
+id = "dex-auth"
+name = "dex-auth"
+secret = "$DEX_STATIC_CLIENT_SECRET"
+redirectURIs = [ "http://localhost:8000", "http://localhost:18000", "https://johnae.cloudflareaccess.com/cdn-cgi/access/callback", "https://tailscale.9000.dev/oidc/callback" ]
+
+[config.services.nginx.virtualHosts."id.9000.dev"]
+forceSSL = true
+enableACME = true
+locations."/".proxyPass = "http://localhost:5556"
+locations."/".proxyWebsockets = true
+
 [config.services.headscale]
 enable = true
 address = "0.0.0.0"
@@ -220,6 +253,7 @@ syncthing-key = { file = "secrets/polaris/syncthing-key.age", owner = "1337" }
 mailserver-john = { file = "secrets/mail/mailserver-john.age"}
 cloudflare-env = { file = "secrets/cloudflare-env.age" }
 auth-9000-headscale = { file = "secrets/auth-9000.age", owner = "headscale", group = "headscale" }
+dex-environment = { file = "secrets/dex-environment.age" }
 
 flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
 sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
@@ -314,6 +348,7 @@ spec.postBuild.substituteFrom = [
 
 [config.environment.state."/keep"]
 directories = [
+  "/var/lib/dex",
   "/var/lib/headscale",
   "/var/lib/jellyfin",
   "/var/lib/media",
