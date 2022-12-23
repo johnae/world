@@ -84,7 +84,6 @@ dns.baseDomain = "9000.dev"
 dns.domains = [ "ts.9000.dev" ]
 dns.nameservers = [ "1.1.1.1" ]
 dns.magicDns = true
-tls.letsencrypt.hostname = "tailscale.9000.dev"
 openIdConnect.issuer = "https://9000.eu.auth0.com/"
 openIdConnect.domainMap.".*" = "default-namespace"
 openIdConnect.clientId = "OkvvzmPd9AzS93lOTSp61g1v5EU4A9eg"
@@ -93,7 +92,12 @@ openIdConnect.clientSecretFile = "/run/agenix/9000-auth0"
 [config.services.headscale.settings]
 logtail.enabled = false
 log.level = "WARN"
-acme_email = "john+headscale-ls@9000.dev"
+
+[config.services.nginx.virtualHosts."tailscale.9000.dev"]
+forceSSL = true
+enableACME = true
+locations."/".proxyPass = "http://localhost:8088"
+locations."/".proxyWebsockets = true
 
 [config.services.syncthing]
 enable = true
