@@ -111,7 +111,7 @@ secret = "$DEX_STATIC_CLIENT_SECRET"
 redirectURIs = [ "http://localhost:8000", "http://localhost:18000", "https://johnae.cloudflareaccess.com/cdn-cgi/access/callback", "https://tailscale.9000.dev/oidc/callback" ]
 
 [config.systemd.services.dex.serviceConfig]
-BindPaths = "/var/lib/dex"
+BindPaths = [ "/var/lib/dex" ]
 
 [config.services.nginx.virtualHosts."id.9000.dev"]
 forceSSL = true
