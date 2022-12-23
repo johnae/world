@@ -159,53 +159,53 @@ jobs:
       run: |
         nix build .#packages.aarch64-linux.$PKG -L
 
-  #host_x86_64_linux:
-  #  needs: [hosts_x86_64_linux, pkg_x86_64_linux]
-  #  runs-on: ${{ matrix.os }}
-  #  strategy:
-  #    matrix: ${{ fromJson(needs.hosts_x86_64_linux.outputs.matrix) }}
-  #  steps:
-  #  - uses: actions/checkout@v3
-  #  - uses: cachix/install-nix-action@v18
-  #    with:
-  #      extra_nix_config: |
-  #        access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-  #        substituters = https://nixpkgs-wayland.cachix.org https://nix-community.cachix.org https://insane.cachix.org https://cachix.cachix.org https://cache.nixos.org/
-  #        trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
-  #  - env:
-  #      HOST: ${{ matrix.host }}
-  #    run: |
-  #      nix build .#nixosConfigurations.$HOST.config.system.build.toplevel -L
+  host_x86_64_linux:
+    needs: [hosts_x86_64_linux, pkg_x86_64_linux]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix: ${{ fromJson(needs.hosts_x86_64_linux.outputs.matrix) }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v18
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          substituters = https://nixpkgs-wayland.cachix.org https://nix-community.cachix.org https://insane.cachix.org https://cachix.cachix.org https://cache.nixos.org/
+          trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+    - env:
+        HOST: ${{ matrix.host }}
+      run: |
+        nix build .#nixosConfigurations.$HOST.config.system.build.toplevel -L
 
-  #host_aarch64_linux:
-  #  needs: [hosts_aarch64_linux, pkg_aarch64_linux]
-  #  runs-on: ${{ matrix.os }}
-  #  strategy:
-  #    matrix: ${{ fromJson(needs.hosts_aarch64_linux.outputs.matrix) }}
-  #  steps:
-  #  - uses: actions/checkout@v3
-  #  - uses: cachix/install-nix-action@v18
-  #    with:
-  #      extra_nix_config: |
-  #        access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-  #        substituters = https://nixpkgs-wayland.cachix.org https://nix-community.cachix.org https://insane.cachix.org https://cachix.cachix.org https://cache.nixos.org/
-  #        trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
-  #  - run: |
-  #      DEBIAN_FRONTEND=noninteractive
-  #      export DEBIAN_FRONTEND
-  #      sudo apt-get update -q -y && sudo apt-get install -q -y qemu-system-aarch64 qemu-efi binfmt-support qemu-user-static
-  #      sudo bash -c "echo extra-platforms = aarch64-linux arm-linux >> /etc/nix/nix.conf"
-  #      sudo systemctl restart nix-daemon
-  #  - env:
-  #      HOST: ${{ matrix.host }}
-  #    run: |
-  #      nix build .#nixosConfigurations.$HOST.config.system.build.toplevel -L
+  host_aarch64_linux:
+    needs: [hosts_aarch64_linux, pkg_aarch64_linux]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix: ${{ fromJson(needs.hosts_aarch64_linux.outputs.matrix) }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v18
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          substituters = https://nixpkgs-wayland.cachix.org https://nix-community.cachix.org https://insane.cachix.org https://cachix.cachix.org https://cache.nixos.org/
+          trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+    - run: |
+        DEBIAN_FRONTEND=noninteractive
+        export DEBIAN_FRONTEND
+        sudo apt-get update -q -y && sudo apt-get install -q -y qemu-system-aarch64 qemu-efi binfmt-support qemu-user-static
+        sudo bash -c "echo extra-platforms = aarch64-linux arm-linux >> /etc/nix/nix.conf"
+        sudo systemctl restart nix-daemon
+    - env:
+        HOST: ${{ matrix.host }}
+      run: |
+        nix build .#nixosConfigurations.$HOST.config.system.build.toplevel -L
 
   summarize:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: Build (matrix)
-    needs: [container_images_x86_64_linux, pkg_x86_64_linux, pkg_aarch64_linux, nix_lint, nix_check] # host_aarch64_linux, host_x86_64_linux, 
+    needs: [container_images_x86_64_linux, pkg_x86_64_linux, pkg_aarch64_linux, nix_lint, nix_check, host_aarch64_linux, host_x86_64_linux] 
     steps:
       - name: Check linting status
         if: ${{ needs.nix_lint.result != 'success' }}
@@ -222,9 +222,9 @@ jobs:
       - name: Check aarch64-linux package build matrix status
         if: ${{ needs.pkg_aarch64_linux.result != 'success' }}
         run: exit 1
-      #- name: Check host aarch64-linux build matrix status
-      #  if: ${{ needs.host_aarch64_linux.result != 'success' }}
-      #  run: exit 1
-      #- name: Check host x86_64-linux build matrix status
-      #  if: ${{ needs.host_x86_64_linux.result != 'success' }}
-      #  run: exit 1
+      - name: Check host aarch64-linux build matrix status
+        if: ${{ needs.host_aarch64_linux.result != 'success' }}
+        run: exit 1
+      - name: Check host x86_64-linux build matrix status
+        if: ${{ needs.host_x86_64_linux.result != 'success' }}
+        run: exit 1

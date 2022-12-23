@@ -595,12 +595,12 @@
       };
 
       github-actions-host-matrix-x86-64-linux = {
-        os = ["ubuntu-latest"];
+        os = ["9k"];
         host = mapAttrsToList (name: _: name) (filterAttrs (_: config: config.system == "x86_64-linux") hostConfigurations);
       };
 
       github-actions-host-matrix-aarch64-linux = {
-        os = ["ubuntu-latest"];
+        os = ["9k"];
         host = mapAttrsToList (name: _: name) (filterAttrs (_: config: config.system == "aarch64-linux") hostConfigurations);
       };
     };
