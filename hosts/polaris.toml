@@ -96,9 +96,9 @@ web.http = "127.0.0.1:5556"
 environmentFile = "/var/run/agenix/dex-environment"
 
 [[config.services.dex.settings.connectors]]
-config.id = "github"
-config.name = "GitHub"
-config.type = "github"
+id = "github"
+name = "GitHub"
+type = "github"
 config.clientID = "$GITHUB_CLIENT_ID"
 config.clientSecret = "$GITHUB_CLIENT_SECRET"
 config.orgs = [ { name = "9k-dev", teams = [ "Admins", "Viewers" ] } ]
