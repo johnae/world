@@ -92,10 +92,10 @@ dns.baseDomain = "9000.dev"
 dns.domains = [ "ts.9000.dev" ]
 dns.nameservers = [ "1.1.1.1" ]
 dns.magicDns = true
-openIdConnect.issuer = "https://9000.eu.auth0.com/"
+openIdConnect.issuer = "https://auth.9000.dev"
 openIdConnect.domainMap.".*" = "9000"
-openIdConnect.clientId = "OkvvzmPd9AzS93lOTSp61g1v5EU4A9eg"
-openIdConnect.clientSecretFile = "/run/agenix/9000-auth0"
+openIdConnect.clientId = "dex-auth"
+openIdConnect.clientSecretFile = "/run/agenix/auth-9000-headscale"
 logLevel = "info"
 
 [config.services.headscale.settings]
@@ -219,7 +219,7 @@ syncthing-cert = { file = "secrets/polaris/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/polaris/syncthing-key.age", owner = "1337" }
 mailserver-john = { file = "secrets/mail/mailserver-john.age"}
 cloudflare-env = { file = "secrets/cloudflare-env.age" }
-9000-auth0 = { file = "secrets/9000-auth0.age", owner = "headscale", group = "headscale" }
+auth-9000-headscale = { file = "secrets/auth-9000.age", owner = "headscale", group = "headscale" }
 
 flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
 sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
