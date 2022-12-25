@@ -20,4 +20,6 @@
   ";
 
   hardware.cpu.amd.updateMicrocode = true;
+
+  boot.initrd.luks.devices.cryptkey.keyFile = "/sys/devices/virtual/dmi/id/product_serial";
 }
