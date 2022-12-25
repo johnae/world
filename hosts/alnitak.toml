@@ -3,7 +3,7 @@ system = "x86_64-linux"
 [config]
 publicKey = ""
 profiles = [
-#  "profiles/hardware/raspberrypi4",
+  "profiles/hardware/apu",
   "profiles/default_fs",
   "profiles/hidpi",
   "profiles/server",
