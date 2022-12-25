@@ -11,6 +11,7 @@ profiles = [
   "profiles/uuid_disk_crypt",
   "profiles/zram",
 ]
+disk.dosLabel = true
 
 [config.system.autoUpgrade]
 enable = false

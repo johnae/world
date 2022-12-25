@@ -6,11 +6,15 @@
 }: let
   inherit (lib) mapAttrsToList listToAttrs splitString concatStringsSep last flatten;
   inherit (builtins) filter match head foldl' replaceStrings;
-  inherit (config.config) boot cryptsetup btrfs machinePurpose;
+  inherit (config.config) boot cryptsetup btrfs machinePurpose disk;
   bootMode =
     if boot.loader.systemd-boot.enable
     then "UEFI"
     else "Legacy";
+  mbr =
+    if disk.dosLabel
+    then "true"
+    else "false";
   luksFormatExtraParams = cryptsetup.luksFormat.extraParams;
   btrfsFormatExtraParams = btrfs.format.extraParams;
   btrfsDisks = btrfs.disks;
@@ -76,6 +80,7 @@ in
       }
 
       BOOTMODE="${bootMode}"
+      MBR="${mbr}"
       DEVRANDOM=/dev/urandom
 
       if [ "$(systemd-detect-virt)" = "none" ]; then
@@ -192,14 +197,44 @@ in
 
       partnum=0
 
-      if [ "$BOOTMODE" = "Legacy" ]; then
-        partnum=$((partnum + 1))
-        sgdisk -n 0:0:+20M -t 0:ef02 -c 0:"biosboot" -u 0:"21686148-6449-6E6F-744E-656564454649" "$DISK" # 1
+      if [ "$BOOTMODE" = "Legacy" ] && [ "$MBR" = "true" ]; then
+       echo Legacy disk formatting using MBR
+       (
+         echo o                        # Create a new empty DOS partition table
+         echo n                        # Add a new partition
+         echo p                        # Primary partition
+         echo 1                        # Partition number
+         echo                          # First sector (Accept default: 1)
+         echo +256M                    # Last sector
+         echo n                        # Add a new partition
+         echo p                        # Primary partition
+         echo 2                        # Partition number
+         echo                          # First sector (Accept default)
+         echo +"$luks_key_space"       # Last sector
+         echo n                        # Add a new partition
+         echo p                        # Primary partition
+         echo 3                        # Partition number
+         echo                          # First sector (Accept default)
+         echo +"$swap_space"           # Last sector
+         echo n                        # Add a new partition
+         echo p                        # Primary partition
+         echo 4                        # Partition number
+         echo                          # First sector (Accept default)
+         echo +"$swap_space"           # Last sector
+         echo w     # Write changes
+       ) | fdisk "$DISK"
+      else
+        echo Formatting disk using GPT
+        if [ "$BOOTMODE" = "Legacy" ]; then
+          echo Legacy disk formatting
+          partnum=$((partnum + 1))
+          sgdisk -n 0:0:+20M -t 0:ef02 -c 0:"biosboot" -u 0:"21686148-6449-6E6F-744E-656564454649" "$DISK" # 1
+        fi
+        sgdisk -n 0:0:+"$efi_space" -t 0:ef00 -c 0:"p_efi" "$DISK" # 1
+        sgdisk -n 0:0:+"$luks_key_space" -t 0:8300 -c 0:"p_cryptkey" "$DISK" # 2
+        sgdisk -n 0:0:+"$swap_space" -t 0:8300 -c 0:"p_swap" "$DISK" # 3
+        sgdisk -n 0:0:0 -t 0:8300 -c 0:"p_root" "$DISK" # 4
       fi
-      sgdisk -n 0:0:+"$efi_space" -t 0:ef00 -c 0:"p_efi" "$DISK" # 1
-      sgdisk -n 0:0:+"$luks_key_space" -t 0:8300 -c 0:"p_cryptkey" "$DISK" # 2
-      sgdisk -n 0:0:+"$swap_space" -t 0:8300 -c 0:"p_swap" "$DISK" # 3
-      sgdisk -n 0:0:0 -t 0:8300 -c 0:"p_root" "$DISK" # 4
 
       echo "PREFIX: $PARTITION_PREFIX"
 

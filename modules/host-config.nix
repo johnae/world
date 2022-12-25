@@ -1,6 +1,6 @@
 {lib, ...}: let
   inherit (lib) mkOption;
-  inherit (lib.types) str nullOr attrsOf listOf enum;
+  inherit (lib.types) str nullOr attrsOf listOf enum bool;
 in {
   options = {
     publicKey = mkOption {
@@ -26,6 +26,10 @@ in {
     machinePurpose = mkOption {
       type = enum ["server" "workstation"];
       default = "server";
+    };
+    disk.dosLabel = mkOption {
+      type = bool;
+      default = false;
     };
     btrfs.format.extraParams = mkOption {
       type = str;
