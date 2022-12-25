@@ -1,0 +1,144 @@
+[config]
+publicKey = ""
+profiles = [
+#  "profiles/hardware/raspberrypi4",
+  "profiles/default_fs",
+  "profiles/hidpi",
+  "profiles/server",
+  "profiles/state",
+  "profiles/uuid_disk_crypt",
+  "profiles/zram",
+]
+
+[config.system.autoUpgrade]
+enable = true
+flake = "github:johnae/world"
+allowReboot = true
+dates = "*:0/15"
+randomizedDelaySec = "5min"
+
+[config.users.groups.john]
+gid = 1337
+
+[config.users.users.john]
+uid = 1337
+hashedPassword = "$6$e449W9mBaSt5B.pK$8Qrx1qigl5V8fhDrF/ijWvmWJT55hr5FFu8w2X0jEjmN0ropV8o82UQ2/Hu83BDyXtDQlJIY8sdKExJrsj0qG."
+openssh.authorizedKeys.keys = [
+  "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ==",
+  "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo=",
+  "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
+]
+
+[config.networking.firewall]
+allowedTCPPorts = [ 80, 443 ]
+trustedInterfaces = [ "insane", "tailscale0" ]
+
+#[config.services.innernet.client.insane]
+#enable = true
+
+#[config.services.innernet.client.insane.settings.interface]
+#address = "192.168.104.100/22"
+#privateKeyFile = "/run/agenix/wg-home"
+#
+#[config.services.innernet.client.insane.settings.server]
+#publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY="
+#externalEndpoint = "65.108.2.146:51820"
+#internalEndpoint = "192.168.104.1:51820"
+#
+#[config.age.secrets]
+#wg-home.file = "secrets/milkyway/wg-home.age"
+
+[config.services.jae.router]
+enable = true
+innernetServerInternalIp = "192.168.104.1"
+innernetServer = "polaris"
+unifiAddress = "65.108.2.146"
+dnsCrypt = true
+## with dnsCrypt enabled, the below servers won't be used
+upstreamDnsServers = [
+  "1.0.0.1",
+  "1.1.1.1",
+  "2606:4700:4700::1111",
+  "2606:4700:4700::1001",
+]
+domain = "insane.lan"
+dnsmasqAdditionalListenAddresses = [ "192.168.104.100" ]
+externalInterface = "enp1s0"
+internalInterface = "enp2s0"
+internalInterfaceIP = "192.168.20.1"
+
+#[config.services.prometheus.exporters.node]
+#enable = true
+
+#[config.security.acme]
+#defaults.email = "john+milkyway@insane.se"
+#acceptTerms = true
+#certs."home.insane.se".postRun = """
+#  set -x
+#  echo Copying certificates to /keep/var/lib/promtail/
+#  cp -r ./* /keep/var/lib/promtail/
+#  chown -R promtail:promtail /keep/var/lib/promtail
+#"""
+#
+#[config.services.nginx]
+#enable = true
+#recommendedGzipSettings = true
+#recommendedOptimisation = true
+#recommendedProxySettings = true
+#recommendedTlsSettings = true
+#sslCiphers = "AES256+EECDH:AES256+EDH:!aNULL"
+#virtualHosts."home.insane.se".enableACME = true
+#
+#[config.environment.state."/keep"]
+#directories = [
+#  "/var/lib/acme",
+#  "/var/lib/promtail",
+#]
+#
+#[config.services.haproxy]
+#enable = true
+#config = """
+#defaults
+#    maxconn 20000
+#    mode    tcp
+#    option  dontlognull
+#    timeout http-request 10s
+#    timeout queue        1m
+#    timeout connect      10s
+#    timeout client       86400s
+#    timeout server       86400s
+#    timeout tunnel       86400s
+#
+#frontend k8s-api
+#    bind 192.168.104.100:443
+#    mode tcp
+#    default_backend k8s-api
+#
+#backend k8s-api
+#    option  log-health-checks
+#    mode tcp
+#    balance roundrobin
+#    server node1 192.168.104.1:6443 check
+#    server node2 192.168.104.67:6443 check
+#    server node3 192.168.104.68:6443 check
+#"""
+#
+#[config.services.promtail]
+#enable = true
+#configuration.positions.filename = "/tmp/positions.yaml"
+#configuration.server.disable = true
+#
+#[[config.services.promtail.configuration.clients]]
+#url = "https://logs.home.k.ill.dev/loki/api/v1/push"
+#tls_config.ca_file = "/etc/ssl/certs/ca-bundle.crt"
+#tls_config.cert_file = "/var/lib/promtail/cert.pem"
+#tls_config.key_file = "/var/lib/promtail/key.pem"
+#tls_config.server_name = "logs.home.k.ill.dev"
+#
+#[[config.services.promtail.configuration.scrape_configs]]
+#job_name = "journal"
+#journal.max_age = "12h"
+#journal.labels = { job = "systemd-journal", host = "milkyway", context = "home-network", component = "router" }
+#relabel_configs = [
+#  { source_labels = [ "__journal__systemd_unit" ], target_label = "unit" }
+#]
