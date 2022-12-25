@@ -167,7 +167,6 @@ in
       set -x
 
       wipefs -fa "$DISK"
-      sgdisk -z "$DISK"
       partprobe "$DISK"
 
       efi_space="${efiSpace}"
@@ -192,7 +191,7 @@ in
 
       echo Will use a "$swap_space" swap space partition
 
-      sgdisk -og "$DISK"
+      sgdisk -Z "$DISK"
       partprobe "$DISK"
 
       partnum=0
@@ -205,7 +204,7 @@ in
          echo p                        # Primary partition
          echo 1                        # Partition number
          echo                          # First sector (Accept default: 1)
-         echo +256M                    # Last sector
+         echo +"$efi_space"            # Last sector
          echo n                        # Add a new partition
          echo p                        # Primary partition
          echo 2                        # Partition number
@@ -220,11 +219,12 @@ in
          echo p                        # Primary partition
          echo 4                        # Partition number
          echo                          # First sector (Accept default)
-         echo +"$swap_space"           # Last sector
-         echo w     # Write changes
+         echo                          # Last sector
+         echo w                        # Write changes
        ) | fdisk "$DISK"
       else
         echo Formatting disk using GPT
+        sgdisk -og "$DISK"
         if [ "$BOOTMODE" = "Legacy" ]; then
           echo Legacy disk formatting
           partnum=$((partnum + 1))
