@@ -240,7 +240,7 @@ in {
 
     services.dnsmasq.enable = true;
     services.dnsmasq.resolveLocalQueries = true;
-    services.dnsmasq.servers =
+    services.dnsmasq.settings.servers =
       if cfg.dnsCrypt
       then ["127.0.0.1#5300"]
       else cfg.upstreamDnsServers;
