@@ -82,6 +82,9 @@ in
         CRYPTKEYFILE="''${CRYPTKEYFILE:-/sys/class/dmi/id/product_uuid}"
         if [ ! -e "$CRYPTKEYFILE" ]; then
           CRYPTKEYFILE="/sys/firmware/devicetree/base/serial-number"
+          if [ ! -e "$CRYPTKEYFILE" ]; then
+            CRYPTKEYFILE="/sys/devices/virtual/dmi/id/product_serial"
+          fi
         fi
       else
         CRYPTKEYFILE="''${CRYPTKEYFILE:-/sys/class/dmi/id/product_version}"
