@@ -8,7 +8,7 @@ profiles = [
   "profiles/hidpi",
   "profiles/server",
   "profiles/state",
-  "profiles/uuid_disk_crypt",
+  "profiles/uuid_disk_crypt", ## remove this instead of overriding?
   "profiles/zram",
 ]
 disk.dosLabel = true
