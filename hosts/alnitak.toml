@@ -1,7 +1,7 @@
 system = "x86_64-linux"
 
 [config]
-publicKey = ""
+publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJnEDS9ziXY31y2uyMBzSFSjyY5KqYnJgR4Tkb8nx/Dn"
 profiles = [
   "profiles/hardware/apu",
   "profiles/default_fs",
@@ -14,7 +14,7 @@ profiles = [
 disk.dosLabel = true
 
 [config.system.autoUpgrade]
-enable = false
+enable = true
 flake = "github:johnae/world"
 allowReboot = true
 dates = "*:0/15"
