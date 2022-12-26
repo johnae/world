@@ -66,8 +66,8 @@ upstreamDnsServers = [
 ]
 domain = "insane.lan"
 dnsmasqAdditionalListenAddresses = [ "192.168.104.100" ]
-externalInterface = "eth0"
-internalInterface = "eth1"
+externalInterface = "enp1s0"
+internalInterface = "enp2s0"
 internalInterfaceIP = "192.168.20.1"
 
 #[config.services.prometheus.exporters.node]
