@@ -275,7 +275,7 @@ in {
     boot.kernel.sysctl."net.ipv6.conf.all.use_tempaddr" = 0;
 
     # allow ipv6 autoconfiguration and temporary address use on wan
-    boot.kernel.sysctl."net.ipv6.conf.enp1s0u2.accept_ra" = 2;
-    boot.kernel.sysctl."net.ipv6.conf.enp1s0u2.autoconf" = 1;
+    boot.kernel.sysctl."net.ipv6.conf.${cfg.externalInterface}.accept_ra" = 2;
+    boot.kernel.sysctl."net.ipv6.conf.${cfg.externalInterface}.autoconf" = 1;
   };
 }
