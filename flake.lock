@@ -417,15 +417,26 @@
       }
     },
     "headscale": {
-      "flake": false,
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "narHash": "sha256-6sk2U0zy7FtDfgP7ElS7SrZoRGXk8KPy8PDos++gK28=",
-        "type": "file",
-        "url": "https://github.com/juanfont/headscale/releases/download/v0.18.0-beta2/headscale_0.18.0-beta2_linux_amd64"
+        "lastModified": 1672159033,
+        "narHash": "sha256-FmbAqU49x55HQWUhTQoBxd/aV1Xx40QjsYDtZdHarQM=",
+        "owner": "johnae",
+        "repo": "headscale",
+        "rev": "e410cf00a41d8f6b08db2fb7842bf5faf551553c",
+        "type": "github"
       },
       "original": {
-        "type": "file",
-        "url": "https://github.com/juanfont/headscale/releases/download/v0.18.0-beta2/headscale_0.18.0-beta2_linux_amd64"
+        "owner": "johnae",
+        "repo": "headscale",
+        "type": "github"
       }
     },
     "home-manager": {
