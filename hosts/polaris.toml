@@ -125,7 +125,6 @@ locations."/".proxyWebsockets = true
 
 [config.services.headscale]
 enable = true
-package = "${pkgs.headscale-latest}"
 address = "0.0.0.0"
 port = 8088
 serverUrl = "https://tailscale.9000.dev"
