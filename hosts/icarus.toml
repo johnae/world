@@ -13,6 +13,7 @@ profiles = [
   "profiles/server",
   "profiles/state",
   "profiles/syncthing",
+  "profiles/tailscale",
   "profiles/uuid_disk_crypt",
   "profiles/zram",
 ]
@@ -118,6 +119,12 @@ wg-net.file = "secrets/icarus/wg-net.age"
 syncthing-cert = { file = "secrets/icarus/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/icarus/syncthing-key.age", owner = "1337" }
 tailscale-auth = { file = "secrets/tailscale-auth.age" }
+
+[config.services.tailscale.auth]
+enable = true
+args.accept-routes = true
+args.login-server = "https://tailscale.9000.dev"
+args.auth-key = "file:/var/run/agenix/tailscale-auth"
 
 [config.services.k3s]
 enable = true
