@@ -181,6 +181,7 @@
           headscale-latest = prev.runCommand "headscale" {} ''
             mkdir -p $out/bin
             cp ${inputs.headscale} $out/bin/headscale
+            chmod +x $out/bin/headscale
           '';
         })
         (final: prev: {
