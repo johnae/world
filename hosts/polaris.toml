@@ -144,6 +144,7 @@ logtail.enabled = false
 oidc.allowed_domains = [ "insane.se", "9000.dev" ]
 ip_prefixes = [ "172.27.0.0/18" ]
 dns_config.override_local_dns = true
+noise.private_key_path = "/var/lib/headscale/noise_private.key"
 
 [config.services.nginx.virtualHosts."tailscale.9000.dev"]
 forceSSL = true
