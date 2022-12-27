@@ -41,95 +41,18 @@ tailscale-auth.file = "secrets/tailscale-auth.age"
 
 [config.services.jae.router]
 enable = true
-innernetServerInternalIp = "192.168.104.1"
-innernetServer = "polaris"
-unifiAddress = "65.108.2.146"
-dnsCrypt = true
-## with dnsCrypt enabled, the below servers won't be used
 upstreamDnsServers = [
-  "1.0.0.1",
-  "1.1.1.1",
-  "2606:4700:4700::1111",
-  "2606:4700:4700::1001",
+  "2a07:a8c1::",
+  "45.90.30.0",
+  "2a07:a8c0::",
+  "45.90.28.0"
 ]
-domain = "insane.lan"
-dnsmasqAdditionalListenAddresses = [ "192.168.104.100" ]
 externalInterface = "enp1s0"
 internalInterface = "enp2s0"
 internalInterfaceIP = "192.168.20.1"
-
-#[config.services.prometheus.exporters.node]
-#enable = true
-
-#[config.security.acme]
-#defaults.email = "john+milkyway@insane.se"
-#acceptTerms = true
-#certs."home.insane.se".postRun = """
-#  set -x
-#  echo Copying certificates to /keep/var/lib/promtail/
-#  cp -r ./* /keep/var/lib/promtail/
-#  chown -R promtail:promtail /keep/var/lib/promtail
-#"""
-#
-#[config.services.nginx]
-#enable = true
-#recommendedGzipSettings = true
-#recommendedOptimisation = true
-#recommendedProxySettings = true
-#recommendedTlsSettings = true
-#sslCiphers = "AES256+EECDH:AES256+EDH:!aNULL"
-#virtualHosts."home.insane.se".enableACME = true
-#
-#[config.environment.state."/keep"]
-#directories = [
-#  "/var/lib/acme",
-#  "/var/lib/promtail",
-#]
-#
-#[config.services.haproxy]
-#enable = true
-#config = """
-#defaults
-#    maxconn 20000
-#    mode    tcp
-#    option  dontlognull
-#    timeout http-request 10s
-#    timeout queue        1m
-#    timeout connect      10s
-#    timeout client       86400s
-#    timeout server       86400s
-#    timeout tunnel       86400s
-#
-#frontend k8s-api
-#    bind 192.168.104.100:443
-#    mode tcp
-#    default_backend k8s-api
-#
-#backend k8s-api
-#    option  log-health-checks
-#    mode tcp
-#    balance roundrobin
-#    server node1 192.168.104.1:6443 check
-#    server node2 192.168.104.67:6443 check
-#    server node3 192.168.104.68:6443 check
-#"""
-#
-#[config.services.promtail]
-#enable = true
-#configuration.positions.filename = "/tmp/positions.yaml"
-#configuration.server.disable = true
-#
-#[[config.services.promtail.configuration.clients]]
-#url = "https://logs.home.k.ill.dev/loki/api/v1/push"
-#tls_config.ca_file = "/etc/ssl/certs/ca-bundle.crt"
-#tls_config.cert_file = "/var/lib/promtail/cert.pem"
-#tls_config.key_file = "/var/lib/promtail/key.pem"
-#tls_config.server_name = "logs.home.k.ill.dev"
-#
-#[[config.services.promtail.configuration.scrape_configs]]
-#job_name = "journal"
-#journal.max_age = "12h"
-#journal.labels = { job = "systemd-journal", host = "milkyway", context = "home-network", component = "router" }
-#relabel_configs = [
-#  { source_labels = [ "__journal__systemd_unit" ], target_label = "unit" }
-#]
+dnsMasqExtraConfig = """
+  no-resolv
+  bogus-priv
+  strict-order
+  add-cpe-id=a5472c
+"""
