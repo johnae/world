@@ -36,20 +36,8 @@ openssh.authorizedKeys.keys = [
 allowedTCPPorts = [ 80, 443 ]
 trustedInterfaces = [ "insane", "tailscale0" ]
 
-#[config.services.innernet.client.insane]
-#enable = true
-
-#[config.services.innernet.client.insane.settings.interface]
-#address = "192.168.104.100/22"
-#privateKeyFile = "/run/agenix/wg-home"
-#
-#[config.services.innernet.client.insane.settings.server]
-#publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY="
-#externalEndpoint = "65.108.2.146:51820"
-#internalEndpoint = "192.168.104.1:51820"
-#
-#[config.age.secrets]
-#wg-home.file = "secrets/milkyway/wg-home.age"
+[config.age.secrets]
+tailscale-auth.file = "secrets/tailscale-auth.age"
 
 [config.services.jae.router]
 enable = true
