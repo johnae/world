@@ -12,5 +12,6 @@
     ./services.nix
     ./sleep-management.nix
     ./state.nix
+    ./tailscale-auth.nix
   ];
 }
