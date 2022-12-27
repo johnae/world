@@ -416,6 +416,18 @@
         "type": "github"
       }
     },
+    "headscale": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-6sk2U0zy7FtDfgP7ElS7SrZoRGXk8KPy8PDos++gK28=",
+        "type": "file",
+        "url": "https://github.com/juanfont/headscale/releases/download/v0.18.0-beta2/headscale_0.18.0-beta2_linux_amd64"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/juanfont/headscale/releases/download/v0.18.0-beta2/headscale_0.18.0-beta2_linux_amd64"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -821,6 +833,7 @@
         "git-branchless": "git-branchless",
         "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
         "grim": "grim",
+        "headscale": "headscale",
         "home-manager": "home-manager",
         "hwdata": "hwdata",
         "kanshi": "kanshi",

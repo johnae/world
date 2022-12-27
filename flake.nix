@@ -52,6 +52,8 @@
     google-cloud-sdk-fish-completion.url = "github:Doctusoft/google-cloud-sdk-fish-completion";
     grim.flake = false;
     grim.url = "github:emersion/grim";
+    headscale.flake = false;
+    headscale.url = "https://github.com/juanfont/headscale/releases/download/v0.18.0-beta2/headscale_0.18.0-beta2_linux_amd64"; # gh-release-update allow-prerelease
     hwdata.url = "github:vcrhonek/hwdata";
     hwdata.flake = false;
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -175,6 +177,12 @@
         inputs.nur.overlay
         inputs.persway.overlays.default
         inputs.spotnix.overlays.default
+        (final: prev: {
+          headscale-latest = prev.runCommand "headscale" {} ''
+            mkdir -p $out/bin
+            cp ${inputs.headscale} $out/bin/headscale
+          '';
+        })
         (final: prev: {
           rbw-git-creds = prev.writeShellApplication {
             name = "rbw-git-creds";
