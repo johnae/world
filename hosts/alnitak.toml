@@ -8,6 +8,7 @@ profiles = [
   "profiles/hidpi",
   "profiles/server",
   "profiles/state",
+  "profiles/tailscale",
   "profiles/uuid_disk_crypt", ## remove this instead of overriding?
   "profiles/zram",
 ]
@@ -38,6 +39,12 @@ trustedInterfaces = [ "insane", "tailscale0" ]
 
 [config.age.secrets]
 tailscale-auth.file = "secrets/tailscale-auth.age"
+
+[config.services.tailscale.auth]
+enable = true
+args.accept-routes = true
+args.login-server = "https://tailscale.9000.dev"
+args.auth-key = "file:/var/run/agenix/tailscale-auth"
 
 [config.services.jae.router]
 enable = true

@@ -11,6 +11,7 @@ profiles = [
   "profiles/server",
   "profiles/state",
   "profiles/syncthing",
+  "profiles/tailscale",
   "profiles/uuid_disk_crypt",
   "profiles/zram",
 ]
@@ -80,6 +81,12 @@ wg-home.file = "secrets/hyperion/wg-home.age"
 syncthing-cert = { file = "secrets/hyperion/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/hyperion/syncthing-key.age", owner = "1337" }
 tailscale-auth = { file = "secrets/tailscale-auth.age" }
+
+[config.services.tailscale.auth]
+enable = true
+args.accept-routes = true
+args.login-server = "https://tailscale.9000.dev"
+args.auth-key = "file:/var/run/agenix/tailscale-auth"
 
 [config.services.k3s]
 enable = true
