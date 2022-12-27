@@ -84,8 +84,13 @@ final: prev: let
           uri="$(echo "$ghpkg" | awk -F'"' '{print $2}' | awk -F'github.com/' '{print $2}')"
           owner="$(echo "$uri" | awk -F'/' '{print $1}')"
           repo="$(echo "$uri" | awk -F'/' '{print $2}')"
-          latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
-            ${jq}/bin/jq '[.[] | select(.draft == false) | select(.prerelease == false)][0].tag_name' -r)"
+          if echo "$ghpkg" | grep -q "allow-prerelease"; then
+            latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
+              ${jq}/bin/jq '[.[] | select(.draft == false)][0].tag_name' -r)"
+          else
+            latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
+              ${jq}/bin/jq '[.[] | select(.draft == false) | select(.prerelease == false)][0].tag_name' -r)"
+          fi
           sed -i -E "s|$owner/$repo/releases/download/[0-9v.]+|$owner/$repo/releases/download/$latest|g" flake.nix
         else
           uri="$(echo "$ghpkg" | awk -F'"' '{print $2}' | awk -F':' '{print $2}')"
