@@ -79,6 +79,7 @@ k3s-token.file = "secrets/k3s/token.age"
 wg-home.file = "secrets/hyperion/wg-home.age"
 syncthing-cert = { file = "secrets/hyperion/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/hyperion/syncthing-key.age", owner = "1337" }
+tailscale-auth = { file = "secrets/tailscale-auth.age" }
 
 [config.services.k3s]
 enable = true

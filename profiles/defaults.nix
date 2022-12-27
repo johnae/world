@@ -33,47 +33,48 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = [
-    pkgs.man-pages
-    pkgs.bmon
-    pkgs.iftop
-    pkgs.file
-    pkgs.cacert
-    pkgs.openssl
-    pkgs.curl
-    pkgs.gnupg
-    pkgs.lsof
-    pkgs.usbutils
-    pkgs.mkpasswd
-    pkgs.powertop
-    pkgs.socat
-    pkgs.nmap
-    pkgs.iptables
-    pkgs.bridge-utils
-    pkgs.pciutils
-    pkgs.zip
-    pkgs.wget
-    pkgs.unzip
-    pkgs.htop
-    pkgs.jq
     pkgs.binutils
-    pkgs.psmisc
-    pkgs.tree
-    pkgs.ripgrep
-    pkgs.vim
-    pkgs.git
-    pkgs.fish
-    pkgs.tmux
     pkgs.blueman
-    pkgs.pavucontrol
     pkgs.bluez
     pkgs.bluez-tools
-    pkgs.fd
-    pkgs.wireguard-tools
-    pkgs.hyperfine
-    pkgs.procs
-    pkgs.sd
+    pkgs.bmon
     pkgs.bottom
+    pkgs.bridge-utils
+    pkgs.cacert
+    pkgs.curl
+    pkgs.fd
+    pkgs.file
+    pkgs.fish
+    pkgs.git
+    pkgs.gnupg
+    pkgs.headscale
+    pkgs.htop
+    pkgs.hyperfine
+    pkgs.iftop
+    pkgs.iptables
+    pkgs.jq
+    pkgs.lsof
+    pkgs.man-pages
+    pkgs.mkpasswd
+    pkgs.nmap
+    pkgs.openssl
+    pkgs.pavucontrol
+    pkgs.pciutils
+    pkgs.powertop
+    pkgs.procs
+    pkgs.psmisc
+    pkgs.ripgrep
+    pkgs.sd
+    pkgs.socat
+    pkgs.tmux
+    pkgs.tree
+    pkgs.unzip
+    pkgs.usbutils
+    pkgs.vim
     pkgs.virt-manager
+    pkgs.wget
+    pkgs.wireguard-tools
+    pkgs.zip
   ];
 
   home-manager.useUserPackages = true;

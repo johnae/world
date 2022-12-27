@@ -98,6 +98,7 @@ remote-disk-password.file = "secrets/remote-disk-password.age"
 id_ed25519_remote_unlock.file = "secrets/titan/id_ed25519_remote_unlock.age"
 syncthing-cert = { file = "secrets/titan/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/titan/syncthing-key.age", owner = "1337" }
+tailscale-auth = { file = "secrets/tailscale-auth.age" }
 
 [config.services.k3s]
 enable = true
