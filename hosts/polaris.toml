@@ -132,6 +132,7 @@ dns.baseDomain = "9000.dev"
 dns.domains = [ "ts.9000.dev" ]
 dns.nameservers = [ "https://dns.nextdns.io/a5472c" ]
 dns.magicDns = true
+dns.override_local_dns = true
 openIdConnect.issuer = "https://id.9000.dev"
 openIdConnect.domainMap.".*" = "ts"
 openIdConnect.clientId = "dex-auth"
