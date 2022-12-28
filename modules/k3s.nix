@@ -7,6 +7,7 @@
   l = lib // builtins;
   inherit
     (l)
+    optional
     mkOption
     mkIf
     mkMerge
@@ -47,13 +48,13 @@
       else "";
     listToCli = path: value:
       concatStringsSep " "
-      (map (item: "--${path} \"${toString item}\"") value);
+      (map (item: "--${path} ${toString item}") value);
     attrsToCli = path:
       mapAttrsToList (
         k: v:
           if isBool v
           then boolToCli path v
-          else "--${path} \"${k}=${toString v}\""
+          else "--${path} ${k}=${toString v}"
       );
     fieldToCli = path: value:
       if isAttrs value
@@ -62,7 +63,7 @@
       then boolToCli path value
       else if isList value
       then listToCli path value
-      else "--${path} \"${toString value}\"";
+      else "--${path} ${toString value}";
   in
     flatten (mapAttrsToList fieldToCli s);
 in {
@@ -126,6 +127,22 @@ in {
           else ""
         }
       '';
+      serviceConfig.ExecStart = lib.mkForce (concatStringsSep " " (
+        [
+          "${pkgs.bash}/bin/bash -c \"exec "
+        ]
+        ++ [
+          "${cfg.package}/bin/k3s ${cfg.role}"
+        ]
+        ++ (optional cfg.clusterInit "--cluster-init")
+        ++ (optional cfg.disableAgent "--disable-agent")
+        ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
+        ++ (optional (cfg.token != "") "--token ${cfg.token}")
+        ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
+        ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
+        ++ [cfg.extraFlags]
+        ++ ["\""]
+      ));
     };
     ## Random fixes and hacks for k3s networking
     ## see: https://github.com/NixOS/nixpkgs/issues/98766
