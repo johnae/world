@@ -28,6 +28,18 @@
   cfg = config.services.k3s;
   k3sManifestsDir = "/var/lib/rancher/k3s/server/manifests";
   containerdConfigDir = "/var/lib/rancher/k3s/agent/etc/containerd";
+  getIfaceIp = pkgs.writeShellApplication {
+    name = "get-iface-ip";
+    runtimeInputs = with pkgs; [jq iproute2];
+    text = ''
+      IFACE=''${1:-}
+      if [ "$IFACE" = "" ]; then
+        echo Please provide the interface to get the ip off of
+        exit 1
+      fi
+      ip -o -4 -family inet -json addr show scope global dev "$IFACE" | jq -r '.[0].addr_info[0].local'
+    '';
+  };
   settingsToCli = s: let
     boolToCli = path: value:
       if value
@@ -90,28 +102,31 @@ in {
   config = mkIf cfg.enable {
     assertions = mkForce [];
     services.k3s.extraFlags = concatStringsSep " " (sort lessThan (settingsToCli cfg.settings));
-    systemd.services.k3s.preStart = ''
-      rm -f ${containerdConfigDir}/config.toml.tmpl
-      ${
-        if cfg.role == "server"
-        then ''
-          mkdir -p ${k3sManifestsDir}
-          ${
-            concatStringsSep "\n" (mapAttrsToList (
-                name: path: "cp ${path} ${k3sManifestsDir}/${name}.yaml"
-              )
-              cfg.autoDeploy)
-          }
-          ${
-            concatStringsSep "\n" (map (
-                manifestName: "touch ${k3sManifestsDir}/${manifestName}.yaml.skip"
-              )
-              cfg.disable)
-          }
-        ''
-        else ""
-      }
-    '';
+    systemd.services.k3s = {
+      path = lib.mkForce [getIfaceIp];
+      preStart = ''
+        rm -f ${containerdConfigDir}/config.toml.tmpl
+        ${
+          if cfg.role == "server"
+          then ''
+            mkdir -p ${k3sManifestsDir}
+            ${
+              concatStringsSep "\n" (mapAttrsToList (
+                  name: path: "cp ${path} ${k3sManifestsDir}/${name}.yaml"
+                )
+                cfg.autoDeploy)
+            }
+            ${
+              concatStringsSep "\n" (map (
+                  manifestName: "touch ${k3sManifestsDir}/${manifestName}.yaml.skip"
+                )
+                cfg.disable)
+            }
+          ''
+          else ""
+        }
+      '';
+    };
     ## Random fixes and hacks for k3s networking
     ## see: https://github.com/NixOS/nixpkgs/issues/98766
     boot.kernelModules = ["br_netfilter" "ip_conntrack" "ip_vs" "ip_vs_rr" "ip_vs_wrr" "ip_vs_sh" "overlay"];
