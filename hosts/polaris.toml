@@ -128,6 +128,7 @@ enable = true
 args.accept-routes = true
 args.login-server = "https://tailscale.9000.dev"
 args.auth-key = "file:/var/run/agenix/tailscale-auth"
+args.advertise-routes =  = "10.128.128.0/21,10.129.128.0/22"
 
 [config.services.headscale]
 enable = true
