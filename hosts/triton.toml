@@ -73,18 +73,6 @@ cert = "/run/agenix/syncthing-cert"
 key = "/run/agenix/syncthing-key"
 dataDir = "/home/john/.local/share/syncthing-data"
 
-[config.services.innernet.client.insane]
-enable = true
-
-[config.services.innernet.client.insane.settings.interface]
-address = "192.168.104.69/22"
-privateKeyFile = "/run/agenix/wg-home"
-
-[config.services.innernet.client.insane.settings.server]
-publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY="
-externalEndpoint = "65.108.2.146:51820"
-internalEndpoint = "192.168.104.1:51820"
-
 [config.users.groups.john]
 gid = 1337
 

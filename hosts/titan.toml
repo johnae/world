@@ -65,18 +65,6 @@ cert = "/run/agenix/syncthing-cert"
 key = "/run/agenix/syncthing-key"
 dataDir = "/home/john/.local/share/syncthing-data"
 
-[config.services.innernet.client.insane]
-enable = true
-
-[config.services.innernet.client.insane.settings.interface]
-address = "192.168.104.67/22"
-privateKeyFile = "/run/agenix/wg-home"
-
-[config.services.innernet.client.insane.settings.server]
-publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY="
-externalEndpoint = "65.108.2.146:51820"
-internalEndpoint = "192.168.104.1:51820"
-
 [[config.services.remote-unlock]]
 enable = true
 host = "65.108.2.146"
@@ -110,7 +98,7 @@ args.auth-key = "file:/var/run/agenix/tailscale-auth"
 [config.services.k3s]
 enable = true
 role = "server"
-after = [ "innernet-client-insane.service" ]
+after = [ "tailscale-auth.service" ]
 
 [config.services.k3s.settings]
 server = "https://polaris.ts.9000.dev:6443"

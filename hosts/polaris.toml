@@ -188,47 +188,6 @@ cert = "/run/agenix/syncthing-cert"
 key = "/run/agenix/syncthing-key"
 dataDir = "/home/john/.local/share/syncthing-data"
 
-[config.services.innernet.server.insane]
-enable = true
-
-[config.services.innernet.server.insane.settings]
-openFirewall = true
-cidr = "192.168.104.0/22"
-listenPort = 51820
-privateKeyFile = "/run/agenix/wg-home"
-publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY="
-externalEndpoint = "65.108.2.146:51820"
-
-[config.services.innernet.server.insane.settings.cidrs.home]
-cidr = "192.168.104.64/26"
-parent = "insane"
-
-[config.services.innernet.server.insane.settings.peers]
-eris.ip = "192.168.104.65"
-eris.cidr = "home"
-eris.publicKey = "Oya0T0tzAV25A7/Qp3tqKP+2KgGjA/OVuUmKzsTFpRo="
-eris.isAdmin = true
-
-titan.ip = "192.168.104.67"
-titan.cidr = "home"
-titan.publicKey = "vNfSS1HsbnRqV6V/RfG0Aq1IoNQPS+IP2O162UlVQQA="
-
-hyperion.ip = "192.168.104.68"
-hyperion.cidr = "home"
-hyperion.publicKey = "zra1G18xLfq29/4DLBYKDr0BfhILaIHyhd09Bwl9Tj8="
-
-icarus.ip = "192.168.104.70"
-icarus.cidr = "home"
-icarus.publicKey = "mDghZTpKQTGgeWYZzHiylgAvGY2yYnPdPaN5ja2V9Qw="
-
-antares.ip = "192.168.104.71"
-antares.cidr = "home"
-antares.publicKey = "CR6tb4DACdqyera100yhvSZ9FuwFRyrPL/bMIf1Of28="
-
-milkyway.ip = "192.168.104.100"
-milkyway.cidr = "home"
-milkyway.publicKey = "XPWUeQ4N9zYcyWgIvvp+3eHSsBiqnHuuwu2J/1uHHkE="
-
 [config.networking]
 defaultGateway = "65.108.2.129"
 defaultGateway6 = { address = "fe80::1", interface = "eth0" }
@@ -283,7 +242,7 @@ authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.
 [config.services.k3s]
 enable = true
 role = "server"
-after = [ "innernet-server-insane.service" ]
+after = [ "tailscale-auth.service" ]
 
 [config.services.k3s.settings]
 cluster-init = true

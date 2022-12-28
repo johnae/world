@@ -70,18 +70,6 @@ allowedIPs = [ "0.0.0.0/0", "::0/0" ]
 endpoint = "185.204.1.219:51820"
 publicKey = "CYFNNfntzhRHn0+QHWv2eBOeU/sCZ5f6FLbTMUyIQHk="
 
-[config.services.innernet.client.insane]
-enable = true
-
-[config.services.innernet.client.insane.settings.interface]
-address = "192.168.104.70/22"
-privateKeyFile = "/run/agenix/wg-home"
-
-[config.services.innernet.client.insane.settings.server]
-publicKey = "Ca4OCVKasunoIVyh3vbp/HyLnrPWp7AOwEuV14PS1QY="
-externalEndpoint = "65.108.2.146:51820"
-internalEndpoint = "192.168.104.1:51820"
-
 [config.services.syncthing]
 enable = true
 devices.SM-G998B.id = "PCFNIXF-AR7YX2B-354IJQW-YP25QM7-N53ES5L-HKB337S-I6JZV34-55LQEAR"
@@ -130,7 +118,7 @@ args.advertise-routes =  = "10.128.128.0/21,10.129.128.0/22"
 [config.services.k3s]
 enable = true
 role = "agent"
-after = [ "innernet-client-insane.service" ]
+after = [ "tailscale-auth.service" ]
 
 [config.services.k3s.settings]
 server = "https://polaris.ts.9000.dev:6443"
