@@ -287,11 +287,11 @@ after = [ "innernet-server-insane.service" ]
 [config.services.k3s.settings]
 cluster-init = true
 token-file = "/run/agenix/k3s-token"
-flannel-iface = "insane"
-node-ip = "192.168.104.1"
-node-external-ip = "65.108.2.146"
+flannel-iface = "tailscale0"
+node-ip = "$(get-iface-ip tailscale0)"
+node-external-ip = "$(get-iface-ip eth0)"
 with-node-id = true
-advertise-address = "192.168.104.1"
+advertise-address = "$(get-iface-ip tailscale0)"
 cluster-cidr = "10.128.128.0/21"
 service-cidr = "10.129.128.0/22"
 cluster-dns = "10.129.128.10"
@@ -305,7 +305,7 @@ node-label."svccontroller.k3s.cattle.io/enablelb" = "true"
 node-label."topology.kubernetes.io/region" = "hetzner"
 node-label."topology.kubernetes.io/zone" = "hetzner-fi"
 secrets-encryption = true
-tls-san = "192.168.104.100"
+tls-san = ["alnitak", "alnitak.ts.9000.dev", "polaris", "polaris.ts.9000.dev", "titan", "titan.ts.9000.dev", "hyperion", "hyperion.ts.9000.dev", "icarus", "icarus.ts.9000.dev", "k8s.home.9000.dev"]
 
 [config.services.k3s.autoDeploy]
 kured = "${pkgs.kured-yaml}/kured.yaml"

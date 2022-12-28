@@ -113,13 +113,13 @@ role = "server"
 after = [ "innernet-client-insane.service" ]
 
 [config.services.k3s.settings]
-server = "https://192.168.104.1:6443"
+server = "https://polaris.ts.9000.dev:6443"
 token-file = "/run/agenix/k3s-token"
-flannel-iface = "insane"
-node-ip = "192.168.104.67"
-node-external-ip = "192.168.20.142"
+flannel-iface = "tailscale0"
+node-ip = "$(get-iface-ip tailscale0)"
+node-external-ip = "$(get-iface-ip eth0)"
 with-node-id = true
-advertise-address = "192.168.104.67"
+advertise-address = "$(get-iface-ip tailscale0)"
 cluster-cidr = "10.128.128.0/21"
 service-cidr = "10.129.128.0/22"
 cluster-dns = "10.129.128.10"

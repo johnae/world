@@ -132,11 +132,11 @@ role = "agent"
 after = [ "innernet-client-insane.service" ]
 
 [config.services.k3s.settings]
-server = "https://192.168.104.100"
+server = "https://polaris.ts.9000.dev:6443"
 token-file = "/run/agenix/k3s-token"
-flannel-iface = "insane"
-node-ip = "192.168.104.70"
-node-external-ip = "192.168.20.143"
+flannel-iface = "tailscale0"
+node-ip = "$(get-iface-ip tailscale0)"
+node-external-ip = "$(get-iface-ip eth0)"
 with-node-id = true
 kubelet-arg.max-pods = 62
 node-label."topology.kubernetes.io/region" = "home"
