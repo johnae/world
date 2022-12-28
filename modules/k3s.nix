@@ -103,7 +103,7 @@ in {
     assertions = mkForce [];
     services.k3s.extraFlags = concatStringsSep " " (sort lessThan (settingsToCli cfg.settings));
     systemd.services.k3s = {
-      path = lib.mkForce [getIfaceIp];
+      path = [getIfaceIp];
       preStart = ''
         rm -f ${containerdConfigDir}/config.toml.tmpl
         ${
