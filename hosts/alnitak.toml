@@ -42,7 +42,7 @@ tailscale-auth.file = "secrets/tailscale-auth.age"
 
 [config.services.tailscale.auth]
 enable = true
-args.ssh = true
+args.ssh = false
 args.accept-routes = false
 args.advertise-tags = ["tag:router","tag:home","tag:ssh"]
 args.login-server = "https://tailscale.9000.dev"
