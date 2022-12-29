@@ -185,15 +185,9 @@ dst = ["john:*"]
 
 [[config.services.headscale.acl.settings.ssh]]
 action = "accept"
-src = ["autogroup:members"]
-dst = ["autogroup:self"]
-users = ["autogroup:nonroot"]
-
-[[config.services.headscale.acl.settings.ssh]]
-action = "accept"
 src = ["group:admin"]
 dst = ["tag:servers","tag:router"]
-users = ["autogroup:nonroot"]
+users = ["john"]
 
 [config.services.nginx.virtualHosts."tailscale.9000.dev"]
 forceSSL = true
