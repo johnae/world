@@ -155,7 +155,7 @@ dns_config.override_local_dns = true
 noise.private_key_path = "/var/lib/headscale/noise_private.key"
 
 [config.services.headscale.acl.settings]
-groups."group:admin" = ["john"]
+groups."group:admin" = ["john","john@insane.se"]
 tagOwners."tag:hetzner" = ["group:admin"]
 tagOwners."tag:hetzner-fi" = ["group:admin"]
 tagOwners."tag:server" = ["group:admin"]
