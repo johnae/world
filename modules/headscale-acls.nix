@@ -26,7 +26,7 @@ in {
     enable = mkEnableOption "enable headscale acl management";
     enableSSH = mkEnableOption "enable headscale experimental ssh support";
     settings = mkOption {
-      type = settingsFormat.type;
+      inherit (settingsFormat) type;
       default = {};
       description = ''
         Configuration for headscale acls
