@@ -186,7 +186,7 @@ dst = ["john:*"]
 [[config.services.headscale.acl.settings.ssh]]
 action = "accept"
 src = ["group:admin"]
-dst = ["tag:servers","tag:router"]
+dst = ["tag:server","tag:router"]
 users = ["john"]
 
 [config.services.nginx.virtualHosts."tailscale.9000.dev"]
