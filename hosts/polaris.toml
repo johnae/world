@@ -322,6 +322,93 @@ spec.postBuild.substituteFrom = [
   { kind = "Secret", name = "cluster-secrets" }
 ]
 
+[config.services.k3s.autoDeploy.dex-auth-gh-admins]
+apiVersion = "rbac.authorization.k8s.io/v1"
+kind = "ClusterRoleBinding"
+metadata.name = "dex-auth-gh-admins"
+roleRef.apiGroup = "rbac.authorization.k8s.io"
+roleRef.kind = "ClusterRole"
+roleRef.name = "cluster-admin"
+subjects = [
+  { apiGroup = "rbac.authorization.k8s.io", kind = "Group", name = "9k-dev:Admin" }
+]
+
+[config.services.k3s.autoDeploy.cluster-read-all-role]
+apiVersion = "rbac.authorization.k8s.io/v1"
+kind = "ClusterRole"
+metadata.name = "cluster-read-all"
+
+[[config.services.k3s.autoDeploy.cluster-read-all-role.rules]]
+apiGroups = [
+  "",
+  "apps",
+  "autoscaling",
+  "batch",
+  "extensions",
+  "policy",
+  "rbac.authorization.k8s.io",
+  "storage.k8s.io"
+]
+resources = [
+  "componentstatuses",
+  "configmaps",
+  "cronjobs",
+  "daemonsets",
+  "deployments",
+  "events",
+  "endpoints",
+  "horizontalpodautoscalers",
+  "ingress",
+  "ingresses",
+  "jobs",
+  "limitranges",
+  "namespaces",
+  "nodes",
+  "pods",
+  "pods/log",
+  "pods/exec",
+  "persistentvolumes",
+  "persistentvolumeclaims",
+  "resourcequotas",
+  "replicasets",
+  "replicationcontrollers",
+  "serviceaccounts",
+  "services",
+  "statefulsets",
+  "storageclasses",
+  "clusterroles",
+  "roles",
+]
+verbs = [
+  "get",
+  "watch",
+  "list",
+]
+
+[[config.services.k3s.autoDeploy.cluster-read-all-role.rules]]
+apiGroups = [""]
+resources = ["pods/exec"]
+verbs = ["create"]
+
+[[config.services.k3s.autoDeploy.cluster-read-all-role.rules]]
+nonResourceURLs = ["*"]
+verbs = [
+  "get",
+  "watch",
+  "list",
+]
+
+[config.services.k3s.autoDeploy.dex-auth-gh-viewers]
+apiVersion = "rbac.authorization.k8s.io/v1"
+kind = "ClusterRoleBinding"
+metadata.name = "dex-auth-gh-viewers"
+roleRef.apiGroup = "rbac.authorization.k8s.io"
+roleRef.kind = "ClusterRole"
+roleRef.name = "cluster-read-all"
+subjects = [
+  { apiGroup = "rbac.authorization.k8s.io", kind = "Group", name = "9k-dev:Viewers" }
+]
+
 [config.environment.state."/keep"]
 directories = [
   "/var/lib/dex",
