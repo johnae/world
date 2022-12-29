@@ -42,7 +42,8 @@ tailscale-auth.file = "secrets/tailscale-auth.age"
 
 [config.services.tailscale.auth]
 enable = true
-args.accept-routes = true
+args.ssh = true
+args.accept-routes = false
 args.login-server = "https://tailscale.9000.dev"
 args.auth-key = "file:/var/run/agenix/tailscale-auth"
 

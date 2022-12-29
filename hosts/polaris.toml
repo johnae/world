@@ -125,6 +125,7 @@ locations."/".proxyWebsockets = true
 
 [config.services.tailscale.auth]
 enable = true
+args.ssh = true
 args.accept-routes = false ## with this on, it causes issues in k3s when network runs on top of tailscale
 args.login-server = "https://tailscale.9000.dev"
 args.auth-key = "file:/var/run/agenix/tailscale-auth"
