@@ -14,6 +14,7 @@
     concatStringsSep
     mapAttrsToList
     isBool
+    isList
     toString
     mapAttrs
     ;
@@ -23,7 +24,7 @@ in {
   options.services.tailscale.auth = {
     enable = mkEnableOption "tailscale automatic auth service";
     args = mkOption {
-      type = types.attrsOf (types.oneOf [types.str types.number types.bool]);
+      type = types.attrsOf (types.oneOf [(types.listOf types.str) types.str types.number types.bool]);
       apply = value:
         mapAttrsToList (name: value: "--${name}${value}") (
           mapAttrs (
@@ -33,6 +34,8 @@ in {
                 if value
                 then "=true"
                 else "=false"
+              else if isList value
+              then " ${concatStringsSep "," value}"
               else " ${toString value}"
           )
           value

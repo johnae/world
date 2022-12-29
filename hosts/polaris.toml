@@ -125,6 +125,7 @@ locations."/".proxyWebsockets = true
 
 [config.services.tailscale.auth]
 enable = true
+args.advertise-tags = ["tag:server","tag:hetzner","tag:hetzner-fi","tag:k3s","tag:ssh"]
 args.ssh = true
 args.accept-routes = false ## with this on, it causes issues in k3s when network runs on top of tailscale
 args.login-server = "https://tailscale.9000.dev"

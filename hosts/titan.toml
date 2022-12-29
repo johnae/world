@@ -91,6 +91,7 @@ tailscale-auth = { file = "secrets/tailscale-auth.age" }
 
 [config.services.tailscale.auth]
 enable = true
+args.advertise-tags = ["tag:server","tag:home","tag:k3s","tag:ssh"]
 args.ssh = true
 args.accept-routes = false ## with this on, it causes issues in k3s when network runs on top of tailscale
 args.login-server = "https://tailscale.9000.dev"
