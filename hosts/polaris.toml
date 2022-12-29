@@ -177,6 +177,16 @@ action = "accept"
 src = ["admin"]
 dst = ["admin:*"]
 
+[[config.services.headscale.acl.settings.acls]]
+action = "accept"
+src = ["ts"]
+dst = ["ts:*"]
+
+[[config.services.headscale.acl.settings.acls]]
+action = "accept"
+src = ["john"]
+dst = ["john:*"]
+
 [config.services.nginx.virtualHosts."tailscale.9000.dev"]
 forceSSL = true
 enableACME = true
