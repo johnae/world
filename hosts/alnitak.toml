@@ -59,9 +59,7 @@ upstreamDnsServers = [
 externalInterface = "enp1s0"
 internalInterface = "enp2s0"
 internalInterfaceIP = "192.168.20.1"
-dnsMasqExtraConfig = """
-  no-resolv
-  bogus-priv
-  strict-order
-  add-cpe-id=a5472c
-"""
+dnsMasqSettings.no-resolv = true
+dnsMasqSettings.bogus-priv = true
+dnsMasqSettings.strict-order = true
+dnsMasqSettings.add-cpe-id = "a5472c"

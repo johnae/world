@@ -56,9 +56,9 @@ in {
       type = listOf str;
       description = "List of upstream dns server addresses.";
     };
-    dnsMasqExtraConfig = mkOption {
-      type = lines;
-      description = "Extra dnsmasq config";
+    dnsMasqSettings = mkOption {
+      type = attrsOf anything;
+      description = "Extran dnsmasq settings";
     };
     externalInterface = mkOption {
       type = str;
@@ -121,8 +121,11 @@ in {
 
     services.dnsmasq.enable = true;
     services.dnsmasq.resolveLocalQueries = true;
-    services.dnsmasq.settings.server = cfg.upstreamDnsServers;
-    services.dnsmasq.extraConfig = cfg.dnsMasqExtraConfig;
+    services.dnsmasq.settings =
+      {
+        server = cfg.upstreamDnsServers;
+      }
+      // cfg.dnsMasqSettings;
 
     boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = true;
     boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
