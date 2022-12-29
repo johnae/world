@@ -24,6 +24,7 @@
 in {
   options.services.headscale.acl = {
     enable = mkEnableOption "enable headscale acl management";
+    enableSSH = mkEnableOption "enable headscale experimental ssh support";
     settings = mkOption {
       type = settingsFormat.type;
       default = {};
@@ -35,5 +36,8 @@ in {
 
   config = mkIf cfg.enable {
     services.headscale.settings.acl_policy_path = settingsFormat.generate "headscale-acls.json" cfg.settings;
+    systemd.services.headscale.environment = mkIf cfg.enableSSH {
+      HEADSCALE_EXPERIMENTAL_FEATURE_SSH = "1";
+    };
   };
 }

@@ -166,6 +166,7 @@ tagOwners."tag:ssh" = ["group:admin"]
 
 [config.services.headscale.acl]
 enable = true
+enableSSH = true
 
 [[config.services.headscale.acl.settings.acls]]
 action = "accept"
