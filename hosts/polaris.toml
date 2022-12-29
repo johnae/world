@@ -154,6 +154,29 @@ ip_prefixes = [ "172.27.0.0/18" ]
 dns_config.override_local_dns = true
 noise.private_key_path = "/var/lib/headscale/noise_private.key"
 
+[config.services.headscale.acl.settings]
+groups."group:admin" = ["john"]
+tagOwners."tag:hetzner" = ["group:admin"]
+tagOwners."tag:hetzner-fi" = ["group:admin"]
+tagOwners."tag:server" = ["group:admin"]
+tagOwners."tag:k3s" = ["group:admin"]
+tagOwners."tag:router" = ["group:admin"]
+tagOwners."tag:home" = ["group:admin"]
+tagOwners."tag:ssh" = ["group:admin"]
+
+[config.services.headscale.acl]
+enable = true
+
+[[config.services.headscale.acl.settings.acls]]
+action = "accept"
+src = ["group:admin"]
+dst = ["*"]
+
+[[config.services.headscale.acl.settings.acls]]
+action = "accept"
+src = ["admin"]
+dst = ["admin:*"]
+
 [config.services.nginx.virtualHosts."tailscale.9000.dev"]
 forceSSL = true
 enableACME = true

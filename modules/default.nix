@@ -3,6 +3,7 @@
     ./auto-upgrade-enhanced.nix
     ./cleanboot.nix
     ./config-from-data.nix
+    ./headscale-acls.nix
     ./home.nix
     ./host-config.nix
     ./innernet.nix
