@@ -170,7 +170,7 @@ enable = true
 [[config.services.headscale.acl.settings.acls]]
 action = "accept"
 src = ["group:admin"]
-dst = ["*"]
+dst = ["*:*"]
 
 [[config.services.headscale.acl.settings.acls]]
 action = "accept"
