@@ -330,7 +330,7 @@ roleRef.apiGroup = "rbac.authorization.k8s.io"
 roleRef.kind = "ClusterRole"
 roleRef.name = "cluster-admin"
 subjects = [
-  { apiGroup = "rbac.authorization.k8s.io", kind = "Group", name = "9k-dev:Admin" }
+  { apiGroup = "rbac.authorization.k8s.io", kind = "Group", name = "9k-dev:Admins" }
 ]
 
 [config.services.k3s.autoDeploy.cluster-read-all-role]
