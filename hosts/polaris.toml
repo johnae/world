@@ -174,11 +174,6 @@ dst = ["*:*"]
 
 [[config.services.headscale.acl.settings.acls]]
 action = "accept"
-src = ["admin"]
-dst = ["admin:*"]
-
-[[config.services.headscale.acl.settings.acls]]
-action = "accept"
 src = ["ts"]
 dst = ["ts:*"]
 
