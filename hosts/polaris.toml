@@ -154,23 +154,12 @@ ip_prefixes = [ "172.27.0.0/18" ]
 dns_config.override_local_dns = true
 noise.private_key_path = "/var/lib/headscale/noise_private.key"
 
-{
-  "acls": [
-    { "action": "accept", "src": ["*"], "dst": ["*:*"] },
-  ],
-  "ssh": [
-      // any user can use Tailscale SSH to connect to their own devices
-      // in check mode as a root or non-root user
-     { "action": "check", "src": ["autogroup:members"], "dst": ["autogroup:self"], "users": ["autogroup:nonroot", "root"] },
-  ]
-}
-
-
 [config.services.headscale.acl]
 enable = true
 enableSSH = true
 
 [config.services.headscale.acl.settings]
+hosts = {}
 groups."group:admin" = ["john@insane.se"]
 groups."group:servers" = ["ts"]
 tagOwners."tag:hetzner" = ["group:admin","group:servers"]
