@@ -158,10 +158,10 @@ noise.private_key_path = "/var/lib/headscale/noise_private.key"
 enable = true
 enableSSH = true
 
-#[config.services.headscale.acl.settings]
-#hosts = {}
-#groups."group:admin" = ["john@insane.se"]
-#groups."group:servers" = ["ts"]
+[config.services.headscale.acl.settings]
+hosts = {}
+groups."group:admin" = ["john@insane.se"]
+groups."group:servers" = ["ts"]
 #tagOwners."tag:hetzner" = ["group:admin","group:servers"]
 #tagOwners."tag:hetzner-fi" = ["group:admin","group:servers"]
 #tagOwners."tag:server" = ["group:admin","group:servers"]
@@ -174,8 +174,13 @@ enableSSH = true
 
 [[config.services.headscale.acl.settings.acls]]
 action = "accept"
-src = ["*"]
+src = ["group:admin"]
 dst = ["*:*"]
+
+[[config.services.headscale.acl.settings.acls]]
+action = "accept"
+src = ["group:servers"]
+dst = ["tag:server:*"]
 
 #[[config.services.headscale.acl.settings.acls]]
 #action = "accept"
