@@ -161,27 +161,61 @@ enableSSH = true
 [config.services.headscale.acl.settings]
 hosts = {}
 groups."group:admin" = ["john"]
-groups."group:servers" = ["ts"]
-groups."group:routers" = ["ts"]
-tagOwners."tag:hetzner" = ["group:admin","group:servers"]
-tagOwners."tag:hetzner-fi" = ["group:admin","group:servers"]
-tagOwners."tag:server" = ["group:admin","group:servers"]
-tagOwners."tag:k3s" = ["group:admin","group:servers"]
-tagOwners."tag:router" = ["group:admin","group:servers", "group:routers"]
-tagOwners."tag:home" = ["group:admin","group:servers", "group:routers"]
-tagOwners."tag:ssh" = ["group:admin","group:servers", "group:routers"]
+groups."group:machines" = ["ts"]
+groups."group:all" = ["ts","john"]
+tagOwners."tag:hetzner" = ["group:admin","group:machines"]
+tagOwners."tag:hetzner-fi" = ["group:admin","group:machines"]
+tagOwners."tag:server" = ["group:admin","group:machines"]
+tagOwners."tag:k3s" = ["group:admin","group:machines"]
+tagOwners."tag:router" = ["group:admin","group:machines"]
+tagOwners."tag:home" = ["group:admin","group:machines"]
+tagOwners."tag:ssh" = ["group:admin","group:machines"]
 disableIPv4 = false
 randomizeClientPort = false
 
 [[config.services.headscale.acl.settings.acls]]
+## admins can access all nodes
 action = "accept"
-src = ["*"]
+src = ["group:admin"]
 dst = ["*:*"]
 
 [[config.services.headscale.acl.settings.acls]]
+## admins can ping all nodes
 action = "accept"
-src = ["group:servers"]
-dst = ["tag:server:*"]
+proto = "icmp"
+src = ["group:admin"]
+dst = ["*:*"]
+
+[[config.services.headscale.acl.settings.acls]]
+## machines can access each other 
+action = "accept"
+src = ["ts"] ## the ts namespace
+dst = ["ts:*"] ## can access nodes in self
+
+[[config.services.headscale.acl.settings.acls]]
+## machines can also ping each other 
+action = "accept"
+proto = "icmp"
+src = ["ts"] ## the ts namespace
+dst = ["ts:*"] ## can access nodes in self
+
+[[config.services.headscale.acl.settings.acls]]
+## john can access his own nodes
+action = "accept"
+src = ["john"] ## the john namespace
+dst = ["john:*"] ## can access nodes in self
+
+[[config.services.headscale.acl.settings.acls]]
+## john can also ping his own nodes
+action = "accept"
+proto = "icmp"
+src = ["john"] ## the john namespace
+dst = ["john:*"] ## can ping nodes in self
+
+#[[config.services.headscale.acl.settings.acls]]
+#action = "accept"
+#src = ["group:servers"]
+#dst = ["tag:server:*"]
 
 #[[config.services.headscale.acl.settings.acls]]
 #action = "accept"
