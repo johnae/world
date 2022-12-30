@@ -156,7 +156,7 @@ noise.private_key_path = "/var/lib/headscale/noise_private.key"
 
 [config.services.headscale.acl]
 enable = true
-enableSSH = true
+enableSSH = false
 
 [config.services.headscale.acl.settings]
 hosts = {}
