@@ -175,7 +175,7 @@ randomizeClientPort = false
 
 [[config.services.headscale.acl.settings.acls]]
 action = "accept"
-src = ["*:*"]
+src = ["*"]
 dst = ["*:*"]
 
 [[config.services.headscale.acl.settings.acls]]
