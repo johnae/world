@@ -155,8 +155,8 @@ dns_config.override_local_dns = true
 noise.private_key_path = "/var/lib/headscale/noise_private.key"
 
 [config.services.headscale.acl]
-enable = true
-enableSSH = false
+enable = false ## don't seem to work that well atm
+enableSSH = false ## neither does this
 
 [config.services.headscale.acl.settings]
 hosts = {}
