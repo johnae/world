@@ -162,15 +162,16 @@ enableSSH = true
 hosts = {}
 groups."group:admin" = ["john@insane.se"]
 groups."group:servers" = ["ts"]
-#tagOwners."tag:hetzner" = ["group:admin","group:servers"]
-#tagOwners."tag:hetzner-fi" = ["group:admin","group:servers"]
-#tagOwners."tag:server" = ["group:admin","group:servers"]
-#tagOwners."tag:k3s" = ["group:admin","group:servers"]
-#tagOwners."tag:router" = ["group:admin","group:servers"]
-#tagOwners."tag:home" = ["group:admin","group:servers"]
-#tagOwners."tag:ssh" = ["group:admin","group:servers"]
-#disableIPv4 = false
-#randomizeClientPort = false
+groups."group:routers" = ["ts"]
+tagOwners."tag:hetzner" = ["group:admin","group:servers"]
+tagOwners."tag:hetzner-fi" = ["group:admin","group:servers"]
+tagOwners."tag:server" = ["group:admin","group:servers"]
+tagOwners."tag:k3s" = ["group:admin","group:servers"]
+tagOwners."tag:router" = ["group:admin","group:servers", "group:routers"]
+tagOwners."tag:home" = ["group:admin","group:servers", "group:routers"]
+tagOwners."tag:ssh" = ["group:admin","group:servers", "group:routers"]
+disableIPv4 = false
+randomizeClientPort = false
 
 [[config.services.headscale.acl.settings.acls]]
 action = "accept"
