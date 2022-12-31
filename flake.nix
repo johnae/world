@@ -52,7 +52,7 @@
     google-cloud-sdk-fish-completion.url = "github:Doctusoft/google-cloud-sdk-fish-completion";
     grim.flake = false;
     grim.url = "github:emersion/grim";
-    headscale.url = "github:johnae/headscale";
+    headscale.url = "github:juanfont/headscale";
     headscale.inputs.flake-utils.follows = "flake-utils";
     headscale.inputs.nixpkgs.follows = "nixpkgs";
     hwdata.url = "github:vcrhonek/hwdata";
