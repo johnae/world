@@ -8,10 +8,12 @@
   inherit pkgs;
   source = inputs.matrix-conduit;
   packageOverrides."^.*".addDeps = {
-    nativeBuildInputs = old: old ++ [pkgs.rustPlatform.bindgenHook pkgs.pkg-config];
-    buildInputs = old: old ++ [pkgs.rocksdb];
-    doCheck = false;
-    cargoBuildFlags = "--no-default-features --features conduit_bin,backend_sqlite,backend_rocksdb";
+    overrideAttrs = old: {
+      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [pkgs.rustPlatform.bindgenHook pkgs.pkg-config];
+      buildInputs = (old.buildInputs or []) ++ [pkgs.rocksdb];
+      doCheck = false;
+      cargoBuildFlags = "--no-default-features --features conduit_bin,backend_sqlite,backend_rocksdb";
+    };
   };
 })
 .packages
