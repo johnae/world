@@ -7,7 +7,6 @@ in {
     enable = true;
     package = firefox;
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-      https-everywhere
       tridactyl
       adsum-notabs
       ublock-origin
