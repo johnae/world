@@ -1,7 +1,7 @@
 system = "x86_64-linux"
 
 [config]
-publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMoTdeqiDgd0BjhgDu96R+fD1s3PNmAB0UgHFet+IPhS"
+publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEaNfCJeVMxPC290oQxf16mrRHX+swWKlo3uhm3ZmYBK"
 syncthingDeviceID = "FB5PKN4-5KT7RPB-5JXSO2B-7BTWIG6-FEPT7FA-AZT4QIP-Z3AMM3L-OQXZPQI"
 profiles = [
   "profiles/hardware/nuc",
