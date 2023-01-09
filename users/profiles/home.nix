@@ -54,6 +54,7 @@ in {
     VISUAL = "emacsclient -t -a=";
     KUBECONFIG = "/home/${home.username}/.kube/config";
     COLORTERM = "truecolor";
+    USE_GKE_GCLOUD_AUTH_PLUGIN = "True";
   };
 
   xdg.enable = true;
