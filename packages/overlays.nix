@@ -44,4 +44,5 @@ in
     rust-analyzer-bin = final: prev: {rust-analyzer-bin = prev.callPackage ./wl-clipboard-x11 {};};
     netns-dbus-proxy = final: prev: {netns-dbus-proxy = prev.callPackage ./wl-clipboard-x11 {};};
     scripts = final: prev: {scripts = prev.callPackage ./scripts {};};
+    river = final: prev: {river = prev.callPackage ./river {};};
   }
