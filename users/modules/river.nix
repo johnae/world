@@ -52,7 +52,7 @@
     inherit (conf) settings;
   in
     pkgs.writeShellApplication {
-      name = "init-xkcd9000";
+      name = "init";
       runtimeInputs = [cfg.package];
       text = ''
         set -x
@@ -171,7 +171,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    xdg.configFile."river/init".source = writeConfig cfg;
+    xdg.configFile."river/init".source = "${writeConfig cfg}/bin/init";
     home.sessionVariables = {
       XKB_DEFAULT_LAYOUT = cfg.xkb.default_layout;
       XKB_DEFAULT_OPTIONS = cfg.xkb.default_options;
