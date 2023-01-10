@@ -564,18 +564,6 @@ Package setup.
        (visual-fill-column-center-text t)
      )
    #+END_SRC
-*** Org-roam
-   #+BEGIN_SRC elisp
-     (use-package org-roam
-       :init
-       (setq org-roam-v2-ack t)
-       :custom
-       (org-roam-directory (file-truename "~/Development/org-roam"))
-       :config
-       (org-roam-db-autosync-mode)
-       (require 'org-roam-protocol)
-     )
-   #+END_SRC
 ** Denote
 #+BEGIN_SRC elisp
   (use-package denote
