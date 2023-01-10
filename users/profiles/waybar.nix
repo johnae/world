@@ -1,8 +1,61 @@
 {
   config,
   lib,
+  pkgs,
   ...
-}: {
+}: let
+  pomodoro = pkgs.writeShellApplication {
+    name = "pomodoro";
+    runtimeInputs = [pkgs.jq pkgs.coreutils pkgs.notify-desktop];
+    text = ''
+        store=/tmp/.pomodoro
+        MIN_25_IN_SECS=$(( 60 * 25 ))
+        CMD=''${1:-}
+        if [ ! -e "$store" ]; then
+          "$0" reset
+          echo 0 > "$store"
+        fi
+        if [ "$CMD" = "start" ]; then
+          if [ -e "$store" ]; then
+            start="$(cat "$store")"
+            now="$(date +'%s')"
+            elapsed=$(( now - start ))
+            if [ "$elapsed" -lt "$MIN_25_IN_SECS" ]; then
+              exit
+            fi
+          fi
+          date +'%s' > "$store"
+        elif [ "$CMD" = "reset" ]; then
+          echo 0 > "$store"
+        elif [ "$CMD" = "status" ]; then
+          start="$(cat "$store")"
+          if [ "$start" = "0" ]; then
+            echo break
+            exit
+          fi
+          now="$(date +'%s')"
+          elapsed=$(( now - start ))
+          if [ "$elapsed" -gt "$MIN_25_IN_SECS" ]; then
+            echo 0 > "$store"
+            notify-desktop -t 5000 -a Pomodoro "Pomodoro block ended" "Time for a break"
+            echo ended
+          else
+            echo $(( MIN_25_IN_SECS - elapsed))
+          fi
+        else
+          cat<<EOF
+          Please provide a command, supported commands:
+
+          start  - starts a new pomodoro, exits silently if there is a running pomodoro
+          reset  - resets any running pomodoro
+          status - returns time left if a pomodoro is running, otherwise returns the word "break"
+      EOF
+          exit 1
+        fi
+    '';
+  };
+in {
+  home.packages = [pomodoro];
   programs.waybar.enable = true;
   programs.waybar.settings.mainBar = {
     bar_id = "main";
@@ -10,7 +63,7 @@
     position = "top";
     spacing = 8;
     modules-left = ["river/tags" "sway/workspaces" "sway/mode" "custom/media"];
-    modules-right = ["network" "network#wifi" "idle_inhibitor" "pulseaudio" "cpu" "temperature" "backlight" "battery" "battery#bat2" "clock" "tray"];
+    modules-right = ["custom/pomodoro" "network" "network#wifi" "idle_inhibitor" "pulseaudio" "cpu" "temperature" "backlight" "battery" "clock" "tray"];
     "custom/media" = {
       format = "{icon}{}";
       return-type = "json";
@@ -21,6 +74,18 @@
       max-length = 70;
       exec = "playerctl -a metadata --format '{\"text\": \"{{playerName}}: {{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
       on-click = "playerctl play-pause";
+    };
+    "custom/pomodoro" = {
+      format = "Pomo: {icon}{}";
+      interval = 1;
+      format-icons = {
+        Playing = " ";
+        Paused = " ";
+      };
+      max-length = 70;
+      on-click = "${pomodoro}/bin/pomodoro start";
+      on-click-right = "${pomodoro}/bin/pomodoro reset";
+      exec = "${pomodoro}/bin/pomodoro status";
     };
     idle_inhibitor = {
       format = "{icon}";
@@ -158,6 +223,9 @@
     }
 
     #cpu {
+    }
+
+    #custom-pomodoro {
     }
 
     #memory {
