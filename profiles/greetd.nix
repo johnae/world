@@ -8,7 +8,7 @@
     cmd,
   }:
     pkgs.writeShellApplication {
-      name = "run";
+      inherit name;
       text = ''
         exec ${pkgs.udev}/bin/systemd-cat --identifier=${name} ${cmd}
       '';
@@ -22,7 +22,7 @@
     cmd,
   }:
     pkgs.writeShellApplication {
-      name = "run";
+      inherit name;
       text = ''
         ${lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "export ${k}=\"${v}\"") env)}
         ${
@@ -40,7 +40,7 @@
         ${
           if viaSystemdCat
           then ''
-            exec ${runViaSystemdCat {inherit name cmd;}}/bin/run
+            exec ${runViaSystemdCat {inherit name cmd;}}/bin/${name}
           ''
           else ''
             exec ${cmd}
@@ -78,25 +78,33 @@
     '';
 
   sessionDir = pkgs.linkFarm "sessions" [
-    {
-      name = "sway.desktop";
-      path = desktopSession "sway" "${runSway}/bin/run";
-    }
+    #{
+    #  name = "sway.desktop";
+    #  path = desktopSession "sway" "${runSway}/bin/sway";
+    #}
     {
       name = "river.desktop";
-      path = desktopSession "river" "${runRiver}/bin/run";
+      path = desktopSession "river" "${runRiver}/bin/river";
     }
     {
-      name = "shell.desktop";
-      path = desktopSession "nu" "${pkgs.nushell}/bin/nu";
+      name = "nushell.desktop";
+      path = desktopSession "nushell" "${pkgs.nushell}/bin/nu";
     }
   ];
+
+  greeter = pkgs.writeShellApplication {
+    name = "greeter";
+    runtimeInputs = [runSway pkgs.systemd pkgs.greetd.tuigreet];
+    text = ''
+      tuigreet --sessions ${sessionDir} --time -r --remember-session --power-shutdown 'systemctl poweroff' --power-reboot 'systemctl reboot' --cmd sway
+    '';
+  };
 in {
   services.greetd = {
     enable = true;
     restart = true;
     settings = {
-      default_session.command = "${pkgs.greetd.tuigreet}/bin/tuigreet --sessions ${sessionDir} --time -r --remember-session --power-shutdown '${pkgs.systemd}/bin/systemctl poweroff' --power-reboot '${pkgs.systemd}/bin/systemctl reboot'";
+      default_session.command = "${greeter}/bin/greeter";
     };
   };
   ## prevents systemd spewing the console with log messages when greeter is active
