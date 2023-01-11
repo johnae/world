@@ -12,7 +12,6 @@
         MIN_25_IN_SECS=$(( 60 * 25 ))
         CMD=''${1:-}
         if [ ! -e "$store" ]; then
-          "$0" reset
           echo 0 > "$store"
         fi
         if [ "$CMD" = "start" ]; then
@@ -76,7 +75,7 @@ in {
       on-click = "playerctl play-pause";
     };
     "custom/pomodoro" = {
-      format = "Pomo: {icon}{}";
+      format = " {icon}{}";
       interval = 1;
       format-icons = {
         Playing = " ";
