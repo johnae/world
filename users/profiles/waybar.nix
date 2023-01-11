@@ -16,7 +16,7 @@
         fi
         if [ "$CMD" = "start" ]; then
           if [ -e "$store" ]; then
-            start="$(cat "$store")"
+            start="$(<"$store")"
             now="$(date +'%s')"
             elapsed=$(( now - start ))
             if [ "$elapsed" -lt "$MIN_25_IN_SECS" ]; then
@@ -27,19 +27,28 @@
         elif [ "$CMD" = "reset" ]; then
           echo 0 > "$store"
         elif [ "$CMD" = "status" ]; then
-          start="$(cat "$store")"
+          start="$(<"$store")"
           if [ "$start" = "0" ]; then
             echo break
             exit
           fi
           now="$(date +'%s')"
           elapsed=$(( now - start ))
+          left=$(( MIN_25_IN_SECS - elapsed ))
           if [ "$elapsed" -gt "$MIN_25_IN_SECS" ]; then
             echo 0 > "$store"
             notify-desktop -t 5000 -a Pomodoro "Pomodoro block ended" "Time for a break"
             echo ended
           else
-            echo $(( MIN_25_IN_SECS - elapsed))
+            set +o errexit
+            ((sec=left%60, left/=60, min=left%60, hrs=left/60))
+            set -o errexit
+            if [ "$hrs" -eq 0 ]; then
+              timestamp=$(printf "%02d:%02d" $min $sec)
+            else
+              timestamp=$(printf "%02d:%02d:%02d" $hrs $min $sec)
+            fi
+            echo "$timestamp"
           fi
         else
           cat<<EOF
