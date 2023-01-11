@@ -77,11 +77,11 @@
       Exec=${command}
     '';
 
-  sessionDir = pkgs.linkFarm "sessions" [
-    #{
-    #  name = "sway.desktop";
-    #  path = desktopSession "sway" "${runSway}/bin/sway";
-    #}
+  sessions = [
+    {
+      name = "sway.desktop";
+      path = desktopSession "sway" "${runSway}/bin/sway";
+    }
     {
       name = "river.desktop";
       path = desktopSession "river" "${runRiver}/bin/river";
@@ -92,19 +92,24 @@
     }
   ];
 
-  greeter = pkgs.writeShellApplication {
-    name = "greeter";
-    runtimeInputs = [runSway pkgs.systemd pkgs.greetd.tuigreet];
-    text = ''
-      tuigreet --sessions ${sessionDir} --time -r --remember-session --power-shutdown 'systemctl poweroff' --power-reboot 'systemctl reboot' --cmd sway
-    '';
-  };
+  createGreeter = default: sessions: let
+    sessionDir = pkgs.linkFarm "sessions" (
+      builtins.filter (item: item.name != "${default}.desktop") sessions
+    );
+  in
+    pkgs.writeShellApplication {
+      name = "greeter";
+      runtimeInputs = [runSway runRiver pkgs.nushell pkgs.systemd pkgs.greetd.tuigreet];
+      text = ''
+        tuigreet --sessions ${sessionDir} --time -r --remember-session --power-shutdown 'systemctl poweroff' --power-reboot 'systemctl reboot' --cmd ${default}
+      '';
+    };
 in {
   services.greetd = {
     enable = true;
     restart = true;
     settings = {
-      default_session.command = "${greeter}/bin/greeter";
+      default_session.command = "${createGreeter "sway" sessions}/bin/greeter";
     };
   };
   ## prevents systemd spewing the console with log messages when greeter is active
