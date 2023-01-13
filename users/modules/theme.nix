@@ -48,13 +48,19 @@ in {
 
           focusedInactive = {
             border = cfg.base00;
+            background = cfg.base07;
+            text = cfg.base03;
+            indicator = cfg.base00;
+            childBorder = cfg.base00;
+          };
+
+          unfocused = {
+            border = cfg.base00;
             background = cfg.base00;
             text = cfg.base07;
             indicator = cfg.base00;
             childBorder = cfg.base00;
           };
-
-          unfocused = focusedInactive;
 
           urgent = {
             border = cfg.base0B;
