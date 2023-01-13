@@ -47,9 +47,9 @@ in {
           };
 
           focusedInactive = {
-            border = cfg.base00;
-            background = cfg.base07;
-            text = cfg.base03;
+            border = cfg.base03;
+            background = cfg.base03;
+            text = cfg.base04;
             indicator = cfg.base00;
             childBorder = cfg.base00;
           };
@@ -57,7 +57,7 @@ in {
           unfocused = {
             border = cfg.base00;
             background = cfg.base00;
-            text = cfg.base07;
+            text = cfg.base0F;
             indicator = cfg.base00;
             childBorder = cfg.base00;
           };
