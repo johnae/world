@@ -179,8 +179,8 @@ extraConfig.tag.forceSignAnnotated = true
 [[config.home-manager.users.john.programs.git.includes]]
 condition = "gitdir:~/Development/volvo/" ## note the IMPORTANT trailing slash
 contents.user.email = "john.axel.eriksson@consultant.volvo.com"
-contents.user.signingKey = "key::sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJsVshwPSDDs5lgly2P6Hv5t96NgASRezs66KvgLR99ZAAAACXNzaDp2b2x2bw=="
-contents.commit.gpgSign = true
+#contents.user.signingKey = "key::sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJsVshwPSDDs5lgly2P6Hv5t96NgASRezs66KvgLR99ZAAAACXNzaDp2b2x2bw=="
+contents.commit.gpgSign = false
 contents.credential."https://github.com".helper = "${pkgs.rbw-git-creds}/bin/rbw-git-creds github.com john.axel.eriksson@consultant.volvo.com"
 contents.url."https://github.com".insteadOf = "ssh://git@github.com"
 
