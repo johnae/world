@@ -15,7 +15,7 @@
   hardware.trackpoint.emulateWheel = lib.mkDefault config.hardware.trackpoint.enable;
   hardware.enableRedistributableFirmware = lib.mkDefault true;
   hardware.trackpoint.device = lib.mkDefault "TPPS/2 Elan TrackPoint";
-  services.fprintd.enable = lib.mkDefault true;
+  #services.fprintd.enable = lib.mkDefault true;
 
   environment.state."/keep".directories = ["/var/lib/fprint"];
 
