@@ -65,6 +65,7 @@
 
   services.avahi.enable = true;
   services.avahi.nssmdns = true;
+  services.avahi.openFirewall = true;
   services.gvfs.enable = true;
   services.gnome.sushi.enable = true;
   services.openssh.enable = true;
@@ -72,7 +73,8 @@
   services.fwupd.enable = true;
 
   services.printing.enable = true;
-  services.printing.drivers = [pkgs.gutenprint pkgs.hplip pkgs.gutenprintBin];
+  services.printing.drivers = [pkgs.gutenprint pkgs.hplip pkgs.gutenprintBin pkgs.foomatic-db-ppds-withNonfreeDb];
+  services.ipp-usb.enable = true;
 
   services.dbus.packages = with pkgs; [gcr dconf gnome.sushi];
   services.udev.packages = with pkgs; [gnome.gnome-settings-daemon];
