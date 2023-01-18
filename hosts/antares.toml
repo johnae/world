@@ -61,6 +61,13 @@ paths = [
 environmentFile = "/run/agenix/restic-env"
 passwordFile = "/run/agenix/restic-pw"
 initialize = true
+timerConfig.OnCalendar = "*-*-* *:00:00"
+pruneOpts = [
+  "--keep-daily 10",
+  "--keep-weekly 7",
+  "--keep-monthly 12",
+  "--keep-yearly 75"
+]
 
 [config.services.syncthing]
 enable = true
