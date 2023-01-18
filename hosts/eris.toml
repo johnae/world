@@ -68,7 +68,7 @@ paths = [
   "/home/john/Documents",
 ]
 environmentFile = "/run/agenix/restic-env"
-passwordfile = "/run/agenix/restic-pw"
+passwordFile = "/run/agenix/restic-pw"
 
 [config.services.syncthing]
 enable = true
