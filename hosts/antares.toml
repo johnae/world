@@ -55,6 +55,8 @@ restic-pw = { file = "secrets/restic-pw.age", owner = "1337" }
 paths = [
   "/home/john/Development",
   "/home/john/Documents",
+  "/home/john/Sync",
+  "/home/john/Photos",
 ]
 environmentFile = "/run/agenix/restic-env"
 passwordFile = "/run/agenix/restic-pw"
