@@ -73,6 +73,7 @@ environmentFile = "/run/agenix/restic-env"
 passwordFile = "/run/agenix/restic-pw"
 initialize = true
 timerConfig.OnCalendar = "*-*-* *:00:00"
+timerConfig.RandomizedDelaySec = "5m"
 pruneOpts = [
   "--keep-daily 10",
   "--keep-weekly 7",
