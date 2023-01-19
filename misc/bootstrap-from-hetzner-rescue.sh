@@ -21,6 +21,6 @@ set -u -x
 cat<<INFO
 Now run:
 
-nix shell nixpkgs#nixos-install-tools
+nix shell nixpkgs#nixos-install-tools nixpkgs#mount
 nixos-install --flake .#<hostname> --no-root-passwd --impure
 INFO
