@@ -69,6 +69,11 @@ pruneOpts = [
   "--keep-monthly 12",
   "--keep-yearly 75"
 ]
+extraBackupArgs = [
+  "--exclude=\".direnv\"",
+  "--exclude=\".terraform\"",
+  "--exclude=\"node_modules\"",
+]
 
 [config.services.syncthing]
 enable = true
