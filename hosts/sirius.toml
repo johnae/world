@@ -137,7 +137,7 @@ key = "/run/agenix/syncthing-key"
 dataDir = "/home/john/.local/share/syncthing-data"
 
 [config.networking]
-defaultGateway = "65.108.238.129"
+defaultGateway = "65.108.233.1"
 defaultGateway6 = { address = "fe80::1", interface = "eth0" }
 
 [[config.networking.interfaces.eth0.ipv4.addresses]]
