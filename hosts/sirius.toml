@@ -1,17 +1,20 @@
 system = "x86_64-linux"
 
 [config]
-publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII0l+4wC4sriwV+yhyqdUdyYzS44HVYmCksi2n9iomh/"
-syncthingDeviceID = "6RLYSEA-GD5XMME-6FSTB3E-3TVZ5BZ-RO66VNC-B72TUJM-HU72Y7E-SHWK3AH"
+publicKey = ""
+syncthingDeviceID = "XFZC5TF-K6CWYRL-GIMFEZO-HNXUS4Q-BPJZJQR-3SVNTXL-X4UABVR-RWDROQD"
 
 profiles = [
   "profiles/hardware/ax101",
+  "profiles/acme",
   "profiles/default_fs",
   "profiles/home-manager",
-  #"profiles/k3s",
+  "profiles/jellyfin",
+  "profiles/k3s",
   "profiles/server",
   "profiles/state",
   "profiles/syncthing",
+  "profiles/tailscale",
   "profiles/zram",
 ]
 
@@ -20,6 +23,9 @@ disks = [ "/dev/nvme0n1", "/dev/nvme1n1" ]
 
 [config.programs.mosh]
 enable = true
+
+[config.boot.binfmt]
+emulatedSystems = [ "aarch64-linux" ]
 
 [config.system.autoUpgrade]
 enable = true
@@ -31,7 +37,7 @@ randomizedDelaySec = "5min"
 
 [config.boot]
 kernelParams = [
-  "ip=65.108.238.134::65.108.238.129:255.255.255.192:orion:eth0:none",
+  "ip=65.108.233.47::65.108.233.1:255.255.255.192:sirius:eth0:none",
 ]
 
 [config.boot.initrd]
@@ -65,13 +71,38 @@ gid = 1337
 
 [config.users.users.john]
 uid = 1337
-shell = "fish"
+shell = "nushell"
 hashedPassword = "$6$dufD6j1MvTFu9f8D$quHkM0IjMcqaBrvq2SzNj/fOBZf0QnX7wHdG6C1pLntLEw0U9AbIM8oN.nxA4gwyYeNmfREQv32AEQP/1q.79."
 openssh.authorizedKeys.keys = [
   "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ==",
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo=",
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=",
 ]
+
+[config.services.tailscale.auth]
+enable = true
+args.advertise-tags = ["tag:server","tag:hetzner","tag:hetzner-fi","tag:k3s","tag:ssh"]
+args.ssh = false
+args.accept-routes = false ## with this on, it causes issues in k3s when network runs on top of tailscale
+args.login-server = "https://tailscale.9000.dev"
+args.auth-key = "file:/var/run/agenix/tailscale-auth"
+
+[config.services.k3s]
+enable = true
+role = "agent"
+after = [ "tailscale-auth.service" ]
+
+[config.services.k3s.settings]
+server = "https://polaris.ts.9000.dev:6443"
+token-file = "/run/agenix/k3s-token"
+flannel-iface = "tailscale0"
+node-ip = "$(get-iface-ip tailscale0)"
+node-external-ip = "$(get-iface-ip eth0)"
+with-node-id = true
+kubelet-arg.max-pods = 62
+node-label."svccontroller.k3s.cattle.io/enablelb" = "true"
+node-label."topology.kubernetes.io/region" = "hetzner"
+node-label."topology.kubernetes.io/zone" = "hetzner-fi"
 
 [config.services.syncthing]
 enable = true
@@ -86,7 +117,8 @@ folders."/home/john/Sync".devices = [
   "eris",
   "icarus",
   "titan",
-  "hyperion"
+  "hyperion",
+  "SM-G998B"
 ]
 folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
 folders."/home/john/Photos".devices = [
@@ -109,11 +141,11 @@ defaultGateway = "65.108.238.129"
 defaultGateway6 = { address = "fe80::1", interface = "eth0" }
 
 [[config.networking.interfaces.eth0.ipv4.addresses]]
-address = "65.108.238.134"
+address = "65.108.233.47"
 prefixLength = 26
 
 [[config.networking.interfaces.eth0.ipv6.addresses]]
-address = "2a01:4f9:1a:b288::2"
+address = "2a01:4f9:1a:ad1d::2"
 prefixLength = 64
 
 [config.networking.firewall]
@@ -123,33 +155,32 @@ allowedTCPPorts = [ 5349, 3478 ]
 allowedUDPPortRanges = [ { from = 49160, to = 49200 } ]
 
 [config.age.secrets]
-#k3s-token.file = "secrets/k3s/token.age"
-wg-home.file = "secrets/orion/wg-home.age"
-#wg-net.file = "secrets/orion/wg-net.age"
-syncthing-cert = { file = "secrets/orion/syncthing-cert.age", owner = "1337" }
-syncthing-key = { file = "secrets/orion/syncthing-key.age", owner = "1337" }
+k3s-token.file = "secrets/k3s/token.age"
+syncthing-cert = { file = "secrets/sirius/syncthing-cert.age", owner = "1337" }
+syncthing-key = { file = "secrets/sirius/syncthing-key.age", owner = "1337" }
 
-#flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
-#sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
-#cluster-secrets = { file = "secrets/k3s/cluster-secrets.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml" }
+initrd-key = { file = "secrets/sirius/initrd_ed25519_key.age", owner = "1337" }
 
-mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337", path = "/home/john/.mbsync-insane" }
+tailscale-auth = { file = "secrets/tailscale-auth.age" }
+
+mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
+mbsync-9000 = { file = "secrets/mbsync-9000.age", owner = "1337" }
 authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
 
 [config.environment.state."/keep"]
 directories = [
   "/var/lib/plex",
+  "/var/lib/jellyfin",
   "/var/lib/media",
-  "/var/lib/headscale",
 ]
 
 [config.home-manager.users.john]
 profiles = [
   "users/profiles/bat",
-  "users/profiles/emacs",
   "users/profiles/fish",
   "users/profiles/git",
   "users/profiles/kubie",
+  "users/profiles/nushell",
   "users/profiles/pueue",
   "users/profiles/rbw",
   "users/profiles/ssh",
@@ -157,11 +188,24 @@ profiles = [
   "users/profiles/tmux",
 ]
 
-## on a local machine alacritty or terminator etc would set this
-## if they support 24-bit color, on a remote system however it doesn't
-## automatically get set
-[config.home-manager.users.john.home.sessionVariables]
-COLORTERM = "truecolor"
+[config.home-manager.users.john.home.file.".emacs"]
+source = "${pkgs.my-emacs-config}"
+
+[config.home-manager.users.john.programs.bat]
+enable = true
+
+[config.home-manager.users.john.programs.emacs]
+enable = true
+package = "${pkgs.my-emacs}"
+
+[config.home-manager.users.john.services.emacs]
+enable = true
+package = "${pkgs.my-emacs}"
+socketActivation.enable = true
+
+[config.home-manager.users.john.systemd.user.services.emacs.Service]
+Environment = [ "COLORTERM=truecolor" ]
+LimitNOFILE = 16384
 
 [config.home-manager.users.john.userinfo]
 email = "john@insane.se"
@@ -178,6 +222,9 @@ enable = true
 [config.home-manager.users.john.services.mbsync]
 enable = true
 frequency = "*:0/5"
+
+[config.home-manager.users.john.services.imapnotify]
+enable = true
 
 [config.home-manager.users.john.services.gitAutoSync.repos."~/Development/org-roam"]
 repository = "git@github.com:johnae/org-roam"
@@ -197,7 +244,11 @@ flavor = "gmail.com"
 mbsync.enable = true
 mbsync.create = "both"
 mbsync.extraConfig.account.PipelineDepth = 10
-passwordCommand = "/run/current-system/sw/bin/cat ~/.mbsync-insane"
+passwordCommand = "${pkgs.coreutils}/bin/cat /run/agenix/mbsync-insane"
+imapnotify.enable = true
+imapnotify.boxes = [ "Inbox" ]
+imapnotify.onNotify = "${pkgs.isync}/bin/mbsync insane"
+imapnotify.onNotifyPost = "${pkgs.mu}/bin/mu index"
 
 [config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.gmail.channels]
 inbox.patterns = ["INBOX"]
@@ -223,3 +274,23 @@ drafts.farPattern = "[Gmail]/Drafts"
 drafts.nearPattern = "Drafts"
 drafts.extraConfig.Create = "near"
 drafts.extraConfig.SyncState = "*"
+
+[config.home-manager.users.john.accounts.email.accounts.9000]
+address = "john@9000.dev"
+userName = "john@9000.dev"
+primary = false
+imap.host = "mail.9000.dev"
+mbsync.enable = true
+mbsync.create = "both"
+mbsync.extraConfig.account.PipelineDepth = 10
+passwordCommand = "${pkgs.coreutils}/bin/cat /run/agenix/mbsync-9000"
+imapnotify.enable = true
+imapnotify.boxes = [ "Inbox" ]
+imapnotify.onNotify = "${pkgs.isync}/bin/mbsync 9000"
+imapnotify.onNotifyPost = "${pkgs.mu}/bin/mu index"
+
+[config.home-manager.users.john.accounts.email.accounts.insane.mbsync.groups.9000.channels]
+all.patterns = ["*"]
+all.extraConfig.Create = "near"
+all.extraConfig.SyncState = "*"
+all.extraConfig.CopyArrivalDate = "yes"

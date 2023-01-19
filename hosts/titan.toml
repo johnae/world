@@ -60,6 +60,7 @@ folders."/home/john/Sync".devices = [
   "icarus",
   "polaris",
   "hyperion",
+  "sirius"
 ]
 cert = "/run/agenix/syncthing-cert"
 key = "/run/agenix/syncthing-key"
@@ -74,7 +75,7 @@ passwordFile = "/run/agenix/remote-disk-password"
 
 [[config.services.remote-unlock]]
 enable = true
-host = "65.108.238.134"
+host = "65.108.233.47"
 port = 2222
 identityFile = "/run/agenix/id_ed25519_remote_unlock"
 passwordFile = "/run/agenix/remote-disk-password"
