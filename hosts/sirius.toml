@@ -33,7 +33,7 @@ flake = "github:johnae/world"
 allowReboot = true
 dates = "*:0/15"
 randomizedDelaySec = "5min"
-#enableSentinel = true
+enableSentinel = true
 
 [config.boot]
 kernelParams = [
