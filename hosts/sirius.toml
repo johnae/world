@@ -167,6 +167,33 @@ mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
 mbsync-9000 = { file = "secrets/mbsync-9000.age", owner = "1337" }
 authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
 
+restic-env = { file = "secrets/restic.age", owner = "1337" }
+restic-pw = { file = "secrets/restic-pw.age", owner = "1337" }
+
+[config.services.restic.backups.remote]
+paths = [
+  "/home/john/Development",
+  "/home/john/Documents",
+  "/home/john/Sync",
+  "/home/john/Photos",
+]
+environmentFile = "/run/agenix/restic-env"
+passwordFile = "/run/agenix/restic-pw"
+initialize = true
+timerConfig.OnCalendar = "*-*-* *:00:00"
+timerConfig.RandomizedDelaySec = "5m"
+pruneOpts = [
+  "--keep-daily 10",
+  "--keep-weekly 7",
+  "--keep-monthly 12",
+  "--keep-yearly 75"
+]
+extraBackupArgs = [
+  "--exclude=\".direnv\"",
+  "--exclude=\".terraform\"",
+  "--exclude=\"node_modules/*\"",
+]
+
 [config.environment.state."/keep"]
 directories = [
   "/var/lib/plex",
