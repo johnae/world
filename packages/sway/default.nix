@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./sway-config-no-nix-store-references.patch
     ./load-configuration-from-etc.patch
+    ./sway-decouple-client-and-container-fullscreen.patch
     (substituteAll {
       src = ./fix-paths.patch;
       inherit swaybg;

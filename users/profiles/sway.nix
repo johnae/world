@@ -212,6 +212,20 @@ in {
             command = "kill";
             criteria.title = "Firefox - Sharing Indicator";
           }
+          {
+            ## only works with patch for sway, eg. packages/sway/sway-decouple-client-and-container-fullscreen.patch
+            command = let
+              nochrome = pkgs.writeShellApplication {
+                name = "nochrome";
+                runtimeInputs = [pkgs.sway pkgs.wtype];
+                text = ''
+                  wtype -k F11
+                  swaymsg fullscreen toggle
+                '';
+              };
+            in "exec ${nochrome}/bin/nochrome";
+            criteria.app_id = "chromium-browser";
+          }
         ];
       };
 
