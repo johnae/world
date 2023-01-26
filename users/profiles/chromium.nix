@@ -1,16 +1,31 @@
 {pkgs, ...}: let
-  chromium = pkgs.chromium.override {
-    commandLineArgs = "-enable-features=UseOzonePlatform -ozone-platform=wayland -enable-features=VaapiVideoDecoder --enable-gpu";
-  };
+  extensions = [
+    {
+      ## vimium
+      id = "dbepggeogbaibhgnhhndojpepiihcmeb";
+    }
+    {
+      ## tab-less
+      id = "mdndkociaebjkggmhnemegoegnbfbgoo";
+    }
+    {
+      ## custom new tab url
+      id = "mmjbdbjnoablegbkcklggeknkfcjkjia";
+    }
+  ];
+  commandLineArgs = [
+    "-enable-features=UseOzonePlatform"
+    "-ozone-platform=wayland"
+    "-enable-features=VaapiVideoDecoder"
+    "--enable-gpu"
+  ];
 in {
-  programs.chromium = {
+  programs.chromiums.chromium-alt = {
     enable = true;
-    package = chromium;
-    extensions = [
-      {
-        ## vimium
-        id = "dbepggeogbaibhgnhhndojpepiihcmeb";
-      }
-    ];
+    inherit extensions commandLineArgs;
+  };
+  programs.chromiums.chromium = {
+    enable = true;
+    inherit extensions commandLineArgs;
   };
 }
