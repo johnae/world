@@ -116,7 +116,7 @@ with lib; let
   });
 
   chromiumPkg = cfg: let
-    name = cfg.name;
+    inherit (cfg) name;
     configDir = "${config.xdg.configHome}/" + name;
     commandLineArgs = concatStringsSep " " (cfg.commandLineArgs ++ ["--user-data-dir=${configDir}"]);
     pkg = cfg.package.override {
@@ -162,7 +162,7 @@ in {
 
   config.home = mkMerge (
     lib.mapAttrsToList (
-      _: value: chromiumConfig value
+      _: chromiumConfig
     )
     config.programs.chromiums
   );
