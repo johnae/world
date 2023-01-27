@@ -70,6 +70,7 @@ paths = [
 ]
 environmentFile = "/run/agenix/restic-env"
 passwordFile = "/run/agenix/restic-pw"
+repository = "s3:https://s3.amazonaws.com/restic-9000-b147"
 initialize = true
 timerConfig.OnCalendar = "*-*-* *:00:00"
 timerConfig.RandomizedDelaySec = "5m"

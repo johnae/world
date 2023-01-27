@@ -57,6 +57,7 @@ paths = [
   "/home/john/Sync",
   "/home/john/Photos",
 ]
+repository = "s3:https://s3.amazonaws.com/restic-9000-b147"
 environmentFile = "/run/agenix/restic-env"
 passwordFile = "/run/agenix/restic-pw"
 initialize = true
