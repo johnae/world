@@ -12,6 +12,7 @@ in {
     carapace
     element-desktop-wayland
     fzf # # for certain utilities that depend on it
+    gh
     git-branchless
     git-crypt
     gnome.nautilus
