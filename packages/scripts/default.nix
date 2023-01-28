@@ -84,10 +84,10 @@
       pass="$(rbw get "$entry" "$login")"
 
       if [ -z "$passonly" ]; then
-        echo -n "$login" | wl-copy -onf
-        echo -n "$pass" | wl-copy -onf
+        echo -n "$login" | timeout -k 3s 2s wl-copy -nf
+        echo -n "$pass" | timeout -k 4s 3s wl-copy -nf
       else
-        echo -n "$pass" | wl-copy -onf
+        echo -n "$pass" | timeout -k 4s 3s wl-copy -nf
       fi
     '';
   };
