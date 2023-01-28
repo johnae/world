@@ -16,6 +16,16 @@ in
     wayland-protocols-master = final: prev: {wayland-protocols-master = prev.callPackage ./wayland-protocols-master {};};
   }
   // {
+    libxkbcommon-150 = final: prev: {
+      libxkbcommon-150 = prev.libxkbcommon.overrideAttrs (oa: rec {
+        pname = "libxkbcommon";
+        version = "1.5.0";
+        src = prev.fetchurl {
+          url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
+          sha256 = "sha256-Vg8RxLu8oQ9JXz7306aqTKYrT4+wtS59RZ0Yom5G4Bc=";
+        };
+      });
+    };
     world-updaters = import ./world-updaters-overlay.nix;
     wlroots-master = final: prev: {
       wlroots-master = prev.callPackage ./wlroots-master {
@@ -26,6 +36,7 @@ in
       sway-unwrapped = prev.callPackage ./sway {
         wlroots = final.wlroots-master;
         wayland-protocols = final.wayland-protocols-master;
+        libxkbcommon = final.libxkbcommon-150;
       };
     };
     sway = final: prev: {sway = prev.callPackage (prev.path + "/pkgs/applications/window-managers/sway/wrapper.nix") {};};
