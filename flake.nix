@@ -36,7 +36,7 @@
     dream2nix.url = "github:nix-community/dream2nix";
     emacs-overlay.inputs.flake-utils.follows = "flake-utils";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
-    emacs-overlay.url = "github:nix-community/emacs-overlay/178e41eb";
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
     fenix.url = "github:nix-community/fenix";
     fire.flake = false;
