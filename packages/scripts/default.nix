@@ -84,6 +84,8 @@
       pass="$(rbw get "$entry" "$login")"
 
       if [ -z "$passonly" ]; then
+        set +e
+        set +o pipefail
         echo -n "$login" | timeout -k 3s 2s wl-copy -nf
         echo -n "$pass" | timeout -k 4s 3s wl-copy -nf
       else
