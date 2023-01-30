@@ -171,7 +171,7 @@
 
     overlays =
       [
-        inputs.agenix.overlay
+        inputs.agenix.overlays.default
         inputs.devshell.overlay
         inputs.emacs-overlay.overlay
         inputs.fenix.overlays.default
