@@ -20,11 +20,15 @@
     "--enable-gpu"
   ];
 in {
+  programs.chromiums.chromium = {
+    enable = true;
+    inherit extensions commandLineArgs;
+  };
   programs.chromiums.chromium-alt = {
     enable = true;
     inherit extensions commandLineArgs;
   };
-  programs.chromiums.chromium = {
+  programs.chromiums.chromium-private = {
     enable = true;
     inherit extensions commandLineArgs;
   };

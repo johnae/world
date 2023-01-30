@@ -59,6 +59,8 @@ in {
             "/home/${userName}/.cache/chromium"
             "/home/${userName}/.config/chromium-alt"
             "/home/${userName}/.cache/chromium-alt"
+            "/home/${userName}/.config/chromium-private"
+            "/home/${userName}/.cache/chromium-private"
             "/home/${userName}/.config/qutebrowser"
             "/home/${userName}/.cache/qutebrowser"
             "/home/${userName}/.config/obs-studio"
