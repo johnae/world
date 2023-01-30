@@ -43,7 +43,7 @@ in {
   networking.domain = lib.mkForce null;
 
   services.openssh.enable = true;
-  services.openssh.passwordAuthentication = false;
+  services.openssh.settings.PasswordAuthentication = false;
 
   networking.firewall.allowedTCPPorts = [22];
 
