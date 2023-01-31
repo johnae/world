@@ -82,7 +82,9 @@
     };
   in {
     inherit dream2nix;
+    ## TODO: currently a hack - understand this problem with dream2nix
     packages.default = config.packages.world;
+    ## TODO: currently a hack - understand this problem with dream2nix
     packages.resolveImpure = pkgs.hello;
   };
 }
