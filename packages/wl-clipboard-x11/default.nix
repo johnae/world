@@ -3,6 +3,7 @@
   wl-clipboard,
   writeShellApplication,
   lib,
+  ...
 }:
 writeShellApplication {
   name = "xclip";

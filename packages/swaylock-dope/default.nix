@@ -10,6 +10,7 @@
   swaylock,
   writeShellApplication,
   lib,
+  ...
 }:
 writeShellApplication {
   name = "swaylock-dope";

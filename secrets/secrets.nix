@@ -11,9 +11,6 @@ let
     attrValues
     concatMap
     isList
-    mapAttrs
-    fromTOML
-    readFile
     hasAttr
     getFlake
     ;

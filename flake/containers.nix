@@ -1,9 +1,14 @@
 {
   self,
   inputs,
-}: (
-  final: prev: let
-    l = prev.lib // builtins;
+  ...
+}: {
+  perSystem = {
+    pkgs,
+    lib,
+    ...
+  }: let
+    l = lib // builtins;
     inherit
       (l)
       baseNameOf
@@ -15,12 +20,13 @@
       recursiveUpdate
       removeSuffix
       ;
+
     pushArchive = attr: image: let
       inherit (image) imageTag imageName;
     in
-      final.writeShellApplication {
+      pkgs.writeShellApplication {
         name = "build-and-push";
-        runtimeInputs = [final.skopeo];
+        runtimeInputs = [pkgs.skopeo];
         text = ''
           EXTRA_TAG="''${1:-}"
           if ! skopeo list-tags docker://${imageName} | grep -q "${imageTag}" >/dev/null; then
@@ -53,6 +59,7 @@
           fi
         '';
       };
+
     imagesInDirectory = dir: (mapAttrs' (
       file: type: let
         name = removeSuffix ".nix" (baseNameOf file);
@@ -62,9 +69,10 @@
           else file;
       in {
         name = "images/archives/${name}";
-        value = final.callPackage (./images + "/${req}") {};
+        value = pkgs.callPackage (../containers/images + "/${req}") {};
       }
     ) (readDir dir));
+
     pushersOfImages = images: (mapAttrs' (
         name: value: {
           name = "images/push/${baseNameOf name}";
@@ -72,9 +80,12 @@
         }
       )
       images);
-    images = imagesInDirectory ./images;
+
+    images = imagesInDirectory ../containers/images;
+
     pushers = pushersOfImages images;
-    pushAll = final.writeShellApplication {
+
+    pushAll = pkgs.writeShellApplication {
       name = "push-all-images";
       text = ''
         ${concatStringsSep "\n" (mapAttrsToList (
@@ -86,6 +97,8 @@
           pushers)}
       '';
     };
-  in
-    recursiveUpdate images (recursiveUpdate pushers {"images/push/all" = pushAll;})
-)
+  in {
+    packages =
+      recursiveUpdate images (recursiveUpdate pushers {"images/push/all" = pushAll;});
+  };
+}

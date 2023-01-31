@@ -1,6 +1,12 @@
-final: prev: let
-  inherit (final) writeShellApplication ripgrep buildEnv curl jq;
-
+{
+  writeShellApplication,
+  buildEnv,
+  lib,
+  curl,
+  jq,
+  ripgrep,
+  ...
+}: let
   update-cargo-vendor-sha = writeShellApplication {
     name = "update-cargo-vendor-sha";
     text = ''
@@ -103,8 +109,8 @@ final: prev: let
       done
     '';
   };
-in {
-  world-updaters = buildEnv {
+in
+  buildEnv {
     name = "world-updaters";
     paths = [
       update-github-release-flake-inputs
@@ -113,5 +119,5 @@ in {
       update-fixed-output-derivation-sha
       update-all-fixed-output-derivation-shas
     ];
-  };
-}
+    meta.platforms = lib.platforms.linux;
+  }

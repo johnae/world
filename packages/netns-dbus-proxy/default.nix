@@ -4,6 +4,7 @@
   socat,
   writeShellApplication,
   lib,
+  ...
 }:
 writeShellApplication {
   name = "netns-dbus-proxy";
