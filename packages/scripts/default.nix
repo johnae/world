@@ -3,24 +3,66 @@
   lib,
   writeShellApplication,
   buildEnv,
-  wl-clipboard,
-  fire,
+  alacritty,
   fd,
+  fire,
+  hostname,
+  pass,
   rbw,
   rofi-wayland,
   skim,
-  pass,
+  wl-clipboard,
   wpa_supplicant,
-  hostname,
+  ...
 }: let
-  git-credential-pass = writeShellApplication {
-    name = "git-credential-pass";
-    runtimeInputs = [pass];
+  rbw-git-creds = writeShellApplication {
+    name = "rbw-git-creds";
+    runtimeInputs = [rbw];
     text = ''
-      passfile="$1"
-      echo password="$(pass show "$passfile" | head -1)"
+      record=''${1:-}
+      item=''${2:-}
+      if [ "$record" = "" ]; then
+        echo Please provide the record the item is stored in
+        exit 1
+      fi
+      if [ "$item" = "" ]; then
+        echo Please provide the item name to get
+        exit 1
+      fi
+      password="$(rbw get "$record" "$item" | head -1)"
+      username="$(rbw get --full "$record" "$item" | grep "Username:" | awk '{print $2}')"
+      cat<<CREDS
+      username=$username
+      password=$password
+      CREDS
     '';
   };
+
+  nixos-upgrade = let
+    default_flake = "github:johnae/world";
+    flags = "--use-remote-sudo -L";
+  in
+    writeShellApplication {
+      name = "nixos-upgrade";
+      text = ''
+        rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
+        flake=''${1:-${default_flake}}
+        echo nixos-rebuild boot --flake "$flake" ${flags}
+        nixos-rebuild boot --flake "$flake" ${flags}
+        booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
+        built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+        if [ "$booted" = "$built" ]; then
+          echo nixos-rebuild switch --flake "$flake" ${flags}
+          nixos-rebuild switch --flake "$flake" ${flags}
+        else
+          cat<<MSG
+          The system must be rebooted for the changes to take effect
+          this is because either all of or some of the kernel, the kernel
+          modules or initrd were updated
+        MSG
+        fi
+      '';
+    };
 
   sk-sk = writeShellApplication {
     name = "sk-sk";
@@ -84,8 +126,6 @@
       pass="$(rbw get "$entry" "$login")"
 
       if [ -z "$passonly" ]; then
-        set +e
-        set +o pipefail
         echo -n "$login" | timeout -k 3s 2s wl-copy -nf
         echo -n "$pass" | timeout -k 4s 3s wl-copy -nf
       else
@@ -153,6 +193,13 @@
     '';
   };
 
+  mail = writeShellApplication {
+    name = "mail";
+    text = ''
+      exec ${alacritty}/bin/alacritty --class mail -e emacsclient -t -a="" -e '(mu4e)'
+    '';
+  };
+
   add-wifi-network = writeShellApplication {
     name = "add-wifi-network";
     runtimeInputs = [wpa_supplicant pass update-wifi-networks];
@@ -184,15 +231,17 @@ in
   buildEnv {
     name = "scripts";
     paths = [
-      project-select
-      launch
-      git-credential-pass
       add-wifi-network
-      update-wifi-networks
-      update-wireguard-keys
-      spotify-cmd
+      launch
+      mail
+      nixos-upgrade
+      project-select
+      rbw-git-creds
       rofi-rbw
       rofi-spotify-search
+      spotify-cmd
+      update-wifi-networks
+      update-wireguard-keys
     ];
     meta.platforms = lib.platforms.linux;
   }

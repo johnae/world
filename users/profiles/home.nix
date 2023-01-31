@@ -41,13 +41,6 @@ in {
     wl-clipboard
     wl-clipboard-x11
     xdg-utils
-    rbw-git-creds
-    (pkgs.writeShellApplication {
-      name = "mail";
-      text = ''
-        exec ${pkgs.alacritty}/bin/alacritty --class mail -e emacsclient -t -a="" -e '(mu4e)'
-      '';
-    })
   ];
 
   home.sessionVariables = {

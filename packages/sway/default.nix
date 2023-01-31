@@ -27,6 +27,7 @@
   inputs,
   isNixOS ? true,
   enableXWayland ? true,
+  ...
 }:
 stdenv.mkDerivation rec {
   pname = "sway-unwrapped";

@@ -8,22 +8,15 @@ This is the [[https://nixos.org][NixOS]] configuration repository for all my mac
 
 It's based on a relatively recent feature of the [[https://nixos.org][Nix package manager]] called [[https://nixos.wiki/wiki/Flakes][flakes]]. Flakes are somewhat similar to a ~Cargo.toml/Cargo.lock~ from the [[https://rust-lang.org][Rust programming language]], a ~go.mod/go.sum~ from the [[https://golang.org/][Go programming language]] or the ~package.json/package.lock~ files used by the [[https://www.npmjs.com/][Node Package Manager]]. The difference being that it is language agnostic - it handles any package(s) or file(s) really. Here, we're using it to build hosts and software deterministically in a reproducible fashion. This would all be possible using Nix without the flakes feature, but it would be more work to design and keep it up-to-date. While flakes are still labelled "experimental" they have a bright future.
 
+This repo is using [[https://flake.parts][flake-parts]] to modularize and clean up [[./flake.nix][./flake.nix]].
+
 * Installing a new machine
 
 Add a new toml file under the [[hosts/][hosts/]] directory, possibly copying an existing fitting host and modifying it. Add the wanted profiles and other configuration. Commit and push them to this repository.
-Currently I PXE boot the (mostly automatic) installer which will format disks and install the system and configuration for the defined hosts. To PXE boot the installer, enable any necessary options in BIOS and then, on another machine on the network from a checkout of this repo, run:
 
-#+BEGIN_SRC sh
-  nix develop -c world pixieboot
-#+END_SRC
+** Running the installation process
 
-You may have to turn off or tweak your firewall for the above to work. I've yet to do anything specific for that but I guess you could probably use the [[https://search.nixos.org/options?channel=21.05&from=0&size=50&sort=relevance&query=pixiecore][NixOS configuration options for pixiecore]] which would handle the firewall for you. But since this is usually a one-off thing for me I don't use that. By the way, I'm using [[https://github.com/danderson/netboot/tree/master/pixiecore][pixiecore]] currently because it's super simple to use and setup as opposed to most other pxe boot solutions, check it out. Might add [[https://netboot.xyz/][netboot.xyz]] for remote server setups later.
-
-Anyway, after running the above command you should be able to pxe boot a machine into the installer. You will then be asked which host to install and after that it's mostly automatic - except for asking you what password to use to unlock the disk.
-
-** Installing without pxe booting
-
-Installing without pxe booting should be quite easy as well, though slightly more involved. Just download a recent installer from [[https://nixos.org/download.html#nixos-iso][https://nixos.org/download.html#nixos-iso]] and enable flakes after booting it:
+Download a recent installer from [[https://nixos.org/download.html#nixos-iso][https://nixos.org/download.html#nixos-iso]] and enable flakes after booting it:
 
 #+BEGIN_SRC sh
   mkdir -p /etc/nix
@@ -40,7 +33,7 @@ Then proceed to clone this repo:
   cd world
 #+END_SRC
 
-After that, just do:
+After that, just pick the host you're installing, like this:
 
 #+BEGIN_SRC sh
   host=eris
@@ -49,16 +42,18 @@ After that, just do:
   nixos-install --flake .#"$host" --no-root-passwd --impure
 #+END_SRC
 
-The pxebooter just automates the above in a nicer fashion. Hosts are defined in the [[hosts/][hosts/]] directory.
+Hosts are defined in the [[hosts/][hosts/]] directory.
 
-/Please note that the setup is quite tailored towards how I like it. For example: all disks are encrypted using dm-crypt and then on top of that formatted as btrfs, swap is automatically setup to a "reasonable" value that is not ideal for a lot of use cases, root is mounted as tmpfs and will therefore use some amount of RAM and it'll also be ephemeral - a reboot results in a clean slate and you'll have to opt-in to what you want to keep./
+/This setup is very customized to my taste. For example: all disks are encrypted using dm-crypt and then on top of that formatted as btrfs, swap is automatically setup to a "reasonable" value that is not ideal for a lot of use cases, root is mounted as tmpfs and will therefore use some amount of RAM and it'll also be ephemeral - a reboot results in a clean slate and you'll have to opt-in to what you want to keep./
 
 * Updating an existing machine
 
-Updates should be handled through standard commit/push/pullreq workflow. Updating a machine called "hello" can be done like this (on that machine):
+Updates should be handled through standard commit/push/pullreq workflow. Updating a machine called "andromeda" can be done like this (on that machine):
 
 #+BEGIN_SRC sh
-  nixos-rebuild switch --flake github:johnae/world#hello --use-remote-sudo
+  nixos-rebuild switch --flake github:johnae/world#andromeda --use-remote-sudo
+  ## in fact, you should be able to just do (because the hostname of the machine will be automatically chosen as default):
+  nixos-rebuild switch --flake github:johnae/world --use-remote-sudo
 #+END_SRC
 
 or via a local clone of this repo:
@@ -66,7 +61,7 @@ or via a local clone of this repo:
 #+BEGIN_SRC sh
   git clone git@github.com:johnae/world
   cd world
-  nixos-rebuild switch --flake .#hello --use-remote-sudo
+  nixos-rebuild switch --flake .#andromeda --use-remote-sudo
 #+END_SRC
 
 * Package updates etc

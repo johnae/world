@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  ...
 }: let
   metadata = import ./metadata.nix;
 in
