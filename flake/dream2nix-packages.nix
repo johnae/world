@@ -81,9 +81,6 @@
       };
     };
   in {
-    #packages = lib.mkMerge (
-    #  lib.mapAttrsToList (_: output: lib.mkDefaultRecursive output.packages or {}) (lib.filterAttrs (name: _: (builtins.match "(nu-.*|nu_.*)" name) == null) (builtins.toJSON (builtins.attrNames dream2nix) dream2nix))
-    #);
     inherit dream2nix;
     packages.default = config.packages.world;
     packages.resolveImpure = pkgs.hello;
