@@ -160,22 +160,22 @@ jobs:
   #    run: |
   #      nix build .#packages.aarch64-linux.$PKG -L
 
-  host_x86_64_linux:
-    needs: [hosts_x86_64_linux, pkg_x86_64_linux]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix: ${{ fromJson(needs.hosts_x86_64_linux.outputs.matrix) }}
-    steps:
-    - uses: actions/checkout@v3
-    - uses: cachix/install-nix-action@v18
-      with:
-        extra_nix_config: |
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-          accept-flake-config = true
-    - env:
-        HOST: ${{ matrix.host }}
-      run: |
-        nix build .#nixosConfigurations.$HOST.config.system.build.toplevel -L
+  # host_x86_64_linux:
+  #   needs: [hosts_x86_64_linux, pkg_x86_64_linux]
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix: ${{ fromJson(needs.hosts_x86_64_linux.outputs.matrix) }}
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - uses: cachix/install-nix-action@v18
+  #     with:
+  #       extra_nix_config: |
+  #         access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+  #         accept-flake-config = true
+  #   - env:
+  #       HOST: ${{ matrix.host }}
+  #     run: |
+  #       nix build .#nixosConfigurations.$HOST.config.system.build.toplevel -L
 
   #host_aarch64_linux:
   #  needs: [hosts_aarch64_linux, pkg_aarch64_linux]
