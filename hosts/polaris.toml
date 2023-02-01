@@ -229,6 +229,9 @@ dst = ["john:*"] ## can ping nodes in self
 #users = ["john"]
 #checkPeriod = "8h"
 
+[config.systemd.services.headscale.serviceConfig]
+RestartSec = 3 ## prevent the service from being rate limited as it tends to initially fail for a while
+
 [config.services.nginx.virtualHosts."tailscale.9000.dev"]
 forceSSL = true
 enableACME = true
