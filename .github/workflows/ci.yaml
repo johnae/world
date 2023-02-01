@@ -162,7 +162,7 @@ jobs:
 
   host_x86_64_linux:
     needs: [hosts_x86_64_linux, pkg_x86_64_linux]
-    runs-on: 9k
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix: ${{ fromJson(needs.hosts_x86_64_linux.outputs.matrix) }}
     steps:
