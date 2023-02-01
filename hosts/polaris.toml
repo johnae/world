@@ -136,23 +136,23 @@ args.advertise-routes = "10.128.128.0/21,10.129.128.0/22"
 enable = true
 address = "0.0.0.0"
 port = 8088
-serverUrl = "https://tailscale.9000.dev"
-dns.baseDomain = "9000.dev"
-dns.domains = [ "ts.9000.dev" ]
-dns.nameservers = [ "https://dns.nextdns.io/a5472c" ]
-dns.magicDns = true
-openIdConnect.issuer = "https://id.9000.dev"
-openIdConnect.domainMap.".*" = "ts"
-openIdConnect.clientId = "dex-auth"
-openIdConnect.clientSecretFile = "/run/agenix/auth-9000-headscale"
-logLevel = "info"
 
 [config.services.headscale.settings]
+server_url = "https://tailscale.9000.dev"
 logtail.enabled = false
-oidc.allowed_domains = [ "insane.se", "9000.dev" ]
+log.level = "info"
 ip_prefixes = [ "172.27.0.0/18" ]
 dns_config.override_local_dns = true
+dns_config.base_domain = "9000.dev"
+dns_config.domains = [ "ts.9000.dev" ]
+dns_config.nameservers = [ "https://dns.nextdns.io/a5472c" ]
+dns_config.magic_dns = true
 noise.private_key_path = "/var/lib/headscale/noise_private.key"
+oidc.allowed_domains = [ "insane.se", "9000.dev" ]
+oidc.issuer = "https://id.9000.dev"
+oidc.domain_map.".*" = "ts"
+oidc.client_id = "dex-auth"
+oidc.client_secret_file = "/run/agenix/auth-9000-headscale"
 
 [config.services.headscale.acl]
 enable = false ## don't seem to work that well atm
