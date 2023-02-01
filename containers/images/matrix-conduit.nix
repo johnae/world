@@ -47,7 +47,7 @@ in
     maxLayers = 6;
     config = {
       WorkingDir = "/conduit";
-      EntryPoint = ["${pkgs.matrix-conduit}/bin/conduit"];
+      EntryPoint = ["${pkgs.conduit}/bin/conduit"];
       ExposedPorts = {
         "${toString port}/tcp" = {};
       };
@@ -72,7 +72,7 @@ in
         pkgs.bash
         pkgs.coreutils-full
         pkgs.cacert.out
-        pkgs.matrix-conduit
+        pkgs.conduit
       ]
       ++ nonRootShadowSetup {
         uid = 999;
