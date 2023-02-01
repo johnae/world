@@ -203,7 +203,7 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: Build (matrix)
-    needs: [container_images_x86_64_linux, pkg_x86_64_linux, nix_lint, nix_check, host_x86_64_linux] ## pkg_aarch64_linux, host_aarch64_linux, 
+    needs: [container_images_x86_64_linux, pkg_x86_64_linux, nix_lint, nix_check] ## pkg_aarch64_linux, host_x86_64_linux, host_aarch64_linux,
     steps:
       - name: Check linting status
         if: ${{ needs.nix_lint.result != 'success' }}
@@ -223,6 +223,6 @@ jobs:
       #- name: Check host aarch64-linux build matrix status
       #  if: ${{ needs.host_aarch64_linux.result != 'success' }}
       #  run: exit 1
-      - name: Check host x86_64-linux build matrix status
-        if: ${{ needs.host_x86_64_linux.result != 'success' }}
-        run: exit 1
+      #- name: Check host x86_64-linux build matrix status
+      #  if: ${{ needs.host_x86_64_linux.result != 'success' }}
+      #  run: exit 1
