@@ -15,6 +15,7 @@ jobs:
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          accept-flake-config = true
     - run: |
         nix run .#lint
 
@@ -26,6 +27,7 @@ jobs:
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          accept-flake-config = true
     - run: |
         nix flake check
 
@@ -45,8 +47,7 @@ jobs:
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-          substituters = https://nixpkgs-wayland.cachix.org https://nix-community.cachix.org https://insane.cachix.org https://cachix.cachix.org https://cache.nixos.org/
-          trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+          accept-flake-config = true
     - run: |
         nix build .#images/push/all
         ./result/bin/push-all-images "$GITHUB_RUN_NUMBER"
@@ -61,6 +62,7 @@ jobs:
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          accept-flake-config = true
     - id: job-matrix
       run: |
         echo "matrix=$(nix eval .#github-actions-package-matrix-x86-64-linux --json)" >> "$GITHUB_OUTPUT"
@@ -89,6 +91,7 @@ jobs:
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          accept-flake-config = true
     - id: job-matrix
       run: |
         echo "matrix=$(nix eval .#github-actions-host-matrix-x86-64-linux --json)" >> "$GITHUB_OUTPUT"
@@ -118,8 +121,7 @@ jobs:
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-          substituters = https://nixpkgs-wayland.cachix.org https://nix-community.cachix.org https://insane.cachix.org https://cachix.cachix.org https://cache.nixos.org/
-          trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+          accept-flake-config = true
     - uses: cachix/cachix-action@v12
       if: ${{ matrix.pkg != 'pxebooter' }}
       with:
@@ -141,8 +143,7 @@ jobs:
   #    with:
   #      extra_nix_config: |
   #        access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-  #        substituters = https://nixpkgs-wayland.cachix.org https://nix-community.cachix.org https://insane.cachix.org https://cachix.cachix.org https://cache.nixos.org/
-  #        trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+  #        accept-flake-config = true
   #  - run: |
   #      DEBIAN_FRONTEND=noninteractive
   #      export DEBIAN_FRONTEND
@@ -170,8 +171,7 @@ jobs:
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-          substituters = https://nixpkgs-wayland.cachix.org https://nix-community.cachix.org https://insane.cachix.org https://cachix.cachix.org https://cache.nixos.org/
-          trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+          accept-flake-config = true
     - env:
         HOST: ${{ matrix.host }}
       run: |
@@ -188,8 +188,7 @@ jobs:
   #    with:
   #      extra_nix_config: |
   #        access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-  #        substituters = https://nixpkgs-wayland.cachix.org https://nix-community.cachix.org https://insane.cachix.org https://cachix.cachix.org https://cache.nixos.org/
-  #        trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+  #        accept-flake-config = true
   #  - run: |
   #      DEBIAN_FRONTEND=noninteractive
   #      export DEBIAN_FRONTEND
