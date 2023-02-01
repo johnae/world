@@ -33,7 +33,7 @@
   update-all-cargo-vendor-shas = writeShellApplication {
     name = "update-all-cargo-vendor-shas";
     text = ''
-      for rpkg in $(${ripgrep}/bin/rg -l cargoSha256 ./packages/*/* | awk -F'/' '{print $3}'); do
+      for rpkg in $(${ripgrep}/bin/rg -l cargoSha256 ./packages/*/* | grep -v world-updaters | awk -F'/' '{print $3}'); do
         ${update-cargo-vendor-sha}/bin/update-cargo-vendor-sha "$rpkg"
       done
     '';
@@ -70,7 +70,7 @@
   update-all-fixed-output-derivation-shas = writeShellApplication {
     name = "update-all-fixed-output-derivation-shas";
     text = ''
-      for fopkg in $(${ripgrep}/bin/rg -l "outputHash|vendorSha256" ./packages/*/* | awk -F'/' '{print $3}'); do
+      for fopkg in $(${ripgrep}/bin/rg -l "outputHash|vendorSha256" ./packages/*/* | grep -v world-updaters | awk -F'/' '{print $3}'); do
         ${update-fixed-output-derivation-sha}/bin/update-fixed-output-derivation-sha "$fopkg"
       done
     '';
