@@ -33,6 +33,7 @@
     dream2nix.inputs.alejandra.follows = "alejandra";
     dream2nix.inputs.devshell.follows = "devshell";
     dream2nix.inputs.nixpkgs.follows = "nixpkgs";
+    dream2nix.inputs.flake-parts.follows = "flake-parts";
     dream2nix.url = "github:nix-community/dream2nix";
     emacs-overlay.inputs.flake-utils.follows = "flake-utils";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
