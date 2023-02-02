@@ -2,6 +2,7 @@
   perSystem = {
     pkgs,
     lib,
+    system,
     ...
   }: let
     inherit
@@ -50,6 +51,11 @@
         swayidle = pkgs.callPackage ../packages/swayidle {
           wayland-protocols = locallyDefinedPackages.wayland-protocols-master;
         };
+      }
+      // {
+        ## packages from other flakes
+        inherit (inputs.spotnix.packages.${system}) spotnix;
+        inherit (inputs.persway.packages.${system}) persway;
       };
   in {
     inherit packages;
