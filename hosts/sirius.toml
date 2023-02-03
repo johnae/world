@@ -21,6 +21,11 @@ profiles = [
 [config.btrfs]
 disks = [ "/dev/nvme0n1", "/dev/nvme1n1" ]
 
+[config.virtualisation]
+docker.enable = false
+podman.enable = true
+podman.dockerCompat = true
+
 [config.programs.mosh]
 enable = true
 
