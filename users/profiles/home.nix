@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  inherit (config) home;
+  inherit (config) home gtk;
 in {
   home.packages = with pkgs; [
     alejandra
@@ -97,6 +97,8 @@ in {
     style.package = pkgs.adwaita-qt;
   };
 
+  home.sessionVariables.XCURSOR_THEME = gtk.cursorTheme.name;
+
   gtk = {
     enable = true;
     font = {
@@ -104,8 +106,8 @@ in {
       name = "Roboto Medium 11";
     };
     cursorTheme = {
-      package = pkgs.arc-icon-theme;
-      name = "Arc";
+      package = pkgs.nordzy-cursor-theme;
+      name = "Nordzy-cursors";
     };
     iconTheme = {
       package = pkgs.arc-icon-theme;
@@ -113,7 +115,7 @@ in {
     };
     theme = {
       package = pkgs.nordic;
-      name = "Nordic";
+      name = "Nordic-darker";
     };
   };
 

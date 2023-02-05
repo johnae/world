@@ -9,6 +9,8 @@
     listToAttrs
     ;
 
+  inherit (config) gtk;
+
   input = listToAttrs (map (name: {
       inherit name;
       value = {
@@ -45,6 +47,7 @@
       fi
     '';
   };
+  xcursor_theme = gtk.cursorTheme.name;
 in {
   home.packages = [
     pkgs.kile
@@ -60,7 +63,7 @@ in {
     MOZ_USE_XINPUT2 = "1";
     QT_WAYLAND_FORCE_DPI = "physical";
     SDL_VIDEODRIVER = "wayland";
-    XCURSOR_THEME = "default";
+    XCURSOR_THEME = xcursor_theme;
     QT_STYLE_OVERRIDE = lib.mkForce "gtk";
     _JAVA_AWT_WM_NONREPARENTING = "1";
     NIXOS_OZONE_WL = "1";

@@ -4,6 +4,7 @@
   lib,
   ...
 }: let
+  inherit (config) gtk;
   swayservice = Description: ExecStart: {
     Unit = {
       inherit Description;
@@ -133,7 +134,7 @@
 
   modifier = "Mod4";
 
-  xcursor_theme = "default";
+  xcursor_theme = gtk.cursorTheme.name;
 in {
   home.sessionVariables = {
     GDK_BACKEND = "wayland";
@@ -398,7 +399,7 @@ in {
   };
 
   systemd.user.services = {
-    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev' -d master_stack -a spiral";
+    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev' -d master_stack";
     rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
     swayidle = swayservice "Sway Idle Service - lock screen etc" "${swayidleCommand}/bin/swayidle";
   };
