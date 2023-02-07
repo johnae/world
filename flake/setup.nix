@@ -21,9 +21,6 @@
         inputs.emacs-overlay.overlay
         inputs.fenix.overlays.default
         inputs.nur.overlay
-        inputs.persway.overlays.default
-        inputs.spotnix.overlays.default
-        inputs.headscale.overlay
 
         (final: prev: (filterAttrs (name: _: ((match "nu-.*" name == null) && (match "nu_.*" name == null))) config.packages))
 
