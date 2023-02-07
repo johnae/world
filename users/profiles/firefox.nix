@@ -6,16 +6,16 @@ in {
   programs.firefox = {
     enable = true;
     package = firefox;
-    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-      tridactyl
-      adsum-notabs
-      ublock-origin
-      react-devtools
-      duckduckgo-privacy-essentials
-      privacy-badger
-    ];
     profiles = {
       default = {
+        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+          tridactyl
+          adsum-notabs
+          ublock-origin
+          react-devtools
+          duckduckgo-privacy-essentials
+          privacy-badger
+        ];
         settings = {
           "browser.compactmode.show" = true;
           "browser.startup.homepage" = "";
