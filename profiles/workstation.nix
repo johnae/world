@@ -13,15 +13,13 @@
     "fs.inotify.max_user_watches" = 12288;
   };
 
-  ## won't work just now
-  #boot.kernelModules = [ "v4l2loopback" ];
-  ## need to do this instead
+  boot.kernelModules = ["v4l2loopback"];
   boot.extraModulePackages = [
     config.boot.kernelPackages.v4l2loopback.out
   ];
 
   boot.extraModprobeConfig = ''
-    options v4l2loopback nr_devices=1 exclusive_caps=1 video_nr=0 card_label=v4l2lo0
+    options v4l2loopback exclusive_caps=1 video_nr=9 card_label=v4l2loopback
   '';
 
   hardware.opengl.enable = true;
