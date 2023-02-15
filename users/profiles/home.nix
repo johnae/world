@@ -7,6 +7,7 @@
 in {
   home.packages = with pkgs; [
     alejandra
+    audacity
     azure-cli
     cachix
     carapace
@@ -34,6 +35,7 @@ in {
     rnix-lsp
     rust-analyzer-bin
     scripts
+    shotcut
     slack
     spotifyd
     spotnix

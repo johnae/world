@@ -66,6 +66,7 @@ in {
             "/home/${userName}/.config/qutebrowser"
             "/home/${userName}/.cache/qutebrowser"
             "/home/${userName}/.config/obs-studio"
+            "/home/${userName}/.config/audacity"
             "/home/${userName}/.config/Element"
             "/home/${userName}/.config/Slack"
             "/home/${userName}/.config/Microsoft"
