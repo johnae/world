@@ -3,6 +3,7 @@
     pkgs,
     lib,
     config,
+    system,
     ...
   }: let
     dream2nix = {
@@ -11,9 +12,13 @@
         packageOverrides."^.*".addDeps = {
           overrideAttrs = old: {
             nativeBuildInputs = (old.nativeBuildInputs or []) ++ [pkgs.pkg-config];
-            buildInputs = (old.buildInputs or []) ++ [pkgs.pcsclite];
+            buildInputs = (old.buildInputs or []) ++ [pkgs.pcsclite pkgs.openssl];
             doCheck = false;
           };
+        };
+        projects.ristate = {
+          subsystem = "rust";
+          translator = "cargo-lock";
         };
       };
 
@@ -27,29 +32,49 @@
             cargoBuildFlags = ["--features pulseaudio_backend,dbus_mpris"];
           };
         };
+        projects.ristate = {
+          subsystem = "rust";
+          translator = "cargo-lock";
+        };
       };
 
       inputs.ristate = {
         source = inputs.ristate;
         packageOverrides."^.*".addDeps.doCheck = false;
+        projects.ristate = {
+          subsystem = "rust";
+          translator = "cargo-lock";
+        };
       };
 
       inputs.netns-exec = {
         source = inputs.netns-exec;
         packageOverrides."^.*".addDeps.doCheck = false;
+        projects.ristate = {
+          subsystem = "rust";
+          translator = "cargo-lock";
+        };
       };
 
       inputs.kile = {
         source = inputs.kile;
         packageOverrides."^.*".addDeps.doCheck = false;
+        projects.ristate = {
+          subsystem = "rust";
+          translator = "cargo-lock";
+        };
       };
 
       inputs.blur = {
         source = inputs.blur;
         packageOverrides."^.*".addDeps.doCheck = false;
+        projects.ristate = {
+          subsystem = "rust";
+          translator = "cargo-lock";
+        };
       };
 
-      inputs.matrix-conduit = {
+      inputs.conduit = {
         source = inputs.matrix-conduit;
         packageOverrides."^.*".addDeps = {
           overrideAttrs = old: {
@@ -59,12 +84,18 @@
             cargoBuildFlags = "--no-default-features --features conduit_bin,backend_sqlite,backend_rocksdb";
           };
         };
+        projects.ristate = {
+          subsystem = "rust";
+          translator = "cargo-lock";
+        };
       };
 
-      inputs.nushell = {
+      inputs.nu = {
         source = inputs.nushell;
-        projects.nu.translator = "cargo-lock";
-        projects.nu.subsystem = "rust";
+        projects.nu = {
+          subsystem = "rust";
+          translator = "cargo-lock";
+        };
         packageOverrides."^.*".addDeps = {
           overrideAttrs = old: {
             nativeBuildInputs = (old.nativeBuildInputs or []) ++ [pkgs.pkg-config pkgs.python3];
@@ -82,9 +113,6 @@
     };
   in {
     inherit dream2nix;
-    ## TODO: currently a hack - understand this problem with dream2nix
-    packages.default = config.packages.world;
-    ## TODO: currently a hack - understand this problem with dream2nix
-    packages.resolveImpure = pkgs.hello;
+    packages = builtins.mapAttrs (k: v: v.packages.${k}) config.dream2nix.outputs;
   };
 }
