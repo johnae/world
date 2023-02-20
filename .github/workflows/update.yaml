@@ -47,9 +47,6 @@ jobs:
           automated pr
         assignees: johnae
         reviewers: johnae
-        team-reviewers: |
-          owners
-          maintainers
 
     - name: Enable Pull Request Automerge
       if: steps.cpr.outputs.pull-request-operation == 'created'
