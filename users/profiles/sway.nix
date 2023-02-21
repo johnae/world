@@ -309,7 +309,7 @@ in {
 
       keybindings = lib.mkOptionDefault {
         "${modifier}+Escape" = ''mode "(p)oweroff, (s)uspend, (h)ibernate, (r)eboot, (l)ogout"'';
-        "${modifier}+x" = ''mode "disabled keybindings"'';
+        "${modifier}+Shift+x" = ''mode "disabled keybindings"'';
         "${modifier}+r" = ''mode "resize"'';
 
         "${modifier}+Control+Tab" = "[con_mark=_swap] unmark _swap; mark --add _swap; [con_mark=_prev] focus; swap container with mark _swap; [con_mark=_swap] unmark _swap";
@@ -317,11 +317,16 @@ in {
         "${modifier}+Control+Right" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus right; swap container with mark _swap; [con_mark=_swap] unmark _swap";
         "${modifier}+Control+Down" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus down; swap container with mark _swap; [con_mark=_swap] unmark _swap";
 
-        "${modifier}+space" = "exec echo swap_visible > $XDG_RUNTIME_DIR/persway"; # "exec SWAP_VISIBLE=yes ${swayMasterStack2}/bin/sway-master-stack2";
-        "${modifier}+Control+space" = "exec echo master_cycle_next > $XDG_RUNTIME_DIR/persway"; # "exec ${swayMasterStack2}/bin/sway-master-stack2";
+        "${modifier}+space" = "exec persway stack-swap-visible";
+        "${modifier}+Control+space" = "exec persway stack-main-rotate-next";
 
-        "${modifier}+Tab" = "exec echo stack_focus_next > $XDG_RUNTIME_DIR/persway";
-        "${modifier}+Shift+Tab" = "exec echo stack_focus_prev > $XDG_RUNTIME_DIR/persway";
+        "${modifier}+Tab" = "exec persway stack-focus-next";
+        "${modifier}+Shift+Tab" = "exec persway stack-focus-prev";
+
+        "${modifier}+z" = "exec persway change-layout spiral";
+        "${modifier}+x" = "exec persway change-layout stack-main --size 70";
+        "${modifier}+c" = "exec persway change-layout stack-main --size 70 --stack-layout tiled";
+        "${modifier}+v" = "exec persway change-layout manual";
 
         "${modifier}+t" = ''exec rofi-spotify-search track'';
         "${modifier}+p" = ''exec rofi-spotify-search playlist'';
@@ -399,7 +404,7 @@ in {
   };
 
   systemd.user.services = {
-    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway -w -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev' -d master_stack";
+    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway daemon -w -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev' -d stack_main";
     rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
     swayidle = swayservice "Sway Idle Service - lock screen etc" "${swayidleCommand}/bin/swayidle";
   };

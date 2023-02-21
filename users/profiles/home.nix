@@ -30,6 +30,7 @@ in {
     netns-dbus-proxy
     nix-index
     nordic
+    persway
     playerctl
     pueue
     rnix-lsp
