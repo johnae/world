@@ -317,7 +317,7 @@ in {
         "${modifier}+Control+Right" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus right; swap container with mark _swap; [con_mark=_swap] unmark _swap";
         "${modifier}+Control+Down" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus down; swap container with mark _swap; [con_mark=_swap] unmark _swap";
 
-        "${modifier}+space" = "exec persway stack-swap-visible";
+        "${modifier}+space" = "exec persway stack-swap-main";
         "${modifier}+Control+space" = "exec persway stack-main-rotate-next";
 
         "${modifier}+Tab" = "exec persway stack-focus-next";
