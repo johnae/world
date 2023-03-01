@@ -67,7 +67,7 @@
     kured.flake = false;
     kured.url = "github:weaveworks/kured";
     matrix-conduit.flake = false;
-    matrix-conduit.url = "gitlab:famedly/conduit/ccdaace"; ## Update when tooling allows
+    matrix-conduit.url = "gitlab:famedly/conduit"; ## Update when tooling allows
     neatvnc.flake = false;
     neatvnc.url = "github:any1/neatvnc";
     netns-exec.flake = false;
