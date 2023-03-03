@@ -15,9 +15,8 @@
       inherit system;
       config.allowUnfree = true;
       overlays = [
-        inputs.devshell.overlay
         inputs.agenix.overlays.default
-        inputs.devshell.overlay
+        inputs.devshell.overlays.default
         inputs.emacs-overlay.overlay
         inputs.fenix.overlays.default
         inputs.nur.overlay
