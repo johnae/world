@@ -66,6 +66,8 @@
     kile.url = "gitlab:snakedye/kile";
     kured.flake = false;
     kured.url = "github:weaveworks/kured";
+    libdisplay-info.flake = false;
+    libdisplay-info.url = "git+https://gitlab.freedesktop.org/emersion/libdisplay-info.git?ref=main";
     matrix-conduit.flake = false;
     matrix-conduit.url = "gitlab:famedly/conduit"; ## Update when tooling allows
     neatvnc.flake = false;

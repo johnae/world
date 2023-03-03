@@ -536,6 +536,23 @@
         "type": "github"
       }
     },
+    "libdisplay-info": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1677782624,
+        "narHash": "sha256-/q79o13Zvu7x02SBGu0W5yQznQ+p7ltZ9L6cMW5t/o4=",
+        "ref": "main",
+        "rev": "147d6611a64a6ab04611b923e30efacaca6fc678",
+        "revCount": 218,
+        "type": "git",
+        "url": "https://gitlab.freedesktop.org/emersion/libdisplay-info.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://gitlab.freedesktop.org/emersion/libdisplay-info.git"
+      }
+    },
     "mach-nix": {
       "flake": false,
       "locked": {
@@ -875,6 +892,7 @@
         "hwdata": "hwdata",
         "kile": "kile",
         "kured": "kured",
+        "libdisplay-info": "libdisplay-info",
         "matrix-conduit": "matrix-conduit",
         "neatvnc": "neatvnc",
         "netns-exec": "netns-exec",
@@ -1099,11 +1117,11 @@
     "wlroots": {
       "flake": false,
       "locked": {
-        "lastModified": 1677683274,
-        "narHash": "sha256-kcqcEX+FvfLOIcTOx2IdoUHCPOw8Po1GT8HyWEUfQCA=",
+        "lastModified": 1677789111,
+        "narHash": "sha256-dWrk+Q3bLdtFe5rkyaAKWCQJCeE/KFNllcu1DvBC38c=",
         "ref": "master",
-        "rev": "97c8ad7c65f397368867310308c96c59b59ef2bd",
-        "revCount": 6159,
+        "rev": "5ae17de23f5fd9bb252a698f3771c840280e2c05",
+        "revCount": 6160,
         "type": "git",
         "url": "https://gitlab.freedesktop.org/wlroots/wlroots.git"
       },

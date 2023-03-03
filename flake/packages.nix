@@ -41,7 +41,15 @@
         });
         wlroots-master = pkgs.callPackage ../packages/wlroots-master {
           wayland-protocols = locallyDefinedPackages.wayland-protocols-master;
+          libdisplay-info = libdisplay-info-main;
         };
+        libdisplay-info-main = pkgs.libdisplay-info.overrideAttrs (
+          oa: rec {
+            pname = "libdisplay-info";
+            version = "0.1.1";
+            src = inputs.libdisplay-info;
+          }
+        );
         sway-unwrapped = pkgs.callPackage ../packages/sway {
           wlroots = wlroots-master;
           wayland-protocols = locallyDefinedPackages.wayland-protocols-master;

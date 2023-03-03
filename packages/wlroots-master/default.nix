@@ -8,6 +8,7 @@
   libGL,
   libX11,
   libcap,
+  libdisplay-info,
   libdrm,
   libglvnd,
   libinput,
@@ -52,6 +53,7 @@ stdenv.mkDerivation {
     libGL
     libX11
     libcap
+    libdisplay-info
     libdrm
     libglvnd
     libinput
