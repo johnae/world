@@ -47,7 +47,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-utils.url = "github:numtide/flake-utils";
     fluxcd-install.flake = false;
-    fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v0.40.1/install.yaml"; # gh-release-update
+    fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v0.40.2/install.yaml"; # gh-release-update
     git-branchless.flake = false;
     git-branchless.url = "github:arxanas/git-branchless";
     google-cloud-sdk-fish-completion.flake = false;
@@ -66,6 +66,8 @@
     kile.url = "gitlab:snakedye/kile";
     kured.flake = false;
     kured.url = "github:weaveworks/kured";
+    libdisplay-info.flake = false;
+    libdisplay-info.url = "git+https://gitlab.freedesktop.org/emersion/libdisplay-info.git?ref=main";
     matrix-conduit.flake = false;
     matrix-conduit.url = "gitlab:famedly/conduit"; ## Update when tooling allows
     neatvnc.flake = false;
