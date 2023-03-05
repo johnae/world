@@ -11,13 +11,13 @@
     ];
     desktop.outputs = [
       {
-        criteria = "LG Electronics LG HDR 4K 0x0000AF76";
+        criteria = "LG Electronics LG HDR 4K 0x0007A976";
         mode = "3840x2160";
         position = "0,0";
         scale = 1.0;
       }
       {
-        criteria = "ASUSTek COMPUTER INC ASUS PB27U 0x0000C167";
+        criteria = "ASUSTek COMPUTER INC ASUS PB27U 0x0001C167";
         mode = "3840x2160";
         position = "3840,0";
         scale = 1.0;
