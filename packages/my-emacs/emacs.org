@@ -375,6 +375,7 @@ Package setup.
 
       "p" '(:ignore p :which-key "project")
       "pp" '(consult-project-extra-find :which-key "open file in project")
+      "po" '(consult-project-extra-find-other-window :which-key "open file other window")
       "ps" '(project-switch-project :which-key "switch project")
       "pb" '(consult-project-buffer :which-key "switch buffer")
 
