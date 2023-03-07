@@ -238,7 +238,7 @@ package = "${pkgs.my-emacs}"
 socketActivation.enable = true
 
 [config.home-manager.users.john.systemd.user.services.emacs.Service]
-Environment = [ "COLORTERM=truecolor" ]
+Environment = [ "COLORTERM=truecolor", "SSH_AUTH_SOCK=/run/user/1337/ssh-auth.sock" ]
 LimitNOFILE = 16384
 
 [config.home-manager.users.john.userinfo]
