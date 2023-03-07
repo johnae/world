@@ -522,7 +522,7 @@ Package setup.
           (sqlite . t)
           (groovy . t)
      ;;(kotlin . t)
-     ;;(typescript . t)
+          (typescript . t)
           (calc . t)
           (C . t)))
      )
