@@ -109,6 +109,7 @@ wg-net.file = "secrets/icarus/wg-net.age"
 syncthing-cert = { file = "secrets/icarus/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/icarus/syncthing-key.age", owner = "1337" }
 tailscale-auth = { file = "secrets/tailscale-auth.age" }
+ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
 
 [config.services.tailscale.auth]
 enable = true

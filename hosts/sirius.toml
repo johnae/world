@@ -175,6 +175,7 @@ authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.
 restic-env = { file = "secrets/restic.age", owner = "1337" }
 restic-pw = { file = "secrets/restic-pw.age", owner = "1337" }
 ts-gh-johnae = { file = "secrets/ts-gh-johnae.age", owner = "1337" }
+ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
 
 [config.services.restic.backups.remote]
 paths = [

@@ -312,6 +312,7 @@ cloudflare-env = { file = "secrets/cloudflare-env.age" }
 auth-9000-headscale = { file = "secrets/auth-9000.age", owner = "headscale", group = "headscale" }
 dex-environment = { file = "secrets/dex-environment.age" }
 tailscale-auth = { file = "secrets/tailscale-auth.age" }
+ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
 
 flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
 sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }

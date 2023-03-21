@@ -70,6 +70,7 @@ wg-home.file = "secrets/hyperion/wg-home.age"
 syncthing-cert = { file = "secrets/hyperion/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/hyperion/syncthing-key.age", owner = "1337" }
 tailscale-auth = { file = "secrets/tailscale-auth.age" }
+ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
 
 [config.services.tailscale.auth]
 enable = true
