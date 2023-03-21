@@ -97,7 +97,7 @@ in rec {
 
     nixosConfigurations = mapAttrs nixosConfig hostConfigurations;
   in {
-    inherit nixosConfigurations;
+    inherit nixosConfigurations hostConfigurations;
   };
 
   perSystem = {
