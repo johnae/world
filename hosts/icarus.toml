@@ -113,7 +113,7 @@ ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
 
 [config.services.tailscale.auth]
 enable = true
-args.advertise-tags = ["tag:server","tag:home","tag:k3s","tag:ssh"]
+args.advertise-tags = ["tag:server"]
 args.ssh = false
 args.accept-routes = false ## with this on, it causes issues in k3s when network runs on top of tailscale
 args.auth-key = "file:/var/run/agenix/ts-gh-9k"
