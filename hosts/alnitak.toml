@@ -39,14 +39,14 @@ trustedInterfaces = [ "insane", "tailscale0" ]
 
 [config.age.secrets]
 tailscale-auth.file = "secrets/tailscale-auth.age"
+ts-gh-9k.file = "secrets/ts-gh-9k.age"
 
 [config.services.tailscale.auth]
 enable = true
-args.ssh = false
+args.advertise-tags = ["tag:server"]
+args.ssh = true
 args.accept-routes = false
-args.advertise-tags = ["tag:router","tag:home","tag:ssh"]
-args.login-server = "https://tailscale.9000.dev"
-args.auth-key = "file:/var/run/agenix/tailscale-auth"
+args.auth-key = "file:/var/run/agenix/ts-gh-9k"
 
 [config.services.jae.router]
 enable = true
