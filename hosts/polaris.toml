@@ -202,7 +202,7 @@ syncthing-cert = { file = "secrets/polaris/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/polaris/syncthing-key.age", owner = "1337" }
 mailserver-john = { file = "secrets/mail/mailserver-john.age"}
 cloudflare-env = { file = "secrets/cloudflare-env.age" }
-auth-9000-headscale = { file = "secrets/auth-9000.age", owner = "headscale", group = "headscale" }
+#auth-9000-headscale = { file = "secrets/auth-9000.age", owner = "headscale", group = "headscale" }
 dex-environment = { file = "secrets/dex-environment.age" }
 tailscale-auth = { file = "secrets/tailscale-auth.age" }
 ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
