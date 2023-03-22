@@ -86,7 +86,7 @@ openssh.authorizedKeys.keys = [
 
 [config.services.tailscale.auth]
 enable = true
-args.advertise-tags = ["tag:server","tag:hetzner","tag:hetzner-fi","tag:k3s","tag:ssh"]
+args.advertise-tags = ["tag:server"]
 args.ssh = true
 args.accept-routes = false ## with this on, it causes issues in k3s when network runs on top of tailscale
 args.auth-key = "file:/var/run/agenix/ts-gh-9k"
