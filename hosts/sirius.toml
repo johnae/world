@@ -87,10 +87,9 @@ openssh.authorizedKeys.keys = [
 [config.services.tailscale.auth]
 enable = true
 args.advertise-tags = ["tag:server","tag:hetzner","tag:hetzner-fi","tag:k3s","tag:ssh"]
-args.ssh = false
+args.ssh = true
 args.accept-routes = false ## with this on, it causes issues in k3s when network runs on top of tailscale
-args.login-server = "https://tailscale.9000.dev"
-args.auth-key = "file:/var/run/agenix/tailscale-auth"
+args.auth-key = "file:/var/run/agenix/ts-gh-9k"
 
 [config.services.k3s]
 enable = true
@@ -98,7 +97,7 @@ role = "agent"
 after = [ "tailscale-auth.service" ]
 
 [config.services.k3s.settings]
-server = "https://polaris.ts.9000.dev:6443"
+server = "https://polaris.tail7f302.ts.net:6443"
 token-file = "/run/agenix/k3s-token"
 flannel-iface = "tailscale0"
 node-ip = "$(get-iface-ip tailscale0)"
