@@ -125,118 +125,11 @@ locations."/".proxyWebsockets = true
 
 [config.services.tailscale.auth]
 enable = true
-args.advertise-tags = ["tag:server","tag:hetzner","tag:hetzner-fi","tag:k3s","tag:ssh"]
-args.ssh = false
+args.advertise-tags = ["tag:server"]
+args.ssh = true
 args.accept-routes = false ## with this on, it causes issues in k3s when network runs on top of tailscale
-args.login-server = "https://tailscale.9000.dev"
-args.auth-key = "file:/var/run/agenix/tailscale-auth"
+args.auth-key = "file:/var/run/agenix/ts-gh-9k"
 args.advertise-routes = "10.128.128.0/21,10.129.128.0/22"
-
-[config.services.headscale]
-enable = true
-address = "0.0.0.0"
-port = 8088
-
-[config.services.headscale.settings]
-server_url = "https://tailscale.9000.dev"
-logtail.enabled = false
-log.level = "info"
-ip_prefixes = [ "172.27.0.0/18" ]
-dns_config.override_local_dns = true
-dns_config.base_domain = "9000.dev"
-dns_config.domains = [ "ts.9000.dev" ]
-dns_config.nameservers = [ "https://dns.nextdns.io/a5472c" ]
-dns_config.magic_dns = true
-noise.private_key_path = "/var/lib/headscale/noise_private.key"
-oidc.allowed_domains = [ "insane.se", "9000.dev" ]
-oidc.issuer = "https://id.9000.dev"
-oidc.domain_map.".*" = "ts"
-oidc.client_id = "dex-auth"
-oidc.client_secret_file = "/run/agenix/auth-9000-headscale"
-
-[config.services.headscale.acl]
-enable = false ## don't seem to work that well atm
-enableSSH = false ## neither does this
-
-[config.services.headscale.acl.settings]
-hosts = {}
-groups."group:admin" = ["john"]
-groups."group:machines" = ["ts"]
-groups."group:all" = ["ts","john"]
-tagOwners."tag:hetzner" = ["group:admin","group:machines"]
-tagOwners."tag:hetzner-fi" = ["group:admin","group:machines"]
-tagOwners."tag:server" = ["group:admin","group:machines"]
-tagOwners."tag:k3s" = ["group:admin","group:machines"]
-tagOwners."tag:router" = ["group:admin","group:machines"]
-tagOwners."tag:home" = ["group:admin","group:machines"]
-tagOwners."tag:ssh" = ["group:admin","group:machines"]
-disableIPv4 = false
-randomizeClientPort = false
-
-[[config.services.headscale.acl.settings.acls]]
-## admins can access all nodes
-action = "accept"
-src = ["group:admin"]
-dst = ["*:*"]
-
-[[config.services.headscale.acl.settings.acls]]
-## admins can ping all nodes
-action = "accept"
-proto = "icmp"
-src = ["group:admin"]
-dst = ["*:*"]
-
-[[config.services.headscale.acl.settings.acls]]
-## machines can access each other 
-action = "accept"
-src = ["ts"] ## the ts namespace
-dst = ["ts:*"] ## can access nodes in self
-
-[[config.services.headscale.acl.settings.acls]]
-## machines can also ping each other 
-action = "accept"
-proto = "icmp"
-src = ["ts"] ## the ts namespace
-dst = ["ts:*"] ## can access nodes in self
-
-[[config.services.headscale.acl.settings.acls]]
-## john can access his own nodes
-action = "accept"
-src = ["john"] ## the john namespace
-dst = ["john:*"] ## can access nodes in self
-
-[[config.services.headscale.acl.settings.acls]]
-## john can also ping his own nodes
-action = "accept"
-proto = "icmp"
-src = ["john"] ## the john namespace
-dst = ["john:*"] ## can ping nodes in self
-
-#[[config.services.headscale.acl.settings.acls]]
-#action = "accept"
-#src = ["group:servers"]
-#dst = ["tag:server:*"]
-
-#[[config.services.headscale.acl.settings.acls]]
-#action = "accept"
-#src = ["ts"]
-#dst = ["ts:*"]
-#
-#[[config.services.headscale.acl.settings.ssh]]
-#action = "check"
-#src = ["group:admin"]
-#dst = ["tag:server"]
-#users = ["john"]
-#checkPeriod = "8h"
-
-[config.systemd.services.headscale.serviceConfig]
-RestartSec = 3 ## prevent the service from being rate limited as it tends to initially fail for a while
-
-[config.services.nginx.virtualHosts."tailscale.9000.dev"]
-forceSSL = true
-enableACME = true
-locations."/".proxyPass = "http://localhost:8088"
-locations."/".proxyWebsockets = true
 
 [config.services.syncthing]
 enable = true
@@ -309,7 +202,7 @@ syncthing-cert = { file = "secrets/polaris/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/polaris/syncthing-key.age", owner = "1337" }
 mailserver-john = { file = "secrets/mail/mailserver-john.age"}
 cloudflare-env = { file = "secrets/cloudflare-env.age" }
-auth-9000-headscale = { file = "secrets/auth-9000.age", owner = "headscale", group = "headscale" }
+#auth-9000-headscale = { file = "secrets/auth-9000.age", owner = "headscale", group = "headscale" }
 dex-environment = { file = "secrets/dex-environment.age" }
 tailscale-auth = { file = "secrets/tailscale-auth.age" }
 ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
@@ -348,7 +241,7 @@ node-label."svccontroller.k3s.cattle.io/enablelb" = "true"
 node-label."topology.kubernetes.io/region" = "hetzner"
 node-label."topology.kubernetes.io/zone" = "hetzner-fi"
 secrets-encryption = true
-tls-san = ["alnitak", "alnitak.ts.9000.dev", "polaris", "polaris.ts.9000.dev", "titan", "titan.ts.9000.dev", "hyperion", "hyperion.ts.9000.dev", "icarus", "icarus.ts.9000.dev", "k8s.home.9000.dev"]
+tls-san = ["alnitak", "alnitak.tail7f302.ts.net", "polaris", "polaris.tail7f302.ts.net", "titan", "titan.tail7f302.ts.net", "hyperion", "hyperion.tail7f302.ts.net", "icarus", "icarus.tail7f302.ts.net", "k8s.home.9000.dev"]
 
 [config.services.k3s.autoDeploy]
 kured = "${pkgs.kured-yaml}/kured.yaml"
