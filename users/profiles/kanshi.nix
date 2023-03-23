@@ -9,6 +9,20 @@
         scale = 1.5;
       }
     ];
+    office.outputs = [
+      {
+        criteria = "LG Electronics LG UltraFine 204NTPC9C520";
+        mode = "3840x2160";
+        position = "0,0";
+        scale = 1.5;
+      }
+      {
+        criteria = "SDC 0x4165 Unknown";
+        mode = "3840x2400";
+        position = "0,1440";
+        scale = 1.5;
+      }
+    ];
     desktop.outputs = [
       {
         criteria = "LG Electronics LG HDR 4K 0x0007A976";
