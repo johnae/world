@@ -14,12 +14,12 @@
         criteria = "LG Electronics LG UltraFine 204NTPC9C520";
         mode = "3840x2160";
         position = "0,0";
-        scale = 1.5;
+        scale = 1.2;
       }
       {
         criteria = "SDC 0x4165 Unknown";
         mode = "3840x2400";
-        position = "0,1440";
+        position = "320,1801";
         scale = 1.5;
       }
     ];
@@ -28,12 +28,12 @@
         criteria = "LG Electronics LG UltraFine 204NTHM9C521";
         mode = "3840x2160";
         position = "0,0";
-        scale = 1.5;
+        scale = 1.2;
       }
       {
         criteria = "SDC 0x4165 Unknown";
         mode = "3840x2400";
-        position = "0,1440";
+        position = "320,1801";
         scale = 1.5;
       }
     ];
