@@ -5,7 +5,6 @@ publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJnEDS9ziXY31y2uyMBzSFSjyY5KqYn
 profiles = [
   "profiles/hardware/apu",
   "profiles/default_fs",
-  "profiles/hidpi",
   "profiles/server",
   "profiles/state",
   "profiles/tailscale",
