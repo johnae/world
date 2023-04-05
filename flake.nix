@@ -27,11 +27,9 @@
     aml.url = "github:any1/aml";
     blur.flake = false;
     blur.url = "github:johnae/blur";
-    devshell.inputs.flake-utils.follows = "flake-utils";
-    devshell.inputs.nixpkgs.follows = "nixpkgs";
-    devshell.url = "github:numtide/devshell";
-    dream2nix.inputs.alejandra.follows = "alejandra";
-    dream2nix.inputs.devshell.follows = "devshell";
+    devenv.url = "github:cachix/devenv";
+    devenv.inputs.nixpkgs.follows = "nixpkgs";
+    #    dream2nix.inputs.alejandra.follows = "alejandra";
     dream2nix.inputs.nixpkgs.follows = "nixpkgs";
     dream2nix.inputs.flake-parts.follows = "flake-parts";
     dream2nix.url = "github:nix-community/dream2nix";
@@ -82,7 +80,6 @@
     nur.url = "github:nix-community/NUR";
     nushell.flake = false;
     nushell.url = "github:nushell/nushell/0.78.0"; # gh-release-update
-    persway.inputs.devshell.follows = "devshell";
     persway.inputs.dream2nix.follows = "dream2nix";
     persway.inputs.fenix.follows = "fenix";
     persway.inputs.flake-utils.follows = "flake-utils";
@@ -96,7 +93,6 @@
     slurp.url = "github:emersion/slurp";
     spotifyd.flake = false;
     spotifyd.url = "github:spotifyd/spotifyd";
-    spotnix.inputs.devshell.follows = "devshell";
     spotnix.inputs.dream2nix.follows = "dream2nix";
     spotnix.inputs.fenix.follows = "fenix";
     spotnix.inputs.flake-utils.follows = "flake-utils";
@@ -131,7 +127,7 @@
         inputs.flake-parts.flakeModules.easyOverlay
         inputs.dream2nix.flakeModuleBeta
         ./flake/containers.nix
-        ./flake/devshell.nix
+        ./flake/devenv.nix
         ./flake/dream2nix-packages.nix
         ./flake/github-actions.nix
         ./flake/hosts.nix
