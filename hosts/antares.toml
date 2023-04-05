@@ -7,7 +7,6 @@ syncthingDeviceID = "CI5DK5E-JLWEOXB-6TUV244-SV6MLGO-R6AY7XQ-ZOFCIQW-G3U2DAS-BK5
 profiles = [
   "profiles/hardware/usbcore",
   "profiles/hardware/z16",
-  "profiles/bluez_autoswitch",
   "profiles/default_fs",
   "profiles/greetd",
   "profiles/home-manager",
