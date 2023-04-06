@@ -6,7 +6,7 @@ let-env PROMPT_MULTILINE_INDICATOR = (^starship prompt --continuation)
 # TODO: Also Use starship vi mode indicators?
 let-env PROMPT_INDICATOR = ""
 
-let-env PROMPT_COMMAND = {
+let-env PROMPT_COMMAND = { ||
     # jobs are not supported
     let width = (term size | get columns | into string)
     ^starship prompt $"--cmd-duration=($env.CMD_DURATION_MS)" $"--status=($env.LAST_EXIT_CODE)" $"--terminal-width=($width)"
@@ -15,4 +15,4 @@ let-env PROMPT_COMMAND = {
 # Not well-suited for `starship prompt --right`.
 # Built-in right prompt is equivalent to $fill$right_format in the first prompt line.
 # Thus does not play well with default `add_newline = True`.
-let-env PROMPT_COMMAND_RIGHT = {''}
+let-env PROMPT_COMMAND_RIGHT = { || ''}
