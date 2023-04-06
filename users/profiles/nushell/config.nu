@@ -295,11 +295,11 @@ let-env config = {
         $direnv | load-env
       "
     }]
-    pre_execution: [{
+    pre_execution: [{ ||
       $nothing  # replace with source code to run before the repl input is run
     }]
     env_change: {
-      PWD: [{
+      PWD: [{ ||
         $nothing
       }]
     }

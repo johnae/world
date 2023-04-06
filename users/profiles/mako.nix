@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  programs.mako = {
+  services.mako = {
     enable = true;
     font = "Roboto";
     backgroundColor = "#000021DD";
