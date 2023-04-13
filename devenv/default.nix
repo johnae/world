@@ -3,6 +3,8 @@
   ansiEscape,
   ...
 }: {
+  name = "world";
+
   packages = with pkgs; [
     agenix
     alejandra

@@ -29,9 +29,12 @@
     blur.url = "github:johnae/blur";
     devenv.url = "github:cachix/devenv";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
-    #    dream2nix.inputs.alejandra.follows = "alejandra";
+    devenv.inputs.pre-commit-hooks.follows = "pre-commit-hooks";
+    devenv.inputs.flake-compat.follows = "flake-compat";
     dream2nix.inputs.nixpkgs.follows = "nixpkgs";
     dream2nix.inputs.flake-parts.follows = "flake-parts";
+    dream2nix.inputs.pre-commit-hooks.follows = "pre-commit-hooks";
+    dream2nix.inputs.flake-compat.follows = "flake-compat";
     dream2nix.url = "github:nix-community/dream2nix";
     emacs-overlay.inputs.flake-utils.follows = "flake-utils";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
@@ -42,6 +45,8 @@
     fire.url = "github:johnae/fire";
     fish-kubectl-completions.flake = false;
     fish-kubectl-completions.url = "github:evanlucas/fish-kubectl-completions";
+    flake-compat.url = "github:edolstra/flake-compat";
+    flake-compat.flake = false;
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-utils.url = "github:numtide/flake-utils";
     fluxcd-install.flake = false;
@@ -68,10 +73,14 @@
     libdisplay-info.url = "git+https://gitlab.freedesktop.org/emersion/libdisplay-info.git?ref=main";
     matrix-conduit.flake = false;
     matrix-conduit.url = "gitlab:famedly/conduit"; ## Update when tooling allows
+    mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
     neatvnc.flake = false;
     neatvnc.url = "github:any1/neatvnc";
     netns-exec.flake = false;
     netns-exec.url = "github:johnae/netns-exec";
+    nix2container.url = "github:nlewo/nix2container";
+    nix2container.inputs.nixpkgs.follows = "nixpkgs";
+    nix2container.inputs.flake-utils.follows = "flake-utils";
     nixlib.url = "github:nix-community/nixpkgs.lib";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -85,6 +94,10 @@
     persway.inputs.flake-utils.follows = "flake-utils";
     persway.inputs.nixpkgs.follows = "nixpkgs";
     persway.url = "github:johnae/persway";
+    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    pre-commit-hooks.inputs.flake-compat.follows = "flake-compat";
+    pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
+    pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
     ristate.flake = false;
     ristate.url = "gitlab:snakedye/ristate";
     rofi-wayland.flake = false;
@@ -125,7 +138,6 @@
       systems = ["x86_64-linux" "aarch64-linux"];
       imports = [
         inputs.flake-parts.flakeModules.easyOverlay
-        inputs.dream2nix.flakeModuleBeta
         ./flake/containers.nix
         ./flake/devenv.nix
         ./flake/dream2nix-packages.nix
