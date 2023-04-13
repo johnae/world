@@ -1,4 +1,7 @@
 {inputs, ...}: {
+  imports = [
+    inputs.dream2nix.flakeModuleBeta
+  ];
   perSystem = {
     pkgs,
     lib,

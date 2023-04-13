@@ -20,6 +20,9 @@ shell +args:
 gc:
   @nix-collect-garbage -d
 
+cachix +args:
+  with-env [CACHIX_SIGNING_KEY (rbw get cachix)] { cachix push insane {{args}} }
+
 # upgrade the system using given flake ref
 upgrade flake="github:johnae/world":
   @rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
