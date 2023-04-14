@@ -39,6 +39,7 @@ id_ed25519_agenda_updater = { file = "secrets/id_ed25519_agenda_updater.age", ow
 id_ed25519_roam_updater = { file = "secrets/id_ed25519_roam_updater.age", owner = "1337" }
 id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
 id_ed25519_alt = { file = "secrets/id_ed25519_alt.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_alt" }
+id_rsa_alt = { file = "secrets/id_rsa_alt.age", owner = "1337", path = "/home/john/.ssh/id_rsa_alt" }
 id_ed25519_alt_root = { file = "secrets/id_ed25519_alt.age", owner = "0", path = "/root/.ssh/id_ed25519" }
 syncthing-cert = { file = "secrets/antares/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/antares/syncthing-key.age", owner = "1337" }
