@@ -31,6 +31,19 @@
         my-emacs-config = pkgs.callPackage ../packages/my-emacs/config.nix {};
         mynerdfonts = pkgs.nerdfonts.override {fonts = ["JetBrainsMono" "DroidSansMono"];};
 
+        wayland-122 = pkgs.wayland.overrideAttrs (oa: rec {
+          pname = "wayland";
+          version = "1.22.0";
+          src = pkgs.fetchurl {
+            url = "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
+            hash = "sha256-FUCvHqaYpHHC2OnSiDMsfg/TYMjx0Sk267fny8JCWEI=";
+          };
+        });
+
+        wayland-protocols-master = pkgs.callPackage ../packages/wayland-protocols-master {
+          wayland = wayland-122;
+        };
+
         libxkbcommon-150 = pkgs.libxkbcommon.overrideAttrs (oa: rec {
           pname = "libxkbcommon";
           version = "1.5.0";
@@ -40,7 +53,8 @@
           };
         });
         wlroots-master = pkgs.callPackage ../packages/wlroots-master {
-          wayland-protocols = locallyDefinedPackages.wayland-protocols-master;
+          wayland = wayland-122;
+          wayland-protocols = wayland-protocols-master;
           libdisplay-info = libdisplay-info-main;
         };
         libdisplay-info-main = pkgs.libdisplay-info.overrideAttrs (
