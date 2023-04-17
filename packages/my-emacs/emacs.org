@@ -126,10 +126,6 @@ Some basic useful settings.
    (eval-when-compile
      (require 'use-package))
    #+END_SRC
-*** Add mu4e to load-path
-   #+BEGIN_SRC elisp
-     (add-to-list 'load-path (getenv "MU4E_LOAD_PATH"))
-   #+END_SRC
 *** Setup auth sources
    #+BEGIN_SRC elisp
      (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
@@ -915,110 +911,6 @@ Package setup.
      (global-fish-completion-mode)
    )
    #+END_SRC
-** Mu4e
-#+BEGIN_SRC elisp
-  (defcustom mu4e-bookmarks
-    '(( :name  "Unread messages"
-        :query "flag:unread AND NOT flag:trashed AND NOT flag:list"
-        :key ?u)
-      ( :name "Today's messages"
-        :query "date:today..now AND NOT flag:list"
-        :key ?t)
-      ( :name "Last 7 days"
-        :query "date:7d..now AND NOT flag:list"
-        :hide-unread t
-        :key ?w)
-      ( :name "Last 7 days of lists"
-        :query "date:7d..now AND flag:list"
-        :hide-unread t
-        :key ?l)
-      ( :name "Messages with images"
-        :query "mime:image/*"
-        :key ?p))
-    "List of pre-defined queries that are shown on the main screen.
-
-    Each of the list elements is a plist with at least:
-    :name  - the name of the query
-    :query - the query expression
-    :key   - the shortcut key.
-
-    Optionally, you add the following:
-    :hide  - if t, bookmark is hdden from the main-view and speedbar.
-    :hide-unread - do not show the counts of unread/total number
-     of matches for the query. This can be useful if a bookmark uses
-     a very slow query. :hide-unread is implied from :hide.
-    "
-    :type '(repeat (plist))
-    :group 'mu4e
-  )
-
-  (use-package mu4e
-    :defer 2
-    :config
-    (require 'org-mu4e)
-    (require 'smtpmail)
-    (add-hook 'mu4e-compose-mode-hook (lambda () (use-hard-newlines -1)))
-    (setq
-     ;; Update mail every 10 mins
-     mu4e-update-interval (* 10 60)
-     ;; systemd runs mbsync - default is "true"
-     ;; mu4e-get-mail-command "mbsync -a"
-     mu4e-maildir "~/Mail"
-     ;;mu4e-completing-read-function #'ivy-completing-read
-     mu4e-change-filenames-when-moving t
-     mu4e-view-show-images t
-     mu4e-view-show-addresses t
-     mu4e-compose-dont-reply-to-self t
-     message-kill-buffer-on-exit t
-     mu4e-context-policy 'pick-first
-     mu4e-compose-dont-reply-to-self t
-
-     mail-user-agent 'mu4e-user-agent
-     message-send-mail-function 'smtpmail-send-it
-     smtpmail-smtp-server "smtp.gmail.com"
-     smtpmail-smtp-service 465
-     smtpmail-stream-type  'ssl
-
-     mu4e-compose-format-flowed t
-   )
-
-    (setq mu4e-contexts
-      `(,(make-mu4e-context
-          :name "Insane"
-          :match-func (lambda (msg) (when msg
-                                      (string-prefix-p "/insane" (mu4e-message-field msg :maildir))))
-          :vars '(
-                   (user-full-name . "John Axel Eriksson")
-                   (smtpmail-smtp-user . "john@insane.se")
-                   (user-mail-address . "john@insane.se")
-                   (mu4e-drafts-folder . "/insane/Drafts")
-                   (mu4e-refile-folder . "/insane/All")
-                   (mu4e-sent-folder . "/insane/Sent")
-                   (mu4e-trash-folder . "/insane/Trash")
-                   ;; gmail handles this
-                   (mu4e-sent-messages-behavior . delete)
-                 )
-         )
-        ,(make-mu4e-context
-          :name "9000"
-          :match-func (lambda (msg) (when msg
-                                      (string-prefix-p "/9000" (mu4e-message-field msg :maildir))))
-          :vars '(
-                   (user-full-name . "John Axel Eriksson")
-                   (smtpmail-smtp-user . "john@9000.dev")
-                   (user-mail-address . "john@9000.dev")
-                   (mu4e-drafts-folder . "/9000/Drafts")
-                   (mu4e-refile-folder . "/9000/All")
-                   (mu4e-sent-folder . "/9000/Sent")
-                   (mu4e-trash-folder . "/9000/Trash")
-                   (smtpmail-smtp-server . "smtp.fastmail.com")
-                   (mu4e-sent-messages-behavior . sent)
-                 )
-         )
-      )
-    )
-  )
-#+END_SRC
 ** Consult
 #+BEGIN_SRC elisp
   (use-package consult

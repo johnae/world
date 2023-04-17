@@ -16,7 +16,7 @@
       config.allowUnfree = true;
       overlays = [
         inputs.agenix.overlays.default
-        inputs.emacs-overlay.overlay
+        inputs.emacs-overlay.overlays.default
         inputs.fenix.overlays.default
         inputs.nur.overlay
 
