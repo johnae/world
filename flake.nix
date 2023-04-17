@@ -130,7 +130,7 @@
     wlvncc.flake = false;
     wlvncc.url = "github:any1/wlvncc";
     xdg-desktop-portal-wlr.flake = false;
-    xdg-desktop-portal-wlr.url = "github:emersion/xdg-desktop-portal-wlr/v0.6.0"; # gh-release-update
+    xdg-desktop-portal-wlr.url = "github:emersion/xdg-desktop-portal-wlr/v0.7.0"; # gh-release-update
   };
 
   outputs = inputs @ {flake-parts, ...}:
