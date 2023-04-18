@@ -597,6 +597,7 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
     (use-package meow
      :config
      (meow-setup)
+     (add-to-list 'meow-mode-state-list '(vterm-mode . insert))
      (meow-global-mode 1)
     )
 #+END_SRC
