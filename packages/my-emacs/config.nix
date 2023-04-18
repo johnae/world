@@ -2,7 +2,7 @@
   runCommand,
   emacs,
 }:
-runCommand "emacs-config" {} ''
+runCommand "default.el" {} ''
   cp ${./emacs.org} $TMPDIR/emacs.org
   cd $TMPDIR
   ${emacs}/bin/emacs --batch -Q \

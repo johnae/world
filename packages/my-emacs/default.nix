@@ -8,7 +8,7 @@ emacsWithPackagesFromUsePackage {
   alwaysEnsure = true;
   alwaysTangle = true;
   config = ./emacs.org;
-
+  defaultInitFile = pkgs.callPackage ./config.nix {};
   extraEmacsPackages = epkgs: [
     epkgs.markdown-mode
     epkgs.tree-sitter

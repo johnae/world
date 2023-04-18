@@ -28,7 +28,6 @@
       locallyDefinedPackages
       // rec {
         inherit (pkgs.callPackage ../utils/world.nix {}) pixieboot world lint;
-        my-emacs-config = pkgs.callPackage ../packages/my-emacs/config.nix {};
         mynerdfonts = pkgs.nerdfonts.override {fonts = ["JetBrainsMono" "DroidSansMono"];};
 
         wayland-122 = pkgs.wayland.overrideAttrs (oa: rec {

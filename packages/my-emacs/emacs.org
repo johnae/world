@@ -123,8 +123,8 @@ Some basic useful settings.
    #+END_SRC
 *** Initialize use-package
    #+BEGIN_SRC elisp
-   (eval-when-compile
-     (require 'use-package))
+     (eval-when-compile
+       (require 'use-package))
    #+END_SRC
 *** Setup auth sources
    #+BEGIN_SRC elisp
@@ -170,7 +170,7 @@ Some basic useful settings.
 *** Highlight matching parentheses
    #+BEGIN_SRC elisp
    (defun my-show-paren-mode ()
-      "Enables 'show-paren-mode'."
+      "Enables show-paren-mode."
       (setq show-paren-delay 0)
       (set-face-background 'show-paren-match (face-background 'default))
       (set-face-foreground 'show-paren-match "#def")
@@ -254,41 +254,6 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
    #+BEGIN_SRC elisp
    (setq custom-safe-themes t)
    #+END_SRC
-*** Cloud/k8s utility functions
-   #+BEGIN_SRC elisp
-     (defun jae/pick-kubectx ()
-       "Select k8s context"
-       (interactive)
-       (setenv "KUBECTX_IGNORE_FZF" "y")
-       (completing-read "Select kubernetes cluster: " (split-string (shell-command-to-string "kubectx") "\n" t)
-                 :action '(1
-                            ("o" (lambda (x) (shell-command (concat "kubectx " x))))
-                          )
-                 )
-       )
-
-     (defun jae/pick-kubens ()
-       "Select k8s namespace"
-       (interactive)
-       (setenv "KUBECTX_IGNORE_FZF" "y")
-       (completing-read "Select kubernetes namespace: " (split-string (shell-command-to-string "kubens") "\n" t)
-                 :action '(1
-                          ("o" (lambda (x) (shell-command (concat "kubens " x))))
-                          )
-                 )
-       )
-
-     (defun jae/pick-gcp-project ()
-       "Select GCP proejct"
-       (interactive)
-       (completing-read "Select GCP Project: " (split-string (shell-command-to-string "gcloud projects list | tail -n +2 | awk '{print $1}'") "\n" t)
-                 :action '(1
-                          ("o" (lambda (x) (shell-command (concat "gcloud config set project " x))))
-                          )
-                 )
-       )
-
-   #+END_SRC
 ** User interface
 *** Set the default font
 #+BEGIN_SRC elisp
@@ -324,9 +289,18 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
   (desktop-save-mode 1)
   (add-hook 'server-after-make-frame-hook 'desktop-read)
 #+END_SRC
+** Windmove
+#+BEGIN_SRC elisp
+(when (fboundp 'windmove-default-keybindings)
+ (windmove-default-keybindings))
+#+END_SRC
 * Packages
-Package setup.
-
+** Bind-key
+#+BEGIN_SRC elisp
+  (use-package bind-key
+    :config
+    (add-to-list 'same-window-buffer-names "*Personal Keybindings*"))
+#+END_SRC
 ** Performance
 *** Adjust garbage collection based on activity (eg. gc on idle)
    #+BEGIN_SRC elisp
@@ -341,197 +315,109 @@ Package setup.
  #+BEGIN_SRC elisp
    (use-package no-littering)
  #+END_SRC
-** Keybindings (general.el)
-*** General itself
-  #+BEGIN_SRC elisp
-    (use-package general
-      :config
-      (general-evil-setup t)
-      (general-create-definer jae/leader-keys
-        :keymaps '(normal insert visual emacs)
-        :prefix "SPC"
-        :global-prefix "M-SPC"))
-  #+END_SRC
-*** Leader key bindings
-  #+BEGIN_SRC elisp
-    (jae/leader-keys
-      "t" '(:ignore t :which-key "toggles")
-      "tt" '(consult-theme :which-key "switch-theme")
-
-      "<SPC>" '(:ignore p :which-key "tab")
-      "<SPC><right>" '(tab-next :which-key "next tab")
-      "<SPC><left>" '(tab-next :which-key "next tab")
-      "<SPC><up>" '(tab-new :which-key "new tab")
-      "<SPC><down>" '(tab-close :which-key "close tab")
-      "<SPC>s" '(tab-switch :which-key "switch to tab")
-
-      "d" '(:ignore p :which-key "documentation")
-      "dd" '(eldoc-doc-buffer :Which-key "open full documentation for point")
-
-
-      "p" '(:ignore p :which-key "project")
-      "pp" '(consult-project-extra-find :which-key "open file in project")
-      "po" '(consult-project-extra-find-other-window :which-key "open file other window")
-      "ps" '(project-switch-project :which-key "switch project")
-      "pb" '(consult-project-buffer :which-key "switch buffer")
-
-      "e" '(:ignore e :which-key "shells")
-      "ee" '(project-eshell :which-key "open eshell in project")
-      "en" '(jae/eshell-new :which-key "open a new eshell instance")
-      "et" '(multi-vterm-project :which-key "open vterm in project")
-      "ey" '(multi-vterm :which-key "open new vterm instance ")
-
-      "s" '(:ignore s :which-key "search")
-      "ss" '(consult-line :which-key "search buffer")
-      "sa" '(consult-ripgrep :which-key "search project")
-
-      "g" '(:ignore g :which-key "magit")
-      "gg" '(magit-status :which-key "magit status")
-      "gd" '(magit-dispatch :which-key "magit dispatch")
-      "gf" '(magit-file-dispatch :which-key "magit file dispatch")
-
-      "w" '(whitespace-cleanup :which-key "whitespace cleanup")
-      "b" '(previous-buffer :which-key "previous buffer")
-      "f" '(next-buffer :which-key "next buffer")
-
-      "o" '(:ignore o :which-key "orgmode")
-      ;"oa" '(counsel-projectile-org-agenda :which-key "org agenda")
-      ;"ot" '(counsel-projectile-org-capture :which-key "task capture")
-      "on" '(org-narrow-to-subtree :which-key "narrow to subtree")
-      "ow" '(widen :which-key "widen buffer to remove narrowing")
-
-      "n" '(:ignore n :which-key "org-roam")
-      "nf" '(org-roam-node-find :which-key "roam node find")
-      "nr" '(org-roam-node-random :which-key "go to random node")
-      "ni" '(org-roam-node-insert :which-key "insert roam node")
-      "no" '(org-id-get-create :which-key "create org id")
-      "nt" '(org-roam-tag-add :which-key "add roam tag")
-      "na" '(org-roam-alias-add :which-key "add roam alias")
-      "nl" '(org-roam-buffer-toggle :which-key "toggle the roam buffer")
-     )
-  #+END_SRC
-*** General key bindings
-  #+BEGIN_SRC elisp
-    (general-define-key
-     "C-=" 'text-scale-increase
-     "C--" 'text-scale-decrease
-     "C-a" 'embark-act
-     "C-c C-p" 'wgrep-change-to-wgrep-mode
-    )
-    (general-define-key
-     :keymaps 'normal
-     "<right>" 'string-inflection-all-cycle
-     )
-  #+END_SRC
 ** Org mode packages
 *** Org mode itself
    #+BEGIN_SRC elisp
-     (defun jae/configure-org-mode ()
-       "Configure 'org-mode'."
-       (org-indent-mode)
-       (variable-pitch-mode 1)
-       (visual-line-mode 1)
-       (mapc
-         (lambda (face)
-                 (set-face-attribute face nil :inherit 'fixed-pitch))
-         (list 'org-code
-               'org-link
-               'org-todo
-               'org-block
-               'org-table
-               'org-verbatim
-               'org-block-begin-line
-               'org-block-end-line
-               'org-meta-line
-               'org-document-info-keyword)
-         )
-      )
+     (use-package org)
+    ; (defun jae/configure-org-mode ()
+    ;   "Configure 'org-mode'."
+    ;   (org-indent-mode)
+    ;   (variable-pitch-mode 1)
+    ;   (visual-line-mode 1)
+    ;   (mapc
+    ;     (lambda (face)
+    ;             (set-face-attribute face nil :inherit 'fixed-pitch))
+    ;     (list 'org-code
+    ;           'org-link
+    ;           'org-todo
+    ;           'org-block
+    ;           'org-table
+    ;           'org-verbatim
+    ;           'org-block-begin-line
+    ;           'org-block-end-line
+    ;           'org-meta-line
+    ;           'org-document-info-keyword)
+    ;     )
+    ;  )
 
-     (use-package org
-       :hook (org-mode . jae/configure-org-mode)
-       :custom-face
-       (variable-pitch ((t (:family "ETBembo", :height 180 :weight thin))))
-       (fixed-pitch ((t (:family "JetBrainsMono Nerd Font" :height 160))))
-       (org-document-title ((t (:weight bold :height 1.5))))
-       (org-done ((t (:strike-through t :weight bold))))
-       (org-headline-done ((t (:strike-through t))))
-       (org-level-1 ((t (:weight bold :height 1.75))))
-       (org-level-2 ((t (:weight normal :height 1.5))))
-       (org-level-3 ((t (:weight normal :height 1.25))))
-       (org-level-4 ((t (:weight normal :height 1.1))))
-       (org-level-5 ((t (:weight normal :height 1.0))))
-       (org-level-6 ((t (:weight normal :height 1.0))))
-       (org-level-7 ((t (:weight normal :height 1.0))))
-       (org-level-8 ((t (:weight normal :height 1.0))))
-       (org-image-actual-width '(600))
-       :init
-       (setq org-log-done 'time
-             org-log-reschedule 'time
-             org-crypt-key "0x45FEBADDA16B8E55"
-             org-src-fontify-natively t
-             org-ellipsis "  "
-             org-pretty-entities t
-             org-hide-emphasis-markers t
-             org-agenda-block-separator ""
-             org-src-fontify-natively t
-             org-fontify-whole-heading-line t
-             org-fontify-done-headline t
-             org-fontify-quote-and-verse-blocks t
-             org-agenda-files '("~/Development/org-agenda/" "~/.gcal-org-sync/")
-             org-directory '("~/Development/org/")
-             org-agenda-todo-list-sublevels 1
-             org-agenda-todo-ignore-scheduled t
-             org-enforce-todo-dependencies t
-             org-startup-with-beamer-mode t
-             org-startup-indented t
-             org-export-coding-system 'utf-8
-             org-export-with-sub-superscripts '{}
-             org-agenda-sorting-strategy
-              (quote
-               ((agenda deadline-up priority-down)
-                (todo priority-down category-keep)
-                (tags priority-down category-keep)
-                (search category-keep)))
-             org-todo-keywords
-              '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED"))
-             org-capture-templates
-             '(
-               ("a" "My TODO task format."
-               entry (file "~/Development/org-agenda/todo.org")
-               "* TODO %?\n")
-               )
-       )
-       :config
-       (org-babel-do-load-languages
-        'org-babel-load-languages
-        '((R . t)
-          (emacs-lisp . t)
-          (ruby . t)
-          (python . t)
-          (js . t)
-          (java . t)
-          (latex . t)
-          (haskell . t)
-          (clojure . t)
-          ;;(go . t)
-          (shell . t)
-          (sql . t)
-          (sqlite . t)
-          (groovy . t)
-     ;;(kotlin . t)
-          (typescript . t)
-          (calc . t)
-          (C . t)))
-     )
+    ; (use-package org
+    ;   :hook (org-mode . jae/configure-org-mode)
+    ;   :custom-face
+    ;   (variable-pitch ((t (:family "ETBembo", :height 180 :weight thin))))
+    ;   (fixed-pitch ((t (:family "JetBrainsMono Nerd Font" :height 160))))
+    ;   (org-document-title ((t (:weight bold :height 1.5))))
+    ;   (org-done ((t (:strike-through t :weight bold))))
+    ;   (org-headline-done ((t (:strike-through t))))
+    ;   (org-level-1 ((t (:weight bold :height 1.75))))
+    ;   (org-level-2 ((t (:weight normal :height 1.5))))
+    ;   (org-level-3 ((t (:weight normal :height 1.25))))
+    ;   (org-level-4 ((t (:weight normal :height 1.1))))
+    ;   (org-level-5 ((t (:weight normal :height 1.0))))
+    ;   (org-level-6 ((t (:weight normal :height 1.0))))
+    ;   (org-level-7 ((t (:weight normal :height 1.0))))
+    ;   (org-level-8 ((t (:weight normal :height 1.0))))
+    ;   (org-image-actual-width '(600))
+    ;   :init
+    ;   (setq org-log-done 'time
+    ;         org-log-reschedule 'time
+    ;         org-crypt-key "0x45FEBADDA16B8E55"
+    ;         org-src-fontify-natively t
+    ;         org-ellipsis "  "
+    ;         org-pretty-entities t
+    ;         org-hide-emphasis-markers t
+    ;         org-agenda-block-separator ""
+    ;         org-src-fontify-natively t
+    ;         org-fontify-whole-heading-line t
+    ;         org-fontify-done-headline t
+    ;         org-fontify-quote-and-verse-blocks t
+    ;         org-agenda-files '("~/Development/org-agenda/" "~/.gcal-org-sync/")
+    ;         org-directory '("~/Development/org/")
+    ;         org-agenda-todo-list-sublevels 1
+    ;         org-agenda-todo-ignore-scheduled t
+    ;         org-enforce-todo-dependencies t
+    ;         org-startup-with-beamer-mode t
+    ;         org-startup-indented t
+    ;         org-export-coding-system 'utf-8
+    ;         org-export-with-sub-superscripts '{}
+    ;         org-agenda-sorting-strategy
+    ;          (quote
+    ;           ((agenda deadline-up priority-down)
+    ;            (todo priority-down category-keep)
+    ;            (tags priority-down category-keep)
+    ;            (search category-keep)))
+    ;         org-todo-keywords
+    ;          '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED"))
+    ;         org-capture-templates
+    ;         '(
+    ;           ("a" "My TODO task format."
+    ;           entry (file "~/Development/org-agenda/todo.org")
+    ;           "* TODO %?\n")
+    ;           )
+    ;   )
+    ;   :config
+    ;   (org-babel-do-load-languages
+    ;    'org-babel-load-languages
+    ;    '((R . t)
+    ;      (emacs-lisp . t)
+    ;      (ruby . t)
+    ;      (python . t)
+    ;      (js . t)
+    ;      (java . t)
+    ;      (latex . t)
+    ;      (haskell . t)
+    ;      (clojure . t)
+    ;      ;;(go . t)
+    ;      (shell . t)
+    ;      (sql . t)
+    ;      (sqlite . t)
+    ;      (groovy . t)
+    ; ;;(kotlin . t)
+    ;      (typescript . t)
+    ;      (calc . t)
+    ;      (C . t)))
+    ; )
    #+END_SRC
 
-       Define some org-mode keybindings.
-   #+BEGIN_SRC elisp
-     (general-define-key
-      :prefix "C-c"
-      "C-r" 'verb-command-map
-     )
-   #+END_SRC
 *** Org -> Hugo
   #+BEGIN_SRC elisp
    (use-package ox-hugo
@@ -588,43 +474,6 @@ Package setup.
      ([remap describe-key] . helpful-key)
     )
  #+END_SRC
-** Evil Packages - Vim for emacs.
-*** Evil itself
-   #+BEGIN_SRC elisp
-                    (use-package evil
-                      :init
-                      (setq evil-undo-system 'undo-redo
-                            evil-want-keybinding nil
-                            evil-want-integration t
-                            evil-want-C-i-jump nil
-                      )
-                      :config
-                      (evil-mode 1)
-                      (general-define-key
-                       :keymaps 'evil-insert-state-map
-                       "C-g" 'evil-normal-state
-                       )
-                    )
-   #+END_SRC
-*** Evil collection - evil keybindings for different parts of Emacs and packages
-   #+BEGIN_SRC elisp
-     (use-package evil-collection
-       :after evil
-       :config
-       (setq evil-collection-company-use-tng nil) ;; breaks esh-autosuggest
-       (evil-collection-init)
-     )
-   #+END_SRC
-*** Evil org
-   #+BEGIN_SRC elisp
-     (use-package evil-org
-       :after org
-       :hook (org-mode . evil-org-mode)
-       :config
-       (require 'evil-org-agenda)
-       (evil-org-agenda-set-keys)
-     )
-   #+END_SRC
 ** Theming
 *** All the icons for doom modeline
    #+BEGIN_SRC elisp
@@ -652,265 +501,159 @@ Package setup.
      (defvar jae:theme 'doom-oceanic-next)
      (load-theme jae:theme t)
    #+END_SRC
-** Term
-*** Enable nicer colors - broken, disabled
-   #+BEGIN_SRC elisp
-   ;;  (use-package eterm-256color
-   ;;    :hook (term-mode . eterm-256color-mode))
-   #+END_SRC
-** EShell
-*** Settings
-  #+BEGIN_SRC elisp
-    (defun jae/configure-eshell ()
-      (require 'em-smart)
-      (require 'em-tramp)
-      (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
-      ;; Better performance
-      (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
-      (general-define-key
-       :states '(normal insert visual)
-       :keymaps 'eshell-mode-map
-       "C-r" 'consult-history
-       "C-l" 'eshell/clear
-       "C-u" 'kill-whole-line
-       )
-      ;;(evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
-      (evil-normalize-keymaps)
-      ;;(define-key eshell-mode-map (kbd "C-l") 'eshell/clear)
-      ;;(define-key eshell-mode-map (kbd "C-u") 'kill-whole-line)
-    (setq
-        eshell-where-to-jump 'begin
-        eshell-review-quick-commands nil
-        eshell-smart-space-goes-to-end t
-        eshell-glob-case-insensitive t
-        eshell-scroll-to-bottom-on-input t
-        eshell-buffer-shorthand t
-        eshell-history-size 10000
-        eshell-buffer-maximum-lines 10000
-        eshell-hist-ignoredups t
-        eshell-cmpl-ignore-case t)
+
+** Meow
+#+BEGIN_SRC elisp
+    (defun meow-setup ()
+    (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+    (meow-motion-overwrite-define-key
+     '("j" . meow-next)
+     '("k" . meow-prev)
+     '("<escape>" . ignore))
+    (meow-leader-define-key
+     ;; SPC j/k will run the original command in MOTION state.
+     '("j" . "H-j")
+     '("k" . "H-k")
+     ;; Use SPC (0-9) for digit arguments.
+     '("1" . meow-digit-argument)
+     '("2" . meow-digit-argument)
+     '("3" . meow-digit-argument)
+     '("4" . meow-digit-argument)
+     '("5" . meow-digit-argument)
+     '("6" . meow-digit-argument)
+     '("7" . meow-digit-argument)
+     '("8" . meow-digit-argument)
+     '("9" . meow-digit-argument)
+     '("0" . meow-digit-argument)
+     '("/" . meow-keypad-describe-key)
+     '("?" . meow-cheatsheet))
+    (meow-normal-define-key
+     '("0" . meow-expand-0)
+     '("9" . meow-expand-9)
+     '("8" . meow-expand-8)
+     '("7" . meow-expand-7)
+     '("6" . meow-expand-6)
+     '("5" . meow-expand-5)
+     '("4" . meow-expand-4)
+     '("3" . meow-expand-3)
+     '("2" . meow-expand-2)
+     '("1" . meow-expand-1)
+     '("-" . negative-argument)
+     '(";" . meow-reverse)
+     '("," . meow-inner-of-thing)
+     '("." . meow-bounds-of-thing)
+     '("[" . meow-beginning-of-thing)
+     '("]" . meow-end-of-thing)
+     '("a" . meow-append)
+     '("A" . meow-open-below)
+     '("b" . meow-back-word)
+     '("B" . meow-back-symbol)
+     '("c" . meow-change)
+     '("d" . meow-delete)
+     '("D" . meow-backward-delete)
+     '("e" . meow-next-word)
+     '("E" . meow-next-symbol)
+     '("f" . meow-find)
+     '("g" . meow-cancel-selection)
+     '("G" . meow-grab)
+     '("h" . meow-left)
+     '("H" . meow-left-expand)
+     '("i" . meow-insert)
+     '("I" . meow-open-above)
+     '("j" . meow-next)
+     '("J" . meow-next-expand)
+     '("k" . meow-prev)
+     '("K" . meow-prev-expand)
+     '("l" . meow-right)
+     '("L" . meow-right-expand)
+     '("m" . meow-join)
+     '("n" . meow-search)
+     '("o" . meow-block)
+     '("O" . meow-to-block)
+     '("p" . meow-yank)
+     '("q" . meow-quit)
+     '("Q" . meow-goto-line)
+     '("r" . meow-replace)
+     '("R" . meow-swap-grab)
+     '("s" . meow-kill)
+     '("t" . meow-till)
+     '("u" . meow-undo)
+     '("U" . meow-undo-in-selection)
+     '("v" . meow-visit)
+     '("w" . meow-mark-word)
+     '("W" . meow-mark-symbol)
+     '("x" . meow-line)
+     '("X" . meow-goto-line)
+     '("y" . meow-save)
+     '("Y" . meow-sync-grab)
+     '("z" . meow-pop-selection)
+     '("'" . repeat)
+     '("<escape>" . ignore)
+     '("C-k" . meow-page-up)
+     '("C-j" . meow-page-down)
+     )
     )
-    (use-package eshell
-      :hook (eshell-first-time-mode . jae/configure-eshell)
-      :config
-      (with-eval-after-load 'esh-opt
-        (setq eshell-destroy-buffer-when-process-dies t
-              eshell-visual-commands '("htop" "fish" "bash" "vim")
-         )
-        )
-     )
-  #+END_SRC
-*** Aliases
-   #+BEGIN_SRC elisp
-     (defun eshell/x ()
-       (insert "exit")
-       (eshell-send-input)
-       (delete-window))
-     (defun eshell/exit () (eshell/x))
-     (defun eshell/e (file) (find-file file))
-     (add-hook 'eshell-first-time-mode-hook
-          (lambda ()
-            (eshell/alias "ll" "ls -lah $*" )
-          )
-     )
-   #+END_SRC
-*** Helper functions
-   #+BEGIN_SRC elisp
-     (defun jae/eshell-new ()
-       "Opens a new instance of eshell."
-       (interactive)
-       (eshell 'N))
 
-     (defun jae/eshell-here ()
-       "Opens up a new shell in the directory associated with the
-     current buffer's file. The eshell is renamed to match that
-     directory to make multiple eshell windows easier."
-       (interactive)
-       (let* ((parent (if (buffer-file-name)
-                          (file-name-directory (buffer-file-name))
-                        default-directory))
-              (height (/ (window-total-height) 3))
-              (name   (car (last (split-string parent "/" t)))))
-         (split-window-vertically (- height))
-         (other-window 1)
-         (eshell "new")
-         (rename-buffer (concat "*eshell: " name "*"))
-
-         (insert (concat "ls"))
-         (eshell-send-input)))
-
-     (defun jae/is-inside-git-tree ()
-       "Returns true if inside git work tree."
-       (string= (jae/shell-command-to-string-nows "git rev-parse --is-inside-work-tree 2>/dev/null")
-                    "true"
-                    ))
-
-     (defun jae/git-unpushed-commits ()
-       "Returns number of local commits not pushed."
-       (if (jae/is-inside-git-tree)
-           (let ((
-                  changes (jae/shell-command-to-string-nows "git log @{u}.. --oneline 2> /dev/null | wc -l")
-                  ))
-             (if (string= changes "0")
-                 nil
-               changes
-               )
-             )
-         nil
-         )
-       )
-
-     (defun jae/git-changes ()
-       "Returns number of changes or nil."
-       (if (jae/is-inside-git-tree)
-           (let ((
-                  diffs (jae/shell-command-to-string-nows "git diff-index HEAD 2> /dev/null | wc -l")
-                  ))
-             (if (string= diffs "0")
-                 nil
-               diffs
-               )
-             )
-         nil
-         )
-       )
-
-     (defun jae/k8s-context ()
-       "Return k8s context or nil"
-       (let ((
-              k8s-ctx (jae/shell-command-to-string-nows
-                       "kubectl config current-context 2>/dev/null")
-                      ))
-         (if (string= k8s-ctx "")
-             nil
-           k8s-ctx
-           )
-         )
-       )
-
-     (defun jae/k8s-ns ()
-       "Return k8s ns or nil"
-       (let ((
-              k8s-ns (jae/shell-command-to-string-nows
-                       "kubens -c 2>/dev/null")
-                      ))
-         (if (string= k8s-ns "")
-             nil
-           k8s-ns
-           )
-         )
-       )
-
-     (defun jae/current-gcloud-project ()
-       "Returns the current gcloud project."
-       (let ((
-              gcloud-project (
-                 jae/shell-command-to-string-nows
-                    "test -e ~/.config/gcloud/configurations/config_default && cat ~/.config/gcloud/configurations/config_default | grep 'project =' | awk '{print $NF}'")
-                             ))
-         (if (string= gcloud-project "")
-             nil
-           gcloud-project
-           )
-         )
-       )
-   #+END_SRC
-*** Prompt
-   #+BEGIN_SRC elisp
-     (defmacro with-face (STR &rest PROPS)
-       "Return STR propertized with PROPS."
-       `(propertize ,STR 'face (list ,@PROPS)))
-
-     (defmacro esh-section (NAME ICON FORM &rest PROPS)
-       "Build eshell section NAME with ICON prepended to evaled FORM with PROPS."
-       `(setq ,NAME
-              (lambda () (when ,FORM
-                      (-> ,ICON
-                         (concat esh-section-delim ,FORM)
-                         (with-face ,@PROPS))))))
-
-     (defun esh-acc (acc x)
-       "Accumulator for evaluating and concatenating esh-sections."
-       (--if-let (funcall x)
-           (if (s-blank? acc)
-               it
-             (concat acc esh-sep it))
-         acc))
-
-     (defun esh-prompt-func ()
-       "Build `eshell-prompt-function'"
-       (concat esh-header
-               (-reduce-from 'esh-acc "" eshell-funcs)
-               "\n"
-               eshell-prompt-string))
-
-     (esh-section esh-dir
-                  "\xf07c"  ;  (fontawesome folder)
-                  (abbreviate-file-name (eshell/pwd))
-                  '(:foreground "#81a1c1" :bold ultra-bold))
-
-       (esh-section esh-git
-                  "\xf126"  ;  (git icon)
-                  (magit-get-current-branch)
-                  '(:foreground "#5e81ac"))
-
-       (esh-section esh-git-changes
-                  "\xf071"  ;  (warn icon)
-                  (jae/git-changes)
-                  '(:foreground "#bf616a"))
-
-       (esh-section esh-git-unpushed-commits
-                  "\xf714"  ;  (skull icon)
-                  (jae/git-unpushed-commits)
-                  '(:foreground "#bf616a"))
-
-       (esh-section esh-k8s
-                  "\xf1b3 "  ;  (cubes icon)
-                  (format "%s (%s)" (jae/k8s-context) (jae/k8s-ns))
-                  '(:foreground "#5e81ac"))
-
-       (esh-section esh-gcp
-                  "\xf1a0"  ;  (google icon)
-                  (jae/current-gcloud-project)
-                  '(:foreground "#5e81ac"))
-
-     ;; Separator between esh-sections
-     (setq esh-sep "  ")
-
-     ;; Separator between an esh-section icon and form
-     (setq esh-section-delim " ")
-
-     ;; Eshell prompt header
-     (setq esh-header "\n")
-
-     ;; Eshell prompt regexp and string. Unless you are varying the prompt by eg.
-     ;; your login, these can be the same.
-     (setq eshell-prompt-regexp "❯❯ ")
-     (setq eshell-prompt-string "❯❯ ")
-
-     ;; Choose which eshell-funcs to enable
-     (setq eshell-funcs (list esh-dir esh-git
-                              esh-git-changes
-                              esh-git-unpushed-commits
-                              esh-k8s esh-gcp
-                              ))
-
-     ;; Enable the new eshell prompt
-     (setq eshell-prompt-function 'esh-prompt-func)
-   #+END_SRC
-*** Auto suggestions a la fish
-   #+BEGIN_SRC elisp
-   (use-package esh-autosuggest
-     :hook (eshell-mode . esh-autosuggest-mode))
-   #+END_SRC
-
-*** Fish shell completion
-   #+BEGIN_SRC elisp
-   (use-package fish-completion
+    (use-package meow
      :config
-     (global-fish-completion-mode)
+     (meow-setup)
+     (meow-global-mode 1)
+    )
+#+END_SRC
+** Keybindings
+#+BEGIN_SRC elisp
+  (define-key global-map (kbd "C-c d") '("open full documentation for point" . eldoc-doc-buffer))
+
+  (define-key global-map (kbd "C-c p C-p") '("open file in project" . consult-project-extra-find))
+
+  (define-key global-map (kbd "C-c p C-o") '("open file in project in other window" . consult-project-extra-find-other-window))
+
+  (define-key global-map (kbd "C-c p C-s") '("switch project" . project-switch-project))
+
+  (define-key global-map (kbd "C-c p C-b") '("switch buffer" . consult-project-buffer))
+
+  (define-key global-map (kbd "C-c e C-t") '("open vterm in project" . multi-vterm-project))
+
+  (define-key global-map (kbd "C-c e C-y") '("open new vterm instance" . multi-vterm))
+
+  (define-key global-map (kbd "C-c s C-s") '("search buffer" . consult-line))
+
+  (defun consult-ripgrep-project ()
+    "Search in project using ripgrep"
+    (interactive)
+    (consult-ripgrep (project-current) nil)
+  )
+
+  (define-key global-map (kbd "C-c s C-a") '("search project" . consult-ripgrep-project))
+
+  (define-key global-map (kbd "C-c C-g") '("magit status" . magit-status))
+  (define-key global-map (kbd "C-c C-d") '("magit dispatch" . magit-dispatch))
+  (define-key global-map (kbd "C-c C-f") '("magit file dispatch" . magit-file-dispatch))
+
+  (define-key global-map (kbd "C-c w") '("whitespace cleanup" . whitespace-cleanup))
+  (define-key global-map (kbd "C-c b") '("previous buffer" . previous-buffer))
+  (define-key global-map (kbd "C-c f") '("next buffer" . next-buffer))
+#+END_SRC
+** Search/replace
+*** Anzu
+#+BEGIN_SRC elisp
+  (use-package anzu
+  :config
+  (global-anzu-mode +1)
+  (set-face-attribute 'anzu-mode-line nil
+                    :foreground "yellow" :weight 'bold)
+
+  (custom-set-variables
+   '(anzu-mode-lighter "")
+   '(anzu-deactivate-region t)
+   '(anzu-search-threshold 1000)
+   '(anzu-replace-threshold 50)
+   '(anzu-replace-to-string-separator " => "))
+
+   (define-key isearch-mode-map [remap isearch-query-replace]  #'anzu-isearch-query-replace)
+   (define-key isearch-mode-map [remap isearch-query-replace-regexp] #'anzu-isearch-query-replace-regexp)
    )
-   #+END_SRC
+#+END_SRC
 ** Consult
 #+BEGIN_SRC elisp
   (use-package consult
@@ -946,9 +689,9 @@ Package setup.
          ;; M-s bindings (search-map)
          ("M-s d" . consult-find)
          ("M-s D" . consult-locate)
-         ("M-s g" . #'(consult-grep (project-current)))
-         ("M-s G" . #'(consult-git-grep (project-current)))
-         ("M-s r" . #'(consult-ripgrep (project-current)))
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
          ("M-s l" . consult-line)
          ("M-s L" . consult-line-multi)
          ("M-s m" . consult-multi-occur)
@@ -1061,7 +804,7 @@ Customize the built-in emacs project.el
     (cons 'transient (expand-file-name root))))
 
   (add-to-list 'project-find-functions #'project-find-root)
-#+END_SRC
+  #+END_SRC
 ** Project Tab Groups
 Project tab groups build on top of project and tabs
 #+BEGIN_SRC elisp
@@ -1123,8 +866,9 @@ Project tab groups build on top of project and tabs
    #+END_SRC
 ** Zoom window - eg. use control-x control-z to zoom in / out a window (eg. "fullscreen" it).
  #+BEGIN_SRC elisp
- (use-package zoom-window
-   :bind* ("C-x C-z" . zoom-window-zoom))
+    (use-package zoom-window
+      :bind ("C-x C-z" . zoom-window-zoom)
+      )
  #+END_SRC
 ** Highlight numbers in source code
  See: [[https://github.com/Fanael/highlight-numbers][https://github.com/Fanael/highlight-numbers]]
@@ -1162,9 +906,9 @@ Project tab groups build on top of project and tabs
    #+END_SRC
 *** Libgit for better performance
    #+BEGIN_SRC elisp
-     (use-package libgit)
-     (use-package magit-libgit
-       :after (magit libgit))
+     ;(use-package libgit)
+     ;(use-package magit-libgit
+     ;  :after (magit libgit))
    #+END_SRC
 *** The stupidly named forge package for github/gitlab integration
    #+BEGIN_SRC elisp
@@ -1264,40 +1008,6 @@ Project tab groups build on top of project and tabs
    (setq-default left-fringe-width  16)
    (setq-default right-fringe-width 16)
  )
- #+END_SRC
-** Hydra
- Hydra is a really cool package allowing you to temporarily enable some keybindings with an optional timeout. Hard to explain WHY that is cool, trust me - it is.
-*** The package
-   #+BEGIN_SRC elisp
-     (use-package hydra)
-   #+END_SRC
-*** Text scaling
-   #+BEGIN_SRC elisp
-     (defhydra hydra-text-scale (:timeout 4)
-       "scale text"
-       ("j" text-scale-increase "in")
-       ("k" text-scale-decrease "out")
-       ("f" nil "finished" :exit t)
-     )
-     (jae/leader-keys
-        "ts" '(hydra-text-scale/body :which-key "scale text")
-      )
-   #+END_SRC
-*** Term switching
-   #+BEGIN_SRC elisp
-     (defhydra hydra-term-switch (:timeout 4)
-       "switch term"
-       ("j" multi-vterm-prev "prev")
-       ("k" multi-vterm-next "next")
-       ("f" nil "finished" :exit t)
-     )
-     (jae/leader-keys
-        "es" '(hydra-term-switch/body :which-key "cycle through terminals")
-      )
-   #+END_SRC
-** VERB http client
- #+BEGIN_SRC elisp
- (use-package verb)
  #+END_SRC
 ** Programming and markup languages
 *** LSP Mode
@@ -1668,8 +1378,6 @@ Project tab groups build on top of project and tabs
       (cl-pushnew '(alejandra . ("alejandra")) apheleia-formatters :test #'equal)
       (cl-pushnew '(nix-mode . alejandra) apheleia-mode-alist :test #'equal)))
   #+END_SRC
-
-
 
 ** Use OSC 52 Escape sequence for copying to system clipboard
 #+BEGIN_SRC elisp

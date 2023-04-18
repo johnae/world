@@ -153,9 +153,6 @@ profiles = [
   "users/profiles/wlsunset",
 ]
 
-[config.home-manager.users.john.home.file.".emacs"]
-source = "${pkgs.my-emacs-config}"
-
 [config.home-manager.users.john.programs.bat]
 enable = true
 
