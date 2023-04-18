@@ -1012,74 +1012,17 @@ Project tab groups build on top of project and tabs
  #+END_SRC
 ** Programming and markup languages
 *** LSP Mode
-   Language Server Protocol.
-   See: [[https://github.com/emacs-lsp/lsp-mode][emacs-lsp/lsp-mode]]
- #+BEGIN_SRC elisp
-   (use-package lsp-mode
-     :init
-     (setq lsp-keymap-prefix "C-c a"
-           lsp-prefer-capf t
-           lsp-rust-server 'rust-analyzer)
-     :config
-     (setq lsp-prefer-flymake nil)
-     (setq lsp-enable-snippet nil)
-     (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
-     (lsp-register-client
-      (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
-                       :major-modes '(nix-mode)
-                       :server-id 'nix))
-     (setq lsp-file-watch-ignored '(
-       "[/\\\\]\\.direnv$"
-       ; SCM tools
-       "[/\\\\]\\.git$"
-       "[/\\\\]\\.hg$"
-       "[/\\\\]\\.bzr$"
-       "[/\\\\]_darcs$"
-       "[/\\\\]\\.svn$"
-       "[/\\\\]_FOSSIL_$"
-       ; IDE tools
-       "[/\\\\]\\.idea$"
-       "[/\\\\]\\.ensime_cache$"
-       "[/\\\\]\\.eunit$"
-       "[/\\\\]node_modules$"
-       "[/\\\\]\\.fslckout$"
-       "[/\\\\]\\.tox$"
-       "[/\\\\]\\.stack-work$"
-       "[/\\\\]\\.bloop$"
-       "[/\\\\]\\.metals$"
-       "[/\\\\]target$"
-       ; Autotools output
-       "[/\\\\]\\.deps$"
-       "[/\\\\]build-aux$"
-       "[/\\\\]autom4te.cache$"
-       "[/\\\\]\\.reference$"))
-     :hook (
-       (lsp-mode . lsp-enable-which-key-integration)
-       (prog-mode . lsp-mode)
-     )
-     :custom
-     (lsp-rust-analyzer-cargo-watch-command "clippy")
-     (lsp-eldoc-render-all t)
-     (lsp-idle-delay 0.6)
-     (lsp-rust-analyzer-server-display-inlay-hints t)
-     (lsp-terraform-server '("terraform-ls" "serve"))
-   )
-
-   (use-package lsp-ui
-     :after lsp-mode
-     :config
-     (setq lsp-ui-doc-max-height 60)
+   Language Server Protocol. Eglot.
+#+BEGIN_SRC elisp
+   (use-package eglot
      :hook
      (
-       (lsp-mode . lsp-ui-mode)
+      (rustic-mode . eglot-ensure)
+      (nix-mode . eglot-ensure)
+      (terraform-mode . eglot-ensure)
      )
-     :custom
-     (lsp-ui-peek-always-show t)
-     (lsp-ui-sideline-show-hover t)
    )
-
-   ;;(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
- #+END_SRC
+#+END_SRC
 *** Flycheck mode
 **** The mode itself
      On-the-fly syntax checking, see: [[https://www.flycheck.org/en/latest/][https://www.flycheck.org/en/latest/]]
