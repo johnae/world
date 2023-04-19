@@ -791,7 +791,7 @@ Customize the built-in emacs project.el
   (customize-set-variable 'project-vc-ignores '(".terraform" "node_modules" ".direnv"))
   (customize-set-variable 'project-vc-extra-root-markers '("Cargo.toml" "*.csproj" "compile_commands.json"
                                                            "package.json" "compile_flags.txt" "deps.edn"
-                                                           "shadow-cljs.edn" "flake.nix" "shell.nix"
+                                                           "shadow-cljs.edn" "flake.nix" "shell.nix" ".project"
                                                            ))
   #+END_SRC
 ** Project Tab Groups
