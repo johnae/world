@@ -1002,14 +1002,27 @@ Project tab groups build on top of project and tabs
 *** LSP Mode
    Language Server Protocol. Eglot.
 #+BEGIN_SRC elisp
-   (use-package eglot
-     :hook
-     (
-      (rustic-mode . eglot-ensure)
-      (nix-mode . eglot-ensure)
-      (terraform-mode . eglot-ensure)
-     )
-   )
+  (defun jae/eglot-hook ()
+    (when (eglot-managed-p)
+      (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+      (add-hook 'before-save-hook #'eglot-organize-imports-on-save nil t)
+    )
+  )
+  (use-package eglot
+    :config
+    (add-to-list 'eglot-server-programs '(terraform-mode .
+                                                         ("terraform-ls" "serve")))
+
+    (add-hook 'eglot-managed-mode-hook #'jae/eglot-hook)
+    :hook
+    (
+     (rustic-mode . eglot-ensure)
+     (rust-mode . eglot-ensure)
+     (go-mode . eglot-ensure)
+     (nix-mode . eglot-ensure)
+     (terraform-mode . eglot-ensure)
+    )
+  )
 #+END_SRC
 *** Flycheck mode
 **** The mode itself
