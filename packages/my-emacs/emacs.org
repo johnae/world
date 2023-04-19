@@ -788,7 +788,7 @@ The built-in emacs project.el
 #+END_SRC
 Customize the built-in emacs project.el
 #+BEGIN_SRC elisp
-  (setq project-vc-extra-root-markers '("Cargo.toml", "*.csproj", "compile_commands.json",
+  (customize-set-variable 'project-vc-extra-root-markers '("Cargo.toml", "*.csproj", "compile_commands.json",
                                         "package.json", "compile_flags.txt", ".git", "deps.edn",
                                         "shadow-cljs.edn", "flake.nix", "shell.nix"
                                         ))
