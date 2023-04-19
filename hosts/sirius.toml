@@ -29,6 +29,9 @@ podman.dockerCompat = true
 [config.programs.mosh]
 enable = true
 
+[config.programs.ssh]
+startAgent = true
+
 [config.boot.binfmt]
 emulatedSystems = [ "aarch64-linux" ]
 
