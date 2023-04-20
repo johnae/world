@@ -72,7 +72,7 @@
     libdisplay-info.flake = false;
     libdisplay-info.url = "git+https://gitlab.freedesktop.org/emersion/libdisplay-info.git?ref=main";
     matrix-conduit.flake = false;
-    matrix-conduit.url = "gitlab:famedly/conduit"; ## Update when tooling allows
+    matrix-conduit.url = "gitlab:famedly/conduit";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
     neatvnc.flake = false;
     neatvnc.url = "github:any1/neatvnc";
