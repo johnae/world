@@ -292,7 +292,7 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
 ** Windmove
 #+BEGIN_SRC elisp
 (when (fboundp 'windmove-default-keybindings)
- (windmove-default-keybindings))
+ (windmove-default-keybindings 'control))
 #+END_SRC
 * Packages
 ** Bind-key
