@@ -125,6 +125,7 @@ Some basic useful settings.
    #+BEGIN_SRC elisp
      (eval-when-compile
        (require 'use-package))
+     (use-package quelpa-use-package)
    #+END_SRC
 *** Setup auth sources
    #+BEGIN_SRC elisp
@@ -784,6 +785,21 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
 #+BEGIN_SRC elisp
   (use-package consult-project-extra)
 #+END_SRC
+** Copilot
+#+BEGIN_SRC elisp
+  (use-package copilot
+  :config
+  (add-hook 'prog-mode-hook 'copilot-mode)
+  (with-eval-after-load 'company
+  ;; disable inline previews
+  (delq 'company-preview-if-just-one-frontend company-frontends))
+  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+  :quelpa (copilot :fetcher github
+                   :repo "zerolfx/copilot.el"
+                   :branch "main"
+                   :files ("dist" "*.el")))
+#+END_SRC
 ** Project
 The built-in emacs project.el
 #+BEGIN_SRC elisp
@@ -1319,10 +1335,10 @@ Project tab groups build on top of project and tabs
  #+END_SRC
 ** Tabnine
 #+BEGIN_SRC elisp
-  (use-package company-tabnine
-    :config
-    (add-to-list 'company-backends #'company-tabnine)
-    )
+  ;(use-package company-tabnine
+  ;  :config
+  ;  (add-to-list 'company-backends #'company-tabnine)
+  ;  )
 #+END_SRC
 ** Code formatting
 #+BEGIN_SRC elisp

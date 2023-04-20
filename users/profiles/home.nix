@@ -29,6 +29,7 @@ in {
     mako
     netns-dbus-proxy
     nix-index
+    nodejs
     nordic
     persway
     playerctl
