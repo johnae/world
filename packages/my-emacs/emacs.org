@@ -589,8 +589,8 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
      '("z" . meow-pop-selection)
      '("'" . repeat)
      '("<escape>" . ignore)
-     '("C-k" . meow-page-up)
-     '("C-j" . meow-page-down)
+     ;'("C-k" . meow-page-up)
+     ;'("C-j" . meow-page-down)
      )
     )
 
@@ -637,6 +637,10 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
   (define-key global-map (kbd "C-c w") '("whitespace cleanup" . whitespace-cleanup))
   (define-key global-map (kbd "C-c b") '("previous buffer" . previous-buffer))
   (define-key global-map (kbd "C-c f") '("next buffer" . next-buffer))
+
+  (define-key global-map (kbd "C-k") '("page up" . meow-page-up))
+  (define-key global-map (kbd "C-j") '("page down" . meow-page-down))
+
 #+END_SRC
 ** Search/replace
 *** Anzu
