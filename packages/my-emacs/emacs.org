@@ -1110,17 +1110,18 @@ Project tab groups build on top of project and tabs
   and front-ends to retrieve and display completion candidates.
   It comes with several back-ends such as Elisp, Clang, Semantic, Eclim, Ropemacs, Ispell, CMake, BBDB, Yasnippet, dabbrev,
   etags, gtags, files, keywords and a few others.
-  #+BEGIN_SRC elisp
+#+BEGIN_SRC elisp
   (use-package company
     :init
     (setq company-idle-delay 0.05
           company-echo-delay 0.05
           company-minimum-prefix-length 2
+          company-show-numbers t
           company-dabbrev-ignore-case nil
           company-dabbrev-downcase nil)
     :config
     (global-company-mode))
-  #+END_SRC
+#+END_SRC
 *** Company quick help
    Show documentation popups when idling on a completion candidate.
    See: [[https://github.com/expez/company-quickhelp][https://github.com/expez/company-quickhelp]]
@@ -1290,6 +1291,7 @@ Project tab groups build on top of project and tabs
   (use-package string-inflection)
 #+END_SRC
 ** Direnv integration
+
  Direnv integration - per buffer - for emacs.
  See: [[https://github.com/wbolster/emacs-direnv][https://github.com/purcell/envrc]]
  and ofc
@@ -1311,7 +1313,13 @@ Project tab groups build on top of project and tabs
             (quit)))))
    )
  #+END_SRC
-
+** Tabnine
+#+BEGIN_SRC elisp
+  (use-package company-tabnine
+    :config
+    (add-to-list 'company-backends #'company-tabnine)
+    )
+#+END_SRC
 ** Code formatting
 #+BEGIN_SRC elisp
   (use-package apheleia
