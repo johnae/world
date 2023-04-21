@@ -642,6 +642,21 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
   (define-key global-map (kbd "C-k") '("page up" . meow-page-up))
   (define-key global-map (kbd "C-j") '("page down" . meow-page-down))
 
+  (defun split-and-follow-below ()
+    (interactive)
+    (split-window-below)
+    (balance-windows)
+    (other-window 1))
+
+  (defun split-and-follow-right ()
+    (interactive)
+    (split-window-right)
+    (balance-windows)
+    (other-window 1))
+
+  (define-key global-map (kbd "C-x 2") 'split-and-follow-below)
+  (define-key global-map (kbd "C-x 3") 'split-and-follow-right)
+
 #+END_SRC
 ** Search/replace
 *** Anzu
