@@ -63,6 +63,7 @@ in {
             "/home/${userName}/.cache/chromium-private"
             "/home/${userName}/.config/chromium-work"
             "/home/${userName}/.cache/chromium-work"
+            "/home/${userName}/.config/github-copilot"
             "/home/${userName}/.config/qutebrowser"
             "/home/${userName}/.cache/qutebrowser"
             "/home/${userName}/.config/obs-studio"
