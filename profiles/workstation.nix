@@ -92,13 +92,14 @@
   xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-wlr pkgs.xdg-desktop-portal-gtk];
 
   fonts.fonts = with pkgs; [
-    google-fonts
+    emacs-all-the-icons-fonts
+    etBook
     font-awesome_5
+    google-fonts
+    iosevka
+    mynerdfonts
     powerline-fonts
     roboto
-    mynerdfonts
-    etBook
-    emacs-all-the-icons-fonts
   ];
 
   security.wrappers.netns-exec = {
