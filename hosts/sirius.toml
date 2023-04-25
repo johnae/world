@@ -195,7 +195,7 @@ paths = [
   "/home/john/Sync",
   "/home/john/Photos",
 ]
-repository = "s3:https://s3.amazonaws.com/restic-9000-b147"
+repository = "s3:https://b0850d27a4d43d7d0f8d36ebc6a1bfab.r2.cloudflarestorage.com/restic-9000-b147"
 environmentFile = "/run/agenix/restic-env"
 passwordFile = "/run/agenix/restic-pw"
 initialize = true
