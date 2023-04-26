@@ -143,6 +143,7 @@ directories = [
 
 [config.home-manager.users.john]
 profiles = [
+  "users/profiles/alacritty",
   "users/profiles/bat",
   "users/profiles/fish",
   "users/profiles/git",
