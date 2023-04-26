@@ -293,7 +293,7 @@ in {
         };
 
         "disabled keybindings" = {
-          Escape = "mode default";
+          "${modifier}+Shift+Control+x" = "mode default";
         };
 
         "(p)oweroff, (s)uspend, (h)ibernate, (r)eboot, (l)ogout" = {
