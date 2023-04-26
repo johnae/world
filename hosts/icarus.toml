@@ -7,6 +7,7 @@ syncthingDeviceID = "HBL5ZRB-R2STGW5-LMAYYHX-KOFTP3X-VO4IV6E-PEDKZ3N-WCRR7BY-F5C
 profiles = [
   "profiles/hardware/b550",
   "profiles/default_fs",
+  "profiles/home-manager",
   "profiles/jellyfin",
   "profiles/k3s",
   "profiles/server",
@@ -139,3 +140,51 @@ directories = [
   "/var/lib/jellyfin",
   "/var/lib/media",
 ]
+
+[config.home-manager.users.john]
+profiles = [
+  "users/profiles/bat",
+  "users/profiles/fish",
+  "users/profiles/git",
+  "users/profiles/kubie",
+  "users/profiles/nushell",
+  "users/profiles/pueue",
+  "users/profiles/rbw",
+  "users/profiles/ssh",
+  "users/profiles/starship",
+  "users/profiles/sway",
+  "users/profiles/waybar",
+  "users/profiles/tmux",
+]
+
+[config.home-manager.users.john.programs.bat]
+enable = true
+
+[config.home-manager.users.john.programs.emacs]
+enable = true
+package = "${pkgs.my-emacs}"
+
+[config.home-manager.users.john.services.emacs]
+enable = true
+package = "${pkgs.my-emacs}"
+socketActivation.enable = true
+
+[config.home-manager.users.john.systemd.user.services.emacs.Service]
+Environment = [ "COLORTERM=truecolor", "SSH_AUTH_SOCK=/run/user/1337/ssh-auth.sock" ]
+LimitNOFILE = 16384
+
+[config.home-manager.users.john.userinfo]
+email = "john@insane.se"
+fullName = "John Axel Eriksson"
+githubUser = "johnae"
+gitlabUser = "johnae"
+
+[[config.home-manager.users.john.programs.git.includes]]
+condition = "gitdir:~/Development/volvo/" ## note the IMPORTANT trailing slash
+contents.user.email = "john.axel.eriksson@consultant.volvo.com"
+contents.credential."https://github.com".helper = "${pkgs.scripts}/bin/rbw-git-creds github.com john.axel.eriksson@consultant.volvo.com"
+contents.url."https://github.com".insteadOf = "ssh://git@github.com"
+
+[config.programs.dconf]
+enable = true
+
