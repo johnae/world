@@ -50,5 +50,5 @@ in {
   programs.fish.enable = true;
   security.sudo.wheelNeedsPassword = false;
 
-  machinePurpose = "server";
+  machinePurpose = lib.mkForce "server";
 }
