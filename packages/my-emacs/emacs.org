@@ -597,16 +597,28 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
    )
   )
 
+  (defun jae/vterm-meow-normal-mode ()
+    (if (eq major-mode 'vterm-mode)
+        (vterm-copy-mode 1))
+  )
+
+  (defun jae/vterm-meow-insert-mode ()
+    (if (eq major-mode 'vterm-mode)
+        (vterm-copy-mode -1))
+  )
+
   (use-package meow
    :config
    (meow-setup)
    (dolist (state '(
                     (vterm-mode . insert)
-                    (vterm-copy-mode . normal)
                    ))
       (add-to-list 'meow-mode-state-list state))
    (meow-global-mode 1)
+   (add-hook 'meow-insert-enter-hook #'jae/vterm-meow-insert-mode)
+   (add-hook 'meow-insert-exit-hook #'jae/vterm-meow-normal-mode)
   )
+
 #+END_SRC
 ** Keybindings
 #+BEGIN_SRC elisp
@@ -633,6 +645,8 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
   )
 
   (define-key global-map (kbd "C-c s C-a") '("search project" . consult-ripgrep-project))
+
+  (define-key global-map (kbd "C-c s C-q") '("replace in buffer" . anzu-query-replace-regexp))
 
   (define-key global-map (kbd "C-c C-g") '("magit status" . magit-status))
   (define-key global-map (kbd "C-c C-d") '("magit dispatch" . magit-dispatch))
