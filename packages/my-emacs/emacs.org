@@ -832,6 +832,10 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
                    :branch "main"
                    :files ("dist" "*.el")))
 #+END_SRC
+** ChatGTP
+#+BEGIN_SRC elisp
+  (use-package gptel)
+#+END_SRC
 ** Project
 The built-in emacs project.el
 #+BEGIN_SRC elisp
