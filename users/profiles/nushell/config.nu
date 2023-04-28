@@ -561,5 +561,5 @@ let-env config = {
 }
 
 alias cat = bat
-alias l = (ls | grid -c)
+def l [] { ls | grid -c }
 alias e = emacsclient -t
