@@ -509,6 +509,19 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
 
   (defun meow-setup ()
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+  (setq meow-resize-keymap (make-keymap))
+  (meow-define-state resize
+    "meow state for resizing windows"
+    :lighter " [R]"
+    :keymap meow-resize-keymap
+  )
+  (meow-define-keys 'resize
+    '("<escape>" . meow-normal-mode)
+    '("<" . balance-windows)
+    '("z" . enlarge-window)
+    '("Z" . shrink-window)
+    '("x" . enlarge-window-horizontally)
+    '("X" . shrink-window-horizontally))
   (meow-motion-overwrite-define-key
    '("j" . meow-next)
    '("k" . meow-prev)
@@ -590,6 +603,7 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
    '("y" . meow-save)
    '("Y" . meow-sync-grab)
    '("z" . meow-pop-selection)
+   '("/" . meow-resize-mode)
    '("'" . repeat)
    '("<escape>" . ignore)
    ;'("C-k" . meow-page-up)
@@ -655,6 +669,9 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
   (define-key global-map (kbd "C-c w") '("whitespace cleanup" . whitespace-cleanup))
   (define-key global-map (kbd "C-c b") '("previous buffer" . previous-buffer))
   (define-key global-map (kbd "C-c f") '("next buffer" . next-buffer))
+
+  (define-key global-map (kbd "C-k") '("page up" . meow-page-up))
+  (define-key global-map (kbd "C-j") '("page down" . meow-page-down))
 
   (define-key global-map (kbd "C-k") '("page up" . meow-page-up))
   (define-key global-map (kbd "C-j") '("page down" . meow-page-down))
