@@ -673,9 +673,6 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
   (define-key global-map (kbd "C-k") '("page up" . meow-page-up))
   (define-key global-map (kbd "C-j") '("page down" . meow-page-down))
 
-  (define-key global-map (kbd "C-k") '("page up" . meow-page-up))
-  (define-key global-map (kbd "C-j") '("page down" . meow-page-down))
-
   (defun split-and-follow-below ()
     (interactive)
     (split-window-below)
