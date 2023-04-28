@@ -44,6 +44,7 @@ in {
     teams
     wl-clipboard
     wl-clipboard-x11
+    wlvncc
     xdg-utils
   ];
 
