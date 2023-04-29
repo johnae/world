@@ -505,23 +505,8 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
 
 ** Meow
 #+BEGIN_SRC elisp
-
-
   (defun meow-setup ()
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
-  (setq meow-resize-keymap (make-keymap))
-  (meow-define-state resize
-    "meow state for resizing windows"
-    :lighter " [R]"
-    :keymap meow-resize-keymap
-  )
-  (meow-define-keys 'resize
-    '("<escape>" . meow-normal-mode)
-    '("<" . balance-windows)
-    '("z" . enlarge-window)
-    '("Z" . shrink-window)
-    '("x" . enlarge-window-horizontally)
-    '("X" . shrink-window-horizontally))
   (meow-motion-overwrite-define-key
    '("j" . meow-next)
    '("k" . meow-prev)
@@ -603,12 +588,28 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
    '("y" . meow-save)
    '("Y" . meow-sync-grab)
    '("z" . meow-pop-selection)
-   '("/" . meow-resize-mode)
    '("'" . repeat)
    '("<escape>" . ignore)
-   ;'("C-k" . meow-page-up)
-   ;'("C-j" . meow-page-down)
    )
+  )
+
+  (defun meow-customize ()
+    (setq meow-window-state-keymap (make-keymap))
+    (meow-define-state window
+      "meow WINDOW state minor mode for window management"
+      :lighter " [W]"
+      :keymap meow-window-state-keymap
+    )
+    (meow-define-keys 'window
+      '("<escape>" . meow-normal-mode)
+      '("<" . balance-windows)
+      '("z" . enlarge-window)
+      '("Z" . shrink-window)
+      '("x" . enlarge-window-horizontally)
+      '("X" . shrink-window-horizontally))
+    (meow-normal-define-key
+     '("/" . meow-window-mode)
+    )
   )
 
   (defun jae/vterm-meow-normal-mode ()
@@ -628,9 +629,10 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
                     (vterm-mode . insert)
                    ))
       (add-to-list 'meow-mode-state-list state))
-   (meow-global-mode 1)
    (add-hook 'meow-insert-enter-hook #'jae/vterm-meow-insert-mode)
    (add-hook 'meow-insert-exit-hook #'jae/vterm-meow-normal-mode)
+   (meow-global-mode 1)
+   (meow-customize)
   )
 
 #+END_SRC
