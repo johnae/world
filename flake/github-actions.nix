@@ -7,6 +7,9 @@
 }: let
   inherit (lib) mapAttrsToList filterAttrs hasPrefix filter elem;
   defaultSkip = [
+    "container-"
+    "container-processes"
+    "container-shell"
     "nu-cli"
     "nu-color-config"
     "nu-command"

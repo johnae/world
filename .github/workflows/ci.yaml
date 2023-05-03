@@ -29,7 +29,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
     - run: |
-        nix flake check
+        nix flake check --impure
 
   container_images_x86_64_linux:
     runs-on: ubuntu-latest
