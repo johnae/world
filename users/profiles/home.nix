@@ -41,7 +41,6 @@ in {
     slack
     spotifyd
     spotnix
-    teams
     wl-clipboard
     wl-clipboard-x11
     wlvncc
