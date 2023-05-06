@@ -96,10 +96,11 @@
     etBook
     font-awesome_5
     google-fonts
-    iosevka
-    mynerdfonts
     powerline-fonts
     roboto
+    (pkgs.nerdfonts.override {
+      fonts = ["JetBrainsMono" "DroidSansMono" "Iosevka" "IosevkaTerm" "RobotoMono"];
+    })
   ];
 
   security.wrappers.netns-exec = {

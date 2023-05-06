@@ -28,7 +28,6 @@
       locallyDefinedPackages
       // rec {
         inherit (pkgs.callPackage ../utils/world.nix {}) pixieboot world lint;
-        mynerdfonts = pkgs.nerdfonts.override {fonts = ["JetBrainsMono" "DroidSansMono"];};
 
         wayland-122 = pkgs.wayland.overrideAttrs (oa: rec {
           pname = "wayland";

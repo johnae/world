@@ -59,7 +59,6 @@ in {
           "matrix-conduit"
           "my-emacs"
           "my-emacs-config"
-          "mynerdfonts"
           "netns-dbus-proxy"
           "netns-exec"
           "nixpkgs-fmt"
