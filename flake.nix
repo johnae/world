@@ -63,7 +63,6 @@
     hwdata.url = "github:vcrhonek/hwdata";
     hwdata.flake = false;
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.inputs.utils.follows = "flake-utils";
     home-manager.url = "github:nix-community/home-manager";
     kile.flake = false;
     kile.url = "gitlab:snakedye/kile";
