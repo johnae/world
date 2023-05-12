@@ -130,6 +130,9 @@
     wlvncc.url = "github:any1/wlvncc";
     xdg-desktop-portal-wlr.flake = false;
     xdg-desktop-portal-wlr.url = "github:emersion/xdg-desktop-portal-wlr/v0.7.0"; # gh-release-update
+    ## emacs packages
+    emacs-copilot.flake = false;
+    emacs-copilot.url = "github:zerolfx/copilot.el";
   };
 
   outputs = inputs @ {flake-parts, ...}:

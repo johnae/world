@@ -306,6 +306,22 @@
         "type": "github"
       }
     },
+    "emacs-copilot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1683774218,
+        "narHash": "sha256-VY3FlN+iawabggiplAFQeeNx8I85kuQqsAxRwgun5u0=",
+        "owner": "zerolfx",
+        "repo": "copilot.el",
+        "rev": "bcc0407e1f00e3a865438f73386442de7978a547",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zerolfx",
+        "repo": "copilot.el",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "inputs": {
         "flake-utils": [
@@ -1166,6 +1182,7 @@
         "blur": "blur",
         "devenv": "devenv",
         "dream2nix": "dream2nix",
+        "emacs-copilot": "emacs-copilot",
         "emacs-overlay": "emacs-overlay",
         "fenix": "fenix",
         "fire": "fire",
