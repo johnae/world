@@ -711,6 +711,13 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
    (define-key isearch-mode-map [remap isearch-query-replace-regexp] #'anzu-isearch-query-replace-regexp)
    )
 #+END_SRC
+** Dirvish
+#+BEGIN_SRC elisp
+  (use-package 'dirvish
+    :config
+    (dirvish-override-dired-mode)
+    )
+#+END_SRC
 ** Consult
 #+BEGIN_SRC elisp
   (use-package consult
