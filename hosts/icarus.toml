@@ -73,7 +73,7 @@ publicKey = "CYFNNfntzhRHn0+QHWv2eBOeU/sCZ5f6FLbTMUyIQHk="
 
 [config.services.syncthing]
 enable = true
-devices.SM-G998B.id = "PCFNIXF-AR7YX2B-354IJQW-YP25QM7-N53ES5L-HKB337S-I6JZV34-55LQEAR"
+devices.s23ultra.id = "WIEQUVJ-5TNGRPN-YD4E47D-WEXXBZO-2AGHFQZ-2K4DDRB-DFSD2UZ-34OCBQ4"
 user = "john"
 group = "users"
 openDefaultPorts = true
@@ -85,13 +85,14 @@ folders."/home/john/Sync".devices = [
   "titan",
   "hyperion",
   "sirius",
+  "s23ultra"
 ]
 folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
 folders."/home/john/Photos".devices = [
   "antares",
   "eris",
   "polaris",
-  "SM-G998B",
+  "s23ultra",
   "sirius",
 ]
 folders."/home/john/Photos".versioning.type = "staggered"

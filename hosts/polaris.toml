@@ -133,7 +133,7 @@ args.advertise-routes = "10.128.128.0/21,10.129.128.0/22"
 
 [config.services.syncthing]
 enable = true
-devices.SM-G998B.id = "PCFNIXF-AR7YX2B-354IJQW-YP25QM7-N53ES5L-HKB337S-I6JZV34-55LQEAR"
+devices.s23ultra.id = "WIEQUVJ-5TNGRPN-YD4E47D-WEXXBZO-2AGHFQZ-2K4DDRB-DFSD2UZ-34OCBQ4"
 user = "john"
 group = "users"
 openDefaultPorts = true
@@ -145,15 +145,15 @@ folders."/home/john/Sync".devices = [
   "titan",
   "hyperion",
   "sirius",
-  "SM-G998B"
+  "s23ultra"
 ]
-folders."/home/john/Photos".id = "sm-g998b_7dxn foton"
+folders."/home/john/Photos".id = "photos"
 folders."/home/john/Photos".devices = [
   "antares",
   "eris",
   "icarus",
   "sirius",
-  "SM-G998B"
+  "s23ultra"
 ]
 folders."/home/john/Photos".versioning.type = "staggered"
 folders."/home/john/Photos".versioning.params.cleanInterval = "3600"
