@@ -114,6 +114,7 @@ node-label."topology.kubernetes.io/zone" = "hetzner-fi"
 [config.services.syncthing]
 enable = true
 devices.s23ultra.id = "WIEQUVJ-5TNGRPN-YD4E47D-WEXXBZO-2AGHFQZ-2K4DDRB-DFSD2UZ-34OCBQ4"
+devices.s8plus.id = "EI6DXMZ-3CMM3R3-LNJPFIF-CTXDVAG-2SXLOCY-4NEEZ3K-CYJBXU6-6W44TAV"
 user = "john"
 group = "users"
 openDefaultPorts = true
@@ -125,7 +126,8 @@ folders."/home/john/Sync".devices = [
   "icarus",
   "titan",
   "hyperion",
-  "s23ultra"
+  "s23ultra",
+  "s8plus"
 ]
 folders."/home/john/Pictures".id = "pictures"
 folders."/home/john/Pictures".devices = [
