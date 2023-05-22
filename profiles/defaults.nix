@@ -149,6 +149,10 @@ in {
   services.fstrim.enable = true;
   services.btrfs.autoScrub.enable = true;
 
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=90
+  '';
+
   ## only allow declarative user management
   users.mutableUsers = false;
 
