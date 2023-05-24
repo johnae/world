@@ -98,32 +98,20 @@ in {
     networking.nat.externalInterface = cfg.externalInterface;
     networking.nat.internalInterfaces = internalInterfaceNames;
 
-    services.dhcpd4.enable = true;
-    services.dhcpd4.interfaces = internalInterfaceNames;
-    services.dhcpd4.extraConfig =
-      ''
-        option subnet-mask 255.255.255.0;
-      ''
-      + (concatStringsSep "\n" (mapAttrsToList (iface: config: ''
-          subnet ${config.network} netmask ${config.netmask} {
-            option broadcast-address ${config.base}.255;
-            option domain-name-servers ${config.address};
-            option routers ${config.address};
-            interface ${iface};
-            default-lease-time 86400;
-            max-lease-time 86400;
-            range ${config.base}.10 ${config.base}.128;
-          }
-        '')
-        internalInterfaces));
-
     environment.state."/keep".directories = ["/var/lib/dnsmasq"];
 
     services.dnsmasq.enable = true;
     services.dnsmasq.resolveLocalQueries = true;
     services.dnsmasq.settings =
       {
+        dhcp-range = mapAttrsToList (tag: net: "${tag},${net.base}.10,${net.base}.128,255.255.255.0,24h") internalInterfaces;
+        dhcp-option = mapAttrsToList (tag: net: "${tag},option:router,${net.address}") internalInterfaces;
+        interface = internalInterfaceNames;
+      }
+      // {
         server = cfg.upstreamDnsServers;
+        dhcp-authoritative = true;
+        dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
       }
       // cfg.dnsMasqSettings;
 
