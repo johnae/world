@@ -106,7 +106,7 @@ in {
       {
         server = cfg.upstreamDnsServers;
         dhcp-range = "${config.base}.10,${config.base}.128,255.255.255.0,24h";
-        dhcp-option = "option:router,${config.address}";
+        dhcp-option = "option:router,${cfg.internalInterfaceIP}";
         dhcp-authoritative = true;
         dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
         interface = cfg.internalInterface;
