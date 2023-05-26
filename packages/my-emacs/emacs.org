@@ -1170,6 +1170,7 @@ Project tab groups build on top of project and tabs
                      ("C-c C-c s" . lsp-rust-analyzer-status))
          :config
          (setq rustic-format-on-save t)
+         (setq rustic-lsp-client 'eglot)
          (add-hook 'rustic-mode-hook 'jae/rustic-mode-hook))
 
        (defun jae/rustic-mode-hook ()
