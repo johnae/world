@@ -1,7 +1,7 @@
 {
   pkgs,
   emacsWithPackagesFromUsePackage,
-  emacsPkg ? pkgs.emacsUnstable-nox,
+  emacsPkg ? pkgs.emacs-unstable-nox,
   inputs,
   ...
 }:
