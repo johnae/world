@@ -215,28 +215,6 @@
         "type": "github"
       }
     },
-    "devshell_3": {
-      "inputs": {
-        "flake-utils": "flake-utils_3",
-        "nixpkgs": [
-          "spotnix",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1677856503,
-        "narHash": "sha256-TW8my47VpavO/PXA5hIumUcX80cj0AufojjUTdUonLw=",
-        "owner": "numtide",
-        "repo": "devshell",
-        "rev": "643d1857fea4e71e7f251cb574f59b1d63778085",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "devshell",
-        "type": "github"
-      }
-    },
     "dream2nix": {
       "inputs": {
         "all-cabal-json": "all-cabal-json",
@@ -468,21 +446,6 @@
       }
     },
     "flake-utils_2": {
-      "locked": {
-        "lastModified": 1642700792,
-        "narHash": "sha256-XqHrk7hFb+zBvRg6Ghl+AZDq03ov6OshJLiSWOoX5es=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "846b2ae0fc4cc943637d3d1def4454213e203cba",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_3": {
       "locked": {
         "lastModified": 1642700792,
         "narHash": "sha256-XqHrk7hFb+zBvRg6Ghl+AZDq03ov6OshJLiSWOoX5es=",
@@ -1256,7 +1219,6 @@
         "rofi-wayland": "rofi-wayland",
         "slurp": "slurp",
         "spotifyd": "spotifyd",
-        "spotnix": "spotnix",
         "sway": "sway",
         "swaybg": "swaybg",
         "swayidle": "swayidle",
@@ -1315,36 +1277,6 @@
       "original": {
         "owner": "spotifyd",
         "repo": "spotifyd",
-        "type": "github"
-      }
-    },
-    "spotnix": {
-      "inputs": {
-        "devshell": "devshell_3",
-        "dream2nix": [
-          "dream2nix"
-        ],
-        "fenix": [
-          "fenix"
-        ],
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1677881679,
-        "narHash": "sha256-TYg95/jwcXLGviArSNKRUWxjcmGZDY8WzinhXQdDu1Y=",
-        "owner": "johnae",
-        "repo": "spotnix",
-        "rev": "095706780a0a60351712d46cf9cc12c454b07806",
-        "type": "github"
-      },
-      "original": {
-        "owner": "johnae",
-        "repo": "spotnix",
         "type": "github"
       }
     },
