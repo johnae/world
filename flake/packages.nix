@@ -74,7 +74,7 @@
       }
       // {
         ## packages from other flakes
-        inherit (inputs.spotnix.packages.${system}) spotnix;
+        #inherit (inputs.spotnix.packages.${system}) spotnix;
         inherit (inputs.persway.packages.${system}) persway;
         inherit (inputs.headscale.packages.${system}) headscale;
       };

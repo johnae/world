@@ -40,7 +40,7 @@ in {
     shotcut
     slack
     spotifyd
-    spotnix
+    #    spotnix
     wl-clipboard
     wl-clipboard-x11
     wlvncc
