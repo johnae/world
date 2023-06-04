@@ -128,6 +128,7 @@ enable = true
 args.advertise-tags = ["tag:server"]
 args.ssh = true
 args.accept-routes = false ## with this on, it causes issues in k3s when network runs on top of tailscale
+args.accept-dns = false
 args.auth-key = "file:/var/run/agenix/ts-gh-9k"
 args.advertise-routes = "10.128.128.0/21,10.129.128.0/22"
 
