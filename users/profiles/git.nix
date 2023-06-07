@@ -10,6 +10,7 @@ in {
     userName = userinfo.fullName;
     userEmail = userinfo.email;
     enable = true;
+    lfs.enable = true;
     delta = {
       enable = true;
       options.features = "decorations side-by-side line-numbers";
