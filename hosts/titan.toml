@@ -79,6 +79,13 @@ port = 2222
 identityFile = "/run/agenix/id_ed25519_remote_unlock"
 passwordFile = "/run/agenix/remote-disk-password"
 
+[[config.services.remote-unlock]]
+enable = true
+host = "65.109.108.74"
+port = 2222
+identityFile = "/run/agenix/id_ed25519_remote_unlock"
+passwordFile = "/run/agenix/remote-disk-password"
+
 [config.age.secrets]
 k3s-token.file = "secrets/k3s/token.age"
 ubnt-api-user-password.file = "secrets/ubnt-api-user-password.age"
