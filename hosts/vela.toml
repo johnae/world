@@ -1,7 +1,7 @@
 system = "x86_64-linux"
 
 [config]
-publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKufBFE8QYq8g38/oLR/2bhc1NA9NOAywtp1EHW0Ro5G"
+#publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKufBFE8QYq8g38/oLR/2bhc1NA9NOAywtp1EHW0Ro5G"
 syncthingDeviceID = "IF27CYB-OJCNJEV-5LRQDQV-WJATGLC-L4I37JV-OKY4EPN-ECBPVE3-CC7CEQC"
 
 profiles = [
@@ -101,7 +101,7 @@ role = "agent"
 after = [ "tailscale-auth.service" ]
 
 [config.services.k3s.settings]
-server = "https://polaris.tail7f302.ts.net:6443"
+server = "https://100.97.45.72:6443"
 token-file = "/run/agenix/k3s-token"
 flannel-iface = "tailscale0"
 node-ip = "$(get-iface-ip tailscale0)"
@@ -172,28 +172,28 @@ allowedUDPPorts = [ 5349, 3478 ]
 allowedTCPPorts = [ 5349, 3478 ]
 allowedUDPPortRanges = [ { from = 49160, to = 49200 } ]
 
-[config.age.secrets]
-k3s-token.file = "secrets/k3s/token.age"
-syncthing-cert = { file = "secrets/vela/syncthing-cert.age", owner = "1337" }
-syncthing-key = { file = "secrets/vela/syncthing-key.age", owner = "1337" }
-
-initrd-key = { file = "secrets/vela/initrd_ed25519_key.age", owner = "1337" }
-
-id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
-id_ed25519_alt = { file = "secrets/id_ed25519_alt.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_alt" }
-id_rsa_alt = { file = "secrets/id_rsa_alt.age", owner = "1337", path = "/home/john/.ssh/id_rsa_alt" }
-
-tailscale-auth = { file = "secrets/tailscale-auth.age" }
-
-mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
-mbsync-9000 = { file = "secrets/mbsync-9000.age", owner = "1337" }
-authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
-
-restic-env = { file = "secrets/restic.age", owner = "1337" }
-restic-pw = { file = "secrets/restic-pw.age", owner = "1337" }
-ts-gh-johnae = { file = "secrets/ts-gh-johnae.age", owner = "1337" }
-ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
-
+# [config.age.secrets]
+# k3s-token.file = "secrets/k3s/token.age"
+# syncthing-cert = { file = "secrets/vela/syncthing-cert.age", owner = "1337" }
+# syncthing-key = { file = "secrets/vela/syncthing-key.age", owner = "1337" }
+# 
+# initrd-key = { file = "secrets/vela/initrd_ed25519_key.age", owner = "1337" }
+# 
+# id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
+# id_ed25519_alt = { file = "secrets/id_ed25519_alt.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_alt" }
+# id_rsa_alt = { file = "secrets/id_rsa_alt.age", owner = "1337", path = "/home/john/.ssh/id_rsa_alt" }
+# 
+# tailscale-auth = { file = "secrets/tailscale-auth.age" }
+# 
+# mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
+# mbsync-9000 = { file = "secrets/mbsync-9000.age", owner = "1337" }
+# authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
+# 
+# restic-env = { file = "secrets/restic.age", owner = "1337" }
+# restic-pw = { file = "secrets/restic-pw.age", owner = "1337" }
+# ts-gh-johnae = { file = "secrets/ts-gh-johnae.age", owner = "1337" }
+# ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
+# 
 [config.services.restic.backups.remote]
 paths = [
   "/home/john/Development",

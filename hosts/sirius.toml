@@ -101,7 +101,7 @@ role = "agent"
 after = [ "tailscale-auth.service" ]
 
 [config.services.k3s.settings]
-server = "https://polaris.tail7f302.ts.net:6443"
+server = "https://100.97.45.72:6443"
 token-file = "/run/agenix/k3s-token"
 flannel-iface = "tailscale0"
 node-ip = "$(get-iface-ip tailscale0)"
