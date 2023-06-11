@@ -80,7 +80,7 @@ gid = 1337
 [config.users.users.john]
 uid = 1337
 shell = "nushell"
-hashedPassword = "$6$08ntYtLqoNoe7GVM$wjr0gmi5F9TARJS8vAQ2lZIW.B2lJrr3QSEYqNjHv7j4nVZVclCuGr9y3ZEckmZt0Vign7il1QEBl3gqNI5m8/"
+hashedPassword = "$6$KsMc3KfrOuEPxBeo$weyZAGPXLV5sssKXAjoOpCaSXBfPX6ucRKYmDf6H7sMtCmCktPsQL2Lmfg1l209NQgGK2apn/Ag0XH6t7mwFS0"
 openssh.authorizedKeys.keys = [
   "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ==",
   "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo=",
@@ -172,27 +172,27 @@ allowedUDPPorts = [ 5349, 3478 ]
 allowedTCPPorts = [ 5349, 3478 ]
 allowedUDPPortRanges = [ { from = 49160, to = 49200 } ]
 
-[config.age.secrets]
-k3s-token.file = "secrets/k3s/token.age"
-syncthing-cert = { file = "secrets/vela/syncthing-cert.age", owner = "1337" }
-syncthing-key = { file = "secrets/vela/syncthing-key.age", owner = "1337" }
-
-initrd-key = { file = "secrets/vela/initrd_ed25519_key.age", owner = "1337" }
-
-id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
-id_ed25519_alt = { file = "secrets/id_ed25519_alt.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_alt" }
-id_rsa_alt = { file = "secrets/id_rsa_alt.age", owner = "1337", path = "/home/john/.ssh/id_rsa_alt" }
-
-tailscale-auth = { file = "secrets/tailscale-auth.age" }
-
-mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
-mbsync-9000 = { file = "secrets/mbsync-9000.age", owner = "1337" }
-authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
-
-restic-env = { file = "secrets/restic.age", owner = "1337" }
-restic-pw = { file = "secrets/restic-pw.age", owner = "1337" }
-ts-gh-johnae = { file = "secrets/ts-gh-johnae.age", owner = "1337" }
-ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
+# [config.age.secrets]
+# k3s-token.file = "secrets/k3s/token.age"
+# syncthing-cert = { file = "secrets/vela/syncthing-cert.age", owner = "1337" }
+# syncthing-key = { file = "secrets/vela/syncthing-key.age", owner = "1337" }
+# 
+# initrd-key = { file = "secrets/vela/initrd_ed25519_key.age", owner = "1337" }
+# 
+# id_ed25519_bbph = { file = "secrets/id_ed25519_bbph.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_bbph" }
+# id_ed25519_alt = { file = "secrets/id_ed25519_alt.age", owner = "1337", path = "/home/john/.ssh/id_ed25519_alt" }
+# id_rsa_alt = { file = "secrets/id_rsa_alt.age", owner = "1337", path = "/home/john/.ssh/id_rsa_alt" }
+# 
+# tailscale-auth = { file = "secrets/tailscale-auth.age" }
+# 
+# mbsync-insane = { file = "secrets/mbsync-insane.age", owner = "1337" }
+# mbsync-9000 = { file = "secrets/mbsync-9000.age", owner = "1337" }
+# authinfo = { file = "secrets/authinfo.age", owner = "1337", path = "/home/john/.authinfo" }
+# 
+# restic-env = { file = "secrets/restic.age", owner = "1337" }
+# restic-pw = { file = "secrets/restic-pw.age", owner = "1337" }
+# ts-gh-johnae = { file = "secrets/ts-gh-johnae.age", owner = "1337" }
+# ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
 
 [config.services.restic.backups.remote]
 paths = [
