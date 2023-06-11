@@ -125,6 +125,7 @@ folders."/home/john/Sync".devices = [
   "antares",
   "eris",
   "icarus",
+  "vela",
   "titan",
   "hyperion",
   "s23ultra",
@@ -134,6 +135,7 @@ folders."/home/john/Pictures".id = "pictures"
 folders."/home/john/Pictures".devices = [
   "eris",
   "antares",
+  "vela",
 ]
 folders."/home/john/Photos".id = "photos"
 folders."/home/john/Photos".devices = [
@@ -141,6 +143,7 @@ folders."/home/john/Photos".devices = [
   "antares",
   "eris",
   "icarus",
+  "vela",
   "s23ultra"
 ]
 folders."/home/john/Photos".versioning.type = "staggered"

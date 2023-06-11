@@ -86,6 +86,7 @@ folders."/home/john/Sync".devices = [
   "titan",
   "hyperion",
   "sirius",
+  "vela",
   "s23ultra",
   "s8plus"
 ]
@@ -95,7 +96,8 @@ folders."/home/john/Photos".devices = [
   "eris",
   "polaris",
   "s23ultra",
-  "sirius",
+  "vela",
+  "sirius"
 ]
 folders."/home/john/Photos".versioning.type = "staggered"
 folders."/home/john/Photos".versioning.params.cleanInterval = "3600"
