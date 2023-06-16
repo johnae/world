@@ -101,6 +101,7 @@ folders."/home/john/Sync".devices = [
   "icarus",
   "sirius",
   "vela",
+  "atlas",
   "titan",
   "hyperion",
   "s23ultra",
@@ -108,12 +109,14 @@ folders."/home/john/Sync".devices = [
 ]
 folders."/home/john/Pictures".id = "pictures"
 folders."/home/john/Pictures".devices = [
+  "atlas",
   "antares",
   "sirius",
   "vela",
 ]
 folders."/home/john/Photos".id = "photos"
 folders."/home/john/Photos".devices = [
+  "atlas",
   "antares",
   "polaris",
   "icarus",
