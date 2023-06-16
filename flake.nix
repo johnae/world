@@ -88,6 +88,8 @@
     nur.url = "github:nix-community/NUR";
     nushell.flake = false;
     nushell.url = "github:nushell/nushell/0.81.0"; # gh-release-update
+    nushell-unstable.flake = false;
+    nushell-unstable.url = "github:nushell/nushell";
     persway.inputs.dream2nix.follows = "dream2nix";
     persway.inputs.fenix.follows = "fenix";
     persway.inputs.flake-utils.follows = "flake-utils";

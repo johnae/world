@@ -94,7 +94,7 @@
       };
 
       inputs.nu = {
-        source = inputs.nushell;
+        source = inputs.nushell-unstable;
         projects.nu = {
           subsystem = "rust";
           translator = "cargo-lock";

@@ -1050,6 +1050,22 @@
         "type": "github"
       }
     },
+    "nushell-unstable": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1686904970,
+        "narHash": "sha256-GxEqDa/vFb+eeB2nfFb3vQ1P4V5Rf8V69LLSm+TSIzI=",
+        "owner": "nushell",
+        "repo": "nushell",
+        "rev": "86f12ffe619ba8ff6f64a9dc2c9db19a01c2b802",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nushell",
+        "repo": "nushell",
+        "type": "github"
+      }
+    },
     "persway": {
       "inputs": {
         "devshell": "devshell_2",
@@ -1213,6 +1229,7 @@
         "notracking": "notracking",
         "nur": "nur",
         "nushell": "nushell",
+        "nushell-unstable": "nushell-unstable",
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks",
         "ristate": "ristate",
