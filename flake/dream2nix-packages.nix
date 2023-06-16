@@ -19,7 +19,7 @@
             doCheck = false;
           };
         };
-        projects.ristate = {
+        projects.age-plugin-yubikey = {
           subsystem = "rust";
           translator = "cargo-lock";
         };
@@ -35,7 +35,7 @@
             cargoBuildFlags = ["--features pulseaudio_backend,dbus_mpris"];
           };
         };
-        projects.ristate = {
+        projects.spotifyd = {
           subsystem = "rust";
           translator = "cargo-lock";
         };
@@ -53,7 +53,7 @@
       inputs.netns-exec = {
         source = inputs.netns-exec;
         packageOverrides."^.*".addDeps.doCheck = false;
-        projects.ristate = {
+        projects.netns-exec = {
           subsystem = "rust";
           translator = "cargo-lock";
         };
@@ -62,7 +62,7 @@
       inputs.kile = {
         source = inputs.kile;
         packageOverrides."^.*".addDeps.doCheck = false;
-        projects.ristate = {
+        projects.kile = {
           subsystem = "rust";
           translator = "cargo-lock";
         };
@@ -71,7 +71,7 @@
       inputs.blur = {
         source = inputs.blur;
         packageOverrides."^.*".addDeps.doCheck = false;
-        projects.ristate = {
+        projects.blur = {
           subsystem = "rust";
           translator = "cargo-lock";
         };
@@ -87,7 +87,7 @@
             cargoBuildFlags = "--no-default-features --features conduit_bin,backend_sqlite,backend_rocksdb";
           };
         };
-        projects.ristate = {
+        projects.conduit = {
           subsystem = "rust";
           translator = "cargo-lock";
         };
