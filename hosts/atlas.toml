@@ -119,7 +119,7 @@ kube-apiserver-arg.oidc-groups-claim = "groups"
 kube-apiserver-arg.oidc-client-id = "dex-auth"
 node-label."svccontroller.k3s.cattle.io/enablelb" = "true"
 node-label."topology.kubernetes.io/region" = "hetzner"
-node-label."topology.kubernetes.io/zone" = "hetzner-fi"
+node-label."topology.kubernetes.io/zone" = "hetzner-de"
 secrets-encryption = true
 tls-san = "192.168.104.100"
 
