@@ -842,6 +842,7 @@ New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”,
 #+END_SRC
 ** Copilot
 #+BEGIN_SRC elisp
+  (use-package editorconfig)
   (use-package copilot
   :config
   (add-hook 'prog-mode-hook 'copilot-mode)
