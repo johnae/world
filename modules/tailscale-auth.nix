@@ -20,6 +20,9 @@
     ;
 
   tsAuth = config.services.tailscale.auth;
+  tsAuthScript = pkgs.writeShellScript "tsauth" ''
+    ${pkgs.tailscale}/bin/tailscale up ${concatStringsSep " " tsAuth.args}
+  '';
 in {
   options.services.tailscale.auth = {
     enable = mkEnableOption "tailscale automatic auth service";
@@ -48,14 +51,13 @@ in {
       description = "Tailscale automatic authentication";
       wantedBy = ["tailscaled.service"];
       after = ["tailscaled.service"];
+      restartTriggers = [tsAuthScript];
       serviceConfig = {
         Type = "oneshot";
         RestartSec = 10;
         Restart = "on-failure";
+        ExecStart = tsAuthScript;
       };
-      script = ''
-        ${pkgs.tailscale}/bin/tailscale up ${concatStringsSep " " tsAuth.args}
-      '';
     };
     systemd.paths.tailscale-socket = {
       wantedBy = ["tailscaled.service"];
