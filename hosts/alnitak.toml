@@ -46,6 +46,7 @@ args.advertise-tags = ["tag:server"]
 args.ssh = true
 args.accept-routes = false
 args.accept-dns = false
+args.advertise-exit-node = true
 args.auth-key = "file:/var/run/agenix/ts-gh-9k"
 
 [config.services.jae.router]
