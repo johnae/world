@@ -13,13 +13,7 @@ emacsWithPackagesFromUsePackage {
   extraEmacsPackages = epkgs: [
     epkgs.markdown-mode
     epkgs.tree-sitter
-    (epkgs.tree-sitter-langs.withPlugins (
-      p:
-        epkgs.tree-sitter-langs.plugins
-        ++ [
-          p.tree-sitter-markdown
-        ]
-    ))
+    epkgs.treesit-grammars.with-all-grammars
   ];
   package = emacsPkg;
 }
