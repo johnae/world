@@ -28,14 +28,4 @@
       value = import "${../devenv}/${file}" {inherit pkgs ansiEscape;};
     }) (builtins.readDir ../devenv);
   };
-  #perSystem = {pkgs, ...}: {
-  #  devenv.shells.default = {
-  #  };
-  #  #devShells.default = inputs.devenv.lib.mkShell {
-  #  #  inherit inputs pkgs;
-  #  #  modules = [
-  #  #    ../devenv.nix
-  #  #  ];
-  #  #};
-  #};
 }
