@@ -153,7 +153,7 @@ in {
 
   wayland.windowManager.sway = {
     enable = true;
-    systemdIntegration = true;
+    systemd.enable = true;
     config = {
       inherit fonts modifier;
       output = {
