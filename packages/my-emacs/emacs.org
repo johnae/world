@@ -1363,6 +1363,11 @@ Project tab groups build on top of project and tabs
      #+BEGIN_SRC elisp
        (use-package just-mode)
      #+END_SRC
+*** Typst
+**** The mode
+     #+BEGIN_SRC elisp
+       (use-package typst-mode)
+     #+END_SRC
 ** String inflection
 #+BEGIN_SRC elisp
   (use-package string-inflection)
