@@ -27,6 +27,10 @@
     aml.url = "github:any1/aml";
     blur.flake = false;
     blur.url = "github:johnae/blur";
+    crane.url = "github:ipetkov/crane";
+    crane.inputs.nixpkgs.follows = "nixpkgs";
+    crane.inputs.flake-utils.follows = "flake-utils";
+    crane.inputs.flake-compat.follows = "flake-compat";
     devenv.url = "github:cachix/devenv";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
     devenv.inputs.pre-commit-hooks.follows = "pre-commit-hooks";
@@ -75,8 +79,11 @@
     kured.url = "github:weaveworks/kured";
     libdisplay-info.flake = false;
     libdisplay-info.url = "git+https://gitlab.freedesktop.org/emersion/libdisplay-info.git?ref=main";
-    matrix-conduit.flake = false;
     matrix-conduit.url = "gitlab:famedly/conduit";
+    matrix-conduit.inputs.flake-utils.follows = "flake-utils";
+    matrix-conduit.inputs.nixpkgs.follows = "nixpkgs";
+    matrix-conduit.inputs.fenix.follows = "fenix";
+    matrix-conduit.inputs.crane.follows = "crane";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
     neatvnc.flake = false;
     neatvnc.url = "github:any1/neatvnc";
