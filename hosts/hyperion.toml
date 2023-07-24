@@ -50,6 +50,11 @@ enable = true
 user = "john"
 group = "users"
 openDefaultPorts = true
+cert = "/run/agenix/syncthing-cert"
+key = "/run/agenix/syncthing-key"
+dataDir = "/home/john/.local/share/syncthing-data"
+
+[config.services.syncthing.settings]
 folders."/home/john/Sync".id = "sync"
 folders."/home/john/Sync".devices = [
   "antares",
@@ -61,9 +66,6 @@ folders."/home/john/Sync".devices = [
   "sirius",
   "vela",
 ]
-cert = "/run/agenix/syncthing-cert"
-key = "/run/agenix/syncthing-key"
-dataDir = "/home/john/.local/share/syncthing-data"
 
 [config.age.secrets]
 k3s-token.file = "secrets/k3s/token.age"
