@@ -89,11 +89,16 @@ extraBackupArgs = [
 
 [config.services.syncthing]
 enable = true
-devices.s23ultra.id = "WIEQUVJ-5TNGRPN-YD4E47D-WEXXBZO-2AGHFQZ-2K4DDRB-DFSD2UZ-34OCBQ4"
-devices.s8plus.id = "EI6DXMZ-3CMM3R3-LNJPFIF-CTXDVAG-2SXLOCY-4NEEZ3K-CYJBXU6-6W44TAV"
 user = "john"
 group = "users"
 openDefaultPorts = true
+cert = "/run/agenix/syncthing-cert"
+key = "/run/agenix/syncthing-key"
+dataDir = "/home/john/.local/share/syncthing-data"
+
+[config.services.syncthing.settings]
+devices.s23ultra.id = "WIEQUVJ-5TNGRPN-YD4E47D-WEXXBZO-2AGHFQZ-2K4DDRB-DFSD2UZ-34OCBQ4"
+devices.s8plus.id = "EI6DXMZ-3CMM3R3-LNJPFIF-CTXDVAG-2SXLOCY-4NEEZ3K-CYJBXU6-6W44TAV"
 folders."/home/john/Sync".id = "sync"
 folders."/home/john/Sync".devices = [
   "antares",
@@ -128,10 +133,6 @@ folders."/home/john/Photos".versioning.type = "staggered"
 folders."/home/john/Photos".versioning.params.cleanInterval = "3600"
 folders."/home/john/Photos".versioning.params.maxAge = "0"
 folders."/home/john/Photos".versioning.params.versionsPath = "/home/john/Photos/stbackup"
-
-cert = "/run/agenix/syncthing-cert"
-key = "/run/agenix/syncthing-key"
-dataDir = "/home/john/.local/share/syncthing-data"
 
 [config.users.groups.john]
 gid = 1337

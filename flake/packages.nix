@@ -29,6 +29,8 @@
       // rec {
         inherit (pkgs.callPackage ../utils/world.nix {}) pixieboot world lint;
 
+        conduit = inputs.matrix-conduit.packages.${system}.default;
+
         wayland-122 = pkgs.wayland.overrideAttrs (oa: rec {
           pname = "wayland";
           version = "1.22.0";
