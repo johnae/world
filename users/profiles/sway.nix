@@ -345,7 +345,7 @@ in {
         "${modifier}+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle open'';
         "${modifier}+Shift+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle none'';
 
-        "${modifier}+Return" = ''exec ${pkgs.alacritty}/bin/alacritty'';
+        "${modifier}+Return" = ''exec ${pkgs.foot}/bin/foot'';
         "${modifier}+d" = ''exec ${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes "drun,run"'';
 
         "${modifier}+minus" = ''exec ${pkgs.scripts}/bin/rofi-rbw'';
@@ -353,7 +353,7 @@ in {
 
         "${modifier}+b" = ''exec ${swayBackground}/bin/sway-background'';
 
-        "${modifier}+Shift+e" = ''exec ${pkgs.alacritty}/bin/alacritty --class emacs -e emacsclient -t -a=""'';
+        "${modifier}+Shift+e" = ''exec ${pkgs.foot}/bin/foot --app-id=emacs emacsclient -t -a=""'';
 
         "${modifier}+Shift+v" = ''splith'';
 

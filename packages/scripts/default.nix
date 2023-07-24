@@ -3,7 +3,7 @@
   lib,
   writeShellApplication,
   buildEnv,
-  alacritty,
+  foot,
   fd,
   fire,
   hostname,
@@ -196,7 +196,7 @@
   mail = writeShellApplication {
     name = "mail";
     text = ''
-      exec ${alacritty}/bin/alacritty --class mail -e emacsclient -t -a="" -e '(mu4e)'
+      exec ${foot}/bin/foot --app-id=mail emacsclient -t -a="" -e '(mu4e)'
     '';
   };
 
