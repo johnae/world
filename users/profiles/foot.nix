@@ -4,7 +4,7 @@ _: {
     server.enable = true;
     settings = {
       main = {
-        font = "JetBrainsMono Nerd Font:size=8";
+        font = "JetBrainsMono Nerd Font:size=14";
         term = "foot";
         dpi-aware = "yes";
       };
