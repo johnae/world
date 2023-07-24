@@ -112,6 +112,33 @@
       }
     },
     "crane": {
+      "inputs": {
+        "flake-compat": [
+          "flake-compat"
+        ],
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": "rust-overlay"
+      },
+      "locked": {
+        "lastModified": 1688772518,
+        "narHash": "sha256-ol7gZxwvgLnxNSZwFTDJJ49xVY5teaSvF7lzlo3YQfM=",
+        "owner": "ipetkov",
+        "repo": "crane",
+        "rev": "8b08e96c9af8c6e3a2b69af5a7fa168750fcf88e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipetkov",
+        "repo": "crane",
+        "type": "github"
+      }
+    },
+    "crane_2": {
       "flake": false,
       "locked": {
         "lastModified": 1681175776,
@@ -218,7 +245,7 @@
     "dream2nix_legacy": {
       "inputs": {
         "all-cabal-json": "all-cabal-json",
-        "crane": "crane",
+        "crane": "crane_2",
         "devshell": "devshell",
         "drv-parts": "drv-parts",
         "flake-compat": [
@@ -751,13 +778,26 @@
       }
     },
     "matrix-conduit": {
-      "flake": false,
+      "inputs": {
+        "crane": [
+          "crane"
+        ],
+        "fenix": [
+          "fenix"
+        ],
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1689519284,
-        "narHash": "sha256-C46+7N71/THMkhyfxzHodm1N89w3GDbYat+mn32QjV4=",
+        "lastModified": 1690104221,
+        "narHash": "sha256-aaIu+12WJ7+UB2rL+B3r2i20liktbbZJZ8TY0MlWAEo=",
         "owner": "famedly",
         "repo": "conduit",
-        "rev": "e9946f81a09b02b12062e2cb999d6836e467e2d7",
+        "rev": "1e560529d8aa95503f5e037576ec64500eb16881",
         "type": "gitlab"
       },
       "original": {
@@ -1199,6 +1239,7 @@
         "alejandra": "alejandra",
         "aml": "aml",
         "blur": "blur",
+        "crane": "crane",
         "devenv": "devenv",
         "dream2nix_legacy": "dream2nix_legacy",
         "emacs-copilot": "emacs-copilot",
@@ -1263,6 +1304,31 @@
         "owner": "rust-lang",
         "ref": "nightly",
         "repo": "rust-analyzer",
+        "type": "github"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "flake-utils": [
+          "crane",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "crane",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1688351637,
+        "narHash": "sha256-CLTufJ29VxNOIZ8UTg0lepsn3X03AmopmaLTTeHDCL4=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "f9b92316727af9e6c7fee4a761242f7f46880329",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
         "type": "github"
       }
     },
