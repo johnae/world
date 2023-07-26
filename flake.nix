@@ -99,7 +99,7 @@
     notracking.url = "github:notracking/hosts-blocklists";
     nur.url = "github:nix-community/NUR";
     nushell.flake = false;
-    nushell.url = "github:nushell/nushell/0.82.0"; # gh-release-update
+    nushell.url = "github:nushell/nushell/0.83.0"; # gh-release-update
     nushell-unstable.flake = false;
     nushell-unstable.url = "github:nushell/nushell";
     persway.inputs.dream2nix.follows = "dream2nix_legacy";
