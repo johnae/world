@@ -224,12 +224,6 @@ passwordFile = "/run/agenix/restic-pw"
 initialize = true
 timerConfig.OnCalendar = "*-*-* *:00:00"
 timerConfig.RandomizedDelaySec = "5m"
-pruneOpts = [
-  "--keep-daily 10",
-  "--keep-weekly 7",
-  "--keep-monthly 12",
-  "--keep-yearly 75"
-]
 extraBackupArgs = [
   "--exclude=\".direnv\"",
   "--exclude=\".terraform\"",
