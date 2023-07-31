@@ -236,7 +236,7 @@ let carapace_completer = { |spans|
 }
 
 # The default config record. This is where much of your global configuration is setup.
-let-env config = {
+$env.config = {
   ls: {
     use_ls_colors: true
   }

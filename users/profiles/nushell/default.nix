@@ -6,6 +6,7 @@
 }: let
   inherit (config) home;
 in {
+  programs.direnv.enableNushellIntegration = false;
   programs.nushell = {
     enable = true;
     package = pkgs.nushell;
@@ -15,7 +16,7 @@ in {
   xdg.configFile."nushell/starship.nu".source = ./starship.nu;
   xdg.configFile."nushell/home.nu".source = pkgs.writeText "home.nu" ''
     ${
-      lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "let-env ${name} = \"${value}\"") home.sessionVariables)
+      lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "$env.${name} = \"${value}\"") home.sessionVariables)
     }
   '';
 }
