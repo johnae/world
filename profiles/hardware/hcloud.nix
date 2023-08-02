@@ -28,6 +28,7 @@
     settings.trusted-users = ["root"];
     extraOptions = ''
       experimental-features = nix-command flakes
+      accept-flake-config = true
       keep-outputs = true
       keep-derivations = true
       tarball-ttl = 900
