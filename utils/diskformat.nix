@@ -4,7 +4,7 @@
   writeShellApplication,
   ...
 }: let
-  inherit (lib) mapAttrsToList listToAttrs splitString concatStringsSep last flatten;
+  inherit (lib) attrByPath mapAttrsToList listToAttrs splitString concatStringsSep last flatten;
   inherit (builtins) filter match head foldl' replaceStrings;
   inherit (config.config) boot cryptsetup btrfs machinePurpose disk;
   bootMode =
@@ -31,7 +31,7 @@
   efiSpace = "500M";
   luksKeySpace = "20M";
   ramGb = "$(free --giga | tail -n+2 | head -1 | awk '{print $2}')";
-  uuidCryptKey = config.config.boot.initrd.luks.devices.cryptkey.keyFile != null;
+  uuidCryptKey = (attrByPath ["config" "boot" "initrd" "luks" "devices" "cryptkey" "keyFile"] null config) != null;
   subvolumes = lib.unique (
     filter (v: v != null)
     (

@@ -14,23 +14,26 @@
         value // {file = ../. + "/${value.file}";}
     );
     "users.users" = mapAttrs (
-      _: value:
-        value
-        // {
-          shell =
-            if hasAttr "shell" value
-            then pkgs.${value.shell}
-            else pkgs.bash;
-          extraGroups =
-            if hasAttr "extraGroups" value
-            then value.extraGroups
-            else ["wheel" "docker" "video" "audio" "kvm" "libvirtd"];
-        }
-        // (
-          if hasAttr "isSystemUser" value
-          then {}
-          else {isNormalUser = true;}
-        )
+      name: value:
+        if name == "root"
+        then value
+        else
+          value
+          // {
+            shell =
+              if hasAttr "shell" value
+              then pkgs.${value.shell}
+              else pkgs.bash;
+            extraGroups =
+              if hasAttr "extraGroups" value
+              then value.extraGroups
+              else ["wheel" "docker" "video" "audio" "kvm" "libvirtd"];
+          }
+          // (
+            if hasAttr "isSystemUser" value
+            then {}
+            else {isNormalUser = true;}
+          )
     );
   };
   ## really just does package interpolation... sort of - needs a bit of further work really
