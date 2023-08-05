@@ -316,11 +316,11 @@
     "emacs-copilot": {
       "flake": false,
       "locked": {
-        "lastModified": 1691026260,
-        "narHash": "sha256-ilOW38IbYIA8BkWQLZtEAEdgpnjXn1RTgx1R5rY/rqo=",
+        "lastModified": 1691128218,
+        "narHash": "sha256-TgSi65gQ/cnYq+SuRcn4o4Sf4nNaV3wXF8kSRR+ilpw=",
         "owner": "zerolfx",
         "repo": "copilot.el",
-        "rev": "d7f3f37010cd621639bbdf60ad45ff28787074b6",
+        "rev": "6f3eb755b5baafbdc357a8d4905ec8017cea9210",
         "type": "github"
       },
       "original": {
@@ -340,11 +340,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1691088406,
-        "narHash": "sha256-MacU7lB/uQ9H1KJkylj7Q1ni6MwkewP3k2Qiapvbc4w=",
+        "lastModified": 1691174294,
+        "narHash": "sha256-z1HCdhgjTcDPxB2Qee/qI47rhbG8r2tS4K2QvZ59T0Q=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "712480410743739b4739652245a1fae4cf9ec38d",
+        "rev": "a0928a82ae68f4697f39c6e0ffcba763ea02a66b",
         "type": "github"
       },
       "original": {
@@ -361,11 +361,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1691043645,
-        "narHash": "sha256-wXOLZo2JQJ8n1W7mpjllSlMljDi4mgMp/xXLhDXg1ag=",
+        "lastModified": 1691130041,
+        "narHash": "sha256-Ikwndx1YOsoUAY7TEp4kH0UVnXBuhLeLkTl/Fpimi6g=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "45c7cfd05e8d5899641f032ce99e0e64e8d9e6b1",
+        "rev": "4322b4dc010b4ba7a2e4df49f8939e872473e4a7",
         "type": "github"
       },
       "original": {
@@ -668,11 +668,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1691039228,
-        "narHash": "sha256-iPNZJ1LvfUf1Y456ewC0DXgf99TNssG8OLObOyqxO6M=",
+        "lastModified": 1691143977,
+        "narHash": "sha256-zXHmmghQdDLecVxFedRxSny4FtVH9lig1/BKObsHwfg=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "86dd48d70a2e2c17e84e747ba4faa92453e68d4a",
+        "rev": "15043a65915bcc16ad207d65b202659e4988066b",
         "type": "github"
       },
       "original": {
@@ -933,11 +933,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1690957133,
-        "narHash": "sha256-0Y4CiOIszhHDDXHFmvHUpmhUotKOIn0m3jpMlm6zUTE=",
+        "lastModified": 1691179816,
+        "narHash": "sha256-WSMwqzU70ZMRHv1CUAfHEEKJuB0c9c9r0F+lJehXfSI=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "24f9162b26f0debd163f6d94752aa2acb9db395a",
+        "rev": "87e3122b67587492a617764f88c71991893fcf8a",
         "type": "github"
       },
       "original": {
@@ -998,11 +998,11 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1690927903,
-        "narHash": "sha256-D5gCaCROnjEKDOel//8TO/pOP87pAEtT0uT8X+0Bj/U=",
+        "lastModified": 1691065946,
+        "narHash": "sha256-IVSh42Q3oJwUjgLKMdzH5fMx+fk1z3V735gK1Izj1Zw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "bd836ac5e5a7358dea73cb74a013ca32864ccb86",
+        "rev": "e9ca92b55bed47696cc7cc25d3f854a1e2e01f86",
         "type": "github"
       },
       "original": {
@@ -1061,11 +1061,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1691109630,
-        "narHash": "sha256-NkltnE+ZMABNP7pJVj7ftu/58aTGa5PXxICLr8fjkI4=",
+        "lastModified": 1691189083,
+        "narHash": "sha256-NZclZz5CS73KnsEV0m7fBO5eqiJPYfJJbpbTwu3PZeM=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "dcd922e7738fc027c73cd2cc110015d38fba9651",
+        "rev": "f69327fecbc536fc8fa155ee28f422a7841494eb",
         "type": "github"
       },
       "original": {
@@ -1094,11 +1094,11 @@
     "nushell-unstable": {
       "flake": false,
       "locked": {
-        "lastModified": 1691092332,
-        "narHash": "sha256-HQoTLmwBtndvcyK1FOj8K4SeN1hd3p216jGeh0+ktHc=",
+        "lastModified": 1691181815,
+        "narHash": "sha256-mIaAiuKEgvYDNYu19bUzQq+N/l2DS4Chcqaovi/kQ/c=",
         "owner": "nushell",
         "repo": "nushell",
-        "rev": "a98b3124c52262d0a72c4d009cfc86ee0977bb0d",
+        "rev": "f61503893835f777c1ade71ec76a6b07fcf818f2",
         "type": "github"
       },
       "original": {
