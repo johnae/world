@@ -32,6 +32,26 @@
     ext4.enable = false;
     btrfs.enable = false;
     network.enable = false;
+    settings = {
+      cloud_init_modules = lib.mkForce [
+        "write-files"
+      ];
+      cloud_config_modules = lib.mkForce [
+        "timezone"
+        "ssh-import-id"
+        "ssh"
+      ];
+      cloud_final_modules = lib.mkForce [
+        "scripts-vendor"
+        "scripts-per-once"
+        "scripts-per-boot"
+        "scripts-per-instance"
+        "scripts-user"
+        "ssh-authkey-fingerprints"
+        "final-message"
+        "power-state-change"
+      ];
+    };
   };
 
   nix = {
