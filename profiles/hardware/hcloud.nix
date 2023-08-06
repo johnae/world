@@ -26,6 +26,14 @@
   networking.hostName = hostName;
   services.openssh.enable = true;
 
+  services.cloud-init = {
+    enable = true;
+    xfs.enable = false;
+    ext4.enable = false;
+    btrfs.enable = false;
+    network.enable = false;
+  };
+
   nix = {
     settings.trusted-users = ["root"];
     extraOptions = ''
