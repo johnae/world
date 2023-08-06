@@ -32,3 +32,6 @@ upgrade flake="github:johnae/world":
 # build the system using given flake ref
 build flake="github:johnae/world":
   @nixos-rebuild build --flake '{{flake}}' --use-remote-sudo -L
+
+echo +args:
+  @echo '{{args}}'
