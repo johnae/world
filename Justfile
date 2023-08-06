@@ -26,9 +26,9 @@ cachix +args:
 # upgrade the system using given flake ref
 upgrade flake="github:johnae/world":
   @rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
-  @nixos-rebuild boot --flake {{flake}} --use-remote-sudo -L
-  @if (echo initrd kernel kernel-modules | all { |it| (readlink $"/run/booted-system/($it)") != (readlink $"/nix/var/nix/profiles/system/($it)") }) { echo "The system must be rebooted for the changes to take effect" } else { nixos-rebuild switch --flake {{flake}} --use-remote-sudo -L }
+  @nixos-rebuild boot --flake '{{flake}}' --use-remote-sudo -L
+  @if (echo initrd kernel kernel-modules | all { |it| (readlink $"/run/booted-system/($it)") != (readlink $"/nix/var/nix/profiles/system/($it)") }) { echo "The system must be rebooted for the changes to take effect" } else { nixos-rebuild switch --flake '{{flake}}' --use-remote-sudo -L }
 
 # build the system using given flake ref
 build flake="github:johnae/world":
-  @nixos-rebuild build --flake {{flake}} --use-remote-sudo -L
+  @nixos-rebuild build --flake '{{flake}}' --use-remote-sudo -L
