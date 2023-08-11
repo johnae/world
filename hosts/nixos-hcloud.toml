@@ -4,6 +4,7 @@ system = "x86_64-linux"
 
 profiles = [
   "profiles/hardware/hcloud",
+  "profiles/hcloud-k3s-core",
 ]
 
 [config.users.users.root]
