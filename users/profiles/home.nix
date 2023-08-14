@@ -8,7 +8,7 @@ in {
   home.packages = with pkgs; [
     alejandra
     audacity
-    azure-cli
+    # azure-cli
     cachix
     carapace
     element-desktop-wayland
