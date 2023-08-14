@@ -33,7 +33,6 @@ args.auth-key = "file:/var/run/agenix/ts-9k"
 [config.services.k3s]
 enable = true
 role = "server"
-disableAgent = true
 after = [ "tailscale-auth.service" ]
 
 [config.services.k3s.settings]
@@ -57,6 +56,7 @@ node-label."svccontroller.k3s.cattle.io/enablelb" = "true"
 node-label."topology.kubernetes.io/region" = "hetzner"
 node-label."topology.kubernetes.io/zone" = "hetzner-fi"
 secrets-encryption = true
+node-taint = "CriticalAddonsOnly=true:NoExecute"
 tls-san = ["k8s-master-0", "k8s-master-0.taileb01.ts.net","k8s-master-1", "k8s-master-1.taileb01.ts.net","k8s-master-2", "k8s-master-2.taileb01.ts.net"]
 
 [config.services.k3s.autoDeploy]
