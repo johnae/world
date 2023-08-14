@@ -23,7 +23,6 @@
   boot.tmp.cleanOnBoot = true;
   boot.growPartition = true;
   zramSwap.enable = true;
-  networking.hostName = hostName;
   services.openssh.enable = true;
 
   nix = {
