@@ -28,6 +28,7 @@
   services.cloud-init.enable = true;
   services.cloud-init.network.enable = true;
   networking.dhcpcd.enable = false; ## we're using cloud-init
+  networking.hostName = hostName;
 
   nix = {
     settings.trusted-users = ["root"];
