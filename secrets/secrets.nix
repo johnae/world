@@ -36,8 +36,10 @@ let
   secretsList = unique (flatten (map (host: map (s: toLocalSecretPath s.file) (attrValues host.age.secrets)) hostsWithSecrets));
 
   mapSecretToPublicKeys = secret:
-    map (host: host.publicKey)
-    (filter (host: any (s: secret == toLocalSecretPath s.file) (attrValues host.age.secrets)) hostsWithSecrets);
+    unique (
+      map (host: host.publicKey)
+      (filter (host: any (s: secret == toLocalSecretPath s.file) (attrValues host.age.secrets)) hostsWithSecrets)
+    );
 
   johnae = [
     "age1yubikey1qt7cjux5unxcsrw9dnkq8qsh0jgnwwvxzxm2jn2pxetjchtclmlk6xvpckq"
