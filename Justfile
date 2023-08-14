@@ -14,7 +14,7 @@ search query:
 
 # open a shell with given packages available
 shell +args:
-  @nix shell (echo {{args}} | each { |it| $"nixpkgs#($it)" } )
+  @nix shell (echo '{{args}}' | each { |it| if ($it | str contains '#') { $it } else { $"nixpkgs#($it)" } } )
 
 # garbage collect the system
 gc:
