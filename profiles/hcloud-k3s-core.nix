@@ -12,6 +12,4 @@
     pkgs.kubectl
     pkgs.tailscale
   ];
-
-  services.cloud-init.enable = true;
 }

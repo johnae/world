@@ -25,6 +25,9 @@
   zramSwap.enable = true;
   services.openssh.enable = true;
 
+  services.cloud-init.enable = true;
+  networking.dhcpcd.enable = false; ## we're using cloud-init
+
   nix = {
     settings.trusted-users = ["root"];
     extraOptions = ''
