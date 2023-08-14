@@ -1089,6 +1089,8 @@ Project tab groups build on top of project and tabs
     (add-to-list 'eglot-server-programs '(terraform-mode .
                                                          ("terraform-ls" "serve")))
 
+    (add-to-list 'eglot-server-programs '(nickel-mode .
+                                                       ("nls")))
     (add-hook 'eglot-managed-mode-hook #'jae/eglot-hook)
     :hook
     (
@@ -1097,6 +1099,7 @@ Project tab groups build on top of project and tabs
      (go-mode . eglot-ensure)
      (nix-mode . eglot-ensure)
      (terraform-mode . eglot-ensure)
+     (nickel-mode . eglot-ensure)
     )
   )
 #+END_SRC
@@ -1368,6 +1371,12 @@ Project tab groups build on top of project and tabs
      #+BEGIN_SRC elisp
        (use-package typst-mode)
      #+END_SRC
+*** Nickel
+**** The mode
+     #+BEGIN_SRC elisp
+       (use-package nickel-mode)
+     #+END_SRC
+
 ** String inflection
 #+BEGIN_SRC elisp
   (use-package string-inflection)
