@@ -129,7 +129,7 @@ in {
       '';
       serviceConfig.ExecStart = lib.mkForce (concatStringsSep " " (
         [
-          "${pkgs.bash}/bin/bash -c \"exec "
+          "${pkgs.bash}/bin/bash -c \"EXTRA_ARGS=\\\"--node-name $(hostname)\\\"; if [ -e /etc/unique-hostname ]; then EXTRA_ARGS=\\\"--node-name $(cat /etc/unique-hostname)\\\"; fi; exec "
         ]
         ++ [
           "${cfg.package}/bin/k3s ${cfg.role}"
@@ -140,6 +140,7 @@ in {
         ++ (optional (cfg.token != "") "--token ${cfg.token}")
         ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
         ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
+        ++ ["$EXTRA_ARGS"]
         ++ [cfg.extraFlags]
         ++ ["\""]
       ));

@@ -21,7 +21,11 @@
 
   tsAuth = config.services.tailscale.auth;
   tsAuthScript = pkgs.writeShellScript "tsauth" ''
-    ${pkgs.tailscale}/bin/tailscale up ${concatStringsSep " " tsAuth.args}
+    EXTRA_ARGS="--hostname $(hostname)"
+    if [ -e /etc/unique-hostname ]; then
+      EXTRA_ARGS="--hostname $(cat /etc/unique-hostname)"
+    fi
+    ${pkgs.tailscale}/bin/tailscale up ${concatStringsSep " " tsAuth.args} $EXTRA_ARGS
   '';
 in {
   options.services.tailscale.auth = {
