@@ -1,7 +1,7 @@
 system = "x86_64-linux"
 
 [config]
-publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICtpUviPI+CRX0LbUxz3nVE4dAsuMCqb6gYqf293tYoI"
+publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH94CfBpOmh++ESfKq5oY1xeRxtOexFBl8AOxyPYBk6U"
 
 profiles = [
   "profiles/hardware/hcloud",
