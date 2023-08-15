@@ -55,9 +55,8 @@ in {
       serviceConfig = {
         Type = "oneshot";
         RestartSec = 10;
-        StartLimitInterval = 10;
-        StartLimitBurst = 5;
         Restart = "on-failure";
+        RemainAfterExit = "yes";
         ExecStart = tsAuthScript;
       };
     };
