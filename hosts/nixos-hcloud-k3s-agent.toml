@@ -6,6 +6,7 @@ publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH94CfBpOmh++ESfKq5oY1xeRxtOexF
 profiles = [
   "profiles/hardware/hcloud",
   "profiles/hcloud-k3s-core",
+  "profiles/hcloud-k3s-fs",
   "profiles/tailscale",
 ]
 
