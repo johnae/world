@@ -1,7 +1,7 @@
 {
   fileSystems."/data" = {
     encrypted = {
-      label = "cryptdata";
+      label = "data";
       keyFile = "/sys/class/dmi/id/product_uuid";
       enable = true;
       blkDev = "/dev/sdb";
