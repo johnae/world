@@ -37,7 +37,7 @@ role = "server"
 after = [ "tailscale-auth.service" ]
 
 [config.services.k3s.settings]
-server = "https://k8s-master-0.taileb01.ts.net:6443"
+server = "https://k8s-master-0:6443"
 token-file = "/run/agenix/k3s-token"
 flannel-iface = "tailscale0"
 node-ip = "$(get-iface-ip tailscale0)"
