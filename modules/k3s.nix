@@ -103,8 +103,25 @@ in {
   config = mkIf cfg.enable {
     assertions = mkForce [];
     services.k3s.extraFlags = concatStringsSep " " (sort lessThan (settingsToCli cfg.settings));
-    systemd.services.k3s = {
-      path = [getIfaceIp];
+    systemd.services.k3s = let
+      k3s = pkgs.writeShellApplication {
+        name = "k3s";
+        runtimeInputs = with pkgs; [getIfaceIp];
+        text =
+          concatStringsSep " "
+          ([
+              "exec ${cfg.package}/bin/k3s ${cfg.role}"
+            ]
+            ++ (optional cfg.clusterInit "--cluster-init")
+            ++ (optional cfg.disableAgent "--disable-agent")
+            ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
+            ++ (optional (cfg.token != "") "--token ${cfg.token}")
+            ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
+            ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
+            ++ [cfg.extraFlags]);
+      };
+    in {
+      after = ["network-online.service" "firewall.service"] ++ cfg.after;
       preStart = ''
         rm -f ${containerdConfigDir}/config.toml.tmpl
         ${
@@ -127,26 +144,10 @@ in {
           else ""
         }
       '';
-      serviceConfig.ExecStart = lib.mkForce (concatStringsSep " " (
-        [
-          "${pkgs.bash}/bin/bash -c \"exec "
-        ]
-        ++ [
-          "${cfg.package}/bin/k3s ${cfg.role}"
-        ]
-        ++ (optional cfg.clusterInit "--cluster-init")
-        ++ (optional cfg.disableAgent "--disable-agent")
-        ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
-        ++ (optional (cfg.token != "") "--token ${cfg.token}")
-        ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
-        ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
-        ++ [cfg.extraFlags]
-        ++ ["\""]
-      ));
+      serviceConfig.ExecStart = lib.mkForce "${k3s}/bin/k3s";
     };
     ## Random fixes and hacks for k3s networking
     ## see: https://github.com/NixOS/nixpkgs/issues/98766
     boot.kernelModules = ["br_netfilter" "ip_conntrack" "ip_vs" "ip_vs_rr" "ip_vs_wrr" "ip_vs_sh" "overlay"];
-    systemd.services.k3s.after = ["network-online.service" "firewall.service"] ++ cfg.after;
   };
 }
