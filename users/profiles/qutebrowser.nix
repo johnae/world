@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   programs.qutebrowser = {
     enable = true;
-    package = pkgs.qutebrowser-qt6;
+    package = pkgs.qutebrowser;
     searchEngines = {
       w = "https://en.wikipedia.org/wiki/Special:Search?search={}&go=Go&ns0=1";
       aw = "https://wiki.archlinux.org/?search={}";
