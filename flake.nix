@@ -59,7 +59,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-utils.url = "github:numtide/flake-utils";
     fluxcd-install.flake = false;
-    fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v2.0.1/install.yaml"; # gh-release-update
+    fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v2.1.0/install.yaml"; # gh-release-update
     git-branchless.flake = false;
     git-branchless.url = "github:arxanas/git-branchless";
     google-cloud-sdk-fish-completion.flake = false;
@@ -99,7 +99,7 @@
     notracking.url = "github:notracking/hosts-blocklists";
     nur.url = "github:nix-community/NUR";
     nushell.flake = false;
-    nushell.url = "github:nushell/nushell/0.83.1"; # gh-release-update
+    nushell.url = "github:nushell/nushell/0.84.0"; # gh-release-update
     nushell-unstable.flake = false;
     nushell-unstable.url = "github:nushell/nushell";
     persway.inputs.dream2nix.follows = "dream2nix_legacy";
