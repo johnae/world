@@ -65,7 +65,7 @@
 in {
   home.packages = [pomodoro];
   programs.waybar.enable = true;
-  programs.waybar.package = pkgs.my-package;
+  programs.waybar.package = pkgs.my-waybar;
   programs.waybar.settings.mainBar = {
     bar_id = "main";
     ipc = true;
