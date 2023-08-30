@@ -79,7 +79,7 @@ in {
           "swayidle"
           "swaylock"
           "swaylock-dope"
-          "waybar"
+          "my-waybar"
           "wayland-protocols-master"
           "wayland120"
           "wl-cliboard"

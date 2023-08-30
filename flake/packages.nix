@@ -40,6 +40,11 @@
           };
         });
 
+        my-waybar = pkgs.waybar.overrideAttrs (oa: rec {
+          wlroots = wlroots-master;
+          inherit sway;
+        });
+
         wayland-protocols-master = pkgs.callPackage ../packages/wayland-protocols-master {
           wayland = wayland-122;
         };
