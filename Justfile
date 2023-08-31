@@ -16,6 +16,10 @@ search query:
 shell +args:
   @nix shell (echo '{{args}}' | each { |it| if ($it | str contains '#') { $it } else { $"nixpkgs#($it)" } } )
 
+# open a shell with given packages available allowing unfree packages
+shell-unfree +args:
+  @with-env [NIXPKGS_ALLOW_UNFREE 1] { nix shell --impure (echo '{{args}}' | each { |it| if ($it | str contains '#') { $it } else { $"nixpkgs#($it)" } } ) }
+
 # garbage collect the system
 gc:
   @nix-collect-garbage -d
