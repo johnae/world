@@ -158,20 +158,6 @@ folders."/home/john/Sync".devices = [
   "s23ultra",
   "s8plus"
 ]
-folders."/home/john/Photos".id = "photos"
-folders."/home/john/Photos".devices = [
-  "antares",
-  "atlas",
-  "eris",
-  "icarus",
-  "sirius",
-  "vela",
-  "s23ultra"
-]
-folders."/home/john/Photos".versioning.type = "staggered"
-folders."/home/john/Photos".versioning.params.cleanInterval = "3600"
-folders."/home/john/Photos".versioning.params.maxAge = "0"
-folders."/home/john/Photos".versioning.params.versionsPath = "/home/john/Photos/stbackup"
 
 [config.networking]
 defaultGateway = "65.108.2.129"
