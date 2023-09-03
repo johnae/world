@@ -17,10 +17,9 @@
     options = ["bind"];
   };
   fileSystems."/etc/ssh" = {
-    device = "/data/etc-ssh";
-    fsType = "none";
-    autoFormat = false;
-    options = ["bind"];
+    device = "none";
+    fsType = "tmpfs";
+    options = ["defaults" "size=2M" "mode=755"];
   };
   fileSystems."/var/lib/tailscale" = {
     device = "/data/tailscale";
