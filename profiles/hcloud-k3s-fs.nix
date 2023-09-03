@@ -16,11 +16,6 @@
     autoFormat = false;
     options = ["bind"];
   };
-  fileSystems."/etc/ssh" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = ["defaults" "size=2M" "mode=755"];
-  };
   fileSystems."/var/lib/tailscale" = {
     device = "/data/tailscale";
     fsType = "none";

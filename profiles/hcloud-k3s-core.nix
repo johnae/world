@@ -13,4 +13,9 @@
     pkgs.tailscale
     pkgs.cryptsetup
   ];
+  fileSystems."/etc/ssh" = {
+    device = "none";
+    fsType = "tmpfs";
+    options = ["defaults" "size=2M" "mode=755"];
+  };
 }
