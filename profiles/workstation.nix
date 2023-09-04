@@ -91,7 +91,7 @@
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-wlr pkgs.xdg-desktop-portal-gtk];
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     emacs-all-the-icons-fonts
     etBook
     font-awesome_5
