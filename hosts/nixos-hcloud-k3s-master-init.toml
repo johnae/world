@@ -25,8 +25,8 @@ ts-9k = { file = "secrets/ts-9k.age", owner = "1337" }
 #flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
 #sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
 #cluster-secrets = { file = "secrets/k3s/cluster-secrets.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml" }
-hetzner-csi-encryption-secret = { file = "secrets/k3s/hetzner-csi-encryption-secret.yaml.age", path = "var/lib/rancher/k3s/server/manifests/hetzner-csi-encryption-secret.yaml" }
-hetzner-api-secret = { file = "secrets/k3s/hetzner-api-secret.yaml.age", path = "var/lib/rancher/k3s/server/manifests/hetzner-api-secret.yaml" }
+hetzner-csi-encryption-secret = { file = "secrets/k3s/hetzner-csi-encryption-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/hetzner-csi-encryption-secret.yaml" }
+hetzner-api-secret = { file = "secrets/k3s/hetzner-api-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/hetzner-api-secret.yaml" }
  
 [config.services.tailscale.auth]
 enable = true
