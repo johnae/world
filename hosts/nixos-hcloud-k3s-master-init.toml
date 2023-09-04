@@ -21,6 +21,12 @@ openssh.authorizedKeys.keys = [
 [config.age.secrets]
 k3s-token.file = "secrets/k3s/token.age"
 ts-9k = { file = "secrets/ts-9k.age", owner = "1337" }
+
+#flux-system-secret = { file = "secrets/k3s/flux-system-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/flux-system-secret.yaml" }
+#sops-age-secret = { file = "secrets/k3s/sops-age-secret.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/sops-age-secret.yaml" }
+#cluster-secrets = { file = "secrets/k3s/cluster-secrets.yaml.age", path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml" }
+hetzner-csi-encryption-secret = { file = "secrets/k3s/hetzner-csi-encryption-secret.yaml.age", path = "var/lib/rancher/k3s/server/manifests/hetzner-csi-encryption-secret.yaml" }
+hetzner-api-secret = { file = "secrets/k3s/hetzner-api-secret.yaml.age", path = "var/lib/rancher/k3s/server/manifests/hetzner-api-secret.yaml" }
  
 [config.services.tailscale.auth]
 enable = true
@@ -62,6 +68,7 @@ tls-san = ["k8s-master-0", "k8s-master-0.taileb01.ts.net","k8s-master-1", "k8s-m
 [config.services.k3s.autoDeploy]
 kured = "${pkgs.kured-yaml}/kured.yaml"
 flux = "${pkgs.fluxcd-yaml}/flux.yaml"
+hetzner-csi-driver = "${pkgs.hetzner-csi-driver-yaml}/hetzner-csi-driver.yaml"
 
 [config.services.k3s.autoDeploy.cluster-vars]
 apiVersion = "v1"
@@ -200,3 +207,14 @@ roleRef.name = "cluster-read-all"
 subjects = [
   { apiGroup = "rbac.authorization.k8s.io", kind = "Group", name = "9k-dev:Viewers" }
 ]
+
+[config.services.k3s.autoDeploy.encrypted-storage-class]
+apiVersion = "storage.k8s.io/v1"
+kind = "StorageClass"
+metadata.name = "hcloud-volumes-encrypted"
+provisioner = "csi.hetzner.cloud"
+reclaimPolicy = "Delete"
+volumeBindingMode = "WaitForFirstConsumer"
+allowVolumeExpansion = true
+parameters."csi.storage.k8s.io/node-publish-secret-name" = "encryption-secret"
+parameters."csi.storage.k8s.io/node-publish-secret-namespace" = "kube-system"

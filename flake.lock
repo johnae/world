@@ -640,6 +640,18 @@
         "type": "github"
       }
     },
+    "hetzner-csi-driver": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-Q4NZ9zpMLskWslOaqbapmT0Fu1nQ+//6uMAOI/ZLH9w=",
+        "type": "file",
+        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.3.2/deploy/kubernetes/hcloud-csi.yml"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.3.2/deploy/kubernetes/hcloud-csi.yml"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -1255,6 +1267,7 @@
         "google-cloud-sdk-fish-completion": "google-cloud-sdk-fish-completion",
         "grim": "grim",
         "headscale": "headscale",
+        "hetzner-csi-driver": "hetzner-csi-driver",
         "home-manager": "home-manager_2",
         "hwdata": "hwdata",
         "kile": "kile",

@@ -9,6 +9,10 @@
     ...
   }: {
     packages = {
+      hetzner-csi-driver-yaml = pkgs.runCommand "hetzner-csi-driver.yaml" {} ''
+        mkdir -p $out
+        cp ${inputs.hetzner-csi-driver} $out/hetzner-csi-driver.yaml
+      '';
       kured-yaml = pkgs.runCommand "kured.yaml" {} ''
         cp ${inputs.kured}/kured-ds.yaml .
         cp ${inputs.kured}/kured-rbac.yaml .
