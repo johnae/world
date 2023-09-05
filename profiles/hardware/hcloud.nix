@@ -27,6 +27,18 @@
 
   services.cloud-init.enable = true;
   services.cloud-init.network.enable = true;
+
+  services.cloud-init.settings.cloud_config_modules = lib.mkForce [
+    "disk_setup"
+    "mounts"
+    "ssh-import-id"
+    "set-passwords"
+    "timezone"
+    "disable-ec2-metadata"
+    "runcmd"
+    ["ssh" "always"]
+  ];
+
   networking.dhcpcd.enable = false; ## we're using cloud-init
   networking.hostName = "";
   networking.useNetworkd = true;
