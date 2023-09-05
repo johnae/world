@@ -35,7 +35,7 @@
     "set-passwords"
     "timezone"
     "disable-ec2-metadata"
-    "runcmd"
+    ["runcmd" "always"]
     ["ssh" "always"]
   ];
 
