@@ -3,7 +3,6 @@
   lib,
   writeShellApplication,
   buildEnv,
-  foot,
   fd,
   fire,
   hostname,
@@ -193,13 +192,6 @@
     '';
   };
 
-  mail = writeShellApplication {
-    name = "mail";
-    text = ''
-      exec ${foot}/bin/foot --app-id=mail emacsclient -t -a="" -e '(mu4e)'
-    '';
-  };
-
   add-wifi-network = writeShellApplication {
     name = "add-wifi-network";
     runtimeInputs = [wpa_supplicant pass update-wifi-networks];
@@ -233,7 +225,6 @@ in
     paths = [
       add-wifi-network
       launch
-      mail
       nixos-upgrade
       project-select
       rbw-git-creds
