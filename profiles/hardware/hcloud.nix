@@ -6,7 +6,13 @@
   config,
   lib,
   ...
-}: {
+}: let
+  inherit (lib // builtins) hasAttr length attrNames filterAttrs mkIf;
+  hasState =
+    hasAttr "state" config.environment
+    && (length (attrNames config.environment.state)) > 0;
+  hasSecrets = config.age.secrets != {};
+in {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     ../../cachix.nix
@@ -25,21 +31,7 @@
   zramSwap.enable = true;
   services.openssh.enable = true;
 
-  services.cloud-init.enable = true;
-  services.cloud-init.network.enable = true;
-
-  services.cloud-init.settings.cloud_config_modules = lib.mkForce [
-    "disk_setup"
-    "mounts"
-    "ssh-import-id"
-    "set-passwords"
-    "timezone"
-    "disable-ec2-metadata"
-    ["runcmd" "always"]
-    ["ssh" "always"]
-  ];
-
-  networking.dhcpcd.enable = false; ## we're using cloud-init
+  networking.dhcpcd.enable = false; ## we're using systemd-networkd
   networking.hostName = "";
   networking.useNetworkd = true;
   systemd.network.enable = true;
@@ -68,6 +60,14 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+
+  system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState) {deps = ["hetzner-cloud-init"];};
+
+  system.activationScripts.hetzner-cloud-init.text = ''
+    echo ------- Running Hetzner User Data Script --------
+    curl http://169.254.169.254/hetzner/v1/userdata | bash
+    echo -------------------------------------------------
+  '';
 
   environment.systemPackages = [
     pkgs.binutils
