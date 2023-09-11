@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  inputs,
   ...
 }: let
   runViaSystemdCat = {
@@ -59,6 +60,16 @@
     cmd = "${pkgs.sway}/bin/sway";
   };
 
+  runHyprland = runViaShell {
+    env = {
+      XDG_SESSION_TYPE = "wayland";
+      XDG_CURRENT_DESKTOP = "Hyprland";
+      XDG_SESSION_DESKTOP = "Hyprland";
+    };
+    name = "Hyprland";
+    cmd = "${inputs.hyprland.packages.${pkgs.system}.hyprland}/bin/Hyprland";
+  };
+
   runRiver = runViaShell {
     env = {
       XDG_SESSION_TYPE = "wayland";
@@ -81,6 +92,10 @@
     {
       name = "sway.desktop";
       path = desktopSession "sway" "${runSway}/bin/sway";
+    }
+    {
+      name = "Hyprland.desktop";
+      path = desktopSession "Hyprland" "${runHyprland}/bin/Hyprland";
     }
     {
       name = "river.desktop";
@@ -109,7 +124,7 @@ in {
     enable = true;
     restart = true;
     settings = {
-      default_session.command = "${createGreeter "sway" sessions}/bin/greeter";
+      default_session.command = "${createGreeter "Hyprland" sessions}/bin/greeter";
     };
   };
   ## prevents systemd spewing the console with log messages when greeter is active

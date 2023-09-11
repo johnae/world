@@ -136,6 +136,7 @@ profiles = [
   "users/profiles/fish",
   "users/profiles/foot",
   "users/profiles/git",
+  "users/profiles/hyprland",
   "users/profiles/i3status-laptop",
   "users/profiles/kanshi",
   "users/profiles/kubie",
@@ -148,13 +149,13 @@ profiles = [
   "users/profiles/river",
   "users/profiles/rofi",
   "users/profiles/spotifyd",
-  #"users/profiles/spotnix",
   "users/profiles/ssh",
   "users/profiles/starship",
   "users/profiles/sway",
   "users/profiles/tmux",
   "users/profiles/waybar",
   "users/profiles/wlsunset",
+  #"users/profiles/spotnix",
 ]
 
 [config.home-manager.users.john.programs.bat]

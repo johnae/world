@@ -75,6 +75,7 @@
     hwdata.flake = false;
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
+    hyprland.url = "github:hyprwm/Hyprland";
     kile.flake = false;
     kile.url = "gitlab:snakedye/kile";
     kured.flake = false;
