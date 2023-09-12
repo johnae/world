@@ -8,7 +8,6 @@
   user = config.users.users.vaultwarden.name;
   group = config.users.users.vaultwarden.group;
   backup = pkgs.writeText "backup.sh" ''
-    mkdir -p "$DIR";
     ${pkgs.sqlite}/bin/sqlite3 /var/lib/bitwarden_rs/db.sqlite3 "VACUUM INTO '${cfg.backupDir}/db.sqlite3'";
     cp -R /var/lib/bitwarden_rs/{attachments,sends,rsa_key*,icon_cache} "${cfg.backupDir}"/;
   '';
