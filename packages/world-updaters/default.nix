@@ -79,6 +79,8 @@
   update-github-release-flake-inputs = writeShellApplication {
     name = "update-github-release-flake-inputs";
     text = ''
+      set -x
+      OIFS="$IFS"
       IFS=$'\n'
       TOKEN=''${1:-}
       curlargs=()
@@ -86,24 +88,18 @@
         curlargs=(-H "Authorization: token $TOKEN")
       fi
       for ghpkg in $(${ripgrep}/bin/rg -N "gh-release-update" ./flake.nix); do
-        if echo "$ghpkg" | grep -q "releases"; then
-          uri="$(echo "$ghpkg" | awk -F'"' '{print $2}' | awk -F'github.com/' '{print $2}')"
-          owner="$(echo "$uri" | awk -F'/' '{print $1}')"
-          repo="$(echo "$uri" | awk -F'/' '{print $2}')"
-          if echo "$ghpkg" | grep -q "allow-prerelease"; then
-            latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
-              ${jq}/bin/jq '[.[] | select(.draft == false)][0].tag_name' -r)"
-          else
-            latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
-              ${jq}/bin/jq '[.[] | select(.draft == false) | select(.prerelease == false)][0].tag_name' -r)"
-          fi
-          sed -i -E "s|$owner/$repo/releases/download/[a-z0-9.-]+|$owner/$repo/releases/download/$latest|g" flake.nix
+        IFS="$OIFS"
+        read -r owner repo < <(echo "$ghpkg" | awk -F[/:] '{print $5" "$6}')
+        if echo "$ghpkg" | grep -q "allow-prerelease"; then
+          latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
+            ${jq}/bin/jq '[.[] | select(.draft == false)][0].tag_name' -r)"
         else
-          uri="$(echo "$ghpkg" | awk -F'"' '{print $2}' | awk -F':' '{print $2}')"
-          owner="$(echo "$uri" | awk -F'/' '{print $1}')"
-          repo="$(echo "$uri" | awk -F'/' '{print $2}')"
           latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
             ${jq}/bin/jq '[.[] | select(.draft == false) | select(.prerelease == false)][0].tag_name' -r)"
+        fi
+        if echo "$ghpkg" | grep -q "releases"; then
+          sed -i -E "s|$owner/$repo/releases/download/[a-z0-9.-]+|$owner/$repo/releases/download/$latest|g" flake.nix
+        else
           sed -i -E "s|$owner/$repo/[0-9v.]+|$owner/$repo/$latest|g" flake.nix
         fi
       done
