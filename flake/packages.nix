@@ -32,7 +32,17 @@
       }
       // {
         ## packages from other flakes
-        #inherit (inputs.spotnix.packages.${system}) spotnix;
+        hyprland-unstable = inputs.hyprland.packages.${system}.hyprland;
+        inherit
+          (inputs.hyprland.packages.${system})
+          hyprland-unwrapped
+          hyprland-debug
+          xdg-desktop-portal-hyprland
+          hyprland-share-picker
+          hyprland-protocols
+          wlroots-hyprland
+          udis86
+          ;
         inherit (inputs.persway.packages.${system}) persway;
         inherit (inputs.headscale.packages.${system}) headscale;
       };
