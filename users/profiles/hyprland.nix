@@ -101,7 +101,7 @@ in {
   };
 
   wayland.windowManager.hyprland.enable = true;
-  wayland.windowManager.hyprland.package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+  wayland.windowManager.hyprland.package = pkgs.hyprland-unstable;
   wayland.windowManager.hyprland.extraConfig = ''
     bind=$mod,escape,submap,(p)oweroff, (s)uspend, (h)ibernate, (r)eboot, (l)ogout
     submap=(p)oweroff, (s)uspend, (h)ibernate, (r)eboot, (l)ogout

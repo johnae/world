@@ -67,7 +67,7 @@
       XDG_SESSION_DESKTOP = "Hyprland";
     };
     name = "Hyprland";
-    cmd = "${inputs.hyprland.packages.${pkgs.system}.hyprland}/bin/Hyprland";
+    cmd = "${pkgs.hyprland-unstable}/bin/Hyprland";
   };
 
   runRiver = runViaShell {
