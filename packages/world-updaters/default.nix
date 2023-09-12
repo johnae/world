@@ -89,7 +89,7 @@
       fi
       for ghpkg in $(${ripgrep}/bin/rg -N "gh-release-update" ./flake.nix); do
         IFS="$OIFS"
-        read -r owner repo < <(echo "$ghpkg" | awk -F[/:] '{print $5" "$6}')
+        read -r owner repo < <(echo "$ghpkg" | sed -E -e 's|https://||g' -e 's|github:|github/|g' | awk -F[/:] '{print $2" "$3}')
         if echo "$ghpkg" | grep -q "allow-prerelease"; then
           latest="$(${curl}/bin/curl -H "Accept: application/vnd.github.v3+json" "''${curlargs[@]}" "https://api.github.com/repos/$owner/$repo/releases" | \
             ${jq}/bin/jq '[.[] | select(.draft == false)][0].tag_name' -r)"
