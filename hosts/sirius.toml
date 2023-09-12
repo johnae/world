@@ -15,7 +15,7 @@ profiles = [
   "profiles/state",
   "profiles/syncthing",
   "profiles/tailscale",
-  "profiles/vaultwarden",
+  #"profiles/vaultwarden",
   "profiles/zram",
 ]
 
@@ -108,7 +108,7 @@ ingress."vv.9000.dev".service = "http://127.0.0.1:8222"
 [config.services.vaultwarden]
 enable = true
 environmentFile = "/run/agenix/vaultwarden-env"
-backupDir = "/home/john/Sync/vaultwarden-backup"
+#backupDir = "/home/john/Sync/vaultwarden-backup"
 
 [config.services.vaultwarden.config]
 DOMAIN = "https://vv.9000.dev"
