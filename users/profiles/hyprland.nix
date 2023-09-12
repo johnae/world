@@ -140,6 +140,8 @@ in {
         "$mod, up, movefocus, u"
         "$mod, down, movefocus, d"
         "$mod, m, movecurrentworkspacetomonitor, +1"
+        "$mod, minus, exec, ${pkgs.scripts}/bin/rofi-rbw"
+        "$mod SHIFT, minus, exec, passonly=y ${pkgs.scripts}/bin/rofi-rbw"
       ]
       ++ (map (num: "$mod, ${num}, workspace, ${num}") (builtins.genList (x: builtins.toString (x + 1)) 9))
       ++ (map (num: "$mod SHIFT, ${num}, movetoworkspace, ${num}") (builtins.genList (x: builtins.toString (x + 1)) 9))
