@@ -1,11 +1,12 @@
 {
   hostName,
+  inputs,
   userProfiles,
   ...
 }: let
   inherit (builtins) mapAttrs;
 in {
-  home-manager.extraSpecialArgs = {inherit hostName;};
+  home-manager.extraSpecialArgs = {inherit hostName inputs;};
   home-manager.sharedModules = [
     ../users/modules/git-auto-sync.nix
     ../users/modules/kubie.nix

@@ -126,6 +126,10 @@
     '';
   };
 
+  terminal = pkgs.alacritty;
+  terminal-bin = "${pkgs.alacritty}/bin/alacritty";
+  terminal-emacs = ''${terminal-bin} --class=emacs -e emacsclient -t -a=""'';
+
   fonts = {
     names = ["Roboto" "Font Awesome 5 Free" "Font Awesome 5 Brands" "Arial" "sans-serif"];
     style = "Bold";
@@ -345,7 +349,7 @@ in {
         "${modifier}+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle open'';
         "${modifier}+Shift+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle none'';
 
-        "${modifier}+Return" = ''exec ${pkgs.foot}/bin/foot'';
+        "${modifier}+Return" = ''exec ${terminal-bin}'';
         "${modifier}+d" = ''exec ${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes "drun,run"'';
 
         "${modifier}+minus" = ''exec ${pkgs.scripts}/bin/rofi-rbw'';
@@ -353,7 +357,7 @@ in {
 
         "${modifier}+b" = ''exec ${swayBackground}/bin/sway-background'';
 
-        "${modifier}+Shift+e" = ''exec ${pkgs.foot}/bin/foot --app-id=emacs emacsclient -t -a=""'';
+        "${modifier}+Shift+e" = ''exec ${terminal-emacs}'';
 
         "${modifier}+Shift+v" = ''splith'';
 

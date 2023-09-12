@@ -65,14 +65,14 @@
 in {
   home.packages = [pomodoro];
   programs.waybar.enable = true;
-  programs.waybar.package = pkgs.my-waybar;
   programs.waybar.settings.mainBar = {
     bar_id = "main";
     ipc = true;
     position = "top";
     spacing = 8;
-    modules-left = ["river/tags" "sway/workspaces" "sway/mode" "custom/media"];
+    modules-left = ["river/tags" "sway/workspaces" "hyprland/workspaces" "sway/mode" "hyprland/submap" "custom/media"];
     modules-right = ["custom/pomodoro" "network" "network#wifi" "idle_inhibitor" "pulseaudio" "cpu" "temperature" "backlight" "battery" "clock" "tray"];
+    modules-center = ["hyprland/window"];
     "custom/media" = {
       format = "{icon}{}";
       return-type = "json";
@@ -83,6 +83,24 @@ in {
       max-length = 70;
       exec = "playerctl -a metadata --format '{\"text\": \"{{playerName}}: {{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
       on-click = "playerctl play-pause";
+    };
+    "hyprland/workspaces" = {
+      format = "{name}";
+      format-icons = {
+        active = "";
+        default = "";
+        persistent = "";
+      };
+      on-scroll-up = "hyprctl dispatch workspace r-1";
+      on-scroll-down = "hyprctl dispatch workspace r+1";
+      all-outputs = false;
+      #persistent_workspaces = {
+      #  "*" = 5;
+      #};
+    };
+    "hyprland/submap" = {
+      format = "✌️ {}";
+      tooltip = false;
     };
     "custom/pomodoro" = {
       format = " {icon}{}";
@@ -200,6 +218,12 @@ in {
     }
 
     #workspaces button.focused {
+        color: white;
+        background: transparent;
+        border-top: 2px solid #c9545d;
+    }
+
+    #workspaces button.active {
         color: white;
         background: transparent;
         border-top: 2px solid #c9545d;
