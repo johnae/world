@@ -247,6 +247,7 @@ directories = [
   "/var/lib/plex",
   "/var/lib/jellyfin",
   "/var/lib/media",
+  "/var/lib/bitwarden_rs"
 ]
 
 [config.home-manager.users.john]
