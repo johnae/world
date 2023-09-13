@@ -79,10 +79,10 @@
 in {
   xdg.configFile."wpaperd/wallpaper.toml".source = pkgs.writeText "wallpaper.toml" ''
     [default]
-    path = "${../../files/wallpapers}"
+    path = "~/Sync/wallpapers"
     duration = "30m"
     sorting = "random"
-    apply-shadow = true
+    apply-shadow = false
   '';
 
   home.sessionVariables = {
@@ -186,7 +186,7 @@ in {
 
     general = {
       layout = "master";
-      border_size = 1;
+      border_size = 0;
       gaps_in = 8;
       gaps_out = 16;
       "col.active_border" = "0xf0f000aa";
@@ -199,7 +199,7 @@ in {
       rounding = 8;
       blur = {
         enabled = true;
-        size = 5;
+        size = 7;
         passes = 2;
         xray = true;
         ignore_opacity = true;
@@ -211,10 +211,10 @@ in {
       drop_shadow = true;
       shadow_range = 20;
       shadow_render_power = 2;
-      "col.shadow" = "0x77000000";
-      "col.shadow_inactive" = "0x22000000";
-      active_opacity = 0.96;
-      inactive_opacity = 0.85;
+      "col.shadow" = "0x99000000";
+      "col.shadow_inactive" = "0x55000000";
+      active_opacity = 0.97;
+      inactive_opacity = 0.90;
       fullscreen_opacity = 1.0;
     };
 
