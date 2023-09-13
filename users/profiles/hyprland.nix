@@ -173,8 +173,8 @@ in {
       enabled = true;
       animation = [
         "workspaces,1,0.6,default"
-        "windows,1,0.6,default"
-        "fade,1,0.6,default"
+        "windows,1,0.8,default"
+        "fade,1,0.8,default"
         "border,1,0.6,default"
         "borderangle,1,0.6,default"
       ];
@@ -203,6 +203,9 @@ in {
       shadow_range = 4;
       shadow_render_power = 3;
       "col.shadow" = "rgba(1a1a1aee)";
+      active_opacity = 0.96;
+      inactive_opacity = 0.85;
+      fullscreen_opacity = 1.0;
     };
 
     dwindle = {
