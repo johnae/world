@@ -98,6 +98,9 @@ in {
       #  "*" = 5;
       #};
     };
+    battery = {
+      format = "{capacity}% ({power}W)";
+    };
     "hyprland/submap" = {
       format = "✌️ {}";
       tooltip = false;
@@ -248,7 +251,7 @@ in {
         border-top: 2px solid #c9545d;
     }
 
-    #mode {
+    #mode, #submap {
         background: #64727D;
         border-bottom: 3px solid white;
     }
@@ -258,7 +261,7 @@ in {
         margin: 0 2px;
     }
 
-    #clock {
+    #clock, #custom-clock {
         font-weight: bold;
     }
 
