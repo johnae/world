@@ -186,23 +186,33 @@ in {
 
     general = {
       layout = "master";
-      gaps_in = 2;
-      gaps_out = 4;
+      border_size = 1;
+      gaps_in = 8;
+      gaps_out = 16;
+      "col.active_border" = "0xf0f000aa";
+      "col.inactive_border" = "0x00000000";
       "col.group_border" = "0x2E344000";
       "col.group_border_active" = "0x5E81AC00";
     };
 
     decoration = {
-      rounding = 5;
+      rounding = 8;
       blur = {
         enabled = true;
-        size = 3;
-        passes = 1;
+        size = 5;
+        passes = 2;
+        xray = true;
+        ignore_opacity = true;
+        new_optimizations = true;
+        noise = 0.12;
+        contrast = 1.05;
+        brightness = 0.8;
       };
       drop_shadow = true;
-      shadow_range = 4;
-      shadow_render_power = 3;
-      "col.shadow" = "rgba(1a1a1aee)";
+      shadow_range = 20;
+      shadow_render_power = 2;
+      "col.shadow" = "0x77000000";
+      "col.shadow_inactive" = "0x22000000";
       active_opacity = 0.96;
       inactive_opacity = 0.85;
       fullscreen_opacity = 1.0;
