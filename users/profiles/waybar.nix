@@ -211,6 +211,7 @@ in {
     }
 
     #workspaces button {
+        border-radius: 20px;
         padding: 0 5px;
         background: transparent;
         color: #bababa;
