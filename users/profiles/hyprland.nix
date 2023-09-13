@@ -231,6 +231,8 @@ in {
       orientation = "right";
     };
 
+    layerrule = "blur,waybar";
+
     input = {
       kb_layout = "us,se";
       kb_variant = "";
