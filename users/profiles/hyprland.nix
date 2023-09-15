@@ -213,8 +213,8 @@ in {
       shadow_render_power = 2;
       "col.shadow" = "0x99000000";
       "col.shadow_inactive" = "0x55000000";
-      active_opacity = 0.97;
-      inactive_opacity = 0.90;
+      active_opacity = 0.95;
+      inactive_opacity = 0.89;
       fullscreen_opacity = 1.0;
     };
 
