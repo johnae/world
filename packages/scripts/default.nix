@@ -18,18 +18,22 @@
     name = "rbw-git-creds";
     runtimeInputs = [rbw];
     text = ''
-      record=''${1:-}
-      item=''${2:-}
-      if [ "$record" = "" ]; then
-        echo Please provide the record the item is stored in
-        exit 1
+      username=''${GIT_USERNAME:-}
+      password=''${GIT_PASSWORD:-}
+      if [ -z "$GIT_USERNAME" ] || [ -z "$GIT_PASSWORD" ]; then
+        record=''${1:-}
+        item=''${2:-}
+        if [ "$record" = "" ]; then
+          echo Please provide the record the item is stored in
+          exit 1
+        fi
+        if [ "$item" = "" ]; then
+          echo Please provide the item name to get
+          exit 1
+        fi
+        password="$(rbw get "$record" "$item" | head -1)"
+        username="$(rbw get --full "$record" "$item" | grep "Username:" | awk '{print $2}')"
       fi
-      if [ "$item" = "" ]; then
-        echo Please provide the item name to get
-        exit 1
-      fi
-      password="$(rbw get "$record" "$item" | head -1)"
-      username="$(rbw get --full "$record" "$item" | grep "Username:" | awk '{print $2}')"
       cat<<CREDS
       username=$username
       password=$password
