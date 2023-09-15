@@ -269,7 +269,7 @@ in {
             unitConfig.StopWhenUnneeded = true;
           }
       )
-      config.services.cloudflared.tunnels;
+      config.services.my-cloudflared.tunnels;
 
     systemd.services =
       mapAttrs'
@@ -317,7 +317,7 @@ in {
             };
           }
       )
-      config.services.cloudflared.tunnels;
+      config.services.my-cloudflared.tunnels;
 
     users.users = mkIf (cfg.user == "cloudflared") {
       cloudflared = {
