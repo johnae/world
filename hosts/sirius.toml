@@ -97,14 +97,25 @@ args.accept-dns = false
 args.advertise-exit-node = true
 args.auth-key = "file:/var/run/agenix/ts-gh-9k"
 
+[config.services.nginx]
+enable = true
+recommendedTlsSettings = true
+recommendedProxySettings = true
+recommendedGzipSettings = true
+recommendedOptimisation = true
+clientMaxBodySize = "300m"
+
+[config.services.nginx.virtualHosts."bw.9000.dev"]
+locations."/".proxyPass = "http://localhost:8222"
+locations."/".proxyWebsockets = true
+
 [config.services.cloudflared]
 enable = true
 
 [config.services.cloudflared.tunnels.9000-tunnel]
 credentialsFile = "/run/agenix/cloudflare-tunnel-9k"
-default = "http_status:404"
+default = "http://localhost"
 originRequest.noTLSVerify = true
-ingress."bw.9000.dev".service = "http://127.0.0.1:8222"
 
 [config.services.vaultwarden]
 enable = true
