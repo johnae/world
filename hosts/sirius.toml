@@ -101,9 +101,9 @@ args.auth-key = "file:/var/run/agenix/ts-gh-9k"
 enable = true
 
 [config.services.cloudflared.tunnels.9000-tunnel]
-credentialsFile = "/run/agenix/cloudflared-tunnel-9k"
+credentialsFile = "/run/agenix/cloudflare-tunnel-9k"
 default = "http_status:404"
-ingress."vv.9000.dev".service = "http://127.0.0.1:8222"
+ingress."bw.9000.dev".service = "http://127.0.0.1:8222"
 
 [config.services.vaultwarden]
 enable = true
@@ -111,7 +111,7 @@ environmentFile = "/run/agenix/vaultwarden-env"
 #backupDir = "/home/john/Sync/vaultwarden-backup"
 
 [config.services.vaultwarden.config]
-DOMAIN = "https://vv.9000.dev"
+DOMAIN = "https://bw.9000.dev"
 SIGNUPS_ALLOWED = "false"
 PASSWORD_HINTS_ALLOWED = "false"
 ROCKET_ADDRESS = "127.0.0.1"
