@@ -8,6 +8,7 @@
     ./host-config.nix
     ./innernet.nix
     ./k3s.nix
+    ./my-cloudflared.nix
     ./private-wireguard.nix
     ./router.nix
     ./services.nix

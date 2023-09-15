@@ -109,10 +109,10 @@ clientMaxBodySize = "300m"
 locations."/".proxyPass = "http://localhost:8222"
 locations."/".proxyWebsockets = true
 
-[config.services.cloudflared]
+[config.services.my-cloudflared]
 enable = true
 
-[config.services.cloudflared.tunnels.9000-tunnel]
+[config.services.my-cloudflared.tunnels.9000-tunnel]
 credentialsFile = "/run/agenix/cloudflare-tunnel-9k"
 default = "http://localhost"
 originRequest.noTLSVerify = true
