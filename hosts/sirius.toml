@@ -232,7 +232,7 @@ restic-pw = { file = "secrets/restic-pw.age", owner = "1337" }
 ts-gh-johnae = { file = "secrets/ts-gh-johnae.age", owner = "1337" }
 ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
 
-cloudflare-tunnel-9k = { file = "secrets/cloudflare-tunnel-9k.age" }
+cloudflare-tunnel-9k = { file = "secrets/cloudflare-tunnel-9k.age", owner = "cloudflared" }
 vaultwarden-env = { file = "secrets/vaultwarden-env.age" }
 
 [config.services.restic.backups.remote]
