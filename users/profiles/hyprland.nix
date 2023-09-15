@@ -79,10 +79,10 @@
 in {
   xdg.configFile."wpaperd/wallpaper.toml".source = pkgs.writeText "wallpaper.toml" ''
     [default]
-    path = "${../../files/wallpapers}"
+    path = "~/Sync/wallpapers"
     duration = "30m"
     sorting = "random"
-    apply-shadow = true
+    apply-shadow = false
   '';
 
   home.sessionVariables = {
@@ -173,8 +173,8 @@ in {
       enabled = true;
       animation = [
         "workspaces,1,0.6,default"
-        "windows,1,0.6,default"
-        "fade,1,0.6,default"
+        "windows,1,0.8,default"
+        "fade,1,0.8,default"
         "border,1,0.6,default"
         "borderangle,1,0.6,default"
       ];
@@ -186,23 +186,36 @@ in {
 
     general = {
       layout = "master";
-      gaps_in = 2;
-      gaps_out = 4;
+      border_size = 0;
+      gaps_in = 8;
+      gaps_out = 16;
+      "col.active_border" = "0xf0f000aa";
+      "col.inactive_border" = "0x00000000";
       "col.group_border" = "0x2E344000";
       "col.group_border_active" = "0x5E81AC00";
     };
 
     decoration = {
-      rounding = 5;
+      rounding = 8;
       blur = {
         enabled = true;
-        size = 3;
-        passes = 1;
+        size = 7;
+        passes = 2;
+        xray = true;
+        ignore_opacity = true;
+        new_optimizations = true;
+        noise = 0.12;
+        contrast = 1.05;
+        brightness = 0.8;
       };
       drop_shadow = true;
-      shadow_range = 4;
-      shadow_render_power = 3;
-      "col.shadow" = "rgba(1a1a1aee)";
+      shadow_range = 20;
+      shadow_render_power = 2;
+      "col.shadow" = "0x99000000";
+      "col.shadow_inactive" = "0x55000000";
+      active_opacity = 0.95;
+      inactive_opacity = 0.89;
+      fullscreen_opacity = 1.0;
     };
 
     dwindle = {
@@ -217,6 +230,8 @@ in {
       mfact = 0.7;
       orientation = "right";
     };
+
+    layerrule = "blur,waybar";
 
     input = {
       kb_layout = "us,se";
