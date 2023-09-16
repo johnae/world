@@ -264,7 +264,7 @@ directories = [
   "/var/lib/jellyfin",
   "/var/lib/media",
   "/var/lib/bitwarden_rs",
-  "/var/lib/matrix-conduit",
+  "/var/lib/private",
 ]
 
 [config.home-manager.users.john]
