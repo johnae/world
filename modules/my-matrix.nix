@@ -9,7 +9,7 @@
   format = pkgs.formats.toml {};
   well_known_server = pkgs.writeText "well-known-matrix-server" ''
     {
-      "m.server": "matrix.${cfg.settings.global.server_name}"
+      "m.server": "matrix.${cfg.settings.global.server_name}:443"
     }
   '';
   well_known_client = pkgs.writeText "well-known-matrix-client" ''
