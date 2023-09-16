@@ -1,0 +1,112 @@
+{
+  config,
+  lib,
+  inputs,
+  pkgs,
+  ...
+}: let
+  cfg = config.services.matrix-conduit;
+  format = pkgs.formats.toml {};
+  well_known_server = pkgs.writeText "well-known-matrix-server" ''
+    {
+      "m.server": "matrix.${cfg.settings.global.server_name}"
+    }
+  '';
+  well_known_client = pkgs.writeText "well-known-matrix-client" ''
+    {
+      "m.homeserver": {
+        "base_url": "https://matrix.${cfg.settings.global.server_name}"
+      }
+    }
+  '';
+in
+  with lib; {
+    options.services.my-matrix = {
+      enable =
+        mkEnableOption
+        "enable the matrix service";
+
+      server_name = mkOption {
+        type = types.str;
+        default = "example.com";
+        description = ''
+          The server name for the matrix server
+        '';
+      };
+    };
+
+    config =
+      mkIf config.services.my-matrix.enable {
+        services.matrix-conduit.enable = true;
+        services.matrix-conduit.settings = {
+          global = {
+            server_name = config.services.my-matrix.server_name;
+            allow_federation = true;
+            allow_encryption = true;
+            allow_registration = true;
+            max_request_size = 20000000;
+            port = 6167;
+            database_backend = "sqlite";
+          };
+          extraEnvironment = {
+            CONDUIT_MAX_CONCURRENT_REQUESTS = "100";
+            CONDUIT_TURN_URIS = "[\"turn:staticauth.turn.openrelay.metered.ca:443?transport=udp\+
+\", \"turn:staticauth.turn.openrelay.metered.ca:443?transport=tcp\"]";
+            CONDUIT_TURN_SECRET = "openrelayprojectsecret";
+          };
+        };
+        services.matrix-conduit.package = inputs.matrix-conduit.packages.${pkgs.system}.default;
+        services.nginx.virtualHosts = {
+          "matrix.${cfg.settings.global.server_name}" = {
+            listen = [
+              {
+                addr = "127.0.0.1";
+                port = 80;
+                ssl = false;
+              }
+              {
+                addr = "127.0.0.1";
+                port = 8448;
+                ssl = false;
+              }
+            ];
+            locations."/_matrix" = {
+              proxyPass = "http://backend_conduit$request_uri";
+              proxyWebsockets = true;
+              extraConfig = ''
+                proxy_set_header Host $host;
+                proxy_buffering off;
+              '';
+            };
+            extraConfig = ''
+              merge_slashes off;
+            '';
+          };
+          "${cfg.settings.global.server_name}" = {
+            locations."=/.well-known/matrix/server" = {
+              alias = "${well_known_server}";
+
+              extraConfig = ''
+                default_type application/json;
+              '';
+            };
+
+            locations."=/.well-known/matrix/client" = {
+              alias = "${well_known_client}";
+
+              extraConfig = ''
+                default_type application/json;
+                add_header Access-Control-Allow-Origin "*";
+              '';
+            };
+          };
+        };
+        services.nginx.upstreams = {
+          "backend_conduit" = {
+            servers = {
+              "[::1]:${toString cfg.settings.global.port}" = {};
+            };
+          };
+        };
+      };
+  }

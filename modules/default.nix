@@ -5,6 +5,7 @@
     ./config-from-data.nix
     ./headscale-acls.nix
     ./home.nix
+    ./my-matrix.nix
     ./host-config.nix
     ./innernet.nix
     ./k3s.nix

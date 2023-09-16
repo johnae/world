@@ -117,6 +117,10 @@ credentialsFile = "/run/agenix/cloudflare-tunnel-9k"
 default = "http://localhost"
 originRequest.noTLSVerify = true
 
+[config.services.my-matrix]
+enable = true
+server_name = "9000.dev"
+
 [config.services.vaultwarden]
 enable = true
 environmentFile = "/run/agenix/vaultwarden-env"
@@ -259,7 +263,8 @@ directories = [
   "/var/lib/plex",
   "/var/lib/jellyfin",
   "/var/lib/media",
-  "/var/lib/bitwarden_rs"
+  "/var/lib/bitwarden_rs",
+  "/var/lib/matrix-conduit",
 ]
 
 [config.home-manager.users.john]
