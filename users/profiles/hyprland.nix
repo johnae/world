@@ -211,6 +211,7 @@ in {
       drop_shadow = true;
       shadow_range = 20;
       shadow_render_power = 2;
+      shadow_offset = "3 3";
       "col.shadow" = "0x99000000";
       "col.shadow_inactive" = "0x55000000";
       active_opacity = 0.95;
