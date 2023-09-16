@@ -9,7 +9,6 @@ profiles = [
   "profiles/default_fs",
   "profiles/home-manager",
   "profiles/jellyfin",
-  "profiles/k3s",
   "profiles/server",
   "profiles/state",
   "profiles/syncthing",
@@ -111,7 +110,6 @@ folders."/home/john/Photos".versioning.params.maxAge = "0"
 folders."/home/john/Photos".versioning.params.versionsPath = "/home/john/Photos/stbackup"
 
 [config.age.secrets]
-k3s-token.file = "secrets/k3s/token.age"
 wg-home.file = "secrets/icarus/wg-home.age"
 wg-net.file = "secrets/icarus/wg-net.age"
 syncthing-cert = { file = "secrets/icarus/syncthing-cert.age", owner = "1337" }
@@ -123,27 +121,11 @@ ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
 enable = true
 args.advertise-tags = ["tag:server"]
 args.ssh = true
-args.accept-routes = false ## with this on, it causes issues in k3s when network runs on top of tailscale
+args.accept-routes = false
 args.accept-dns = false
 args.advertise-exit-node = true
 args.auth-key = "file:/var/run/agenix/ts-gh-9k"
 args.advertise-routes = "10.128.128.0/21,10.129.128.0/22"
-
-[config.services.k3s]
-enable = true
-role = "agent"
-after = [ "tailscale-auth.service" ]
-
-[config.services.k3s.settings]
-server = "https://100.97.45.72:6443"
-token-file = "/run/agenix/k3s-token"
-flannel-iface = "tailscale0"
-node-ip = "\"$(get-iface-ip tailscale0)\""
-node-external-ip = "\"$(get-iface-ip eth0)\""
-with-node-id = true
-kubelet-arg.max-pods = 62
-node-label."topology.kubernetes.io/region" = "home"
-node-label."topology.kubernetes.io/zone" = "home"
 
 [config.environment.state."/keep"]
 directories = [

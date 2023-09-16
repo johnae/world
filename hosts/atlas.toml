@@ -10,7 +10,6 @@ profiles = [
   "profiles/default_fs",
   "profiles/home-manager",
   "profiles/jellyfin",
-  "profiles/k3s",
   "profiles/server",
   "profiles/state",
   "profiles/syncthing",
@@ -91,27 +90,10 @@ openssh.authorizedKeys.keys = [
 enable = true
 args.advertise-tags = ["tag:server"]
 args.ssh = true
-args.accept-routes = false ## with this on, it causes issues in k3s when network runs on top of tailscale
+args.accept-routes = false
 args.accept-dns = false
 args.advertise-exit-node = true
 args.auth-key = "file:/var/run/agenix/ts-gh-9k"
-
-[config.services.k3s]
-enable = true
-role = "agent"
-after = [ "tailscale-auth.service" ]
-
-[config.services.k3s.settings]
-server = "https://100.97.45.72:6443"
-token-file = "/run/agenix/k3s-token"
-flannel-iface = "tailscale0"
-node-ip = "\"$(get-iface-ip tailscale0)\""
-node-external-ip = "\"$(get-iface-ip eth0)\""
-with-node-id = true
-kubelet-arg.max-pods = 62
-node-label."svccontroller.k3s.cattle.io/enablelb" = "true"
-node-label."topology.kubernetes.io/region" = "hetzner"
-node-label."topology.kubernetes.io/zone" = "hetzner-de"
 
 [config.services.syncthing]
 enable = true
@@ -178,7 +160,6 @@ allowedTCPPorts = [ 5349, 3478 ]
 allowedUDPPortRanges = [ { from = 49160, to = 49200 } ]
 
 [config.age.secrets]
-k3s-token.file = "secrets/k3s/token.age"
 syncthing-cert = { file = "secrets/atlas/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/atlas/syncthing-key.age", owner = "1337" }
 

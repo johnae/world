@@ -6,7 +6,6 @@ syncthingDeviceID = "FB5PKN4-5KT7RPB-5JXSO2B-7BTWIG6-FEPT7FA-AZT4QIP-Z3AMM3L-OQX
 profiles = [
   "profiles/hardware/nuc",
   "profiles/default_fs",
-  "profiles/k3s",
   "profiles/server",
   "profiles/state",
   "profiles/syncthing",
@@ -68,7 +67,6 @@ folders."/home/john/Sync".devices = [
 ]
 
 [config.age.secrets]
-k3s-token.file = "secrets/k3s/token.age"
 wg-home.file = "secrets/hyperion/wg-home.age"
 syncthing-cert = { file = "secrets/hyperion/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/hyperion/syncthing-key.age", owner = "1337" }
@@ -79,33 +77,6 @@ ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
 enable = true
 args.advertise-tags = ["tag:server"]
 args.ssh = true
-args.accept-routes = false ## with this on, it causes issues in k3s when network runs on top of tailscale
+args.accept-routes = false
 args.accept-dns = false
 args.auth-key = "file:/var/run/agenix/ts-gh-9k"
-
-[config.services.k3s]
-enable = true
-role = "server"
-after = [ "tailscale-auth.service" ]
-
-[config.services.k3s.settings]
-server = "https://100.97.45.72:6443"
-token-file = "/run/agenix/k3s-token"
-flannel-iface = "tailscale0"
-node-ip = "\"$(get-iface-ip tailscale0)\""
-node-external-ip = "\"$(get-iface-ip eth0)\""
-with-node-id = true
-advertise-address = "\"$(get-iface-ip tailscale0)\""
-cluster-cidr = "10.128.128.0/21"
-service-cidr = "10.129.128.0/22"
-cluster-dns = "10.129.128.10"
-kubelet-arg.max-pods = 62
-kube-controller-manager-arg.node-cidr-mask-size = 25
-kube-apiserver-arg.oidc-issuer-url = "https://id.9000.dev"
-kube-apiserver-arg.oidc-username-claim = "email"
-kube-apiserver-arg.oidc-groups-claim = "groups"
-kube-apiserver-arg.oidc-client-id = "dex-auth"
-node-label."topology.kubernetes.io/region" = "home"
-node-label."topology.kubernetes.io/zone" = "home"
-secrets-encryption = true
-tls-san = "192.168.104.100"
