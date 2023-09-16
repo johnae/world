@@ -58,18 +58,6 @@ in
         services.matrix-conduit.package = inputs.matrix-conduit.packages.${pkgs.system}.default;
         services.nginx.virtualHosts = {
           "matrix.${cfg.settings.global.server_name}" = {
-            listen = [
-              {
-                addr = "127.0.0.1";
-                port = 80;
-                ssl = false;
-              }
-              {
-                addr = "127.0.0.1";
-                port = 8448;
-                ssl = false;
-              }
-            ];
             locations."/_matrix" = {
               proxyPass = "http://backend_conduit$request_uri";
               proxyWebsockets = true;
