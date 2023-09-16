@@ -43,7 +43,7 @@ in
             server_name = config.services.my-matrix.server_name;
             allow_federation = true;
             allow_encryption = true;
-            allow_registration = true;
+            allow_registration = false;
             max_request_size = 20000000;
             port = 6167;
             database_backend = "sqlite";
