@@ -40,7 +40,7 @@ in {
   };
   systemd.services.vaultwarden.serviceConfig.ExecStartPre = "${pkgs.bash}/bin/bash ${restore-vw-backup}";
   systemd.timers.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
-    timerConfig.OnCalendar = "12 h";
+    timerConfig.OnCalendar = "*-*-* */12:00:00";
   };
   systemd.services.backup-vaultwarden = lib.mkForce {
     description = "Backup vaultwarden";
