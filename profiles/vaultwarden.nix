@@ -12,6 +12,11 @@
     cp -R /var/lib/bitwarden_rs/{attachments,sends,rsa_key*,icon_cache} "${cfg.backupDir}"/;
   '';
 in {
+  fileSystems."${cfg.backupDir}" = {
+    device = "/home/john/Sync/vaultwarden-backup";
+    fsType = "none";
+    options = ["bind"];
+  };
   systemd.services.backup-vaultwarden = lib.mkForce {
     description = "Backup vaultwarden";
     environment = {
