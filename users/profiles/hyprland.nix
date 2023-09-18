@@ -204,7 +204,7 @@ in {
         xray = true;
         ignore_opacity = true;
         new_optimizations = true;
-        noise = 0.12;
+        noise = 0.02;
         contrast = 1.05;
         brightness = 0.8;
       };
