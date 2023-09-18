@@ -57,7 +57,6 @@ in {
       User = lib.mkDefault user;
       Group = lib.mkDefault group;
       ExecStart = "${pkgs.bash}/bin/bash ${backup}";
-      RemainAfterExit = "yes";
     };
     wantedBy = ["multi-user.target"];
   };
