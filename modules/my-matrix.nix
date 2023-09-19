@@ -40,7 +40,7 @@ in
         services.matrix-conduit.enable = true;
         services.matrix-conduit.settings = {
           global = {
-            server_name = config.services.my-matrix.server_name;
+            inherit (config.services.my-matrix) server_name;
             allow_federation = true;
             allow_encryption = true;
             allow_registration = false;

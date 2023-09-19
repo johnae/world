@@ -321,7 +321,7 @@ in {
 
     users.users = mkIf (cfg.user == "cloudflared") {
       cloudflared = {
-        group = cfg.group;
+        inherit (cfg) group;
         isSystemUser = true;
       };
     };
