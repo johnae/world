@@ -39,7 +39,7 @@ emulatedSystems = [ "aarch64-linux" ]
 enable = true
 flake = "github:johnae/world"
 allowReboot = true
-dates = "*:0/15"
+dates = "06:00"
 randomizedDelaySec = "5min"
 enableSentinel = true
 
