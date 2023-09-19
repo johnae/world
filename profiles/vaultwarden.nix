@@ -45,7 +45,7 @@ in {
   systemd.services.vaultwarden.serviceConfig.ExecStartPre = "${pkgs.bash}/bin/bash ${restore-vw-backup}";
   systemd.services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
     serviceConfig = {
-      ExecStart = "${pkgs.bash}/bin/bash ${backup}"; ## use a tweaked backup script instead of upstream
+      ExecStart = lib.mkForce "${pkgs.bash}/bin/bash ${backup}"; ## use a tweaked backup script instead of upstream
     };
   };
 }
