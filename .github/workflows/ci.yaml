@@ -16,6 +16,8 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
+    - name: Run the Magic Nix Cache
+      uses: DeterminateSystems/magic-nix-cache-action@v2
     - run: |
         nix run .#lint
 
@@ -28,6 +30,8 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
+    - name: Run the Magic Nix Cache
+      uses: DeterminateSystems/magic-nix-cache-action@v2
     - run: |
         nix flake check --impure
 
@@ -36,8 +40,7 @@ jobs:
     needs: [pkg_x86_64_linux]
     steps:
     - uses: actions/checkout@v4
-    -
-      name: Login to GHCR
+    - name: Login to GHCR
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
@@ -48,6 +51,8 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
+    - name: Run the Magic Nix Cache
+      uses: DeterminateSystems/magic-nix-cache-action@v2
     - run: |
         nix build .#images/push/all
         ./result/bin/push-all-images "$GITHUB_RUN_NUMBER"
@@ -63,6 +68,8 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
+    - name: Run the Magic Nix Cache
+      uses: DeterminateSystems/magic-nix-cache-action@v2
     - id: job-matrix
       run: |
         echo "matrix=$(nix eval .#github-actions-package-matrix-x86-64-linux --json)" >> "$GITHUB_OUTPUT"
@@ -92,6 +99,8 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
+    - name: Run the Magic Nix Cache
+      uses: DeterminateSystems/magic-nix-cache-action@v2
     - id: job-matrix
       run: |
         echo "matrix=$(nix eval .#github-actions-host-matrix-x86-64-linux --json)" >> "$GITHUB_OUTPUT"
@@ -127,6 +136,8 @@ jobs:
       with:
         name: insane
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+    - name: Run the Magic Nix Cache
+      uses: DeterminateSystems/magic-nix-cache-action@v2
     - env:
         PKG: ${{ matrix.pkg }}
       run: |

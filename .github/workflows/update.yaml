@@ -15,6 +15,8 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
+    - name: Run the Magic Nix Cache
+      uses: DeterminateSystems/magic-nix-cache-action@v2
     - run: |
         nix shell nixpkgs#git -c git config user.name 'NixBot'
         nix shell nixpkgs#git -c git config user.email 'johnae@users.noreply.github.com'
