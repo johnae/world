@@ -10,6 +10,10 @@
   DATA_FOLDER = "/var/lib/bitwarden_rs";
   backup = pkgs.writeText "backup.sh" ''
     export DIR="${cfg.backupDir}/backup-$(date '+%Y%m%d-%H%M')"
+    if [ -d "$DIR" ]; then
+      echo "Backup directory $DIR already exists, skipping backup"
+      exit 0
+    fi
     mkdir -p "$DIR"
     ${pkgs.sqlite}/bin/sqlite3 /var/lib/bitwarden_rs/db.sqlite3 "VACUUM INTO '$DIR/db.sqlite3'";
     cp -R /var/lib/bitwarden_rs/{attachments,sends,rsa_key*,icon_cache} "$DIR"/;
@@ -39,27 +43,9 @@ in {
     options = ["bind"];
   };
   systemd.services.vaultwarden.serviceConfig.ExecStartPre = "${pkgs.bash}/bin/bash ${restore-vw-backup}";
-  systemd.timers.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
-    timerConfig.OnCalendar = "0/12:00";
-  };
-  systemd.services.backup-vaultwarden = lib.mkForce {
-    description = "Backup vaultwarden";
-    restartIfChanged = false; ## we don't want this to restart on every rebuild
-    environment = {
-      DATA_FOLDER = "/var/lib/bitwarden_rs";
-      BACKUP_FOLDER = cfg.backupDir;
-    };
-    path = with pkgs; [sqlite];
-    # if both services are started at the same time, vaultwarden fails with "database is locked"
-    before = lib.mkForce [];
+  systemd.services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
     serviceConfig = {
-      SyslogIdentifier = "backup-vaultwarden";
-      Type = "oneshot";
-      User = lib.mkDefault user;
-      Group = lib.mkDefault group;
-      ExecStart = "${pkgs.bash}/bin/bash ${backup}";
-      Restart = "no";
+      ExecStart = "${pkgs.bash}/bin/bash ${backup}"; ## use a tweaked backup script instead of upstream
     };
-    wantedBy = ["multi-user.target"];
   };
 }
