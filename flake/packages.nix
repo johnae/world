@@ -38,7 +38,6 @@
           hyprland-unwrapped
           hyprland-debug
           xdg-desktop-portal-hyprland
-          hyprland-share-picker
           hyprland-protocols
           wlroots-hyprland
           udis86
