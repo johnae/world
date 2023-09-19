@@ -44,6 +44,7 @@ in {
   };
   systemd.services.backup-vaultwarden = lib.mkForce {
     description = "Backup vaultwarden";
+    restartIfChanged = false; ## we don't want this to restart on every rebuild
     environment = {
       DATA_FOLDER = "/var/lib/bitwarden_rs";
       BACKUP_FOLDER = cfg.backupDir;
@@ -56,7 +57,6 @@ in {
       Type = "oneshot";
       User = lib.mkDefault user;
       Group = lib.mkDefault group;
-      Restart = "no";
       ExecStart = "${pkgs.bash}/bin/bash ${backup}";
     };
     wantedBy = ["multi-user.target"];
