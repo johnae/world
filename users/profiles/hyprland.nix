@@ -127,6 +127,7 @@ in {
   '';
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
+    monitor = ",highres,auto,1";
     bind =
       [
         "$mod, Return, exec, ${terminal-bin}"
