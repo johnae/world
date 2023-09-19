@@ -60,12 +60,9 @@ folders."/home/john/Sync".id = "sync"
 folders."/home/john/Sync".devices = [
   "antares",
   "eris",
-  "atlas",
   "icarus",
-  "polaris",
   "hyperion",
   "sirius",
-  "vela"
 ]
 
 [[config.services.remote-unlock]]

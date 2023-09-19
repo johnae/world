@@ -58,12 +58,9 @@ folders."/home/john/Sync".id = "sync"
 folders."/home/john/Sync".devices = [
   "antares",
   "eris",
-  "atlas",
   "icarus",
-  "polaris",
   "titan",
   "sirius",
-  "vela",
 ]
 
 [config.age.secrets]

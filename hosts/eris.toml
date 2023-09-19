@@ -96,11 +96,8 @@ devices.s8plus.id = "EI6DXMZ-3CMM3R3-LNJPFIF-CTXDVAG-2SXLOCY-4NEEZ3K-CYJBXU6-6W4
 folders."/home/john/Sync".id = "sync"
 folders."/home/john/Sync".devices = [
   "antares",
-  "polaris",
   "icarus",
   "sirius",
-  "vela",
-  "atlas",
   "titan",
   "hyperion",
   "s23ultra",
@@ -108,17 +105,13 @@ folders."/home/john/Sync".devices = [
 ]
 folders."/home/john/Pictures".id = "pictures"
 folders."/home/john/Pictures".devices = [
-  "atlas",
   "antares",
   "sirius",
-  "vela",
 ]
 folders."/home/john/Photos".id = "photos"
 folders."/home/john/Photos".devices = [
-  "atlas",
   "antares",
   "icarus",
-  "vela",
   "sirius",
   "s23ultra"
 ]

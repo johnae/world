@@ -86,22 +86,17 @@ folders."/home/john/Sync".id = "sync"
 folders."/home/john/Sync".devices = [
   "antares",
   "eris",
-  "polaris",
-  "atlas",
   "titan",
   "hyperion",
   "sirius",
-  "vela",
   "s23ultra",
   "s8plus"
 ]
 folders."/home/john/Photos".id = "photos"
 folders."/home/john/Photos".devices = [
   "antares",
-  "atlas",
   "eris",
   "s23ultra",
-  "vela",
   "sirius"
 ]
 folders."/home/john/Photos".versioning.type = "staggered"
