@@ -56,6 +56,7 @@ in {
       Type = "oneshot";
       User = lib.mkDefault user;
       Group = lib.mkDefault group;
+      Restart = "no";
       ExecStart = "${pkgs.bash}/bin/bash ${backup}";
     };
     wantedBy = ["multi-user.target"];
