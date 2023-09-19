@@ -41,7 +41,7 @@ flake = "github:johnae/world"
 allowReboot = true
 dates = "06:00"
 randomizedDelaySec = "5min"
-enableSentinel = true
+enableSentinel = false ## not running kubernetes here
 
 [config.boot]
 kernelParams = [
