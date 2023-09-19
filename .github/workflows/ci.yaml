@@ -20,7 +20,7 @@ jobs:
         nix run .#lint
 
   nix_check:
-    runs-on: 9k
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: cachix/install-nix-action@v23
