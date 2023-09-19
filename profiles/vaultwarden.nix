@@ -51,13 +51,14 @@ in {
     };
     path = with pkgs; [sqlite];
     # if both services are started at the same time, vaultwarden fails with "database is locked"
-    before = ["vaultwarden.service"];
+    before = lib.mkForce [];
     serviceConfig = {
       SyslogIdentifier = "backup-vaultwarden";
       Type = "oneshot";
       User = lib.mkDefault user;
       Group = lib.mkDefault group;
       ExecStart = "${pkgs.bash}/bin/bash ${backup}";
+      Restart = "no";
     };
     wantedBy = ["multi-user.target"];
   };
