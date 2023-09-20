@@ -20,7 +20,7 @@
     text = ''
       username=''${GIT_USERNAME:-}
       password=''${GIT_PASSWORD:-}
-      if [ -z "$GIT_USERNAME" ] || [ -z "$GIT_PASSWORD" ]; then
+      if [ -z "$username" ] || [ -z "$password" ]; then
         record=''${1:-}
         item=''${2:-}
         if [ "$record" = "" ]; then
