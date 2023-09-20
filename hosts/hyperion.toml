@@ -38,7 +38,7 @@ openssh.authorizedKeys.keys = [
 defaultGateway = "192.168.20.1"
 
 [config.networking.firewall]
-trustedInterfaces = [ "insane" ] ## trust the vpn mesh
+trustedInterfaces = [ "tailscale0" ]
 
 [[config.networking.interfaces.eth0.ipv4.addresses]]
 address = "192.168.20.141"

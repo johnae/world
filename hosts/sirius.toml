@@ -48,6 +48,10 @@ kernelParams = [
   "ip=65.108.233.47::65.108.233.1:255.255.255.192:sirius:eth0:none",
 ]
 
+## for tailscale exit node functionality
+[config.boot.kernel.sysctl]
+"net.ipv4.ip_forward" = 1
+
 [config.boot.initrd]
 availableKernelModules = [
   "igb",
@@ -184,10 +188,7 @@ address = "2a01:4f9:1a:ad1d::2"
 prefixLength = 64
 
 [config.networking.firewall]
-trustedInterfaces = [ "insane" ] ## trust the vpn mesh
-allowedUDPPorts = [ 5349, 3478 ]
-allowedTCPPorts = [ 5349, 3478 ]
-allowedUDPPortRanges = [ { from = 49160, to = 49200 } ]
+trustedInterfaces = [ "tailscale0" ]
 
 [config.age.secrets]
 syncthing-cert = { file = "secrets/sirius/syncthing-cert.age", owner = "1337" }
