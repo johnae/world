@@ -105,8 +105,6 @@ folders."/home/john/Photos".versioning.params.maxAge = "0"
 folders."/home/john/Photos".versioning.params.versionsPath = "/home/john/Photos/stbackup"
 
 [config.age.secrets]
-wg-home.file = "secrets/icarus/wg-home.age"
-wg-net.file = "secrets/icarus/wg-net.age"
 syncthing-cert = { file = "secrets/icarus/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/icarus/syncthing-key.age", owner = "1337" }
 ts-google-9k = { file = "secrets/ts-google-9k.age", owner = "1337" }

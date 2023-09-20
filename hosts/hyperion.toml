@@ -64,7 +64,6 @@ folders."/home/john/Sync".devices = [
 ]
 
 [config.age.secrets]
-wg-home.file = "secrets/hyperion/wg-home.age"
 syncthing-cert = { file = "secrets/hyperion/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/hyperion/syncthing-key.age", owner = "1337" }
 ts-google-9k = { file = "secrets/ts-google-9k.age", owner = "1337" }
