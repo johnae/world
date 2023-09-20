@@ -100,8 +100,7 @@ remote-disk-password.file = "secrets/remote-disk-password.age"
 id_ed25519_remote_unlock.file = "secrets/titan/id_ed25519_remote_unlock.age"
 syncthing-cert = { file = "secrets/titan/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/titan/syncthing-key.age", owner = "1337" }
-tailscale-auth = { file = "secrets/tailscale-auth.age" }
-ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
+ts-google-9k = { file = "secrets/ts-google-9k.age", owner = "1337" }
 
 [config.services.tailscale.auth]
 enable = true
@@ -109,4 +108,4 @@ args.advertise-tags = ["tag:server"]
 args.ssh = true
 args.accept-routes = false
 args.accept-dns = false
-args.auth-key = "file:/var/run/agenix/ts-gh-9k"
+args.auth-key = "file:/var/run/agenix/ts-google-9k"

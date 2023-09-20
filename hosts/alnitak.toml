@@ -37,8 +37,7 @@ allowedTCPPorts = [ 80, 443 ]
 trustedInterfaces = [ "insane", "tailscale0" ]
 
 [config.age.secrets]
-tailscale-auth.file = "secrets/tailscale-auth.age"
-ts-gh-9k.file = "secrets/ts-gh-9k.age"
+ts-google-9k = { file = "secrets/ts-google-9k.age", owner = "1337" }
 
 [config.services.tailscale.auth]
 enable = true
@@ -47,7 +46,7 @@ args.ssh = true
 args.accept-routes = false
 args.accept-dns = false
 args.advertise-exit-node = true
-args.auth-key = "file:/var/run/agenix/ts-gh-9k"
+args.auth-key = "file:/var/run/agenix/ts-google-9k"
 
 [config.services.jae.router]
 enable = true

@@ -67,8 +67,7 @@ folders."/home/john/Sync".devices = [
 wg-home.file = "secrets/hyperion/wg-home.age"
 syncthing-cert = { file = "secrets/hyperion/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/hyperion/syncthing-key.age", owner = "1337" }
-tailscale-auth = { file = "secrets/tailscale-auth.age" }
-ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
+ts-google-9k = { file = "secrets/ts-google-9k.age", owner = "1337" }
 
 [config.services.tailscale.auth]
 enable = true
@@ -76,4 +75,4 @@ args.advertise-tags = ["tag:server"]
 args.ssh = true
 args.accept-routes = false
 args.accept-dns = false
-args.auth-key = "file:/var/run/agenix/ts-gh-9k"
+args.auth-key = "file:/var/run/agenix/ts-google-9k"

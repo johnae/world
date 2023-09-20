@@ -109,8 +109,7 @@ wg-home.file = "secrets/icarus/wg-home.age"
 wg-net.file = "secrets/icarus/wg-net.age"
 syncthing-cert = { file = "secrets/icarus/syncthing-cert.age", owner = "1337" }
 syncthing-key = { file = "secrets/icarus/syncthing-key.age", owner = "1337" }
-tailscale-auth = { file = "secrets/tailscale-auth.age" }
-ts-gh-9k = { file = "secrets/ts-gh-9k.age", owner = "1337" }
+ts-google-9k = { file = "secrets/ts-google-9k.age", owner = "1337" }
 
 [config.services.tailscale.auth]
 enable = true
@@ -119,8 +118,7 @@ args.ssh = true
 args.accept-routes = false
 args.accept-dns = false
 args.advertise-exit-node = true
-args.auth-key = "file:/var/run/agenix/ts-gh-9k"
-args.advertise-routes = "10.128.128.0/21,10.129.128.0/22"
+args.auth-key = "file:/var/run/agenix/ts-google-9k"
 
 [config.environment.state."/keep"]
 directories = [
