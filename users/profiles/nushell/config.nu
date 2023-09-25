@@ -291,7 +291,7 @@ $env.config = {
     pre_prompt: [{
       code: "
         let direnv = (direnv export json | from json)
-        let direnv = if ($direnv | length) == 1 { $direnv } else { {} }
+        let direnv = if ($direnv | is-empty) { {} } else { $direnv }
         $direnv | load-env
       "
     }]
