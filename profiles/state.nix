@@ -43,6 +43,7 @@ in {
             "/home/${userName}/.local/share/password-store"
             "/home/${userName}/.local/share/fish"
             "/home/${userName}/.local/share/containers"
+            "/home/${userName}/.local/share/atuin"
             "/home/${userName}/.local/share/Steam"
             "/home/${userName}/.local/share/vulkan"
             "/home/${userName}/.local/share/qutebrowser"
