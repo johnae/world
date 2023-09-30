@@ -72,7 +72,7 @@
     headscale.inputs.flake-utils.follows = "flake-utils";
     headscale.inputs.nixpkgs.follows = "nixpkgs";
     hetzner-csi-driver.flake = false;
-    hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.4.0/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
+    hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.5.1/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
     hwdata.url = "github:vcrhonek/hwdata";
     hwdata.flake = false;
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
