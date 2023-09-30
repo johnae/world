@@ -8,6 +8,7 @@
 in {
   programs.atuin.enable = true;
   programs.direnv.enableNushellIntegration = false;
+  programs.atuin.enableNushellIntegration = false;
   programs.nushell = {
     enable = true;
     package = pkgs.nushell;
