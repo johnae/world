@@ -14,6 +14,9 @@
     _module.args.pkgs = import inputs.nixpkgs {
       inherit system;
       config.allowUnfree = true;
+      config.permittedInsecurePackages = [
+        "nodejs-16.20.2"
+      ];
       overlays = [
         inputs.agenix.overlays.default
         inputs.emacs-overlay.overlays.default

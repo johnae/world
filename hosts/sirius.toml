@@ -175,10 +175,12 @@ folders."/home/john/Photos".versioning.params.cleanInterval = "3600"
 folders."/home/john/Photos".versioning.params.maxAge = "0"
 folders."/home/john/Photos".versioning.params.versionsPath = "/home/john/Photos/stbackup"
 
-[config.services.openvscode-server]
+[config.services.code-server]
 user = "john"
 group = "users"
 enable = true
+disableUpdateCheck = true
+auth = "none"
 host = "100.88.131.21"
 
 [config.networking]
