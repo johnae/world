@@ -23,12 +23,6 @@
         (final: prev: (filterAttrs (name: _: ((match "nu-.*" name == null) && (match "nu_.*" name == null))) config.packages))
 
         (final: prev: {
-          code-server = prev.code-server.override {
-            nodejs = prev.nodejs-18_x;
-          };
-        })
-
-        (final: prev: {
           inherit inputs;
           google-cloud-sdk-gke =
             (prev.google-cloud-sdk.withExtraComponents [
