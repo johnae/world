@@ -7,6 +7,7 @@ syncthingDeviceID = "XFZC5TF-K6CWYRL-GIMFEZO-HNXUS4Q-BPJZJQR-3SVNTXL-X4UABVR-RWD
 profiles = [
   "profiles/hardware/ax101",
   "profiles/acme",
+  "profiles/code-server",
   "profiles/default_fs",
   "profiles/home-manager",
   "profiles/jellyfin",
