@@ -1,12 +1,13 @@
 {pkgs, ...}: {
   services.code-server.extraPackages = with pkgs; [
-    direnv
+    atuin
     carapace
+    direnv
     fzf
     gh
+    git
     git-branchless
     git-crypt
-    git
     kubectl
     kubectx
     kubelogin-oidc
