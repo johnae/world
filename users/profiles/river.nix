@@ -66,7 +66,6 @@ in {
     XCURSOR_THEME = xcursor_theme;
     QT_STYLE_OVERRIDE = lib.mkForce "gtk";
     _JAVA_AWT_WM_NONREPARENTING = "1";
-    NIXOS_OZONE_WL = "1";
   };
   wayland.windowManager.river.enable = true;
   wayland.windowManager.river.xkb = {
