@@ -7,11 +7,13 @@
   runViaSystemdCat = {
     name,
     cmd,
+    systemdSession,
   }:
     pkgs.writeShellApplication {
       inherit name;
       text = ''
-        exec ${pkgs.udev}/bin/systemd-cat --identifier=${name} ${cmd}
+        ${pkgs.udev}/bin/systemd-cat --identifier=${name} ${cmd}
+        systemctl --user stop ${systemdSession} || true
       '';
     };
 
@@ -41,7 +43,10 @@
         ${
           if viaSystemdCat
           then ''
-            exec ${runViaSystemdCat {inherit name cmd;}}/bin/${name}
+            exec ${runViaSystemdCat {
+              inherit name cmd;
+              systemdSession = "${lib.toLower name}-session.target";
+            }}/bin/${name}
           ''
           else ''
             exec ${cmd}
@@ -124,7 +129,7 @@ in {
     enable = true;
     restart = true;
     settings = {
-      default_session.command = "${createGreeter "Hyprland" sessions}/bin/greeter";
+      default_session.command = "${createGreeter "${runHyprland}/bin/Hyprland" sessions}/bin/greeter";
     };
   };
   ## prevents systemd spewing the console with log messages when greeter is active
