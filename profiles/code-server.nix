@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  service.code-server.extraPackages = with pkgs; [
+  services.code-server.extraPackages = with pkgs; [
     direnv
     carapace
     fzf
