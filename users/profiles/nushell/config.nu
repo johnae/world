@@ -289,12 +289,27 @@ $env.config = {
 
   hooks: {
     pre_prompt: [{
+      ## enable direnv integration
       code: "
         let direnv = (direnv export json | from json)
         let direnv = if ($direnv | is-empty) { {} } else { $direnv }
         $direnv | load-env
       "
-    }]
+    }
+    ## if inside zellij, rename tabs to directory name
+    {
+      code: "
+        if ('ZELLIJ' in $env) {
+          mut current_dir = (pwd)
+          if ($current_dir == $env.HOME) {
+            $current_dir = '~'
+          }
+          let current_dir = (echo $current_dir | split row "/" | last)
+          zellij action rename-tab $current_dir out+err> /dev/null
+        }
+      "
+    }
+    ]
     pre_execution: [{ ||
       $nothing  # replace with source code to run before the repl input is run
     }]
