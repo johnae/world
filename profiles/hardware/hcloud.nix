@@ -59,8 +59,6 @@ in {
     package = pkgs.nix;
   };
 
-  nixpkgs.config.allowUnfree = true;
-
   system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState) {deps = ["hetzner-cloud-init"];};
 
   system.activationScripts.hetzner-cloud-init.text = ''
