@@ -246,13 +246,14 @@ profiles = [
   "users/profiles/bat",
   "users/profiles/fish",
   "users/profiles/git",
+  "users/profiles/helix",
   "users/profiles/kubie",
   "users/profiles/nushell",
   "users/profiles/pueue",
   "users/profiles/rbw",
   "users/profiles/ssh",
   "users/profiles/starship",
-  "users/profiles/tmux",
+  "users/profiles/zellij",
 ]
 
 [config.home-manager.users.john.programs.bat]
