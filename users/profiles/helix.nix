@@ -6,7 +6,10 @@
 
       editor = {
         line-number = "relative";
-        mouse = false;
+        mouse = true;
+        cursorline = true;
+        bufferline = "multiple";
+        true-color = true;
 
         cursor-shape = {
           insert = "bar";
@@ -17,6 +20,13 @@
         file-picker = {
           hidden = false;
         };
+
+        lsp = {
+          auto-signature-help = false;
+          display-messages = true;
+        };
+
+        statusline.left = ["mode" "spinner" "version-control" "file-name"];
       };
     };
     languages = {
@@ -24,7 +34,7 @@
         {
           name = "nix";
           formatter = {command = "${pkgs.alejandra}/bin/alejandra";};
-          language-server = {command = "${pkgs.nixd}/bin/nixd";};
+          language-server = {command = "${pkgs.nil}/bin/nil";};
           auto-format = true;
         }
       ];
