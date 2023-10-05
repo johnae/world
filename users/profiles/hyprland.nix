@@ -27,7 +27,7 @@
     name = "swaylock-effects";
     runtimeInputs = [pkgs.swaylock-effects];
     text = ''
-      swaylock \
+      exec swaylock \
        --screenshots \
        --indicator-radius 100 \
        --indicator-thickness 7 \
@@ -56,7 +56,7 @@
     name = "swayidle";
     runtimeInputs = [pkgs.bash swaylockEffects pkgs.swayidle];
     text = ''
-      swayidle -d -w timeout ${swaylockTimeout} swaylock-effects \
+      exec swayidle -d -w timeout ${swaylockTimeout} swaylock-effects \
                      timeout ${swaylockSleepTimeout} 'hyprctl dispatch dpms off' \
                      resume 'hyprctl dispatch dpms on' \
                      before-sleep swaylock-effects
@@ -270,6 +270,7 @@ in {
     ];
     exec-once = [
       "${pkgs.wpaperd}/bin/wpaperd"
+      "${swayidleCommand}/bin/swayidle"
     ];
   };
 }
