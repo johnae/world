@@ -321,7 +321,7 @@ $env.config = {
   }
   menus: [
       # Configuration for default nushell menus
-      # Note the lack of souce parameter
+      # Note the lack of source parameter
       {
         name: completion_menu
         only_buffer_difference: false
@@ -447,6 +447,17 @@ $env.config = {
       event: [
         { send: executehostcommand,
           cmd: "gcloud config set project (gcloud projects list --format=json | from json | get projectId | to text | sk)"
+        }
+      ]
+    }
+    {
+      name: cd_to_project_root
+      modifier: control
+      keycode: char_g
+      mode: [emacs, vi_normal, vi_insert] # Options: emacs vi_normal vi_insert
+      event: [
+        { send: executehostcommand,
+          cmd: "cd (fd '\\.git$' Development -H -t d -x echo {//} | sk)"
         }
       ]
     }
