@@ -22,6 +22,7 @@ in {
         #cursorline = true;
         bufferline = "multiple";
         true-color = true;
+        color-modes = true;
 
         cursor-shape = {
           insert = "bar";
@@ -36,10 +37,17 @@ in {
         lsp = {
           auto-signature-help = false;
           display-messages = true;
+          display-inlay-hints = true;
           copilot-auto = true;
         };
 
-        statusline.left = ["mode" "spinner" "version-control" "file-name"];
+        statusline = {
+          left = ["mode" "spinner" "version-control" "file-name"];
+          right = ["file-type" "file-encoding"];
+          mode.normal = "NORMAL";
+          mode.insert = "INSERT";
+          mode.select = "SELECT";
+        };
       };
 
       keys = {
