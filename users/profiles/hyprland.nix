@@ -74,7 +74,23 @@
 
   xcursor_theme = config.gtk.cursorTheme.name;
   terminal-bin = "${pkgs.wezterm}/bin/wezterm";
-  editor = ''${terminal-bin} start --class=hx hx'';
+  editor = pkgs.writeShellApplication {
+    name = "editor";
+    runtimeInputs = with pkgs; [wezterm fd rofi-wayland];
+    text = ''
+      # shellcheck disable=SC1083
+      fd '\.git' Development -H -t d -x echo {//} | rofi -dmenu -p "Edit project" | xargs -r -I{} wezterm start --class=hx bash -c "cd {}; exec hx ."
+    '';
+  };
+
+  remote-editor = pkgs.writeShellApplication {
+    name = "remote-editor";
+    runtimeInputs = with pkgs; [openssh wezterm fd rofi-wayland];
+    text = ''
+      # shellcheck disable=SC1083
+      ssh sirius fd '\.git' Development -H -t d -x echo {//} | rofi -dmenu -p "Edit remote project" | xargs -r -I{} wezterm ssh --class=hx-remote sirius bash -c "cd {}; exec hx ."
+    '';
+  };
 in {
   xdg.configFile."wpaperd/wallpaper.toml".source = pkgs.writeText "wallpaper.toml" ''
     [default]
@@ -131,7 +147,8 @@ in {
         "$mod, Return, exec, ${terminal-bin}"
         "$mod SHIFT, q, killactive"
         "$mod, d, exec, ${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes \"drun,run\""
-        "$mod SHIFT, e, exec, ${editor}"
+        "$mod SHIFT, e, exec, ${editor}/bin/editor"
+        "$mod SHIFT, r, exec, ${remote-editor}/bin/remote-editor"
         "$mod SHIFT, s, exec, ${screenshot}/bin/screenshot"
         "$mod CONTROL, l, exec, ${swaylockEffects}/bin/swaylock-effects"
         "$mod, left, movefocus, l"
