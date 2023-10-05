@@ -32,6 +32,7 @@
       }
       // {
         ## packages from other flakes
+        helix-latest = inputs.helix.packages.${system}.helix;
         hyprland-unstable = inputs.hyprland.packages.${system}.hyprland;
         inherit
           (inputs.hyprland.packages.${system})

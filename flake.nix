@@ -29,6 +29,8 @@
     aml.url = "github:any1/aml";
     blur.flake = false;
     blur.url = "github:johnae/blur";
+    copilot-vim.url = "github:github/copilot.vim";
+    copilot-vim.flake = false;
     crane.url = "github:ipetkov/crane";
     crane.inputs.nixpkgs.follows = "nixpkgs";
     crane.inputs.flake-utils.follows = "flake-utils";
@@ -71,6 +73,7 @@
     headscale.url = "github:juanfont/headscale";
     headscale.inputs.flake-utils.follows = "flake-utils";
     headscale.inputs.nixpkgs.follows = "nixpkgs";
+    helix.url = "github:AlexanderDickie/helix/copilot"; ## copilot support
     hetzner-csi-driver.flake = false;
     hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.5.1/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
     hwdata.url = "github:vcrhonek/hwdata";

@@ -8,6 +8,7 @@
   packages = with pkgs; [
     agenix
     alejandra
+    nil
     yj
     rage
     age-plugin-yubikey
