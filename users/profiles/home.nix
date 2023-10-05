@@ -48,8 +48,8 @@ in {
   ];
 
   home.sessionVariables = {
-    EDITOR = "emacsclient -t -a=";
-    VISUAL = "emacsclient -t -a=";
+    EDITOR = "hx";
+    VISUAL = "hx";
     KUBECONFIG = "/home/${home.username}/.kube/config";
     COLORTERM = "truecolor";
     USE_GKE_GCLOUD_AUTH_PLUGIN = "True";

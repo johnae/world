@@ -577,4 +577,4 @@ $env.config = {
 
 alias cat = bat
 def l [] { ls | grid -c }
-alias e = emacsclient -t
+alias e = hx

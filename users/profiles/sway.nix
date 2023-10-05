@@ -126,9 +126,8 @@
     '';
   };
 
-  terminal = pkgs.alacritty;
-  terminal-bin = "${pkgs.alacritty}/bin/alacritty";
-  terminal-emacs = ''${terminal-bin} --class=emacs -e emacsclient -t -a=""'';
+  terminal-bin = "${pkgs.wezterm}/bin/wezterm";
+  editor = ''${terminal-bin} start --class=hx hx'';
 
   fonts = {
     names = ["Roboto" "Font Awesome 5 Free" "Font Awesome 5 Brands" "Arial" "sans-serif"];
@@ -356,7 +355,7 @@ in {
 
         "${modifier}+b" = ''exec ${swayBackground}/bin/sway-background'';
 
-        "${modifier}+Shift+e" = ''exec ${terminal-emacs}'';
+        "${modifier}+Shift+e" = ''exec ${editor}'';
 
         "${modifier}+Shift+v" = ''splith'';
 

@@ -73,9 +73,8 @@
   };
 
   xcursor_theme = config.gtk.cursorTheme.name;
-  terminal = pkgs.alacritty;
-  terminal-bin = "${pkgs.alacritty}/bin/alacritty";
-  terminal-emacs = ''${terminal-bin} --class=emacs -e emacsclient -t -a=""'';
+  terminal-bin = "${pkgs.wezterm}/bin/wezterm";
+  editor = ''${terminal-bin} start --class=hx hx'';
 in {
   xdg.configFile."wpaperd/wallpaper.toml".source = pkgs.writeText "wallpaper.toml" ''
     [default]
@@ -132,7 +131,7 @@ in {
         "$mod, Return, exec, ${terminal-bin}"
         "$mod SHIFT, q, killactive"
         "$mod, d, exec, ${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes \"drun,run\""
-        "$mod SHIFT, e, exec, ${terminal-emacs}"
+        "$mod SHIFT, e, exec, ${editor}"
         "$mod SHIFT, s, exec, ${screenshot}/bin/screenshot"
         "$mod CONTROL, l, exec, ${swaylockEffects}/bin/swaylock-effects"
         "$mod, left, movefocus, l"

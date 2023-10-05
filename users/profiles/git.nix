@@ -22,7 +22,7 @@ in {
     extraConfig = {
       github.user = userinfo.githubUser;
       gitlab.user = userinfo.gitlabUser;
-      core.editor = "emacsclient -c";
+      core.editor = "hx";
       push.default = "upstream";
       pull.rebase = true;
       rebase.autoStash = true;
