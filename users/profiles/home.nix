@@ -13,6 +13,7 @@ in {
     carapace
     element-desktop-wayland
     fzf # # for certain utilities that depend on it
+    gex
     gh
     git-branchless
     git-crypt
