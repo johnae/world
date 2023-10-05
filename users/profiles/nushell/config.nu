@@ -578,4 +578,4 @@ $env.config = {
 alias cat = bat
 def l [] { ls | grid -c }
 alias e = hx
-alias commit = gex
+alias c = gex
