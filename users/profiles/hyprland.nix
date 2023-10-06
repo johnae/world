@@ -76,19 +76,33 @@
   terminal-bin = "${pkgs.wezterm}/bin/wezterm";
   editor = pkgs.writeShellApplication {
     name = "editor";
-    runtimeInputs = with pkgs; [wezterm fd rofi-wayland];
+    runtimeInputs = with pkgs; [hyprland wezterm fd rofi-wayland];
     text = ''
       # shellcheck disable=SC1083
-      fd '\.git' Development -H -t d -x echo {//} | rofi -dmenu -p "Edit project" | xargs -r -I{} wezterm start --class=hx bash -c "cd {}; exec hx ."
+      project="$(fd '\.git' ~/Development -H -t d -x echo {//} | sort -u | rofi -dmenu -p "Edit project")"
+      if [ -n "$project" ]; then
+        name="$(basename "$project")"
+        if hyprctl clients | grep -q "class: $name-local"; then
+          exec hyprctl dispatch focuswindow "$name-local"
+        fi
+        exec wezterm connect --workspace "$name" --class="$name"-local local-dev nu -e "wezterm cli adjust-pane-size --pane-id (wezterm cli split-pane --cwd $project) --amount 23 Down; wezterm cli activate-pane-direction Up; cd $project; if ('flake.nix' | path exists) { nix develop --impure -c hx . } else { hx . }"
+      fi
     '';
   };
 
   remote-editor = pkgs.writeShellApplication {
     name = "remote-editor";
-    runtimeInputs = with pkgs; [openssh wezterm fd rofi-wayland];
+    runtimeInputs = with pkgs; [hyprland openssh wezterm fd rofi-wayland];
     text = ''
       # shellcheck disable=SC1083
-      ssh sirius fd '\.git' Development -H -t d -x echo {//} | rofi -dmenu -p "Edit remote project" | xargs -r -I{} wezterm ssh --class=hx-remote sirius bash -c "cd {}; exec hx ."
+      project="$(ssh sirius fd '\.git' ~/Development -H -t d -x echo {//} | sort -u | rofi -dmenu -p "Edit project")"
+      if [ -n "$project" ]; then
+        name="$(basename "$project")"
+        if hyprctl clients | grep -q "class: $name-remote"; then
+          exec hyprctl dispatch focuswindow "$name-remote"
+        fi
+        exec wezterm connect --workspace "$name" --class="$name"-remote remote-dev nu -e "wezterm cli adjust-pane-size --pane-id (wezterm cli split-pane --cwd $project) --amount 23 Down; wezterm cli activate-pane-direction Up; cd $project; if ('flake.nix' | path exists) { nix develop --impure -c hx . } else { hx . }"
+      fi
     '';
   };
 in {
