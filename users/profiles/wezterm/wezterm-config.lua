@@ -24,18 +24,18 @@ config.keys = {
     action = act.SendKey { key = 'a', mods = 'CTRL' },
   },
 }
--- config.unix_domains = {
---   {
---     name = "dev",
---   },
--- }
--- config.ssh_domains = {
---   {
---     name = "sirius",
---     remote_address = "sirius",
---     username = "john",
---     connect_automatically = true,
---   },
--- }
+config.unix_domains = {
+  {
+    name = "local-dev",
+  },
+}
+config.ssh_domains = {
+  {
+    name = "remote-dev",
+    remote_address = "sirius",
+    username = "john",
+    connect_automatically = false,
+  },
+}
 
 return config
