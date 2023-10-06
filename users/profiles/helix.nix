@@ -73,6 +73,10 @@ in {
           language-servers = ["rust-analyzer" "copilot"];
         }
         {
+          name = "lua";
+          language-servers = ["lua-language-server" "copilot"];
+        }
+        {
           name = "javascript";
           language-servers = ["typescript-language-server" "copilot"];
         }
@@ -115,6 +119,10 @@ in {
         {
           name = "yaml";
           language-servers = ["yaml-language-server" "copilot"];
+        }
+        {
+          name = "toml";
+          language-servers = ["taplo" "copilot"];
         }
         {
           name = "just";
