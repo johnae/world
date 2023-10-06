@@ -1,7 +1,6 @@
 {
   dockerTools,
   pkgs,
-  lib,
   dockerRegistry ? "ghcr.io/johnae",
   dockerTag ? null,
   ...
