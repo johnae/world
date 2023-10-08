@@ -48,7 +48,7 @@ local function open_project_action(window, pane)
               workspace = name,
               domain = { DomainName = domain },
               cwd = label,
-              args = wezterm.shell_split('nu -e "if (\'flake.nix\' | path exists) { nix develop --impure -c hx . } else { hx . }"')
+              args = wezterm.shell_split('nu -e "if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
             })
             mux.set_active_workspace(name)
             pane:split { cwd = label, direction = 'Bottom', size = 0.15 }
