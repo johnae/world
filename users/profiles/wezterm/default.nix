@@ -3,7 +3,6 @@
   programs.wezterm = {
     enable = true;
     extraConfig = ''
-      package.path = "./?.lua;" .. package.path
       return (require 'wezterm-config')
     '';
   };
