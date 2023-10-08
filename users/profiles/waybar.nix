@@ -67,6 +67,7 @@ in {
   programs.waybar.enable = true;
   programs.waybar.settings.mainBar = {
     bar_id = "main";
+    layer = "top";
     ipc = true;
     position = "top";
     spacing = 8;
