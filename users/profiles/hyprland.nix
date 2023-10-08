@@ -73,38 +73,18 @@
   };
 
   xcursor_theme = config.gtk.cursorTheme.name;
-  terminal-bin = "${pkgs.wezterm}/bin/wezterm";
-  editor = pkgs.writeShellApplication {
-    name = "editor";
-    runtimeInputs = with pkgs; [hyprland wezterm fd rofi-wayland];
-    text = ''
-      # shellcheck disable=SC1083
-      project="$(fd '\.git' ~/Development -H -t d -x echo {//} | sort -u | rofi -dmenu -p "Edit project")"
-      if [ -n "$project" ]; then
-        name="$(basename "$project")"
-        if hyprctl clients | grep -q "class: $name-local"; then
-          exec hyprctl dispatch focuswindow "$name-local"
-        fi
-        exec wezterm connect --workspace "$name" --class="$name"-local local-dev nu -e "wezterm cli adjust-pane-size --pane-id (wezterm cli split-pane --cwd $project) --amount 23 Down; wezterm cli activate-pane-direction Up; cd $project; if ('flake.nix' | path exists) { nix develop --impure -c hx . } else { hx . }"
-      fi
-    '';
-  };
+  terminal-bin = "${pkgs.wezterm}/bin/wezterm start --always-new-process";
+  dev-env = name:
+    pkgs.writeShellApplication {
+      name = name;
+      runtimeInputs = with pkgs; [wezterm];
+      text = ''
+        exec wezterm connect --class=${name} ${name}
+      '';
+    };
 
-  remote-editor = pkgs.writeShellApplication {
-    name = "remote-editor";
-    runtimeInputs = with pkgs; [hyprland openssh wezterm fd rofi-wayland];
-    text = ''
-      # shellcheck disable=SC1083
-      project="$(ssh sirius fd '\.git' ~/Development -H -t d -x echo {//} | sort -u | rofi -dmenu -p "Edit project")"
-      if [ -n "$project" ]; then
-        name="$(basename "$project")"
-        if hyprctl clients | grep -q "class: $name-remote"; then
-          exec hyprctl dispatch focuswindow "$name-remote"
-        fi
-        exec wezterm connect --workspace "$name" --class="$name"-remote remote-dev nu -e "wezterm cli adjust-pane-size --pane-id (wezterm cli split-pane --cwd $project) --amount 23 Down; wezterm cli activate-pane-direction Up; cd $project; if ('flake.nix' | path exists) { nix develop --impure -c hx . } else { hx . }"
-      fi
-    '';
-  };
+  local-dev = dev-env "local-dev";
+  remote-dev = dev-env "remote-dev";
 in {
   xdg.configFile."wpaperd/wallpaper.toml".source = pkgs.writeText "wallpaper.toml" ''
     [default]
@@ -161,8 +141,8 @@ in {
         "$mod, Return, exec, ${terminal-bin}"
         "$mod SHIFT, q, killactive"
         "$mod, d, exec, ${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes \"drun,run\""
-        "$mod SHIFT, e, exec, ${editor}/bin/editor"
-        "$mod SHIFT, r, exec, ${remote-editor}/bin/remote-editor"
+        "$mod SHIFT, e, exec, ${local-dev}/bin/local-dev"
+        "$mod SHIFT, r, exec, ${remote-dev}/bin/remote-dev"
         "$mod SHIFT, s, exec, ${screenshot}/bin/screenshot"
         "$mod CONTROL, l, exec, ${swaylockEffects}/bin/swaylock-effects"
         "$mod, left, movefocus, l"
