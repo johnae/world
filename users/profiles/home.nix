@@ -24,6 +24,7 @@ in {
     kanshi
     kubectl
     kubectx
+    kubelogin
     kubelogin-oidc
     kustomize
     lm_sensors
