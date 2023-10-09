@@ -76,7 +76,7 @@
   terminal-bin = "${pkgs.wezterm}/bin/wezterm start --always-new-process";
   dev-env = name:
     pkgs.writeShellApplication {
-      name = name;
+      inherit name;
       runtimeInputs = with pkgs; [wezterm];
       text = ''
         exec wezterm connect --class=${name} ${name}
