@@ -57,9 +57,20 @@ in {
       };
     };
     languages = {
-      language-server.copilot = {
-        command = "${copilot}/bin/copilot";
-        args = ["--stdio"];
+      language-server = {
+        copilot = {
+          command = "${copilot}/bin/copilot";
+          args = ["--stdio"];
+        };
+        yaml-language-server = {
+          config.yaml.format.enable = true;
+          config.yaml.validation = true;
+          config.yaml.schemas = {
+            "https://json.schemastore.org/github-workflow.json" = ".github/{actions,workflows}/*.{yml,yaml}";
+            "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-tasks.json" = "roles/{tasks,handlers}/*.{yml,yaml}";
+            kubernetes = "kubernetes/*.{yml,yaml}";
+          };
+        };
       };
       language = [
         {
