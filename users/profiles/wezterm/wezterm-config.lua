@@ -56,6 +56,9 @@ local function open_project_action(window, pane)
           else
             mux.set_active_workspace(name)
           end
+          wezterm.run_child_process (wezterm.shell_split('hyprctl dispatch fullscreen'))
+          wezterm.run_child_process (wezterm.shell_split('sleep 0.1'))
+          wezterm.run_child_process (wezterm.shell_split('hyprctl dispatch fullscreen'))
         end
       end),
       title = "Projects",
