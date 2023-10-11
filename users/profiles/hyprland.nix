@@ -169,10 +169,17 @@ in {
         "$mod SHIFT, f, fakefullscreen"
       ];
 
+    group = {
+      groupbar = {
+        font_size = 12;
+        gradients = false;
+        "col.inactive" = "0x2E344000";
+        "col.active" = "0x5E81AC00";
+      };
+    };
+
     misc.disable_hyprland_logo = true;
     misc.disable_splash_rendering = true;
-    misc.groupbar_titles_font_size = 12;
-    misc.groupbar_gradients = true; ## ugly
 
     binds = {
       workspace_back_and_forth = true;
@@ -201,8 +208,6 @@ in {
       gaps_out = 16;
       "col.active_border" = "0xf0f000aa";
       "col.inactive_border" = "0x00000000";
-      "col.group_border" = "0x2E344000";
-      "col.group_border_active" = "0x5E81AC00";
     };
 
     decoration = {
