@@ -17,6 +17,15 @@ local function has_value(t, v)
   return false
 end
 
+local function find_tab(t, v)
+  for _, tab in ipairs(t) do
+    if tab:get_title() == v then
+      return tab
+    end
+  end
+  return nil
+end
+
 local function open_project_action(window, pane)
   local domain = pane:get_domain_name()
   wezterm.log_info('domain: ', domain)
@@ -34,6 +43,7 @@ local function open_project_action(window, pane)
       seen[line] = true
     end
   end
+
   window:perform_action(
     act.InputSelector {
       action = wezterm.action_callback(function(window, pane, id, label)
@@ -41,24 +51,19 @@ local function open_project_action(window, pane)
           wezterm.log_info('cancelled project select')
         else
           local name = basename(label)
-          local workspaces = mux.get_workspace_names()
-          if not has_value(workspaces, name) then
-            wezterm.log_info('create new workspace: ', name)
-            local _, pane, _ = mux.spawn_window({
-              workspace = name,
-              domain = { DomainName = domain },
+          local tabs = window:mux_window():tabs()
+          local project_tab = find_tab(tabs, name)
+          if project_tab == nil then
+            local tab, pane, window = window:mux_window():spawn_tab {
               cwd = label,
-              args = wezterm.shell_split('nu -e "if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
-            })
-            mux.set_active_workspace(name)
-            pane:split { cwd = label, direction = 'Bottom', size = 0.15 }
+              args = wezterm.shell_split('nu -e "cd ' .. label .. '; if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
+            }
+            cli_pane = pane:split { cwd = label, direction = 'Bottom', size = 0.25 }
             pane:activate()
+            tab:set_title(name)
           else
-            mux.set_active_workspace(name)
+            project_tab:activate()
           end
-          wezterm.run_child_process (wezterm.shell_split('hyprctl dispatch fullscreen'))
-          wezterm.run_child_process (wezterm.shell_split('sleep 0.1'))
-          wezterm.run_child_process (wezterm.shell_split('hyprctl dispatch fullscreen'))
         end
       end),
       title = "Projects",
@@ -69,6 +74,7 @@ local function open_project_action(window, pane)
   )
 end
 
+config.enable_tab_bar = false
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
 config.font_size = 14.0
 config.color_scheme = 'nord'
@@ -101,13 +107,9 @@ config.unix_domains = {
   {
     name = "local-dev",
   },
-}
-config.ssh_domains = {
   {
     name = "remote-dev",
-    remote_address = "sirius",
-    username = "john",
-    connect_automatically = false,
-  },
+    proxy_command = wezterm.shell_split('ssh -T -A sirius wezterm cli proxy')
+  }
 }
 return config
