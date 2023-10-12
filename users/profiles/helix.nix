@@ -19,10 +19,14 @@ in {
       editor = {
         line-number = "relative";
         mouse = true;
-        #cursorline = true;
         bufferline = "multiple";
         true-color = true;
         color-modes = true;
+        auto-format = true;
+        whitespace.render = {
+          space = "all";
+          tab = "all";
+        };
 
         cursor-shape = {
           insert = "bar";
@@ -48,11 +52,22 @@ in {
           mode.insert = "INSERT";
           mode.select = "SELECT";
         };
+
+        soft-wrap = {
+          enable = true;
+        };
       };
 
       keys = {
         insert = {
           right = "apply_copilot_completion";
+        };
+        normal = {
+          space = {
+            e = ":write";
+            q = ":quit";
+            space = "goto_last_accessed_file";
+          };
         };
       };
     };
