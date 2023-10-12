@@ -74,6 +74,7 @@ local function open_project_action(window, pane)
   )
 end
 
+config.mux_env_remove = {}
 config.enable_tab_bar = false
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
 config.font_size = 14.0
