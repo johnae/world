@@ -257,13 +257,6 @@ profiles = [
   "users/profiles/zellij",
 ]
 
-[config.home-manager.users.john.home.file.".ssh/rc"]
-text = """
-if [ -e "$SSH_AUTH_SOCK" ]; then
-  ln -sf "$SSH_AUTH_SOCK" /run/user/1337/ssh-auth.sock
-fi
-"""
-
 [config.home-manager.users.john.home.sessionVariables]
 SSH_AUTH_SOCK = "/run/user/1337/ssh-auth.sock"
 
