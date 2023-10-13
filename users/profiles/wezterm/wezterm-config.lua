@@ -75,11 +75,25 @@ local function open_project_action(window, pane)
 end
 
 wezterm.on('SplitHorizontal', function(window, pane)
-  window:perform_action(act.SplitHorizontal {})
+  if pane:get_title() == 'hx' then
+    window:perform_action(act.Multiple {
+      act.SendKey { key = 'w', mods = 'CTRL'},
+      act.SendKey { key = 's'}
+    })
+  else
+    window:perform_action(act.SplitHorizontal {})
+  end
 end)
 
 wezterm.on('SplitVertical', function(window, pane)
-  window:perform_action(act.SplitHorizontal {})
+  if pane:get_title() == 'hx' then
+    window:perform_action(act.Multiple {
+      act.SendKey { key = 'w', mods = 'CTRL'},
+      act.SendKey { key = 'v'}
+    })
+  else
+    window:perform_action(act.SplitVertical {})
+  end
 end)
 
 wezterm.on('FindProject', open_project_action)
