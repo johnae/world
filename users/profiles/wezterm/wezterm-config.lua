@@ -110,7 +110,7 @@ config.unix_domains = {
   },
   {
     name = "remote-dev",
-    proxy_command = wezterm.shell_split('ssh -T -A sirius "ln -sf $SSH_AUTH_SOCK /run/user/1337/ssh-auth.sock; wezterm cli proxy"')
+    proxy_command = wezterm.shell_split('ssh -T -A sirius "ln -sf $env.SSH_AUTH_SOCK /run/user/1337/ssh-auth.sock; wezterm cli proxy"')
   }
 }
 return config
