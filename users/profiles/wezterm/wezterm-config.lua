@@ -79,9 +79,9 @@ wezterm.on('SplitHorizontal', function(window, pane)
     window:perform_action(act.Multiple {
       act.SendKey { key = 'w', mods = 'CTRL'},
       act.SendKey { key = 's'}
-    })
+    }, pane)
   else
-    window:perform_action(act.SplitHorizontal {})
+    window:perform_action(act.SplitHorizontal {}, pane)
   end
 end)
 
@@ -90,9 +90,9 @@ wezterm.on('SplitVertical', function(window, pane)
     window:perform_action(act.Multiple {
       act.SendKey { key = 'w', mods = 'CTRL'},
       act.SendKey { key = 'v'}
-    })
+    }, pane)
   else
-    window:perform_action(act.SplitVertical {})
+    window:perform_action(act.SplitVertical {}, pane)
   end
 end)
 
