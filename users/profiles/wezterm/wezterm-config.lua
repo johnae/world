@@ -74,6 +74,16 @@ local function open_project_action(window, pane)
   )
 end
 
+wezterm.on('SplitHorizontal', function(window, pane)
+  window:perform_action(act.SplitHorizontal {})
+end)
+
+wezterm.on('SplitVertical', function(window, pane)
+  window:perform_action(act.SplitHorizontal {})
+end)
+
+wezterm.on('FindProject', open_project_action)
+
 config.mux_env_remove = {}
 config.enable_tab_bar = false
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
@@ -86,12 +96,12 @@ config.keys = {
   {
     key = 'RightArrow',
     mods = 'LEADER',
-    action = act.SplitHorizontal { domain = 'CurrentPaneDomain' },
+    action = act.EmitEvent('SplitHorizontal')
   },
   {
     key = 'DownArrow',
     mods = 'LEADER',
-    action = act.SplitVertical { domain = 'CurrentPaneDomain' },
+    action = act.EmitEvent('SplitVertical')
   },
   {
     key = 'Space',
@@ -101,7 +111,7 @@ config.keys = {
   {
     key = 'f',
     mods = 'LEADER',
-    action = wezterm.action_callback(open_project_action),
+    action = act.EmitEvent('FindProject')
   }
 }
 config.unix_domains = {
