@@ -153,22 +153,22 @@ config.window_background_opacity = 0.95
 config.keys = {
   {
     key = 'LeftArrow',
-    mods = 'CTRL|SHIFT',
+    mods = 'CTRL+SHIFT',
     action = act.EmitEvent('ActivateDirectionLeft')
   },
   {
     key = 'RightArrow',
-    mods = 'CTRL|SHIFT',
+    mods = 'CTRL+SHIFT',
     action = act.EmitEvent('ActivateDirectionRight')
   },
   {
     key = 'UpArrow',
-    mods = 'CTRL|SHIFT',
+    mods = 'CTRL+SHIFT',
     action = act.EmitEvent('ActivateDirectionUp')
   },
   {
     key = 'DownArrow',
-    mods = 'CTRL|SHIFT',
+    mods = 'CTRL+SHIFT',
     action = act.EmitEvent('ActivateDirectionDown')
   },
   {
