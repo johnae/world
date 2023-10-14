@@ -108,7 +108,7 @@ wezterm.on('ActivateDirectionLeft', function(window, pane)
       act.SendKey { key = 'LeftArrow' }
     }, pane)
   else
-    window:perform_action(act.ActivatePaneDirection('Left'))
+    window:perform_action(act.ActivatePaneDirection('Left'), pane)
   end
 end)
 
@@ -119,16 +119,16 @@ wezterm.on('ActivateDirectionRight', function(window, pane)
       act.SendKey { key = 'RightArrow' }
     }, pane)
   else
-    window:perform_action(act.ActivatePaneDirection('Right'))
+    window:perform_action(act.ActivatePaneDirection('Right'), pane)
   end
 end)
 
 wezterm.on('ActivateDirectionUp', function(window, pane)
-  window:perform_action(act.ActivatePaneDirection('Up'))
+  window:perform_action(act.ActivatePaneDirection('Up'), pane)
 end)
 
 wezterm.on('ActivateDirectionDown', function(window, pane)
-  window:perform_action(act.ActivatePaneDirection('Down'))
+  window:perform_action(act.ActivatePaneDirection('Down'), pane)
 end)
 
 config.mux_env_remove = {}
