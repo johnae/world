@@ -123,6 +123,14 @@ wezterm.on('ActivateDirectionRight', function(window, pane)
   end
 end)
 
+wezterm.on('ActivateDirectionUp', function(window, pane)
+  window:perform_action(act.ActivatePaneDirection('Up'))
+end)
+
+wezterm.on('ActivateDirectionDown', function(window, pane)
+  window:perform_action(act.ActivatePaneDirection('Down'))
+end)
+
 config.mux_env_remove = {}
 config.enable_tab_bar = false
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
