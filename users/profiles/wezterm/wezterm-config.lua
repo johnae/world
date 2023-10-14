@@ -98,6 +98,31 @@ end)
 
 wezterm.on('FindProject', open_project_action)
 
+-- These two will work in practice as I don't have things laid out
+-- in so many different ways - i.e don't need or want Up/Down as well
+-- for example.
+wezterm.on('ActivateDirectionLeft', function(window, pane)
+  if pane:get_title() == 'hx' then
+    window:perform_action(act.Multiple {
+      act.SendKey { key = 'w', mods = 'CTRL' },
+      act.SendKey { key = 'LeftArrow' }
+    }, pane)
+  else
+    window:perform_action(act.ActivatePaneDirection('Left'))
+  end
+end)
+
+wezterm.on('ActivateDirectionRight', function(window, pane)
+  if pane:get_title() == 'hx' then
+    window:perform_action(act.Multiple {
+      act.SendKey { key = 'w', mods = 'CTRL' },
+      act.SendKey { key = 'RightArrow' }
+    }, pane)
+  else
+    window:perform_action(act.ActivatePaneDirection('Right'))
+  end
+end)
+
 config.mux_env_remove = {}
 config.enable_tab_bar = false
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
@@ -107,6 +132,26 @@ config.hide_tab_bar_if_only_one_tab = true
 config.leader = { key='Space', mods='CTRL' }
 config.window_background_opacity = 0.95
 config.keys = {
+  {
+    key = 'LeftArrow',
+    mods = 'CTRL|SHIFT',
+    action = act.EmitEvent('ActivateDirectionLeft')
+  },
+  {
+    key = 'RightArrow',
+    mods = 'CTRL|SHIFT',
+    action = act.EmitEvent('ActivateDirectionRight')
+  },
+  {
+    key = 'UpArrow',
+    mods = 'CTRL|SHIFT',
+    action = act.EmitEvent('ActivateDirectionUp')
+  },
+  {
+    key = 'DownArrow',
+    mods = 'CTRL|SHIFT',
+    action = act.EmitEvent('ActivateDirectionDown')
+  },
   {
     key = 'RightArrow',
     mods = 'LEADER',
