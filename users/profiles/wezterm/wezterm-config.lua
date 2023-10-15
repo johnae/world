@@ -176,6 +176,11 @@ config.keys = {
     action = act.SendKey { key = 'Space', mods = 'CTRL' },
   },
   {
+    key = 't',
+    mods = 'LEADER',
+    action = wezterm.action.ShowTabNavigator
+  },
+  {
     key = 'f',
     mods = 'LEADER',
     action = act.EmitEvent('FindProject')
