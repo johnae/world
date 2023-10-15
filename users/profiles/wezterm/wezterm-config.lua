@@ -38,7 +38,7 @@ local function open_project_action(window, pane)
     status, out, err = wezterm.run_child_process (wezterm.shell_split('fd \\.git /home/john/Development -H -t d -x echo {//}'))
   end
   local tabs = window:mux_window():tabs()
-  for tab in tabs do
+  for _, tab in ipairs(tabs) do
     local title = tab:get_title()
     if (not seen[title]) then
       table.insert(choices, { id = title, label = "Tab: " .. title })
