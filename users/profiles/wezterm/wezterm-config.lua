@@ -4,13 +4,13 @@ local mux = wezterm.mux
 local config = wezterm.config_builder()
 
 local function project_name(str)
-	local name = string.gsub(str, "(.*/)(.*)", "%2")
-	local dirname_path = string.gsub(str, "(.*)/(.*)", "%1")
-	local dirname = string.gsub(dirname_path, "(.*/)(.*)", "%2")
+  local name = string.gsub(str, "(.*/)(.*)", "%2")
+  local dirname_path = string.gsub(str, "(.*)/(.*)", "%1")
+  local dirname = string.gsub(dirname_path, "(.*/)(.*)", "%2")
   if dirname ~= 'Development' then
     name = dirname .. "/" .. name
   end
-	return name
+  return name
 end
 
 local function has_value(t, v)
@@ -67,8 +67,8 @@ local function open_project_action(window, pane)
           local project_tab = find_tab(tabs, name)
           if project_tab == nil then
             local tab, pane, window = window:mux_window():spawn_tab {
-              cwd = label,
-              args = wezterm.shell_split('nu -e "cd ' .. id .. '; if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
+              cwd = id,
+              args = wezterm.shell_split('nu -e "if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
             }
             cli_pane = pane:split { cwd = id, direction = 'Bottom', size = 0.25 }
             pane:activate()
