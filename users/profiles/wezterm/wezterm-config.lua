@@ -81,7 +81,7 @@ local function open_project_action(window, pane)
             wezterm.log_info('project tab was nil, create new tab with name: ', name, ' id: ', id)
             local tab, pane, window = window:mux_window():spawn_tab {
               cwd = id,
-              args = wezterm.shell_split('nu -e "if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
+              args = wezterm.shell_split('nu -e "cd ' .. id .. '; if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
             }
             cli_pane = pane:split { cwd = id, direction = 'Bottom', size = 0.25 }
             pane:activate()
