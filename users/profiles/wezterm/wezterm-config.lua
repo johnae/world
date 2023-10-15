@@ -3,7 +3,14 @@ local act = wezterm.action
 local mux = wezterm.mux
 local config = wezterm.config_builder()
 
+local function starts_with(str, start)
+  return str:sub(1, #start) == start
+end
+
 local function project_name(str)
+  if not starts_with(str, '/') then
+    return str
+  end
   local name = string.gsub(str, "(.*/)(.*)", "%2")
   local dirname_path = string.gsub(str, "(.*)/(.*)", "%1")
   local dirname = string.gsub(dirname_path, "(.*/)(.*)", "%2")
@@ -49,13 +56,13 @@ local function open_project_action(window, pane)
       title = "<unnamed>"
     end
     if (not seen[title]) then
-      table.insert(choices, { id = { type = "tab", name = title }, label = "Tab: " .. title })
+      table.insert(choices, { id = title, label = "Tab: " .. title })
       seen[title] = true
     end
   end
   for line in out:gmatch("[^\r\n]+") do
     if (not seen[line]) then
-      table.insert(choices, { id = { type = "dir", name = tostring(line) }, label = "Directory: " .. project_name(line) })
+      table.insert(choices, { id = tostring(line), label = "Directory: " .. project_name(line) })
       seen[line] = true
     end
   end
@@ -67,20 +74,14 @@ local function open_project_action(window, pane)
           wezterm.log_info('cancelled project select')
         else
           wezterm.log_info('select input, id: ', id, ' label: ', label)
-          local name
-          if id.type == 'tab' then
-            name = id.name
-          else
-            name = project_name(id.name)
-          end
-          local tabs = window:mux_window():tabs()
+          local name = project_name(id)
           wezterm.log_info('tab find tab: ', name)
           local project_tab = find_tab(tabs, name)
           if project_tab == nil then
             wezterm.log_info('project tab was nil, create new tab with name: ', name, ' id: ', id)
             local tab, pane, window = window:mux_window():spawn_tab {
               cwd = id,
-              args = wezterm.shell_split('nu -e "cd ' .. id .. '; if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
+              args = wezterm.shell_split('nu -e "if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
             }
             cli_pane = pane:split { cwd = id, direction = 'Bottom', size = 0.25 }
             pane:activate()
