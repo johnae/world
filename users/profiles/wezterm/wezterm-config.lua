@@ -56,14 +56,15 @@ local function open_project_action(window, pane)
       title = "<unnamed>"
     end
     if (not seen[title]) then
-      table.insert(choices, { id = title, label = "Tab: " .. title })
+      table.insert(choices, { id = title, label = title })
       seen[title] = true
     end
   end
   for line in out:gmatch("[^\r\n]+") do
-    if (not seen[line]) then
-      table.insert(choices, { id = tostring(line), label = "Directory: " .. project_name(line) })
-      seen[line] = true
+    local name = project_name(line)
+    if (not seen[name]) then
+      table.insert(choices, { id = tostring(line), label = name })
+      seen[name] = true
     end
   end
 
