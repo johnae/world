@@ -45,6 +45,9 @@ local function open_project_action(window, pane)
   local tabs = window:mux_window():tabs()
   for _, tab in ipairs(tabs) do
     local title = tab:get_title()
+    if title == "" or title == nil then
+      title = "<unnamed>"
+    end
     if (not seen[title]) then
       table.insert(choices, { id = title, label = "Tab: " .. title })
       seen[title] = true
@@ -63,15 +66,20 @@ local function open_project_action(window, pane)
         if not id and not label then
           wezterm.log_info('cancelled project select')
         else
+          wezterm.log_info('select input, id: ', id, ' label: ', label)
           local name = project_name(id)
+          local tabs = window:mux_window():tabs()
+          wezterm.log_info('tab find tab: ', name)
           local project_tab = find_tab(tabs, name)
           if project_tab == nil then
+            wezterm.log_info('project tab was nil, create new tab with name: ', name, ' id: ', id)
             local tab, pane, window = window:mux_window():spawn_tab {
               cwd = id,
               args = wezterm.shell_split('nu -e "cd ' .. id .. '; if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
             }
             cli_pane = pane:split { cwd = id, direction = 'Bottom', size = 0.25 }
             pane:activate()
+            wezterm.log_info('tab set title: ', name)
             tab:set_title(name)
           else
             project_tab:activate()
