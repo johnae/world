@@ -3,8 +3,13 @@ local act = wezterm.action
 local mux = wezterm.mux
 local config = wezterm.config_builder()
 
-local function basename(str)
+local function project_name(str)
 	local name = string.gsub(str, "(.*/)(.*)", "%2")
+	local dirname_path = string.gsub(str, "(.*)/(.*)", "%1")
+	local dirname = string.gsub(dirname_path, "(.*/)(.*)", "%2")
+  if dirname ~= 'Development' then
+    name = dirname .. "/" .. name
+  end
 	return name
 end
 
@@ -33,9 +38,9 @@ local function open_project_action(window, pane)
   local seen = {}
   local status, out, err
   if (domain == "remote-dev") then
-    status, out, err = wezterm.run_child_process (wezterm.shell_split('ssh sirius fd \\.git /home/john/Development -H -t d -x echo {//}'))
+    status, out, err = wezterm.run_child_process (wezterm.shell_split('ssh sirius fd \\.git /home/john/Development -d 3 -H -t d -x echo {//}'))
   else
-    status, out, err = wezterm.run_child_process (wezterm.shell_split('fd \\.git /home/john/Development -H -t d -x echo {//}'))
+    status, out, err = wezterm.run_child_process (wezterm.shell_split('fd \\.git /home/john/Development -d 3 -H -t d -x echo {//}'))
   end
   local tabs = window:mux_window():tabs()
   for _, tab in ipairs(tabs) do
@@ -47,7 +52,7 @@ local function open_project_action(window, pane)
   end
   for line in out:gmatch("[^\r\n]+") do
     if (not seen[line]) then
-      table.insert(choices, { id = tostring(line), label = "Directory: " .. basename(line) })
+      table.insert(choices, { id = tostring(line), label = "Directory: " .. project_name(line) })
       seen[line] = true
     end
   end
@@ -58,7 +63,7 @@ local function open_project_action(window, pane)
         if not id and not label then
           wezterm.log_info('cancelled project select')
         else
-          local name = basename(id)
+          local name = project_name(id)
           local project_tab = find_tab(tabs, name)
           if project_tab == nil then
             local tab, pane, window = window:mux_window():spawn_tab {
