@@ -49,13 +49,13 @@ local function open_project_action(window, pane)
       title = "<unnamed>"
     end
     if (not seen[title]) then
-      table.insert(choices, { id = title, label = "Tab: " .. title })
+      table.insert(choices, { id = { type = "tab", name = title }, label = "Tab: " .. title })
       seen[title] = true
     end
   end
   for line in out:gmatch("[^\r\n]+") do
     if (not seen[line]) then
-      table.insert(choices, { id = tostring(line), label = "Directory: " .. project_name(line) })
+      table.insert(choices, { id = { type = "dir", name = tostring(line) }, label = "Directory: " .. project_name(line) })
       seen[line] = true
     end
   end
@@ -67,7 +67,12 @@ local function open_project_action(window, pane)
           wezterm.log_info('cancelled project select')
         else
           wezterm.log_info('select input, id: ', id, ' label: ', label)
-          local name = project_name(id)
+          local name
+          if id.type == 'tab' then
+            name = id.name
+          else
+            name = project_name(id.name)
+          end
           local tabs = window:mux_window():tabs()
           wezterm.log_info('tab find tab: ', name)
           local project_tab = find_tab(tabs, name)
