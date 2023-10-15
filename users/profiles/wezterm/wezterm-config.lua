@@ -37,9 +37,17 @@ local function open_project_action(window, pane)
   else
     status, out, err = wezterm.run_child_process (wezterm.shell_split('fd \\.git /home/john/Development -H -t d -x echo {//}'))
   end
+  local tabs = window:mux_window():tabs()
+  for tab in tabs do
+    local title = tab:get_title()
+    if (not seen[title]) then
+      table.insert(choices, { id = title, label = "Tab: " .. title })
+      seen[title] = true
+    end
+  end
   for line in out:gmatch("[^\r\n]+") do
     if (not seen[line]) then
-      table.insert(choices, { label = tostring(line) })
+      table.insert(choices, { id = tostring(line), label = "Directory: " .. basename(line) })
       seen[line] = true
     end
   end
@@ -50,15 +58,14 @@ local function open_project_action(window, pane)
         if not id and not label then
           wezterm.log_info('cancelled project select')
         else
-          local name = basename(label)
-          local tabs = window:mux_window():tabs()
+          local name = basename(id)
           local project_tab = find_tab(tabs, name)
           if project_tab == nil then
             local tab, pane, window = window:mux_window():spawn_tab {
               cwd = label,
-              args = wezterm.shell_split('nu -e "cd ' .. label .. '; if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
+              args = wezterm.shell_split('nu -e "cd ' .. id .. '; if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
             }
-            cli_pane = pane:split { cwd = label, direction = 'Bottom', size = 0.25 }
+            cli_pane = pane:split { cwd = id, direction = 'Bottom', size = 0.25 }
             pane:activate()
             tab:set_title(name)
           else
@@ -176,7 +183,7 @@ config.keys = {
     action = act.SendKey { key = 'Space', mods = 'CTRL' },
   },
   {
-    key = 't',
+    key = 'g',
     mods = 'LEADER',
     action = wezterm.action.ShowTabNavigator
   },
