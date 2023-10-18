@@ -203,6 +203,16 @@ config.keys = {
     action = act.SendKey { key = 'Space', mods = 'CTRL' },
   },
   {
+    key = 'q',
+    mods = 'LEADER',
+    action = wezterm.action.CloseCurrentPane { confirm = true },
+  },
+  {
+    key = 'q',
+    mods = 'LEADER|SHIFT',
+    action = wezterm.action.CloseCurrentTab { confirm = true },
+  },
+  {
     key = 'g',
     mods = 'LEADER',
     action = wezterm.action.ShowTabNavigator
