@@ -72,6 +72,32 @@
     '';
   };
 
+  swapCycle = dir:
+    pkgs.writeShellApplication {
+      name = "swap-${dir}";
+      runtimeInputs = [pkgs.hyprland-unstable pkgs.jq];
+      text = ''
+        WS="$(hyprctl activeworkspace -j | jq -r .id)"
+        STACKLEN="$(hyprctl clients -j | jq '[.[] | select(.workspace.id == '"$WS"')] | length - 2')"
+        if [ "$STACKLEN" -le 0 ]; then
+          STACKLEN=0
+        fi
+        hyprctl dispatch layoutmsg focusmaster master
+        hyprctl dispatch layoutmsg cycle${dir}
+        hyprctl dispatch layoutmsg swapwithmaster master
+        hyprctl dispatch layoutmsg focusmaster master
+        hyprctl dispatch layoutmsg cycle${dir}
+        # shellcheck disable=SC2034
+        for i in $(seq 1 "$STACKLEN"); do
+          hyprctl dispatch layoutmsg swap${dir}
+        done
+        hyprctl dispatch layoutmsg focusmaster master
+      '';
+    };
+
+  swapCycleNext = swapCycle "next";
+  swapCyclePrev = swapCycle "prev";
+
   xcursor_theme = config.gtk.cursorTheme.name;
   terminal-bin = "${pkgs.wezterm}/bin/wezterm start --always-new-process";
   dev-env = name:
@@ -164,7 +190,9 @@ in {
         "$mod SHIFT, right, movewindoworgroup, r"
         "$mod SHIFT, up, movewindoworgroup, u"
         "$mod SHIFT, down, movewindoworgroup, d"
-        "$mod, space, layoutmsg, swapwithmaster"
+        "$mod, space, exec, ${swapCycleNext}/bin/swap-next"
+        "$mod SHIFT, space, exec, ${swapCyclePrev}/bin/swap-prev"
+        "$mod CONTROL, space, layoutmsg, swapwithmaster"
         "$mod, f, fullscreen"
         "$mod SHIFT, f, fakefullscreen"
       ];
