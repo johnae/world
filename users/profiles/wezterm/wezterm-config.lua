@@ -158,6 +158,12 @@ wezterm.on('ActivateDirectionDown', function(window, pane)
   window:perform_action(act.ActivatePaneDirection('Down'), pane)
 end)
 
+wezterm.on('ActivateContextUI', function(window, pane)
+  local gitpane = pane:split { args = { "gex" } }
+  gitpane:activate()
+  window:perform_action(wezterm.action.TogglePaneZoomState, gitpane)
+end)
+
 config.mux_env_remove = {}
 config.enable_tab_bar = false
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
@@ -206,6 +212,11 @@ config.keys = {
     key = 'q',
     mods = 'LEADER',
     action = wezterm.action.CloseCurrentPane { confirm = true },
+  },
+  {
+    key = 'c',
+    mods = 'LEADER',
+    action = act.EmitEvent('ActivateContextUI')
   },
   {
     key = 'q',
