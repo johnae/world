@@ -275,7 +275,17 @@ in {
       orientation = "right";
     };
 
-    layerrule = "blur,waybar";
+    layerrule = ["blur,waybar"];
+
+    windowrulev2 = [
+      "dimaround,class:gcr-prompter"
+      "stayfocused,class:gcr-prompter"
+      "dimaround,class:gitui"
+      "stayfocused,class:gitui"
+      "float,class:gitui"
+      "size 60% 60%,class:gitui"
+      "center,class:gitui"
+    ];
 
     input = {
       kb_layout = "us,se";
