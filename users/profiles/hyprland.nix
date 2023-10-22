@@ -242,14 +242,14 @@ in {
       rounding = 8;
       blur = {
         enabled = true;
-        size = 7;
-        passes = 2;
+        size = 9;
+        passes = 4;
         xray = true;
         ignore_opacity = true;
         new_optimizations = true;
         noise = 0.02;
         contrast = 1.05;
-        brightness = 0.8;
+        brightness = 1.1;
       };
       drop_shadow = true;
       shadow_range = 20;
@@ -258,7 +258,7 @@ in {
       "col.shadow" = "0x99000000";
       "col.shadow_inactive" = "0x55000000";
       active_opacity = 0.95;
-      inactive_opacity = 0.89;
+      inactive_opacity = 0.87;
       fullscreen_opacity = 1.0;
     };
 
