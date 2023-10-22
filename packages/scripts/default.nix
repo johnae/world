@@ -119,6 +119,7 @@
     name = "rofi-rbw";
     runtimeInputs = [rofi-wayland rbw wl-clipboard];
     text = ''
+      rbw unlock
       passonly=''${passonly:-}
       selection="$(rbw list --fields name,user | \
          sed 's|\t|/|g' | \
