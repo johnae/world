@@ -71,7 +71,7 @@ in {
     position = "top";
     spacing = 8;
     margin-top = 4;
-    modules-left = ["river/tags" "sway/workspaces" "hyprland/workspaces" "sway/mode" "hyprland/submap" "custom/media"];
+    modules-left = ["custom/logo" "sway/workspaces" "hyprland/workspaces" "sway/mode" "hyprland/submap" "custom/media"];
     modules-right = ["custom/pomodoro" "network" "network#wifi" "idle_inhibitor" "pulseaudio" "cpu" "temperature" "backlight" "battery" "clock" "tray"];
     modules-center = ["hyprland/window"];
     "custom/media" = {
@@ -121,6 +121,10 @@ in {
     "custom/clock" = {
       exec = "date +'%Y-%m-%d %H:%M:%S'";
       interval = 1;
+      tooltip = false;
+    };
+    "custom/logo" = {
+      format = "    ";
       tooltip = false;
     };
     #clock = {
@@ -324,13 +328,33 @@ in {
         transition: all 0.3s ease-in-out;
     }
 
+    #custom-logo {
+        background-image: url('${../../files/nix-snowflake.svg}');
+        background-color: @backgroundlight;
+        background-position: center;
+        padding: 3px;
+        background-origin: content-box;
+        background-repeat: no-repeat;
+        background-size: contain;
+        margin: 3px 3px 3px 16px;
+        font-size:16px;
+        color: @iconcolor;
+        border-radius: 15px;
+        opacity: 0.8;
+        transition: all 0.3s ease-in-out;
+    }
+
+
+        padding: 1px 10px 0px 10px;
+        margin: 3px 15px 3px 0px;
+
     #clock, #custom-clock, #custom-pomodoro {
         background-color: @backgrounddark;
         font-size: 16px;
         color: @textcolor1;
         border-radius: 15px;
         padding: 1px 10px 0px 10px;
-        margin: 3px 15px 3px 0px;
+        margin: 3px 16px 3px 0px;
         opacity:0.8;
         border:3px solid @bordercolor;
     }
@@ -396,18 +420,12 @@ in {
         }
     }
 
-    #mode #submap {
-        background-color: @info;
+    #mode, #submap {
+        background-color: @warn;
         border-radius: 15px;
         color: @textcolor3;
-        padding: 2px 15px 0px 10px;
-        margin: 5px 15px 5px 0px;
-        animation-name: blink;
-        animation-duration: 2.0s;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-        border:3px solid @bordercolor;
+        padding: 1px 10px 0px 10px;
+        margin: 2px 1px 3px 1px;
         transition: all 0.3s ease-in-out;
     }
 
