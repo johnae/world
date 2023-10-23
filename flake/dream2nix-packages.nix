@@ -41,28 +41,10 @@
         };
       };
 
-      inputs.ristate = {
-        source = inputs.ristate;
-        packageOverrides."^.*".addDeps.doCheck = false;
-        projects.ristate = {
-          subsystem = "rust";
-          translator = "cargo-lock";
-        };
-      };
-
       inputs.netns-exec = {
         source = inputs.netns-exec;
         packageOverrides."^.*".addDeps.doCheck = false;
         projects.netns-exec = {
-          subsystem = "rust";
-          translator = "cargo-lock";
-        };
-      };
-
-      inputs.kile = {
-        source = inputs.kile;
-        packageOverrides."^.*".addDeps.doCheck = false;
-        projects.kile = {
           subsystem = "rust";
           translator = "cargo-lock";
         };

@@ -851,22 +851,6 @@
         "type": "github"
       }
     },
-    "kile": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1693732213,
-        "narHash": "sha256-QK6oJ4YpncUJvJWfnSFnz9OeMKf3CPz/P4vjOkJ8pmQ=",
-        "owner": "snakedye",
-        "repo": "kile",
-        "rev": "683efdd637afca25bcb61b3e8140f7485ac50939",
-        "type": "gitlab"
-      },
-      "original": {
-        "owner": "snakedye",
-        "repo": "kile",
-        "type": "gitlab"
-      }
-    },
     "kured": {
       "flake": false,
       "locked": {
@@ -1385,22 +1369,6 @@
         "type": "github"
       }
     },
-    "ristate": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1690116859,
-        "narHash": "sha256-6slH7R6kbSXQBd7q38oBEbngaCbFv0Tyq34VB1PAfhM=",
-        "owner": "snakedye",
-        "repo": "ristate",
-        "rev": "92e989f26cadac69af1208163733e73b4cf447da",
-        "type": "gitlab"
-      },
-      "original": {
-        "owner": "snakedye",
-        "repo": "ristate",
-        "type": "gitlab"
-      }
-    },
     "rofi-wayland": {
       "flake": false,
       "locked": {
@@ -1447,7 +1415,6 @@
         "home-manager": "home-manager_2",
         "hwdata": "hwdata",
         "hyprland": "hyprland",
-        "kile": "kile",
         "kured": "kured",
         "libdisplay-info": "libdisplay-info",
         "matrix-conduit": "matrix-conduit",
@@ -1464,7 +1431,6 @@
         "nushell-unstable": "nushell-unstable",
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks",
-        "ristate": "ristate",
         "rofi-wayland": "rofi-wayland",
         "slurp": "slurp",
         "spotifyd": "spotifyd",
