@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  inputs,
   ...
 }: let
   runViaSystemdCat = {
@@ -75,16 +74,6 @@
     cmd = "${pkgs.hyprland-unstable}/bin/Hyprland";
   };
 
-  runRiver = runViaShell {
-    env = {
-      XDG_SESSION_TYPE = "wayland";
-      XDG_CURRENT_DESKTOP = "river";
-      XDG_SESSION_DESKTOP = "river";
-    };
-    name = "river";
-    cmd = "${pkgs.river}/bin/river";
-  };
-
   desktopSession = name: command:
     pkgs.writeText "${name}.desktop" ''
       [Desktop Entry]
@@ -103,10 +92,6 @@
       path = desktopSession "Hyprland" "${runHyprland}/bin/Hyprland";
     }
     {
-      name = "river.desktop";
-      path = desktopSession "river" "${runRiver}/bin/river";
-    }
-    {
       name = "nushell.desktop";
       path = desktopSession "nushell" "${pkgs.nushell}/bin/nu";
     }
@@ -119,7 +104,7 @@
   in
     pkgs.writeShellApplication {
       name = "greeter";
-      runtimeInputs = [runSway runRiver pkgs.nushell pkgs.systemd pkgs.greetd.tuigreet];
+      runtimeInputs = [runSway pkgs.nushell pkgs.systemd pkgs.greetd.tuigreet];
       text = ''
         tuigreet --sessions ${sessionDir} --time -r --remember-session --power-shutdown 'systemctl poweroff' --power-reboot 'systemctl reboot' --cmd ${default}
       '';
