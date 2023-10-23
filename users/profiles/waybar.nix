@@ -344,10 +344,6 @@ in {
         transition: all 0.3s ease-in-out;
     }
 
-
-        padding: 1px 10px 0px 10px;
-        margin: 3px 15px 3px 0px;
-
     #clock, #custom-clock, #custom-pomodoro {
         background-color: @backgrounddark;
         font-size: 16px;
