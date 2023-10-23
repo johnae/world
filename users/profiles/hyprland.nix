@@ -1,25 +1,9 @@
 {
-  inputs,
   config,
   lib,
   pkgs,
   ...
 }: let
-  hyprService = Description: ExecStart: {
-    Unit = {
-      inherit Description;
-      After = "hypr-session.target";
-      BindsTo = "hypr-session.target";
-    };
-
-    Service = {
-      Type = "simple";
-      inherit ExecStart;
-    };
-
-    Install.WantedBy = ["hypr-session.target"];
-  };
-
   swaylockTimeout = "300";
   swaylockSleepTimeout = "310";
 
@@ -217,11 +201,11 @@ in {
     animations = {
       enabled = true;
       animation = [
-        "workspaces,1,0.6,default"
-        "windows,1,0.8,default"
-        "fade,1,0.8,default"
-        "border,1,0.6,default"
-        "borderangle,1,0.6,default"
+        "workspaces,1,2,default,slidefade 10%"
+        "windows,1,1,default"
+        "fade,1,5,default"
+        "border,1,1,default"
+        "borderangle,1,1,default"
       ];
     };
 
@@ -275,7 +259,7 @@ in {
       orientation = "right";
     };
 
-    layerrule = ["blur,waybar"];
+    # layerrule = ["blur,waybar"];
 
     windowrulev2 = [
       "dimaround,class:gcr-prompter"
