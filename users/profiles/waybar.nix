@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   pkgs,
   ...
@@ -71,6 +70,7 @@ in {
     ipc = true;
     position = "top";
     spacing = 8;
+    margin-top = 4;
     modules-left = ["river/tags" "sway/workspaces" "hyprland/workspaces" "sway/mode" "hyprland/submap" "custom/media"];
     modules-right = ["custom/pomodoro" "network" "network#wifi" "idle_inhibitor" "pulseaudio" "cpu" "temperature" "backlight" "battery" "clock" "tray"];
     modules-center = ["hyprland/window"];
@@ -203,95 +203,217 @@ in {
     };
   };
   programs.waybar.style = ''
+    @define-color backgroundlight #eceff4;
+    @define-color backgrounddark #5e81ac;
+    @define-color workspacesbackground1 #eceff4;
+    @define-color workspacesbackground2 #5e81ac;
+    @define-color bordercolor #eceff4;
+    @define-color textcolor1 #eceff4;
+    @define-color textcolor2 #2e3440;
+    @define-color textcolor3 #e5e9f0;
+    @define-color iconcolor #2e3440;
+    @define-color warn #bf616a;
+    @define-color info #ebcb8b;
+    @define-color focus #b48ead;
+
     * {
-        border: none;
-        border-radius: 0;
         font-family: "Roboto Mono, Font Awesome 5 Free, Font Awesome 5 Brands, Arial, sans-serif";
-        font-size: 18px;
-        min-height: 30px;
+        border: none;
+        border-radius: 0px;
     }
 
     window#waybar {
-        background: rgba(0, 0, 0.4, 0.4);
-        color: white;
+        background-color: rgba(0,0,0,0.0);
+        border-bottom: 0px solid #ffffff;
+        transition-property: background-color;
+        transition-duration: .5s;
     }
 
-    #window {
+    #workspaces {
+        background: @workspacesbackground1;
+        margin: 2px 1px 3px 1px;
+        padding: 0px 1px;
+        border-radius: 15px;
+        border: 0px;
         font-weight: bold;
-        font-family: "Roboto Mono, Font Awesome 5 Free, Font Awesome 5 Brands, Arial, sans-serif";
+        font-style: normal;
+        opacity: 0.8;
+        font-size: 16px;
+        color: @textcolor1;
     }
 
     #workspaces button {
-        border-radius: 20px;
-        padding: 0 5px;
-        background: transparent;
-        color: #bababa;
-        border-top: 2px solid transparent;
-    }
-
-    #workspaces button.focused {
-        color: white;
-        background: transparent;
-        border-top: 2px solid #c9545d;
+        padding: 0px 5px;
+        margin: 4px 3px;
+        border-radius: 15px;
+        border: 0px;
+        color: @textcolor1;
+        background-color: @workspacesbackground2;
+        transition: all 0.3s ease-in-out;
+        opacity: 0.4;
     }
 
     #workspaces button.active {
-        color: white;
-        background: transparent;
-        border-top: 2px solid #c9545d;
+        color: @textcolor1;
+        background: @workspacesbackground2;
+        border-radius: 15px;
+        min-width: 40px;
+        transition: all 0.3s ease-in-out;
+        opacity:1.0;
     }
 
-    #tags button {
-        background: transparent;
-        color: transparent;
+    #workspaces button:hover {
+        color: @textcolor1;
+        background: @workspacesbackground2;
+        border-radius: 15px;
+        opacity:0.7;
     }
 
-    #tags button.occupied {
-        padding: 0 5px;
-        background: transparent;
-        color: #bababa;
-        border-top: 2px solid transparent;
+    tooltip {
+        border-radius: 10px;
+        background-color: @backgroundlight;
+        opacity:0.8;
+        padding:20px;
+        margin:0px;
     }
 
-    #tags button.focused {
-        color: white;
-        background: transparent;
-        border-top: 2px solid #c9545d;
+    tooltip label {
+        color: @textcolor2;
     }
 
-    #mode, #submap {
-        background: #64727D;
-        border-bottom: 3px solid white;
+    #window {
+        background: @backgroundlight;
+        margin: 5px 15px 5px 0px;
+        padding: 2px 10px 0px 10px;
+        border-radius: 12px;
+        color:@textcolor2;
+        font-size:16px;
+        font-weight:normal;
+        opacity:0.8;
     }
 
-    #custom-clock, #clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode {
-        padding: 0 3px;
-        margin: 0 2px;
+    window#waybar.empty #window {
+        background-color:transparent;
     }
 
-    #clock, #custom-clock {
-        font-weight: bold;
+    .modules-left > widget:first-child > #workspaces {
+        margin-left: 0;
+    }
+
+    .modules-right > widget:last-child > #workspaces {
+        margin-right: 0;
+    }
+
+    #disk,#memory,#cpu,#idle_inhibitor,#temperature {
+        background-color: @backgroundlight;
+        margin:0px;
+        padding:0px;
+        font-size:16px;
+        color:@iconcolor;
+        border-radius: 15px;
+        padding: 1px 10px 0px 10px;
+        margin: 3px 15px 3px 0px;
+        opacity:0.8;
+        transition: all 0.3s ease-in-out;
+    }
+
+    #idle_inhibitor.activated {
+        background-color: @focus;
+        color:@textcolor1;
+        border:3px solid @bordercolor;
+        transition: all 0.3s ease-in-out;
+    }
+
+    #clock, #custom-clock, #custom-pomodoro {
+        background-color: @backgrounddark;
+        font-size: 16px;
+        color: @textcolor1;
+        border-radius: 15px;
+        padding: 1px 10px 0px 10px;
+        margin: 3px 15px 3px 0px;
+        opacity:0.8;
+        border:3px solid @bordercolor;
+    }
+
+    #pulseaudio {
+        background-color: @backgroundlight;
+        font-size: 16px;
+        color: @textcolor2;
+        border-radius: 15px;
+        padding: 2px 10px 0px 10px;
+        margin: 5px 15px 5px 0px;
+        opacity:0.8;
+    }
+
+    #pulseaudio.muted {
+        background-color: @backgrounddark;
+        color: @textcolor1;
+    }
+
+    #network {
+        background-color: @backgroundlight;
+        font-size: 16px;
+        color: @textcolor2;
+        border-radius: 15px;
+        padding: 2px 10px 0px 10px;
+        margin: 5px 15px 5px 0px;
+        opacity:0.8;
+    }
+
+    #network.disconnected {
+        background: #bf616a;
+    }
+
+    #network.ethernet {
+        background-color: @backgroundlight;
+        color: @textcolor2;
+    }
+
+    #network.wifi {
+        background-color: @backgroundlight;
+        color: @textcolor2;
     }
 
     #battery {
+        background-color: @backgroundlight;
+        font-size: 16px;
+        color: @textcolor2;
+        border-radius: 15px;
+        padding: 2px 15px 0px 10px;
+        margin: 5px 15px 5px 0px;
+        opacity:0.8;
     }
 
-    #battery icon {
-        color: red;
-    }
-
-    #battery.charging {
+    #battery.charging, #battery.plugged {
+        color: @textcolor2;
+        background-color: @backgroundlight;
     }
 
     @keyframes blink {
         to {
-            background-color: #ffffff;
-            color: black;
+            background-color: @backgroundlight;
+            color: @textcolor2;
         }
     }
 
-    #battery.warning:not(.charging) {
-        color: white;
+    #mode #submap {
+        background-color: @info;
+        border-radius: 15px;
+        color: @textcolor3;
+        padding: 2px 15px 0px 10px;
+        margin: 5px 15px 5px 0px;
+        animation-name: blink;
+        animation-duration: 2.0s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        border:3px solid @bordercolor;
+        transition: all 0.3s ease-in-out;
+    }
+
+    #battery.critical:not(.charging) {
+        background-color: @warn;
+        color: @textcolor3;
         animation-name: blink;
         animation-duration: 0.5s;
         animation-timing-function: linear;
@@ -299,34 +421,21 @@ in {
         animation-direction: alternate;
     }
 
-    #cpu {
-    }
-
-    #custom-pomodoro {
-    }
-
-    #memory {
-    }
-
-    #network {
-    }
-
-    #network.disconnected {
-        background: #f53c3c;
-    }
-
-    #pulseaudio {
-    }
-
-    #pulseaudio.muted {
-    }
-
-    #custom-spotify {
-        color: rgb(102, 220, 105);
-    }
-
     #tray {
+        background-color: #2980b9;
     }
 
+    #tray > .passive {
+        -gtk-icon-effect: dim;
+    }
+
+    #tray > .needs-attention {
+        -gtk-icon-effect: highlight;
+        background-color: #eb4d4b;
+    }
+
+    label:focus {
+        background-color: #000000;
+    }
   '';
 }
