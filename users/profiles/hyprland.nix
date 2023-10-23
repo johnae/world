@@ -223,7 +223,7 @@ in {
     };
 
     decoration = {
-      rounding = 8;
+      rounding = 12;
       blur = {
         enabled = true;
         size = 9;
@@ -233,7 +233,7 @@ in {
         new_optimizations = true;
         noise = 0.02;
         contrast = 1.05;
-        brightness = 1.1;
+        brightness = 1.2;
       };
       drop_shadow = true;
       shadow_range = 20;
