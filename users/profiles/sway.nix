@@ -241,7 +241,7 @@ in {
         "type:keyboard" = {
           xkb_layout = "us,se";
           xkb_model = "pc105";
-          xkb_options = "ctrl:nocaps,grp:switch";
+          xkb_options = "ctrl:nocaps,grp:switch,compose:rctrl";
           xkb_variant = "\"\"";
         };
         "1739:52804:MSFT0001:00_06CB:CE44_Touchpad" = {

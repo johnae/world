@@ -275,7 +275,7 @@ in {
       kb_layout = "us,se";
       kb_variant = "";
       kb_model = "pc105";
-      kb_options = "ctrl:nocaps,grp:switch";
+      kb_options = "ctrl:nocaps,grp:switch,compose:rctrl";
       kb_rules = "";
 
       follow_mouse = 1;
