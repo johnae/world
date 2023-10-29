@@ -73,7 +73,9 @@
     headscale.url = "github:juanfont/headscale";
     headscale.inputs.flake-utils.follows = "flake-utils";
     headscale.inputs.nixpkgs.follows = "nixpkgs";
-    helix.url = "github:AlexanderDickie/helix/copilot"; ## copilot support
+    helix.url = "github:helix-editor/helix"; ## copilot support
+    helix-copilot-patch.url = "https://patch-diff.githubusercontent.com/raw/helix-editor/helix/pull/6865.patch"; ## copilot support
+    helix-copilot-patch.flake = false;
     hetzner-csi-driver.flake = false;
     hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.5.1/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
     hwdata.url = "github:vcrhonek/hwdata";
