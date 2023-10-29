@@ -1,9 +1,3 @@
----
-title: "World"
-author: "johnae"
-lang: "en-US"
----
-
 This is the [NixOS](https://nixos.org) configuration repository for all my machines and custom packages (i.e not part of [nixpkgs](https://github.com/nixos/nixpkgs) yet). In some sense it is my world, which is how it got its name.
 
 It's based on a relatively recent feature of the [Nix package manager](https://nixos.org) called [flakes](https://nixos.wiki/wiki/Flakes). Flakes are somewhat similar to a `Cargo.toml/Cargo.lock` from the [Rust programming language](https://rust-lang.org), a `go.mod/go.sum` from the [Go programming language](https://golang.org/) or the `package.json/package.lock` files used by the [Node Package Manager](https://www.npmjs.com/). The difference being that it is language agnostic - it handles any package(s) or file(s) really. Here, we're using it to build hosts and software deterministically in a reproducible fashion. This would all be possible using Nix without the flakes feature, but it would be more work to design and keep it up-to-date. While flakes are still labelled "experimental" they have a bright future.
