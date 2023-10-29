@@ -1,8 +1,4 @@
-{
-  self,
-  inputs,
-  ...
-}: {
+{self, ...}: {
   perSystem = {
     pkgs,
     lib,
@@ -13,7 +9,6 @@
       (l)
       baseNameOf
       concatStringsSep
-      listToAttrs
       mapAttrs'
       mapAttrsToList
       readDir
