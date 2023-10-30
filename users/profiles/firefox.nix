@@ -1,6 +1,6 @@
 {pkgs, ...}: let
   firefox = pkgs.firefox.override {
-    nativeMessagingHosts = [pkgs.tridactyl-native];
+    extraNativeMessagingHosts = [pkgs.tridactyl-native];
   };
 in {
   programs.firefox = {
