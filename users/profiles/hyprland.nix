@@ -62,7 +62,7 @@
       runtimeInputs = [pkgs.hyprland-unstable pkgs.jq];
       text = ''
         WS="$(hyprctl activeworkspace -j | jq -r .id)"
-        STACKLEN="$(hyprctl clients -j | jq '[.[] | select(.workspace.id == '"$WS"')] | length - 2')"
+        STACKLEN="$(hyprctl clients -j | jq '[.[] | select(.workspace.id == '"$WS"' and .hidden == false)] | length - 2')"
         if [ "$STACKLEN" -le 0 ]; then
           STACKLEN=0
         fi
