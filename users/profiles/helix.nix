@@ -23,6 +23,7 @@ in {
         true-color = true;
         color-modes = true;
         auto-format = true;
+        auto-save = true;
         whitespace.render = {
           space = "all";
           tab = "all";
