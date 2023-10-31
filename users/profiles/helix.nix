@@ -77,6 +77,9 @@ in {
           command = "${copilot}/bin/copilot";
           args = ["--stdio"];
         };
+        rust-analyzer = {
+          config.check.command = "clippy";
+        };
         yaml-language-server = {
           config.yaml.format.enable = true;
           config.yaml.validation = true;
