@@ -80,7 +80,7 @@
     hwdata.flake = false;
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
-    hyprland.url = "github:hyprwm/Hyprland/d0367d8560653eafdcce14778b2f44e6c6ddf707";
+    hyprland.url = "github:hyprwm/Hyprland";
     kured.flake = false;
     kured.url = "github:weaveworks/kured";
     libdisplay-info.flake = false;
