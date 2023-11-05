@@ -240,9 +240,6 @@ $env.config = {
   ls: {
     use_ls_colors: true
   }
-  cd: {
-    abbreviations: true # set to true to allow you to do things like cd s/o/f and nushell expand it to cd some/other/folder
-  }
   history: {
     max_size: 10000 # Session has to be reloaded for this to take effect
     sync_on_enter: true # Enable to share the history between multiple sessions, else you have to close the session to persist history to file
@@ -311,11 +308,11 @@ $env.config = {
     }
     ]
     pre_execution: [{ ||
-      $nothing  # replace with source code to run before the repl input is run
+      null  # replace with source code to run before the repl input is run
     }]
     env_change: {
       PWD: [{ ||
-        $nothing
+        null
       }]
     }
   }
