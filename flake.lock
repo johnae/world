@@ -1448,6 +1448,7 @@
         "slurp": "slurp",
         "spotifyd": "spotifyd",
         "wayvnc": "wayvnc",
+        "wezterm": "wezterm",
         "wl-clipboard": "wl-clipboard",
         "wlvncc": "wlvncc",
         "xdg-desktop-portal-wlr": "xdg-desktop-portal-wlr"
@@ -1586,6 +1587,24 @@
         "owner": "any1",
         "repo": "wayvnc",
         "type": "github"
+      }
+    },
+    "wezterm": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1699116113,
+        "narHash": "sha256-ZnmBKBiaqKGKKrItTrPf/LGJvtu7BBvu1+QAk5PBi6g=",
+        "rev": "d6809533215e273ca23e52614c886929ad702715",
+        "revCount": 7510,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/wez/wezterm/"
+      },
+      "original": {
+        "rev": "d6809533215e273ca23e52614c886929ad702715",
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/wez/wezterm/"
       }
     },
     "wl-clipboard": {

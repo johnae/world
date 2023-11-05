@@ -125,6 +125,8 @@
     spotifyd.url = "github:spotifyd/spotifyd";
     wayvnc.flake = false;
     wayvnc.url = "github:any1/wayvnc";
+    wezterm.flake = false;
+    wezterm.url = "git+https://github.com/wez/wezterm/?rev=d6809533215e273ca23e52614c886929ad702715&submodules=1";
     wl-clipboard.flake = false;
     wl-clipboard.url = "github:bugaevc/wl-clipboard";
     wlvncc.flake = false;
