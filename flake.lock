@@ -721,29 +721,18 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1699190185,
-        "narHash": "sha256-cnUlbdq9R9QrcMkg1vAekH2Mk/Lau5umFh2lKgv8bKU=",
-        "owner": "helix-editor",
+        "lastModified": 1699278594,
+        "narHash": "sha256-tX3FzcdYW3KLjEPQQ4cUdLitgSbTcK9SFhJRjJSSFP8=",
+        "owner": "johnae",
         "repo": "helix",
-        "rev": "a98ad137f9b0678ce9770aaa56a8bf8ca7c51d17",
+        "rev": "4129509da11f90518eb2882a3cb2a18747cfe72c",
         "type": "github"
       },
       "original": {
-        "owner": "helix-editor",
+        "owner": "johnae",
+        "ref": "copilot",
         "repo": "helix",
         "type": "github"
-      }
-    },
-    "helix-copilot-patch": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-gjTGXh6qvu68f1f7k3HbwjvwVJFbeDi2f7M5gPkIAFw=",
-        "type": "file",
-        "url": "https://patch-diff.githubusercontent.com/raw/helix-editor/helix/pull/6865.patch"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://patch-diff.githubusercontent.com/raw/helix-editor/helix/pull/6865.patch"
       }
     },
     "hetzner-csi-driver": {
@@ -1422,7 +1411,6 @@
         "grim": "grim",
         "headscale": "headscale",
         "helix": "helix",
-        "helix-copilot-patch": "helix-copilot-patch",
         "hetzner-csi-driver": "hetzner-csi-driver",
         "home-manager": "home-manager_2",
         "hwdata": "hwdata",

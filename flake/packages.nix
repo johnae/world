@@ -74,16 +74,8 @@
         conduit = inputs.matrix-conduit.packages.${system}.default;
       }
       // rec {
-        ## packages from other flakes
-        helix-unwrapped-latest = inputs.helix.packages.${system}.helix-unwrapped.overrideAttrs (oa: {
-          src = pkgs.runCommand "patched-source" {} ''
-            cp -r ${oa.src} $out
-            chmod -R u+w $out
-            cd $out
-            patch -f -p1 -t < ${inputs.helix-copilot-patch} || true
-          '';
-        });
-        helix-latest = makeOverridableHelix helix-unwrapped-latest {};
+        # ## packages from other flakes
+        helix-latest = inputs.helix.packages.${system}.helix;
         hyprland-unstable = inputs.hyprland.packages.${system}.hyprland;
         inherit
           (inputs.hyprland.packages.${system})
