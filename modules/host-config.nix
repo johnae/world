@@ -13,7 +13,7 @@ in {
     };
     u2fMappings = mkOption {
       type = attrsOf (listOf str);
-      default = [];
+      default = {};
     };
     wgPublicKey = mkOption {
       type = nullOr str;
@@ -38,6 +38,9 @@ in {
     btrfs.disks = mkOption {
       type = listOf str;
       default = ["/dev/nvme0n1"];
+    };
+    adminUser = mkOption {
+      type = str;
     };
   };
 }

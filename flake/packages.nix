@@ -5,78 +5,24 @@
     system,
     ...
   }: let
-    inherit
-      (lib // builtins)
-      filterAttrs
-      filter
-      pathExists
-      attrNames
-      readDir
-      mapAttrs
-      ;
-    pkgList =
-      filter
-      (elem:
-        ! (inputs.${elem} ? "sourceInfo")
-        && pathExists (toString (../packages + "/${elem}")))
-      (attrNames inputs);
+    inherit (lib // builtins) attrNames pathExists filter filterAttrs mapAttrs readDir;
     locallyDefinedPackages = mapAttrs (
       name: _: (pkgs.callPackage (../packages + "/${name}") {inherit inputs;})
     ) (filterAttrs (filename: type: type == "directory") (readDir ../packages));
-
-    mkRootPath = rel:
-      builtins.path {
-        path = "${inputs.helix}/${rel}";
-        name = rel;
-      };
-
-    makeOverridableHelix = old: config: let
-      grammars = pkgs.callPackage "${inputs.helix}/grammars.nix" config;
-      runtimeDir = pkgs.runCommand "helix-runtime" {} ''
-        mkdir -p $out
-        ln -s ${mkRootPath "runtime"}/* $out
-        rm -r $out/grammars
-        ln -s ${grammars} $out/grammars
-      '';
-      helix-wrapped =
-        pkgs.runCommand
-        old.name
-        {
-          inherit (old) pname version;
-          meta = old.meta or {};
-          passthru =
-            (old.passthru or {})
-            // {
-              unwrapped = old;
-            };
-          nativeBuildInputs = [pkgs.makeWrapper];
-          makeWrapperArgs = config.makeWrapperArgs or [];
-        }
-        ''
-          cp -rs --no-preserve=mode,ownership ${old} $out
-          wrapProgram "$out/bin/hx" ''${makeWrapperArgs[@]} --set HELIX_RUNTIME "${runtimeDir}"
-        '';
-    in
-      helix-wrapped
-      // {
-        override = makeOverridableHelix old;
-        passthru =
-          helix-wrapped.passthru
-          // {
-            wrapper = old: makeOverridableHelix old config;
-          };
-      };
-
+  in {
     packages =
       locallyDefinedPackages
       // {
-        inherit (pkgs.callPackage ../utils/world.nix {}) pixieboot world lint;
-        conduit = inputs.matrix-conduit.packages.${system}.default;
-      }
-      // rec {
-        # ## packages from other flakes
+        world = pkgs.writeShellApplication {
+          name = "world";
+          runtimeInputs = with pkgs; [just nushell];
+          text = ''
+            just -f ${../Justfile} -d "$(pwd)" "$@"
+          '';
+        };
         helix-latest = inputs.helix.packages.${system}.helix;
         hyprland-unstable = inputs.hyprland.packages.${system}.hyprland;
+        persway = inputs.persway.packages.${system}.default;
         inherit
           (inputs.hyprland.packages.${system})
           hyprland-unwrapped
@@ -86,10 +32,6 @@
           wlroots-hyprland
           udis86
           ;
-        inherit (inputs.persway.packages.${system}) persway;
-        inherit (inputs.headscale.packages.${system}) headscale;
       };
-  in {
-    inherit packages;
   };
 }

@@ -1,19 +1,24 @@
 let
   inherit
     (builtins)
-    any
     all
-    replaceStrings
-    filter
-    foldl'
-    elem
-    listToAttrs
+    any
     attrValues
     concatMap
-    isList
-    hasAttr
+    elem
+    elemAt
+    filter
+    foldl'
     getFlake
+    hasAttr
+    isList
+    length
+    listToAttrs
+    replaceStrings
+    split
     ;
+
+  last = list: elemAt list (length list - 1);
 
   flatten = x:
     if isList x
@@ -27,18 +32,18 @@ let
 
   hasAttrsFilter = attrsList: filter (attr: all (key: hasAttr key attr) attrsList);
 
-  hostConfigsList = map (host: host.config) (attrValues (getFlake (toString ../.)).hostConfigurations);
+  hostConfigsList = map (host: host.config) (attrValues (getFlake (toString ../.)).nixosConfigurations);
 
   hostsWithSecrets = hasAttrsFilter ["publicKey" "age"] hostConfigsList;
 
-  toLocalSecretPath = replaceStrings ["secrets/"] [""];
+  toLocalSecretPath = path: last (split ".*/" path);
 
-  secretsList = unique (flatten (map (host: map (s: toLocalSecretPath s.file) (attrValues host.age.secrets)) hostsWithSecrets));
+  secretsList = unique (flatten (map (host: map (s: toLocalSecretPath (toString s.file)) (attrValues host.age.secrets)) hostsWithSecrets));
 
   mapSecretToPublicKeys = secret:
     unique (
       map (host: host.publicKey)
-      (filter (host: any (s: secret == toLocalSecretPath s.file) (attrValues host.age.secrets)) hostsWithSecrets)
+      (filter (host: any (s: secret == toLocalSecretPath (toString s.file)) (attrValues host.age.secrets)) hostsWithSecrets)
     );
 
   johnae = [
@@ -50,4 +55,4 @@ in
       inherit name;
       value.publicKeys = johnae ++ (mapSecretToPublicKeys name);
     })
-    secretsList)
+    (builtins.trace (builtins.toJSON secretsList) secretsList))

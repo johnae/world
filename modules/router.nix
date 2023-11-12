@@ -1,32 +1,22 @@
 {
-  inputs,
   config,
   lib,
-  pkgs,
-  hostConfigurations,
   ...
 }: let
   inherit
     (lib)
     mkIf
-    mkForce
     splitString
-    nameValuePair
-    mapAttrs'
     mkOption
     mkEnableOption
     mapAttrsToList
-    recursiveUpdate
     ;
   inherit
     (builtins)
     head
     tail
-    foldl'
-    attrValues
     attrNames
     mapAttrs
-    concatStringsSep
     ;
 
   cfg = config.services.jae.router;
@@ -98,7 +88,7 @@ in {
     networking.nat.externalInterface = cfg.externalInterface;
     networking.nat.internalInterfaces = internalInterfaceNames;
 
-    environment.state."/keep".directories = ["/var/lib/dnsmasq"];
+    environment.persistence."/keep".directories = ["/var/lib/dnsmasq"];
 
     services.dnsmasq.enable = true;
     services.dnsmasq.resolveLocalQueries = true;

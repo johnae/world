@@ -1,13 +1,10 @@
 {
-  config,
+  adminUser,
   lib,
   ...
-}: let
-  inherit (lib) mapAttrs' nameValuePair filterAttrs;
-  inherit (builtins) toString;
-  inherit (config.users) users;
-in {
-  environment.state."/keep" = {
+}: {
+  environment.persistence."/keep" = {
+    hideMounts = true;
     directories = [
       "/var/log"
       "/var/lib/bluetooth"
@@ -27,63 +24,60 @@ in {
       "/etc/ssh/ssh_host_ed25519_key.pub"
     ];
 
-    users = mapAttrs' (
-      userName: conf:
-        nameValuePair (toString conf.uid) {
-          directories = [
-            "/home/${userName}/Downloads"
-            "/home/${userName}/Documents"
-            "/home/${userName}/Development"
-            "/home/${userName}/Photos"
-            "/home/${userName}/Pictures"
-            "/home/${userName}/Games"
-            "/home/${userName}/Sync"
-            "/home/${userName}/Mail"
-            "/home/${userName}/.local/share/direnv"
-            "/home/${userName}/.local/share/password-store"
-            "/home/${userName}/.local/share/fish"
-            "/home/${userName}/.local/share/containers"
-            "/home/${userName}/.local/share/atuin"
-            "/home/${userName}/.local/share/Steam"
-            "/home/${userName}/.local/share/vulkan"
-            "/home/${userName}/.local/share/qutebrowser"
-            "/home/${userName}/.local/share/syncthing-data"
-            "/home/${userName}/.local/share/nix"
-            "/home/${userName}/.mail"
-            "/home/${userName}/.cargo"
-            "/home/${userName}/.cache/mu"
-            "/home/${userName}/.cache/nix"
-            "/home/${userName}/.cache/nix-index"
-            "/home/${userName}/.cache/rbw"
-            "/home/${userName}/.mozilla/firefox/default"
-            "/home/${userName}/.config/chromium"
-            "/home/${userName}/.cache/chromium"
-            "/home/${userName}/.config/chromium-alt"
-            "/home/${userName}/.cache/chromium-alt"
-            "/home/${userName}/.config/chromium-private"
-            "/home/${userName}/.cache/chromium-private"
-            "/home/${userName}/.config/chromium-work"
-            "/home/${userName}/.cache/chromium-work"
-            "/home/${userName}/.config/github-copilot"
-            "/home/${userName}/.config/qutebrowser"
-            "/home/${userName}/.cache/qutebrowser"
-            "/home/${userName}/.config/obs-studio"
-            "/home/${userName}/.config/audacity"
-            "/home/${userName}/.config/Element"
-            "/home/${userName}/.config/Slack"
-            "/home/${userName}/.config/Microsoft"
-            "/home/${userName}/.gnupg"
-            "/home/${userName}/.config/gcloud"
-            "/home/${userName}/.emacs.d"
-            "/home/${userName}/.terraform.d"
-          ];
-          files = [
-            "/home/${userName}/.kube/config"
-            "/home/${userName}/.ssh/known_hosts"
-            "/home/${userName}/.spotify_token_cache.json"
-            "/home/${userName}/.config/nushell/history.txt"
-          ];
-        }
-    ) (filterAttrs (_: user: user.isNormalUser) users);
+    users.${adminUser.name} = {
+      directories = [
+        "Downloads"
+        "Documents"
+        "Development"
+        "Photos"
+        "Pictures"
+        "Games"
+        "Sync"
+        "Mail"
+        ".local/share/direnv"
+        ".local/share/password-store"
+        ".local/share/fish"
+        ".local/share/containers"
+        ".local/share/atuin"
+        ".local/share/Steam"
+        ".local/share/vulkan"
+        ".local/share/qutebrowser"
+        ".local/share/syncthing-data"
+        ".local/share/nix"
+        ".mail"
+        ".cargo"
+        ".cache/mu"
+        ".cache/nix"
+        ".cache/nix-index"
+        ".cache/rbw"
+        ".mozilla/firefox/default"
+        ".config/chromium"
+        ".cache/chromium"
+        ".config/chromium-alt"
+        ".cache/chromium-alt"
+        ".config/chromium-private"
+        ".cache/chromium-private"
+        ".config/chromium-work"
+        ".cache/chromium-work"
+        ".config/github-copilot"
+        ".config/qutebrowser"
+        ".cache/qutebrowser"
+        ".config/obs-studio"
+        ".config/audacity"
+        ".config/Element"
+        ".config/Slack"
+        ".config/Microsoft"
+        ".gnupg"
+        ".config/gcloud"
+        ".emacs.d"
+        ".terraform.d"
+      ];
+      files = [
+        ".kube/config"
+        ".ssh/known_hosts"
+        ".spotify_token_cache.json"
+        ".config/nushell/history.txt"
+      ];
+    };
   };
 }

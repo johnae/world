@@ -1,4 +1,4 @@
-name: Nix Autoupdater
+name: Nix Flake Updater
 
 on:
   workflow_dispatch: {}
@@ -20,30 +20,21 @@ jobs:
     - run: |
         nix shell nixpkgs#git -c git config user.name 'NixBot'
         nix shell nixpkgs#git -c git config user.email 'johnae@users.noreply.github.com'
-
-        ## by building this we can rely on it not being affected by
-        ## the flake being in some invalid state during updates
-        nix build .#world-updaters
-
-        ./result/bin/update-github-release-flake-inputs ${{ secrets.GITHUB_TOKEN }}
         nix flake update
-        ./result/bin/update-all-cargo-vendor-shas
-        ./result/bin/update-all-fixed-output-derivation-shas
-
-        nix shell nixpkgs#git -c git commit -am "[Auto] update all inputs"
+        nix shell nixpkgs#git -c git commit -am "[auto] update flake inputs"
       
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
       id: cpr
       with:
         token: ${{ secrets.MACHINE_USER_TOKEN }}
-        commit-message: '[Auto] Package updates'
+        commit-message: '[auto] package updates'
         committer: GitHub <noreply@github.com>
         author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
         signoff: false
-        branch: package-auto-updates
+        branch: automatic-updates
         delete-branch: true
-        title: '[Auto] Package updates'
+        title: '[auto] package updates'
         body: ''
         labels: |
           automated pr

@@ -1,5 +1,4 @@
 {
-  hostName,
   lib,
   hostConfigurations,
   ...
@@ -9,7 +8,7 @@
 
   syncthingDevices =
     mapAttrs (_: value: {id = value.syncthingDeviceID;})
-    (filterAttrs (name: value: hasAttr "syncthingDeviceID" value && name != hostName) hostConfigurations);
+    (filterAttrs (name: value: value.services.syncthing.enable && value.syncthingDeviceID != null) hostConfigurations);
 in {
   services.syncthing.settings.devices = syncthingDevices;
 }

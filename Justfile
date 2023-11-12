@@ -7,10 +7,11 @@ alias help := default
 
 default:
   @just --list -f {{justfile()}} -d {{invocation_directory()}}
+  @if (echo {{invocation_directory()}} | str contains "world") { echo "\n    lint\n    check" }
 
 # search for packages
 search query:
-  @nix search nixpkgs {{query}} --json | from json | transpose | flatten | select column0 version description
+  @nix search nixpkgs {{query}} --json | from json | transpose | flatten | select column0 version description | rename --column { column0: attribute }
 
 # open a shell with given packages available
 shell +args:
@@ -37,5 +38,14 @@ upgrade flake="github:johnae/world":
 build flake="github:johnae/world":
   @nixos-rebuild build --flake '{{flake}}' --use-remote-sudo -L
 
+[private]
 echo +args:
   @echo '{{args}}'
+
+[private]
+lint:
+  @statix check .
+
+[private]
+check:
+  @nix flake check --impure # impure because of devenv
