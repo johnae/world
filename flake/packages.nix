@@ -15,7 +15,7 @@
       // {
         world = pkgs.writeShellApplication {
           name = "world";
-          runtimeInputs = with pkgs; [just nushell];
+          runtimeInputs = with pkgs; [just nushell statix];
           text = ''
             just -f ${../Justfile} -d "$(pwd)" "$@"
           '';
