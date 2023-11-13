@@ -5,7 +5,7 @@
     system,
     ...
   }: let
-    inherit (lib // builtins) attrNames pathExists filter filterAttrs mapAttrs readDir;
+    inherit (lib // builtins) filterAttrs mapAttrs readDir;
     locallyDefinedPackages = mapAttrs (
       name: _: (pkgs.callPackage (../packages + "/${name}") {inherit inputs;})
     ) (filterAttrs (filename: type: type == "directory") (readDir ../packages));
@@ -20,6 +20,7 @@
             just -f ${../Justfile} -d "$(pwd)" "$@"
           '';
         };
+
         helix-latest = inputs.helix.packages.${system}.helix;
         hyprland-unstable = inputs.hyprland.packages.${system}.hyprland;
         persway = inputs.persway.packages.${system}.default;
