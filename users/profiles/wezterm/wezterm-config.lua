@@ -169,6 +169,10 @@ config.enable_tab_bar = false
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
 config.font_size = 14.0
 config.color_scheme = 'nord'
+config.colors = {
+  -- Use a different background color than the theme background color
+  background = '#00374e',
+}
 config.hide_tab_bar_if_only_one_tab = true
 config.leader = { key='Space', mods='CTRL' }
 config.window_background_opacity = 0.95
