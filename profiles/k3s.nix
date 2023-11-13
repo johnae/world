@@ -12,7 +12,7 @@ in {
   services.k3s.disable = ["traefik"];
 
   networking.firewall.trustedInterfaces = ["cni+" "flannel.1" "calico+" "cilium+" "lxc+"];
-  environment.state."/keep" = {
+  environment.persistence."/keep" = {
     directories = [
       "/etc/rancher"
       "/var/lib/dockershim"

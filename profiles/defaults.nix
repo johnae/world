@@ -6,6 +6,7 @@
   lib,
   ...
 }: let
+  inherit (lib // builtins) attrNames hasAttr recursiveUpdate mkIf length;
   restic-pkgs =
     lib.mapAttrsToList (
       name: value:
@@ -25,11 +26,11 @@
         }
     )
     config.services.restic.backups;
+  hasState =
+    hasAttr "persistence" config.environment
+    && (length (attrNames config.environment.persistence)) > 0;
+  hasSecrets = config.age.secrets != {};
 in {
-  imports = [
-    ../cachix.nix
-  ];
-
   nix = {
     settings.trusted-users = ["root"];
     extraOptions = ''
@@ -38,8 +39,6 @@ in {
       keep-derivations = true
       tarball-ttl = 900
     '';
-
-    registry.nixpkgs.flake = inputs.nixpkgs;
 
     nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
@@ -108,6 +107,7 @@ in {
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd.availableKernelModules = ["xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc"];
+  #boot.supportedFilesystems = ["bcachefs"];
 
   i18n.defaultLocale = "en_US.UTF-8";
   console.keyMap = "us";
@@ -154,11 +154,6 @@ in {
   ## only allow declarative user management
   users.mutableUsers = false;
 
-  ## This just auto-creates /nix/var/nix/{profiles,gcroots}/per-user/<USER>
-  ## for all extraUsers setup on the system. Without this home-manager refuses
-  ## to run on boot when setup as a nix module and the user has yet to install
-  ## anything through nix (which is the case on a completely new install).
-  ## I tend to install the full system from an iso so I really want home-manager
-  ## to run properly on boot.
-  services.nix-dirs.enable = true;
+  ##
+  system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState) {deps = ["persist-files"];};
 }

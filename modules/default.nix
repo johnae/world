@@ -1,20 +1,14 @@
 {
   imports = [
     ./auto-upgrade-enhanced.nix
-    ./cleanboot.nix
-    ./config-from-data.nix
-    ./headscale-acls.nix
     ./home.nix
     ./my-matrix.nix
     ./host-config.nix
     ./innernet.nix
     ./k3s.nix
     ./my-cloudflared.nix
-    ./private-wireguard.nix
     ./router.nix
     ./services.nix
-    ./sleep-management.nix
-    ./state.nix
     ./tailscale-auth.nix
   ];
 }

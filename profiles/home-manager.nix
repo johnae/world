@@ -1,7 +1,6 @@
 {
   hostName,
   inputs,
-  userProfiles,
   ...
 }: let
   inherit (builtins) mapAttrs;
@@ -15,13 +14,13 @@ in {
     ../users/modules/userinfo.nix
   ];
 
-  home-manager.users =
-    mapAttrs (
-      user: profiles: {...}: {
-        imports = [../users/profiles/home.nix] ++ profiles;
-        home.stateVersion = "21.05";
-        home.username = user;
-      }
-    )
-    userProfiles;
+  # home-manager.users =
+  #   mapAttrs (
+  #     user: profiles: {...}: {
+  #       #imports = [../users/profiles/home.nix] ++ profiles;
+  #       home.stateVersion = "21.05";
+  #       home.username = user;
+  #     }
+  #   )
+  #   userProfiles;
 }

@@ -51,7 +51,7 @@
   powerManagement.enable = true;
   powerManagement.powertop.enable = true;
 
-  environment.state."/keep".directories = ["/var/cache/powertop"];
+  environment.persistence."/keep".directories = ["/var/cache/powertop"];
 
   virtualisation.docker.enable = false;
   virtualisation.podman.enable = true;
@@ -102,13 +102,6 @@
       fonts = ["JetBrainsMono" "DroidSansMono" "Iosevka" "IosevkaTerm" "RobotoMono"];
     })
   ];
-
-  security.wrappers.netns-exec = {
-    source = "${pkgs.netns-exec}/bin/netns-exec";
-    owner = "root";
-    group = "root";
-    setuid = true;
-  };
 
   machinePurpose = "workstation";
 }

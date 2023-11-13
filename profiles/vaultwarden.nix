@@ -2,6 +2,7 @@
   lib,
   config,
   pkgs,
+  adminUser,
   ...
 }: let
   cfg = config.services.vaultwarden;
@@ -38,7 +39,7 @@
   '';
 in {
   fileSystems."${cfg.backupDir}" = {
-    device = "/home/john/Sync/vaultwarden-backup";
+    device = "/home/${adminUser.name}/Sync/vaultwarden-backup";
     fsType = "none";
     options = ["bind"];
   };

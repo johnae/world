@@ -1,3 +1,0 @@
-{
-  services.pcscd.enable = true;
-}

@@ -6,7 +6,7 @@ This repo is using [flake-parts](https://flake.parts) to modularize and clean up
 
 # Installing a new machine
 
-Add a new toml file under the [hosts/](hosts/) directory, possibly copying an existing fitting host and modifying it. Add the wanted profiles and other configuration. Commit and push them to this repository.
+Add a new file under the relevant architecture folder under the [hosts/](hosts/) directory, possibly copying an existing fitting host and modifying it. Add the wanted profiles and other configuration. Commit and push them to this repository.
 
 ## Running the installation process
 

@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  self,
   ...
 }: {
   perSystem = {
@@ -16,10 +15,8 @@
       config.allowUnfree = true;
       overlays = [
         inputs.agenix.overlays.default
-        inputs.emacs-overlay.overlays.default
-        inputs.fenix.overlays.default
+        #inputs.fenix.overlays.default
         inputs.nur.overlay
-
         (final: prev: (filterAttrs (name: _: ((match "nu-.*" name == null) && (match "nu_.*" name == null))) config.packages))
 
         ## temporary fix to btrfs-progs

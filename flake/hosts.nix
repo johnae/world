@@ -1,117 +1,100 @@
 {
   inputs,
-  lib,
-  withSystem,
   self,
+  withSystem,
   ...
 }: let
   inherit
     (inputs.nixpkgs.lib // builtins)
-    mapAttrs'
-    replaceStrings
-    fromTOML
-    readDir
-    readFile
-    pathExists
-    mapAttrs
-    attrByPath
-    filterAttrsRecursive
+    filterAttrs
+    foldl'
     makeOverridable
-    nixosSystem
-    mkIf
+    mapAttrs'
+    mapAttrsToList
     mkForce
+    mkIf
+    nixosSystem
+    readDir
+    replaceStrings
     substring
     ;
-in rec {
-  flake = let
-    hostConfigurations = mapAttrs' (
-      filename: _: let
-        name = replaceStrings [".toml"] [""] filename;
-      in {
-        inherit name;
-        value = fromTOML (readFile (../hosts + "/${filename}"));
-      }
-    ) (readDir ../hosts);
 
-    nixosConfig = hostName: config: let
-      fileOrDir = path: let
-        basePath = toString (../. + "/${path}");
-      in
-        if pathExists basePath
-        then basePath
-        else "${basePath}.nix";
+  nixSettings = {
+    nix.registry.nixpkgs = {flake = inputs.nixpkgs;};
+    nix.registry.world = {flake = inputs.self;};
+  };
+  mapSystems = dir: mapAttrsToList (name: _: name) (filterAttrs (_: type: type == "directory") (readDir dir));
+  mapHosts = foldl' (
+    hosts: system:
+      hosts
+      // (mapAttrs' (
+        filename: _: let
+          name = replaceStrings [".nix"] [""] filename;
+        in {
+          inherit name;
+          value = {
+            inherit system;
+            hostconf = ../hosts + "/${system}/${filename}";
+          };
+        }
+      ) (builtins.readDir ../hosts/${system}))
+  ) {};
 
-      hostConf = config.config;
-      profiles = map fileOrDir hostConf.profiles;
-
-      ## Somewhat hacky way of making it seem as if we're
-      ## giving home-manager the profiles to load - that
-      ## can't actually happen within a module though. I.e
-      ## in a module you can't add imports coming from an option.
-      userProfiles = mapAttrs (
-        _: user: let
-          profiles = attrByPath ["profiles"] {} user;
-        in
-          map fileOrDir profiles
-      ) (attrByPath ["home-manager" "users"] {} hostConf);
-
-      modules = [../modules];
-
-      inherit (config) system;
-
-      cfg =
-        filterAttrsRecursive (
-          name: _:
-            name != "profiles"
-        )
-        hostConf;
-    in
-      withSystem system (ctx @ {pkgs, ...}:
+  defaultModules = [
+    nixSettings
+    inputs.nixpkgs.nixosModules.notDetected
+    inputs.impermanence.nixosModules.impermanence
+    inputs.home-manager.nixosModules.home-manager
+    inputs.agenix.nixosModules.age
+    ../modules/default.nix
+  ];
+  nixosConfigurations = mapAttrs' (
+    name: conf: let
+      inherit (conf) system hostconf;
+    in {
+      inherit name;
+      value = withSystem system ({pkgs, ...}:
         makeOverridable nixosSystem {
           inherit system;
           specialArgs = {
-            inherit hostName inputs userProfiles;
-            hostConfiguration = cfg;
-            hostConfigurations = mapAttrs (_: conf: conf.config) hostConfigurations;
+            hostName = name;
+            adminUser = {
+              name = "john";
+              uid = 1337;
+              gid = 1337;
+              userinfo = {
+                email = "john@insane.se";
+                fullName = "John Axel Eriksson";
+                githubUser = "johnae";
+                gitlabUser = "johnae";
+              };
+            };
+            hostConfigurations = mapAttrs' (name: conf: {
+              inherit name;
+              value = conf.config;
+            }) (filterAttrs (hostName: _: hostName != name) nixosConfigurations);
+            inherit inputs;
           };
-
-          modules = [
-            {
-              system.configurationRevision = mkIf (self ? rev) self.rev;
-              system.nixos.versionSuffix = mkForce "git.${substring 0 11 inputs.nixpkgs.rev}";
-              nixpkgs.pkgs = pkgs;
-            }
-            (
-              {pkgs, ...}: {
-                environment.systemPackages = [pkgs.world];
+          modules =
+            [
+              {
+                system.configurationRevision = mkIf (self ? rev) self.rev;
+                system.nixos.versionSuffix = mkForce "git.${substring 0 11 inputs.nixpkgs.rev}";
+                nixpkgs.pkgs = pkgs;
+                environment.systemPackages = [
+                  pkgs.world
+                ];
               }
-            )
-            inputs.nixpkgs.nixosModules.notDetected
-            inputs.home-manager.nixosModules.home-manager
-            inputs.agenix.nixosModules.age
-            {
-              imports = modules ++ profiles;
-            }
-          ];
+            ]
+            ++ defaultModules
+            ++ [
+              hostconf
+            ];
         });
-
-    nixosConfigurations = mapAttrs nixosConfig hostConfigurations;
-  in {
-    inherit nixosConfigurations hostConfigurations;
-  };
-
-  perSystem = {
-    pkgs,
-    lib,
-    ...
-  }: let
-    diskFormatter = hostName: config: pkgs: {
-      name = "${hostName}-diskformat";
-      value = pkgs.callPackage ../utils/diskformat.nix {
-        inherit hostName config;
-      };
-    };
-  in {
-    packages = mapAttrs' (hostName: config: diskFormatter hostName config pkgs) flake.nixosConfigurations;
+    }
+  ) (mapHosts (mapSystems ../hosts));
+in {
+  flake = {
+    inherit nixosConfigurations;
   };
 }

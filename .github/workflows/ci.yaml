@@ -19,7 +19,7 @@ jobs:
     - name: Run the Magic Nix Cache
       uses: DeterminateSystems/magic-nix-cache-action@v2
     - run: |
-        nix run .#lint
+        nix run .#world -- lint
 
   nix_check:
     runs-on: ubuntu-latest
@@ -33,29 +33,7 @@ jobs:
     - name: Run the Magic Nix Cache
       uses: DeterminateSystems/magic-nix-cache-action@v2
     - run: |
-        nix flake check --impure
-
-  container_images_x86_64_linux:
-    runs-on: ubuntu-latest
-    needs: [pkg_x86_64_linux]
-    steps:
-    - uses: actions/checkout@v4
-    - name: Login to GHCR
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ github.token }}
-    - uses: cachix/install-nix-action@v23
-      with:
-        extra_nix_config: |
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-          accept-flake-config = true
-    - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v2
-    - run: |
-        nix build .#images/push/all
-        ./result/bin/push-all-images "$GITHUB_RUN_NUMBER"
+        nix run .#world -- check
 
   pkgs_x86_64_linux:
     runs-on: ubuntu-latest
@@ -74,20 +52,6 @@ jobs:
       run: |
         echo "matrix=$(nix eval .#github-actions-package-matrix-x86-64-linux --json)" >> "$GITHUB_OUTPUT"
 
-  #pkgs_aarch64_linux:
-  #  runs-on: ubuntu-latest
-  #  outputs:
-  #    matrix: ${{ steps.job-matrix.outputs.matrix }}
-  #  steps:
-  #  - uses: actions/checkout@v4
-  #  - uses: cachix/install-nix-action@v23
-  #    with:
-  #      extra_nix_config: |
-  #        access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-  #  - id: job-matrix
-  #    run: |
-  #      echo "matrix=$(nix eval .#github-actions-package-matrix-aarch64-linux --json)" >> "$GITHUB_OUTPUT"
-
   hosts_x86_64_linux:
     runs-on: ubuntu-latest
     outputs:
@@ -104,20 +68,6 @@ jobs:
     - id: job-matrix
       run: |
         echo "matrix=$(nix eval .#github-actions-host-matrix-x86-64-linux --json)" >> "$GITHUB_OUTPUT"
-
-  #hosts_aarch64_linux:
-  #  runs-on: ubuntu-latest
-  #  outputs:
-  #    matrix: ${{ steps.job-matrix.outputs.matrix }}
-  #  steps:
-  #  - uses: actions/checkout@v4
-  #  - uses: cachix/install-nix-action@v23
-  #    with:
-  #      extra_nix_config: |
-  #        access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-  #  - id: job-matrix
-  #    run: |
-  #      echo "matrix=$(nix eval .#github-actions-host-matrix-aarch64-linux --json)" >> "$GITHUB_OUTPUT"
 
   pkg_x86_64_linux:
     needs: pkgs_x86_64_linux
@@ -143,78 +93,11 @@ jobs:
       run: |
         nix build .#packages.x86_64-linux.$PKG -L
 
-  #pkg_aarch64_linux:
-  #  needs: pkgs_aarch64_linux
-  #  runs-on: ${{ matrix.os }}
-  #  strategy:
-  #    matrix: ${{ fromJson(needs.pkgs_aarch64_linux.outputs.matrix) }}
-  #  steps:
-  #  - uses: actions/checkout@v4
-  #  - uses: cachix/install-nix-action@v23
-  #    with:
-  #      extra_nix_config: |
-  #        access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-  #        accept-flake-config = true
-  #  - run: |
-  #      DEBIAN_FRONTEND=noninteractive
-  #      export DEBIAN_FRONTEND
-  #      sudo apt-get update -q -y && sudo apt-get install -q -y qemu-system-aarch64 qemu-efi binfmt-support qemu-user-static
-  #      sudo bash -c "echo extra-platforms = aarch64-linux arm-linux >> /etc/nix/nix.conf"
-  #      sudo systemctl restart nix-daemon
-  #  - uses: cachix/cachix-action@v12
-  #    if: ${{ matrix.pkg != 'pxebooter' }}
-  #    with:
-  #      name: insane
-  #      signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-  #  - env:
-  #      PKG: ${{ matrix.pkg }}
-  #    run: |
-  #      nix build .#packages.aarch64-linux.$PKG -L
-
-  # host_x86_64_linux:
-  #   needs: [hosts_x86_64_linux, pkg_x86_64_linux]
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix: ${{ fromJson(needs.hosts_x86_64_linux.outputs.matrix) }}
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #   - uses: cachix/install-nix-action@v23
-  #     with:
-  #       extra_nix_config: |
-  #         access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-  #         accept-flake-config = true
-  #   - env:
-  #       HOST: ${{ matrix.host }}
-  #     run: |
-  #       nix build .#nixosConfigurations.$HOST.config.system.build.toplevel -L
-
-  #host_aarch64_linux:
-  #  needs: [hosts_aarch64_linux, pkg_aarch64_linux]
-  #  runs-on: ${{ matrix.os }}
-  #  strategy:
-  #    matrix: ${{ fromJson(needs.hosts_aarch64_linux.outputs.matrix) }}
-  #  steps:
-  #  - uses: actions/checkout@v4
-  #  - uses: cachix/install-nix-action@v23
-  #    with:
-  #      extra_nix_config: |
-  #        access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-  #        accept-flake-config = true
-  #  - run: |
-  #      DEBIAN_FRONTEND=noninteractive
-  #      export DEBIAN_FRONTEND
-  #      sudo apt-get update -q -y && sudo apt-get install -q -y qemu-system-aarch64 qemu-efi binfmt-support qemu-user-static
-  #      sudo bash -c "echo extra-platforms = aarch64-linux arm-linux >> /etc/nix/nix.conf"
-  #  - env:
-  #      HOST: ${{ matrix.host }}
-  #    run: |
-  #      nix build .#nixosConfigurations.$HOST.config.system.build.toplevel -L
-
   summarize:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: Build (matrix)
-    needs: [container_images_x86_64_linux, pkg_x86_64_linux, nix_lint, nix_check] ## pkg_aarch64_linux, host_x86_64_linux, host_aarch64_linux,
+    needs: [pkg_x86_64_linux, nix_lint, nix_check]
     steps:
       - name: Check linting status
         if: ${{ needs.nix_lint.result != 'success' }}
@@ -222,18 +105,6 @@ jobs:
       - name: Check flake check status
         if: ${{ needs.nix_check.result != 'success' }}
         run: exit 1
-      - name: Check container image build and push status
-        if: ${{ needs.container_images_x86_64_linux.result != 'success' }}
-        run: exit 1
       - name: Check x86_64-linux package build matrix status
         if: ${{ needs.pkg_x86_64_linux.result != 'success' }}
         run: exit 1
-      #- name: Check aarch64-linux package build matrix status
-      #  if: ${{ needs.pkg_aarch64_linux.result != 'success' }}
-      #  run: exit 1
-      #- name: Check host aarch64-linux build matrix status
-      #  if: ${{ needs.host_aarch64_linux.result != 'success' }}
-      #  run: exit 1
-      #- name: Check host x86_64-linux build matrix status
-      #  if: ${{ needs.host_x86_64_linux.result != 'success' }}
-      #  run: exit 1
