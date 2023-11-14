@@ -2,6 +2,7 @@
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJnEDS9ziXY31y2uyMBzSFSjyY5KqYnJgR4Tkb8nx/Dn";
 
   imports = [
+    ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
     ../../profiles/disk/btrfs-on-luks.nix
     ../../profiles/hardware/apu.nix

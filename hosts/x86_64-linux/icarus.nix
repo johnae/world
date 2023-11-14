@@ -9,6 +9,7 @@
   btrfs.disks = ["/dev/nvme0n1" "/dev/nvme1n1"];
 
   imports = [
+    ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
     ../../profiles/disk/btrfs-on-luks.nix
     ../../profiles/hardware/b550.nix

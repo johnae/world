@@ -7,6 +7,7 @@
   syncthingDeviceID = "FB5PKN4-5KT7RPB-5JXSO2B-7BTWIG6-FEPT7FA-AZT4QIP-Z3AMM3L-OQXZPQI";
 
   imports = [
+    ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
     ../../profiles/disk/btrfs-on-luks.nix
     ../../profiles/hardware/nuc.nix
