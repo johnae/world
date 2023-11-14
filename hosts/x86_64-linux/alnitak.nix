@@ -59,4 +59,10 @@
       owner = "1337";
     };
   };
+
+  home-manager = {
+    users.${adminUser.name} = {
+      imports = [../../users/profiles/headless.nix];
+    };
+  };
 }

@@ -103,4 +103,10 @@
       passwordFile = "/run/agenix/remote-disk-password";
     }
   ];
+
+  home-manager = {
+    users.${adminUser.name} = {
+      imports = [../../users/profiles/headless.nix];
+    };
+  };
 }
