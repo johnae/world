@@ -1,4 +1,4 @@
-{...}: {
+{adminUser, ...}: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJnEDS9ziXY31y2uyMBzSFSjyY5KqYnJgR4Tkb8nx/Dn";
 
   imports = [
