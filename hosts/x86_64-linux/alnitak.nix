@@ -6,6 +6,7 @@
     ../../profiles/admin-user/user.nix
     ../../profiles/disk/btrfs-on-luks.nix
     ../../profiles/hardware/apu.nix
+    ../../profiles/home-manager.nix
     ../../profiles/server.nix
     ../../profiles/state.nix
     ../../profiles/tailscale.nix

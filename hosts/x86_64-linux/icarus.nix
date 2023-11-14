@@ -13,6 +13,7 @@
     ../../profiles/admin-user/user.nix
     ../../profiles/disk/btrfs-on-luks.nix
     ../../profiles/hardware/b550.nix
+    ../../profiles/home-manager.nix
     ../../profiles/server.nix
     ../../profiles/state.nix
     ../../profiles/syncthing.nix
