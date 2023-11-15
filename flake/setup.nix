@@ -19,17 +19,6 @@
         inputs.nur.overlay
         (final: prev: (filterAttrs (name: _: ((match "nu-.*" name == null) && (match "nu_.*" name == null))) config.packages))
 
-        ## temporary fix to btrfs-progs
-        (final: prev: {
-          btrfs-progs = prev.btrfs-progs.overrideAttrs (oa: {
-            patches =
-              (oa.patches or [])
-              ++ [
-                ../files/btrfs-6.6-IOCTL_SCAN_DEV.patch
-              ];
-          });
-        })
-
         (final: prev: {
           inherit inputs;
           google-cloud-sdk-gke =
