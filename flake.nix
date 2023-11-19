@@ -1,5 +1,5 @@
 {
-  description = "Atomic Worlds. Declarative Today. Utopia Tomorrow.";
+  description = "Declarative Today. Utopia Tomorrow.";
 
   nixConfig = {
     extra-experimental-features = "nix-command flakes";
@@ -72,6 +72,8 @@
     pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    river.flake = false;
+    river.url = "git+https://github.com/riverwm/river?submodules=1";
     wezterm.flake = false;
     wezterm.url = "git+https://github.com/wez/wezterm/?rev=f0e3eecba6faec0aa963a6f0067577afc99e11db&submodules=1";
   };
