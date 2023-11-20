@@ -72,10 +72,8 @@
     pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-    river.flake = false;
-    river.url = "git+https://github.com/riverwm/river?submodules=1";
     wezterm.flake = false;
-    wezterm.url = "git+https://github.com/wez/wezterm/?rev=f0e3eecba6faec0aa963a6f0067577afc99e11db&submodules=1";
+    wezterm.url = "git+https://github.com/wez/wezterm/?rev=600652583594e9f6195a6427d1fabb09068622a7&submodules=1";
   };
 
   outputs = inputs @ {flake-parts, ...}:

@@ -638,24 +638,6 @@
         "type": "github"
       }
     },
-    "river": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1700247117,
-        "narHash": "sha256-tacwctOL2TFiC8VP6ymoJ5QjQUFrG5H70J3HeOW/7/g=",
-        "ref": "refs/heads/master",
-        "rev": "50ccd4c5b3cd700bed09d26eb75552f08f9af262",
-        "revCount": 1076,
-        "submodules": true,
-        "type": "git",
-        "url": "https://github.com/riverwm/river"
-      },
-      "original": {
-        "submodules": true,
-        "type": "git",
-        "url": "https://github.com/riverwm/river"
-      }
-    },
     "root": {
       "inputs": {
         "age-plugin-yubikey": "age-plugin-yubikey",
@@ -680,7 +662,6 @@
         "nur": "nur",
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks",
-        "river": "river",
         "wezterm": "wezterm"
       }
     },
@@ -759,17 +740,17 @@
     "wezterm": {
       "flake": false,
       "locked": {
-        "lastModified": 1699370718,
-        "narHash": "sha256-VxN3qv+uRuS1Yo51zWkooZdJkodEbZ4F50iYRihCQIU=",
+        "lastModified": 1700259065,
+        "narHash": "sha256-iwIiGRHgf2uBf2ueIzdxDtQW9Z7Gf0gXdb+0RIOH+Qo=",
         "ref": "refs/heads/main",
-        "rev": "f0e3eecba6faec0aa963a6f0067577afc99e11db",
-        "revCount": 7513,
+        "rev": "600652583594e9f6195a6427d1fabb09068622a7",
+        "revCount": 7516,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/wez/wezterm/"
       },
       "original": {
-        "rev": "f0e3eecba6faec0aa963a6f0067577afc99e11db",
+        "rev": "600652583594e9f6195a6427d1fabb09068622a7",
         "submodules": true,
         "type": "git",
         "url": "https://github.com/wez/wezterm/"
