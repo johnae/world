@@ -37,10 +37,13 @@
       "ctrl+shift+left" = "neighboring_window left";
       "ctrl+shift+right" = "neighboring_window right";
       "ctrl+tab" = "select_tab";
+      "ctrl+space>right" = "next_tab";
+      "ctrl+space>left" = "previous_tab";
       "ctrl+n" = "launch --cwd=current";
       "ctrl+t" = "launch --cwd=current --type=tab";
       "ctrl+shift+z" = "toggle_layout stack"; ## zoom
       "ctrl+space>q" = "close_window";
+      "ctrl+space>shift+q" = "close_tab";
       "ctrl+space>g" = "launch --cwd=current --type=overlay gex";
       #"ctrl+space>f" = "launch --cwd=current --type=overlay find-project"
     };

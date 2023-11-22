@@ -83,18 +83,45 @@
   swapCyclePrev = swapCycle "prev";
 
   xcursor_theme = config.gtk.cursorTheme.name;
-  terminal-bin = "${pkgs.wezterm}/bin/wezterm start --always-new-process";
-  dev-env = name:
+  terminal-bin = "${pkgs.kitty}/bin/kitty";
+  #terminal-bin = "${pkgs.wezterm}/bin/wezterm start --always-new-process";
+  # dev-env = name:
+  #   pkgs.writeShellApplication {
+  #     inherit name;
+  #     runtimeInputs = with pkgs; [wezterm];
+  #     text = ''
+  #       exec wezterm connect --class=${name} ${name}
+  #     '';
+  #   };
+
+  dev-env = {
+    name,
+    host ? null,
+  }:
     pkgs.writeShellApplication {
       inherit name;
-      runtimeInputs = with pkgs; [wezterm];
+      runtimeInputs = with pkgs; [kitty];
       text = ''
-        exec wezterm connect --class=${name} ${name}
+        ${
+          if host == null
+          then ''
+            exec kitty -1 --instance-group=${name} --class=${name}
+          ''
+          else ''
+            exec kitty -1 --instance-group=${name} --class=${name} kitten ssh ${host}
+          ''
+        }
       '';
     };
 
-  local-dev = dev-env "local-dev";
-  remote-dev = dev-env "remote-dev";
+  # local-dev = dev-env "local-dev";
+  # remote-dev = dev-env "remote-dev";
+
+  local-dev = dev-env {name = "local-dev";};
+  remote-dev = dev-env {
+    name = "remote-dev";
+    host = "sirius";
+  };
 in {
   xdg.configFile."wpaperd/wallpaper.toml".source = pkgs.writeText "wallpaper.toml" ''
     [default]
