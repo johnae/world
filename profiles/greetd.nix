@@ -12,7 +12,7 @@
       inherit name;
       text = ''
         trap 'systemctl --user stop ${systemdSession} || true' EXIT
-        ${pkgs.udev}/bin/systemd-cat --identifier=${name} ${cmd}
+        ${pkgs.systemd}/bin/systemd-cat --identifier=${name} ${cmd}
       '';
     };
 
