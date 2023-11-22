@@ -9,6 +9,7 @@ in {
     ./bat.nix
     ./git.nix
     ./helix.nix
+    ./kitty.nix
     ./kubie.nix
     ./nushell/default.nix
     ./rbw.nix
