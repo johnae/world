@@ -83,7 +83,8 @@
   swapCyclePrev = swapCycle "prev";
 
   xcursor_theme = config.gtk.cursorTheme.name;
-  terminal-bin = "${pkgs.kitty}/bin/kitty";
+  terminal-bin = "${pkgs.alacritty}/bin/alacritty";
+  #terminal-bin = "${pkgs.kitty}/bin/kitty";
   #terminal-bin = "${pkgs.wezterm}/bin/wezterm start --always-new-process";
   # dev-env = name:
   #   pkgs.writeShellApplication {
@@ -94,21 +95,48 @@
   #     '';
   #   };
 
+  # dev-env = {
+  #   name,
+  #   host ? null,
+  # }:
+  #   pkgs.writeShellApplication {
+  #     inherit name;
+  #     runtimeInputs = with pkgs; [kitty];
+  #     text = ''
+  #       ${
+  #         if host == null
+  #         then ''
+  #           exec kitty -1 --instance-group=${name} --class=${name}
+  #         ''
+  #         else ''
+  #           exec kitty -1 --instance-group=${name} --class=${name} kitten ssh ${host}
+  #         ''
+  #       }
+  #     '';
+  #   };
+
   dev-env = {
     name,
     host ? null,
   }:
     pkgs.writeShellApplication {
       inherit name;
-      runtimeInputs = with pkgs; [kitty];
+      runtimeInputs = with pkgs; [alacritty hyprland-unstable jq];
       text = ''
+        export PID="$(hyprctl clients -j | jq '[.[] | select(.class == "local-dev" and .initialTitle == "Alacritty")] | first | .pid')"
+        if [ "$PID" != "null" ]; then
+          exec hyprctl dispatch focuswindow "pid:$PID"
+        fi
+        # shellcheck disable=SC2093
+        exec alacritty --class=${name} \
+                       --working-directory="$HOME" \
         ${
           if host == null
           then ''
-            exec kitty -1 --instance-group=${name} --class=${name}
+            --command zellij -s ${name} attach -c -f ${name}
           ''
           else ''
-            exec kitty -1 --instance-group=${name} --class=${name} kitten ssh ${host}
+            --command ssh -A -t ${host} zellij -s ${name} attach -c -f ${name}
           ''
         }
       '';
