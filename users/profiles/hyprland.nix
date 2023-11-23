@@ -123,7 +123,7 @@
       inherit name;
       runtimeInputs = with pkgs; [alacritty hyprland-unstable jq];
       text = ''
-        export PID="$(hyprctl clients -j | jq '[.[] | select(.class == "local-dev" and .initialTitle == "Alacritty")] | first | .pid')"
+        PID="$(hyprctl clients -j | jq '[.[] | select(.class == "local-dev" and .initialTitle == "Alacritty")] | first | .pid')"
         if [ "$PID" != "null" ]; then
           exec hyprctl dispatch focuswindow "pid:$PID"
         fi
