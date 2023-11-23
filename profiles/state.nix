@@ -50,6 +50,7 @@
         ".cache/nix"
         ".cache/nix-index"
         ".cache/rbw"
+        ".cache/zellij"
         ".mozilla/firefox/default"
         ".config/chromium"
         ".cache/chromium"
