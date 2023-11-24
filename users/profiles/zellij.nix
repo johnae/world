@@ -15,7 +15,11 @@
         zellij action go-to-tab-name "$name"
         exit 0
       fi
-      zellij action new-tab -l dev -c "$project"
+      if [ -e "$project/dev.kdl" ]; then
+        zellij action new-tab -l "$project/dev.kdl" -c "$project"
+      else
+        zellij action new-tab -l dev -c "$project"
+      fi
     '';
   };
   direnvExecMaybe = pkgs.writeShellApplication {
