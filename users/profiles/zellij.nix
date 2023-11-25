@@ -16,9 +16,9 @@
         exit 0
       fi
       if [ -e "$project/dev.kdl" ]; then
-        zellij action new-tab -l "$project/dev.kdl" -c "$project"
+        zellij action new-tab -l "$project/dev.kdl" -c "$project" -n "$name"
       else
-        zellij action new-tab -l dev -c "$project"
+        zellij action new-tab -l dev -c "$project" -n "$name"
       fi
     '';
   };
