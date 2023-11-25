@@ -60,6 +60,7 @@ in {
   xdg.configFile."zellij/config.kdl".text = ''
     theme "nord"
     pane_frames false
+    session_serialization 1
     keybinds {
       unbind "Ctrl b"
       unbind "Ctrl g"
