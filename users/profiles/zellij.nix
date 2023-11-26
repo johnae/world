@@ -61,9 +61,17 @@ in {
     theme "nord"
     pane_frames false
     session_serialization true
+    serialization_interval 1
     keybinds {
       unbind "Ctrl b"
       unbind "Ctrl g"
+      unbind "Alt n"
+      unbind "Alt h"
+      unbind "Alt l"
+      unbind "Alt j"
+      unbind "Alt k"
+      unbind "Alt ="
+      unbind "Alt -"
       shared_except "locked" {
         bind "Ctrl e" { SwitchToMode "Locked"; }
         bind "Ctrl g" {
