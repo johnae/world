@@ -127,7 +127,7 @@
         if [ "$PID" != "null" ]; then
           exec hyprctl dispatch focuswindow "pid:$PID"
         fi
-        # shellcheck disable=SC2093
+        # shellcheck disable=SC2093,SC2016
         exec alacritty --class=${name} \
                        --working-directory="$HOME" \
         ${
@@ -136,7 +136,7 @@
             --command zellij -s ${name} attach -c -f ${name}
           ''
           else ''
-            --command ssh -A -t ${host} zellij -s ${name} attach -c -f ${name}
+            --command ssh -A -t ${host} 'ln -sf $env.SSH_AUTH_SOCK $"/run/user/(id -u)/ssh-auth.sock"; zellij -s ${name} attach -c -f ${name}'
           ''
         }
       '';
