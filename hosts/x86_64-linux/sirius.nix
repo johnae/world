@@ -250,6 +250,9 @@
     users.${adminUser.name} = {
       imports = [../../users/profiles/headless.nix];
       programs.git.extraConfig.user.signingKey = "key::sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo=";
+      home.sessionVariables = {
+        SSH_AUTH_SOCK = "/run/user/${toString adminUser.uid}/ssh-auth.sock";
+      };
     };
   };
 }
