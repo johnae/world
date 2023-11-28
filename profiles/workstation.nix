@@ -59,6 +59,8 @@
 
   programs.ssh.startAgent = true;
 
+  services.pcscd.enable = true;
+
   programs.dconf.enable = true;
 
   services.avahi.enable = true;
