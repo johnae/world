@@ -18,7 +18,7 @@
     mkdir -p "$DIR"
     ${pkgs.sqlite}/bin/sqlite3 /var/lib/bitwarden_rs/db.sqlite3 "VACUUM INTO '$DIR/db.sqlite3'";
     cp -R /var/lib/bitwarden_rs/{attachments,sends,rsa_key*,icon_cache} "$DIR"/;
-    chown -R 1337 "$DIR"
+    chown -R ${toString adminUser.uid}:${toString adminUser.gid} "$DIR"
     echo removing old backups
     (cd "${cfg.backupDir}";
       for dir in $(ls -r | tail -n +10); do
@@ -43,9 +43,26 @@ in {
     fsType = "none";
     options = ["bind"];
   };
-  systemd.services.vaultwarden.serviceConfig.ExecStartPre = "${pkgs.bash}/bin/bash ${restore-vw-backup}";
+  systemd.services.restore-vaultwarden-backup = {
+    description = "restore vaultwarden backup";
+    wantedBy = ["multi-user.target"];
+    after = ["local-fs.target"];
+    before = ["vaultwarden.service" "backup-vaultwarden.service"];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root"; ## to change perms on restore
+      Group = "root";
+      ExecStart = "${pkgs.bash}/bin/bash ${restore-vw-backup}";
+    };
+  };
+  systemd.services.vaultwarden = {
+    requires = ["restore-vaultwarden-backup.service"];
+    after = ["restore-vaultwarden-backup.service"];
+  };
   systemd.services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
     serviceConfig = {
+      User = "root"; ## need to change perms etc
+      Group = "root";
       ExecStart = lib.mkForce "${pkgs.bash}/bin/bash ${backup}"; ## use a tweaked backup script instead of upstream
     };
   };
