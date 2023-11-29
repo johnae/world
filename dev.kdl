@@ -1,0 +1,11 @@
+layout {
+  pane split_direction="horizontal" {
+    pane size="75%" command="direnv" {
+      args "exec" "." "hx" "."
+    }
+    pane
+  }
+  pane size=1 borderless=true {
+    plugin location="zellij:compact-bar"
+  }
+}
