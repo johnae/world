@@ -78,6 +78,10 @@ in {
           command = "${copilot}/bin/copilot";
           args = ["--stdio"];
         };
+        nu-lsp = {
+          command = "${pkgs.nushell}/bin/nu";
+          args = ["--lsp"];
+        };
         rust-analyzer = {
           config.check.command = "clippy";
         };
@@ -132,7 +136,7 @@ in {
         }
         {
           name = "nu";
-          language-servers = ["copilot"];
+          language-servers = ["nu-lsp" "copilot"];
         }
         {
           name = "css";
