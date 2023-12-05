@@ -38,6 +38,7 @@
     fi
   '';
 in {
+  environment.persistence."/keep".directories = [DATA_FOLDER];
   fileSystems."${cfg.backupDir}" = {
     device = "/home/${adminUser.name}/Sync/vaultwarden-backup";
     fsType = "none";

@@ -124,6 +124,7 @@
       PASSWORD_HINTS_ALLOWED = "false";
       ROCKET_ADDRESS = "127.0.0.1";
       ROCKET_PORT = 8222;
+      PASSWORD_ITERATIONS = 600000;
     };
   };
 
