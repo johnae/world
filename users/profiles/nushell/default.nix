@@ -5,6 +5,7 @@
   ...
 }: let
   inherit (config) home;
+  nu-scripts = "${pkgs.nu_scripts}/share/nu_scripts";
 in {
   programs.atuin.enable = true;
   programs.direnv.enableNushellIntegration = false;
@@ -18,6 +19,44 @@ in {
       source ~/.config/nushell/home.nu
       source ~/.config/nushell/starship.nu
       source ~/.config/nushell/atuin.nu
+
+      $env.config.hooks.pre_prompt = [
+       {
+        code: "
+          if ('ZELLIJ' in $env) {
+            mut current_dir = (pwd)
+            if ($current_dir == $env.HOME) {
+              $current_dir = '~'
+            }
+            let current_dir = (echo $current_dir | split row "/" | last)
+            zellij action rename-tab $current_dir out+err> /dev/null
+          }
+        "
+       }
+      ]
+
+      $env.config.hooks.pre_prompt = (
+        $env.config.hooks.pre_prompt | append (source ${nu-scripts}/nu-hooks/direnv/config.nu)
+      )
+
+      ${
+        lib.concatStringsSep "\n"
+        (
+          map (completion: "use ${nu-scripts}/custom-completions/${completion}/${completion}-completions.nu") [
+            "cargo"
+            "git"
+            "just"
+            "nix"
+            "npm"
+            "typst"
+            "man"
+            "make"
+            "zellij"
+          ]
+        )
+      }
+
+      use ${nu-scripts}/custom-completions/yarn/yarn-completion.nu
     '';
   };
   xdg.configFile."nushell/atuin.nu".source = pkgs.runCommand "atuin.nu" {} ''
