@@ -60,4 +60,6 @@ in {
         };
       }) (builtins.tail btrfsDisks))
     );
+
+  services.btrfs.autoScrub.enable = true;
 }

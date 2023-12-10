@@ -145,7 +145,6 @@ in {
 
   services.sshguard.enable = true;
   services.fstrim.enable = true;
-  services.btrfs.autoScrub.enable = true;
 
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=90
