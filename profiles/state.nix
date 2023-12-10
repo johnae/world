@@ -78,6 +78,7 @@
         ".ssh/known_hosts"
         ".spotify_token_cache.json"
         ".config/nushell/history.txt"
+        ".config/tenacity.cfg"
       ];
     };
   };

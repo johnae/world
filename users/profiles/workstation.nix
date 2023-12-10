@@ -37,6 +37,7 @@ in {
     shotcut
     slack
     spotifyd
+    tenacity
     wl-clipboard
     wl-clipboard-x11
     xdg-utils
