@@ -25,7 +25,6 @@ in {
     ];
 
   home.packages = with pkgs; [
-    audacity
     element-desktop-wayland
     gnome.nautilus
     kanshi
