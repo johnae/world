@@ -222,9 +222,6 @@ in {
         shared_except "move" "locked" {
             bind "Ctrl h" { SwitchToMode "Move"; }
         }
-        shared_except "tmux" "locked" {
-            bind "Ctrl b" { SwitchToMode "Tmux"; }
-        }
     }
 
     plugins {
