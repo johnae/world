@@ -9,7 +9,7 @@
     runtimeInputs = [pkgs.zellij pkgs.fd pkgs.skim];
     text = ''
       # shellcheck disable=SC1083
-      project="$(fd \.git /home/john/Development -d 3 -H -t d -x echo {//} | sort -u | sk)"
+      project="$(fd \.git /home/john/Development -d 3 -H -x echo {//} | sort -u | sk)"
       name="$(basename "$project")"
       if zellij action query-tab-names | grep -q "$name"; then
         zellij action go-to-tab-name "$name"
