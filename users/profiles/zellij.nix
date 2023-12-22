@@ -36,14 +36,24 @@
 in {
   xdg.configFile."zellij/layouts/dev.kdl".text = ''
     layout {
-      pane split_direction="horizontal" {
-        pane size="75%" command="${direnvExecMaybe}/bin/direnv-exec-maybe" {
-          args "hx" "."
+      tab focus=true hide_floating_panes=true {
+        pane split_direction="horizontal" {
+          pane size="75%" command="${direnvExecMaybe}/bin/direnv-exec-maybe" {
+            args "hx" "."
+          }
+          pane
         }
-        pane
-      }
-      pane size=1 borderless=true {
-        plugin location="zellij:compact-bar"
+        pane size=1 borderless=true {
+          plugin location="zellij:compact-bar"
+        }
+        floating_panes {
+          pane  {
+            x 0
+            y 0
+            width "100%"
+            height "75%"
+          }
+        }
       }
     }
   '';
