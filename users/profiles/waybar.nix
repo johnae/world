@@ -71,9 +71,9 @@ in {
     position = "top";
     spacing = 8;
     margin-top = 4;
-    modules-left = ["custom/logo" "sway/workspaces" "hyprland/workspaces" "sway/mode" "hyprland/submap" "custom/media"];
+    modules-left = ["custom/logo" "river/tags" "sway/workspaces" "hyprland/workspaces" "sway/mode" "river/mode" "hyprland/submap" "custom/media"];
     modules-right = ["custom/pomodoro" "network" "network#wifi" "idle_inhibitor" "pulseaudio" "cpu" "temperature" "backlight" "battery" "clock" "tray"];
-    modules-center = ["hyprland/window"];
+    modules-center = ["hyprland/window" "river/window"];
     "custom/media" = {
       format = "{icon}{}";
       return-type = "json";
@@ -233,7 +233,7 @@ in {
         transition-duration: .5s;
     }
 
-    #workspaces {
+    #workspaces, #tags {
         background: @workspacesbackground1;
         margin: 2px 1px 3px 1px;
         padding: 0px 1px;
@@ -246,7 +246,7 @@ in {
         color: @textcolor1;
     }
 
-    #workspaces button {
+    #workspaces, #tags button {
         padding: 0px 5px;
         margin: 4px 3px;
         border-radius: 15px;
@@ -257,7 +257,7 @@ in {
         opacity: 0.4;
     }
 
-    #workspaces button.active {
+    #workspaces, #tags button.active {
         color: @textcolor1;
         background: @workspacesbackground2;
         border-radius: 15px;
@@ -266,11 +266,32 @@ in {
         opacity:1.0;
     }
 
-    #workspaces button:hover {
+    #tags button.focused {
+        color: @textcolor1;
+        background: @workspacesbackground2;
+        border-radius: 15px;
+        min-width: 40px;
+        transition: all 0.3s ease-in-out;
+        opacity:1.0;
+    }
+
+    #workspaces,#tags button:hover {
         color: @textcolor1;
         background: @workspacesbackground2;
         border-radius: 15px;
         opacity:0.7;
+    }
+
+    #tags button:not(.occupied):not(.focused) {
+    	font-size: 0;
+    	min-width: 0;
+    	min-height: 0;
+    	margin: -17px;
+    	padding: 0;
+    	border: 0;
+    	opacity: 0;
+    	box-shadow: none;
+    	background-color: transparent;
     }
 
     tooltip {

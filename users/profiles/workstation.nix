@@ -17,6 +17,7 @@ in {
       ./kanshi.nix
       ./mako.nix
       ./obs.nix
+      ./river.nix
       ./rofi.nix
       ./spotifyd.nix
       ./sway.nix

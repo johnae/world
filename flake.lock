@@ -639,6 +639,24 @@
         "type": "github"
       }
     },
+    "river": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1700247117,
+        "narHash": "sha256-tacwctOL2TFiC8VP6ymoJ5QjQUFrG5H70J3HeOW/7/g=",
+        "ref": "refs/heads/master",
+        "rev": "50ccd4c5b3cd700bed09d26eb75552f08f9af262",
+        "revCount": 1076,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/riverwm/river"
+      },
+      "original": {
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/riverwm/river"
+      }
+    },
     "root": {
       "inputs": {
         "age-plugin-yubikey": "age-plugin-yubikey",
@@ -663,6 +681,7 @@
         "nur": "nur",
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks",
+        "river": "river",
         "wezterm": "wezterm"
       }
     },

@@ -8,14 +8,12 @@
   inherit
     (l)
     mkOption
-    mkMerge
     mkIf
     mkEnableOption
+    optional
     types
     flatten
     mapAttrsToList
-    mapAttrs
-    isString
     isList
     isAttrs
     ;
@@ -97,17 +95,21 @@
 
         ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources || true
         ${pkgs.gnome.gnome-settings-daemon}/libexec/gsd-xsettings || true
-        ${pkgs.dbus.out}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-
-        systemctl --user import-environment
-        systemctl --user restart graphical-session.target
-        systemctl --user restart sway-session.target
 
         ${
-          lib.concatStringsSep "\n" settings.exec
+          if cfg.systemd.enable
+          then ''
+            ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP || true
+            systemctl --user start river-session.target
+          ''
+          else ""
         }
 
-        exec ${settings.layout-generator-exec}
+        ${
+          lib.concatStringsSep "\n" (map (exec: "riverctl spawn '${exec}'") settings.exec)
+        }
+
+        riverctl spawn '${settings.layout-generator-exec}'
       '';
     };
 in {
@@ -117,28 +119,35 @@ in {
       type = types.package;
       default = pkgs.river;
     };
-    xkb = {
-      default_layout = mkOption {
-        type = types.str;
-        default = "us";
+    systemd = {
+      enable = mkOption {
+        type = types.bool;
+        default = pkgs.stdenv.isLinux;
       };
-      default_options = mkOption {
-        type = types.str;
-        default = "";
-      };
-      default_model = mkOption {
-        type = types.str;
-        default = "pc105";
-      };
-      default_variant = mkOption {
-        type = types.str;
-        default = "";
-      };
+      xdgAutostart = mkEnableOption "Enable xdg-desktop-autostart.target";
     };
-    xkb_default_layout = mkOption {
-      type = types.str;
-      default = "us";
-    };
+    # xkb = {
+    #   default_layout = mkOption {
+    #     type = types.str;
+    #     default = "us";
+    #   };
+    #   default_options = mkOption {
+    #     type = types.str;
+    #     default = "";
+    #   };
+    #   default_model = mkOption {
+    #     type = types.str;
+    #     default = "pc105";
+    #   };
+    #   default_variant = mkOption {
+    #     type = types.str;
+    #     default = "";
+    #   };
+    # };
+    # xkb_default_layout = mkOption {
+    #   type = types.str;
+    #   default = "us";
+    # };
     settings = mkOption {
       default = {};
       type = types.submodule {
@@ -160,7 +169,7 @@ in {
         };
         options.layout-generator-exec = mkOption {
           type = types.str;
-          default = "exec rivertile -view-padding 4 -outer-padding 4";
+          default = "${pkgs.river}/bin/rivertile -view-padding 4 -outer-padding 4";
         };
         options.exec = mkOption {
           type = types.listOf types.str;
@@ -171,13 +180,26 @@ in {
   };
 
   config = mkIf cfg.enable {
-    xdg.configFile."river/init".source = "${writeConfig cfg}/bin/init";
-    home.sessionVariables = {
-      XKB_DEFAULT_LAYOUT = cfg.xkb.default_layout;
-      XKB_DEFAULT_OPTIONS = cfg.xkb.default_options;
-      XKB_DEFAULT_MODEL = cfg.xkb.default_model;
-      XKB_DEFAULT_VARIANT = cfg.xkb.default_variant;
+    systemd.user.targets.river-session = mkIf cfg.systemd.enable {
+      Unit = {
+        Description = "river compositor session";
+        Documentation = ["man:systemd.special(7)"];
+        BindsTo = ["graphical-session.target"];
+        Wants =
+          ["graphical-session-pre.target"]
+          ++ optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
+        After = ["graphical-session-pre.target"];
+        Before =
+          optional cfg.systemd.xdgAutostart "xdg-desktop-autostart.target";
+      };
     };
+    xdg.configFile."river/init".source = "${writeConfig cfg}/bin/init";
+    # home.sessionVariables = {
+    #   XKB_DEFAULT_LAYOUT = cfg.xkb.default_layout;
+    #   XKB_DEFAULT_OPTIONS = cfg.xkb.default_options;
+    #   XKB_DEFAULT_MODEL = cfg.xkb.default_model;
+    #   XKB_DEFAULT_VARIANT = cfg.xkb.default_variant;
+    # };
     home.packages = [cfg.package];
   };
 }

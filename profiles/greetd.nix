@@ -64,6 +64,16 @@
     cmd = "${pkgs.sway}/bin/sway";
   };
 
+  runRiver = runViaShell {
+    env = {
+      XDG_SESSION_TYPE = "wayland";
+      XDG_CURRENT_DESKTOP = "river";
+      XDG_SESSION_DESKTOP = "river";
+    };
+    name = "river";
+    cmd = "${pkgs.river}/bin/river";
+  };
+
   runHyprland = runViaShell {
     env = {
       XDG_SESSION_TYPE = "wayland";
@@ -90,6 +100,10 @@
     {
       name = "Hyprland.desktop";
       path = desktopSession "Hyprland" "${runHyprland}/bin/Hyprland";
+    }
+    {
+      name = "river.desktop";
+      path = desktopSession "river" "${runRiver}/bin/river";
     }
     {
       name = "nushell.desktop";
