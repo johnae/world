@@ -169,7 +169,7 @@ in {
     map.normal."Super+Shift".R = "spawn '${remote-dev}/bin/remote-dev'";
     map.normal."Super+Shift".S = "spawn '${screenshot}/bin/screenshot'";
 
-    map.normal.Control.L = "spawn '${swaylockEffects}/bin/swaylock-effects'";
+    map.normal."Super+Control".L = "spawn '${swaylockEffects}/bin/swaylock-effects'";
 
     map.normal.Super.Left = "focus-view left";
     map.normal.Super.Right = "focus-view right";
