@@ -93,9 +93,6 @@
             riverctl map $mode None XF86MonBrightnessDown spawn 'light -U 5'
         done
 
-        ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources || true
-        ${pkgs.gnome.gnome-settings-daemon}/libexec/gsd-xsettings || true
-
         ${
           if cfg.systemd.enable
           then ''
@@ -110,6 +107,10 @@
         }
 
         riverctl spawn '${settings.layout-generator-exec}'
+
+        ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources || true
+        ${pkgs.gnome.gnome-settings-daemon}/libexec/gsd-xsettings || true
+
       '';
     };
 in {
