@@ -282,7 +282,7 @@ in {
         opacity:0.7;
     }
 
-    #tags button:not(.occupied):not(.focused) {
+    #workspaces, #tags button:not(.occupied):not(.focused) {
     	font-size: 0;
     	min-width: 0;
     	min-height: 0;
