@@ -101,7 +101,7 @@ in {
     };
     "river/tags" = {
       num-tags = 9;
-      tag-labels = ["1: dev" "2: chromium-work" "3: firefox" "4: chromium-private" "5" "6" "7" "8" "9"];
+      tag-labels = ["1: dev" "2: chromium-work" "3: firefox" "4: chromium-private" "5" "6" "7" "8" "9: chat"];
       set-tags = [
         1
         2
@@ -112,7 +112,6 @@ in {
         64
         128
         256
-        512
       ];
     };
     battery = {
