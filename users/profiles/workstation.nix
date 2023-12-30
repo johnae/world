@@ -39,6 +39,7 @@ in {
     slack
     spotifyd
     tenacity
+    teams-for-linux
     wl-clipboard
     wl-clipboard-x11
     xdg-utils
