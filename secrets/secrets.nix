@@ -36,7 +36,7 @@ let
 
   hostsWithSecrets = hasAttrsFilter ["publicKey" "age"] hostConfigsList;
 
-  toLocalSecretPath = path: last (split ".*/" path);
+  toLocalSecretPath = path: last (split "/secrets/" path);
 
   secretsList = unique (flatten (map (host: map (s: toLocalSecretPath (toString s.file)) (attrValues host.age.secrets)) hostsWithSecrets));
 
