@@ -99,6 +99,22 @@ in {
       #  "*" = 5;
       #};
     };
+    "river/tags" = {
+      num-tags = 9;
+      tag-labels = ["1: dev" "2: chromium-work" "3: firefox" "4: chromium-private" "5" "6" "7" "8" "9"];
+      set-tags = [
+        1
+        2
+        4
+        8
+        16
+        32
+        64
+        128
+        256
+        512
+      ];
+    };
     battery = {
       format = "{capacity}% ({power}W)";
     };
@@ -317,7 +333,7 @@ in {
         opacity:0.8;
     }
 
-    window#waybar.empty #window {
+    window#waybar.empty #window:not(.focused) {
         background-color:transparent;
     }
 

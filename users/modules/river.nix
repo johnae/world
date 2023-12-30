@@ -34,7 +34,7 @@
         )
         value
       else if isList value
-      then lib.concatStringsSep "\n" (map (v: "riverctl ${v}") value)
+      then lib.concatStringsSep "\n" (map (v: "riverctl ${path} ${v}") value)
       else "riverctl ${path} ${toString value}";
   in
     flatten (mapAttrsToList mapField (lib.filterAttrs (

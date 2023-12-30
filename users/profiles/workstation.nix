@@ -29,6 +29,7 @@ in {
     element-desktop-wayland
     gnome.nautilus
     kanshi
+    lswt
     mako
     nordic
     persway

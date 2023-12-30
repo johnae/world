@@ -64,18 +64,14 @@
   xcursor_theme = config.gtk.cursorTheme.name;
   terminal-bin = "${pkgs.alacritty}/bin/alacritty";
 
-  dev-env = {
+  _dev-env = {
     name,
     host ? null,
   }:
     pkgs.writeShellApplication {
       inherit name;
-      runtimeInputs = with pkgs; [alacritty jq];
+      runtimeInputs = with pkgs; [alacritty];
       text = ''
-        # PID="$(hyprctl clients -j | jq '[.[] | select(.class == "${name}" and .initialTitle == "Alacritty")] | first | .pid')"
-        # if [ "$PID" != "null" ]; then
-        #   exec hyprctl dispatch focuswindow "pid:$PID"
-        # fi
         # shellcheck disable=SC2093,SC2016
         exec alacritty --class=${name} \
                        --working-directory="$HOME" \
@@ -88,6 +84,22 @@
             --command ssh -A -t ${host} 'ln -sf $env.SSH_AUTH_SOCK $"/run/user/(id -u)/ssh-auth.sock"; zellij -s ${name} attach -c -f ${name}'
           ''
         }
+      '';
+    };
+
+  dev-env = {
+    name,
+    host ? null,
+  }:
+    pkgs.writeShellApplication {
+      inherit name;
+      runtimeInputs = with pkgs; [alacritty jq lswt];
+      text = ''
+        if ! lswt -j | jq -e '.[] | select(.app_id == "${name}")' > /dev/null; then
+          # shellcheck disable=SC2093,SC2016
+          riverctl spawn '${_dev-env {inherit name host;}}/bin/${name}'
+        fi
+        exec riverctl set-focused-tags 1
       '';
     };
 
@@ -207,6 +219,17 @@ in {
 
     set-repeat = "50 300";
     focus-follows-cursor = "normal";
+
+    rule-add = [
+      "-app-id 'remote-dev' tags '1'"
+      "-app-id 'local-dev' tags '1'"
+      "-app-id 'chromium-browser (/home/john/.config/chromium-work)' tags '2'"
+      "-app-id 'firefox' tags '4'"
+      "-app-id 'chromium-browser (/home/john/.config/chromium-private)' tags '8'"
+      "-app-id 'chromium-browser *' ssd"
+      "-app-id 'org.gnome.Nautilus' ssd"
+      "-app-id 'firefox' ssd"
+    ];
 
     default-layout = "rivertile";
     exec = [
