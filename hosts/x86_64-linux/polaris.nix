@@ -3,8 +3,8 @@
   hostName,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIkVRh0mxlSK57KgjsGXBgmQ+Ix9+dYIgKd941eXaPx3";
-  syncthingDeviceID = "XFZC5TF-K6CWYRL-GIMFEZO-HNXUS4Q-BPJZJQR-3SVNTXL-X4UABVR-RWDROQD";
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO+xRli4VFYQbs30KkRapz0DrGnR4CwnfsNfHdd/o/hd";
+  syncthingDeviceID = "SGX63Q5-DOXVF7U-LMHF2FN-AJ6S77F-VRFSBNJ-7HCL52Q-WL6GQNT-BBFCZQ3";
 
   btrfs.disks = ["/dev/nvme0n1" "/dev/nvme1n1"];
 
@@ -43,7 +43,7 @@
   };
 
   boot.kernelParams = [
-    "ip=65.108.233.47::65.108.233.1:255.255.255.192:${hostName}:eth0:none"
+    "ip=65.109.80.32::65.109.80.1:255.255.255.192:${hostName}:eth0:none"
   ];
 
   ## for tailscale exit node functionality
@@ -129,7 +129,7 @@
   };
 
   networking = {
-    defaultGateway = "65.108.233.1";
+    defaultGateway = "65.109.80.1";
     defaultGateway6 = {
       address = "fe80::1";
       interface = "eth0";
@@ -137,14 +137,14 @@
     firewall.trustedInterfaces = ["tailscale0"];
     interfaces.eth0.ipv4.addresses = [
       {
-        address = "65.108.233.47";
+        address = "65.109.80.32";
         prefixLength = 26;
       }
     ];
 
     interfaces.eth0.ipv6.addresses = [
       {
-        address = "2a01:4f9:1a:ad1d::2";
+        address = "2a01:4f9:3051:4e2f::2";
         prefixLength = 64;
       }
     ];
@@ -211,9 +211,9 @@
           "eris"
           "hyperion"
           "icarus"
-          "polaris"
           "s23ultra"
           "s8plus"
+          "sirius"
           "titan"
         ];
       };
@@ -222,7 +222,7 @@
         devices = [
           "antares"
           "eris"
-          "polaris"
+          "sirius"
         ];
       };
       folders."/home/${adminUser.name}/Photos" = {
@@ -231,8 +231,8 @@
           "antares"
           "eris"
           "icarus"
-          "polaris"
           "s23ultra"
+          "sirius"
         ];
 
         versioning.type = "staggered";

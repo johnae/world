@@ -85,22 +85,24 @@
       folders."/home/${adminUser.name}/Sync" = {
         id = "sync";
         devices = [
-          "eris"
-          "sirius"
           "antares"
-          "titan"
+          "eris"
           "hyperion"
+          "polaris"
           "s23ultra"
           "s8plus"
+          "sirius"
+          "titan"
         ];
       };
       folders."/home/${adminUser.name}/Photos" = {
         id = "photos";
         devices = [
-          "eris"
-          "sirius"
           "antares"
+          "eris"
+          "polaris"
           "s23ultra"
+          "sirius"
         ];
         versioning.type = "staggered";
         versioning.params.cleanInterval = "3600";

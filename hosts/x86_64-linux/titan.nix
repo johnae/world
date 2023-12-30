@@ -84,13 +84,14 @@
       folders."/home/${adminUser.name}/Sync" = {
         id = "sync";
         devices = [
-          "eris"
-          "icarus"
           "antares"
-          "sirius"
+          "eris"
           "hyperion"
+          "icarus"
+          "polaris"
           "s23ultra"
           "s8plus"
+          "sirius"
         ];
       };
     };
