@@ -218,7 +218,8 @@ in {
     border-color-unfocused = "0x586e75";
 
     set-repeat = "50 300";
-    focus-follows-cursor = "normal";
+    focus-follows-cursor = "always";
+    set-cursor-warp = "on-focus-change";
 
     rule-add = [
       "-app-id 'remote-dev' tags '1'"
