@@ -19,7 +19,7 @@
     ../../profiles/state.nix
     ../../profiles/syncthing.nix
     ../../profiles/tailscale.nix
-    #    ../../profiles/vaultwarden.nix
+    ../../profiles/vaultwarden.nix
     ../../profiles/zram.nix
   ];
 
@@ -99,34 +99,34 @@
     };
   };
 
-  # services.my-cloudflared = {
-  #   enable = true;
-  #   tunnels."9000-tunnel" = {
-  #     credentialsFile = "/run/agenix/cloudflare-tunnel-9k";
-  #     default = "http://localhost";
-  #     originRequest.noTLSVerify = true;
-  #   };
-  # };
+  services.my-cloudflared = {
+    enable = true;
+    tunnels."9000-tunnel" = {
+      credentialsFile = "/run/agenix/cloudflare-tunnel-9k";
+      default = "http://localhost";
+      originRequest.noTLSVerify = true;
+    };
+  };
 
-  # services.my-matrix = {
-  #   enable = true;
-  #   server_name = "9000.dev";
-  # };
+  services.my-matrix = {
+    enable = true;
+    server_name = "9000.dev";
+  };
 
-  # services.vaultwarden = {
-  #   enable = true;
-  #   environmentFile = "/run/agenix/vaultwarden-env";
-  #   backupDir = "/var/lib/vaultwarden-backup";
+  services.vaultwarden = {
+    enable = true;
+    environmentFile = "/run/agenix/vaultwarden-env";
+    backupDir = "/var/lib/vaultwarden-backup";
 
-  #   config = {
-  #     DOMAIN = "https://bw.9000.dev";
-  #     SIGNUPS_ALLOWED = "false";
-  #     PASSWORD_HINTS_ALLOWED = "false";
-  #     ROCKET_ADDRESS = "127.0.0.1";
-  #     ROCKET_PORT = 8222;
-  #     PASSWORD_ITERATIONS = 600000;
-  #   };
-  # };
+    config = {
+      DOMAIN = "https://bw.9000.dev";
+      SIGNUPS_ALLOWED = "false";
+      PASSWORD_HINTS_ALLOWED = "false";
+      ROCKET_ADDRESS = "127.0.0.1";
+      ROCKET_PORT = 8222;
+      PASSWORD_ITERATIONS = 600000;
+    };
+  };
 
   networking = {
     defaultGateway = "65.109.80.1";
