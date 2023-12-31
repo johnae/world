@@ -155,4 +155,6 @@ in {
 
   ##
   system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState) {deps = ["persist-files"];};
+
+  services.nix-dirs.enable = true;
 }
