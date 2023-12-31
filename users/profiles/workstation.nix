@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  inherit (config) home gtk;
+  inherit (config) gtk;
 in {
   imports =
     [./default.nix]
@@ -18,6 +18,7 @@ in {
       ./mako.nix
       ./obs.nix
       ./river.nix
+      ./river-luatile/default.nix
       ./rofi.nix
       ./spotifyd.nix
       ./sway.nix
@@ -34,12 +35,13 @@ in {
     nordic
     persway
     playerctl
+    river-luatile
     scripts
     shotcut
     slack
     spotifyd
-    tenacity
     teams-for-linux
+    tenacity
     wl-clipboard
     wl-clipboard-x11
     xdg-utils

@@ -233,7 +233,8 @@ in {
       "-app-id 'firefox' ssd"
     ];
 
-    default-layout = "rivertile";
+    default-layout = "luatile";
+    layout-generator-exec = "${pkgs.river-luatile}/bin/river-luatile";
     exec = [
       "${pkgs.wpaperd}/bin/wpaperd"
       "${swayidleCommand}/bin/swayidle"
