@@ -106,7 +106,7 @@
   local-dev = dev-env {name = "local-dev";};
   remote-dev = dev-env {
     name = "remote-dev";
-    host = "sirius";
+    host = config.userInfo.devRemote;
   };
 
   input = listToAttrs (map (name: {

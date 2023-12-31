@@ -25,6 +25,13 @@
           type = types.str;
           example = "someuser";
         };
+      devRemote =
+        mkOption
+        {
+          type = types.either types.str types.null;
+          example = "somehost";
+          default = null;
+        };
     };
   };
 }
