@@ -243,12 +243,12 @@
     };
   };
 
-  services.restic.backups.remote.pruneOpts = [
-    "--keep-daily 10"
-    "--keep-weekly 7"
-    "--keep-monthly 12"
-    "--keep-yearly 75"
-  ];
+  # services.restic.backups.remote.pruneOpts = [
+  #   "--keep-daily 10"
+  #   "--keep-weekly 7"
+  #   "--keep-monthly 12"
+  #   "--keep-yearly 75"
+  # ];
 
   home-manager = {
     users.${adminUser.name} = {
