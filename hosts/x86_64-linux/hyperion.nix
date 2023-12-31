@@ -86,7 +86,7 @@
           "icarus"
           "antares"
           "titan"
-          "sirius"
+          "polaris"
           "s23ultra"
           "s8plus"
         ];

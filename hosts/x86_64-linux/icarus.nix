@@ -91,7 +91,6 @@
           "polaris"
           "s23ultra"
           "s8plus"
-          "sirius"
           "titan"
         ];
       };
@@ -102,7 +101,6 @@
           "eris"
           "polaris"
           "s23ultra"
-          "sirius"
         ];
         versioning.type = "staggered";
         versioning.params.cleanInterval = "3600";

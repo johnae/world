@@ -96,7 +96,7 @@
         devices = [
           "antares"
           "icarus"
-          "sirius"
+          "polaris"
           "titan"
           "hyperion"
           "s23ultra"
@@ -107,7 +107,7 @@
         id = "pictures";
         devices = [
           "antares"
-          "sirius"
+          "polaris"
         ];
       };
       folders."/home/${adminUser.name}/Photos" = {
@@ -115,7 +115,7 @@
         devices = [
           "antares"
           "icarus"
-          "sirius"
+          "polaris"
           "s23ultra"
         ];
 

@@ -91,7 +91,6 @@
           "polaris"
           "s23ultra"
           "s8plus"
-          "sirius"
         ];
       };
     };

@@ -213,7 +213,6 @@
           "icarus"
           "s23ultra"
           "s8plus"
-          "sirius"
           "titan"
         ];
       };
@@ -222,7 +221,6 @@
         devices = [
           "antares"
           "eris"
-          "sirius"
         ];
       };
       folders."/home/${adminUser.name}/Photos" = {
@@ -232,7 +230,6 @@
           "eris"
           "icarus"
           "s23ultra"
-          "sirius"
         ];
 
         versioning.type = "staggered";
