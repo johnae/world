@@ -148,7 +148,7 @@
   local-dev = dev-env {name = "local-dev";};
   remote-dev = dev-env {
     name = "remote-dev";
-    host = config.userInfo.devRemote;
+    host = config.userinfo.devRemote;
   };
 in {
   xdg.configFile."wpaperd/wallpaper.toml".source = pkgs.writeText "wallpaper.toml" ''
