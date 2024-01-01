@@ -117,11 +117,12 @@
         tap = "enabled";
       };
     }) [
-      "1739:52804:MSFT0001:00_06CB:CE44_Touchpad"
-      "1739:30383:DLL075B:01_06CB:76AF_Touchpad"
+      "1267:12850:ELAN06A1:00_04F3:3232_Touchpad"
       "1739:30383:DELL07E6:00_06CB:76AF_Touchpad"
-      "1739:52710:DLL096D:01_06CB:CDE6_Touchpad"
+      "1739:30383:DLL075B:01_06CB:76AF_Touchpad"
       "1739:52620:SYNA8005:00_06CB:CD8C_Touchpad"
+      "1739:52710:DLL096D:01_06CB:CDE6_Touchpad"
+      "1739:52804:MSFT0001:00_06CB:CE44_Touchpad"
     ]);
 
   river-menu = pkgs.writeShellApplication {
@@ -191,8 +192,9 @@ in {
     map.normal."Super+Shift".J = "swap next";
     map.normal."Super+Shift".K = "swap previous";
 
-    map.normal."Super+Control".J = ["focus-view next" "zoom"];
+    map.normal."Super+Control".J = ["focus-view next" "swap next" "zoom"];
     map.normal."Super+Control".K = ["focus-view previous" "zoom"];
+    map.normal."Super+Shift".Space = "send-layout-cmd luatile 'next_layout()'";
 
     map.normal.Super.Minus = "spawn '${pkgs.scripts}/bin/rofi-rbw'";
     map.normal."Super+Shift".Minus = "spawn 'passonly=y ${pkgs.scripts}/bin/rofi-rbw'";
