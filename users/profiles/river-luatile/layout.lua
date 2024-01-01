@@ -2,25 +2,10 @@
 local main_ratio = 0.65
 local gaps = 10
 local smart_gaps = false
+local layout = "main-side-stack"
 
--- The most important function - the actual layout generator
---
--- The argument is a table with:
---  * Focused tags (`args.tags`)
---  * Window count (`args.count`)
---  * Output width (`args.width`)
---  * Output height (`args.height`)
---  * Output name (`args.output`)
---
--- The return value must be a table with exactly `count` entries. Each entry is a table with four
--- numbers:
---  * X coordinate
---  * Y coordinate
---  * Window width
---  * Window height
---
--- This example is a simplified version of `rivertile`
-function handle_layout(args)
+-- This layout function is a main window with a side window below which a stack of windows resides
+function main_side_stack(args)
 	local retval = {}
 	if args.count == 1 then
 		if smart_gaps then
@@ -47,7 +32,6 @@ function handle_layout(args)
 	elseif args.count > 2 then
 		local main_w = (args.width - gaps * 3) * main_ratio
 		local side_w = (args.width - gaps * 3) - main_w
-		--local side_w = (args.width - gaps * 3) - main_w - (gaps * 2 * (args.count - 2))
 		local main_h = args.height - gaps * 2
 		table.insert(retval, {
 			gaps,
@@ -77,11 +61,91 @@ function handle_layout(args)
 	return retval
 end
 
+function monocle(args)
+	local retval = {}
+	local main_w = args.width
+	local main_h = args.height
+	table.insert(retval, {
+		0,
+		0,
+		main_w,
+		main_h,
+	})
+	if args.count > 1 then
+		for i = 0, (args.count - 2) do
+			table.insert(retval, {
+				args.width + i + 1,
+				args.height + i + 1,
+				0,
+				0,
+			})
+		end
+	end
+	return retval
+end
+
+-- This layout function emulates the default rivertile layout
+function main_stack(args)
+	local retval = {}
+	if args.count == 1 then
+		if smart_gaps then
+			table.insert(retval, { 0, 0, args.width, args.height })
+		else
+			table.insert(retval, { gaps, gaps, args.width - gaps * 2, args.height - gaps * 2 })
+		end
+	elseif args.count > 1 then
+		local main_w = (args.width - gaps * 3) * main_ratio
+		local side_w = (args.width - gaps * 3) - main_w
+		local main_h = args.height - gaps * 2
+		local side_h = (args.height - gaps) / (args.count - 1) - gaps
+		table.insert(retval, {
+			gaps,
+			gaps,
+			main_w,
+			main_h,
+		})
+		for i = 0, (args.count - 2) do
+			table.insert(retval, {
+				main_w + gaps * 2,
+				gaps + i * (side_h + gaps),
+				side_w,
+				side_h,
+			})
+		end
+	end
+	return retval
+end
+
+-- The most important function - the actual layout generator
+--
+-- The argument is a table with:
+--  * Focused tags (`args.tags`)
+--  * Window count (`args.count`)
+--  * Output width (`args.width`)
+--  * Output height (`args.height`)
+--  * Output name (`args.output`)
+--
+-- The return value must be a table with exactly `count` entries. Each entry is a table with four
+-- numbers:
+--  * X coordinate
+--  * Y coordinate
+--  * Window width
+--  * Window height
+
+function handle_layout(args)
+  if layout == "main-side-stack" then
+    return main_side_stack(args)
+  elseif layout == "monocle" then
+		return monocle(args)
+	end
+  return main_stack(args)
+end
+
 -- This optional function returns the metadata for the current layout.
 -- Currently only `name` is supported, the name of the layout. It get's passed
 -- the same `args` as handle_layout()
 function handle_metadata(args)
-	return { name = "rivertile-simple" }
+	return { name = layout }
 end
 
 -- IMPORTANT: User commands send via `riverctl send-layout-cmd` are treated as lua code.
@@ -92,19 +156,38 @@ end
 -- Run with `riverctl send-layout-cmd luatile "toggle_gaps()"`
 local gaps_alt = 0
 function toggle_gaps()
+	print("Toggling gaps")
 	local tmp = gaps
 	gaps = gaps_alt
 	gaps_alt = tmp
 end
 
 function set_main_ratio(ratio)
+	print("Setting main ratio to " .. ratio)
   main_ratio = ratio
 end
 
 function set_gaps(gap)
+	print("Setting gaps to " .. gap)
   gaps = gap
 end
 
 function set_smart_gaps(smart)
+	print("Setting smart gaps to " .. smart)
   smart_gaps = smart
+end
+
+function set_layout(name)
+	print("Setting layout to " .. name)
+  layout = name
+end
+
+function next_layout()
+  if layout == "main-side-stack" then
+		set_layout("monocle")
+  elseif layout == "monocle" then
+		set_layout("main-stack")
+  else
+		set_layout("main-side-stack")
+  end
 end
