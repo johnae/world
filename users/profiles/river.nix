@@ -117,12 +117,12 @@
         tap = "enabled";
       };
     }) [
-      "1267:12850:ELAN06A1:00_04F3:3232_Touchpad"
-      "1739:30383:DELL07E6:00_06CB:76AF_Touchpad"
-      "1739:30383:DLL075B:01_06CB:76AF_Touchpad"
-      "1739:52620:SYNA8005:00_06CB:CD8C_Touchpad"
-      "1739:52710:DLL096D:01_06CB:CDE6_Touchpad"
-      "1739:52804:MSFT0001:00_06CB:CE44_Touchpad"
+      "pointer-1267-12850-ELAN06A1:00_04F3:3232_Touchpad"
+      "pointer-1739-30383-DELL07E6:00_06CB:76AF_Touchpad"
+      "pointer-1739-30383-DLL075B:01_06CB:76AF_Touchpad"
+      "pointer-1739-52620-SYNA8005:00_06CB:CD8C_Touchpad"
+      "pointer-1739-52710-DLL096D:01_06CB:CDE6_Touchpad"
+      "pointer-1739-52804-MSFT0001:00_06CB:CE44_Touchpad"
     ]);
 
   river-menu = pkgs.writeShellApplication {
