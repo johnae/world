@@ -13,7 +13,7 @@
   udev,
   wayland,
   wayland-protocols,
-  wlroots_0_16,
+  wlroots_0_17,
   xwayland,
   zig,
   withManpages ? true,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       pixman
       udev
       wayland-protocols
-      wlroots_0_16
+      wlroots_0_17
     ]
     ++ lib.optional xwaylandSupport libX11;
 

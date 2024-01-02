@@ -20,6 +20,28 @@
         (final: prev: (filterAttrs (name: _: ((match "nu-.*" name == null) && (match "nu_.*" name == null))) config.packages))
 
         (final: prev: {
+          wlroots_river_0_17_1 = prev.wlroots_0_17.overrideAttrs (oa: rec {
+            version = "0.17.1";
+            src = prev.fetchFromGitLab {
+              domain = "gitlab.freedesktop.org";
+              owner = "wlroots";
+              repo = "wlroots";
+              rev = version;
+              hash = "sha256-Z0gWM7AQqJOSr2maUtjdgk/MF6pyeyFMMTaivgt+RMI=";
+            };
+            patches = [];
+            buildInputs =
+              oa.buildInputs
+              ++ [
+                prev.ffmpeg
+                prev.hwdata
+                prev.libliftoff
+                prev.libdisplay-info
+              ];
+          });
+        })
+
+        (final: prev: {
           inherit inputs;
           google-cloud-sdk-gke =
             (prev.google-cloud-sdk.withExtraComponents [
