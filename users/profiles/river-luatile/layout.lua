@@ -191,7 +191,7 @@ end
 function handle_layout(args)
   if layout == "main-side-stack" then
     return main_side_stack(args)
-  if layout == "main-bottom-stack" then
+  elseif layout == "main-bottom-stack" then
     return main_bottom_stack(args)
   elseif layout == "monocle" then
 		return monocle(args)
