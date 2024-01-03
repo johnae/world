@@ -116,6 +116,62 @@ function main_stack(args)
 	return retval
 end
 
+function main_bottom_stack(args)
+	local retval = {}
+	if args.count == 1 then
+		if smart_gaps then
+			table.insert(retval, { 0, 0, args.width, args.height })
+		else
+			table.insert(retval, { gaps, gaps, args.width - gaps * 2, args.height - gaps * 2 })
+		end
+	elseif args.count == 2 then
+		local main_h = (args.height - gaps * 3) * main_ratio
+		local side_h = (args.height - gaps * 3) - main_h
+		local main_w = args.width - gaps * 2
+		table.insert(retval, {
+			gaps,
+			gaps,
+			main_w,
+			main_h,
+		})
+		table.insert(retval, {
+			gaps,
+			(main_h + gaps * 2),
+			main_w,
+			side_h,
+		})
+	elseif args.count > 2 then
+		local main_h = (args.height - gaps * 3) * main_ratio
+		local side_h = (args.height - gaps * 3) - main_h
+		local main_w = args.width - gaps * 2
+		table.insert(retval, {
+			gaps,
+			gaps,
+			main_w,
+			main_h,
+		})
+		table.insert(retval, {
+			gaps,
+			(main_h + gaps * 2),
+			main_w,
+			side_h,
+		})
+		for i = 0, (args.count - 3) do
+			local y = (main_h + gaps * 2) + (i * gaps)
+			local x = (main_w * main_ratio) + (gaps * 2) + (i * gaps)
+			local height = side_h - (i * gaps) - (((args.count - 3) - i) * gaps)
+			local width = main_w - (main_w * main_ratio) - gaps - (i * gaps)
+			table.insert(retval, {
+				x,
+				y,
+				width,
+				height,
+			})
+		end
+	end
+	return retval
+end
+
 -- The most important function - the actual layout generator
 --
 -- The argument is a table with:
@@ -135,6 +191,8 @@ end
 function handle_layout(args)
   if layout == "main-side-stack" then
     return main_side_stack(args)
+  if layout == "main-bottom-stack" then
+    return main_bottom_stack(args)
   elseif layout == "monocle" then
 		return monocle(args)
 	end
@@ -187,6 +245,8 @@ function next_layout()
 		set_layout("monocle")
   elseif layout == "monocle" then
 		set_layout("main-stack")
+	elseif layout == "main-bottom-stack" then
+		set_layout("main-bottom-stack")
   else
 		set_layout("main-side-stack")
   end
