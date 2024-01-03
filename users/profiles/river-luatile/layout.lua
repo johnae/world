@@ -153,7 +153,7 @@ function main_bottom_stack(args)
 		table.insert(retval, {
 			gaps,
 			(main_h + gaps * 2),
-			main_w,
+			main_w * main_ratio,
 			side_h,
 		})
 		for i = 0, (args.count - 3) do
