@@ -245,7 +245,7 @@ function next_layout()
 		set_layout("monocle")
   elseif layout == "monocle" then
 		set_layout("main-stack")
-	elseif layout == "main-bottom-stack" then
+	elseif layout == "main-stack" then
 		set_layout("main-bottom-stack")
   else
 		set_layout("main-side-stack")
