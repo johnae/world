@@ -45,7 +45,7 @@ local function open_project_action(window, pane)
   local seen = {}
   local status, out, err
   if (domain == "remote-dev") then
-    status, out, err = wezterm.run_child_process (wezterm.shell_split('ssh sirius fd \\.git /home/john/Development -d 3 -H -t d -x echo {//}'))
+    status, out, err = wezterm.run_child_process (wezterm.shell_split('ssh <devRemote> fd \\.git /home/john/Development -d 3 -H -t d -x echo {//}'))
   else
     status, out, err = wezterm.run_child_process (wezterm.shell_split('fd \\.git /home/john/Development -d 3 -H -t d -x echo {//}'))
   end
@@ -244,7 +244,7 @@ config.unix_domains = {
   },
   {
     name = "remote-dev",
-    proxy_command = wezterm.shell_split('ssh -T -A sirius "ln -sf $env.SSH_AUTH_SOCK /run/user/1337/ssh-auth.sock; wezterm cli proxy"')
+    proxy_command = wezterm.shell_split('ssh -T -A <devRemote> "ln -sf $env.SSH_AUTH_SOCK /run/user/1337/ssh-auth.sock; wezterm cli proxy"')
   }
 }
 return config
