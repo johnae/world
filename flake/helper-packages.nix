@@ -18,7 +18,7 @@
       rbw
       rofi-wayland
       skim
-      wl-clipboard
+      wtype
       wpa_supplicant
       ;
 
@@ -99,7 +99,7 @@
 
     rofi-rbw = writeShellApplication {
       name = "rofi-rbw";
-      runtimeInputs = [rofi-wayland rbw wl-clipboard];
+      runtimeInputs = [rofi-wayland rbw wtype];
       text = ''
         passonly=''${passonly:-}
         selection="$(rbw list --fields name,user | \
@@ -111,10 +111,9 @@
         pass="$(rbw get "$entry" "$login")"
 
         if [ -z "$passonly" ]; then
-          echo -n "$login" | timeout -k 3s 2s wl-copy -nf
-          echo -n "$pass" | timeout -k 4s 3s wl-copy -nf
+          echo -en "$login\t$pass" | wtype -
         else
-          echo -n "$pass" | timeout -k 4s 3s wl-copy -nf
+          echo -n "$pass" | wtype -
         fi
       '';
     };
@@ -128,7 +127,7 @@
 
     rofi-spotnix-play = writeShellApplication {
       name = "rofi-spotnix-play";
-      runtimeInputs = [rofi-wayland wl-clipboard];
+      runtimeInputs = [rofi-wayland];
       text = ''
         t="$1"
         awk -F ' - spotify:' \
@@ -141,7 +140,7 @@
 
     rofi-spotify-search = writeShellApplication {
       name = "rofi-spotify-search";
-      runtimeInputs = [rofi-wayland wl-clipboard];
+      runtimeInputs = [rofi-wayland];
       text = ''
         t="$1"
         search="$(rofi -normal-window -dmenu -p "search $t >")"
