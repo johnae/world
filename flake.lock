@@ -660,11 +660,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1703939133,
-        "narHash": "sha256-Gxe+mfOT6bL7wLC/tuT2F+V+Sb44jNr8YsJ3cyIl4Mo=",
+        "lastModified": 1704668415,
+        "narHash": "sha256-BMzNHFod53iiU4lkR5WHwqQCFmaCLq85sUCskXneXlA=",
         "owner": "cachix",
         "repo": "pre-commit-hooks.nix",
-        "rev": "9d3d7e18c6bc4473d7520200d4ddab12f8402d38",
+        "rev": "44493e2b3c3ebcd39a9947e9ed9f2c2af164ec4c",
         "type": "github"
       },
       "original": {
@@ -676,11 +676,11 @@
     "river": {
       "flake": false,
       "locked": {
-        "lastModified": 1704652623,
-        "narHash": "sha256-KgtmIA4qWu4ZD2fP+0GqJci8fHr2Jkj2KLoZLYxzCxA=",
+        "lastModified": 1704668110,
+        "narHash": "sha256-60e856xG0nd61AQV7HLlGWBNNRZtXSVDHs4MSxvrrhI=",
         "ref": "refs/heads/master",
-        "rev": "dd9933b6a15e415e63b52585301d9216ef57b3cf",
-        "revCount": 1113,
+        "rev": "5947f04408c5f7d578054d40e2c1a3bbb7051bd0",
+        "revCount": 1114,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/riverwm/river"
