@@ -127,6 +127,8 @@
     };
   };
 
+  programs.steam.enable = true;
+
   home-manager = {
     users.${adminUser.name} = {
       imports = [../../users/profiles/workstation.nix];
