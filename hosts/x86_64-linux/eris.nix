@@ -25,6 +25,8 @@
     ../../profiles/zram.nix
   ];
 
+  boot.loader.systemd-boot.memtest86.enable = true;
+
   boot.initrd = {
     systemd.enable = true;
     luks.devices.cryptkey.crypttabExtraOpts = ["fido2-device=auto"];
