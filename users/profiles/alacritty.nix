@@ -12,7 +12,9 @@
         padding.y = 2;
         opacity = 0.95;
       };
-      draw_bold_text_with_bright_colors = true;
+      colors = {
+        draw_bold_text_with_bright_colors = true;
+      };
       scrolling = {
         history = 20000;
         multiplier = 20;
@@ -25,7 +27,7 @@
         glyph_offset.x = 0;
         glyph_offset.y = 0;
       };
-      mouse.hide_cursor_when_typing = true;
+      mouse.hide_when_typing = true;
       cursor = {
         style.blinking = "Never";
         unfocused_hollow = true;
