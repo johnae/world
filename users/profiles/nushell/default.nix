@@ -56,7 +56,7 @@ in {
         )
       }
 
-      use ${nu-scripts}/custom-completions/yarn/yarn-completion.nu
+      use ${nu-scripts}/custom-completions/yarn/yarn-v4-completions.nu
     '';
   };
   xdg.configFile."nushell/atuin.nu".source = pkgs.runCommand "atuin.nu" {} ''
