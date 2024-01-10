@@ -27,6 +27,7 @@
     docker.enable = false;
     podman.enable = true;
     podman.dockerCompat = true;
+    libvirtd.enable = true;
   };
 
   programs.ssh.startAgent = true;
