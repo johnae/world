@@ -14,6 +14,7 @@
       "/var/lib/systemd"
       "/var/lib/tailscale"
       "/var/lib/wireguard"
+      "/var/lib/libvirt"
       "/var/log"
     ];
     files = [
