@@ -9,7 +9,7 @@
   imports = [
     ../../profiles/hardware/usbcore.nix
     ../../profiles/hardware/x570.nix
-    ../../profiles/disk/btrfs-on-luks.nix
+    ../../profiles/disk/bcachefs.nix
     ../../profiles/admin-user/user.nix
     ../../profiles/admin-user/u2fmappings.nix
     ../../profiles/admin-user/home-manager.nix
@@ -26,6 +26,8 @@
   ];
 
   boot.loader.systemd-boot.memtest86.enable = true;
+
+  bcachefs.disks = ["nvme0n1"];
 
   boot.initrd = {
     systemd.enable = true;
