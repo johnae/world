@@ -1,6 +1,6 @@
 {lib, ...}: let
   inherit (lib) mkOption;
-  inherit (lib.types) str nullOr attrsOf listOf enum bool;
+  inherit (lib.types) str nullOr attrsOf listOf enum bool ints;
 in {
   options = {
     publicKey = mkOption {
@@ -38,6 +38,18 @@ in {
     btrfs.disks = mkOption {
       type = listOf str;
       default = ["/dev/nvme0n1"];
+    };
+    bcachefs.disks = mkOption {
+      type = listOf str;
+      default = [];
+    };
+    bcachefs.subvolumes = mkOption {
+      type = listOf str;
+      default = ["nix" "home" "var"];
+    };
+    tmpfsRoot.sizegb = mkOption {
+      type = ints.between 2 64;
+      default = 8;
     };
     adminUser = mkOption {
       type = str;
