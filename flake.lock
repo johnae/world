@@ -44,11 +44,11 @@
     "copilot-vim": {
       "flake": false,
       "locked": {
-        "lastModified": 1702343967,
-        "narHash": "sha256-mHwK8vw3vbcMKuTb1aMRSL5GS0+4g3tw3G4uZGMA2lQ=",
+        "lastModified": 1704902483,
+        "narHash": "sha256-n1ZgH/KN3u+pQNuQeouS5S0LYB7d061jNyBsXJKxdtc=",
         "owner": "github",
         "repo": "copilot.vim",
-        "rev": "5b19fb001d7f31c4c7c5556d7a97b243bd29f45f",
+        "rev": "1a55183ef9347d6f420406a3746474b6b9fb9ef5",
         "type": "github"
       },
       "original": {
@@ -278,11 +278,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1704829327,
-        "narHash": "sha256-lUU1f6jaBMbbUI4CUHa1H0sf/yxbydK4JbxpGgUMGgk=",
+        "lastModified": 1704906538,
+        "narHash": "sha256-itBjIIc5CvgHGTXvD5dUEa28wDHggJr3VEFOnzEBPpc=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "b240704bee1d04eacc27654ea875cf6f15033c7c",
+        "rev": "8d31c84483be7cc6f909d73c6ecd4c0b4bdc3360",
         "type": "github"
       },
       "original": {
@@ -591,11 +591,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1704889423,
-        "narHash": "sha256-J1hHDGFyatyQ3it9CXlNybC87BMy1VIttaNR1h7moqk=",
+        "lastModified": 1704926790,
+        "narHash": "sha256-cvIgvBUvwD4pVQQ0n30b9v52+L27zldSBZzPY5dL2tw=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "0b34dc4f624fe005afd64627f4a68d39315d650c",
+        "rev": "45a706bce225239a923b84019d693ba3d656c8ee",
         "type": "github"
       },
       "original": {
@@ -660,11 +660,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1704725188,
-        "narHash": "sha256-qq8NbkhRZF1vVYQFt1s8Mbgo8knj+83+QlL5LBnYGpI=",
+        "lastModified": 1704913983,
+        "narHash": "sha256-K/GuHFFriQhH3VPWMhm6bYelDuPyGGjGu1OF1EWUn5k=",
         "owner": "cachix",
         "repo": "pre-commit-hooks.nix",
-        "rev": "ea96f0c05924341c551a797aaba8126334c505d2",
+        "rev": "b0265634df1dc584585c159b775120e637afdb41",
         "type": "github"
       },
       "original": {
@@ -676,11 +676,11 @@
     "river": {
       "flake": false,
       "locked": {
-        "lastModified": 1704827476,
-        "narHash": "sha256-xKj7jLp1NuYJyfLQwEbrOtzD+v7//jN6eMShY0r1TMc=",
+        "lastModified": 1704929555,
+        "narHash": "sha256-wdLly7c3ZzcASAkvkRfJhoTkz3dAWw/Am2nW6c4x69w=",
         "ref": "refs/heads/master",
-        "rev": "cc1f988e56fd0fb5204fe954590fb2bee6a2af86",
-        "revCount": 1116,
+        "rev": "f6c434c7a7d313c7bca9f42030fdac58efbad491",
+        "revCount": 1117,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/riverwm/river"
