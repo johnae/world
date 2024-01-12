@@ -27,7 +27,7 @@
 
   boot.loader.systemd-boot.memtest86.enable = true;
 
-  bcachefs.disks = ["nvme0n1"];
+  bcachefs.disks = ["/dev/nvme0n1"];
 
   boot.initrd = {
     systemd.enable = true;

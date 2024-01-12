@@ -209,7 +209,7 @@ in
       cd "$DIR"
 
       echo Bind mounting subvolumes
-      mkdir -p ${concatStringsSep " " (map (sub: "/mnt/${sub}") subvolumes)}
+      mkdir -p ${concatStringsSep " " (map (sub: "/mnt/${sub}") subvolumes)} /mnt/boot
       ${concatStringsSep "\n" (map (sub: "mount --bind /mnt/keep/${sub} /mnt/${sub}") subvolumes)}
 
       # and mount the boot partition
