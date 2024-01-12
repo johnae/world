@@ -35,7 +35,7 @@ in {
       encrypted = {
         enable = true;
         label = "encrypted_swap";
-        keyfile = "/sysroot/keep/encrypted_swap.key";
+        keyFile = "/sysroot/keep/encrypted_swap.key";
       };
     }
   ];
