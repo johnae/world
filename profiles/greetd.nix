@@ -109,6 +109,10 @@
       name = "nushell.desktop";
       path = desktopSession "nushell" "${pkgs.nushell}/bin/nu";
     }
+    {
+      name = "bash.desktop";
+      path = desktopSession "bash" "${pkgs.bashInteractive}/bin/bash";
+    }
   ];
 
   createGreeter = default: sessions: let
@@ -118,7 +122,7 @@
   in
     pkgs.writeShellApplication {
       name = "greeter";
-      runtimeInputs = [runSway pkgs.nushell pkgs.systemd pkgs.greetd.tuigreet];
+      runtimeInputs = [runSway pkgs.bashInteractive pkgs.nushell pkgs.systemd pkgs.greetd.tuigreet];
       text = ''
         tuigreet --sessions ${sessionDir} --time -r --remember-session --power-shutdown 'systemctl poweroff' --power-reboot 'systemctl reboot' --cmd ${default}
       '';
