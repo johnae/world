@@ -8,6 +8,7 @@
   inherit (lib) attrByPath mapAttrsToList concatStringsSep flatten;
   inherit (builtins) filter match foldl' replaceStrings;
   inherit (config.config) boot cryptsetup bcachefs machinePurpose disk;
+  inherit (bcachefs) subvolumes;
   bootMode =
     if boot.loader.systemd-boot.enable
     then "UEFI"
@@ -18,7 +19,6 @@
     else "false";
   luksFormatExtraParams = cryptsetup.luksFormat.extraParams;
   bcacheFsDisks = bcachefs.disks;
-  subvolumes = bcachefs.subvolumes;
   diskLabels = {
     boot = "boot";
     swap = "swap";
