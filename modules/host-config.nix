@@ -43,6 +43,10 @@ in {
       type = listOf str;
       default = [];
     };
+    bcachefs.devices = mkOption {
+      type = listOf str;
+      default = [];
+    };
     bcachefs.subvolumes = mkOption {
       type = listOf str;
       default = ["nix" "home" "var"];

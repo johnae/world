@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  bcacheFsDisks = config.bcachefs.disks;
+  bcacheFsDevices = config.bcachefs.devices;
   tmpfsRootSizeGb = config.tmpfsRoot.sizegb;
 in {
   fileSystems."/" = {
@@ -13,7 +13,7 @@ in {
   };
 
   fileSystems."/keep" = {
-    device = lib.concatStringsSep ":" bcacheFsDisks;
+    device = lib.concatStringsSep ":" bcacheFsDevices;
     fsType = "bcachefs";
     options = ["defaults" "compression=zstd"];
     neededForBoot = true;
