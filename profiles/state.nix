@@ -74,6 +74,7 @@
         ".mail"
         ".mozilla/firefox/default"
         ".terraform.d"
+        ".steam"
       ];
       files = [
         ".config/nushell/history.txt"
