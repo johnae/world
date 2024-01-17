@@ -15,7 +15,7 @@ in {
   fileSystems."/keep" = {
     device = lib.concatStringsSep ":" bcacheFsDevices;
     fsType = "bcachefs";
-    options = ["defaults" "compression=zstd"];
+    options = ["defaults" "compression=zstd" "background_compression=zstd"];
     neededForBoot = true;
   };
 
