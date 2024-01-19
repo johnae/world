@@ -48,10 +48,10 @@ in {
         }
         floating_panes {
           pane  {
-            x 0
-            y 0
-            width "100%"
-            height "75%"
+            x "10%"
+            y "10%"
+            width "80%"
+            height "65%"
           }
         }
       }
