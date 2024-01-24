@@ -182,6 +182,8 @@ in {
     map.normal."Super+Shift".R = "spawn '${remote-dev}/bin/remote-dev'";
     map.normal."Super+Shift".S = "spawn '${screenshot}/bin/screenshot'";
 
+    map.normal."Super".K = "spawn '${pkgs.kanshi}/bin/kanshictl reload'";
+
     map.normal."Super+Control".L = "spawn '${swaylockEffects}/bin/swaylock-effects'";
 
     map.normal.Super.Left = "focus-view left";
