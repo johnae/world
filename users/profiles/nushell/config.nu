@@ -104,8 +104,37 @@ let light_theme = {
     shape_nothing: light_cyan
 }
 
-let carapace_completer = { |spans|
-    carapace $spans.0 nushell $spans | from json
+let carapace_completer = {|spans|
+    carapace $spans.0 nushell ...$spans | from json
+}
+
+let fish_completer = {|spans|
+    fish --command $'complete "--do-complete=($spans | str join " ")"'
+    | $"value(char tab)description(char newline)" + $in
+    | from tsv --flexible --no-infer
+}
+
+let external_completer = {|spans|
+    let expanded_alias = scope aliases
+    | where name == $spans.0
+    | get -i 0.expansion
+
+    let spans = if $expanded_alias != null {
+      $spans
+      | skip 1
+      | prepend ($expanded_alias | split row " " | take 1)
+    } else {
+      $spans
+    }
+
+    match $spans.0 {
+        nu => $fish_completer
+        git => $fish_completer
+        kubectl => $fish_completer
+        zellij => $fish_completer
+        docker => $fish_completer
+        _ => $carapace_completer
+    } | do $in $spans
 }
 
 # The default config record. This is where much of your global configuration is setup.
@@ -121,7 +150,7 @@ $env.config = {
   completions: {
     external: {
       enable: true
-      completer: $carapace_completer
+      completer: $external_completer
       max_results: 100
     }
     case_sensitive: false # set to true to enable case-sensitive completions
