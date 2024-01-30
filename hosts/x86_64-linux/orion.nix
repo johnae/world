@@ -8,7 +8,7 @@
 
   bcachefs = {
     disks = ["/dev/nvme0n1" "/dev/nvme1n1"];
-    devices = ["/dev/nvme0n1p3" "/dev/nvme0n1p1"];
+    devices = ["/dev/nvme0n1p3" "/dev/nvme1n1p1"];
   };
 
   imports = [
