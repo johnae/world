@@ -19,6 +19,7 @@
     else "false";
   luksFormatExtraParams = cryptsetup.luksFormat.extraParams;
   bcacheFsDisks = bcachefs.disks;
+  bcacheFsDevices = bcachefs.devices;
   diskLabels = {
     boot = "boot";
     swap = "swap";
@@ -167,7 +168,7 @@ in
 
       echo Creating encrypted root bcachefs
       # shellcheck disable=SC2086
-      bcachefs format --discard --encrypted --compression=zstd --replicas=${toString (builtins.length bcacheFsDisks)} -L root --label=ssd.ssd1 $DISK_ROOT ${lib.concatStringsSep " " (lib.imap1 (idx: disk: "--label=ssd.ssd${toString (idx + 1)} ${disk}") (builtins.tail bcacheFsDisks))}
+      bcachefs format --discard --encrypted --compression=zstd --replicas=${toString (builtins.length bcacheFsDisks)} -L root ${lib.concatStringsSep " " (lib.imap1 (idx: disk: "--label=ssd.ssd${toString (idx + 1)} ${disk}") bcacheFsDevices)}
 
       keyctl link @u @s
 
