@@ -168,7 +168,7 @@ in
 
       echo Creating encrypted root bcachefs
       # shellcheck disable=SC2086
-      bcachefs format --discard --encrypted --compression=zstd --replicas=${toString (builtins.length bcacheFsDisks)} -L root ${lib.concatStringsSep " " (lib.imap1 (idx: disk: "--label=ssd.ssd${toString (idx + 1)} ${disk}") bcacheFsDevices)}
+      bcachefs format --discard --encrypted --compression=zstd --replicas=${toString (builtins.length bcacheFsDisks)} -L root ${lib.concatStringsSep " " (lib.imap1 (idx: disk: "--label=ssd.ssd${toString idx} ${disk}") bcacheFsDevices)}
 
       keyctl link @u @s
 
