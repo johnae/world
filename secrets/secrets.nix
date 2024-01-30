@@ -55,4 +55,4 @@ in
       inherit name;
       value.publicKeys = johnae ++ (mapSecretToPublicKeys name);
     })
-    (builtins.trace (builtins.toJSON secretsList) secretsList))
+    secretsList)
