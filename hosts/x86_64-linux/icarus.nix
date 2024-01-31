@@ -41,20 +41,12 @@
     "ip=192.168.20.143::192.168.20.1:255.255.255.0:${hostName}:eth0:none"
   ];
 
-  # boot.initrd.systemd = {
-  #   enable = true;
-  #   emergencyAccess = true;
-  #   network = {
-  #     enable = true;
-  #     networks."eth0".extraConfig = ''
-  #       [Match]
-  #       Name = eth0
-  #       [Network]
-  #       Address = 192.168.20.143/24
-  #       Gateway = 192.168.20.1
-  #     '';
-  #   };
-  # };
+  boot.initrd.availableKernelModules = [
+    "igc"
+    "nvme"
+    "ahci"
+    "usbhid"
+  ];
 
   boot.initrd.network = {
     enable = true;
