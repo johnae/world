@@ -6,7 +6,7 @@
   ...
 }: let
   inherit (lib) attrByPath mapAttrsToList concatStringsSep flatten;
-  inherit (builtins) filter match foldl' replaceStrings;
+  inherit (builtins) filter match foldl' replaceStrings elemAt length head substring split;
   inherit (config.config) boot cryptsetup bcachefs machinePurpose disk;
   inherit (bcachefs) subvolumes;
   bootMode =
@@ -19,7 +19,10 @@
     else "false";
   luksFormatExtraParams = cryptsetup.luksFormat.extraParams;
   bcacheFsDisks = bcachefs.disks;
-  bcacheFsDevices = bcachefs.devices;
+  bcacheUuid =
+    if (substring 0 5 (elemAt bcachefs.devices 0)) == "UUID="
+    then lib.last (split "UUID=" (head bcachefs.devices))
+    else null;
   diskLabels = {
     boot = "boot";
     swap = "swap";
@@ -168,7 +171,11 @@ in
 
       echo Creating encrypted root bcachefs
       # shellcheck disable=SC2086
-      bcachefs format --discard --encrypted --compression=zstd --replicas=${toString (builtins.length bcacheFsDisks)} -L root ${lib.concatStringsSep " " (lib.imap1 (idx: disk: "--label=ssd.ssd${toString idx} ${disk}") bcacheFsDevices)}
+      bcachefs format ${
+        if bcacheUuid != null
+        then "--uuid=${bcacheUuid} "
+        else " "
+      }--discard --encrypted --compression=zstd --replicas=${toString (builtins.length bcacheFsDisks)} -L root --label=ssd.ssd1 "$DISK_ROOT" ${lib.concatStringsSep " " (lib.imap1 (idx: disk: ''--label=ssd.ssd${toString (idx + 1)} ${disk}"$PARTITION_PREFIX"1'') (builtins.tail bcacheFsDisks))}
 
       keyctl link @u @s
 

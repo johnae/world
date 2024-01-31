@@ -6,9 +6,9 @@
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHaa82NwBC+ty4Wyeuf5kdava7huSYF6k0NYF2ahwayW";
   syncthingDeviceID = "HBL5ZRB-R2STGW5-LMAYYHX-KOFTP3X-VO4IV6E-PEDKZ3N-WCRR7BY-F5C7AAP";
 
-  bcachefs = {
-    disks = ["/dev/nvme0n1"]; # "/dev/nvme1n1"];
-    devices = ["/dev/disk/by-partlabel/p_root"]; # "/dev/disk/by-partlabel/p_root1"];
+  bcachefs = rec {
+    disks = ["/dev/nvme0n1" "/dev/nvme1n1"];
+    devices = ["UUID=8bb1d35f-475b-4c38-9603-25b1a0bad57f"];
   };
 
   imports = [
