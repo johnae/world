@@ -60,9 +60,11 @@
     "usbhid"
   ];
 
+  boot.initrd.systemd.enable = true;
+
   boot.initrd.network = {
     enable = true;
-    postCommands = "echo 'cryptsetup-askpass' >> /root/.profile";
+    postCommands = "echo 'systemctl default' >> /root/.profile";
   };
 
   boot.initrd.network.ssh = {
