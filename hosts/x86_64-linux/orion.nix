@@ -1,6 +1,7 @@
 {
   adminUser,
   hostName,
+  pkgs,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEEPD945cTDxeNhGljSKqQfRCUeXcwIDKOBD847OECQs";
@@ -62,9 +63,24 @@
 
   boot.initrd.systemd.enable = true;
 
-  boot.initrd.network = {
+  boot.initrd.systemd.initrdBin = [pkgs.bcachefs-tools];
+
+  # boot.initrd.network = {
+  #   enable = true;
+  #   postCommands = "echo 'systemctl default' >> /root/.profile";
+  # };
+
+  boot.initrd.systemd.network = {
     enable = true;
-    postCommands = "echo 'systemctl default' >> /root/.profile";
+    networks."eth0".extraConfig = ''
+      [Match]
+      Name = eth0
+      [Network]
+      Address = 2a01:4f9:3051:5389::2/64
+      Gateway = fe80:1
+      Address = 65.109.85.161/26
+      Gateway = 65.109.85.129
+    '';
   };
 
   boot.initrd.network.ssh = {
