@@ -50,10 +50,8 @@
         [Match]
         Name = eth0
         [Network]
-        Address = 2a01:4f9:3051:5389::2/64
-        Gateway = fe80:1
-        Address = 65.109.85.161/26
-        Gateway = 65.109.85.129
+        Address = 192.168.20.143/24
+        Gateway = 192.168.20.1
       '';
     };
   };
