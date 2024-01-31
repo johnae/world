@@ -1,6 +1,7 @@
 {
   adminUser,
   hostName,
+  pkgs,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHaa82NwBC+ty4Wyeuf5kdava7huSYF6k0NYF2ahwayW";
@@ -48,9 +49,14 @@
     "usbhid"
   ];
 
+  boot.initrd.extraUtilsCommands = ''
+    copy_bin_and_libs ${pkgs.keyutils}/bin/keyctl
+    copy_bin_and_libs ${pkgs.procps}/bin/pkill
+  '';
+
   boot.initrd.network = {
     enable = true;
-    postCommands = "echo 'bcachefs unlock /dev/disk/by-partlabel/p_root:/dev/disk/by-partlabel/p_root1' >> /root/.profile";
+    postCommands = "echo 'keyctl link @u @s; bcachefs unlock /dev/disk/by-partlabel/p_root; pkill bcachefs' >> /root/.profile";
     flushBeforeStage2 = true;
     ssh = {
       enable = true;
