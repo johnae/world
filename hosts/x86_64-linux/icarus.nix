@@ -8,7 +8,7 @@
 
   bcachefs = rec {
     disks = ["/dev/nvme0n1" "/dev/nvme1n1"];
-    devices = ["UUID=8bb1d35f-475b-4c38-9603-25b1a0bad57f"];
+    devices = ["/dev/disk/by-uuid/8bb1d35f-475b-4c38-9603-25b1a0bad57f"];
   };
 
   imports = [

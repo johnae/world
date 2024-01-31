@@ -19,10 +19,8 @@
     else "false";
   luksFormatExtraParams = cryptsetup.luksFormat.extraParams;
   bcacheFsDisks = bcachefs.disks;
-  bcacheUuid =
-    if (substring 0 5 (elemAt bcachefs.devices 0)) == "UUID="
-    then lib.last (split "UUID=" (head bcachefs.devices))
-    else null;
+  ## TODO: fix this to be more generic as support for bcachefs gets better
+  bcacheUuid = lib.last (split "by-uuid/" (head bcachefs.devices));
   diskLabels = {
     boot = "boot";
     swap = "swap";
