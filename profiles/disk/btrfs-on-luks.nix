@@ -32,6 +32,11 @@ in {
 
   swapDevices = [{device = "/dev/disk/by-label/swap";}];
 
+  boot.initrd.supportedFilesystems = [
+    "btrfs"
+    "vfat"
+  ];
+
   boot.initrd.luks.devices =
     lib.recursiveUpdate {
       cryptkey.device = "/dev/disk/by-label/cryptkey";

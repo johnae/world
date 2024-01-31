@@ -29,6 +29,11 @@ in {
     fsType = "vfat";
   };
 
+  boot.initrd.supportedFilesystems = [
+    "bcachefs"
+    "vfat"
+  ];
+
   swapDevices = [
     {
       label = "swap";
