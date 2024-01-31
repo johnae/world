@@ -7,8 +7,8 @@
   syncthingDeviceID = "HBL5ZRB-R2STGW5-LMAYYHX-KOFTP3X-VO4IV6E-PEDKZ3N-WCRR7BY-F5C7AAP";
 
   bcachefs = {
-    disks = ["/dev/nvme0n1" "/dev/nvme1n1"];
-    devices = ["/dev/nvme0n1p3" "/dev/nvme1n1p1"];
+    disks = ["/dev/nvme0n1"]; # "/dev/nvme1n1"];
+    devices = ["/dev/disk/by-partlabel/p_root"]; # "/dev/disk/by-partlabel/p_root1"];
   };
 
   imports = [
