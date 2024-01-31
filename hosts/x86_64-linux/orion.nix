@@ -1,7 +1,6 @@
 {
   adminUser,
   hostName,
-  pkgs,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEEPD945cTDxeNhGljSKqQfRCUeXcwIDKOBD847OECQs";
@@ -15,7 +14,7 @@
   imports = [
     ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
-    ../../profiles/disk/btrfs-on-luks.nix
+    ../../profiles/disk/bcachefs.nix
     ../../profiles/hardware/ax101.nix
     ../../profiles/home-manager.nix
     ../../profiles/server.nix
@@ -64,7 +63,6 @@
   boot.initrd.systemd = {
     enable = true;
     emergencyAccess = true;
-    # initrdBin = [pkgs.bcachefs-tools];
     network = {
       enable = true;
       networks."eth0".extraConfig = ''
