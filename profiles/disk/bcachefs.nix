@@ -5,6 +5,7 @@
 }: let
   bcacheFsDevices = config.bcachefs.devices;
   tmpfsRootSizeGb = config.tmpfsRoot.sizegb;
+  systemInitrd = config.boot.initrd.systemd.enable;
 in {
   fileSystems."/" = {
     device = "none";
@@ -41,7 +42,10 @@ in {
       encrypted = {
         enable = true;
         label = "encrypted_swap";
-        keyFile = "/sysroot/keep/encrypted_swap.key";
+        keyFile =
+          if systemInitrd
+          then "/sysroot/keep/encrypted_swap.key"
+          else "/mnt-root/keep/encrypted_swap.key";
         blkDev = "/dev/disk/by-label/encrypted_swap";
       };
     }
