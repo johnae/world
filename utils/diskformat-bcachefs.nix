@@ -210,7 +210,7 @@ in
       mkfs.fat -F 32 -n ${diskLabels.boot} "$DISK_EFI"
       waitForPath "/dev/disk/by-label/${diskLabels.boot}"
 
-      # now create the btrfs subvolumes we're interested in having
+      # now create the bcachefs subvolumes we're interested in having
       echo Creating bcachefs subvolumes at /mnt/keep
       cd /mnt/keep
       ${concatStringsSep "\n" (map (v: "bcachefs subvolume create ${v}") subvolumes)}
