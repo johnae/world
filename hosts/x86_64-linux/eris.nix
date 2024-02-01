@@ -102,6 +102,7 @@
           "antares"
           "icarus"
           "polaris"
+          "orion"
           "titan"
           "hyperion"
           "s23ultra"
@@ -112,6 +113,7 @@
         id = "pictures";
         devices = [
           "antares"
+          "orion"
           "polaris"
         ];
       };
@@ -120,6 +122,7 @@
         devices = [
           "antares"
           "icarus"
+          "orion"
           "polaris"
           "s23ultra"
         ];
