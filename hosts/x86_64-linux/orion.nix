@@ -8,13 +8,13 @@
 
   bcachefs = {
     disks = ["/dev/nvme0n1" "/dev/nvme1n1"];
-    devices = ["/dev/nvme0n1p3" "/dev/nvme1n1p1"];
+    devices = ["/dev/mapper/encrypted_root" "/dev/mapper/encrypted_root1"];
   };
 
   imports = [
     ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
-    ../../profiles/disk/bcachefs.nix
+    ../../profiles/disk/bcachefs-on-luks.nix
     ../../profiles/hardware/ax101.nix
     ../../profiles/home-manager.nix
     ../../profiles/server.nix
@@ -60,30 +60,9 @@
     "usbhid"
   ];
 
-  boot.initrd.systemd = {
-    enable = true;
-    emergencyAccess = true;
-    network = {
-      enable = true;
-      networks."eth0".extraConfig = ''
-        [Match]
-        Name = eth0
-        [Network]
-        Address = 2a01:4f9:3051:5389::2/64
-        Gateway = fe80:1
-        Address = 65.109.85.161/26
-        Gateway = 65.109.85.129
-      '';
-    };
-  };
-
-  # boot.initrd.network = {
-  #   enable = true;
-  #   postCommands = "echo 'systemctl default' >> /root/.profile";
-  # };
-
   boot.initrd.network = {
     enable = true;
+    postCommands = "echo 'cryptsetup-askpass' >> /root/.profile";
     flushBeforeStage2 = true;
     ssh = {
       enable = true;
