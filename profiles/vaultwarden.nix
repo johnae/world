@@ -18,7 +18,7 @@
     mkdir -p "$DIR"
     ${pkgs.sqlite}/bin/sqlite3 /var/lib/bitwarden_rs/db.sqlite3 "VACUUM INTO '$DIR/db.sqlite3'";
     cp -R /var/lib/bitwarden_rs/{attachments,sends,rsa_key*,icon_cache} "$DIR"/;
-    chown -R ${toString adminUser.uid}:${toString adminUser.gid} "$DIR"
+    chown -R ${toString adminUser.uid}:${toString adminUser.gid} "${cfg.backupDir}"
     echo removing old backups
     (cd "${cfg.backupDir}";
       for dir in $(ls -r | tail -n +10); do
