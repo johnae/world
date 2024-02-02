@@ -19,7 +19,7 @@
     ../../profiles/state.nix
     ../../profiles/syncthing.nix
     ../../profiles/tailscale.nix
-    ../../profiles/vaultwarden.nix
+    # ../../profiles/vaultwarden.nix
     ../../profiles/zram.nix
   ];
 
@@ -185,11 +185,11 @@
       owner = "${toString adminUser.uid}";
     };
 
-    cloudflare-tunnel-9k = {
-      file = ../../secrets/cloudflare-tunnel-9k.age;
-      owner = "cloudflared";
-    };
-    vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
+    # cloudflare-tunnel-9k = {
+    #   file = ../../secrets/cloudflare-tunnel-9k.age;
+    #   owner = "cloudflared";
+    # };
+    # vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
   };
 
   services.syncthing = {
@@ -244,12 +244,12 @@
     };
   };
 
-  services.restic.backups.remote.pruneOpts = [
-    "--keep-daily 10"
-    "--keep-weekly 7"
-    "--keep-monthly 12"
-    "--keep-yearly 75"
-  ];
+  # services.restic.backups.remote.pruneOpts = [
+  #   "--keep-daily 10"
+  #   "--keep-weekly 7"
+  #   "--keep-monthly 12"
+  #   "--keep-yearly 75"
+  # ];
 
   home-manager = {
     users.${adminUser.name} = {
