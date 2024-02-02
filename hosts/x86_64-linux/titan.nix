@@ -32,6 +32,13 @@
   ## for tailscale exit node functionality
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
+  boot.initrd.availableKernelModules = [
+    "e1000e"
+    "nvme"
+    "ahci"
+    "usbhid"
+  ];
+
   services.tailscale.auth = {
     enable = true;
     args.advertise-tags = ["tag:server"];
@@ -107,6 +114,13 @@
     {
       enable = true;
       host = "65.109.80.32";
+      port = 2222;
+      identityFile = "/run/agenix/id_ed25519_remote_unlock";
+      passwordFile = "/run/agenix/remote-disk-password";
+    }
+    {
+      enable = true;
+      host = "65.109.85.161";
       port = 2222;
       identityFile = "/run/agenix/id_ed25519_remote_unlock";
       passwordFile = "/run/agenix/remote-disk-password";

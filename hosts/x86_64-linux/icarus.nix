@@ -1,7 +1,6 @@
 {
   adminUser,
   hostName,
-  pkgs,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHaa82NwBC+ty4Wyeuf5kdava7huSYF6k0NYF2ahwayW";
@@ -9,13 +8,13 @@
 
   bcachefs = {
     disks = ["/dev/nvme0n1" "/dev/nvme1n1"];
-    devices = ["/dev/disk/by-partlabel/p_root" "/dev/disk/by-partlabel/p_root1"];
+    devices = ["/dev/mapper/encrypted_root" "/dev/mapper/encrypted_root1"];
   };
 
   imports = [
     ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
-    ../../profiles/disk/bcachefs.nix
+    ../../profiles/disk/bcachefs-on-luks.nix
     ../../profiles/hardware/b550.nix
     ../../profiles/home-manager.nix
     ../../profiles/server.nix
@@ -49,14 +48,9 @@
     "usbhid"
   ];
 
-  boot.initrd.extraUtilsCommands = ''
-    copy_bin_and_libs ${pkgs.keyutils}/bin/keyctl
-    copy_bin_and_libs ${pkgs.procps}/bin/pkill
-  '';
-
   boot.initrd.network = {
     enable = true;
-    postCommands = "echo 'keyctl link @u @s; bcachefs unlock /dev/disk/by-partlabel/p_root; pkill bcachefs' >> /root/.profile";
+    postCommands = "echo 'cryptsetup-askpass' >> /root/.profile";
     flushBeforeStage2 = true;
     ssh = {
       enable = true;
@@ -73,25 +67,6 @@
       ];
     };
   };
-
-  # boot.initrd.network = {
-  #   enable = true;
-  #   flushBeforeStage2 = true;
-  #   ssh = {
-  #     enable = true;
-  #     port = 2222;
-  #     ## This isn't so nice. Have to copy the file to /keep/secrets and keep it there.
-  #     hostKeys = [
-  #       "/keep/secrets/initrd_ed25519_key"
-  #     ];
-  #     authorizedKeys = [
-  #       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyjMuNOFrZBi7CrTyu71X+aRKyzvTmwCEkomhB0dEhENiQ3PTGVVWBi1Ta9E9fqbqTW0HmNL5pjGV+BU8j9mSi6VxLzJVUweuwQuvqgAi0chAJVPe0FSzft9M7mJoEq5DajuSiL7dSjXpqNFDk/WCDUBE9pELw+TXvxyQpFO9KZwiYCCNRQY6dCjrPJxGwG+JzX6l900GFrgOXQ3KYGk8vzep2Qp+iuH1yTgEowUICkb/9CmZhHQXSvq2gAtoOsGTd9DTyLOeVwZFJkTL/QW0AJNRszckGtYdA3ftCUNsTLSP/VqYN9EjxcMHQe4PGjkK7VLb59DQJFyRQqvPXiUyxNloHcu/sDuiKHIk/0qDLHlVn2xc5zkvzSqoQxoXx+P4dDbje1KHLY8E96gLe2Csu0ti+qsM5KEvgYgwWwm2g3IBlaWwgAtC0UWEzIuBPrAgPd5vi+V50ITIaIk6KIV7JPOubLUXaLS5KW77pWyi9PqAGOXj+DgTWoB3QeeZh7CGhPL5fAecYN7Pw734cULZpnw10Bi/jp4Nlq1AJDk8BwLUJbzZ8aexwMf78syjkHJBBrTOAxADUE02nWBQd0w4K5tl/a3UnBYWGyX8TD44046Swl/RY/69PxFvYcVRuF4eARI6OWojs1uhoR9WkO8eGgEsuxxECwNpWxR5gjKcgJQ=="
-  #       "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDp;auQBOftphOeuF2TaBHGQSAAAABHNzaDo="
-  #       "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo="
-  #       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+trOinD68RD1efI6p05HeaNA0SjzeRnUvpf22+jsq+"
-  #     ];
-  #   };
-  # };
 
   services.tailscale.auth = {
     enable = true;
