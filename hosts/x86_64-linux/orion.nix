@@ -22,7 +22,7 @@
     ../../profiles/state.nix
     ../../profiles/syncthing.nix
     ../../profiles/tailscale.nix
-    #    ../../profiles/vaultwarden.nix
+    ../../profiles/vaultwarden.nix
     ../../profiles/zram.nix
   ];
 
@@ -90,47 +90,47 @@
     args.auth-key = "file:/var/run/agenix/ts-google-9k";
   };
 
-  # services.nginx = {
-  #   enable = true;
-  #   recommendedTlsSettings = true;
-  #   recommendedProxySettings = true;
-  #   recommendedGzipSettings = true;
-  #   recommendedOptimisation = true;
-  #   clientMaxBodySize = "300m";
-  #   virtualHosts."bw.9000.dev" = {
-  #     locations."/".proxyPass = "http://localhost:8222";
-  #     locations."/".proxyWebsockets = true;
-  #   };
-  # };
+  services.nginx = {
+    enable = true;
+    recommendedTlsSettings = true;
+    recommendedProxySettings = true;
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    clientMaxBodySize = "300m";
+    virtualHosts."bw.9000.dev" = {
+      locations."/".proxyPass = "http://localhost:8222";
+      locations."/".proxyWebsockets = true;
+    };
+  };
 
-  # services.my-cloudflared = {
-  #   enable = true;
-  #   tunnels."9000-tunnel" = {
-  #     credentialsFile = "/run/agenix/cloudflare-tunnel-9k";
-  #     default = "http://localhost";
-  #     originRequest.noTLSVerify = true;
-  #   };
-  # };
+  services.my-cloudflared = {
+    enable = true;
+    tunnels."9000-tunnel" = {
+      credentialsFile = "/run/agenix/cloudflare-tunnel-9k";
+      default = "http://localhost";
+      originRequest.noTLSVerify = true;
+    };
+  };
 
-  # services.my-matrix = {
-  #   enable = true;
-  #   server_name = "9000.dev";
-  # };
+  services.my-matrix = {
+    enable = true;
+    server_name = "9000.dev";
+  };
 
-  # services.vaultwarden = {
-  #   enable = true;
-  #   environmentFile = "/run/agenix/vaultwarden-env";
-  #   backupDir = "/var/lib/vaultwarden-backup";
+  services.vaultwarden = {
+    enable = true;
+    environmentFile = "/run/agenix/vaultwarden-env";
+    backupDir = "/var/lib/vaultwarden-backup";
 
-  #   config = {
-  #     DOMAIN = "https://bw.9000.dev";
-  #     SIGNUPS_ALLOWED = "false";
-  #     PASSWORD_HINTS_ALLOWED = "false";
-  #     ROCKET_ADDRESS = "127.0.0.1";
-  #     ROCKET_PORT = 8222;
-  #     PASSWORD_ITERATIONS = 600000;
-  #   };
-  # };
+    config = {
+      DOMAIN = "https://bw.9000.dev";
+      SIGNUPS_ALLOWED = "false";
+      PASSWORD_HINTS_ALLOWED = "false";
+      ROCKET_ADDRESS = "127.0.0.1";
+      ROCKET_PORT = 8222;
+      PASSWORD_ITERATIONS = 600000;
+    };
+  };
 
   networking = {
     defaultGateway = "65.109.85.129";
@@ -214,6 +214,7 @@
           "antares"
           "eris"
           "hyperion"
+          "polaris"
           "icarus"
           "s23ultra"
           "s8plus"
@@ -224,6 +225,7 @@
         id = "pictures";
         devices = [
           "antares"
+          "polaris"
           "eris"
         ];
       };
@@ -232,6 +234,7 @@
         devices = [
           "antares"
           "eris"
+          "polaris"
           "icarus"
           "s23ultra"
         ];
