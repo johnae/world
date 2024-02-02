@@ -67,7 +67,7 @@
                 fullName = "John Axel Eriksson";
                 githubUser = "johnae";
                 gitlabUser = "johnae";
-                devRemote = "polaris";
+                devRemote = "orion";
               };
             };
             hostConfigurations = mapAttrs' (name: conf: {
