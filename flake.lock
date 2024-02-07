@@ -608,11 +608,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1706834982,
-        "narHash": "sha256-3CfxA7gZ+DVv/N9Pvw61bV5Oe/mWfxYPyVQGqp9TMJA=",
+        "lastModified": 1707211557,
+        "narHash": "sha256-LTKTzZ6fM5j8XWXf51IMBzDaOaJg9kYWLUZxoIhzRN8=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "83e571bb291161682b9c3ccd48318f115143a550",
+        "rev": "6e5cc385fc8cf5ca6495d70243074ccdea9f64c7",
         "type": "github"
       },
       "original": {
@@ -705,11 +705,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1706913249,
-        "narHash": "sha256-x3M7iV++CsvRXI1fpyFPduGELUckZEhSv0XWnUopAG8=",
+        "lastModified": 1707092692,
+        "narHash": "sha256-ZbHsm+mGk/izkWtT4xwwqz38fdlwu7nUUKXTOmm4SyE=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "e92b6015881907e698782c77641aa49298330223",
+        "rev": "faf912b086576fd1a15fca610166c98d47bc667e",
         "type": "github"
       },
       "original": {
@@ -721,11 +721,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1707176267,
-        "narHash": "sha256-noAIpR+ZjVRdDcZ/pgboe37q3div1b3Ygw16ISNpAkY=",
+        "lastModified": 1707259456,
+        "narHash": "sha256-Q7GlZsC/kBh1Qr7n/cYwwpSvb9LV1no0LQwVOS8/n8M=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "65a74c3f40d3e60ba1b7c04c63c371208ba88657",
+        "rev": "86be2f150dfce413d8d3a1bc782a2baea7f427e2",
         "type": "github"
       },
       "original": {
@@ -806,11 +806,11 @@
     "river": {
       "flake": false,
       "locked": {
-        "lastModified": 1707132789,
-        "narHash": "sha256-XE8aX1bXqIQNhNAgQ0Imm461Sc8wTDcsh33NfNqekTA=",
+        "lastModified": 1707220749,
+        "narHash": "sha256-dEvMs4msWIbxTF8rzdTELZpQM4fokypsHI5/63RqZ7I=",
         "ref": "refs/heads/master",
-        "rev": "4685f6906d1e5a95b9ad26e511f8501110c626c3",
-        "revCount": 1125,
+        "rev": "026c832ba142cb28e8c2224be3e74bb4656441a1",
+        "revCount": 1126,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/riverwm/river"
