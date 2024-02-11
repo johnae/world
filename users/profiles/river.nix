@@ -127,10 +127,10 @@
 
   river-menu = pkgs.writeShellApplication {
     name = "river-menu";
-    runtimeInputs = [pkgs.rofi-wayland];
+    runtimeInputs = [pkgs.fuzzel];
     text = ''
 
-      ACTION="$(echo -e "logout\npoweroff\nreboot\nhibernate\nsuspend" | rofi -normal-window -matching fuzzy -i -dmenu)"
+      ACTION="$(echo -e "logout\npoweroff\nreboot\nhibernate\nsuspend" | fuzzel -d)"
       if [ "$ACTION" = "logout" ]; then
         riverctl exit
       elif [ "$ACTION" = "poweroff" ]; then
@@ -150,6 +150,7 @@ in {
   home.packages = [
     pkgs.kile-wl
     pkgs.rofi-wayland
+    pkgs.fuzzel
     pkgs.scripts
   ];
   home.sessionVariables = {
@@ -174,7 +175,8 @@ in {
     keyboard-layout = "-model pc105 -variant '' -options ctrl:nocaps,grp:switch,compose:rctrl us,se";
 
     map.normal.Super.Return = "spawn ${terminal-bin}";
-    map.normal.Super.D = "spawn '${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes \"drun,run\"'";
+    # map.normal.Super.D = "spawn '${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes \"drun,run\"'";
+    map.normal.Super.D = "spawn '${pkgs.fuzzel}/bin/fuzzel'";
 
     map.normal."Super+Shift".Q = "close";
 
@@ -198,8 +200,8 @@ in {
     map.normal."Super+Control".K = ["focus-view previous" "zoom"];
     map.normal."Super+Shift".Space = "send-layout-cmd luatile 'next_layout()'";
 
-    map.normal.Super.Minus = "spawn '${pkgs.scripts}/bin/rofi-rbw'";
-    map.normal."Super+Shift".Minus = "spawn 'passonly=y ${pkgs.scripts}/bin/rofi-rbw'";
+    map.normal.Super.Minus = "spawn '${pkgs.scripts}/bin/fuzzel-rbw'";
+    map.normal."Super+Shift".Minus = "spawn 'passonly=y ${pkgs.scripts}/bin/fuzzel-rbw'";
 
     map.normal.Super.M = "focus-output next";
 

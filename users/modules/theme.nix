@@ -8,6 +8,7 @@
   cfg = config.base16-theme;
   cnotation = builtins.replaceStrings ["#"] ["0x"];
   footclr = builtins.replaceStrings ["#"] [""];
+  fuzzelclr = clr: alpha: "${footclr clr}${alpha}";
   color = default:
     mkOption {
       inherit default;
@@ -38,7 +39,7 @@ in {
   config = mkIf cfg.enable (
     mkMerge [
       {
-        wayland.windowManager.sway.config.colors = rec {
+        wayland.windowManager.sway.config.colors = {
           focused = {
             border = cfg.base0A;
             background = cfg.base0A;
@@ -132,6 +133,24 @@ in {
           bright.magenta = cnotation cfg.base0F;
           bright.cyan = cnotation cfg.base07;
           bright.white = cnotation cfg.base06;
+        };
+
+        #   background = "282a36dd";
+        #   text = "f8f8f2ff";
+        #   match = "8be9fdff";
+        #   selection-match = "8be9fdff";
+        #   selection = "44475add";
+        #   selection-text = "f8f8f2ff";
+        #   border = "bd93f9ff";
+
+        programs.fuzzel.settings.colors = {
+          background = fuzzelclr cfg.base00 "dd";
+          text = fuzzelclr cfg.base06 "ff";
+          match = fuzzelclr cfg.base04 "ff";
+          selection-match = fuzzelclr cfg.base04 "ff";
+          selection = fuzzelclr cfg.base08 "dd";
+          selection-text = fuzzelclr cfg.base06 "ff";
+          border = fuzzelclr cfg.base08 "ff";
         };
 
         xdg.configFile."rio/themes/default.toml".source = (pkgs.formats.toml {}).generate "rio-default-theme" {

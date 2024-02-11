@@ -359,12 +359,6 @@ in {
         "${modifier}+c" = "exec persway change-layout stack-main --size 70 --stack-layout tiled";
         "${modifier}+v" = "exec persway change-layout manual";
 
-        "${modifier}+t" = ''exec rofi-spotify-search track'';
-        "${modifier}+p" = ''exec rofi-spotify-search playlist'';
-        "${modifier}+Shift+n" = ''exec spotify-cmd next'';
-        "${modifier}+Shift+p" = ''exec spotify-cmd prev'';
-        "${modifier}+Shift+m" = ''exec spotify-cmd pause'';
-
         "${modifier}+Shift+s" = ''exec ${screenshot}/bin/screenshot'';
 
         "${modifier}+Shift+k" = ''exec systemctl --user restart kanshi'';
@@ -393,11 +387,6 @@ in {
 
         XF86MonBrightnessUp = ''exec light -A 5'';
         XF86MonBrightnessDown = ''exec light -U 5'';
-
-        XF86AudioNext = ''exec ${pkgs.scripts}/bin/spotify-cmd next'';
-        XF86AudioPrev = ''exec ${pkgs.scripts}/bin/spotify-cmd prev'';
-        XF86AudioPlay = ''exec ${pkgs.scripts}/bin/spotify-cmd play'';
-        XF86AudioPause = ''exec ${pkgs.scripts}/bin/spotify-cmd pause'';
 
         "${modifier}+q" = ''layout stacking'';
         "${modifier}+o" = ''move absolute position center'';

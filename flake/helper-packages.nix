@@ -1,4 +1,4 @@
-{inputs, ...}: {
+{...}: {
   perSystem = {
     pkgs,
     lib,
@@ -17,6 +17,7 @@
       pass
       rbw
       rofi-wayland
+      fuzzel
       skim
       wtype
       wpa_supplicant
@@ -118,34 +119,24 @@
       '';
     };
 
-    spotify-cmd = writeShellApplication {
-      name = "spotify-cmd";
+    fuzzel-rbw = writeShellApplication {
+      name = "fuzzel-rbw";
+      runtimeInputs = [fuzzel rbw wtype];
       text = ''
-        echo "$@" > "$XDG_RUNTIME_DIR"/spotnix_input
-      '';
-    };
+        passonly=''${passonly:-}
+        selection="$(rbw list --fields name,user | \
+           sed 's|\t|/|g' | \
+           fuzzel -d)"
 
-    rofi-spotnix-play = writeShellApplication {
-      name = "rofi-spotnix-play";
-      runtimeInputs = [rofi-wayland];
-      text = ''
-        t="$1"
-        awk -F ' - spotify:' \
-               '{print "<span size=\"medium\">"$1"</span><span size=\"1\" alpha=\"1\">#spotify:"$2"</span>"}' \
-               < "$XDG_RUNTIME_DIR"/spotnix_output | \
-               rofi -normal-window -matching fuzzy -i -dmenu -markup-rows -format p -p "$t >" | \
-               awk -F'#' '{print "play "$2}' > "$XDG_RUNTIME_DIR"/spotnix_input
-      '';
-    };
+        entry="$(echo "$selection" | awk -F'/' '{print $1}')"
+        login="$(echo "$selection" | awk -F'/' '{print $2}')"
+        pass="$(rbw get "$entry" "$login")"
 
-    rofi-spotify-search = writeShellApplication {
-      name = "rofi-spotify-search";
-      runtimeInputs = [rofi-wayland];
-      text = ''
-        t="$1"
-        search="$(rofi -normal-window -dmenu -p "search $t >")"
-        echo search_"$t" "$search" > "$XDG_RUNTIME_DIR"/spotnix_input
-        ${rofi-spotnix-play}/bin/rofi-spotnix-play "$t"
+        if [ -z "$passonly" ]; then
+          echo -en "$login\t$pass" | wtype -
+        else
+          echo -n "$pass" | wtype -
+        fi
       '';
     };
 
@@ -214,8 +205,7 @@
           project-select
           rbw-git-creds
           rofi-rbw
-          rofi-spotify-search
-          spotify-cmd
+          fuzzel-rbw
           update-wifi-networks
           update-wireguard-keys
         ];
