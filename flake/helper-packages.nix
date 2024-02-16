@@ -1,4 +1,4 @@
-{...}: {
+{
   perSystem = {
     pkgs,
     lib,
