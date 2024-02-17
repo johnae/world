@@ -29,7 +29,7 @@ in {
     genericName = "Web Browser";
     exec = "chromium %U";
     terminal = false;
-    categories = ["Application" "Network" "WebBrowser"];
+    categories = ["Network" "WebBrowser"];
     mimeType = ["text/html" "text/xml"];
     actions = {
       "New-Window" = {
@@ -46,7 +46,7 @@ in {
     genericName = "Web Browser";
     exec = "chromium-alt %U";
     terminal = false;
-    categories = ["Application" "Network" "WebBrowser"];
+    categories = ["Network" "WebBrowser"];
     mimeType = ["text/html" "text/xml"];
     actions = {
       "New-Window" = {
@@ -63,7 +63,7 @@ in {
     genericName = "Web Browser";
     exec = "chromium-private %U";
     terminal = false;
-    categories = ["Application" "Network" "WebBrowser"];
+    categories = ["Network" "WebBrowser"];
     mimeType = ["text/html" "text/xml"];
     actions = {
       "New-Window" = {
@@ -80,7 +80,7 @@ in {
     genericName = "Web Browser";
     exec = "chromium-work %U";
     terminal = false;
-    categories = ["Application" "Network" "WebBrowser"];
+    categories = ["Network" "WebBrowser"];
     mimeType = ["text/html" "text/xml"];
     actions = {
       "New-Window" = {
