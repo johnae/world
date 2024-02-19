@@ -92,7 +92,25 @@
     pulse.enable = true;
   };
   xdg.portal.enable = true;
-  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk];
+  xdg.portal.wlr.enable = true;
+  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
+  xdg.portal.config = let
+    wlrConf = {
+      default = ["wlr" "gtk"];
+      "org.freedesktop.impl.portal.Secret" = ["gnome-keyring"];
+    };
+  in {
+    common = {
+      default = ["gtk"];
+      "org.freedesktop.impl.portal.Secret" = ["gnome-keyring"];
+    };
+    river = wlrConf;
+    sway = wlrConf;
+    Hyprland = {
+      default = ["hyprland" "gtk"];
+      "org.freedesktop.impl.portal.Secret" = ["gnome-keyring"];
+    };
+  };
 
   fonts.packages = with pkgs; [
     emacs-all-the-icons-fonts
