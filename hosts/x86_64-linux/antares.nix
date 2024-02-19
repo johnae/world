@@ -98,6 +98,7 @@
           "eris"
           "icarus"
           "polaris"
+          "orion"
           "titan"
           "hyperion"
           "s23ultra"
@@ -108,6 +109,7 @@
         id = "pictures";
         devices = [
           "eris"
+          "orion"
           "polaris"
         ];
       };
@@ -116,6 +118,7 @@
         devices = [
           "eris"
           "icarus"
+          "orion"
           "polaris"
           "s23ultra"
         ];
