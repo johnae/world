@@ -179,11 +179,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1708150887,
-        "narHash": "sha256-lyEaeShLZqQtFO+ULLfxF9fYaYpTal0Ck1B+iKYBOMs=",
+        "lastModified": 1708237286,
+        "narHash": "sha256-vnELK6BmGDGeoWe/Ybp2LXKEojamaFTu5ZMbwYSkT3w=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "761431323e30846bae160e15682cfa687c200606",
+        "rev": "39318c8f48be57bc2c8fd5325ae1005fffa9f1f2",
         "type": "github"
       },
       "original": {
@@ -346,11 +346,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1708031129,
-        "narHash": "sha256-EH20hJfNnc1/ODdDVat9B7aKm0B95L3YtkIRwKLvQG8=",
+        "lastModified": 1708294481,
+        "narHash": "sha256-DZtxmeb4OR7iCaKUUuq05ADV2rX8WReZEF7Tq//W0+Y=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "3d6791b3897b526c82920a2ab5f61d71985b3cf8",
+        "rev": "a54e05bc12d88ff2df941d0dc1183cb5235fa438",
         "type": "github"
       },
       "original": {
@@ -362,6 +362,7 @@
     "hyprland": {
       "inputs": {
         "hyprland-protocols": "hyprland-protocols",
+        "hyprlang": "hyprlang",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -370,11 +371,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1708209862,
-        "narHash": "sha256-VNn9gR8NZzcLsZGpLR8eK7+9xNPF39ox9lL8W232iX8=",
+        "lastModified": 1708300923,
+        "narHash": "sha256-TnZ4E2AZbRXcm5tuior9KMNSjruy11Oqic0yc7ySU1U=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "5261a8df81c1aad07b582bce82d164801de533b0",
+        "rev": "69a4f08dbee6dc08d1e2ce498ce80ab20844e4f3",
         "type": "github"
       },
       "original": {
@@ -409,6 +410,27 @@
       }
     },
     "hyprlang": {
+      "inputs": {
+        "nixpkgs": [
+          "hyprland",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1708005943,
+        "narHash": "sha256-9TT3xk++LI5/SPYgjYX34xZ4ebR93c1uerIq+SE/ues=",
+        "owner": "hyprwm",
+        "repo": "hyprlang",
+        "rev": "aeb3e012adc7b3235335c540b214b82267c2b983",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hyprwm",
+        "repo": "hyprlang",
+        "type": "github"
+      }
+    },
+    "hyprlang_2": {
       "inputs": {
         "nixpkgs": [
           "hyprland",
@@ -480,11 +502,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1706844761,
-        "narHash": "sha256-5BcXmVy5QPXplCT9fJ4A0+Tru0kG2sAR7qYwdxVrwvo=",
+        "lastModified": 1708220210,
+        "narHash": "sha256-qsiApRdQEk9Sd3u/iiFt7idUEdsccHc3TcxmsHy3CJ4=",
         "owner": "famedly",
         "repo": "conduit",
-        "rev": "72a13d83539a4df7c0f126b5854642e210c506b0",
+        "rev": "be1e2e93073d88ef1972a3c99014a7d14d731b85",
         "type": "gitlab"
       },
       "original": {
@@ -721,11 +743,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1708213449,
-        "narHash": "sha256-m1H5SvWlIldAzQrvzOSxhoxNJjodIZZBY34F/Iu7id4=",
+        "lastModified": 1708294799,
+        "narHash": "sha256-CXpBIBqeWiarwpJk2DLTEooy0uX7at1mqFNCnho5kRo=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "ccc244cf9a517cdfccfd6a7a8b47083a5f926a0e",
+        "rev": "8abbb1212ff453b65fe998f01e644584fff79f6d",
         "type": "github"
       },
       "original": {
@@ -806,11 +828,11 @@
     "river": {
       "flake": false,
       "locked": {
-        "lastModified": 1707994778,
-        "narHash": "sha256-WGP5IlPNHgi4D2I2seYtDps91uRasBGTi2lzlp10ifU=",
+        "lastModified": 1708273796,
+        "narHash": "sha256-d8lCaNxlowtJuR8fOgMlwkKIVLRc2YBPMplkAaEkG60=",
         "ref": "refs/heads/master",
-        "rev": "2bdbe414e86e321bebc0075c53cc416bf4bf4273",
-        "revCount": 1132,
+        "rev": "d1bb27038b369d375f57ad10ad174a6d18682bbb",
+        "revCount": 1136,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/riverwm/river"
@@ -980,7 +1002,7 @@
           "hyprland",
           "hyprland-protocols"
         ],
-        "hyprlang": "hyprlang",
+        "hyprlang": "hyprlang_2",
         "nixpkgs": [
           "hyprland",
           "nixpkgs"
