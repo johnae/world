@@ -175,7 +175,6 @@ in {
     keyboard-layout = "-model pc105 -variant '' -options ctrl:nocaps,grp:switch,compose:rctrl us,se";
 
     map.normal.Super.Return = "spawn ${terminal-bin}";
-    # map.normal.Super.D = "spawn '${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes \"drun,run\"'";
     map.normal.Super.D = "spawn '${pkgs.fuzzel}/bin/fuzzel'";
 
     map.normal."Super+Shift".Q = "close";

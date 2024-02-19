@@ -127,28 +127,6 @@ in {
       };
       xdgAutostart = mkEnableOption "Enable xdg-desktop-autostart.target";
     };
-    # xkb = {
-    #   default_layout = mkOption {
-    #     type = types.str;
-    #     default = "us";
-    #   };
-    #   default_options = mkOption {
-    #     type = types.str;
-    #     default = "";
-    #   };
-    #   default_model = mkOption {
-    #     type = types.str;
-    #     default = "pc105";
-    #   };
-    #   default_variant = mkOption {
-    #     type = types.str;
-    #     default = "";
-    #   };
-    # };
-    # xkb_default_layout = mkOption {
-    #   type = types.str;
-    #   default = "us";
-    # };
     settings = mkOption {
       default = {};
       type = types.submodule {
@@ -195,12 +173,6 @@ in {
       };
     };
     xdg.configFile."river/init".source = "${writeConfig cfg}/bin/init";
-    # home.sessionVariables = {
-    #   XKB_DEFAULT_LAYOUT = cfg.xkb.default_layout;
-    #   XKB_DEFAULT_OPTIONS = cfg.xkb.default_options;
-    #   XKB_DEFAULT_MODEL = cfg.xkb.default_model;
-    #   XKB_DEFAULT_VARIANT = cfg.xkb.default_variant;
-    # };
     home.packages = [cfg.package];
   };
 }
