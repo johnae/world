@@ -109,22 +109,6 @@
     host = config.userinfo.devRemote;
   };
 
-  input = listToAttrs (map (name: {
-      inherit name;
-      value = {
-        disable-while-typing = "enabled";
-        natural-scroll = "enabled";
-        tap = "enabled";
-      };
-    }) [
-      "pointer-1267-12850-ELAN06A1:00_04F3:3232_Touchpad"
-      "pointer-1739-30383-DELL07E6:00_06CB:76AF_Touchpad"
-      "pointer-1739-30383-DLL075B:01_06CB:76AF_Touchpad"
-      "pointer-1739-52620-SYNA8005:00_06CB:CD8C_Touchpad"
-      "pointer-1739-52710-DLL096D:01_06CB:CDE6_Touchpad"
-      "pointer-1739-52804-MSFT0001:00_06CB:CE44_Touchpad"
-    ]);
-
   river-menu = pkgs.writeShellApplication {
     name = "river-menu";
     runtimeInputs = [pkgs.fuzzel];
@@ -147,11 +131,13 @@
     '';
   };
 in {
-  home.packages = [
-    pkgs.kile-wl
-    pkgs.rofi-wayland
-    pkgs.fuzzel
-    pkgs.scripts
+  home.packages = with pkgs; [
+    kile-wl
+    rofi-wayland
+    fuzzel
+    light
+    pamixer
+    scripts
   ];
   home.sessionVariables = {
     GDK_BACKEND = "wayland";
@@ -168,55 +154,85 @@ in {
   };
 
   wayland.windowManager.river.enable = true;
-
   wayland.windowManager.river.settings = {
-    inherit input;
+    input = listToAttrs (map (name: {
+        inherit name;
+        value = {
+          disable-while-typing = true;
+          natural-scroll = true;
+          tap = true;
+        };
+      }) [
+        "pointer-1267-12850-ELAN06A1:00_04F3:3232_Touchpad"
+        "pointer-1739-30383-DELL07E6:00_06CB:76AF_Touchpad"
+        "pointer-1739-30383-DLL075B:01_06CB:76AF_Touchpad"
+        "pointer-1739-52620-SYNA8005:00_06CB:CD8C_Touchpad"
+        "pointer-1739-52710-DLL096D:01_06CB:CDE6_Touchpad"
+        "pointer-1739-52804-MSFT0001:00_06CB:CE44_Touchpad"
+      ]);
+
+    declare-mode = ["passthrough" "wmctl" "locked" "normal"];
 
     keyboard-layout = "-model pc105 -variant '' -options ctrl:nocaps,grp:switch,compose:rctrl us,se";
 
-    map.normal.Super.Return = "spawn ${terminal-bin}";
-    map.normal.Super.D = "spawn '${pkgs.fuzzel}/bin/fuzzel'";
+    map.normal."Super+Control L" = "spawn '${swaylockEffects}/bin/swaylock-effects'";
+    map.normal."Super+Control Space" = "toggle-float";
 
-    map.normal."Super+Shift".Q = "close";
+    map.normal."Super+Control J" = "spawn 'riverctl focus-view next; riverctl swap next; riverctl zoom'";
+    map.normal."Super+Control K" = "spawn 'riverctl focus-view previous; riverctl zoom'";
+    map.normal."Super Up" = "focus-view up";
+    map.normal."Super Down" = "focus-view down";
+    map.normal."Super Left" = "focus-view left";
+    map.normal."Super Right" = "focus-view right";
+    map.normal."Super M" = "focus-output next";
 
-    map.normal."Super+Shift".E = "spawn '${local-dev}/bin/local-dev'";
-    map.normal."Super+Shift".R = "spawn '${remote-dev}/bin/remote-dev'";
-    map.normal."Super+Shift".S = "spawn '${screenshot}/bin/screenshot'";
+    map.normal."Super+Shift J" = "swap next";
+    map.normal."Super+Shift K" = "swap previous";
 
-    map.normal."Super".K = "spawn '${pkgs.kanshi}/bin/kanshictl reload'";
+    map.normal."Super+Shift M" = "send-to-output next";
 
-    map.normal."Super+Control".L = "spawn '${swaylockEffects}/bin/swaylock-effects'";
+    map.normal."Super+Shift Q" = "close";
+    map.normal."Super Space" = "zoom";
 
-    map.normal.Super.Left = "focus-view left";
-    map.normal.Super.Right = "focus-view right";
-    map.normal.Super.Up = "focus-view up";
-    map.normal.Super.Down = "focus-view down";
+    map.normal."Super D" = "spawn '${pkgs.fuzzel}/bin/fuzzel'";
+    map.normal."Super Escape" = "spawn '${river-menu}/bin/river-menu'";
+    map.normal."Super K" = "spawn '${pkgs.kanshi}/bin/kanshictl reload'";
 
-    map.normal."Super+Shift".J = "swap next";
-    map.normal."Super+Shift".K = "swap previous";
+    map.normal."Super Minus" = "spawn '${pkgs.scripts}/bin/fuzzel-rbw'";
+    map.normal."Super Return" = "spawn ${terminal-bin}";
+    map.normal."Super+Shift E" = "spawn '${local-dev}/bin/local-dev'";
 
-    map.normal."Super+Control".J = ["focus-view next" "swap next" "zoom"];
-    map.normal."Super+Control".K = ["focus-view previous" "zoom"];
-    map.normal."Super+Shift".Space = "send-layout-cmd luatile 'next_layout()'";
+    map.normal."Super+Shift Minus" = "spawn 'passonly=y ${pkgs.scripts}/bin/fuzzel-rbw'";
+    map.normal."Super+Shift R" = "spawn '${remote-dev}/bin/remote-dev'";
 
-    map.normal.Super.Minus = "spawn '${pkgs.scripts}/bin/fuzzel-rbw'";
-    map.normal."Super+Shift".Minus = "spawn 'passonly=y ${pkgs.scripts}/bin/fuzzel-rbw'";
+    map.normal."Super+Shift Space" = "send-layout-cmd luatile 'next_layout()'";
+    map.normal."Super+Shift S" = "spawn '${screenshot}/bin/screenshot'";
 
-    map.normal.Super.M = "focus-output next";
+    map.normal."Super F11" = "enter-mode passthrough";
+    map.normal."Super F" = "toggle-fullscreen";
+    map.passthrough."Super F11" = "enter-mode normal";
 
-    map.normal."Super+Shift".M = "send-to-output next";
+    map.normal."None XF86Eject" = "spawn 'eject -T'";
+    map.normal."None XF86AudioRaiseVolume" = "spawn 'pamixer -i 5'";
+    map.normal."None XF86AudioLowerVolume" = "spawn 'pamixer -d 5'";
+    map.normal."None XF86AudioMute" = "spawn 'pamixer --toggle-mute'";
+    map.normal."None XF86AudioMedia" = "spawn 'playerctl play-pause'";
+    map.normal."None XF86AudioPlay" = "spawn 'playerctl play-pause'";
+    map.normal."None XF86AudioPrev" = "spawn 'playerctl previous'";
+    map.normal."None XF86AudioNext" = "spawn 'playerctl next'";
+    map.normal."None XF86MonBrightnessUp" = "spawn 'light -A 5'";
+    map.normal."None XF86MonBrightnessDown" = "spawn 'light -U 5'";
 
-    map.normal.Super.Space = "zoom";
-
-    map.normal."Super+Control".Space = "toggle-float";
-    map.normal.Super.F = "toggle-fullscreen";
-
-    additional-modes = ["passthrough" "wmctl"];
-
-    map.normal.Super.F11 = "enter-mode passthrough";
-    map.passthrough.Super.F11 = "enter-mode normal";
-
-    map.normal.Super.Escape = "spawn '${river-menu}/bin/river-menu'";
+    map.locked."None XF86Eject" = "spawn 'eject -T'";
+    map.locked."None XF86AudioRaiseVolume" = "spawn 'pamixer -i 5'";
+    map.locked."None XF86AudioLowerVolume" = "spawn 'pamixer -d 5'";
+    map.locked."None XF86AudioMute" = "spawn 'pamixer --toggle-mute'";
+    map.locked."None XF86AudioMedia" = "spawn 'playerctl play-pause'";
+    map.locked."None XF86AudioPlay" = "spawn 'playerctl play-pause'";
+    map.locked."None XF86AudioPrev" = "spawn 'playerctl previous'";
+    map.locked."None XF86AudioNext" = "spawn 'playerctl next'";
+    map.locked."None XF86MonBrightnessUp" = "spawn 'light -A 5'";
+    map.locked."None XF86MonBrightnessDown" = "spawn 'light -U 5'";
 
     background-color = "0x002b36";
     border-color-focused = "0x93a1a1";
@@ -239,11 +255,31 @@ in {
     ];
 
     default-layout = "luatile";
-    layout-generator-exec = "${pkgs.river-luatile}/bin/river-luatile";
-    exec = [
-      "${pkgs.wpaperd}/bin/wpaperd"
-      "${swayidleCommand}/bin/swayidle"
-      "${pkgs.kanshi}/bin/kanshi"
-    ];
+    spawn =
+      [
+        "${pkgs.wpaperd}/bin/wpaperd"
+        "${swayidleCommand}/bin/swayidle"
+        "${pkgs.kanshi}/bin/kanshi"
+      ]
+      ++
+      ## layout gen
+      [
+        "${pkgs.river-luatile}/bin/river-luatile"
+      ];
   };
+
+  wayland.windowManager.river.extraConfig = ''
+    for i in $(seq 1 9)
+    do
+        tags=$((1 << (i - 1)))
+        riverctl map normal Super "$i" set-focused-tags $tags
+        riverctl map normal Super+Shift "$i" set-view-tags $tags
+        riverctl map normal Super+Control "$i" toggle-focused-tags $tags
+        riverctl map normal Super+Shift+Control "$i" toggle-view-tags $tags
+    done
+
+    all_tags=$(((1 << 32) - 1))
+    riverctl map normal Super 0 set-focused-tags "$all_tags"
+    riverctl map normal Super+Shift 0 set-view-tags "$all_tags"
+  '';
 }
