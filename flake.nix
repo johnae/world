@@ -41,7 +41,7 @@
     helix.inputs.nixpkgs.follows = "nixpkgs";
     helix.url = "github:johnae/helix/copilot"; ## copilot support
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "github:johnae/home-manager/patch-1"; ## temporary
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland.url = "github:hyprwm/Hyprland";
     impermanence.url = "github:nix-community/impermanence";
