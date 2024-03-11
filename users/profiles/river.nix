@@ -142,7 +142,7 @@ in {
   home.sessionVariables = {
     GDK_BACKEND = "wayland";
     CLUTTER_BACKEND = "wayland";
-    QT_QPA_PLATFORM = "wayland-egl";
+    QT_QPA_PLATFORM = "";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     MOZ_ENABLE_WAYLAND = "1";
     MOZ_USE_XINPUT2 = "1";
