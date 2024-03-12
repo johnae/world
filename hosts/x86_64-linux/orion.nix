@@ -114,9 +114,7 @@
   };
 
   security.acme.certs = {
-    "bw.ill.dev" = {
-      webroot = "/var/lib/acme/acme-challenge/";
-    };
+    "bw.ill.dev" = {};
   };
 
   environment.persistence."/keep" = {
