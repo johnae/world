@@ -88,3 +88,19 @@ $env.NU_PLUGIN_DIRS = [
 def search-replace-recursively [pattern replacement] {
     rg $'($pattern)' . -l | lines | par-each { |file| sed -i $'s|($pattern)|($replacement)|g' $file }
 }
+
+def "from jwt" [] {
+    jwt-cli decode --json - | from json | convert-datetime "exp" | convert-datetime "iat" | convert-datetime "nbf"
+}
+
+def "convert-datetime" [field: string] {
+    if ($in.payload | columns | any { $in == $field }) {
+        $in | update payload { update $field { timestamp into datetime } }
+    } else {
+        $in
+    }
+}
+
+def "timestamp into datetime" [] {
+    $in * 1_000_000_000 | into datetime
+}

@@ -7,6 +7,9 @@
   inherit (config) home;
   nu-scripts = "${pkgs.nu_scripts}/share/nu_scripts";
 in {
+  home.packages = [
+    pkgs.jwt-cli ## see env.nu for impl
+  ];
   programs.atuin.enable = true;
   programs.direnv.enableNushellIntegration = false;
   programs.atuin.enableNushellIntegration = false;

@@ -37,15 +37,15 @@ in {
     git-branchless
     git-crypt
     google-cloud-sdk-gke
+    jwt-cli
     kubectl
     kubectx
     kubelogin
     kubelogin-oidc
     kustomize
     lm_sensors
-    nix-index
     nil
-    # wezterm
+    nix-index
   ];
 
   xdg.enable = true;
