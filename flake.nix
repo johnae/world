@@ -74,8 +74,6 @@
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     river.url = "git+https://github.com/riverwm/river?submodules=1&rev=ac655593f3113ca1d94d27c5845f0406bf495c9a";
     river.flake = false;
-    wezterm.flake = false;
-    wezterm.url = "git+https://github.com/wez/wezterm/?rev=600652583594e9f6195a6427d1fabb09068622a7&submodules=1";
   };
 
   outputs = inputs @ {flake-parts, ...}:
