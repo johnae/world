@@ -90,7 +90,7 @@ def search-replace-recursively [pattern replacement] {
 }
 
 def "from jwt" [] {
-    jwt-cli decode --json - | from json | convert-datetime "exp" | convert-datetime "iat" | convert-datetime "nbf"
+    jwt decode --json - | from json | convert-datetime "exp" | convert-datetime "iat" | convert-datetime "nbf"
 }
 
 def "convert-datetime" [field: string] {
