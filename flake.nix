@@ -72,7 +72,7 @@
     pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-    river.url = "git+https://github.com/riverwm/river?submodules=1&rev=ac655593f3113ca1d94d27c5845f0406bf495c9a";
+    river.url = "git+https://codeberg.org/river/river?submodules=1";
     river.flake = false;
   };
 
