@@ -12,6 +12,7 @@
   };
 
   imports = [
+    ../../profiles/acme.nix
     ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
     ../../profiles/disk/bcachefs-on-luks.nix
@@ -204,6 +205,8 @@
       file = ../../secrets/cloudflare-tunnel-9k.age;
       owner = "cloudflared";
     };
+
+    cloudflare-env.file = ../../secrets/cloudflare-env.age;
     vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
   };
 
