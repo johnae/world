@@ -15,7 +15,7 @@ in {
     ./rbw.nix
     ./ssh.nix
     ./starship.nix
-    ./wezterm/default.nix
+    #    ./wezterm/default.nix
     ./zellij.nix
   ];
 
@@ -44,8 +44,8 @@ in {
     kustomize
     lm_sensors
     nix-index
-    rnix-lsp
-    wezterm
+    nil
+    # wezterm
   ];
 
   xdg.enable = true;

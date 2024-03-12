@@ -810,16 +810,16 @@
     "river": {
       "flake": false,
       "locked": {
-        "lastModified": 1709896862,
-        "narHash": "sha256-Hm8FyG8EX7G8GKnNZE/R12laooQJQdwtDJaWDVo5LGw=",
-        "ref": "refs/heads/master",
-        "rev": "4a65af667e59a703000d859e77098a4893b77fa6",
-        "revCount": 1166,
+        "lastModified": 1709988456,
+        "narHash": "sha256-hVt7FRJ04Z04406wnsvLhH8fRxzLa2RVFhzOM5pQSQo=",
+        "rev": "ac655593f3113ca1d94d27c5845f0406bf495c9a",
+        "revCount": 1167,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/riverwm/river"
       },
       "original": {
+        "rev": "ac655593f3113ca1d94d27c5845f0406bf495c9a",
         "submodules": true,
         "type": "git",
         "url": "https://github.com/riverwm/river"
@@ -849,8 +849,7 @@
         "nur": "nur",
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks",
-        "river": "river",
-        "wezterm": "wezterm"
+        "river": "river"
       }
     },
     "rust-analyzer-src": {
@@ -938,25 +937,6 @@
         "owner": "nix-systems",
         "repo": "default-linux",
         "type": "github"
-      }
-    },
-    "wezterm": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1700259065,
-        "narHash": "sha256-iwIiGRHgf2uBf2ueIzdxDtQW9Z7Gf0gXdb+0RIOH+Qo=",
-        "ref": "refs/heads/main",
-        "rev": "600652583594e9f6195a6427d1fabb09068622a7",
-        "revCount": 7516,
-        "submodules": true,
-        "type": "git",
-        "url": "https://github.com/wez/wezterm/"
-      },
-      "original": {
-        "rev": "600652583594e9f6195a6427d1fabb09068622a7",
-        "submodules": true,
-        "type": "git",
-        "url": "https://github.com/wez/wezterm/"
       }
     },
     "wlroots": {
