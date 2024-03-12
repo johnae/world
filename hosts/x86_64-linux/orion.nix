@@ -112,6 +112,18 @@
     };
   };
 
+  security.acme.certs = {
+    "bw.ill.dev" = {
+      webroot = "/var/lib/acme/acme-challenge/";
+    };
+  };
+
+  environment.persistence."/keep" = {
+    directories = [
+      "/var/lib/acme"
+    ];
+  };
+
   services.my-matrix = {
     enable = true;
     server_name = "9000.dev";
