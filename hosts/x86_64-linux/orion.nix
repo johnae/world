@@ -123,11 +123,6 @@
     ];
   };
 
-  services.my-matrix = {
-    enable = true;
-    server_name = "9000.dev";
-  };
-
   services.vaultwarden = {
     enable = true;
     environmentFile = "/run/agenix/vaultwarden-env";
