@@ -103,6 +103,7 @@
         useACMEHost = "bw.9000.dev";
         locations."/".proxyPass = "http://localhost:8222";
         locations."/".proxyWebsockets = true;
+        forceSSL = true;
       };
     };
   };
