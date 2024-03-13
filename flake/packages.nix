@@ -44,7 +44,6 @@
         };
         inherit
           (inputs.hyprland.packages.${system})
-          hyprland-unwrapped
           hyprland-debug
           xdg-desktop-portal-hyprland
           hyprland-protocols
