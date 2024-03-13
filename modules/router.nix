@@ -5,18 +5,19 @@
 }: let
   inherit
     (lib)
-    mkIf
-    splitString
-    mkOption
-    mkEnableOption
+    flatten
     mapAttrsToList
+    mkEnableOption
+    mkIf
+    mkOption
+    splitString
     ;
   inherit
     (builtins)
-    head
-    tail
     attrNames
+    head
     mapAttrs
+    tail
     ;
 
   cfg = config.services.jae.router;
@@ -42,9 +43,21 @@
 in {
   options.services.jae.router = with lib.types; {
     enable = mkEnableOption "Whether to enable the router";
+    #disableDns = mkEnableOption "Whether to disable dns server";
+    useNextDns = mkEnableOption "Whether to use nextdns DoH for name resolution";
+    nextDnsEnvFile = mkOption {
+      type = nullOr str;
+      example = "/path/to/envfile";
+      default = null;
+    };
     upstreamDnsServers = mkOption {
       type = listOf str;
       description = "List of upstream dns server addresses.";
+    };
+    restrictedMacs = mkOption {
+      type = listOf str;
+      description = "List of mac addresses.";
+      default = [];
     };
     dnsMasqSettings = mkOption {
       type = attrsOf anything;
@@ -95,15 +108,28 @@ in {
     services.dnsmasq.settings =
       {
         dhcp-range = mapAttrsToList (tag: net: "${tag},${net.base}.10,${net.base}.128,255.255.255.0,24h") internalInterfaces;
-        dhcp-option = mapAttrsToList (tag: net: "${tag},option:router,${net.address}") internalInterfaces;
+        dhcp-option = (mapAttrsToList (tag: net: "${tag},option:router,${net.address}") internalInterfaces) ++ ["option:dns-server,${cfg.internalInterfaceIP}"];
         interface = internalInterfaceNames;
       }
       // {
-        server = cfg.upstreamDnsServers;
+        server = mkIf (!cfg.useNextDns) cfg.upstreamDnsServers;
+        # server = mkMerge [
+        #   (mkIf (!cfg.useNextDns) cfg.upstreamDnsServers)
+        #   (mkIf cfg.useNextDns ["127.0.0.1#5555"])
+        # ];
         dhcp-authoritative = true;
         dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
+        add-mac = "text";
+        add-subnet = "32,128";
+        port = 5342;
       }
       // cfg.dnsMasqSettings;
+
+    services.nextdns.enable = cfg.useNextDns;
+    services.nextdns.arguments = (flatten (map (mac: ["-profile" "${mac}=\${KIDSDNS_ID}"]) cfg.restrictedMacs)) ++ ["-profile" "${cfg.internalInterfaceIP}/24=\${NEXTDNS_ID}" "-cache-size" "10MB" "-discovery-dns" "127.0.0.1:5342" "-report-client-info" "-listen" "${cfg.internalInterfaceIP}:53"];
+    systemd.services.nextdns = mkIf cfg.useNextDns {
+      serviceConfig.EnvironmentFile = cfg.nextDnsEnvFile;
+    };
 
     boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = true;
     boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
