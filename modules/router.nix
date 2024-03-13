@@ -6,6 +6,7 @@
   inherit
     (lib)
     mkIf
+    mkMerge
     splitString
     mkOption
     mkEnableOption
@@ -42,6 +43,13 @@
 in {
   options.services.jae.router = with lib.types; {
     enable = mkEnableOption "Whether to enable the router";
+    #disableDns = mkEnableOption "Whether to disable dns server";
+    useNextDns = mkEnableOption "Whether to use nextdns DoH for name resolution";
+    nextDnsEnvFile = mkOption {
+      type = nullOr str;
+      example = "/path/to/envfile";
+      default = null;
+    };
     upstreamDnsServers = mkOption {
       type = listOf str;
       description = "List of upstream dns server addresses.";
@@ -99,11 +107,22 @@ in {
         interface = internalInterfaceNames;
       }
       // {
-        server = cfg.upstreamDnsServers;
+        server = mkMerge [
+          (mkIf (!cfg.useNextDns) cfg.upstreamDnsServers)
+          (mkIf cfg.useNextDns ["127.0.0.1:5555"])
+        ];
         dhcp-authoritative = true;
         dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
+        add-mac = true;
+        add-subnet = "32,128";
       }
       // cfg.dnsMasqSettings;
+
+    services.nextdns.enable = cfg.useNextDns;
+    services.nextdns.arguments = ["-profile" "${cfg.internalInterfaceIP}/24=$NEXTDNS_ID" "-cache-size" "10MB" "-listen" "127.0.0.1:5555"];
+    systemd.services.nextdns = mkIf cfg.useNextDns {
+      serviceConfig.EnvironmentFile = cfg.nextDnsEnvFile;
+    };
 
     boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = true;
     boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;

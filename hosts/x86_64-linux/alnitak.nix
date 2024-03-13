@@ -45,6 +45,9 @@
 
   services.jae.router = {
     enable = true;
+    useNextDns = true;
+    nextDnsEnvFile = "/var/run/agenix/nextdns";
+    #disableDns = true; ## for nextdns
     upstreamDnsServers = [
       "2a07:a8c1::"
       "45.90.30.0"
@@ -57,13 +60,15 @@
     dnsMasqSettings.no-resolv = true;
     dnsMasqSettings.bogus-priv = true;
     dnsMasqSettings.strict-order = true;
-    dnsMasqSettings.add-cpe-id = "a5472c";
   };
 
   age.secrets = {
     ts-google-9k = {
       file = ../../secrets/ts-google-9k.age;
       owner = "1337";
+    };
+    nextdns = {
+      file = ../../secrets/nextdns.age;
     };
   };
 
