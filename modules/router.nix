@@ -119,7 +119,7 @@ in {
         ];
         dhcp-authoritative = true;
         dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
-        add-mac = true;
+        add-mac = "text";
         add-subnet = "32,128";
       }
       // cfg.dnsMasqSettings;
