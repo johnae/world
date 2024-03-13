@@ -98,9 +98,17 @@
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     clientMaxBodySize = "300m";
-    virtualHosts."bw.9000.dev" = {
-      locations."/".proxyPass = "http://localhost:8222";
-      locations."/".proxyWebsockets = true;
+    virtualHosts = {
+      "bw.9000.dev" = {
+        locations."/".proxyPass = "http://localhost:8222";
+        locations."/".proxyWebsockets = true;
+      };
+      "bw.ill.dev" = {
+        useACMEHost = "bw.ill.dev";
+        forceSSL = true;
+        locations."/".proxyPass = "http://localhost:8222";
+        locations."/".proxyWebsockets = true;
+      };
     };
   };
 
