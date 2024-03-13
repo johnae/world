@@ -5,19 +5,20 @@
 }: let
   inherit
     (lib)
+    flatten
+    mapAttrsToList
+    mkEnableOption
     mkIf
     mkMerge
-    splitString
     mkOption
-    mkEnableOption
-    mapAttrsToList
+    splitString
     ;
   inherit
     (builtins)
-    head
-    tail
     attrNames
+    head
     mapAttrs
+    tail
     ;
 
   cfg = config.services.jae.router;
@@ -53,6 +54,11 @@ in {
     upstreamDnsServers = mkOption {
       type = listOf str;
       description = "List of upstream dns server addresses.";
+    };
+    restrictedMacs = mkOption {
+      type = listOf str;
+      description = "List of mac addresses.";
+      default = [];
     };
     dnsMasqSettings = mkOption {
       type = attrsOf anything;
@@ -119,7 +125,7 @@ in {
       // cfg.dnsMasqSettings;
 
     services.nextdns.enable = cfg.useNextDns;
-    services.nextdns.arguments = ["-profile" "${cfg.internalInterfaceIP}/24=\${NEXTDNS_ID}" "-cache-size" "10MB" "-listen" "127.0.0.1:5555"];
+    services.nextdns.arguments = ["-profile" "${cfg.internalInterfaceIP}/24=\${NEXTDNS_ID}" "-cache-size" "10MB" "-listen" "127.0.0.1:5555"] ++ (flatten (map (mac: ["-profile" "${mac}=\${KIDSDNS_ID}"]) cfg.restrictedMacs));
     systemd.services.nextdns = mkIf cfg.useNextDns {
       serviceConfig.EnvironmentFile = cfg.nextDnsEnvFile;
     };
