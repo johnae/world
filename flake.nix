@@ -45,11 +45,6 @@
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland.url = "github:hyprwm/Hyprland";
     impermanence.url = "github:nix-community/impermanence";
-    matrix-conduit.inputs.crane.follows = "crane";
-    matrix-conduit.inputs.fenix.follows = "fenix";
-    matrix-conduit.inputs.flake-utils.follows = "flake-utils";
-    matrix-conduit.inputs.nixpkgs.follows = "nixpkgs";
-    matrix-conduit.url = "gitlab:famedly/conduit";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
     nix2container.inputs.flake-utils.follows = "flake-utils";
     nix2container.inputs.nixpkgs.follows = "nixpkgs";
@@ -72,7 +67,7 @@
     pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-    river.url = "git+https://github.com/riverwm/river?submodules=1&rev=ac655593f3113ca1d94d27c5845f0406bf495c9a";
+    river.url = "git+https://codeberg.org/river/river?submodules=1";
     river.flake = false;
   };
 

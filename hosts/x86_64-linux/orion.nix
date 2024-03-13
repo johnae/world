@@ -12,6 +12,7 @@
   };
 
   imports = [
+    ../../profiles/acme.nix
     ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
     ../../profiles/disk/bcachefs-on-luks.nix
@@ -85,7 +86,7 @@
     args.advertise-tags = ["tag:server"];
     args.ssh = true;
     args.accept-routes = false;
-    args.accept-dns = false;
+    args.accept-dns = true;
     args.advertise-exit-node = true;
     args.auth-key = "file:/var/run/agenix/ts-google-9k";
   };
@@ -97,24 +98,41 @@
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     clientMaxBodySize = "300m";
-    virtualHosts."bw.9000.dev" = {
-      locations."/".proxyPass = "http://localhost:8222";
-      locations."/".proxyWebsockets = true;
+    virtualHosts = {
+      "bw.9000.dev" = {
+        useACMEHost = "bw.9000.dev";
+        locations."/".proxyPass = "http://localhost:8222";
+        locations."/".proxyWebsockets = true;
+        forceSSL = true;
+      };
     };
   };
 
-  services.my-cloudflared = {
-    enable = true;
-    tunnels."9000-tunnel" = {
-      credentialsFile = "/run/agenix/cloudflare-tunnel-9k";
-      default = "http://localhost";
-      originRequest.noTLSVerify = true;
+  # services.my-cloudflared = {
+  #   enable = true;
+  #   tunnels."9000-tunnel" = {
+  #     credentialsFile = "/run/agenix/cloudflare-tunnel-9k";
+  #     default = "http://localhost";
+  #     originRequest.noTLSVerify = true;
+  #   };
+  # };
+
+  security.acme.certs = {
+    "bw.ill.dev" = {
+      group = "nginx";
+    };
+    "bw.9000.dev" = {
+      group = "nginx";
+    };
+    "bw.johnae.dev" = {
+      group = "nginx";
     };
   };
 
-  services.my-matrix = {
-    enable = true;
-    server_name = "9000.dev";
+  environment.persistence."/keep" = {
+    directories = [
+      "/var/lib/acme"
+    ];
   };
 
   services.vaultwarden = {
@@ -190,8 +208,10 @@
 
     cloudflare-tunnel-9k = {
       file = ../../secrets/cloudflare-tunnel-9k.age;
-      owner = "cloudflared";
+      # owner = "cloudflared";
     };
+
+    cloudflare-env.file = ../../secrets/cloudflare-env.age;
     vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
   };
 
