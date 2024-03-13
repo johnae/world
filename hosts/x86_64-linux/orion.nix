@@ -207,7 +207,7 @@
 
     cloudflare-tunnel-9k = {
       file = ../../secrets/cloudflare-tunnel-9k.age;
-      owner = "cloudflared";
+      # owner = "cloudflared";
     };
 
     cloudflare-env.file = ../../secrets/cloudflare-env.age;
