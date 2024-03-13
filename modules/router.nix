@@ -109,7 +109,7 @@ in {
       // {
         server = mkMerge [
           (mkIf (!cfg.useNextDns) cfg.upstreamDnsServers)
-          (mkIf cfg.useNextDns ["127.0.0.1:5555"])
+          (mkIf cfg.useNextDns ["127.0.0.1#5555"])
         ];
         dhcp-authoritative = true;
         dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
