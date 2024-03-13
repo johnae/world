@@ -122,9 +122,15 @@
   };
 
   security.acme.certs = {
-    "bw.ill.dev" = {};
-    "bw.9000.dev" = {};
-    "bw.johnae.dev" = {};
+    "bw.ill.dev" = {
+      group = "nginx";
+    };
+    "bw.9000.dev" = {
+      group = "nginx";
+    };
+    "bw.johnae.dev" = {
+      group = "nginx";
+    };
   };
 
   environment.persistence."/keep" = {
