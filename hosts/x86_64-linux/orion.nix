@@ -100,26 +100,21 @@
     clientMaxBodySize = "300m";
     virtualHosts = {
       "bw.9000.dev" = {
-        locations."/".proxyPass = "http://localhost:8222";
-        locations."/".proxyWebsockets = true;
-      };
-      "bw.ill.dev" = {
-        useACMEHost = "bw.ill.dev";
-        forceSSL = true;
+        useACMEHost = "bw.9000.dev";
         locations."/".proxyPass = "http://localhost:8222";
         locations."/".proxyWebsockets = true;
       };
     };
   };
 
-  services.my-cloudflared = {
-    enable = true;
-    tunnels."9000-tunnel" = {
-      credentialsFile = "/run/agenix/cloudflare-tunnel-9k";
-      default = "http://localhost";
-      originRequest.noTLSVerify = true;
-    };
-  };
+  # services.my-cloudflared = {
+  #   enable = true;
+  #   tunnels."9000-tunnel" = {
+  #     credentialsFile = "/run/agenix/cloudflare-tunnel-9k";
+  #     default = "http://localhost";
+  #     originRequest.noTLSVerify = true;
+  #   };
+  # };
 
   security.acme.certs = {
     "bw.ill.dev" = {
