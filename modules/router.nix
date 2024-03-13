@@ -119,7 +119,7 @@ in {
       // cfg.dnsMasqSettings;
 
     services.nextdns.enable = cfg.useNextDns;
-    services.nextdns.arguments = ["-profile" "${cfg.internalInterfaceIP}/24=$NEXTDNS_ID" "-cache-size" "10MB" "-listen" "127.0.0.1:5555"];
+    services.nextdns.arguments = ["-profile" "${cfg.internalInterfaceIP}/24=\${NEXTDNS_ID}" "-cache-size" "10MB" "-listen" "127.0.0.1:5555"];
     systemd.services.nextdns = mkIf cfg.useNextDns {
       serviceConfig.EnvironmentFile = cfg.nextDnsEnvFile;
     };
