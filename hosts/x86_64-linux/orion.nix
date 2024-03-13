@@ -115,6 +115,8 @@
 
   security.acme.certs = {
     "bw.ill.dev" = {};
+    "bw.9000.dev" = {};
+    "bw.johnae.dev" = {};
   };
 
   environment.persistence."/keep" = {
