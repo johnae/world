@@ -45,11 +45,6 @@
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland.url = "github:hyprwm/Hyprland";
     impermanence.url = "github:nix-community/impermanence";
-    matrix-conduit.inputs.crane.follows = "crane";
-    matrix-conduit.inputs.fenix.follows = "fenix";
-    matrix-conduit.inputs.flake-utils.follows = "flake-utils";
-    matrix-conduit.inputs.nixpkgs.follows = "nixpkgs";
-    matrix-conduit.url = "gitlab:famedly/conduit";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
     nix2container.inputs.flake-utils.follows = "flake-utils";
     nix2container.inputs.nixpkgs.follows = "nixpkgs";
