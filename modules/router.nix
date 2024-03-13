@@ -9,7 +9,6 @@
     mapAttrsToList
     mkEnableOption
     mkIf
-    mkMerge
     mkOption
     splitString
     ;
@@ -109,7 +108,7 @@ in {
     services.dnsmasq.settings =
       {
         dhcp-range = mapAttrsToList (tag: net: "${tag},${net.base}.10,${net.base}.128,255.255.255.0,24h") internalInterfaces;
-        dhcp-option = mapAttrsToList (tag: net: "${tag},option:router,${net.address}") internalInterfaces;
+        dhcp-option = (mapAttrsToList (tag: net: "${tag},option:router,${net.address}") internalInterfaces) ++ ["option:dns-server,${cfg.internalInterfaceIP}"];
         interface = internalInterfaceNames;
       }
       // {
