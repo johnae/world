@@ -9,11 +9,17 @@
       ${pkgs.nodejs}/bin/node ${inputs.copilot-vim}/dist/agent.js "''$@"
     '';
   };
+  helix-copilot = pkgs.writeShellApplication {
+    name = "hx";
+    runtimeInputs = [copilot];
+    text = ''
+      ${pkgs.helix-latest}/bin/hx -a "''$@"
+    '';
+  };
 in {
-  home.packages = [ copilot ];
   programs.helix = {
     enable = true;
-    package = pkgs.helix-latest;
+    package = helix-copilot;
     settings = {
       theme = "nord";
 
