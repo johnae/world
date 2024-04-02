@@ -47,6 +47,11 @@
     wifi-networks = {
       file = ../../secrets/wifi-networks.age;
     };
+    copilot-token = {
+      file = ../../secrets/gh_copilot.age;
+      owner = "${toString adminUser.uid}";
+      path = "/home/${adminUser.name}/.config/github-copilot/hosts.json";
+    };
     id_ed25519_agenda_updater = {
       file = ../../secrets/id_ed25519_agenda_updater.age;
       owner = "${toString adminUser.uid}";
