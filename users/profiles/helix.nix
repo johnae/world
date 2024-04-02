@@ -6,14 +6,14 @@
   copilot = pkgs.writeShellApplication {
     name = "copilot";
     text = ''
-      ${pkgs.nodejs}/bin/node ${inputs.copilot-vim}/dist/agent.js "''$@"
+      exec ${pkgs.nodejs}/bin/node ${inputs.copilot-vim}/dist/agent.js "''$@"
     '';
   };
   helix-copilot = pkgs.writeShellApplication {
     name = "hx";
     runtimeInputs = [copilot];
     text = ''
-      ${pkgs.helix-latest}/bin/hx -a "''$@"
+      exec ${pkgs.helix-latest}/bin/hx -a "''$@"
     '';
   };
 in {
