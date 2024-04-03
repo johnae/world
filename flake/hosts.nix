@@ -46,6 +46,7 @@
     inputs.impermanence.nixosModules.impermanence
     inputs.home-manager.nixosModules.home-manager
     inputs.agenix.nixosModules.age
+    inputs.disko.nixosModules.disko
     ../modules/default.nix
   ];
   nixosConfigurations = mapAttrs' (
