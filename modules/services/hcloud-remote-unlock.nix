@@ -11,7 +11,8 @@
     name = "hcloud-unlock-all";
     runtimeInputs = [pkgs.hcloud pkgs.gawk pkgs.openssh pkgs.bash];
     text = ''
-      export HCLOUD_TOKEN=$(cat "$1")
+      HCLOUD_TOKEN=$(cat "$1")
+      export HCLOUD_TOKEN
       for server in $(hcloud server list -o noheader | awk '{print $4}'); do
         echo "Probing host $server on port 22"
         if timeout 5 bash -c "</dev/tcp/$server/22"; then
@@ -21,7 +22,7 @@
         echo "No response on port 22, probing host $server on port 2222"
         if timeout 5 bash -c "</dev/tcp/$server/2222"; then
           echo "Host $server is waiting for unlock - unlocking"
-          ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i /home/john/.ssh/id_ed25519_alt -p 2222 "root@$server" < "$1"
+          ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i /home/john/.ssh/id_ed25519_alt -p 2222 "root@$server" < "$2"
         else
           echo "Host $server is down, retry later"
         fi
@@ -58,7 +59,7 @@ in {
       wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${hcloud-unlock-all}/bin/hcloud-unlock-all ${cfg.hcloudTokenFile}";
+        ExecStart = "${hcloud-unlock-all}/bin/hcloud-unlock-all ${cfg.hcloudTokenFile} ${cfg.diskpasswordFile}";
       };
     };
   };
