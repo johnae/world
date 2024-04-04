@@ -56,7 +56,6 @@ resource "hcloud_server" "master" {
   location    = "hel1"
   labels = local.labels
   ssh_keys    = [hcloud_ssh_key.default.id]
-  depends_on = [hcloud_server.master-0]
   user_data = <<-EOF
   if [ -e /etc/generated-hostname ]; then
     exit 0
@@ -73,7 +72,6 @@ resource "hcloud_server" "agent" {
   location    = "hel1"
   labels = local.labels
   ssh_keys    = [hcloud_ssh_key.default.id]
-  depends_on = [hcloud_server.master-0]
   user_data = <<-EOF
   if [ -e /etc/generated-hostname ]; then
     exit 0
