@@ -74,6 +74,10 @@
       file = ../../secrets/ts-google-9k.age;
       owner = "${toString adminUser.uid}";
     };
+    hcloud-token = {
+      file = ../../secrets/hcloud-token.age;
+      owner = "${toString adminUser.uid}";
+    };
   };
 
   services.syncthing = {
@@ -126,6 +130,11 @@
       passwordFile = "/run/agenix/remote-disk-password";
     }
   ];
+
+  services.hcloud-remote-unlock-all = {
+    enable = true;
+    hcloudTokenFile = "/run/agenix/hcloud-token";
+  };
 
   home-manager = {
     users.${adminUser.name} = {
