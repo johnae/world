@@ -15,7 +15,7 @@ in {
       hostKeys = [
         "/etc/ssh/initrd_ed25519_key"
       ];
-      authorizedKeys = rootKeys;
+      authorizedKeys = rootKeys ++ ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+trOinD68RD1efI6p05HeaNA0SjzeRnUvpf22+jsq+"];
     };
   };
 }
