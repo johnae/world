@@ -374,6 +374,18 @@
         "type": "github"
       }
     },
+    "fluxcd-install": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-4S+yEDmWcJ86/Ruq8Z2mKrANh7gkdYdPe0x7NOE3Awk=",
+        "type": "file",
+        "url": "https://github.com/fluxcd/flux2/releases/download/v2.2.3/install.yaml"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/fluxcd/flux2/releases/download/v2.2.3/install.yaml"
+      }
+    },
     "gitignore": {
       "inputs": {
         "nixpkgs": [
@@ -444,6 +456,18 @@
         "ref": "copilot",
         "repo": "helix",
         "type": "github"
+      }
+    },
+    "hetzner-csi-driver": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-qAVkWR3xUrOgKDzngu9bgD8hZEdtsKEMPSM+Xh9ghwI=",
+        "type": "file",
+        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.6.0/deploy/kubernetes/hcloud-csi.yml"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.6.0/deploy/kubernetes/hcloud-csi.yml"
       }
     },
     "home-manager": {
@@ -603,6 +627,22 @@
       "original": {
         "owner": "nix-community",
         "repo": "impermanence",
+        "type": "github"
+      }
+    },
+    "kured": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1711661327,
+        "narHash": "sha256-xuTFA42ftJeiS2WpVKud9vR8qFivBDI/HFyK+Wdwd7o=",
+        "owner": "kubereboot",
+        "repo": "kured",
+        "rev": "6b7161aa923427dfdb26ea8acea33e0ed091dee9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kubereboot",
+        "repo": "kured",
         "type": "github"
       }
     },
@@ -1048,10 +1088,13 @@
         "flake-compat": "flake-compat_5",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils_3",
+        "fluxcd-install": "fluxcd-install",
         "helix": "helix",
+        "hetzner-csi-driver": "hetzner-csi-driver",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "impermanence": "impermanence",
+        "kured": "kured",
         "mk-shell-bin": "mk-shell-bin",
         "nix2container": "nix2container",
         "nixos-generators": "nixos-generators",

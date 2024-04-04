@@ -7,32 +7,26 @@ in {
 
   imports = [
     ../../profiles/hcloud.nix
+    ../../profiles/hcloud-k3s-master.nix
+    ../../profiles/hcloud-remote-unlock.nix
     ../../profiles/disk/disko-basic.nix
     ../../profiles/tailscale.nix
     ../../profiles/zram.nix
   ];
 
-  boot.kernelParams = [
-    "ip=:::::eth0:dhcp"
-  ];
-
-  boot.initrd.network = {
-    enable = true;
-    postCommands = "echo 'cryptsetup-askpass' >> /root/.profile";
-    flushBeforeStage2 = true;
-    ssh = {
-      enable = true;
-      port = 2222;
-      hostKeys = [
-        "/etc/ssh/initrd_ed25519_key"
-      ];
-      authorizedKeys = authkeys;
-    };
-  };
+  services.k3s.settings.cluster-init = true;
+  services.k3s.settings.node-name = "\"$(cat /etc/generated-hostname)\"";
 
   age.secrets = {
-    ts-google-9k-hcloud = {
-      file = ../../secrets/ts-google-9k-hcloud.age;
+    ts-google-9k-hcloud.file = ../../secrets/ts-google-9k-hcloud.age;
+    k3s-token.file = ../../secrets/k3s/token.age;
+    hetzner-csi-encryption-secret = {
+      file = ../../secrets/k3s/hetzner-csi-encryption-secret.yaml.age;
+      path = "/var/lib/rancher/k3s/server/manifests/hetzner-csi-encryption-secret.yaml";
+    };
+    hetzner-api-secret = {
+      file = ../../secrets/k3s/hetzner-api-secret.yaml.age;
+      path = "/var/lib/rancher/k3s/server/manifests/hetzner-api-secret.yaml";
     };
   };
 
@@ -44,6 +38,7 @@ in {
     args.accept-dns = true;
     args.advertise-exit-node = true;
     args.auth-key = "file:/var/run/agenix/ts-google-9k-hcloud";
+    args.hostname = "\"$(cat /etc/generated-hostname)\"";
   };
 
   users.users.root.openssh.authorizedKeys.keys = authkeys;

@@ -38,15 +38,21 @@
     flake-compat.flake = false;
     flake-compat.url = "github:edolstra/flake-compat";
     flake-utils.url = "github:numtide/flake-utils";
+    fluxcd-install.flake = false;
+    fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v2.2.3/install.yaml"; # gh-release-update
     helix.inputs.crane.follows = "crane";
     helix.inputs.flake-utils.follows = "flake-utils";
     helix.inputs.nixpkgs.follows = "nixpkgs";
     helix.url = "github:johnae/helix/copilot"; ## copilot support
+    hetzner-csi-driver.flake = false;
+    hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.6.0/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland.url = "github:hyprwm/Hyprland";
     impermanence.url = "github:nix-community/impermanence";
+    kured.flake = false;
+    kured.url = "github:kubereboot/kured";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
     nix2container.inputs.flake-utils.follows = "flake-utils";
     nix2container.inputs.nixpkgs.follows = "nixpkgs";
@@ -80,6 +86,7 @@
         ./flake/github-actions.nix
         ./flake/helper-packages.nix
         ./flake/hosts.nix
+        ./flake/kubernetes.nix
         ./flake/packages.nix
         ./flake/setup.nix
       ];

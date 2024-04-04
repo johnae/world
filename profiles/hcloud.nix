@@ -67,6 +67,7 @@ in {
   in {
     description = "Hetzner Cloud Init";
     after = ["network.target"];
+    before = ["tailscale-auth.service" "tailscaled.service"];
     wantedBy = ["multi-user.target"];
     serviceConfig = {
       Type = "oneshot";

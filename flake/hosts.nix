@@ -59,6 +59,7 @@
           inherit system;
           specialArgs = {
             hostName = name;
+            tailnet = "tail68e9c";
             adminUser = {
               name = "john";
               uid = 1337;

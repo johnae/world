@@ -106,7 +106,7 @@ in {
     systemd.services.k3s = let
       k3s = pkgs.writeShellApplication {
         name = "k3s";
-        runtimeInputs = with pkgs; [getIfaceIp];
+        runtimeInputs = with pkgs; [getIfaceIp gawk];
         text =
           concatStringsSep " "
           ([
