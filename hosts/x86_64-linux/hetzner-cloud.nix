@@ -8,7 +8,6 @@ in {
   imports = [
     ../../profiles/hcloud.nix
     ../../profiles/disk/disko-basic.nix
-    ../../profiles/server.nix
     ../../profiles/tailscale.nix
     ../../profiles/zram.nix
   ];
