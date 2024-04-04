@@ -11,6 +11,7 @@
     name = "hcloud-unlock-all";
     runtimeInputs = [pkgs.hcloud pkgs.gawk pkgs.openssh pkgs.bash];
     text = ''
+      export HCLOUD_TOKEN=$(cat "$1")
       for server in $(hcloud server list -o noheader | awk '{print $4}'); do
         echo "Probing host $server on port 22"
         if timeout 5 bash -c "</dev/tcp/$server/22"; then
@@ -30,6 +31,11 @@
 in {
   options.services.hcloud-remote-unlock-all = {
     enable = mkEnableOption "remote unlock all disks on all hcloud servers";
+    diskpasswordFile = mkOption {
+      type = str;
+      example = "/path/to/diskpassword-file";
+      description = "The disk password file";
+    };
     hcloudTokenFile = mkOption {
       type = str;
       example = "/path/to/token-file";
