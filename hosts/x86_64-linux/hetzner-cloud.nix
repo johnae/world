@@ -1,53 +1,51 @@
-{
-  modulesPath,
-  pkgs,
-  lib,
-  ...
-}: {
-  imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-    (modulesPath + "/profiles/qemu-guest.nix")
-    ../../profiles/disk/disko-basic.nix
-  ];
-  boot.loader.grub = {
-    # no need to set devices, disko will add all devices that have a EF02 partition to the list already
-    # devices = [ ];
-    efiSupport = true;
-    efiInstallAsRemovable = true;
-  };
-  services.openssh.enable = true;
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  nix = {
-    settings.trusted-users = ["root"];
-    extraOptions = ''
-      experimental-features = nix-command flakes
-      keep-outputs = true
-      keep-derivations = true
-      tarball-ttl = 900
-    '';
-  };
-
-  networking.usePredictableInterfaceNames = false;
-  networking.dhcpcd.enable = false;
-  networking.useDHCP = false;
-  networking.useNetworkd = true;
-  systemd.network.enable = true;
-  systemd.network.networks."eth0" = {
-    matchConfig.Name = "eth0";
-    networkConfig.DHCP = "ipv4";
-  };
-
-  environment.systemPackages = map lib.lowPrio [
-    pkgs.curl
-    pkgs.gitMinimal
-  ];
-
-  users.users.root.openssh.authorizedKeys.keys = [
-    # change this to your ssh key
+{...}: let
+  authkeys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzm5RyD+1nfy1LquvkEog4SZtPgdhzjr49jSC8PAinp"
   ];
+in {
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN3wV0xe1C2JtwQHwHNL3yYnGsXPfnQAvElF37ux7qkc";
 
-  system.stateVersion = "23.11";
+  imports = [
+    ../../profiles/hcloud.nix
+    ../../profiles/disk/disko-basic.nix
+    ../../profiles/server.nix
+    ../../profiles/tailscale.nix
+    ../../profiles/zram.nix
+  ];
+
+  boot.kernelParams = [
+    "ip=:::::eth0:dhcp"
+  ];
+
+  boot.initrd.network = {
+    enable = true;
+    postCommands = "echo 'cryptsetup-askpass' >> /root/.profile";
+    flushBeforeStage2 = true;
+    ssh = {
+      enable = true;
+      port = 2222;
+      hostKeys = [
+        "/etc/ssh/initrd_ed25519_key"
+      ];
+      authorizedKeys = authkeys;
+    };
+  };
+
+  age.secrets = {
+    ts-google-9k-hcloud = {
+      file = ../../secrets/ts-google-9k-hcloud.age;
+    };
+  };
+
+  services.tailscale.auth = {
+    enable = true;
+    args.advertise-tags = ["tag:server" "tag:hcloud"];
+    args.ssh = true;
+    args.accept-routes = false;
+    args.accept-dns = true;
+    args.advertise-exit-node = true;
+    args.auth-key = "file:/var/run/agenix/ts-google-9k-hcloud";
+  };
+
+  users.users.root.openssh.authorizedKeys.keys = authkeys;
 }

@@ -22,30 +22,18 @@
               mountpoint = "/boot";
             };
           };
-          root = {
-            name = "root";
+          luks = {
             size = "100%";
             content = {
-              type = "lvm_pv";
-              vg = "pool";
-            };
-          };
-        };
-      };
-    };
-    lvm_vg = {
-      pool = {
-        type = "lvm_vg";
-        lvs = {
-          root = {
-            size = "100%FREE";
-            content = {
-              type = "filesystem";
-              format = "ext4";
-              mountpoint = "/";
-              mountOptions = [
-                "defaults"
-              ];
+              type = "luks";
+              name = "encrypted";
+              settings.allowDiscards = true;
+              passwordFile = "/tmp/disk.key";
+              content = {
+                type = "filesystem";
+                format = "ext4";
+                mountpoint = "/";
+              };
             };
           };
         };
