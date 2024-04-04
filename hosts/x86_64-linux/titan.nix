@@ -136,6 +136,7 @@
     enable = true;
     hcloudTokenFile = "/run/agenix/hcloud-token";
     diskpasswordFile = "/run/agenix/remote-cloud-disk-password";
+    identityFile = "/run/agenix/id_ed25519_remote_unlock";
   };
 
   home-manager = {

@@ -22,7 +22,7 @@
         echo "No response on port 22, probing host $server on port 2222"
         if timeout 5 bash -c "</dev/tcp/$server/2222"; then
           echo "Host $server is waiting for unlock - unlocking"
-          ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i /home/john/.ssh/id_ed25519_alt -p 2222 "root@$server" < "$2"
+          ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i "$3" -p 2222 "root@$server" < "$2"
         else
           echo "Host $server is down, retry later"
         fi
@@ -42,6 +42,11 @@ in {
       example = "/path/to/token-file";
       description = "The Hetzner Cloud API token";
     };
+    identityFile = mkOption {
+      type = str;
+      example = "/path/to/private-key";
+      description = "The SSH private key file";
+    };
   };
   config = mkIf cfg.enable {
     systemd.timers.hcloud-remote-unlock-all = {
@@ -59,7 +64,7 @@ in {
       wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${hcloud-unlock-all}/bin/hcloud-unlock-all ${cfg.hcloudTokenFile} ${cfg.diskpasswordFile}";
+        ExecStart = "${hcloud-unlock-all}/bin/hcloud-unlock-all ${cfg.hcloudTokenFile} ${cfg.diskpasswordFile} ${cfg.identityFile}";
       };
     };
   };
