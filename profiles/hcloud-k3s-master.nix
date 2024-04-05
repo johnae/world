@@ -72,7 +72,6 @@
           chart = {
             spec = {
               chart = "tailscale-operator";
-              version = "'6.5.*'";
               sourceRef = {
                 kind = "HelmRepository";
                 name = "tailscale";
