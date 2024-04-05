@@ -85,35 +85,35 @@
           };
         };
       };
-      tailscale-auth-proxy-cluster-role = {
-        apiVersion = "rbac.authorization.k8s.io/v1";
-        kind = "ClusterRole";
-        metadata.name = "tailscale-auth-proxy";
-        rules = [
-          {
-            apiGroups = [""];
-            resources = ["users" "groups"];
-            verbs = ["impersonate"];
-          }
-        ];
-      };
-      tailscale-auth-proxy-cluster-role-binding = {
-        apiVersion = "rbac.authorization.k8s.io/v1";
-        kind = "ClusterRoleBinding";
-        metadata.name = "tailscale-auth-proxy";
-        subjects = [
-          {
-            kind = "ServiceAccount";
-            name = "operator";
-            namespace = "tailscale";
-          }
-        ];
-        roleRef = {
-          kind = "ClusterRole";
-          name = "tailscale-auth-proxy";
-          apiGroup = "rbac.authorization.k8s.io";
-        };
-      };
+      # tailscale-auth-proxy-cluster-role = {
+      #   apiVersion = "rbac.authorization.k8s.io/v1";
+      #   kind = "ClusterRole";
+      #   metadata.name = "tailscale-auth-proxy";
+      #   rules = [
+      #     {
+      #       apiGroups = [""];
+      #       resources = ["users" "groups"];
+      #       verbs = ["impersonate"];
+      #     }
+      #   ];
+      # };
+      # tailscale-auth-proxy-cluster-role-binding = {
+      #   apiVersion = "rbac.authorization.k8s.io/v1";
+      #   kind = "ClusterRoleBinding";
+      #   metadata.name = "tailscale-auth-proxy";
+      #   subjects = [
+      #     {
+      #       kind = "ServiceAccount";
+      #       name = "operator";
+      #       namespace = "tailscale";
+      #     }
+      #   ];
+      #   roleRef = {
+      #     kind = "ClusterRole";
+      #     name = "tailscale-auth-proxy";
+      #     apiGroup = "rbac.authorization.k8s.io";
+      #   };
+      # };
     };
   };
 }
