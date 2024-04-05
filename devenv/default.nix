@@ -1,22 +1,8 @@
 {
   pkgs,
-  lib,
   ansiEscape,
   ...
-}: let
-  tofuProvider = provider:
-    provider.override (oldArgs: {
-      provider-source-address =
-        lib.replaceStrings
-        ["https://registry.terraform.io/providers"]
-        ["registry.opentofu.org"]
-        oldArgs.homepage;
-    });
-  tofuWithPlugins = pkgs.opentofu.withPlugins (
-    p:
-      map tofuProvider [p.null p.external p.hcloud p.cloudflare p.random]
-  );
-in {
+}: {
   name = "world";
 
   packages = with pkgs; [
