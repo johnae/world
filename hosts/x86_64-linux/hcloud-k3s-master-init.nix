@@ -25,6 +25,10 @@
   age.secrets = {
     ts-google-9k-hcloud.file = ../../secrets/ts-google-9k-hcloud.age;
     k3s-token.file = ../../secrets/k3s/token.age;
+    cluster-secrets = {
+      file = ../../secrets/k3s/cluster-secrets.yaml.age;
+      path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml";
+    };
     hetzner-csi-encryption-secret = {
       file = ../../secrets/k3s/hetzner-csi-encryption-secret.yaml.age;
       path = "/var/lib/rancher/k3s/server/manifests/hetzner-csi-encryption-secret.yaml";
