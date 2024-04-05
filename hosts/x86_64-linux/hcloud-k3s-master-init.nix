@@ -1,8 +1,4 @@
-{...}: let
-  authkeys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzm5RyD+1nfy1LquvkEog4SZtPgdhzjr49jSC8PAinp"
-  ];
-in {
+{
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN3wV0xe1C2JtwQHwHNL3yYnGsXPfnQAvElF37ux7qkc";
 
   imports = [
@@ -41,5 +37,7 @@ in {
     args.hostname = "\"$(cat /etc/generated-hostname)\"";
   };
 
-  users.users.root.openssh.authorizedKeys.keys = authkeys;
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzm5RyD+1nfy1LquvkEog4SZtPgdhzjr49jSC8PAinp"
+  ];
 }
