@@ -30,10 +30,10 @@
                     - /usr/bin/kured
                     - --reboot-command=/run/current-system/sw/bin/systemctl reboot
                     - --period=10m
-            tolerations:
-            - effect: NoExecute
-              key: CriticalAddonsOnly
-              operator: Exists
+        tolerations:
+        - effect: NoExecute
+          key: CriticalAddonsOnly
+          operator: Exists
         PATCH
         cat<<KUSTOMIZATION>kustomization.yaml
         apiVersion: kustomize.config.k8s.io/v1beta1
