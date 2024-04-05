@@ -68,6 +68,7 @@
           interval = "10m";
           timeout = "5m";
           targetNamespace = "tailscale";
+          install.createNamespace = true;
           chart = {
             spec = {
               chart = "tailscale-operator";
