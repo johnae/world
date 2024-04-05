@@ -21,13 +21,17 @@ locals {
   masters = 3
   agents = 2
   labels = {
-    "k8s-cluster" : random_id.cluster.hex
+    "k8s-cluster" : random_string.cluster.id
     "tailscale" : "yes"
   }
 }
 
-resource "random_id" "cluster" {
-  byte_length = 2
+resource "random_string" "cluster" {
+  length = 6
+  upper = false
+  special = false
+  min_lower = 2
+  min_numeric = 2
 }
 
 resource "hcloud_ssh_key" "default" {
@@ -36,7 +40,7 @@ resource "hcloud_ssh_key" "default" {
 }
 
 resource "hcloud_server" "master-0" {
-  name        = "master-${random_id.cluster.hex}-0"
+  name        = "master-${random_string.cluster.id}-0"
   image       = "ubuntu-22.04" # just to get the server started
   server_type = local.master_server_type
   location    = "hel1"
@@ -46,13 +50,13 @@ resource "hcloud_server" "master-0" {
   if [ -e /etc/generated-hostname ]; then
     exit 0
   fi
-  echo master-${random_id.cluster.hex}-0 > /etc/generated-hostname
+  echo master-${random_string.cluster.id}-0 > /etc/generated-hostname
   mkdir -p /var/lib/rancher/k3s/server/manifests
 
   cat<<YAML > /var/lib/rancher/k3s/server/manifests/cluster-vars.yaml
   apiVersion: v1
   data:
-    cluster_id: ${random_id.cluster.hex}
+    cluster_id: ${random_string.cluster.id}
   kind: ConfigMap
   metadata:
     name: cluster-vars
@@ -84,14 +88,14 @@ resource "hcloud_server" "master-0" {
         mode: "true"
 
       operatorConfig:
-        hostname: "k8s-api-${random_id.cluster.hex}"
+        hostname: "k8s-api-${random_string.cluster.id}"
   YAML
   EOF
 }
 
 resource "hcloud_server" "master" {
   for_each    = toset([for i in range(1, local.masters): tostring(i)])
-  name        = "master-${random_id.cluster.hex}-${each.key}"
+  name        = "master-${random_string.cluster.id}-${each.key}"
   image       = "ubuntu-22.04" # just to get the server started
   server_type = local.master_server_type
   location    = "hel1"
@@ -101,13 +105,13 @@ resource "hcloud_server" "master" {
   if [ -e /etc/generated-hostname ]; then
     exit 0
   fi
-  echo master-${random_id.cluster.hex}-${each.key} > /etc/generated-hostname
+  echo master-${random_string.cluster.id}-${each.key} > /etc/generated-hostname
   mkdir -p /var/lib/rancher/k3s/server/manifests
 
   cat<<YAML > /var/lib/rancher/k3s/server/manifests/cluster-vars.yaml
   apiVersion: v1
   data:
-    cluster_id: ${random_id.cluster.hex}
+    cluster_id: ${random_string.cluster.id}
   kind: ConfigMap
   metadata:
     name: cluster-vars
@@ -139,14 +143,14 @@ resource "hcloud_server" "master" {
         mode: "true"
 
       operatorConfig:
-        hostname: "k8s-api-${random_id.cluster.hex}"
+        hostname: "k8s-api-${random_string.cluster.id}"
   YAML
   EOF
 }
 
 resource "hcloud_server" "agent" {
   for_each    = toset([for i in range(0, local.agents): tostring(i)])
-  name        = "agent-${random_id.cluster.hex}-${each.key}"
+  name        = "agent-${random_string.cluster.id}-${each.key}"
   image       = "ubuntu-22.04" # just to get the server started
   server_type = local.agent_server_type
   location    = "hel1"
@@ -156,7 +160,7 @@ resource "hcloud_server" "agent" {
   if [ -e /etc/generated-hostname ]; then
     exit 0
   fi
-  echo agent-${random_id.cluster.hex}-${each.key} > /etc/generated-hostname
+  echo agent-${random_string.cluster.id}-${each.key} > /etc/generated-hostname
   EOF
 }
 
@@ -234,18 +238,6 @@ module "agent-install" {
   extra_files_script = "./extra-files-script.sh"
 }
 
-output "public_ips" {
-  value = merge(
-    {
-      "${hcloud_server.master-0.name}" = hcloud_server.master-0.ipv4_address
-    }, {
-      for master in hcloud_server.master : master.name => master.ipv4_address
-    }, {
-      for agent in hcloud_server.agent : agent.name => agent.ipv4_address
-    }
-  )
-}
-
-output "master_api" {
-  value = "https://${hcloud_server.master-0.name}:6443"
+output "k8s_api" {
+  value = "k8s-api-${random_string.cluster.id}"
 }
