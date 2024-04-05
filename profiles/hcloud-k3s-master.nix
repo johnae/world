@@ -80,10 +80,6 @@
               releaseName = "tailscale-operator";
             };
           };
-          values = {
-            oauth.clientId = "\${tailscale_oauth_id}";
-            oauth.clientSecret = "\${tailscale_oauth_secret}";
-          };
         };
       };
     };
