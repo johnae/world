@@ -10,12 +10,25 @@
     ../../profiles/zram.nix
   ];
 
+  system.autoUpgrade = {
+    enable = true;
+    flake = "github:johnae/world";
+    allowReboot = true;
+    dates = "06:00";
+    randomizedDelaySec = "5min";
+    enableSentinel = true; ## we're running kured on k8s for synchronized reboots
+  };
+
   services.k3s.settings.server = "https://\"$(awk -F- '{print \"master-\"$2\"-0\"}' < /etc/generated-hostname)\":6443";
   services.k3s.settings.node-name = "\"$(cat /etc/generated-hostname)\"";
 
   age.secrets = {
     ts-google-9k-hcloud.file = ../../secrets/ts-google-9k-hcloud.age;
     k3s-token.file = ../../secrets/k3s/token.age;
+    cluster-secrets = {
+      file = ../../secrets/k3s/cluster-secrets.yaml.age;
+      path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml";
+    };
     hetzner-csi-encryption-secret = {
       file = ../../secrets/k3s/hetzner-csi-encryption-secret.yaml.age;
       path = "/var/lib/rancher/k3s/server/manifests/hetzner-csi-encryption-secret.yaml";

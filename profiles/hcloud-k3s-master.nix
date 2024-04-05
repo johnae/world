@@ -18,10 +18,6 @@
       cluster-dns = "10.129.128.10";
       kubelet-arg.max-pods = 62;
       kube-controller-manager-arg.node-cidr-mask-size = 25;
-      # kube-apiserver-arg.oidc-issuer-url = "https://id.9000.dev";
-      # kube-apiserver-arg.oidc-username-claim = "email";
-      # kube-apiserver-arg.oidc-groups-claim = "groups";
-      # kube-apiserver-arg.oidc-client-id = "dex-auth";
       node-label."svccontroller.k3s.cattle.io/enablelb" = "true";
       node-label."topology.kubernetes.io/region" = "hetzner";
       node-label."topology.kubernetes.io/zone" = "hetzner-fi";
@@ -33,6 +29,63 @@
       kured = "${pkgs.kured-yaml}/kured.yaml";
       flux = "${pkgs.fluxcd-yaml}/flux.yaml";
       hetzner-csi-driver = "${pkgs.hetzner-csi-driver-yaml}/hetzner-csi-driver.yaml";
+      cluster-vars = {
+        apiVersion = "v1";
+        kind = "ConfigMap";
+        metadata.name = "cluster-vars";
+        metadata.namespace = "flux-system";
+        data.pod_subnet = "10.128.128.0/21";
+      };
+      encrypted-storage-class = {
+        apiVersion = "storage.k8s.io/v1";
+        kind = "StorageClass";
+        metadata.name = "hcloud-volumes-encrypted";
+        provisioner = "csi.hetzner.cloud";
+        reclaimPolicy = "Delete";
+        volumeBindingMode = "WaitForFirstConsumer";
+        allowVolumeExpansion = true;
+        parameters."csi.storage.k8s.io/node-publish-secret-name" = "encryption-secret";
+        parameters."csi.storage.k8s.io/node-publish-secret-namespace" = "kube-system";
+      };
+      tailscale-helm-repo = {
+        apiVersion = "source.toolkit.fluxcd.io/v1beta2";
+        kind = "HelmRepository";
+        metadata = {
+          name = "tailscale";
+          namespace = "flux-system";
+        };
+        spec = {
+          interval = "5m";
+          url = "https://pkgs.tailscale.com/helmcharts";
+        };
+      };
+      tailscale-operator = {
+        apiVersion = "helm.toolkit.fluxcd.io/v2beta2";
+        kind = "HelmRelease";
+        metadata.name = "tailscale-operator";
+        metadata.namespace = "flux-system";
+        spec = {
+          interval = "10m";
+          timeout = "5m";
+          targetNamespace = "tailscale";
+          chart = {
+            spec = {
+              chart = "tailscale-operator";
+              version = "'6.5.*'";
+              sourceRef = {
+                kind = "HelmRepository";
+                name = "tailscale";
+              };
+              interval = "5m";
+              releaseName = "tailscale-operator";
+            };
+          };
+          values = {
+            oauth.clientId = "\${tailscale_oauth_id}";
+            oauth.clientSecret = "\${tailscale_oauth_secret}";
+          };
+        };
+      };
     };
   };
 }

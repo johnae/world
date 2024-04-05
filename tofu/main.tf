@@ -16,6 +16,8 @@ terraform {
 }
 
 locals {
+  master_server_type = "cpx11" # AMD 2 vCPU, 2 GB RAM, 40 GB NVMe SSD
+  agent_server_type = "cpx21" # AMD 3 vCPU, 4 GB RAM, 80 GB NVMe SSD
   masters = 3
   agents = 2
   labels = {
@@ -36,7 +38,7 @@ resource "hcloud_ssh_key" "default" {
 resource "hcloud_server" "master-0" {
   name        = "master-${random_id.cluster.hex}-0"
   image       = "ubuntu-22.04" # just to get the server started
-  server_type = "cpx11"          # AMD 2 vCPU, 2 GB RAM, 40 GB NVMe SSD
+  server_type = local.master_server_type
   location    = "hel1"
   ssh_keys    = [hcloud_ssh_key.default.id]
   labels = local.labels
@@ -52,7 +54,7 @@ resource "hcloud_server" "master" {
   for_each    = toset([for i in range(1, local.masters): tostring(i)])
   name        = "master-${random_id.cluster.hex}-${each.key}"
   image       = "ubuntu-22.04" # just to get the server started
-  server_type = "cpx11"          # AMD 2 vCPU, 2 GB RAM, 40 GB NVMe SSD
+  server_type = local.master_server_type
   location    = "hel1"
   labels = local.labels
   ssh_keys    = [hcloud_ssh_key.default.id]
@@ -68,7 +70,7 @@ resource "hcloud_server" "agent" {
   for_each    = toset([for i in range(0, local.agents): tostring(i)])
   name        = "agent-${random_id.cluster.hex}-${each.key}"
   image       = "ubuntu-22.04" # just to get the server started
-  server_type = "cpx11"          # AMD 2 vCPU, 2 GB RAM, 40 GB NVMe SSD
+  server_type = local.agent_server_type
   location    = "hel1"
   labels = local.labels
   ssh_keys    = [hcloud_ssh_key.default.id]
@@ -154,6 +156,18 @@ module "agent-install" {
   extra_files_script = "./extra-files-script.sh"
 }
 
-output "public_ip" {
-  value = hcloud_server.master-0.ipv4_address
+output "public_ips" {
+  value = merge(
+    {
+      "${hcloud_server.master-0.name}" = hcloud_server.master-0.ipv4_address
+    }, {
+      for master in hcloud_server.master : master.name => master.ipv4_address
+    }, {
+      for agent in hcloud_server.agent : agent.name => agent.ipv4_address
+    }
+  )
+}
+
+output "master_api" {
+  value = "https://${hcloud_server.master-0.name}:6443"
 }

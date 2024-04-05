@@ -3,6 +3,7 @@
   pkgs,
   config,
   lib,
+  hostName,
   ...
 }: let
   inherit (lib // builtins) hasAttr length attrNames mkIf;
@@ -53,7 +54,7 @@ in {
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = false;
 
-  networking.hostName = "";
+  networking.hostName = hostName;
 
   system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState) {deps = ["persist-files"];};
 
