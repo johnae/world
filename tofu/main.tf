@@ -47,6 +47,45 @@ resource "hcloud_server" "master-0" {
     exit 0
   fi
   echo master-${random_id.cluster.hex}-0 > /etc/generated-hostname
+  mkdir -p /var/lib/rancher/k3s/server/manifests
+
+  cat<<YAML > /var/lib/rancher/k3s/server/manifests/cluster-vars.yaml
+  apiVersion: v1
+  data:
+    cluster_id: ${random_id.cluster.hex}
+  kind: ConfigMap
+  metadata:
+    name: cluster-vars
+    namespace: flux-system
+  YAML
+
+  cat<<YAML > /var/lib/rancher/k3s/server/manifests/tailscale-operator.yaml
+  apiVersion: helm.toolkit.fluxcd.io/v2beta2
+  kind: HelmRelease
+  metadata:
+    name: tailscale-operator
+    namespace: flux-system
+  spec:
+    chart:
+      spec:
+        chart: tailscale-operator
+        interval: 5m
+        releaseName: tailscale-operator
+        sourceRef:
+          kind: HelmRepository
+          name: tailscale
+    install:
+      createNamespace: true
+    interval: 10m
+    targetNamespace: tailscale
+    timeout: 5m
+    values:
+      apiServerProxyConfig:
+        mode: "true"
+
+      operatorConfig:
+        hostname: "k8s-api-${random_id.cluster.hex}"
+  YAML
   EOF
 }
 
@@ -63,6 +102,45 @@ resource "hcloud_server" "master" {
     exit 0
   fi
   echo master-${random_id.cluster.hex}-${each.key} > /etc/generated-hostname
+  mkdir -p /var/lib/rancher/k3s/server/manifests
+
+  cat<<YAML > /var/lib/rancher/k3s/server/manifests/cluster-vars.yaml
+  apiVersion: v1
+  data:
+    cluster_id: ${random_id.cluster.hex}
+  kind: ConfigMap
+  metadata:
+    name: cluster-vars
+    namespace: flux-system
+  YAML
+
+  cat<<YAML > /var/lib/rancher/k3s/server/manifests/tailscale-operator.yaml
+  apiVersion: helm.toolkit.fluxcd.io/v2beta2
+  kind: HelmRelease
+  metadata:
+    name: tailscale-operator
+    namespace: flux-system
+  spec:
+    chart:
+      spec:
+        chart: tailscale-operator
+        interval: 5m
+        releaseName: tailscale-operator
+        sourceRef:
+          kind: HelmRepository
+          name: tailscale
+    install:
+      createNamespace: true
+    interval: 10m
+    targetNamespace: tailscale
+    timeout: 5m
+    values:
+      apiServerProxyConfig:
+        mode: "true"
+
+      operatorConfig:
+        hostname: "k8s-api-${random_id.cluster.hex}"
+  YAML
   EOF
 }
 

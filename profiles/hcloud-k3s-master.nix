@@ -29,13 +29,6 @@
       kured = "${pkgs.kured-yaml}/kured.yaml";
       flux = "${pkgs.fluxcd-yaml}/flux.yaml";
       hetzner-csi-driver = "${pkgs.hetzner-csi-driver-yaml}/hetzner-csi-driver.yaml";
-      cluster-vars = {
-        apiVersion = "v1";
-        kind = "ConfigMap";
-        metadata.name = "cluster-vars";
-        metadata.namespace = "flux-system";
-        data.pod_subnet = "10.128.128.0/21";
-      };
       encrypted-storage-class = {
         apiVersion = "storage.k8s.io/v1";
         kind = "StorageClass";
@@ -59,61 +52,6 @@
           url = "https://pkgs.tailscale.com/helmcharts";
         };
       };
-      tailscale-operator = {
-        apiVersion = "helm.toolkit.fluxcd.io/v2beta2";
-        kind = "HelmRelease";
-        metadata.name = "tailscale-operator";
-        metadata.namespace = "flux-system";
-        spec = {
-          interval = "10m";
-          timeout = "5m";
-          targetNamespace = "tailscale";
-          install.createNamespace = true;
-          chart = {
-            spec = {
-              chart = "tailscale-operator";
-              sourceRef = {
-                kind = "HelmRepository";
-                name = "tailscale";
-              };
-              interval = "5m";
-              releaseName = "tailscale-operator";
-            };
-          };
-          values = {
-            apiServerProxyConfig.mode = "true";
-          };
-        };
-      };
-      # tailscale-auth-proxy-cluster-role = {
-      #   apiVersion = "rbac.authorization.k8s.io/v1";
-      #   kind = "ClusterRole";
-      #   metadata.name = "tailscale-auth-proxy";
-      #   rules = [
-      #     {
-      #       apiGroups = [""];
-      #       resources = ["users" "groups"];
-      #       verbs = ["impersonate"];
-      #     }
-      #   ];
-      # };
-      # tailscale-auth-proxy-cluster-role-binding = {
-      #   apiVersion = "rbac.authorization.k8s.io/v1";
-      #   kind = "ClusterRoleBinding";
-      #   metadata.name = "tailscale-auth-proxy";
-      #   subjects = [
-      #     {
-      #       kind = "ServiceAccount";
-      #       name = "operator";
-      #       namespace = "tailscale";
-      #     }
-      #   ];
-      #   roleRef = {
-      #     kind = "ClusterRole";
-      #     name = "tailscale-auth-proxy";
-      #     apiGroup = "rbac.authorization.k8s.io";
-      #   };
-      # };
     };
   };
 }
