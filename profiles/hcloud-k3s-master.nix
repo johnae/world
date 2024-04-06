@@ -79,7 +79,6 @@
               chart = "tailscale-operator";
               interval = "5m";
               releaseName = "tailscale-operator";
-              targetNamespace = "tailscale";
               sourceRef = {
                 kind = "HelmRepository";
                 name = "tailscale";
@@ -87,6 +86,7 @@
             };
           };
           install.createNamespace = true;
+          targetNamespace = "tailscale";
           interval = "10m";
           timeout = "5m";
           values = {
