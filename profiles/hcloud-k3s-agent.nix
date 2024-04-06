@@ -10,8 +10,9 @@
       node-external-ip = "\"$(get-iface-ip eth0)\"";
       kubelet-arg.max-pods = 62;
       node-label."svccontroller.k3s.cattle.io/enablelb" = "true";
-      node-label."topology.kubernetes.io/region" = "hetzner";
-      node-label."topology.kubernetes.io/zone" = "hetzner-fi";
+      node-label."topology.kubernetes.io/region" = "$\"REGION\"";
+      node-label."topology.kubernetes.io/zone" = "\"$ZONE\"";
+      node-label."hostname" = "\"$NODENAME\"";
     };
   };
 }

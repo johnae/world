@@ -43,8 +43,8 @@ in {
   };
 
   environment.etc."bashrc.local".text = ''
-    if [ -e /etc/generated-hostname ]; then
-      NODENAME="$(cat /etc/generated-hostname)"
+    if [ -e /run/nixos/metadata ]; then
+      source /run/nixos/metadata
       if [ "$TERM" != "dumb" ] || [ -n "$INSIDE_EMACS" ]; then
         PROMPT_COLOR="1;31m"
         ((UID)) && PROMPT_COLOR="1;32m"
@@ -78,16 +78,16 @@ in {
   system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState) {deps = ["persist-files"];};
 
   ## networking must be up before we can run the cloud-init script
-  systemd.services.hetzner-cloud-init = let
+  systemd.services.metadata = let
     cloudInitScript = pkgs.writeShellScript "cloud-init" ''
       echo ------- Running Hetzner User Data Script --------
       ${pkgs.curl}/bin/curl http://169.254.169.254/hetzner/v1/userdata | ${pkgs.bash}/bin/bash
       echo -------------------------------------------------
     '';
   in {
-    description = "Hetzner Cloud Init";
+    description = "Metadata Service";
     after = ["network.target"];
-    before = ["tailscale-auth.service" "tailscaled.service"];
+    before = ["tailscale-auth.service" "tailscaled.service" "k3s.service"];
     wantedBy = ["multi-user.target"];
     serviceConfig = {
       Type = "oneshot";

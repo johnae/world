@@ -19,8 +19,7 @@
     enableSentinel = true; ## we're running kured on k8s for synchronized reboots
   };
 
-  services.k3s.settings.server = "https://\"$(awk -F- '{print \"master-\"$2\"-0\"}' < /etc/generated-hostname)\":6443";
-  services.k3s.settings.node-name = "\"$(cat /etc/generated-hostname)\"";
+  services.k3s.settings.server = "https://\"$INITIAL_MASTER\":6443";
 
   age.secrets = {
     ts-google-9k-hcloud.file = ../../secrets/ts-google-9k-hcloud.age;
@@ -51,7 +50,7 @@
     args.accept-dns = true;
     args.advertise-exit-node = true;
     args.auth-key = "file:/var/run/agenix/ts-google-9k-hcloud";
-    args.hostname = "\"$(cat /etc/generated-hostname)\"";
+    args.hostname = "\"$NODENAME\"";
   };
 
   users.users.root.openssh.authorizedKeys.keys = [

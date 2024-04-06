@@ -50,7 +50,7 @@ in {
     systemd.services.tailscale-auth = {
       description = "Tailscale automatic authentication";
       wantedBy = ["tailscaled.service"];
-      after = ["tailscaled.service"];
+      after = ["tailscaled.service" "metadata.service"];
       restartTriggers = [tsAuthScript];
       serviceConfig = {
         Type = "oneshot";
@@ -58,6 +58,7 @@ in {
         Restart = "on-failure";
         RemainAfterExit = "yes";
         ExecStart = tsAuthScript;
+        EnvironmentFile = "/run/nixos/metadata";
       };
     };
     systemd.paths.tailscale-socket = {

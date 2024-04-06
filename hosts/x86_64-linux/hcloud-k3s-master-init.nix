@@ -20,7 +20,6 @@
   };
 
   services.k3s.settings.cluster-init = true;
-  services.k3s.settings.node-name = "\"$(cat /etc/generated-hostname)\"";
 
   age.secrets = {
     ts-google-9k-hcloud.file = ../../secrets/ts-google-9k-hcloud.age;
@@ -51,7 +50,7 @@
     args.accept-dns = true;
     args.advertise-exit-node = true;
     args.auth-key = "file:/var/run/agenix/ts-google-9k-hcloud";
-    args.hostname = "\"$(cat /etc/generated-hostname)\"";
+    args.hostname = "\"$NODENAME\"";
   };
 
   users.users.root.openssh.authorizedKeys.keys = [

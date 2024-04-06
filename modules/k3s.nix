@@ -106,7 +106,7 @@ in {
     systemd.services.k3s = let
       k3s = pkgs.writeShellApplication {
         name = "k3s";
-        runtimeInputs = with pkgs; [getIfaceIp gawk];
+        runtimeInputs = with pkgs; [getIfaceIp gawk envsubst];
         text =
           concatStringsSep " "
           ([
@@ -130,7 +130,7 @@ in {
             mkdir -p ${k3sManifestsDir}
             ${
               concatStringsSep "\n" (mapAttrsToList (
-                  name: path: "cp ${path} ${k3sManifestsDir}/${name}.yaml"
+                  name: path: "envsubst < ${path} > ${k3sManifestsDir}/${name}.yaml"
                 )
                 cfg.autoDeploy)
             }
@@ -144,6 +144,7 @@ in {
           else ""
         }
       '';
+      serviceConfig.EnvironmentFile = lib.mkForce "/run/nixos/metadata";
       serviceConfig.ExecStart = lib.mkForce "${k3s}/bin/k3s";
     };
     ## Random fixes and hacks for k3s networking
