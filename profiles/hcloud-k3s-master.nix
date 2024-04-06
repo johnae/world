@@ -79,6 +79,7 @@
               chart = "tailscale-operator";
               interval = "5m";
               releaseName = "tailscale-operator";
+              targetNamespace = "tailscale";
               sourceRef = {
                 kind = "HelmRepository";
                 name = "tailscale";
