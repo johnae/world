@@ -23,7 +23,7 @@ locals {
   masters = 3
   agents = 2
   labels = {
-    "k8s-cluster" : random_string.cluster.id
+    "cluster_id" : random_string.cluster.id
     "tailscale" : "yes"
   }
 }
@@ -42,33 +42,32 @@ resource "random_string" "cluster" {
   min_numeric = 2
 }
 
+resource "random_string" "master_id" {
+  for_each    = toset([for i in range(0, local.masters): tostring(i)])
+  length = 4
+  upper = false
+  special = false
+  min_lower = 2
+  min_numeric = 2
+}
+
+resource "random_string" "agent_id" {
+  for_each    = toset([for i in range(0, local.agents): tostring(i)])
+  length = 4
+  upper = false
+  special = false
+  min_lower = 2
+  min_numeric = 2
+}
+
 resource "hcloud_ssh_key" "default" {
   name       = "default"
   public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzm5RyD+1nfy1LquvkEog4SZtPgdhzjr49jSC8PAinp"
 }
 
-resource "hcloud_server" "master-0" {
-  name        = "master-${random_string.cluster.id}-0"
-  image       = "ubuntu-22.04" # just to get the server started
-  server_type = local.master_server_type
-  location    = local.region
-  ssh_keys    = [hcloud_ssh_key.default.id]
-  labels = local.labels
-  placement_group_id = hcloud_placement_group.default.id
-  user_data = <<-EOF
-  cat<<META>/run/nixos/metadata
-  CLUSTER_ID=${random_string.cluster.id}
-  NODENAME=master-${random_string.cluster.id}-0
-  REGION=${local.region}
-  ZONE=${local.zone}
-  INITIAL_MASTER=master-${random_string.cluster.id}-0
-  META
-  EOF
-}
-
 resource "hcloud_server" "master" {
-  for_each    = toset([for i in range(1, local.masters): tostring(i)])
-  name        = "master-${random_string.cluster.id}-${each.key}"
+  for_each    = toset([for i in range(0, local.masters): tostring(i)])
+  name        = "master-${random_string.cluster.id}-${random_string.master_id[each.key].id}"
   image       = "ubuntu-22.04" # just to get the server started
   server_type = local.master_server_type
   location    = local.region
@@ -76,19 +75,21 @@ resource "hcloud_server" "master" {
   placement_group_id = hcloud_placement_group.default.id
   ssh_keys    = [hcloud_ssh_key.default.id]
   user_data = <<-EOF
+  mkdir -p /run/nixos
   cat<<META>/run/nixos/metadata
   CLUSTER_ID=${random_string.cluster.id}
-  NODENAME=master-${random_string.cluster.id}-${each.key}
+  NODE_ID=${random_string.master_id[each.key].id}
+  NODENAME=master-${random_string.cluster.id}-${random_string.master_id[each.key].id}
   REGION=${local.region}
   ZONE=${local.zone}
-  INITIAL_MASTER=master-${random_string.cluster.id}-0
+  INITIAL_MASTER=master-${random_string.cluster.id}-${random_string.master_id["0"].id}
   META
   EOF
 }
 
 resource "hcloud_server" "agent" {
   for_each    = toset([for i in range(0, local.agents): tostring(i)])
-  name        = "agent-${random_string.cluster.id}-${each.key}"
+  name        = "agent-${random_string.cluster.id}-${random_string.agent_id[each.key].id}"
   image       = "ubuntu-22.04" # just to get the server started
   server_type = local.agent_server_type
   location    = local.region
@@ -96,12 +97,14 @@ resource "hcloud_server" "agent" {
   placement_group_id = hcloud_placement_group.default.id
   ssh_keys    = [hcloud_ssh_key.default.id]
   user_data = <<-EOF
+  mkdir -p /run/nixos
   cat<<META>/run/nixos/metadata
   CLUSTER_ID=${random_string.cluster.id}
-  NODENAME=agent-${random_string.cluster.id}-${each.key}
+  NODE_ID=${random_string.agent_id[each.key].id}
+  NODENAME=agent-${random_string.cluster.id}-${random_string.agent_id[each.key].id}
   REGION=${local.region}
   ZONE=${local.zone}
-  INITIAL_MASTER=master-${random_string.cluster.id}-0
+  INITIAL_MASTER=master-${random_string.cluster.id}-${random_string.master_id["0"].id}
   META
   EOF
 }
@@ -140,7 +143,7 @@ module "master-init-install" {
   source            = "github.com/nix-community/nixos-anywhere//terraform/install"
   nixos_system      = module.master-init-system-build.result.out
   nixos_partitioner = module.master-init-disko.result.out
-  target_host       = hcloud_server.master-0.ipv4_address
+  target_host       = hcloud_server.master["0"].ipv4_address
   disk_encryption_key_scripts = [
     {
       path = "/tmp/disk.key"

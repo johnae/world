@@ -6,7 +6,7 @@
   services.k3s = {
     enable = true;
     role = "server";
-    after = ["tailscale-auth.service"];
+    after = ["tailscale-auth.service" "metadata.service"];
     settings = {
       token-file = "/run/agenix/k3s-token";
       flannel-iface = "tailscale0";

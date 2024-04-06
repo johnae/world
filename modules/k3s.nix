@@ -10,10 +10,8 @@
     optional
     mkOption
     mkIf
-    mkMerge
     mkForce
     types
-    optionals
     mapAttrsToList
     flatten
     concatStringsSep
@@ -130,7 +128,7 @@ in {
             mkdir -p ${k3sManifestsDir}
             ${
               concatStringsSep "\n" (mapAttrsToList (
-                  name: path: "envsubst < ${path} > ${k3sManifestsDir}/${name}.yaml"
+                  name: path: "${pkgs.envsubst}/bin/envsubst < ${path} > ${k3sManifestsDir}/${name}.yaml"
                 )
                 cfg.autoDeploy)
             }
