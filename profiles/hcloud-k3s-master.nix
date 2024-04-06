@@ -74,18 +74,16 @@
           namespace = "flux-system";
         };
         spec = {
-          chart = {
-            spec = {
-              chart = "tailscale-operator";
-              interval = "5m";
-              releaseName = "tailscale-operator";
-              sourceRef = {
-                kind = "HelmRepository";
-                name = "tailscale";
-              };
+          chart.spec = {
+            chart = "tailscale-operator";
+            interval = "5m";
+            sourceRef = {
+              kind = "HelmRepository";
+              name = "tailscale";
             };
           };
           install.createNamespace = true;
+          releaseName = "tailscale-operator";
           targetNamespace = "tailscale";
           interval = "10m";
           timeout = "5m";
