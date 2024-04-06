@@ -77,7 +77,7 @@ in {
       then value
       else
         pkgs.runCommand "${name}.yaml" {} ''
-          cat<<EOF>$out
+          cat<<'EOF'>$out
           ${builtins.toJSON value}
           EOF
         '');

@@ -6,6 +6,7 @@
     settings = {
       token-file = "/run/agenix/k3s-token";
       flannel-iface = "tailscale0";
+      node-name = "\"$NODENAME\"";
       node-ip = "\"$(get-iface-ip tailscale0)\"";
       node-external-ip = "\"$(get-iface-ip eth0)\"";
       kubelet-arg.max-pods = 62;
