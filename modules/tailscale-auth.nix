@@ -54,7 +54,7 @@ in {
     systemd.services.tailscale-auth = {
       description = "Tailscale automatic authentication";
       wantedBy = ["tailscaled.service"];
-      after = ["tailscaled.service"] ++ cfg.after;
+      after = ["tailscaled.service"] ++ tsAuth.after;
       restartTriggers = [tsAuthScript];
       serviceConfig = {
         Type = "oneshot";
