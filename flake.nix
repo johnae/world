@@ -78,6 +78,7 @@
     river.url = "git+https://codeberg.org/river/river?submodules=1";
     river.flake = false;
     terranix.url = "github:terranix/terranix";
+    terranix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ {flake-parts, ...}:
