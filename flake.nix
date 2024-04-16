@@ -77,6 +77,7 @@
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     river.url = "git+https://codeberg.org/river/river?submodules=1";
     river.flake = false;
+    terranix.url = "github:terranix/terranix";
   };
 
   outputs = inputs @ {flake-parts, ...}:
@@ -86,6 +87,7 @@
         ./flake/github-actions.nix
         ./flake/helper-packages.nix
         ./flake/hosts.nix
+        ./flake/infra.nix
         ./flake/kubernetes.nix
         ./flake/packages.nix
         ./flake/setup.nix
