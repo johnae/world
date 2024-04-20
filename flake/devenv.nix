@@ -25,7 +25,7 @@
   in {
     devenv.shells = lib.mapAttrs' (file: _: {
       name = builtins.replaceStrings [".nix"] [""] file;
-      value = import "${../devenv}/${file}" {inherit pkgs ansiEscape;};
+      value = import "${../devenv}/${file}" {inherit pkgs lib ansiEscape;};
     }) (builtins.readDir ../devenv);
   };
 }

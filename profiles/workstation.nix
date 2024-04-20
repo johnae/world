@@ -13,15 +13,6 @@
     "fs.inotify.max_user_watches" = 12288;
   };
 
-  boot.kernelModules = ["v4l2loopback"];
-  boot.extraModulePackages = [
-    config.boot.kernelPackages.v4l2loopback.out
-  ];
-
-  boot.extraModprobeConfig = ''
-    options v4l2loopback exclusive_caps=1 video_nr=9 card_label=v4l2loopback
-  '';
-
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
 

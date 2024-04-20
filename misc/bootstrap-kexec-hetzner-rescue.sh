@@ -77,9 +77,7 @@ cat <<EOF > /root/config.nix
 EOF
 
 # Generate the kexec script
-#nix run github:nix-community/nixos-generators -- -o /root/result  -f kexec-bundle -c /root/config.nix
-nix run github:farcaller/nixos-generators/kexec -- -o /root/result -f kexec-bundle -c /root/config.nix -I nixpkgs=channel:nixos-unstable
-
+nix run github:nix-community/nixos-generators -- -o /root/result  -f kexec-bundle -c /root/config.nix -I nixpkgs=channel:nixos-unstable
+# Run the kexec script
 echo "kexec - please reconnect"
-
 /root/result

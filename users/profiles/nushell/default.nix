@@ -12,7 +12,7 @@ in {
   ];
   programs.atuin.enable = true;
   programs.direnv.enableNushellIntegration = false;
-  programs.atuin.enableNushellIntegration = false;
+  programs.atuin.enableNushellIntegration = true;
   programs.nushell = {
     enable = true;
     package = pkgs.nushell;
@@ -21,7 +21,6 @@ in {
     extraConfig = ''
       source ~/.config/nushell/home.nu
       source ~/.config/nushell/starship.nu
-      source ~/.config/nushell/atuin.nu
 
       $env.config.hooks.pre_prompt = [
        {
@@ -39,7 +38,7 @@ in {
       ]
 
       $env.config.hooks.pre_prompt = (
-        $env.config.hooks.pre_prompt | append (source ${nu-scripts}/nu-hooks/direnv/config.nu)
+        $env.config.hooks.pre_prompt | append (source ${nu-scripts}/nu-hooks/nu-hooks/direnv/config.nu)
       )
 
       ${
@@ -62,9 +61,6 @@ in {
       use ${nu-scripts}/custom-completions/yarn/yarn-v4-completions.nu
     '';
   };
-  xdg.configFile."nushell/atuin.nu".source = pkgs.runCommand "atuin.nu" {} ''
-    ${pkgs.atuin}/bin/atuin init nu > $out
-  '';
   xdg.configFile."nushell/starship.nu".source = ./starship.nu;
   xdg.configFile."nushell/home.nu".source = pkgs.writeText "home.nu" ''
     ${

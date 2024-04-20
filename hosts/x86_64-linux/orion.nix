@@ -177,6 +177,11 @@
       file = ../../secrets/${hostName}/initrd_ed25519_key.age;
       owner = "${toString adminUser.uid}";
     };
+    copilot-token = {
+      file = ../../secrets/gh_copilot.age;
+      owner = "${toString adminUser.uid}";
+      path = "/home/${adminUser.name}/.config/github-copilot/hosts.json";
+    };
     id_ed25519_bbph = {
       file = ../../secrets/id_ed25519_bbph.age;
       owner = "${toString adminUser.uid}";

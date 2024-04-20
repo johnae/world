@@ -46,6 +46,7 @@
     inputs.impermanence.nixosModules.impermanence
     inputs.home-manager.nixosModules.home-manager
     inputs.agenix.nixosModules.age
+    inputs.disko.nixosModules.disko
     ../modules/default.nix
   ];
   nixosConfigurations = mapAttrs' (
@@ -58,6 +59,7 @@
           inherit system;
           specialArgs = {
             hostName = name;
+            tailnet = "tail68e9c";
             adminUser = {
               name = "john";
               uid = 1337;

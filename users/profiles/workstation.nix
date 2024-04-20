@@ -22,7 +22,7 @@ in {
       ./river-luatile/default.nix
       ./river.nix
       ./rofi.nix
-      ./spotifyd.nix
+      # ./spotifyd.nix
       ./sway.nix
       ./waybar.nix
       ./wlsunset.nix
@@ -42,8 +42,6 @@ in {
     scripts
     shotcut
     slack
-    spotifyd
-    teams-for-linux
     tenacity
     wl-clipboard
     wl-clipboard-x11

@@ -6,13 +6,20 @@
   copilot = pkgs.writeShellApplication {
     name = "copilot";
     text = ''
-      ${pkgs.nodejs}/bin/node ${inputs.copilot-vim}/dist/agent.js "''$@"
+      exec ${pkgs.nodejs}/bin/node ${inputs.copilot-vim}/dist/agent.js "''$@"
+    '';
+  };
+  helix-copilot = pkgs.writeShellApplication {
+    name = "hx";
+    runtimeInputs = [copilot];
+    text = ''
+      exec ${pkgs.helix-latest}/bin/hx -a "''$@"
     '';
   };
 in {
   programs.helix = {
     enable = true;
-    package = pkgs.helix-latest;
+    package = helix-copilot;
     settings = {
       theme = "nord";
 
@@ -43,7 +50,7 @@ in {
           auto-signature-help = false;
           display-messages = true;
           display-inlay-hints = true;
-          copilot-auto = true;
+          #copilot-auto = true;
         };
 
         statusline = {
@@ -61,7 +68,7 @@ in {
 
       keys = {
         insert = {
-          right = "apply_copilot_completion";
+          right = "copilot_apply_completion";
         };
         normal = {
           space = {
@@ -74,14 +81,10 @@ in {
     };
     languages = {
       language-server = {
-        copilot = {
-          command = "${copilot}/bin/copilot";
-          args = ["--stdio"];
-        };
-        nu-lsp = {
-          command = "${pkgs.nushell}/bin/nu";
-          args = ["--lsp"];
-        };
+        #copilot = {
+        #  command = "${copilot}/bin/copilot";
+        #  args = ["--stdio"];
+        #};
         rust-analyzer = {
           config.check.command = "clippy";
         };
@@ -99,68 +102,8 @@ in {
         {
           name = "nix";
           formatter = {command = "alejandra";};
-          language-servers = ["nil" "copilot"];
+          language-servers = ["nil"];
           auto-format = true;
-        }
-        {
-          name = "rust";
-          language-servers = ["rust-analyzer" "copilot"];
-        }
-        {
-          name = "lua";
-          language-servers = ["lua-language-server" "copilot"];
-        }
-        {
-          name = "javascript";
-          language-servers = ["typescript-language-server" "copilot"];
-        }
-        {
-          name = "typescript";
-          language-servers = ["typescript-language-server" "copilot"];
-        }
-        {
-          name = "bash";
-          language-servers = ["bash-language-server" "copilot"];
-        }
-        {
-          name = "hcl";
-          language-servers = ["terraform-ls" "copilot"];
-        }
-        {
-          name = "tfvars";
-          language-servers = ["terraform-ls" "copilot"];
-        }
-        {
-          name = "go";
-          language-servers = ["gopls" "copilot"];
-        }
-        {
-          name = "nu";
-          language-servers = ["nu-lsp" "copilot"];
-        }
-        {
-          name = "css";
-          language-servers = ["vscode-css-language-server" "copilot"];
-        }
-        {
-          name = "html";
-          language-servers = ["vscode-html-language-server" "copilot"];
-        }
-        {
-          name = "nickel";
-          language-servers = ["copilot"];
-        }
-        {
-          name = "yaml";
-          language-servers = ["yaml-language-server" "copilot"];
-        }
-        {
-          name = "toml";
-          language-servers = ["taplo" "copilot"];
-        }
-        {
-          name = "just";
-          language-servers = ["copilot"];
         }
       ];
     };

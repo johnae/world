@@ -1,6 +1,5 @@
 {
   config,
-  options,
   pkgs,
   lib,
   ...
@@ -26,6 +25,11 @@
 in {
   options.services.tailscale.auth = {
     enable = mkEnableOption "tailscale automatic auth service";
+    after = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = "[\"metadata.service\"]";
+    };
     args = mkOption {
       type = types.attrsOf (types.oneOf [(types.listOf types.str) types.str types.number types.bool]);
       apply = value:
@@ -50,7 +54,7 @@ in {
     systemd.services.tailscale-auth = {
       description = "Tailscale automatic authentication";
       wantedBy = ["tailscaled.service"];
-      after = ["tailscaled.service"];
+      after = ["tailscaled.service"] ++ tsAuth.after;
       restartTriggers = [tsAuthScript];
       serviceConfig = {
         Type = "oneshot";
@@ -58,6 +62,7 @@ in {
         Restart = "on-failure";
         RemainAfterExit = "yes";
         ExecStart = tsAuthScript;
+        EnvironmentFile = "-/run/nixos/metadata";
       };
     };
     systemd.paths.tailscale-socket = {
