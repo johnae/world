@@ -1,8 +1,4 @@
-{
-  adminUser,
-  lib,
-  ...
-}: {
+{adminUser, ...}: {
   environment.persistence."/keep" = {
     hideMounts = true;
     directories = [

@@ -13,6 +13,15 @@
     locallyDefinedPackages = mapAttrs (
       name: _: (pkgs.callPackage (../packages + "/${name}") {inherit inputs;})
     ) (filterAttrs (filename: type: type == "directory") (readDir ../packages));
+
+    tofuProvider = provider:
+      provider.override (oldArgs: {
+        provider-source-address =
+          lib.replaceStrings
+          ["https://registry.terraform.io/providers"]
+          ["registry.opentofu.org"]
+          oldArgs.homepage;
+      });
   in {
     packages =
       (
@@ -34,7 +43,10 @@
             just -f ${../Justfile} -d "$(pwd)" "$@"
           '';
         };
-
+        tofuWithPlugins = pkgs.opentofu.withPlugins (
+          p:
+            map tofuProvider [p.null p.external p.hcloud p.cloudflare p.random]
+        );
         helix-latest = inputs.helix.packages.${system}.helix;
         hyprland-unstable = inputs.hyprland.packages.${system}.hyprland;
         persway = inputs.persway.packages.${system}.default;

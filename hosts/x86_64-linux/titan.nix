@@ -61,6 +61,7 @@
 
   age.secrets = {
     remote-disk-password.file = ../../secrets/remote-disk-password.age;
+    remote-cloud-disk-password.file = ../../secrets/remote-cloud-disk-password.age;
     id_ed25519_remote_unlock.file = ../../secrets/${hostName}/id_ed25519_remote_unlock.age;
     syncthing-cert = {
       file = ../../secrets/${hostName}/syncthing-cert.age;
@@ -72,6 +73,10 @@
     };
     ts-google-9k = {
       file = ../../secrets/ts-google-9k.age;
+      owner = "${toString adminUser.uid}";
+    };
+    hcloud-token = {
+      file = ../../secrets/hcloud-token.age;
       owner = "${toString adminUser.uid}";
     };
   };
@@ -126,6 +131,13 @@
       passwordFile = "/run/agenix/remote-disk-password";
     }
   ];
+
+  services.hcloud-remote-unlock-all = {
+    enable = true;
+    hcloudTokenFile = "/run/agenix/hcloud-token";
+    diskpasswordFile = "/run/agenix/remote-cloud-disk-password";
+    identityFile = "/run/agenix/id_ed25519_remote_unlock";
+  };
 
   home-manager = {
     users.${adminUser.name} = {

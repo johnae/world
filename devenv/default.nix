@@ -7,14 +7,16 @@
 
   packages = with pkgs; [
     agenix
-    alejandra
-    yj
-    rage
     age-plugin-yubikey
-    nil
+    alejandra
+    hcloud
     just
-    world
+    nil
+    rage
     statix
+    tofuWithPlugins
+    world
+    yj
   ];
 
   enterShell = ansiEscape ''

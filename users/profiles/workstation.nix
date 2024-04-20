@@ -42,8 +42,6 @@ in {
     scripts
     shotcut
     slack
-    # spotifyd
-    teams-for-linux
     tenacity
     wl-clipboard
     wl-clipboard-x11
