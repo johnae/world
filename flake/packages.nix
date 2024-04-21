@@ -47,6 +47,7 @@
           p:
             map tofuProvider [p.null p.external p.hcloud p.cloudflare p.random]
         );
+        zjstatus = inputs.zjstatus.packages.${system}.default;
         helix-latest = inputs.helix.packages.${system}.helix;
         hyprland-unstable = inputs.hyprland.packages.${system}.hyprland;
         persway = inputs.persway.packages.${system}.default;
