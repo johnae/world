@@ -56,7 +56,7 @@
       text = ''
         rbw_lock=/tmp/lock.rbw.lock
         rbw_pid_lock="/tmp/lock.$$.tmp"
-        trap "rm -f $rbw_lock $rbw_pid_lock" EXIT
+        trap 'rm -f $rbw_lock $rbw_pid_lock' EXIT
         if ! rbw unlocked 2>/dev/null; then
           touch "$rbw_pid_lock"
           if ln "$rbw_pid_lock" "$rbw_lock" 2>/dev/null; then
