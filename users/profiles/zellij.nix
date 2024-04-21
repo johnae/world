@@ -37,22 +37,28 @@ in {
   xdg.configFile."zellij/layouts/dev.kdl".text = ''
     layout {
       tab focus=true hide_floating_panes=true {
-        pane split_direction="horizontal" {
+        pane split_direction="vertical" {
           pane size="75%" command="${direnvExecMaybe}/bin/direnv-exec-maybe" {
             args "hx" "."
           }
-          pane
+          pane split_direction="horizontal" {
+            pane
+            pane
+            pane
+          }
         }
+
+
         pane size=1 borderless=true {
           plugin location="zellij:compact-bar"
         }
 
         floating_panes {
             pane {
-              x "2%"
-              y "2"
-              width "96%"
-              height "96%"
+              x "10%"
+              y "2%"
+              width "80%"
+              height "80%"
             }
         }
       }
@@ -236,12 +242,19 @@ in {
     }
 
     plugins {
-        tab-bar { path "tab-bar"; }
-        status-bar { path "status-bar"; }
-        strider { path "strider"; }
-        compact-bar { path "compact-bar"; }
-        session-manager { path "session-manager"; }
+        tab-bar location="zellij:tab-bar"
+        status-bar location="zellij:status-bar"
+        strider location="zellij:strider"
+        compact-bar location="zellij:compact-bar"
+        session-manager location="zellij:session-manager"
+        welcome-screen location="zellij:session-manager" {
+            welcome_screen true
+        }
+        filepicker location="zellij:strider" {
+            cwd "/"
+        }
     }
+
   '';
   programs.zellij = {
     enable = true;
