@@ -151,14 +151,6 @@
     host = config.userinfo.devRemote;
   };
 in {
-  xdg.configFile."wpaperd/wallpaper.toml".source = pkgs.writeText "wallpaper.toml" ''
-    [default]
-    path = "~/Sync/wallpapers"
-    duration = "30m"
-    sorting = "random"
-    apply-shadow = false
-  '';
-
   home.sessionVariables = {
     GDK_BACKEND = "wayland";
     CLUTTER_BACKEND = "wayland";
