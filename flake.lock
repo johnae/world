@@ -488,7 +488,9 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "rust-overlay": "rust-overlay"
+        "rust-overlay": [
+          "rust-overlay"
+        ]
       },
       "locked": {
         "lastModified": 1711225587,
@@ -1131,7 +1133,9 @@
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks_2",
         "river": "river",
-        "terranix": "terranix"
+        "rust-overlay": "rust-overlay",
+        "terranix": "terranix",
+        "zjstatus": "zjstatus"
       }
     },
     "rust-analyzer-src": {
@@ -1154,20 +1158,18 @@
     "rust-overlay": {
       "inputs": {
         "flake-utils": [
-          "helix",
           "flake-utils"
         ],
         "nixpkgs": [
-          "helix",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1709604635,
-        "narHash": "sha256-le4fwmWmjGRYWwkho0Gr7mnnZndOOe4XGbLw68OvF40=",
+        "lastModified": 1713665713,
+        "narHash": "sha256-IXwXOTN0GtMyLbtOy0qUNdfdnXIA8p4LbyKxBShS44Q=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "e86c0fb5d3a22a5f30d7f64ecad88643fe26449d",
+        "rev": "a520e9870c46a0d0af3745a0b707dbf14b66f72c",
         "type": "github"
       },
       "original": {
@@ -1337,6 +1339,35 @@
       "original": {
         "owner": "hyprwm",
         "repo": "xdg-desktop-portal-hyprland",
+        "type": "github"
+      }
+    },
+    "zjstatus": {
+      "inputs": {
+        "crane": [
+          "crane"
+        ],
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": [
+          "rust-overlay"
+        ]
+      },
+      "locked": {
+        "lastModified": 1713632424,
+        "narHash": "sha256-8qv8u3LO68kSC7Nd0cO4y1KvzHgx+DbN+Trw3D26WSg=",
+        "owner": "dj95",
+        "repo": "zjstatus",
+        "rev": "583962d9383bc2d64a1ed00dc8d569d0edcbe58d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dj95",
+        "repo": "zjstatus",
         "type": "github"
       }
     }

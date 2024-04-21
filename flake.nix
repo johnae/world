@@ -43,6 +43,7 @@
     helix.inputs.crane.follows = "crane";
     helix.inputs.flake-utils.follows = "flake-utils";
     helix.inputs.nixpkgs.follows = "nixpkgs";
+    helix.inputs.rust-overlay.follows = "rust-overlay";
     helix.url = "github:johnae/helix/copilot"; ## copilot support
     hetzner-csi-driver.flake = false;
     hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.6.0/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
@@ -77,8 +78,16 @@
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     river.url = "git+https://codeberg.org/river/river?submodules=1";
     river.flake = false;
-    terranix.url = "github:terranix/terranix";
+    rust-overlay.inputs.flake-utils.follows = "flake-utils";
+    rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    rust-overlay.url = "github:oxalica/rust-overlay";
     terranix.inputs.nixpkgs.follows = "nixpkgs";
+    terranix.url = "github:terranix/terranix";
+    zjstatus.inputs.crane.follows = "crane";
+    zjstatus.inputs.flake-utils.follows = "flake-utils";
+    zjstatus.inputs.nixpkgs.follows = "nixpkgs";
+    zjstatus.inputs.rust-overlay.follows = "rust-overlay";
+    zjstatus.url = "github:dj95/zjstatus";
   };
 
   outputs = inputs @ {flake-parts, ...}:
