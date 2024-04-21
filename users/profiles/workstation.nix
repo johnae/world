@@ -39,7 +39,6 @@ in {
     persway
     playerctl
     river-luatile
-    scripts
     shotcut
     slack
     tenacity

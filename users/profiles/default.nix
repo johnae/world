@@ -48,6 +48,7 @@ in {
     lm_sensors
     nil
     nix-index
+    scripts
   ];
 
   xdg.enable = true;
