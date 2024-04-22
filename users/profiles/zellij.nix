@@ -34,11 +34,12 @@
     '';
   };
 in {
+  home.packages = [direnvExecMaybe];
   xdg.configFile."zellij/layouts/dev.kdl".text = ''
     layout {
       tab focus=true hide_floating_panes=true {
         pane split_direction="vertical" {
-          pane size="75%" command="${direnvExecMaybe}/bin/direnv-exec-maybe" {
+          pane size="75%" command="direnv-exec-maybe" {
             args "hx" "."
           }
           pane split_direction="horizontal" {
