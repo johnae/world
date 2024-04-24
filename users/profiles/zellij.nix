@@ -10,16 +10,7 @@
     text = ''
       # shellcheck disable=SC1083
       project="$(fd \.git /home/john/Development -d 3 -u -t d -x echo {//} | sort -u | sk)"
-      name="$(basename "$project")"
-      if zellij action query-tab-names | grep -q "$name"; then
-        zellij action go-to-tab-name "$name"
-        exit 0
-      fi
-      if [ -e "$project/dev.kdl" ]; then
-        zellij action new-tab -l "$project/dev.kdl" -c "$project" -n "$name"
-      else
-        zellij action new-tab -l dev -c "$project" -n "$name"
-      fi
+      zellij pipe --name zwift_selection "$project"
     '';
   };
   direnvExecMaybe = pkgs.writeShellApplication {
@@ -255,6 +246,9 @@ in {
               }
             }
             bind "Ctrl a" {
+              LaunchOrFocusPlugin "file://${pkgs.zwift}/bin/zwift.wasm" {
+                floating true
+              }
               Run "${openProject}/bin/zellij-open-project" {
                 cwd "/home/${username}"
                 floating true

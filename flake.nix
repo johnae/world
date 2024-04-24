@@ -86,6 +86,11 @@
     zjstatus.inputs.nixpkgs.follows = "nixpkgs";
     zjstatus.inputs.rust-overlay.follows = "rust-overlay";
     zjstatus.url = "github:dj95/zjstatus";
+    zwift.url = "github:johnae/zwift";
+    zwift.inputs.crane.follows = "crane";
+    zwift.inputs.flake-utils.follows = "flake-utils";
+    zwift.inputs.nixpkgs.follows = "nixpkgs";
+    zwift.inputs.rust-overlay.follows = "rust-overlay";
   };
 
   outputs = inputs @ {flake-parts, ...}:
