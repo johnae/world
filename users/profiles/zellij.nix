@@ -13,6 +13,15 @@
       zellij pipe --name zwift_selection "$project"
     '';
   };
+  openSession = pkgs.writeShellApplication {
+    name = "zellij-open-session";
+    runtimeInputs = [pkgs.zellij pkgs.skim];
+    text = ''
+      # shellcheck disable=SC1083
+      session="$(zellij ls -s | sk)"
+      zellij pipe --name zwift_selection "$session"
+    '';
+  };
   direnvExecMaybe = pkgs.writeShellApplication {
     name = "direnv-exec-maybe";
     runtimeInputs = [pkgs.direnv];
@@ -250,6 +259,16 @@ in {
                 floating true
               }
               Run "${openProject}/bin/zellij-open-project" {
+                cwd "/home/${username}"
+                floating true
+                close_on_exit true
+              }
+            }
+            bind "Alt a" {
+              LaunchOrFocusPlugin "file://${pkgs.zwift}/bin/zwift.wasm" {
+                floating true
+              }
+              Run "${openSession}/bin/zellij-open-session" {
                 cwd "/home/${username}"
                 floating true
                 close_on_exit true
