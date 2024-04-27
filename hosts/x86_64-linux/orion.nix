@@ -1,6 +1,7 @@
 {
   adminUser,
   hostName,
+  lib,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEEPD945cTDxeNhGljSKqQfRCUeXcwIDKOBD847OECQs";
@@ -48,7 +49,7 @@
   };
 
   boot.kernelParams = [
-    "ip=65.109.85.161::65.109.85.129:255.255.255.192:${hostName}:eth0:none"
+    "ip=65.109.85.161::65.109.85.129:255.255.255.192:${hostName}::none"
   ];
 
   ## for tailscale exit node functionality
@@ -150,27 +151,30 @@
     };
   };
 
-  networking = {
-    defaultGateway = "65.109.85.129";
-    defaultGateway6 = {
-      address = "fe80::1";
-      interface = "eth0";
-    };
-    firewall.trustedInterfaces = ["tailscale0"];
-    interfaces.eth0.ipv4.addresses = [
-      {
-        address = "65.109.85.161";
-        prefixLength = 26;
-      }
-    ];
+  networking.dhcpcd.enable = false;
+  networking.useNetworkd = true;
+  networking.usePredictableInterfaceNames = lib.mkForce true;
 
-    interfaces.eth0.ipv6.addresses = [
-      {
-        address = "2a01:4f9:3051:5389::2";
-        prefixLength = 64;
-      }
-    ];
+  systemd.network = {
+    enable = true;
+    networks."10-wan" = {
+      ## udevadm test-builtin net_id /sys/class/net/eth0
+      ## https://www.freedesktop.org/software/systemd/man/latest/systemd.net-naming-scheme.html
+      #matchConfig.Name = "enp41s0";
+      matchConfig.MACAddress = "a8:a1:59:c1:1a:f2";
+      address = [
+        "65.109.85.161/26"
+        "2a01:4f9:3051:5389::2/64"
+      ];
+      routes = [
+        {routeConfig.Gateway = "65.109.85.129";}
+        {routeConfig.Gateway = "fe80::1";}
+      ];
+      linkConfig.RequiredForOnline = "routable";
+    };
   };
+
+  networking.firewall.trustedInterfaces = ["tailscale0"];
 
   age.secrets = {
     initrd-key = {
