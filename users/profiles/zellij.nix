@@ -1,6 +1,7 @@
 {
-  pkgs,
   config,
+  lib,
+  pkgs,
   ...
 }: let
   inherit (config.home) username;
@@ -276,6 +277,9 @@ in {
             }
             bind "Alt Left" { MoveFocusOrTab "Left"; }
             bind "Alt Right" { MoveFocusOrTab "Right"; }
+
+            ${lib.concatStringsSep "\n" (builtins.genList (x: "bind \"Alt ${toString (x + 1)}\" { GoToTab ${toString (x + 1)}; }") 9)}
+
             bind "Alt Down" { MoveFocus "Down"; }
             bind "Alt Up" { MoveFocus "Up"; }
         }
