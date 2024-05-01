@@ -39,6 +39,10 @@ in {
       type = listOf str;
       default = ["/dev/nvme0n1"];
     };
+    btrfs.subvolumes = mkOption {
+      type = listOf str;
+      default = ["nix" "home" "var"];
+    };
     bcachefs.disks = mkOption {
       type = listOf str;
       default = [];
