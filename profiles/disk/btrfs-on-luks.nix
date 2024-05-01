@@ -68,4 +68,5 @@ in {
     );
 
   services.btrfs.autoScrub.enable = true;
+  services.btrfs.autoScrub.fileSystems = ["/nix" "/keep"];
 }
