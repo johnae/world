@@ -101,8 +101,8 @@ in
         else "yes"
       }
 
-      DISK_PASSWORD=""
-      if [ "$USER_DISK_PASSWORD" = "yes" ]; then
+      DISK_PASSWORD="''${DISK_PASSWORD:-}"
+      if [ "$USER_DISK_PASSWORD" = "yes" ] && [ -z "$DISK_PASSWORD" ]; then
         while true; do
           echo -n Disk password:
           read -r -s DISK_PASSWORD
