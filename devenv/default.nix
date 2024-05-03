@@ -89,7 +89,7 @@
             cp /mnt/keep/secrets/initrd_ed25519_key /keep/secrets/
             chmod 0600 /mnt/keep/secrets/initrd_ed25519_key
             chmod 0600 /keep/secrets/initrd_ed25519_key
-            nixos-install --flake .#test--no-root-passwd
+            nixos-install --flake .#test --no-root-passwd --impure
       SSH
           break
         fi
