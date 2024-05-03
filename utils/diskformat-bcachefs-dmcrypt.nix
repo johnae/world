@@ -128,7 +128,12 @@ in
       fi
 
       DISK=${builtins.head bcacheFsDisks}
-      PARTITION_PREFIX="p"
+      PARTITION_PREFIX=""
+
+      if echo "$DISK" | grep -q nvme; then
+        echo "$DISK" is an NVMe device
+        PARTITION_PREFIX="p"
+      fi
 
       if [ ! -b "$DISK" ]; then
         echo "$DISK" is not a block device
