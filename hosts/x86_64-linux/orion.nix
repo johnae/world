@@ -155,7 +155,6 @@
   networking.nat = {
     enable = true;
     enableIPv6 = true;
-    externalInterface = "enp41s0";
     internalInterfaces = ["microvm"];
   };
 
@@ -182,6 +181,14 @@
         ];
         linkConfig.RequiredForOnline = "routable";
       };
+      "10-microvm" = {
+        matchConfig.Name = "microvm";
+        addresses = [
+          {
+            addressConfig.Address = "10.100.0.1/27";
+          }
+        ];
+      };
       "11-microvm" = {
         matchConfig.Name = "vm-*";
         networkConfig.Bridge = "microvm";
@@ -189,7 +196,7 @@
     };
   };
 
-  networking.firewall.trustedInterfaces = ["tailscale0"];
+  networking.firewall.trustedInterfaces = ["tailscale0" "microvm"];
 
   age.secrets = {
     initrd-key = {

@@ -39,7 +39,6 @@
   networking.nat = {
     enable = true;
     enableIPv6 = true;
-    externalInterface = "enp38s0";
     internalInterfaces = ["microvm"];
   };
   systemd.network = {
@@ -54,6 +53,14 @@
       "10-lan" = {
         matchConfig.Name = ["enp*" "wlan*" "wlp*"];
         networkConfig.DHCP = "ipv4";
+      };
+      "10-microvm" = {
+        matchConfig.Name = "microvm";
+        addresses = [
+          {
+            addressConfig.Address = "10.100.0.1/27";
+          }
+        ];
       };
       "11-microvm" = {
         matchConfig.Name = "vm-*";
