@@ -151,9 +151,13 @@
     };
   };
 
-  networking.dhcpcd.enable = false;
-  networking.useNetworkd = true;
-  networking.usePredictableInterfaceNames = lib.mkForce true;
+  networking.useDHCP = false;
+  networking.nat = {
+    enable = true;
+    enableIPv6 = true;
+    externalInterface = "enp41s0";
+    internalInterfaces = ["microvm"];
+  };
 
   systemd.network = {
     enable = true;
