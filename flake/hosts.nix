@@ -42,11 +42,12 @@
 
   defaultModules = [
     nixSettings
-    inputs.nixpkgs.nixosModules.notDetected
-    inputs.impermanence.nixosModules.impermanence
-    inputs.home-manager.nixosModules.home-manager
     inputs.agenix.nixosModules.age
     inputs.disko.nixosModules.disko
+    inputs.home-manager.nixosModules.home-manager
+    inputs.impermanence.nixosModules.impermanence
+    inputs.microvm.nixosModules.host
+    inputs.nixpkgs.nixosModules.notDetected
     ../modules/default.nix
   ];
   nixosConfigurations = mapAttrs' (

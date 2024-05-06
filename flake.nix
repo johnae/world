@@ -54,6 +54,9 @@
     impermanence.url = "github:nix-community/impermanence";
     kured.flake = false;
     kured.url = "github:kubereboot/kured";
+    microvm.url = "github:astro/microvm.nix";
+    microvm.inputs.flake-utils.follows = "flake-utils";
+    microvm.inputs.nixpkgs.follows = "nixpkgs";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
     nix2container.inputs.flake-utils.follows = "flake-utils";
     nix2container.inputs.nixpkgs.follows = "nixpkgs";

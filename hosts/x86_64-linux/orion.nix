@@ -157,20 +157,31 @@
 
   systemd.network = {
     enable = true;
-    networks."10-wan" = {
-      ## udevadm test-builtin net_id /sys/class/net/eth0
-      ## https://www.freedesktop.org/software/systemd/man/latest/systemd.net-naming-scheme.html
-      #matchConfig.Name = "enp41s0";
-      matchConfig.MACAddress = "a8:a1:59:c1:1a:f2";
-      address = [
-        "65.109.85.161/26"
-        "2a01:4f9:3051:5389::2/64"
-      ];
-      routes = [
-        {routeConfig.Gateway = "65.109.85.129";}
-        {routeConfig.Gateway = "fe80::1";}
-      ];
-      linkConfig.RequiredForOnline = "routable";
+    netdevs = {
+      "10-microvm".netdevConfig = {
+        Kind = "bridge";
+        Name = "microvm";
+      };
+    };
+    networks = {
+      "10-wan" = {
+        ## udevadm test-builtin net_id /sys/class/net/eth0
+        ## https://www.freedesktop.org/software/systemd/man/latest/systemd.net-naming-scheme.html
+        matchConfig.Name = ["enp*"];
+        address = [
+          "65.109.85.161/26"
+          "2a01:4f9:3051:5389::2/64"
+        ];
+        routes = [
+          {routeConfig.Gateway = "65.109.85.129";}
+          {routeConfig.Gateway = "fe80::1";}
+        ];
+        linkConfig.RequiredForOnline = "routable";
+      };
+      "11-microvm" = {
+        matchConfig.Name = "vm-*";
+        networkConfig.Bridge = "microvm";
+      };
     };
   };
 
