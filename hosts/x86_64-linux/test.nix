@@ -1,12 +1,17 @@
-{modulesPath, ...}: {
+{
+  pkgs,
+  lib,
+  modulesPath,
+  ...
+}: {
   # publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEEPD945cTDxeNhGljSKqQfRCUeXcwIDKOBD847OECQs";
   # syncthingDeviceID = "XOPUBYF-LTOERSA-NGLA6ZJ-BU455JS-JOTCFQP-JGZP6WC-VRUTNOX-5YEUVQD";
 
   bcachefs = {
-    #disks = ["/dev/nvme0n1" "/dev/nvme1n1"];
-    #devices = ["/dev/mapper/encrypted_root" "/dev/mapper/encrypted_root1"];
-    disks = ["/dev/nvme0n1"];
-    devices = ["/dev/mapper/encrypted_root"];
+    disks = ["/dev/nvme0n1" "/dev/nvme1n1"];
+    devices = ["/dev/mapper/encrypted_root" "/dev/mapper/encrypted_root1"];
+    # disks = ["/dev/nvme0n1"];
+    # devices = ["/dev/mapper/encrypted_root"];
   };
 
   # btrfs = {
@@ -20,9 +25,7 @@
     ../../profiles/server.nix
     ../../profiles/state.nix
     ../../profiles/zram.nix
-    (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
-    (modulesPath + "/virtualisation/qemu-vm.nix")
   ];
 
   programs.ssh.startAgent = true;
@@ -39,13 +42,37 @@
     "virtio"
   ];
 
-  boot.initrd = {
-    systemd.enable = true;
+  # fileSystems."/keep" = {
+  #   device = lib.mkForce "UUID=8e1e4b4c-3e5c-4b1d-9f4b-1b1c5d4b7a4c";
+  # };
+  # lsblk -f
+
+  boot.initrd.systemd = let
+    mount = pkgs.writeShellScriptBin "bcachefs-mount-helper" ''
+      mkdir /sysroot
+      until bcachefs mount -o rw,relatime,metadata_replicas=2,compression=zstd,background_compression=zstd /dev/mapper/encrypted_root:/dev/mapper/encrypted_root1 /sysroot; do
+        sleep 1
+      done
+    '';
+  in {
+    enable = true;
+    storePaths = ["${mount}/bin/bcachefs-mount-helper"];
+    users.root.shell = "${mount}/bin/bcachefs-mount-helper";
+    # services.bcachefs-mount-helper = {
+    #   description = "Mount the bcachefs root filesystem";
+    #   before = ["sysroot-keep.mount"];
+    #   # after = ["local-fs.target"];
+    #   # wants = ["local-fs.target"];
+    #   serviceConfig = {
+    #     Type = "oneshot";
+    #     ExecStart = "${mount}/bin/bcachefs-mount-helper";
+    #   };
+    # };
   };
 
   boot.initrd.network = {
     enable = true;
-    #postCommands = "echo 'cryptsetup-askpass' >> /root/.profile";
+    # postCommands = "echo 'cryptsetup-askpass' >> /root/.profile";
     flushBeforeStage2 = true;
     ssh = {
       enable = true;
