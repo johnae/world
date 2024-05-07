@@ -12,7 +12,6 @@
   };
 
   imports = [
-    ../../profiles/acme.nix
     ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
     ../../profiles/disk/bcachefs-on-luks.nix
@@ -23,7 +22,6 @@
     ../../profiles/state.nix
     ../../profiles/syncthing.nix
     ../../profiles/tailscale.nix
-    ../../profiles/vaultwarden.nix
     ../../profiles/zram.nix
   ];
 
