@@ -68,7 +68,6 @@
     ssh = {
       enable = true;
       port = 2222;
-      ## This isn't so nice. Have to copy the file to /keep/secrets and keep it there.
       hostKeys = [
         "/keep/secrets/initrd_ed25519_key"
       ];
