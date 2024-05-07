@@ -349,8 +349,7 @@ in
 
       # now create the bcachefs subvolumes we're interested in having
       echo Creating bcachefs subvolumes at /mnt/keep
-      cd /mnt/keep
-      ${concatStringsSep "\n" (map (v: "bcachefs subvolume create ${v}") subvolumes)}
+      ${concatStringsSep "\n" (map (v: "bcachefs subvolume create /mnt/keep/${v}") subvolumes)}
 
       cd "$DIR"
 
