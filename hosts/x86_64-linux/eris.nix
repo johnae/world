@@ -140,7 +140,7 @@
         devices = [
           "antares"
           "icarus"
-          "polaris"
+          "sirius"
           "orion"
           "titan"
           "hyperion"
@@ -153,7 +153,7 @@
         devices = [
           "antares"
           "orion"
-          "polaris"
+          "sirius"
         ];
       };
       folders."/home/${adminUser.name}/Photos" = {
@@ -162,7 +162,7 @@
           "antares"
           "icarus"
           "orion"
-          "polaris"
+          "sirius"
           "s23ultra"
         ];
 

@@ -100,7 +100,7 @@
           "eris"
           "hyperion"
           "icarus"
-          "polaris"
+          "sirius"
           "s23ultra"
           "s8plus"
         ];

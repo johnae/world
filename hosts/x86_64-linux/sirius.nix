@@ -195,7 +195,6 @@
           "antares"
           "eris"
           "hyperion"
-          "polaris"
           "icarus"
           "s23ultra"
           "s8plus"
@@ -206,7 +205,6 @@
         id = "pictures";
         devices = [
           "antares"
-          "polaris"
           "eris"
         ];
       };
@@ -215,7 +213,6 @@
         devices = [
           "antares"
           "eris"
-          "polaris"
           "icarus"
           "s23ultra"
         ];

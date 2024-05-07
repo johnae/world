@@ -102,7 +102,7 @@
         devices = [
           "eris"
           "icarus"
-          "polaris"
+          "sirius"
           "orion"
           "titan"
           "hyperion"
@@ -115,7 +115,7 @@
         devices = [
           "eris"
           "orion"
-          "polaris"
+          "sirius"
         ];
       };
       folders."/home/${adminUser.name}/Photos" = {
@@ -124,7 +124,7 @@
           "eris"
           "icarus"
           "orion"
-          "polaris"
+          "sirius"
           "s23ultra"
         ];
         versioning.type = "staggered";

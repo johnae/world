@@ -122,7 +122,7 @@
           "antares"
           "eris"
           "hyperion"
-          "polaris"
+          "sirius"
           "s23ultra"
           "s8plus"
           "titan"
@@ -133,7 +133,7 @@
         devices = [
           "antares"
           "eris"
-          "polaris"
+          "sirius"
           "s23ultra"
         ];
         versioning.type = "staggered";
