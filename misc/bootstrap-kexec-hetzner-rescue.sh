@@ -57,15 +57,12 @@ cat <<EOF > /root/config.nix
     jq
   ];
 
-  networking.usePredictableInterfaceNames = false;
-  networking.dhcpcd.enable = false;
   networking.useDHCP = false;
-  networking.useNetworkd = true;
   systemd.network = {
     enable = true;
-    networks."eth0".extraConfig = ''
+    networks."10-wan".extraConfig = ''
       [Match]
-      Name = eth0
+      Name = enp*
       [Network]
       Address = $ipv6
       Gateway = fe80::1
