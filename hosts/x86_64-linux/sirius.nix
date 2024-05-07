@@ -110,7 +110,7 @@
         ## https://www.freedesktop.org/software/systemd/man/latest/systemd.net-naming-scheme.html
         matchConfig.Name = ["enp*"];
         address = [
-          "65.109.92.129/26"
+          "65.109.92.173/26"
           "2a01:4f9:3051:46ed::2/64"
         ];
         routes = [
