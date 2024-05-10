@@ -356,7 +356,7 @@ in
       echo Create /mnt mount points
       mkdir -p ${concatStringsSep " " (map (sub: "/mnt/${sub}") subvolumes)} /mnt/boot
       echo Bind mounting nix subvolume
-      mount --bind /mnt/keep/nix /mnt/nix"
+      mount --bind /mnt/keep/nix /mnt/nix
 
       # and mount the boot partition
       echo Mounting boot partition
