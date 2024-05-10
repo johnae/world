@@ -1,6 +1,6 @@
 {lib, ...}: let
   inherit (lib) mkOption;
-  inherit (lib.types) str nullOr attrsOf listOf enum bool ints;
+  inherit (lib.types) str nullOr attrsOf listOf enum bool ints attrs;
 in {
   options = {
     publicKey = mkOption {
@@ -60,7 +60,8 @@ in {
       default = 8;
     };
     adminUser = mkOption {
-      type = str;
+      type = attrs;
+      default = {};
     };
   };
 }

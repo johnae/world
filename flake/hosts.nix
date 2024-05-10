@@ -53,6 +53,18 @@
   nixosConfigurations = mapAttrs' (
     name: conf: let
       inherit (conf) system hostconf;
+      adminUser = {
+        name = "john";
+        uid = 1337;
+        gid = 1337;
+        userinfo = {
+          email = "john@insane.se";
+          fullName = "John Axel Eriksson";
+          githubUser = "johnae";
+          gitlabUser = "johnae";
+          devRemote = "orion";
+        };
+      };
     in {
       inherit name;
       value = withSystem system ({pkgs, ...}:
@@ -61,18 +73,7 @@
           specialArgs = {
             hostName = name;
             tailnet = "tail68e9c";
-            adminUser = {
-              name = "john";
-              uid = 1337;
-              gid = 1337;
-              userinfo = {
-                email = "john@insane.se";
-                fullName = "John Axel Eriksson";
-                githubUser = "johnae";
-                gitlabUser = "johnae";
-                devRemote = "orion";
-              };
-            };
+            inherit adminUser;
             hostConfigurations = mapAttrs' (name: conf: {
               inherit name;
               value = conf.config;
@@ -81,6 +82,9 @@
           };
           modules =
             [
+              {
+                inherit adminUser;
+              }
               {
                 system.configurationRevision = mkIf (self ? rev) self.rev;
                 system.nixos.versionSuffix = mkForce "git.${substring 0 11 inputs.nixpkgs.rev}";
