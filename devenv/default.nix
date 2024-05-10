@@ -87,13 +87,9 @@
             git add hosts/x86_64-linux/test.nix
             nix build --accept-flake-config .#test-diskformat
             DISK_PASSWORD="123456" ./result/bin/diskformat | tee -a diskformat.log
-            #mkdir -p /keep/secrets
             mkdir -p /mnt/keep/secrets
             ssh-keygen -t ed25519 -C test-vm-key -f /mnt/keep/secrets/initrd_ed25519_key -N ""
-            #cp /mnt/keep/secrets/initrd_ed25519_key /keep/secrets/
             chmod 0600 /mnt/keep/secrets/initrd_ed25519_key
-            #chmod 0600 /keep/secrets/initrd_ed25519_key
-            lsblk -f
             nixos-install --flake .#test --no-root-passwd --option accept-flake-config true
       SSH
           break
