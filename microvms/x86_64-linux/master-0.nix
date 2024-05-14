@@ -20,6 +20,9 @@
     ts-google-9k = {
       file = ../../secrets/ts-google-9k.age;
     };
+    k3s-token = {
+      file = ../../secrets/k3s/token.age;
+    };
   };
 
   services.tailscale.auth = {
