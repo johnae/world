@@ -40,6 +40,22 @@
       ) (builtins.readDir ../hosts/${system}))
   ) {};
 
+  mapMicrovms = foldl' (
+    hosts: system:
+      hosts
+      // (mapAttrs' (
+        filename: _: let
+          name = replaceStrings [".nix"] [""] filename;
+        in {
+          inherit name;
+          value = {
+            inherit system;
+            hostconf = ../microvms + "/${system}/${filename}";
+          };
+        }
+      ) (builtins.readDir ../microvms/${system}))
+  ) {};
+
   defaultModules = [
     nixSettings
     inputs.agenix.nixosModules.age
@@ -50,6 +66,16 @@
     inputs.nixpkgs.nixosModules.notDetected
     ../modules/default.nix
   ];
+
+  microvmModules = [
+    nixSettings
+    inputs.agenix.nixosModules.age
+    inputs.home-manager.nixosModules.home-manager
+    inputs.impermanence.nixosModules.impermanence
+    inputs.microvm.nixosModules.guest
+    ../modules/default.nix
+  ];
+
   nixosConfigurations = mapAttrs' (
     name: conf: let
       inherit (conf) system hostconf;
@@ -100,7 +126,7 @@
             ];
         });
     }
-  ) (mapHosts (mapSystems ../hosts));
+  ) ((mapHosts (mapSystems ../hosts)) // (mapMicrovms (mapSystems ../microvms)));
 in {
   flake = {
     inherit nixosConfigurations;
