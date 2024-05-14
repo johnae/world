@@ -37,7 +37,7 @@
       proto = "virtiofs";
       tag = "keep";
       source = "/var/lib/microvms/master-0/keep";
-      mountpoint = "/keep";
+      mountPoint = "/keep";
     }
   ];
 }
