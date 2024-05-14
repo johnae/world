@@ -7,6 +7,10 @@ in {
       type = str;
       default = "xxxx";
     };
+    vmId = mkOption {
+      type = ints.between 0 9999;
+      default = 0;
+    };
     syncthingDeviceID = mkOption {
       type = nullOr str;
       default = null;

@@ -164,6 +164,9 @@
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_rsa_alt";
     };
+    ssh_host_microvm_ed25519_key = {
+      file = ../../secrets/ssh_host_microvm_ed25519_key.age;
+    };
     syncthing-cert = {
       file = ../../secrets/${hostName}/syncthing-cert.age;
       owner = "${toString adminUser.uid}";
