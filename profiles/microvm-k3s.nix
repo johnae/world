@@ -64,10 +64,10 @@ in {
 
   age.secrets = {
     ts-google-9k = {
-      file = ../../secrets/ts-google-9k.age;
+      file = ../secrets/ts-google-9k.age;
     };
     k3s-token = {
-      file = ../../secrets/k3s/token.age;
+      file = ../secrets/k3s/token.age;
     };
   };
 
