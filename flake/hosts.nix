@@ -100,10 +100,12 @@
             hostName = name;
             tailnet = "tail68e9c";
             inherit adminUser;
-            hostConfigurations = mapAttrs' (name: conf: {
-              inherit name;
-              value = conf.config;
-            }) (filterAttrs (hostName: _: hostName != name) nixosConfigurations);
+            hostConfigurations =
+              mapAttrs' (name: conf: {
+                inherit name;
+                value = conf.config;
+              })
+              nixosConfigurations;
             inherit inputs;
           };
           modules =
