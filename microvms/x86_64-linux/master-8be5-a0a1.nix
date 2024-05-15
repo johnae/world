@@ -1,6 +1,7 @@
 {
   hostName,
   pkgs,
+  lib,
   tailnet,
   config,
   ...
