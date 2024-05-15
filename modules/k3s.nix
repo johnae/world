@@ -64,6 +64,8 @@
         k: v:
           if isBool v
           then boolToCli path v
+          else if v == null
+          then ""
           else "--${path} ${k}=${toString v}"
       );
     fieldToCli = path: value:
@@ -73,6 +75,8 @@
       then boolToCli path value
       else if isList value
       then listToCli path value
+      else if value == null
+      then ""
       else "--${path} ${toString value}";
   in
     flatten (mapAttrsToList fieldToCli s);
