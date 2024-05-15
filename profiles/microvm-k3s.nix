@@ -7,13 +7,13 @@
   ...
 }: let
   inherit (builtins) head tail filter split attrNames;
+  inherit (head config.microvm.interfaces) mac;
   hnComponents = filter (i: i != []) (split "-" hostName);
   clusterId = head (tail hnComponents);
   nodeId = head (tail (tail hnComponents));
   clusterNodes = lib.attrsets.attrVals (filter (lib.strings.hasInfix clusterId) (attrNames hostConfigurations)) hostConfigurations;
   initialMasterNode = head (filter (lib.attrByPath ["services" "k3s" "settings" "cluster-init"] false) clusterNodes);
   initialMaster = builtins.trace initialMasterNode.networking.hostName initialMasterNode.networking.hostName;
-  mac = (head config.microvm.interfaces).mac;
 in {
   imports = [
     ../profiles/microvm.nix
