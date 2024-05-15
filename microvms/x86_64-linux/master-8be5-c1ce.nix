@@ -161,6 +161,8 @@ in {
   };
 
   fileSystems."/keep".neededForBoot = true;
+  microvm.vcpu = lib.mkForce 2;
+  microvm.mem = lib.mkForce 8192;
   microvm.volumes = [
     {
       mountPoint = "/var/lib/rancher";
