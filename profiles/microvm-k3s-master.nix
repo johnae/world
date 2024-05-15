@@ -24,6 +24,17 @@
     };
   };
 
+  age.secrets = {
+    tailscale-oauth-secret = {
+      file = ../secrets/k3s/tailscale-oauth-secret.yaml.age;
+      path = "/var/lib/rancher/k3s/server/manifests/tailscale-oauth-secret.yaml";
+    };
+    cluster-secrets = {
+      file = ../secrets/k3s/cluster-secrets.yaml.age;
+      path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml";
+    };
+  };
+
   microvm.vcpu = lib.mkForce 2;
   microvm.mem = lib.mkForce 8192;
 }
