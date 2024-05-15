@@ -146,6 +146,14 @@ in {
     k3s-token = {
       file = ../../secrets/k3s/token.age;
     };
+    tailscale-oauth-secret = {
+      file = ../../secrets/k3s/tailscale-oauth-secret.yaml.age;
+      path = "/var/lib/rancher/k3s/server/manifests/tailscale-oauth-secret.yaml";
+    };
+    cluster-secrets = {
+      file = ../../secrets/k3s/cluster-secrets.yaml.age;
+      path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml";
+    };
   };
 
   age.identityPaths = ["/keep/etc/ssh/ssh_host_ed25519_key"];
