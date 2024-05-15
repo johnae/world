@@ -11,7 +11,7 @@
   clusterId = head (tail hnComponents);
   nodeId = head (tail (tail hnComponents));
   clusterNodes = lib.attrsets.attrVals (filter (lib.strings.hasInfix clusterId) (attrNames hostConfigurations)) hostConfigurations;
-  initialMasterNode = head (filter (node: (lib.hasAttr "cluster-init" node.services.k3s.settings) && node.services.k3s.settings.cluster-init == true) clusterNodes);
+  initialMasterNode = head (filter (node: lib.attrByPath ["services" "k3s" "settings" "cluster-init"] false node) clusterNodes);
   initialMaster = initialMasterNode.networking.hostName;
   mac = (head config.microvm.interfaces).mac;
 in {
