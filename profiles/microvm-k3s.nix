@@ -91,6 +91,8 @@ in {
   };
 
   fileSystems."/keep".neededForBoot = true;
+  fileSystems."/etc/rancher".neededForBoot = true;
+  fileSystems."/var/lib/rancher".neededForBoot = true;
   microvm.volumes = [
     {
       mountPoint = "/var/lib/rancher";
