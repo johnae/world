@@ -32,6 +32,13 @@
     libvirtd.enable = true;
   };
 
+  microvm.autostart = [
+    "agent-8be5-ac2e"
+    "agent-8be5-9792"
+    "agent-8be5-c91d"
+    "master-8be5-f2ba"
+  ];
+
   programs.ssh.startAgent = true;
 
   boot.binfmt.emulatedSystems = ["aarch64-linux"];
