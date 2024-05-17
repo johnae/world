@@ -31,8 +31,9 @@
         -drive file=nvm1.img,if=none,id=nvm1,format=qcow2 \
         -device nvme,serial=3576de6e,drive=nvm0 \
         -device nvme,serial=642b56ae,drive=nvm1 \
-        -device e1000,netdev=net0 \
-        -netdev user,id=net0,hostfwd=tcp:127.0.0.1:5555-:22,hostfwd=tcp:127.0.0.1:6666-:2222
+        -device virtio-net-pci,netdev=net0 \
+        -netdev user,id=net0,hostfwd=tcp:127.0.0.1:5555-:22,hostfwd=tcp:127.0.0.1:6666-:2222 \
+        -nographic
     '';
   };
 
@@ -55,8 +56,9 @@
         -drive file=nvm1.img,if=none,id=nvm1,format=qcow2 \
         -device nvme,serial=3576de6e,drive=nvm0 \
         -device nvme,serial=642b56ae,drive=nvm1 \
-        -device e1000,netdev=net0 \
-        -netdev user,id=net0,hostfwd=tcp:127.0.0.1:5555-:22,hostfwd=tcp:127.0.0.1:6666-:2222
+        -device virtio-net-pci,netdev=net0 \
+        -netdev user,id=net0,hostfwd=tcp:127.0.0.1:5555-:22,hostfwd=tcp:127.0.0.1:6666-:2222 \
+        -nographic
     '';
   };
 
@@ -84,15 +86,11 @@
             cd world
             git add hosts/x86_64-linux/test.nix
             nix build --accept-flake-config .#test-diskformat
-            DISK_PASSWORD="123456" ./result/bin/diskformat
-            mkdir -p /keep/secrets
+            DISK_PASSWORD="123456" ./result/bin/diskformat | tee -a diskformat.log
             mkdir -p /mnt/keep/secrets
             ssh-keygen -t ed25519 -C test-vm-key -f /mnt/keep/secrets/initrd_ed25519_key -N ""
-            cp /mnt/keep/secrets/initrd_ed25519_key /keep/secrets/
             chmod 0600 /mnt/keep/secrets/initrd_ed25519_key
-            chmod 0600 /keep/secrets/initrd_ed25519_key
-            lsblk -f
-            echo nixos-install --flake .#test --no-root-passwd --impure
+            nixos-install --flake .#test --no-root-passwd --option accept-flake-config true
       SSH
           break
         fi

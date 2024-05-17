@@ -40,6 +40,22 @@
       ) (builtins.readDir ../hosts/${system}))
   ) {};
 
+  mapMicrovms = foldl' (
+    hosts: system:
+      hosts
+      // (mapAttrs' (
+        filename: _: let
+          name = replaceStrings [".nix"] [""] filename;
+        in {
+          inherit name;
+          value = {
+            inherit system;
+            hostconf = ../microvms + "/${system}/${filename}";
+          };
+        }
+      ) (builtins.readDir ../microvms/${system}))
+  ) {};
+
   defaultModules = [
     nixSettings
     inputs.agenix.nixosModules.age
@@ -50,9 +66,31 @@
     inputs.nixpkgs.nixosModules.notDetected
     ../modules/default.nix
   ];
+
+  microvmModules = [
+    nixSettings
+    inputs.agenix.nixosModules.age
+    inputs.home-manager.nixosModules.home-manager
+    inputs.impermanence.nixosModules.impermanence
+    inputs.microvm.nixosModules.guest
+    ../modules/default.nix
+  ];
+
   nixosConfigurations = mapAttrs' (
     name: conf: let
       inherit (conf) system hostconf;
+      adminUser = {
+        name = "john";
+        uid = 1337;
+        gid = 1337;
+        userinfo = {
+          email = "john@insane.se";
+          fullName = "John Axel Eriksson";
+          githubUser = "johnae";
+          gitlabUser = "johnae";
+          devRemote = "orion";
+        };
+      };
     in {
       inherit name;
       value = withSystem system ({pkgs, ...}:
@@ -61,26 +99,20 @@
           specialArgs = {
             hostName = name;
             tailnet = "tail68e9c";
-            adminUser = {
-              name = "john";
-              uid = 1337;
-              gid = 1337;
-              userinfo = {
-                email = "john@insane.se";
-                fullName = "John Axel Eriksson";
-                githubUser = "johnae";
-                gitlabUser = "johnae";
-                devRemote = "orion";
-              };
-            };
-            hostConfigurations = mapAttrs' (name: conf: {
-              inherit name;
-              value = conf.config;
-            }) (filterAttrs (hostName: _: hostName != name) nixosConfigurations);
+            inherit adminUser;
+            hostConfigurations =
+              mapAttrs' (name: conf: {
+                inherit name;
+                value = conf.config;
+              })
+              nixosConfigurations;
             inherit inputs;
           };
           modules =
             [
+              {
+                inherit adminUser;
+              }
               {
                 system.configurationRevision = mkIf (self ? rev) self.rev;
                 system.nixos.versionSuffix = mkForce "git.${substring 0 11 inputs.nixpkgs.rev}";
@@ -96,7 +128,7 @@
             ];
         });
     }
-  ) (mapHosts (mapSystems ../hosts));
+  ) ((mapHosts (mapSystems ../hosts)) // (mapMicrovms (mapSystems ../microvms)));
 in {
   flake = {
     inherit nixosConfigurations;

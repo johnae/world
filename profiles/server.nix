@@ -18,7 +18,7 @@ in {
     "net.core.rmem_max" = lib.mkDefault 2500000; ## https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
   };
 
-  networking.usePredictableInterfaceNames = false; ## works when there's only one ethernet port
+  networking.usePredictableInterfaceNames = true; ## works when there's only one ethernet port
   networking.useDHCP = false;
 
   environment.systemPackages = [

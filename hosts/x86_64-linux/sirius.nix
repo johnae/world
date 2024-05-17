@@ -32,6 +32,13 @@
     libvirtd.enable = true;
   };
 
+  microvm.autostart = [
+    "agent-8be5-ac2e"
+    "agent-8be5-9792"
+    "agent-8be5-c91d"
+    "master-8be5-f2ba"
+  ];
+
   programs.ssh.startAgent = true;
 
   boot.binfmt.emulatedSystems = ["aarch64-linux"];
@@ -120,9 +127,13 @@
       };
       "10-microvm" = {
         matchConfig.Name = "microvm";
+        networkConfig = {
+          DHCPServer = true;
+          IPv6SendRA = true;
+        };
         addresses = [
           {
-            addressConfig.Address = "10.100.0.32/27";
+            addressConfig.Address = "10.100.1.1/24";
           }
         ];
       };
@@ -159,6 +170,9 @@
       file = ../../secrets/id_rsa_alt.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_rsa_alt";
+    };
+    ssh_host_microvm_ed25519_key = {
+      file = ../../secrets/ssh_host_microvm_ed25519_key.age;
     };
     syncthing-cert = {
       file = ../../secrets/${hostName}/syncthing-cert.age;
