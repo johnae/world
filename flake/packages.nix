@@ -54,6 +54,7 @@
         wlroots-river = pkgs.wlroots_river_0_17_2;
         river = locallyDefinedPackages.river.override {
           wlroots_0_17 = pkgs.wlroots_river_0_17_2;
+          zig = pkgs.zig_0_11;
         };
       };
   };
