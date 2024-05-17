@@ -60,7 +60,6 @@
           (inputs.hyprland.packages.${system})
           hyprland-debug
           xdg-desktop-portal-hyprland
-          hyprland-protocols
           wlroots-hyprland
           udis86
           ;
