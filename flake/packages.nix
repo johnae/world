@@ -50,20 +50,12 @@
         zjstatus = inputs.zjstatus.packages.${system}.default;
         zwift = inputs.zwift.packages.${system}.default;
         helix-latest = inputs.helix.packages.${system}.helix;
-        hyprland-unstable = inputs.hyprland.packages.${system}.hyprland;
         persway = inputs.persway.packages.${system}.default;
         wlroots-river = pkgs.wlroots_river_0_17_2;
         river = locallyDefinedPackages.river.override {
           wlroots_0_17 = pkgs.wlroots_river_0_17_2;
+          zig = pkgs.zig_0_11;
         };
-        inherit
-          (inputs.hyprland.packages.${system})
-          hyprland-debug
-          xdg-desktop-portal-hyprland
-          hyprland-protocols
-          wlroots-hyprland
-          udis86
-          ;
       };
   };
 }

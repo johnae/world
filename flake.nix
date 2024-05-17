@@ -20,9 +20,17 @@
   inputs = {
     agenix.inputs.home-manager.follows = "nixpkgs";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
+    agenix.inputs.systems.follows = "systems";
     agenix.url = "github:ryantm/agenix";
     age-plugin-yubikey.flake = false;
     age-plugin-yubikey.url = "github:str4d/age-plugin-yubikey";
+    cachix.url = "github:cachix/cachix";
+    cachix.inputs = {
+      devenv.follows = "devenv";
+      flake-compat.follows = "flake-compat";
+      nixpkgs.follows = "nixpkgs";
+      pre-commit-hooks.follows = "pre-commit-hooks";
+    };
     copilot-vim.flake = false;
     copilot-vim.url = "github:github/copilot.vim";
     crane.inputs.nixpkgs.follows = "nixpkgs";
@@ -30,6 +38,7 @@
     devenv.inputs.flake-compat.follows = "flake-compat";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
     devenv.inputs.pre-commit-hooks.follows = "pre-commit-hooks";
+    devenv.inputs.cachix.follows = "cachix";
     devenv.url = "github:cachix/devenv";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
@@ -38,6 +47,7 @@
     flake-compat.flake = false;
     flake-compat.url = "github:edolstra/flake-compat";
     flake-utils.url = "github:numtide/flake-utils";
+    flake-utils.inputs.systems.follows = "systems";
     fluxcd-install.flake = false;
     fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v2.2.3/install.yaml"; # gh-release-update
     helix.inputs.crane.follows = "crane";
@@ -49,8 +59,6 @@
     hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.6.0/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
-    hyprland.inputs.nixpkgs.follows = "nixpkgs";
-    hyprland.url = "github:hyprwm/Hyprland";
     impermanence.url = "github:nix-community/impermanence";
     kured.flake = false;
     kured.url = "github:kubereboot/kured";
@@ -76,7 +84,6 @@
     persway.inputs.nixpkgs.follows = "nixpkgs";
     persway.url = "github:johnae/persway";
     pre-commit-hooks.inputs.flake-compat.follows = "flake-compat";
-    pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     river.url = "git+https://codeberg.org/river/river?submodules=1";
@@ -84,6 +91,7 @@
     rust-overlay.inputs.flake-utils.follows = "flake-utils";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
+    systems.url = "github:nix-systems/default";
     zjstatus.inputs.crane.follows = "crane";
     zjstatus.inputs.flake-utils.follows = "flake-utils";
     zjstatus.inputs.nixpkgs.follows = "nixpkgs";
@@ -91,7 +99,12 @@
     zjstatus.url = "github:dj95/zjstatus";
     zwift.url = "github:johnae/zwift";
     zwift.inputs.crane.follows = "crane";
+    zwift.inputs.devenv.follows = "devenv";
+    zwift.inputs.fenix.follows = "fenix";
+    zwift.inputs.flake-parts.follows = "flake-parts";
     zwift.inputs.flake-utils.follows = "flake-utils";
+    zwift.inputs.mk-shell-bin.follows = "mk-shell-bin";
+    zwift.inputs.nix2container.follows = "nix2container";
     zwift.inputs.nixpkgs.follows = "nixpkgs";
     zwift.inputs.rust-overlay.follows = "rust-overlay";
   };

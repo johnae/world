@@ -95,6 +95,8 @@ in {
     };
   };
 
+  system.stateVersion = "24.05";
+
   environment.systemPackages = [
     pkgs.binutils
     pkgs.cacert
