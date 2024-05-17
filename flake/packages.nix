@@ -60,8 +60,6 @@
           (inputs.hyprland.packages.${system})
           hyprland-debug
           xdg-desktop-portal-hyprland
-          wlroots-hyprland
-          udis86
           ;
       };
   };
