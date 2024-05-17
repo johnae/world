@@ -17,7 +17,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
     - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v4
+      uses: DeterminateSystems/magic-nix-cache-action@v6
     - run: |
         nix run .#world -- lint
 
@@ -31,7 +31,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
     - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v4
+      uses: DeterminateSystems/magic-nix-cache-action@v6
     - run: |
         nix run .#world -- check
 
@@ -47,7 +47,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
     - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v4
+      uses: DeterminateSystems/magic-nix-cache-action@v6
     - id: job-matrix
       run: |
         echo "matrix=$(nix eval .#github-actions-package-matrix-x86-64-linux --json)" >> "$GITHUB_OUTPUT"
@@ -64,7 +64,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
     - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v4
+      uses: DeterminateSystems/magic-nix-cache-action@v6
     - id: job-matrix
       run: |
         echo "matrix=$(nix eval .#github-actions-host-matrix-x86-64-linux --json)" >> "$GITHUB_OUTPUT"
@@ -87,7 +87,7 @@ jobs:
         name: insane
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
     - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v4
+      uses: DeterminateSystems/magic-nix-cache-action@v6
     - env:
         PKG: ${{ matrix.pkg }}
       run: |
