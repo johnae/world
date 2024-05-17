@@ -84,6 +84,8 @@ in {
 
   system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState) {deps = ["persist-files"];};
 
+  system.stateVersion = "24.05";
+
   microvm = {
     volumes = [
       {
