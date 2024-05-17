@@ -76,7 +76,6 @@
     persway.inputs.nixpkgs.follows = "nixpkgs";
     persway.url = "github:johnae/persway";
     pre-commit-hooks.inputs.flake-compat.follows = "flake-compat";
-    pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     river.url = "git+https://codeberg.org/river/river?submodules=1";
