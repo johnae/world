@@ -364,6 +364,18 @@
         "type": "github"
       }
     },
+    "juicefs-csi-driver": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-hAp02U5cvG5N+W8LmuT2A8Qyi1lDLZcd9eYhozqx7/o=",
+        "type": "file",
+        "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.23.6/deploy/k8s.yaml"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.23.6/deploy/k8s.yaml"
+      }
+    },
     "kured": {
       "flake": false,
       "locked": {
@@ -697,6 +709,7 @@
         "hetzner-csi-driver": "hetzner-csi-driver",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
+        "juicefs-csi-driver": "juicefs-csi-driver",
         "kured": "kured",
         "microvm": "microvm",
         "mk-shell-bin": "mk-shell-bin",

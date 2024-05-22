@@ -9,6 +9,10 @@
         mkdir -p $out
         cp ${inputs.hetzner-csi-driver} $out/hetzner-csi-driver.yaml
       '';
+      juicefs-csi-driver-yaml = pkgs.runCommand "juicefs-csi-driver.yaml" {} ''
+        mkdir -p $out
+        cp ${inputs.juicefs-csi-driver} $out/juicefs-csi-driver.yaml
+      '';
       kured-yaml = pkgs.runCommand "kured.yaml" {} ''
         cp ${inputs.kured}/kured-ds.yaml .
         cp ${inputs.kured}/kured-rbac.yaml .

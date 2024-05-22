@@ -19,6 +19,7 @@
     autoDeploy = {
       kured = "${pkgs.kured-yaml}/kured.yaml";
       flux = "${pkgs.fluxcd-yaml}/flux.yaml";
+      juicefs-csi-driver = "${pkgs.juicefs-csi-driver-yaml}/juicefs-csi-driver.yaml";
       cluster-vars = {
         apiVersion = "v1";
         kind = "ConfigMap";
