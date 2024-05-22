@@ -127,11 +127,13 @@
 
   services.redis = {
     package = pkgs.valkey;
-    default = {
-      enable = true;
-      appendOnly = true;
-      bind = null;
-      port = 6379;
+    servers = {
+      default = {
+        enable = true;
+        appendOnly = true;
+        bind = null;
+        port = 6379;
+      };
     };
   };
 
