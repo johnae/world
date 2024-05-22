@@ -30,7 +30,6 @@
                 - --v=5
                 - --enable-manager=true
                 - --format-in-pod=true
-                - --config=/etc/config/config.yaml
         PATCH
         cat<<KUSTOMIZATION>kustomization.yaml
         apiVersion: kustomize.config.k8s.io/v1beta1
