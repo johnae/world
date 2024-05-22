@@ -1,6 +1,7 @@
 {
   adminUser,
   hostName,
+  pkgs,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEEPD945cTDxeNhGljSKqQfRCUeXcwIDKOBD847OECQs";
@@ -124,6 +125,16 @@
   #   };
   # };
 
+  services.redis = {
+    package = pkgs.valkey;
+    default = {
+      enable = true;
+      appendOnly = true;
+      bind = null;
+      port = 6379;
+    };
+  };
+
   security.acme.certs = {
     "bw.ill.dev" = {
       group = "nginx";
@@ -139,6 +150,7 @@
   environment.persistence."/keep" = {
     directories = [
       "/var/lib/acme"
+      "/var/lib/redis-default"
     ];
   };
 
