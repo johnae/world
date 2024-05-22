@@ -33,6 +33,10 @@
       file = ../secrets/k3s/cluster-secrets.yaml.age;
       path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml";
     };
+    juicefs-secret = {
+      file = ../secrets/k3s/juicefs-secret.yaml.age;
+      path = "/var/lib/rancher/k3s/server/manifests/juicefs-secret.yaml";
+    };
   };
 
   microvm.vcpu = lib.mkForce 2;
