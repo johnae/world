@@ -94,11 +94,11 @@ in {
   fileSystems."/etc/rancher".neededForBoot = true;
   fileSystems."/var/lib/rancher".neededForBoot = true;
   microvm.volumes = [
-    # {
-    #   mountPoint = "/var/lib/rancher";
-    #   image = "rancher.img";
-    #   size = 2048;
-    # }
+    {
+      mountPoint = "/var/lib/rancher";
+      image = "rancher.img";
+      size = 1024 * 20; # 20 GiB
+    }
     {
       mountPoint = "/etc/rancher";
       image = "rancher-etc.img";
@@ -111,12 +111,6 @@ in {
       tag = "keep";
       source = "/var/lib/microvms/${hostName}/keep";
       mountPoint = "/keep";
-    }
-    {
-      proto = "virtiofs";
-      tag = "rancher";
-      source = "/var/lib/microvms/${hostName}/rancher";
-      mountPoint = "/var/lib/rancher";
     }
   ];
 }
