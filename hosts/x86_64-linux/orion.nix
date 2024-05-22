@@ -133,6 +133,9 @@
         appendOnly = true;
         bind = null;
         port = 6379;
+        settings = {
+          protected-mode = false;
+        };
       };
     };
   };
