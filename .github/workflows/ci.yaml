@@ -81,7 +81,7 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
-    - uses: cachix/cachix-action@v14
+    - uses: cachix/cachix-action@v15
       if: ${{ matrix.pkg != 'pxebooter' }}
       with:
         name: insane
