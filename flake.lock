@@ -72,6 +72,18 @@
         "type": "github"
       }
     },
+    "cloud-native-pg": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-ct2Pk5P4Z1Jig5yxoeGRH2xa5gK+C3nYgC6djviyX08=",
+        "type": "file",
+        "url": "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.23.1/cnpg-1.23.1.yaml"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.23.1/cnpg-1.23.1.yaml"
+      }
+    },
     "copilot-vim": {
       "flake": false,
       "locked": {
@@ -257,13 +269,13 @@
     "fluxcd-install": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-4S+yEDmWcJ86/Ruq8Z2mKrANh7gkdYdPe0x7NOE3Awk=",
+        "narHash": "sha256-7O9YxABovkeDVA4vePsZl/F734bngeOW2V9I9ThJYAk=",
         "type": "file",
-        "url": "https://github.com/fluxcd/flux2/releases/download/v2.2.3/install.yaml"
+        "url": "https://github.com/fluxcd/flux2/releases/download/v2.3.0/install.yaml"
       },
       "original": {
         "type": "file",
-        "url": "https://github.com/fluxcd/flux2/releases/download/v2.2.3/install.yaml"
+        "url": "https://github.com/fluxcd/flux2/releases/download/v2.3.0/install.yaml"
       }
     },
     "gitignore": {
@@ -367,13 +379,13 @@
     "juicefs-csi-driver": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-hAp02U5cvG5N+W8LmuT2A8Qyi1lDLZcd9eYhozqx7/o=",
+        "narHash": "sha256-EOoMSu/pL4RGZUFuqjYntIOFJRFh9jrRePvg8Utn3Yk=",
         "type": "file",
-        "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.23.6/deploy/k8s.yaml"
+        "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.0/deploy/k8s.yaml"
       },
       "original": {
         "type": "file",
-        "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.23.6/deploy/k8s.yaml"
+        "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.0/deploy/k8s.yaml"
       }
     },
     "kured": {
@@ -696,6 +708,7 @@
         "age-plugin-yubikey": "age-plugin-yubikey",
         "agenix": "agenix",
         "cachix": "cachix",
+        "cloud-native-pg": "cloud-native-pg",
         "copilot-vim": "copilot-vim",
         "crane": "crane",
         "devenv": "devenv",
