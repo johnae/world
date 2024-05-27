@@ -13,30 +13,18 @@ def get-eligible-flake-inputs [] {
 
 def update-release-url [url: string] {
   if ($url | str contains "/releases/") {
-    let url_parts = ($url | split column -c "/" | get 0)
-    let last_col = ($url_parts | columns) | last
-    let owner = ($url_parts | get column3)
-    let repo = ($url_parts | get column4)
-    let version = ($url_parts | get column7 | str replace "v" "")
-    let file = ($url_parts | $last_col)
-    let api_url = $"https://api.github.com/repos/($owner)/($repo)/releases"
-    echo $api_url
+    let url_parts = ($url | parse --regex 'https://github.com/(?P<owner>[a-zA-Z-0-9]+)/(?P<repo>[a-zA-Z-0-9]+)/releases/download/v?(?P<version>[.0-9]+).*/(?P<file>[a-zA-Z0-9-.]+)$')
+    let api_url = $"https://api.github.com/repos/($url_parts.owner | to text)/($url_parts.repo | to text)/releases"
     let releases = (http get $api_url)
     let new_version = ($releases | filter { |release| $release.draft == false and $release.prerelease == false } | first | get name | str replace "v" "")
-    let new_url = $url | str replace $version $new_version
+    let new_url = $url | str replace ($url_parts.version | to text) $new_version
     open flake.nix | str replace $url $new_url | save -f flake.nix
   } else if ($url | str contains "/raw.githubusercontent.com/") {
-    let url_parts = ($url | split column -c "/" | get 0)
-    let last_col = ($url_parts | columns) | last
-    let owner = ($url_parts | get column3)
-    let repo = ($url_parts | get column4)
-    let version = ($url_parts | get column5 | str replace "v" "")
-    let file = ($url_parts | $last_col)
-    let api_url = $"https://api.github.com/repos/($owner)/($repo)/releases"
-    echo $api_url
+    let url_parts = ($url | parse --regex 'https://raw.githubusercontent.com/(?P<owner>[a-zA-Z-0-9]+)/(?P<repo>[a-zA-Z-0-9]+)/v?(?P<version>[.0-9]+).*/(?P<file>[a-zA-Z0-9-.]+)$')
+    let api_url = $"https://api.github.com/repos/($url_parts.owner | to text)/($url_parts.repo | to text)/releases"
     let releases = (http get $api_url)
     let new_version = ($releases | filter { |release| $release.draft == false and $release.prerelease == false } | first | get name | str replace "v" "")
-    let new_url = $url | str replace $version $new_version
+    let new_url = $url | str replace ($url_parts.version | to text) $new_version
     open flake.nix | str replace $url $new_url | save -f flake.nix
   } else {
     echo $"gh-release-update: unsupported URL ($url), skip"
