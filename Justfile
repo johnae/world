@@ -43,6 +43,10 @@ echo +args:
   @echo '{{args}}'
 
 [private]
+gh-release-update:
+  ./misc/gh-release-update.nu
+
+[private]
 lint:
   @statix check .
 
