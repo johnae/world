@@ -97,10 +97,10 @@
     };
     river = wlrConf;
     sway = wlrConf;
-    Hyprland = {
-      default = ["hyprland" "gtk"];
-      "org.freedesktop.impl.portal.Secret" = ["gnome-keyring"];
-    };
+    # Hyprland = {
+    #   default = ["hyprland" "gtk"];
+    #   "org.freedesktop.impl.portal.Secret" = ["gnome-keyring"];
+    # };
   };
 
   fonts.packages = with pkgs; [

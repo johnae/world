@@ -39,6 +39,18 @@
       ip -o -4 -family inet -json addr show scope global dev "$IFACE" | jq -r '.[0].addr_info[0].local'
     '';
   };
+  getIfaceWithMac = pkgs.writeShellApplication {
+    name = "get-iface-with-mac";
+    runtimeInputs = with pkgs; [jq iproute2];
+    text = ''
+      MAC=''${1:-}
+      if [ "$MAC" = "" ]; then
+        echo Please provide the mac address to get the interface name
+        exit 1
+      fi
+      ip -o -json link show | jq -r ".[] | select(.address == \"$MAC\") | .ifname"
+    '';
+  };
   settingsToCli = s: let
     boolToCli = path: value:
       if value
@@ -52,6 +64,8 @@
         k: v:
           if isBool v
           then boolToCli path v
+          else if v == null
+          then ""
           else "--${path} ${k}=${toString v}"
       );
     fieldToCli = path: value:
@@ -61,6 +75,8 @@
       then boolToCli path value
       else if isList value
       then listToCli path value
+      else if value == null
+      then ""
       else "--${path} ${toString value}";
   in
     flatten (mapAttrsToList fieldToCli s);
@@ -104,7 +120,7 @@ in {
     systemd.services.k3s = let
       k3s = pkgs.writeShellApplication {
         name = "k3s";
-        runtimeInputs = with pkgs; [getIfaceIp gawk envsubst];
+        runtimeInputs = with pkgs; [getIfaceIp getIfaceWithMac gawk envsubst];
         text =
           concatStringsSep " "
           ([

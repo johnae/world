@@ -153,6 +153,8 @@ in {
   ## only allow declarative user management
   users.mutableUsers = false;
 
+  system.stateVersion = "24.05";
+
   ##
   system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState) {deps = ["persist-files"];};
 

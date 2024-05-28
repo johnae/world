@@ -35,6 +35,44 @@
     #    luks.devices.cryptkey.crypttabExtraOpts = ["fido2-device=auto"];
   };
 
+  networking.useDHCP = false;
+  networking.nat = {
+    enable = true;
+    enableIPv6 = true;
+    internalInterfaces = ["microvm"];
+  };
+  systemd.network = {
+    enable = true;
+    netdevs = {
+      "10-microvm".netdevConfig = {
+        Kind = "bridge";
+        Name = "microvm";
+      };
+    };
+    networks = {
+      "10-lan" = {
+        matchConfig.Name = ["enp*" "wlan*" "wlp*"];
+        networkConfig.DHCP = "ipv4";
+      };
+      "10-microvm" = {
+        matchConfig.Name = "microvm";
+        networkConfig = {
+          DHCPServer = true;
+          IPv6SendRA = true;
+        };
+        addresses = [
+          {
+            addressConfig.Address = "10.100.100.1/24";
+          }
+        ];
+      };
+      "11-microvm" = {
+        matchConfig.Name = "vm-*";
+        networkConfig.Bridge = "microvm";
+      };
+    };
+  };
+
   age.secrets = {
     spotnix = {
       file = ../../secrets/spotnix.age;
@@ -106,7 +144,7 @@
         devices = [
           "antares"
           "icarus"
-          "polaris"
+          "sirius"
           "orion"
           "titan"
           "hyperion"
@@ -119,7 +157,7 @@
         devices = [
           "antares"
           "orion"
-          "polaris"
+          "sirius"
         ];
       };
       folders."/home/${adminUser.name}/Photos" = {
@@ -128,7 +166,7 @@
           "antares"
           "icarus"
           "orion"
-          "polaris"
+          "sirius"
           "s23ultra"
         ];
 

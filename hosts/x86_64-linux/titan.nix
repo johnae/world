@@ -100,7 +100,7 @@
           "eris"
           "hyperion"
           "icarus"
-          "polaris"
+          "sirius"
           "s23ultra"
           "s8plus"
         ];
@@ -111,21 +111,14 @@
   services.remote-unlock = [
     {
       enable = true;
-      host = "65.108.233.47";
-      port = 2222;
-      identityFile = "/run/agenix/id_ed25519_remote_unlock";
-      passwordFile = "/run/agenix/remote-disk-password";
-    }
-    {
-      enable = true;
-      host = "65.109.80.32";
-      port = 2222;
-      identityFile = "/run/agenix/id_ed25519_remote_unlock";
-      passwordFile = "/run/agenix/remote-disk-password";
-    }
-    {
-      enable = true;
       host = "65.109.85.161";
+      port = 2222;
+      identityFile = "/run/agenix/id_ed25519_remote_unlock";
+      passwordFile = "/run/agenix/remote-disk-password";
+    }
+    {
+      enable = true;
+      host = "65.109.92.173";
       port = 2222;
       identityFile = "/run/agenix/id_ed25519_remote_unlock";
       passwordFile = "/run/agenix/remote-disk-password";
