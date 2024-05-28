@@ -673,24 +673,6 @@
         "type": "github"
       }
     },
-    "river": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1716474062,
-        "narHash": "sha256-AOWnFp+ruWfJomi7QxGqpQ4eVvVXDRtALiCd7EzkUnI=",
-        "ref": "refs/heads/master",
-        "rev": "c5b1d1de4e78fcd39d08d8b71486dd85edc60f3c",
-        "revCount": 1269,
-        "submodules": true,
-        "type": "git",
-        "url": "https://codeberg.org/river/river"
-      },
-      "original": {
-        "submodules": true,
-        "type": "git",
-        "url": "https://codeberg.org/river/river"
-      }
-    },
     "root": {
       "inputs": {
         "age-plugin-yubikey": "age-plugin-yubikey",
@@ -720,7 +702,6 @@
         "nur": "nur",
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks",
-        "river": "river",
         "rust-overlay": "rust-overlay",
         "systems": "systems",
         "zjstatus": "zjstatus",
