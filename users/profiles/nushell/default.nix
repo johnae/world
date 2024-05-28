@@ -44,17 +44,35 @@ in {
       ${
         lib.concatStringsSep "\n"
         (
-          map (completion: "use ${nu-scripts}/custom-completions/${completion}/${completion}-completions.nu") [
-            "cargo"
-            "git"
-            "just"
-            "nix"
-            "npm"
-            "typst"
-            "man"
-            "make"
-            "zellij"
+          (
+            map (completion: "use ${nu-scripts}/custom-completions/${completion}/${completion}-completions.nu") [
+              "bat"
+              "cargo"
+              "curl"
+              "gh"
+              "git"
+              "just"
+              "make"
+              "man"
+              "nix"
+              "npm"
+              "rg"
+              "tar"
+              "typst"
+              "zellij"
+            ]
+          )
+          ++ [
+            "use ${nu-scripts}/custom-completions/yarn/yarn-v4-completions.nu"
           ]
+          ++ (
+            map (module_path: "source ${nu-scripts}/modules/${module_path}") [
+              "argx/mod.nu"
+              "data_extraction/ultimate_extractor.nu"
+              # "kubernetes/mod.nu"
+              "nix/nix.nu"
+            ]
+          )
         )
       }
 
