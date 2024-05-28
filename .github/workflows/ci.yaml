@@ -10,11 +10,10 @@ jobs:
   nix_lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v26
+    - uses: actions/checkout@v4      
+    - uses: DeterminateSystems/nix-installer-action@v11
       with:
-        extra_nix_config: |
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+        extra-conf: |
           accept-flake-config = true
     - name: Run the Magic Nix Cache
       uses: DeterminateSystems/magic-nix-cache-action@v6
@@ -25,10 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v26
+    - uses: DeterminateSystems/nix-installer-action@v11
       with:
-        extra_nix_config: |
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+        extra-conf: |
           accept-flake-config = true
     - name: Run the Magic Nix Cache
       uses: DeterminateSystems/magic-nix-cache-action@v6
@@ -41,10 +39,9 @@ jobs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v26
+    - uses: DeterminateSystems/nix-installer-action@v11
       with:
-        extra_nix_config: |
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+        extra-conf: |
           accept-flake-config = true
     - name: Run the Magic Nix Cache
       uses: DeterminateSystems/magic-nix-cache-action@v6
@@ -58,10 +55,9 @@ jobs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v26
+    - uses: DeterminateSystems/nix-installer-action@v11
       with:
-        extra_nix_config: |
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+        extra-conf: |
           accept-flake-config = true
     - name: Run the Magic Nix Cache
       uses: DeterminateSystems/magic-nix-cache-action@v6
@@ -76,10 +72,9 @@ jobs:
       matrix: ${{ fromJson(needs.pkgs_x86_64_linux.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v26
+    - uses: DeterminateSystems/nix-installer-action@v11
       with:
-        extra_nix_config: |
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+        extra-conf: |
           accept-flake-config = true
     - uses: cachix/cachix-action@v15
       if: ${{ matrix.pkg != 'pxebooter' }}
