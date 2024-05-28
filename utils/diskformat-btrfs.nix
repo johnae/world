@@ -7,6 +7,7 @@
   inherit (lib) attrByPath mapAttrsToList concatStringsSep flatten;
   inherit (builtins) filter match foldl' replaceStrings;
   inherit (config.config) boot cryptsetup btrfs bcachefs machinePurpose disk;
+  inherit (btrfs) subvolumes;
   bootMode =
     if boot.loader.systemd-boot.enable
     then "UEFI"
@@ -32,19 +33,6 @@
   luksKeySpace = "20M";
   ramGb = "$(free --giga | tail -n+2 | head -1 | awk '{print $2}')";
   uuidCryptKey = (attrByPath ["config" "boot" "initrd" "luks" "devices" "cryptkey" "keyFile"] null config) != null;
-  subvolumes = lib.unique (
-    filter (v: v != null)
-    (
-      flatten
-      (
-        map (match "^subvol=(.*)")
-        (
-          foldl' (a: b: a ++ b.options) []
-          (filter (v: v.fsType == "btrfs") (mapAttrsToList (_: v: v) config.config.fileSystems))
-        )
-      )
-    )
-  );
 in
   writeShellApplication {
     name = "diskformat";
@@ -101,8 +89,8 @@ in
         else "yes"
       }
 
-      DISK_PASSWORD=""
-      if [ "$USER_DISK_PASSWORD" = "yes" ]; then
+      DISK_PASSWORD="''${DISK_PASSWORD:-}"
+      if [ "$USER_DISK_PASSWORD" = "yes" ] && [ -z "$DISK_PASSWORD" ]; then
         while true; do
           echo -n Disk password:
           read -r -s DISK_PASSWORD
@@ -142,7 +130,12 @@ in
       fi
 
       DISK=${builtins.head btrfsDisks}
-      PARTITION_PREFIX="p"
+      PARTITION_PREFIX=""
+
+      if echo "$DISK" | grep -q nvme; then
+        echo "$DISK" is an NVMe device
+        PARTITION_PREFIX="p"
+      fi
 
       if [ ! -b "$DISK" ]; then
         echo "$DISK" is not a block device

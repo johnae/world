@@ -1,6 +1,7 @@
 {
-  pkgs,
   config,
+  lib,
+  pkgs,
   ...
 }: let
   inherit (config.home) username;
@@ -10,16 +11,16 @@
     text = ''
       # shellcheck disable=SC1083
       project="$(fd \.git /home/john/Development -d 3 -u -t d -x echo {//} | sort -u | sk)"
-      name="$(basename "$project")"
-      if zellij action query-tab-names | grep -q "$name"; then
-        zellij action go-to-tab-name "$name"
-        exit 0
-      fi
-      if [ -e "$project/dev.kdl" ]; then
-        zellij action new-tab -l "$project/dev.kdl" -c "$project" -n "$name"
-      else
-        zellij action new-tab -l dev -c "$project" -n "$name"
-      fi
+      zellij pipe --name zwift_selection "$project"
+    '';
+  };
+  openSession = pkgs.writeShellApplication {
+    name = "zellij-open-session";
+    runtimeInputs = [pkgs.zellij pkgs.skim];
+    text = ''
+      # shellcheck disable=SC1083
+      session="$(zellij ls -s | sk)"
+      zellij pipe --name zwift_selection "$session"
     '';
   };
   direnvExecMaybe = pkgs.writeShellApplication {
@@ -33,29 +34,83 @@
       fi
     '';
   };
+  zjstatusPane = ''
+    pane size=1 borderless=true {
+      plugin location="file://${pkgs.zjstatus}/bin/zjstatus.wasm" {
+
+        format_left  "{mode}#[fg=#89B4FA,bg=#181825,bold] {session}#[bg=#181825] {tabs}"
+        format_center "{command_hostname}"
+        format_right "{command_git_branch} {command_kubectx} {command_kubens} {datetime}"
+        format_space "#[bg=#181825]"
+
+        mode_normal          "#[bg=#89B4FA,fg=#000000] {name} "
+        mode_tmux            "#[bg=#ffc387,fg=#000000] {name} "
+        mode_default_to_mode "tmux"
+
+        tab_normal               "#[fg=#6C7086,bg=#181825] {index} {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"
+        tab_active               "#[fg=#9399B2,bg=#181825,bold,italic] {index} {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"
+        tab_fullscreen_indicator "□ "
+        tab_sync_indicator       "  "
+        tab_floating_indicator   "󰉈 "
+
+        command_kubectx_command  "kubectx -c"
+        command_kubectx_format   "#[fg=#6C7086,bg=#181825,italic] {stdout}"
+        command_kubectx_interval "2"
+
+        command_kubens_command  "kubens -c"
+        command_kubens_format   "#[fg=#6C7086,bg=#181825,bold]{stdout} "
+        command_kubens_interval "2"
+
+        command_hostname_command  "hostname"
+        command_hostname_format   "#[fg=#6C7086,bg=#181825,bold]{stdout} "
+        command_hostname_interval "30"
+
+        command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
+        command_git_branch_format      "#[fg=#89B4FA,bg=#181825,bold] on {stdout} "
+        command_git_branch_interval    "2"
+        command_git_branch_rendermode  "static"
+
+        datetime          "#[fg=#9399B2,bg=#181825] {format} "
+        datetime_format   "%A, %d %b %Y %H:%M"
+        datetime_timezone "Europe/Stockholm"
+      }
+    }
+  '';
 in {
+  home.packages = [direnvExecMaybe];
   xdg.configFile."zellij/layouts/dev.kdl".text = ''
+
     layout {
-      tab focus=true hide_floating_panes=true {
-        pane split_direction="horizontal" {
-          pane size="75%" command="${direnvExecMaybe}/bin/direnv-exec-maybe" {
+      default_tab_template {
+          children
+          ${zjstatusPane}
+      }
+
+      tab_template name="main" {
+        pane split_direction="vertical" {
+          pane size="75%" command="direnv-exec-maybe" {
             args "hx" "."
           }
-          pane
-        }
-        pane size=1 borderless=true {
-          plugin location="zellij:compact-bar"
+          pane split_direction="horizontal" stacked=true {
+            pane
+            pane
+            pane
+          }
         }
 
         floating_panes {
             pane {
-              x "2%"
-              y "2"
-              width "96%"
-              height "96%"
+              x "10%"
+              y "2%"
+              width "80%"
+              height "80%"
             }
         }
+
+        ${zjstatusPane}
       }
+
+      main focus=true hide_floating_panes=true name="main"
     }
   '';
   xdg.configFile."zellij/layouts/default.kdl".text = ''
@@ -201,7 +256,20 @@ in {
               }
             }
             bind "Ctrl a" {
+              LaunchOrFocusPlugin "file://${pkgs.zwift}/bin/zwift.wasm" {
+                floating true
+              }
               Run "${openProject}/bin/zellij-open-project" {
+                cwd "/home/${username}"
+                floating true
+                close_on_exit true
+              }
+            }
+            bind "Alt a" {
+              LaunchOrFocusPlugin "file://${pkgs.zwift}/bin/zwift.wasm" {
+                floating true
+              }
+              Run "${openSession}/bin/zellij-open-session" {
                 cwd "/home/${username}"
                 floating true
                 close_on_exit true
@@ -209,6 +277,9 @@ in {
             }
             bind "Alt Left" { MoveFocusOrTab "Left"; }
             bind "Alt Right" { MoveFocusOrTab "Right"; }
+
+            ${lib.concatStringsSep "\n" (builtins.genList (x: "bind \"Alt ${toString (x + 1)}\" { GoToTab ${toString (x + 1)}; }") 9)}
+
             bind "Alt Down" { MoveFocus "Down"; }
             bind "Alt Up" { MoveFocus "Up"; }
         }
@@ -236,12 +307,19 @@ in {
     }
 
     plugins {
-        tab-bar { path "tab-bar"; }
-        status-bar { path "status-bar"; }
-        strider { path "strider"; }
-        compact-bar { path "compact-bar"; }
-        session-manager { path "session-manager"; }
+        tab-bar location="zellij:tab-bar"
+        status-bar location="zellij:status-bar"
+        strider location="zellij:strider"
+        compact-bar location="zellij:compact-bar"
+        session-manager location="zellij:session-manager"
+        welcome-screen location="zellij:session-manager" {
+            welcome_screen true
+        }
+        filepicker location="zellij:strider" {
+            cwd "/"
+        }
     }
+
   '';
   programs.zellij = {
     enable = true;

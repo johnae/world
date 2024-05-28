@@ -9,6 +9,38 @@
         mkdir -p $out
         cp ${inputs.hetzner-csi-driver} $out/hetzner-csi-driver.yaml
       '';
+      juicefs-csi-driver-yaml = pkgs.runCommand "juicefs-csi-driver.yaml" {} ''
+        mkdir -p $out
+        cp ${inputs.juicefs-csi-driver} juicefs-csi-driver.yaml
+        cat<<PATCH>juicefs-csi-driver-patch.yaml
+        apiVersion: apps/v1
+        kind: DaemonSet
+        metadata:
+          name: juicefs-csi-node
+          namespace: kube-system
+        spec:
+          template:
+            spec:
+              containers:
+              - name: juicefs-plugin
+                args:
+                - --endpoint=\$(CSI_ENDPOINT)
+                - --logtostderr
+                - --nodeid=\$(NODE_NAME)
+                - --v=5
+                - --enable-manager=true
+                - --format-in-pod=true
+        PATCH
+        cat<<KUSTOMIZATION>kustomization.yaml
+        apiVersion: kustomize.config.k8s.io/v1beta1
+        kind: Kustomization
+        resources:
+        - juicefs-csi-driver.yaml
+        patches:
+        - path: juicefs-csi-driver-patch.yaml
+        KUSTOMIZATION
+        ${pkgs.kustomize}/bin/kustomize build . > $out/juicefs-csi-driver.yaml
+      '';
       kured-yaml = pkgs.runCommand "kured.yaml" {} ''
         cp ${inputs.kured}/kured-ds.yaml .
         cp ${inputs.kured}/kured-rbac.yaml .

@@ -71,7 +71,12 @@ in
       DEVRANDOM=/dev/urandom
 
       DISK=${builtins.head bcacheFsDisks}
-      PARTITION_PREFIX="p"
+      PARTITION_PREFIX=""
+
+      if echo "$DISK" | grep -q nvme; then
+        echo "$DISK" is an NVMe device
+        PARTITION_PREFIX="p"
+      fi
 
       if [ ! -b "$DISK" ]; then
         echo "$DISK" is not a block device
@@ -212,8 +217,7 @@ in
 
       # now create the bcachefs subvolumes we're interested in having
       echo Creating bcachefs subvolumes at /mnt/keep
-      cd /mnt/keep
-      ${concatStringsSep "\n" (map (v: "bcachefs subvolume create ${v}") subvolumes)}
+      ${concatStringsSep "\n" (map (v: "bcachefs subvolume create /mnt/keep/${v}") subvolumes)}
 
       cd "$DIR"
 

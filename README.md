@@ -35,7 +35,7 @@ After that, just pick the host you're installing, like this:
   host=eris
   nix build .#"$host"-diskformat
   ./result/bin/diskformat
-  nixos-install --flake .#"$host" --no-root-passwd --impure
+  nixos-install --flake .#"$host" --no-root-passwd
 ```
 
 Hosts are defined in the [hosts/](hosts/) directory.

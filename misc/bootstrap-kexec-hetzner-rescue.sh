@@ -34,7 +34,7 @@ cat <<EOF > /root/config.nix
   boot.initrd.availableKernelModules = ["xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc"];
   boot.supportedFilesystems = lib.mkForce [ "btrfs" "cifs" "f2fs" "jfs" "ntfs" "reiserfs" "vfat" "xfs" "bcachefs" ];
   users.users.root.openssh.authorizedKeys.keys = [
-    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDp;auQBOftphOeuF2TaBHGQSAAAABHNzaDo="
+    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIJY3QSBIiRKN8/B3nHgCBDpauQBOftphOeuF2TaBHGQSAAAABHNzaDo="
     "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo="
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+trOinD68RD1efI6p05HeaNA0SjzeRnUvpf22+jsq+"
   ];
@@ -57,15 +57,12 @@ cat <<EOF > /root/config.nix
     jq
   ];
 
-  networking.usePredictableInterfaceNames = false;
-  networking.dhcpcd.enable = false;
   networking.useDHCP = false;
-  networking.useNetworkd = true;
   systemd.network = {
     enable = true;
-    networks."eth0".extraConfig = ''
+    networks."10-wan".extraConfig = ''
       [Match]
-      Name = eth0
+      Name = enp*
       [Network]
       Address = $ipv6
       Gateway = fe80::1

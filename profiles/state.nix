@@ -11,6 +11,7 @@
       "/var/lib/tailscale"
       "/var/lib/wireguard"
       "/var/lib/libvirt"
+      "/var/lib/microvms"
       "/var/log"
     ];
     files = [

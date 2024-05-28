@@ -1,6 +1,7 @@
 {
   adminUser,
   hostName,
+  pkgs,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEEPD945cTDxeNhGljSKqQfRCUeXcwIDKOBD847OECQs";
@@ -34,6 +35,14 @@
     libvirtd.enable = true;
   };
 
+  microvm.autostart = [
+    "agent-8be5-d4a1"
+    "agent-8be5-15c3"
+    "agent-8be5-32c4"
+    "master-8be5-a0a1"
+    "master-8be5-c1ce"
+  ];
+
   programs.ssh.startAgent = true;
 
   boot.binfmt.emulatedSystems = ["aarch64-linux"];
@@ -48,7 +57,7 @@
   };
 
   boot.kernelParams = [
-    "ip=65.109.85.161::65.109.85.129:255.255.255.192:${hostName}:eth0:none"
+    "ip=65.109.85.161::65.109.85.129:255.255.255.192:${hostName}::none"
   ];
 
   ## for tailscale exit node functionality
@@ -68,7 +77,6 @@
     ssh = {
       enable = true;
       port = 2222;
-      ## This isn't so nice. Have to copy the file to /keep/secrets and keep it there.
       hostKeys = [
         "/keep/secrets/initrd_ed25519_key"
       ];
@@ -117,6 +125,21 @@
   #   };
   # };
 
+  services.redis = {
+    package = pkgs.valkey;
+    servers = {
+      default = {
+        enable = true;
+        appendOnly = true;
+        bind = null;
+        port = 6379;
+        settings = {
+          protected-mode = false;
+        };
+      };
+    };
+  };
+
   security.acme.certs = {
     "bw.ill.dev" = {
       group = "nginx";
@@ -132,6 +155,7 @@
   environment.persistence."/keep" = {
     directories = [
       "/var/lib/acme"
+      "/var/lib/redis-default"
     ];
   };
 
@@ -150,27 +174,56 @@
     };
   };
 
-  networking = {
-    defaultGateway = "65.109.85.129";
-    defaultGateway6 = {
-      address = "fe80::1";
-      interface = "eth0";
-    };
-    firewall.trustedInterfaces = ["tailscale0"];
-    interfaces.eth0.ipv4.addresses = [
-      {
-        address = "65.109.85.161";
-        prefixLength = 26;
-      }
-    ];
-
-    interfaces.eth0.ipv6.addresses = [
-      {
-        address = "2a01:4f9:3051:5389::2";
-        prefixLength = 64;
-      }
-    ];
+  networking.useDHCP = false;
+  networking.nat = {
+    enable = true;
+    enableIPv6 = true;
+    internalInterfaces = ["microvm"];
   };
+
+  systemd.network = {
+    enable = true;
+    netdevs = {
+      "10-microvm".netdevConfig = {
+        Kind = "bridge";
+        Name = "microvm";
+      };
+    };
+    networks = {
+      "10-wan" = {
+        ## udevadm test-builtin net_id /sys/class/net/eth0
+        ## https://www.freedesktop.org/software/systemd/man/latest/systemd.net-naming-scheme.html
+        matchConfig.Name = ["enp*"];
+        address = [
+          "65.109.85.161/26"
+          "2a01:4f9:3051:5389::2/64"
+        ];
+        routes = [
+          {routeConfig.Gateway = "65.109.85.129";}
+          {routeConfig.Gateway = "fe80::1";}
+        ];
+        linkConfig.RequiredForOnline = "routable";
+      };
+      "10-microvm" = {
+        matchConfig.Name = "microvm";
+        networkConfig = {
+          DHCPServer = true;
+          IPv6SendRA = true;
+        };
+        addresses = [
+          {
+            addressConfig.Address = "10.100.0.1/24";
+          }
+        ];
+      };
+      "11-microvm" = {
+        matchConfig.Name = "vm-*";
+        networkConfig.Bridge = "microvm";
+      };
+    };
+  };
+
+  networking.firewall.trustedInterfaces = ["tailscale0" "microvm"];
 
   age.secrets = {
     initrd-key = {
@@ -196,6 +249,9 @@
       file = ../../secrets/id_rsa_alt.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_rsa_alt";
+    };
+    ssh_host_microvm_ed25519_key = {
+      file = ../../secrets/ssh_host_microvm_ed25519_key.age;
     };
     syncthing-cert = {
       file = ../../secrets/${hostName}/syncthing-cert.age;
@@ -239,7 +295,7 @@
           "antares"
           "eris"
           "hyperion"
-          "polaris"
+          "sirius"
           "icarus"
           "s23ultra"
           "s8plus"
@@ -250,7 +306,7 @@
         id = "pictures";
         devices = [
           "antares"
-          "polaris"
+          "sirius"
           "eris"
         ];
       };
@@ -259,7 +315,7 @@
         devices = [
           "antares"
           "eris"
-          "polaris"
+          "sirius"
           "icarus"
           "s23ultra"
         ];

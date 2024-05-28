@@ -87,8 +87,8 @@ in
         else "yes"
       }
 
-      DISK_PASSWORD=""
-      if [ "$USER_DISK_PASSWORD" = "yes" ]; then
+      DISK_PASSWORD="''${DISK_PASSWORD:-}"
+      if [ "$USER_DISK_PASSWORD" = "yes" ] && [ -z "$DISK_PASSWORD" ]; then
         while true; do
           echo -n Disk password:
           read -r -s DISK_PASSWORD
@@ -128,7 +128,12 @@ in
       fi
 
       DISK=${builtins.head bcacheFsDisks}
-      PARTITION_PREFIX="p"
+      PARTITION_PREFIX=""
+
+      if echo "$DISK" | grep -q nvme; then
+        echo "$DISK" is an NVMe device
+        PARTITION_PREFIX="p"
+      fi
 
       if [ ! -b "$DISK" ]; then
         echo "$DISK" is not a block device
@@ -344,14 +349,14 @@ in
 
       # now create the bcachefs subvolumes we're interested in having
       echo Creating bcachefs subvolumes at /mnt/keep
-      cd /mnt/keep
-      ${concatStringsSep "\n" (map (v: "bcachefs subvolume create ${v}") subvolumes)}
+      ${concatStringsSep "\n" (map (v: "bcachefs subvolume create /mnt/keep/${v}") subvolumes)}
 
       cd "$DIR"
 
-      echo Bind mounting subvolumes
+      echo Create /mnt mount points
       mkdir -p ${concatStringsSep " " (map (sub: "/mnt/${sub}") subvolumes)} /mnt/boot
-      ${concatStringsSep "\n" (map (sub: "mount --bind /mnt/keep/${sub} /mnt/${sub}") subvolumes)}
+      echo Bind mounting nix subvolume
+      mount --bind /mnt/keep/nix /mnt/nix
 
       # and mount the boot partition
       echo Mounting boot partition

@@ -14,7 +14,7 @@ in {
       ./firefox.nix
       ./foot.nix
       ./fuzzel.nix
-      ./hyprland.nix
+      # ./hyprland.nix
       ./kanshi.nix
       ./mako.nix
       ./obs.nix
@@ -23,7 +23,7 @@ in {
       ./river.nix
       ./rofi.nix
       # ./spotifyd.nix
-      ./sway.nix
+      # ./sway.nix
       ./waybar.nix
       ./wlsunset.nix
     ];
@@ -39,7 +39,6 @@ in {
     persway
     playerctl
     river-luatile
-    scripts
     shotcut
     slack
     tenacity
@@ -47,6 +46,14 @@ in {
     wl-clipboard-x11
     xdg-utils
   ];
+
+  xdg.configFile."wpaperd/wallpaper.toml".source = pkgs.writeText "wallpaper.toml" ''
+    [default]
+    path = "~/Sync/wallpapers"
+    duration = "30m"
+    sorting = "random"
+    apply-shadow = false
+  '';
 
   ## because https://github.com/nix-community/home-manager/issues/1213
   xdg.configFile."mimeapps.list".force = true;
@@ -87,7 +94,7 @@ in {
 
   qt = {
     enable = true;
-    platformTheme = "gnome";
+    platformTheme.name = "adwaita";
     style.name = "adwaita-dark";
     style.package = pkgs.adwaita-qt;
   };

@@ -17,7 +17,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
     - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v4
+      uses: DeterminateSystems/magic-nix-cache-action@v6
     - run: |
         nix run .#world -- lint
 
@@ -31,7 +31,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
     - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v4
+      uses: DeterminateSystems/magic-nix-cache-action@v6
     - run: |
         nix run .#world -- check
 
@@ -47,7 +47,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
     - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v4
+      uses: DeterminateSystems/magic-nix-cache-action@v6
     - id: job-matrix
       run: |
         echo "matrix=$(nix eval .#github-actions-package-matrix-x86-64-linux --json)" >> "$GITHUB_OUTPUT"
@@ -64,7 +64,7 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
     - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v4
+      uses: DeterminateSystems/magic-nix-cache-action@v6
     - id: job-matrix
       run: |
         echo "matrix=$(nix eval .#github-actions-host-matrix-x86-64-linux --json)" >> "$GITHUB_OUTPUT"
@@ -81,13 +81,13 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           accept-flake-config = true
-    - uses: cachix/cachix-action@v14
+    - uses: cachix/cachix-action@v15
       if: ${{ matrix.pkg != 'pxebooter' }}
       with:
         name: insane
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
     - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v4
+      uses: DeterminateSystems/magic-nix-cache-action@v6
     - env:
         PKG: ${{ matrix.pkg }}
       run: |

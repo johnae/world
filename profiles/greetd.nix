@@ -93,14 +93,14 @@
     '';
 
   sessions = [
-    {
-      name = "sway.desktop";
-      path = desktopSession "sway" "${runSway}/bin/sway";
-    }
-    {
-      name = "Hyprland.desktop";
-      path = desktopSession "Hyprland" "${runHyprland}/bin/Hyprland";
-    }
+    # {
+    #   name = "sway.desktop";
+    #   path = desktopSession "sway" "${runSway}/bin/sway";
+    # }
+    # {
+    #   name = "Hyprland.desktop";
+    #   path = desktopSession "Hyprland" "${runHyprland}/bin/Hyprland";
+    # }
     {
       name = "river.desktop";
       path = desktopSession "river" "${runRiver}/bin/river";
