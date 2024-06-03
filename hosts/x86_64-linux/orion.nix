@@ -89,14 +89,16 @@
     };
   };
 
-  services.tailscale.auth = {
-    enable = true;
-    args.advertise-tags = ["tag:server"];
-    args.ssh = true;
-    args.accept-routes = false;
-    args.accept-dns = true;
-    args.advertise-exit-node = true;
-    args.auth-key = "file:/var/run/agenix/ts-google-9k";
+  services.tailscale = {
+    authKeyFile = "/var/run/agenix/ts-google-9k";
+    useRoutingFeatures = "both";
+    extraUpFlags = [
+      "--accept-dns=true"
+      "--accept-routes=true"
+      "--advertise-exit-node=true"
+      "--advertise-tags=tag:server"
+      "--ssh"
+    ];
   };
 
   services.nginx = {
