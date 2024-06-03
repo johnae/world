@@ -117,6 +117,7 @@ in {
       }
 
       main focus=true hide_floating_panes=true name="main"
+      tab name="alt"
     }
   '';
   xdg.configFile."zellij/layouts/default.kdl".text = ''
