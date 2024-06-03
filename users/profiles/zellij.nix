@@ -82,7 +82,12 @@ in {
 
     layout {
       default_tab_template {
-          children
+          pane split_direction="vertical" {
+            pane focus=true size="65%"
+            pane split_direction="horizontal" stacked=true {
+              children
+            }
+          }
           ${zjstatusPane}
       }
 
@@ -92,8 +97,9 @@ in {
             args "hx" "."
           }
           pane split_direction="horizontal" stacked=true {
-            pane
-            pane
+            pane expanded=true command="direnv-exec-maybe" {
+              args "bash" "-c" "if hash devenv 2>/dev/null; then exec devenv up; else echo no devenv; exec $SHELL; fi"
+            }
             pane
           }
         }
@@ -118,9 +124,7 @@ in {
       pane split_direction="horizontal" {
         pane
       }
-      pane size=1 borderless=true {
-        plugin location="zellij:compact-bar"
-      }
+      ${zjstatusPane}
     }
   '';
   xdg.configFile."zellij/config.kdl".text = ''
