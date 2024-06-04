@@ -115,6 +115,12 @@
         locations."/".proxyWebsockets = true;
         forceSSL = true;
       };
+      "bs.9000.dev" = {
+        useACMEHost = "bs.9000.dev";
+        locations."/".proxyPass = "http://localhost:7007";
+        locations."/".proxyWebsockets = true;
+        forceSSL = true;
+      };
     };
   };
 
@@ -147,6 +153,9 @@
       group = "nginx";
     };
     "bw.9000.dev" = {
+      group = "nginx";
+    };
+    "bs.9000.dev" = {
       group = "nginx";
     };
     "bw.johnae.dev" = {
