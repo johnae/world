@@ -23,6 +23,25 @@
       zellij pipe --name zwift_selection "$session"
     '';
   };
+  zellij-wrapped = pkgs.writeShellApplication {
+    name = "zellij";
+    runtimeInputs = [pkgs.zellij];
+    text = ''
+      mkdir -p ~/.cache/zellij
+      cat<<EOF>~/.cache/zellij/permissions.kdl
+      "${pkgs.zwift}/bin/zwift.wasm" {
+          ReadApplicationState
+          ChangeApplicationState
+      }
+      "${pkgs.zjstatus}/bin/zjstatus.wasm" {
+          ChangeApplicationState
+          RunCommands
+          ReadApplicationState
+      }
+      EOF
+      zellij "$@"
+    '';
+  };
   direnvExecMaybe = pkgs.writeShellApplication {
     name = "direnv-exec-maybe";
     runtimeInputs = [pkgs.direnv];
@@ -328,5 +347,6 @@ in {
   '';
   programs.zellij = {
     enable = true;
+    package = zellij-wrapped;
   };
 }
