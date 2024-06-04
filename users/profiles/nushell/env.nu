@@ -104,3 +104,5 @@ def "convert-datetime" [field: string] {
 def "timestamp into datetime" [] {
     $in * 1_000_000_000 | into datetime
 }
+
+def --wrapped k [...args] { ^kubectl ...$args | from ssv }
