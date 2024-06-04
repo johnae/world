@@ -43,6 +43,7 @@
   };
   systemd.network = {
     enable = true;
+    wait-online.ignoredInterfaces = ["tailscale0" "microvm"];
     netdevs = {
       "10-microvm".netdevConfig = {
         Kind = "bridge";
