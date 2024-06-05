@@ -115,12 +115,6 @@
         locations."/".proxyWebsockets = true;
         forceSSL = true;
       };
-      "bs.9000.dev" = {
-        useACMEHost = "bs.9000.dev";
-        locations."/".proxyPass = "http://localhost:7007";
-        locations."/".proxyWebsockets = true;
-        forceSSL = true;
-      };
     };
   };
 
@@ -155,9 +149,6 @@
     "bw.9000.dev" = {
       group = "nginx";
     };
-    "bs.9000.dev" = {
-      group = "nginx";
-    };
     "bw.johnae.dev" = {
       group = "nginx";
     };
@@ -190,6 +181,24 @@
     enable = true;
     enableIPv6 = true;
     internalInterfaces = ["microvm"];
+  };
+
+  services.networkd-dispatcher = let
+    tailscale-forwarding = pkgs.writeShellApplication {
+      name = "tailscale-forwarding";
+      runtimeInputs = with pkgs; [iproute2 ethtool coreutils];
+      text = ''
+        for dev in $(ip route show 0/0 | cut -f5 -d' '); do echo ethtool -K "$dev" rx-udp-gro-forwarding on rx-gro-list off; done
+      '';
+    };
+  in {
+    enable = true;
+    rules = {
+      "50-tailscale" = {
+        onState = ["routable"];
+        script = "${tailscale-forwarding}/bin/tailscale-forwarding";
+      };
+    };
   };
 
   systemd.network = {
