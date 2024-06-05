@@ -48,7 +48,18 @@ gh-release-update:
 
 [private]
 lint:
-  @statix check .
+  @echo 'Linting...'
+  @let out = (statix check . | complete); if ($out.exit_code > 0) { let span = (metadata $out).span; error make {msg: "Linting failed", label: {text: $out.stdout, span: $span}} } else { echo $out.stdout }
+
+[private]
+dead:
+  @echo 'Checking for dead code...'
+  @let out = (deadnix -f . | complete); if ($out.exit_code > 0) { let span = (metadata $out).span; error make {msg: "Dead code check failed", label: {text: $out.stdout, span: $span}} } else { echo $out.stdout }
+
+[private]
+dscheck:
+  @echo 'Flake checker...'
+  @let out = (nix run github:DeterminateSystems/flake-checker | complete); if ($out.exit_code > 0) { let span = (metadata $out).span; error make {msg: "Flake checker failed", label: {text: $out.stdout, span: $span}} } else { echo $out.stdout }
 
 [private]
 check:
