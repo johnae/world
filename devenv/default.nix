@@ -98,24 +98,33 @@
       done
     '';
   };
+
+  project-build = pkgs.writeShellApplication {
+    name = "project-build";
+    runtimeInputs = [pkgs.nushell];
+    text = ''
+      exec nu -c "watch . --glob=**/*.nix {|| world lint; world dead; world dscheck }"
+    '';
+  };
 in {
   name = "world";
 
   packages = with pkgs; [
-    agenix
     age-plugin-yubikey
+    agenix
     alejandra
     hcloud
+    installTestVM
     just
     nil
+    project-build
     rage
+    runTestVM
+    startTestVM
     statix
     tofuWithPlugins
     world
     yj
-    startTestVM
-    runTestVM
-    installTestVM
   ];
 
   enterShell = ansiEscape ''
