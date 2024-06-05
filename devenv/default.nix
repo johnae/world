@@ -101,9 +101,9 @@
 
   project-build = pkgs.writeShellApplication {
     name = "project-build";
-    runtimeInputs = [pkgs.nushell];
+    runtimeInputs = [pkgs.watchexec];
     text = ''
-      exec nu -c "watch . --glob=**/*.nix {|| world lint; world dead; world dscheck }"
+      watchexec -r -- 'world lint; world dead; world dscheck'
     '';
   };
 in {
