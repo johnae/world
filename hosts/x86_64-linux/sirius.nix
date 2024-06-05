@@ -1,6 +1,7 @@
 {
   adminUser,
   hostName,
+  pkgs,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPYExvLXmlYzWsoJLST2A9FdzN7re7J+Uz1TMpQ2ndhP";
