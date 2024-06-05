@@ -5,8 +5,8 @@
   ...
 }:
 with lib; let
-  inherit (builtins) head tail concatMap concatStringsSep length all any filter getAttr listToAttrs;
-  inherit (lib) mapAttrsToList stringToCharacters toUpper toLower mapAttrs';
+  inherit (builtins) concatStringsSep length filter getAttr listToAttrs;
+  inherit (lib) mapAttrsToList;
 
   innernet-server-db-path = "/var/lib/innernet-server";
   innernet-server-etc-path = "/etc/innernet-server";

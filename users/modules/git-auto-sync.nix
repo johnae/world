@@ -8,13 +8,9 @@
   inherit
     (l)
     mkOption
-    mkMerge
-    mkIf
-    mkEnableOption
     types
     baseNameOf
     dirOf
-    mapAttrsToList
     mapAttrs'
     nameValuePair
     ;

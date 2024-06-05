@@ -17,9 +17,9 @@
         inputs.agenix.overlays.default
         #inputs.fenix.overlays.default
         inputs.nur.overlay
-        (final: prev: (filterAttrs (name: _: ((match "nu-.*" name == null) && (match "nu_.*" name == null))) config.packages))
+        (_final: _prev: (filterAttrs (name: _: ((match "nu-.*" name == null) && (match "nu_.*" name == null))) config.packages))
 
-        (final: prev: {
+        (_final: prev: {
           wlroots_river_0_17_2 = prev.wlroots_0_17.overrideAttrs (oa: rec {
             version = "0.17.2";
             src = prev.fetchFromGitLab {
@@ -41,7 +41,7 @@
           });
         })
 
-        (final: prev: {
+        (_final: prev: {
           inherit inputs;
           google-cloud-sdk-gke = prev.google-cloud-sdk.withExtraComponents [
             prev.google-cloud-sdk.components.gke-gcloud-auth-plugin

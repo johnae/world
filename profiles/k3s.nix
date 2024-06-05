@@ -1,13 +1,4 @@
 {
-  lib,
-  pkgs,
-  config,
-  hostName,
-  ...
-}: let
-  inherit (lib) optionals mkIf;
-  cfg = config.services.k3s;
-in {
   services.k3s.disable = ["traefik"];
 
   networking.firewall.trustedInterfaces = ["cni+" "flannel.1" "calico+" "cilium+" "lxc+"];

@@ -61,6 +61,7 @@ in {
     systemd.services.hcloud-remote-unlock-all = {
       description = "Remote unlock all disks on all Hetzner Cloud servers";
       after = ["network-online.target"];
+      requires = ["network-online.target"];
       wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "oneshot";

@@ -1,10 +1,5 @@
 {
-  perSystem = {
-    pkgs,
-    lib,
-    system,
-    ...
-  }: let
+  perSystem = {pkgs, ...}: let
     inherit
       (pkgs)
       stdenv
