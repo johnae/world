@@ -11,6 +11,12 @@ in {
     pkgs.jwt-cli ## see env.nu for impl
   ];
   programs.atuin.enable = true;
+  programs.atuin.settings = {
+    auto_sync = true;
+    sync_frequency = "5m";
+    sync_address = "http://atuin-atuin.tail68e9c.ts.net";
+    sync.records = true;
+  };
   programs.direnv.enableNushellIntegration = false;
   programs.atuin.enableNushellIntegration = true;
   programs.nushell = {
