@@ -74,15 +74,15 @@
     cmd = "${pkgs.river}/bin/river";
   };
 
-  runHyprland = runViaShell {
-    env = {
-      XDG_SESSION_TYPE = "wayland";
-      XDG_CURRENT_DESKTOP = "Hyprland";
-      XDG_SESSION_DESKTOP = "Hyprland";
-    };
-    name = "Hyprland";
-    cmd = "${pkgs.hyprland-unstable}/bin/Hyprland";
-  };
+  # runHyprland = runViaShell {
+  #   env = {
+  #     XDG_SESSION_TYPE = "wayland";
+  #     XDG_CURRENT_DESKTOP = "Hyprland";
+  #     XDG_SESSION_DESKTOP = "Hyprland";
+  #   };
+  #   name = "Hyprland";
+  #   cmd = "${pkgs.hyprland-unstable}/bin/Hyprland";
+  # };
 
   desktopSession = name: command:
     pkgs.writeText "${name}.desktop" ''

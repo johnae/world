@@ -1,9 +1,5 @@
 {inputs, ...}: {
-  perSystem = {
-    pkgs,
-    lib,
-    ...
-  }: {
+  perSystem = {pkgs, ...}: {
     packages = {
       hetzner-csi-driver-yaml = pkgs.runCommand "hetzner-csi-driver.yaml" {} ''
         mkdir -p $out

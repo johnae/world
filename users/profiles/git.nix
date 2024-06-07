@@ -1,9 +1,4 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
-}: let
+{config, ...}: let
   inherit (config) userinfo;
 in {
   programs.git = {

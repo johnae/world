@@ -5,18 +5,14 @@
   keyutils,
   ...
 }: let
-  inherit (lib) attrByPath mapAttrsToList concatStringsSep flatten;
-  inherit (builtins) filter match foldl' replaceStrings elemAt length head substring split;
-  inherit (config.config) boot cryptsetup bcachefs machinePurpose disk;
+  inherit (lib) concatStringsSep;
+  inherit (builtins) head split;
+  inherit (config.config) boot cryptsetup bcachefs machinePurpose;
   inherit (bcachefs) subvolumes;
   bootMode =
     if boot.loader.systemd-boot.enable
     then "UEFI"
     else "Legacy";
-  mbr =
-    if disk.dosLabel
-    then "true"
-    else "false";
   luksFormatExtraParams = cryptsetup.luksFormat.extraParams;
   bcacheFsDisks = bcachefs.disks;
   ## TODO: fix this to be more generic as support for bcachefs gets better

@@ -12,7 +12,7 @@
     inherit (lib // builtins) filterAttrs mapAttrs readDir mapAttrs';
     locallyDefinedPackages = mapAttrs (
       name: _: (pkgs.callPackage (../packages + "/${name}") {inherit inputs;})
-    ) (filterAttrs (filename: type: type == "directory") (readDir ../packages));
+    ) (filterAttrs (_filename: type: type == "directory") (readDir ../packages));
 
     tofuProvider = provider:
       provider.override (oldArgs: {
@@ -38,7 +38,7 @@
       // {
         world = pkgs.writeShellApplication {
           name = "world";
-          runtimeInputs = with pkgs; [just nushell statix];
+          runtimeInputs = with pkgs; [just nushell statix deadnix];
           text = ''
             just -f ${../Justfile} -d "$(pwd)" "$@"
           '';

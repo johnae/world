@@ -58,7 +58,7 @@
     helix.inputs.rust-overlay.follows = "rust-overlay";
     helix.url = "github:johnae/helix/copilot"; ## copilot support
     hetzner-csi-driver.flake = false;
-    hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.6.0/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
+    hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.7.0/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     impermanence.url = "github:nix-community/impermanence";

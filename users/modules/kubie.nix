@@ -8,13 +8,7 @@
   l = lib // builtins;
   inherit
     (l)
-    flatten
-    isAttrs
-    isList
-    isString
     literalExpression
-    mapAttrs
-    mapAttrsToList
     mkEnableOption
     mkIf
     mkMerge

@@ -6,7 +6,7 @@
   lib,
   ...
 }: let
-  inherit (lib // builtins) attrNames hasAttr recursiveUpdate mkIf length;
+  inherit (lib // builtins) attrNames hasAttr mkIf length;
   restic-pkgs =
     lib.mapAttrsToList (
       name: value:
