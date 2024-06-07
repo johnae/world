@@ -23,6 +23,25 @@
       zellij pipe --name zwift_selection "$session"
     '';
   };
+  zellij-wrapped = pkgs.writeShellApplication {
+    name = "zellij";
+    runtimeInputs = [pkgs.zellij];
+    text = ''
+      mkdir -p ~/.cache/zellij
+      cat<<EOF>~/.cache/zellij/permissions.kdl
+      "${pkgs.zwift}/bin/zwift.wasm" {
+          ReadApplicationState
+          ChangeApplicationState
+      }
+      "${pkgs.zjstatus}/bin/zjstatus.wasm" {
+          ChangeApplicationState
+          RunCommands
+          ReadApplicationState
+      }
+      EOF
+      zellij "$@"
+    '';
+  };
   direnvExecMaybe = pkgs.writeShellApplication {
     name = "direnv-exec-maybe";
     runtimeInputs = [pkgs.direnv];
@@ -98,7 +117,10 @@ in {
           }
           pane split_direction="horizontal" stacked=true {
             pane expanded=true command="direnv-exec-maybe" {
-              args "bash" "-c" "if hash devenv 2>/dev/null; then exec devenv up; else echo no devenv; exec $SHELL; fi"
+              args "bash" "-c" "if hash project-up 2>/dev/null; then exec project-up; else echo no project-up; exec $SHELL; fi"
+            }
+            pane expanded=true command="direnv-exec-maybe" {
+              args "bash" "-c" "if hash project-build 2>/dev/null; then exec project-build; else echo no project-build; exec $SHELL; fi"
             }
             pane
           }
@@ -328,5 +350,6 @@ in {
   '';
   programs.zellij = {
     enable = true;
+    package = zellij-wrapped;
   };
 }

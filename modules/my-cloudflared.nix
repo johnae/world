@@ -164,7 +164,7 @@ in {
       description = lib.mdDoc ''
         Cloudflare tunnels.
       '';
-      type = types.attrsOf (types.submodule ({name, ...}: {
+      type = types.attrsOf (types.submodule {
         options = {
           inherit originRequest;
 
@@ -201,7 +201,7 @@ in {
 
           ingress = mkOption {
             type = with types;
-              attrsOf (either str (submodule ({hostname, ...}: {
+              attrsOf (either str (submodule {
                 options = {
                   inherit originRequest;
 
@@ -227,7 +227,7 @@ in {
                     example = "/*.(jpg|png|css|js)";
                   };
                 };
-              })));
+              }));
             default = {};
             description = lib.mdDoc ''
               Ingress rules.
@@ -240,7 +240,7 @@ in {
             };
           };
         };
-      }));
+      });
 
       default = {};
       example = {
@@ -261,7 +261,7 @@ in {
     systemd.targets =
       mapAttrs'
       (
-        name: tunnel:
+        name: _tunnel:
           nameValuePair "cloudflared-tunnel-${name}" {
             description = "Cloudflare tunnel '${name}' target";
             requires = ["cloudflared-tunnel-${name}.service"];

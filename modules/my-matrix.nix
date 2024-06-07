@@ -6,7 +6,6 @@
   ...
 }: let
   cfg = config.services.matrix-conduit;
-  format = pkgs.formats.toml {};
   well_known_server = pkgs.writeText "well-known-matrix-server" ''
     {
       "m.server": "matrix.${cfg.settings.global.server_name}:443"

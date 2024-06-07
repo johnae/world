@@ -1,6 +1,7 @@
 {
   adminUser,
   hostName,
+  pkgs,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPYExvLXmlYzWsoJLST2A9FdzN7re7J+Uz1TMpQ2ndhP";
@@ -102,6 +103,24 @@
     enable = true;
     enableIPv6 = true;
     internalInterfaces = ["microvm"];
+  };
+
+  services.networkd-dispatcher = let
+    tailscale-forwarding = pkgs.writeShellApplication {
+      name = "tailscale-forwarding";
+      runtimeInputs = with pkgs; [iproute2 ethtool coreutils];
+      text = ''
+        for dev in $(ip route show 0/0 | cut -f5 -d' '); do echo ethtool -K "$dev" rx-udp-gro-forwarding on rx-gro-list off; done
+      '';
+    };
+  in {
+    enable = true;
+    rules = {
+      "50-tailscale" = {
+        onState = ["routable"];
+        script = "${tailscale-forwarding}/bin/tailscale-forwarding";
+      };
+    };
   };
 
   systemd.network = {

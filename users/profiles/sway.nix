@@ -72,17 +72,17 @@
     '';
   };
 
-  swapContainers = pkgs.writeShellApplication {
-    name = "swap-containers";
-    runtimeInputs = [pkgs.jq pkgs.sway];
-    text = ''
-      if swaymsg -t get_marks | jq -e 'any(.[] == "_swap"; .)'; then
-        exec swaymsg 'swap container with mark _swap; [con_mark=_swap] focus; [con_mark=_swap] unmark _swap'
-      else
-        exec swaymsg '[con_mark=_swap] unmark _swap; mark --add _swap'
-      fi
-    '';
-  };
+  # swapContainers = pkgs.writeShellApplication {
+  #   name = "swap-containers";
+  #   runtimeInputs = [pkgs.jq pkgs.sway];
+  #   text = ''
+  #     if swaymsg -t get_marks | jq -e 'any(.[] == "_swap"; .)'; then
+  #       exec swaymsg 'swap container with mark _swap; [con_mark=_swap] focus; [con_mark=_swap] unmark _swap'
+  #     else
+  #       exec swaymsg '[con_mark=_swap] unmark _swap; mark --add _swap'
+  #     fi
+  #   '';
+  # };
 
   randomPicsumBackground = pkgs.writeShellApplication {
     name = "random-picsum-background";

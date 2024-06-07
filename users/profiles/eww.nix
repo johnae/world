@@ -1,9 +1,4 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
-}: let
+{pkgs, ...}: let
   eww = pkgs.eww-wayland;
   ewwbin = "${eww}/bin/eww";
   volumeListener = pkgs.writeShellApplication {

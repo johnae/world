@@ -4,9 +4,9 @@
   writeShellApplication,
   ...
 }: let
-  inherit (lib) attrByPath mapAttrsToList concatStringsSep flatten;
-  inherit (builtins) filter match foldl' replaceStrings;
-  inherit (config.config) boot cryptsetup btrfs bcachefs machinePurpose disk;
+  inherit (lib) attrByPath concatStringsSep;
+  inherit (builtins) replaceStrings;
+  inherit (config.config) boot cryptsetup btrfs machinePurpose disk;
   inherit (btrfs) subvolumes;
   bootMode =
     if boot.loader.systemd-boot.enable
@@ -340,7 +340,7 @@ in
 
       ${
         lib.concatStringsSep "\n" (lib.imap1 (
-          idx: disk: let
+          idx: _disk: let
             device = "/dev/mapper/${diskLabels.encRoot}${toString idx}";
           in ''
             echo Adding device ${device}

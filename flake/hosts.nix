@@ -67,15 +67,6 @@
     ../modules/default.nix
   ];
 
-  microvmModules = [
-    nixSettings
-    inputs.agenix.nixosModules.age
-    inputs.home-manager.nixosModules.home-manager
-    inputs.impermanence.nixosModules.impermanence
-    inputs.microvm.nixosModules.guest
-    ../modules/default.nix
-  ];
-
   nixosConfigurations = mapAttrs' (
     name: conf: let
       inherit (conf) system hostconf;
