@@ -1,16 +1,6 @@
-{
-  pkgs,
-  config,
-  ...
-}: {
-  xdg.configFile."wezterm/wezterm-config.lua".source = pkgs.runCommand "wezterm-config.lua" {} ''
-    cp ${./wezterm-config.lua} $out
-    substituteInPlace $out --replace "<devRemote>" ${config.userinfo.devRemote}
-  '';
+{config, ...}: {
   programs.wezterm = {
     enable = true;
-    extraConfig = ''
-      return (require 'wezterm-config')
-    '';
+    extraConfig = builtins.replaceStrings ["<devRemote>"] [config.userinfo.devRemote] (builtins.readFile ./wezterm.lua);
   };
 }

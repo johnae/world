@@ -94,6 +94,10 @@
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
     systems.url = "github:nix-systems/default";
+    wezterm.inputs.flake-utils.follows = "flake-utils";
+    wezterm.inputs.nixpkgs.follows = "nixpkgs";
+    wezterm.inputs.rust-overlay.follows = "rust-overlay";
+    wezterm.url = "github:wez/wezterm?dir=nix";
     zjstatus.inputs.crane.follows = "crane";
     zjstatus.inputs.flake-utils.follows = "flake-utils";
     zjstatus.inputs.nixpkgs.follows = "nixpkgs";

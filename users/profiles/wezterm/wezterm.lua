@@ -233,9 +233,14 @@ config.keys = {
     action = wezterm.action.ShowTabNavigator
   },
   {
-    key = 'f',
+    key = 'a',
     mods = 'LEADER',
     action = act.EmitEvent('FindProject')
+  },
+  {
+    key = 'f',
+    mods = 'LEADER',
+    action = wezterm.action.TogglePaneZoomState,
   }
 }
 config.unix_domains = {

@@ -25,6 +25,7 @@ in {
       # ./spotifyd.nix
       # ./sway.nix
       ./waybar.nix
+      ./wezterm/default.nix
       ./wlsunset.nix
     ];
 
