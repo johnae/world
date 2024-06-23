@@ -78,15 +78,6 @@
     nixos-hardware.url = "github:nixos/nixos-hardware";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nur.url = "github:nix-community/NUR";
-    persway.inputs.crane.follows = "crane";
-    persway.inputs.devenv.follows = "devenv";
-    persway.inputs.fenix.follows = "fenix";
-    persway.inputs.flake-parts.follows = "flake-parts";
-    persway.inputs.flake-utils.follows = "flake-utils";
-    persway.inputs.mk-shell-bin.follows = "mk-shell-bin";
-    persway.inputs.nix2container.follows = "nix2container";
-    persway.inputs.nixpkgs.follows = "nixpkgs";
-    persway.url = "github:johnae/persway";
     pre-commit-hooks.inputs.flake-compat.follows = "flake-compat";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";

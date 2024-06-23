@@ -37,7 +37,6 @@ in {
     lswt
     mako
     nordic
-    persway
     playerctl
     river-luatile
     shotcut

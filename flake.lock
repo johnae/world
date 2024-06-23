@@ -670,47 +670,6 @@
         "type": "github"
       }
     },
-    "persway": {
-      "inputs": {
-        "crane": [
-          "crane"
-        ],
-        "devenv": [
-          "devenv"
-        ],
-        "fenix": [
-          "fenix"
-        ],
-        "flake-parts": [
-          "flake-parts"
-        ],
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "mk-shell-bin": [
-          "mk-shell-bin"
-        ],
-        "nix2container": [
-          "nix2container"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1699357377,
-        "narHash": "sha256-FJm7Xh/CAtQmfqQU3x2QGcGjGBwl+Cevou+mHxhWIXw=",
-        "owner": "johnae",
-        "repo": "persway",
-        "rev": "8987d2e54d1436026d6fd7ef4ee32b58b3d4b8b4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "johnae",
-        "repo": "persway",
-        "type": "github"
-      }
-    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": [
@@ -764,7 +723,6 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nur": "nur",
-        "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks",
         "rust-overlay": "rust-overlay",
         "systems": "systems",
