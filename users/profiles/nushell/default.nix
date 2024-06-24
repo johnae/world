@@ -73,10 +73,10 @@ in {
           ]
           ++ (
             map (module_path: "source ${nu-scripts}/modules/${module_path}") [
-              "argx/mod.nu"
-              "data_extraction/ultimate_extractor.nu"
+              #              "argx/mod.nu"
+              #              "data_extraction/ultimate_extractor.nu"
               # "kubernetes/mod.nu"
-              "nix/nix.nu"
+              #              "nix/nix.nu"
             ]
           )
         )
