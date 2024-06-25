@@ -32,7 +32,7 @@
       pre-commit-hooks.follows = "pre-commit-hooks";
     };
     cloud-native-pg.flake = false;
-    cloud-native-pg.url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.23.1/cnpg-1.23.1.yaml"; # gh-release-update
+    cloud-native-pg.url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.23.2/cnpg-1.23.2.yaml"; # gh-release-update
     copilot-vim.flake = false;
     copilot-vim.url = "github:github/copilot.vim";
     crane.inputs.nixpkgs.follows = "nixpkgs";
@@ -58,12 +58,12 @@
     helix.inputs.rust-overlay.follows = "rust-overlay";
     helix.url = "github:johnae/helix/copilot"; ## copilot support
     hetzner-csi-driver.flake = false;
-    hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.7.0/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
+    hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.8.0/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     impermanence.url = "github:nix-community/impermanence";
     juicefs-csi-driver.flake = false;
-    juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.0/deploy/k8s.yaml"; # gh-release-update
+    juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.1/deploy/k8s.yaml"; # gh-release-update
     kured.flake = false;
     kured.url = "github:kubereboot/kured";
     microvm.url = "github:astro/microvm.nix";
