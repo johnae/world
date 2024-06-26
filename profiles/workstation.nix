@@ -12,9 +12,9 @@
     "fs.inotify.max_user_watches" = 12288;
   };
 
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
 
-  hardware.opengl.extraPackages = [
+  hardware.graphics.extraPackages = [
     pkgs.intel-media-driver
     pkgs.vaapiIntel
     pkgs.vaapiVdpau

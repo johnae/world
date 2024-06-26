@@ -5,7 +5,7 @@
 }: {
   services.jellyfin.enable = true;
   services.jellyfin.openFirewall = true;
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
     extraPackages = [
       pkgs.intel-media-driver

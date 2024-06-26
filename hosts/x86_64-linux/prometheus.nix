@@ -34,9 +34,9 @@
     libvirtd.enable = true;
   };
 
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
 
-  hardware.opengl.extraPackages = [
+  hardware.graphics.extraPackages = [
     pkgs.intel-media-driver
     pkgs.vaapiIntel
     pkgs.vaapiVdpau
