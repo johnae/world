@@ -64,6 +64,7 @@
 
   boot.initrd.availableKernelModules = [
     "igb"
+    "r8169" ## this is the network card in gex44
     "nvme"
     "ahci"
     "usbhid"
