@@ -51,7 +51,12 @@
   # services.nextjs-ollama-llm-ui.ollamaUrl = "http://100.123.66.6:11434";
   services.ollama.enable = true;
   services.ollama.acceleration = "cuda";
-  services.ollama.host = "100.123.66.6";
+  services.ollama.host = "0.0.0.0";
+  services.ollama.environmentVariables = {
+    OLLAMA_LLM_LIBRARY = "gpu";
+    OLLAMA_FLASH_ATTENTION = "True";
+    CUDA_ERROR_LEVEL = "50";
+  };
 
   system.autoUpgrade = {
     enable = true;
