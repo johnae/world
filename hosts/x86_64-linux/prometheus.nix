@@ -152,6 +152,7 @@
 
   systemd.network = {
     enable = true;
+    wait-online.anyInterface = true;
     netdevs = {
       "10-microvm".netdevConfig = {
         Kind = "bridge";
