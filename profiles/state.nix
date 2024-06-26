@@ -12,6 +12,7 @@
       "/var/lib/wireguard"
       "/var/lib/libvirt"
       "/var/lib/microvms"
+      "/var/lib/private/ollama"
       "/var/log"
     ];
     files = [

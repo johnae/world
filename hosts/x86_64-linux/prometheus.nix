@@ -46,6 +46,12 @@
 
   boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
+  # services.nextjs-ollama-llm-ui.enable = true;
+  # services.nextjs-ollama-llm-ui.port = 1337;
+  # services.nextjs-ollama-llm-ui.ollamaUrl = "http://100.123.66.6:11434";
+  services.ollama.enable = true;
+  services.ollama.acceleration = "cuda";
+
   system.autoUpgrade = {
     enable = true;
     flake = "github:johnae/world";
