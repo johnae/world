@@ -19,8 +19,9 @@ set +u +x
 set -u -x
 
 ipv4="$(ip addr show dev eth0 | grep -E 'inet .*global.*' | awk '{print $2}')"
-ipv6="$(ip addr show dev eth0 | grep -E 'inet .*global.*' | awk '{print $2}')"
+ipv6="$(ip addr show dev eth0 | grep -E 'inet6 .*global.*' | awk '{print $2}')"
 ipv4gw="$(ip route | grep "default via" | awk '{print $3}')"
+ipv6gw="$(ip -6 route | grep "default via" | awk '{print $3}')"
 
 cat <<EOF > /root/config.nix
 {pkgs, lib, ...}:
@@ -65,7 +66,7 @@ cat <<EOF > /root/config.nix
       Name = enp*
       [Network]
       Address = $ipv6
-      Gateway = fe80::1
+      Gateway = $ipv6gw
       Address =  $ipv4
       Gateway = $ipv4gw
     '';
