@@ -34,6 +34,18 @@
     libvirtd.enable = true;
   };
 
+  hardware.opengl.enable = true;
+
+  hardware.opengl.extraPackages = [
+    pkgs.intel-media-driver
+    pkgs.vaapiIntel
+    pkgs.vaapiVdpau
+    pkgs.libvdpau-va-gl
+    pkgs.rocmPackages.clr
+    pkgs.rocmPackages.clr.icd
+    pkgs.amdvlk
+  ];
+
   # microvm.autostart = [
   #   "agent-8be5-d4a1"
   #   "agent-8be5-15c3"
@@ -53,7 +65,6 @@
   services.ollama.acceleration = "cuda";
   services.ollama.host = "0.0.0.0";
   services.ollama.environmentVariables = {
-    OLLAMA_LLM_LIBRARY = "gpu";
     OLLAMA_FLASH_ATTENTION = "True";
     CUDA_ERROR_LEVEL = "50";
   };
