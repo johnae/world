@@ -51,6 +51,7 @@
   # services.nextjs-ollama-llm-ui.ollamaUrl = "http://100.123.66.6:11434";
   services.ollama.enable = true;
   services.ollama.acceleration = "cuda";
+  services.ollama.host = "100.123.66.6";
 
   system.autoUpgrade = {
     enable = true;
