@@ -24,7 +24,6 @@
     ../../profiles/state.nix
     ../../profiles/syncthing.nix
     ../../profiles/tailscale.nix
-    ../../profiles/vaultwarden.nix
     ../../profiles/zram.nix
   ];
 
