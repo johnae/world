@@ -45,6 +45,12 @@
     pkgs.rocmPackages.clr.icd
     pkgs.amdvlk
   ];
+  services.xserver.videoDrivers = ["nvidia"];
+  hardware.nvidia.nvidiaPersistenced = true;
+  hardware.nvidia.prime.nvidiaBusId = "PCI:1:0:0";
+  environment.systemPackages = [
+    pkgs.cudaPackages.cudaToolkit
+  ];
 
   # microvm.autostart = [
   #   "agent-8be5-d4a1"
