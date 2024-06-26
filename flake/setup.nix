@@ -13,6 +13,8 @@
     _module.args.pkgs = import inputs.nixpkgs {
       inherit system;
       config.allowUnfree = true;
+      config.cudaSupport = true;
+      config.cudaVersion = "12";
       overlays = [
         inputs.agenix.overlays.default
         #inputs.fenix.overlays.default
