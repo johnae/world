@@ -49,7 +49,7 @@
   hardware.nvidia.nvidiaPersistenced = true;
   hardware.nvidia.prime.nvidiaBusId = "PCI:1:0:0";
   environment.systemPackages = [
-    pkgs.cudaPackages.cudaToolkit
+    pkgs.cudaPackages.cudatoolkit
   ];
 
   # microvm.autostart = [
