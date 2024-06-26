@@ -120,7 +120,6 @@
       "--accept-dns=true"
       "--accept-routes=true"
       "--advertise-exit-node=true"
-      "--advertise-tags=tag:server"
       "--ssh"
     ];
   };
