@@ -228,6 +228,8 @@
         devices = [
           "antares"
           "eris"
+          "prometheus"
+          "orion"
           "hyperion"
           "icarus"
           "s23ultra"
@@ -239,6 +241,8 @@
         id = "pictures";
         devices = [
           "antares"
+          "prometheus"
+          "orion"
           "eris"
         ];
       };
@@ -247,6 +251,7 @@
         devices = [
           "antares"
           "eris"
+          "orion"
           "icarus"
           "s23ultra"
         ];

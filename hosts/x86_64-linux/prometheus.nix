@@ -4,8 +4,8 @@
   pkgs,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEEPD945cTDxeNhGljSKqQfRCUeXcwIDKOBD847OECQs";
-  syncthingDeviceID = "XOPUBYF-LTOERSA-NGLA6ZJ-BU455JS-JOTCFQP-JGZP6WC-VRUTNOX-5YEUVQD";
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBSg05Gm7aFf2DpPLNPbnXfFnCpjKVtE5svM6wFtnTYJ";
+  syncthingDeviceID = "2CJB6EV-IMHV3H7-O3BLFCM-CMCXTIV-6WX2LZ5-NLZ4XWV-YXPNZF5-66ZPIQT";
 
   bcachefs = {
     disks = ["/dev/nvme0n1" "/dev/nvme1n1"];
@@ -17,7 +17,7 @@
     ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
     ../../profiles/disk/bcachefs-on-luks.nix
-    ../../profiles/hardware/ax101.nix
+    ../../profiles/hardware/gex44.nix
     ../../profiles/home-manager.nix
     ../../profiles/server.nix
     ../../profiles/restic-backup.nix
@@ -35,13 +35,13 @@
     libvirtd.enable = true;
   };
 
-  microvm.autostart = [
-    "agent-8be5-d4a1"
-    "agent-8be5-15c3"
-    "agent-8be5-32c4"
-    "master-8be5-a0a1"
-    "master-8be5-c1ce"
-  ];
+  # microvm.autostart = [
+  #   "agent-8be5-d4a1"
+  #   "agent-8be5-15c3"
+  #   "agent-8be5-32c4"
+  #   "master-8be5-a0a1"
+  #   "master-8be5-c1ce"
+  # ];
 
   programs.ssh.startAgent = true;
 
@@ -57,7 +57,7 @@
   };
 
   boot.kernelParams = [
-    "ip=65.109.85.161::65.109.85.129:255.255.255.192:${hostName}::none"
+    "ip=144.76.201.232::144.76.201.225:255.255.255.224:${hostName}::none"
   ];
 
   ## for tailscale exit node functionality
@@ -101,81 +101,6 @@
     ];
   };
 
-  services.nginx = {
-    enable = true;
-    recommendedTlsSettings = true;
-    recommendedProxySettings = true;
-    recommendedGzipSettings = true;
-    recommendedOptimisation = true;
-    clientMaxBodySize = "300m";
-    virtualHosts = {
-      "bw.9000.dev" = {
-        useACMEHost = "bw.9000.dev";
-        locations."/".proxyPass = "http://localhost:8222";
-        locations."/".proxyWebsockets = true;
-        forceSSL = true;
-      };
-    };
-  };
-
-  # services.my-cloudflared = {
-  #   enable = true;
-  #   tunnels."9000-tunnel" = {
-  #     credentialsFile = "/run/agenix/cloudflare-tunnel-9k";
-  #     default = "http://localhost";
-  #     originRequest.noTLSVerify = true;
-  #   };
-  # };
-
-  services.redis = {
-    package = pkgs.valkey;
-    servers = {
-      default = {
-        enable = true;
-        appendOnly = true;
-        bind = null;
-        port = 6379;
-        settings = {
-          protected-mode = false;
-        };
-      };
-    };
-  };
-
-  security.acme.certs = {
-    "bw.ill.dev" = {
-      group = "nginx";
-    };
-    "bw.9000.dev" = {
-      group = "nginx";
-    };
-    "bw.johnae.dev" = {
-      group = "nginx";
-    };
-  };
-
-  environment.persistence."/keep" = {
-    directories = [
-      "/var/lib/acme"
-      "/var/lib/redis-default"
-    ];
-  };
-
-  services.vaultwarden = {
-    enable = true;
-    environmentFile = "/run/agenix/vaultwarden-env";
-    backupDir = "/var/lib/vaultwarden-backup";
-
-    config = {
-      DOMAIN = "https://bw.9000.dev";
-      SIGNUPS_ALLOWED = "false";
-      PASSWORD_HINTS_ALLOWED = "false";
-      ROCKET_ADDRESS = "127.0.0.1";
-      ROCKET_PORT = 8222;
-      PASSWORD_ITERATIONS = 600000;
-    };
-  };
-
   networking.useDHCP = false;
   networking.nat = {
     enable = true;
@@ -215,11 +140,11 @@
         ## https://www.freedesktop.org/software/systemd/man/latest/systemd.net-naming-scheme.html
         matchConfig.Name = ["enp*"];
         address = [
-          "65.109.85.161/26"
-          "2a01:4f9:3051:5389::2/64"
+          "144.76.201.232/27"
+          "2a01:4f8:200:82c5::2/64"
         ];
         routes = [
-          {routeConfig.Gateway = "65.109.85.129";}
+          {routeConfig.Gateway = "144.76.201.225";}
           {routeConfig.Gateway = "fe80::1";}
         ];
         linkConfig.RequiredForOnline = "routable";
@@ -232,7 +157,7 @@
         };
         addresses = [
           {
-            addressConfig.Address = "10.100.0.1/24";
+            addressConfig.Address = "10.100.2.1/24";
           }
         ];
       };
@@ -248,6 +173,10 @@
   age.secrets = {
     initrd-key = {
       file = ../../secrets/${hostName}/initrd_ed25519_key.age;
+      owner = "${toString adminUser.uid}";
+    };
+    host-key = {
+      file = ../../secrets/${hostName}/host_ed25519_key.age;
       owner = "${toString adminUser.uid}";
     };
     copilot-token = {
@@ -281,19 +210,10 @@
       file = ../../secrets/${hostName}/syncthing-key.age;
       owner = "${toString adminUser.uid}";
     };
-
     ts-google-9k = {
       file = ../../secrets/ts-google-9k.age;
       owner = "${toString adminUser.uid}";
     };
-
-    cloudflare-tunnel-9k = {
-      file = ../../secrets/cloudflare-tunnel-9k.age;
-      # owner = "cloudflared";
-    };
-
-    cloudflare-env.file = ../../secrets/cloudflare-env.age;
-    vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
   };
 
   services.syncthing = {
@@ -315,7 +235,7 @@
           "antares"
           "eris"
           "hyperion"
-          "prometheus"
+          "orion"
           "sirius"
           "icarus"
           "s23ultra"
@@ -327,35 +247,13 @@
         id = "pictures";
         devices = [
           "antares"
-          "prometheus"
           "sirius"
+          "orion"
           "eris"
         ];
-      };
-      folders."/home/${adminUser.name}/Photos" = {
-        id = "photos";
-        devices = [
-          "antares"
-          "eris"
-          "sirius"
-          "icarus"
-          "s23ultra"
-        ];
-
-        versioning.type = "staggered";
-        versioning.params.cleanInterval = "3600";
-        versioning.params.maxAge = "0";
-        versioning.params.versionsPath = "/home/${adminUser.name}/Photos/stbackup";
       };
     };
   };
-
-  services.restic.backups.remote.pruneOpts = [
-    "--keep-daily 10"
-    "--keep-weekly 7"
-    "--keep-monthly 12"
-    "--keep-yearly 75"
-  ];
 
   home-manager = {
     users.${adminUser.name} = {
