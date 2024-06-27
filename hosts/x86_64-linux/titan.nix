@@ -123,6 +123,13 @@
       identityFile = "/run/agenix/id_ed25519_remote_unlock";
       passwordFile = "/run/agenix/remote-disk-password";
     }
+    {
+      enable = true;
+      host = "144.76.201.232";
+      port = 2222;
+      identityFile = "/run/agenix/id_ed25519_remote_unlock";
+      passwordFile = "/run/agenix/remote-disk-password";
+    }
   ];
 
   services.hcloud-remote-unlock-all = {
