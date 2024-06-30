@@ -18,9 +18,4 @@
   #services.fprintd.enable = lib.mkDefault true;
 
   environment.persistence."/keep".directories = ["/var/lib/fprint"];
-
-  boot = {
-    kernelModules = ["acpi_call"];
-    extraModulePackages = with config.boot.kernelPackages; [acpi_call];
-  };
 }
