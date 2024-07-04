@@ -2,12 +2,31 @@
   services.kanshi.enable = true;
   services.kanshi.settings = [
     {
-      profile.name = "default";
+      profile.name = "z16";
       profile.outputs = [
         {
           criteria = "Samsung Display Corp. 0x4165 Unknown";
           mode = "3840x2400";
           position = "0,0";
+          scale = 1.5;
+        }
+      ];
+    }
+
+    {
+      profile.name = "z16-2";
+      profile.outputs = [
+        {
+          criteria = "Samsung Display Corp. 0x4165 Unknown";
+          mode = "3840x2400";
+          position = "0,0";
+          scale = 1.5;
+        }
+
+        {
+          criteria = "ViewSonic Corporation VX1655-OLED XBA235200337";
+          mode = "3840x2160";
+          position = "2560,0";
           scale = 1.5;
         }
       ];
