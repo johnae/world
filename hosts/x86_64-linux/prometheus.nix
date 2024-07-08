@@ -91,15 +91,6 @@
   ## for tailscale exit node functionality
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
-  boot.initrd.availableKernelModules = [
-    "igb"
-    "r8169" ## this is the network card in gex44
-    "i915"
-    "nvme"
-    "ahci"
-    "usbhid"
-  ];
-
   boot.initrd.network = {
     enable = true;
     postCommands = "echo 'cryptsetup-askpass' >> /root/.profile";

@@ -63,13 +63,6 @@
   ## for tailscale exit node functionality
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
-  boot.initrd.availableKernelModules = [
-    "igb"
-    "nvme"
-    "ahci"
-    "usbhid"
-  ];
-
   boot.initrd.network = {
     enable = true;
     postCommands = "echo 'cryptsetup-askpass' >> /root/.profile";
