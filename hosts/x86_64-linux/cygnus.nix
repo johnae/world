@@ -25,6 +25,9 @@
     ../../profiles/zram.nix
   ];
 
+  bcachefs.disks = ["/dev/nvme0n1"];
+  bcachefs.devices = ["/dev/nvme0n1p3"];
+
   boot.initrd = {
     systemd.enable = true;
     luks.devices.cryptkey.crypttabExtraOpts = ["fido2-device=auto"];
