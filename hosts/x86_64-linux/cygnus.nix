@@ -30,7 +30,7 @@
 
   boot.initrd = {
     systemd.enable = true;
-    luks.devices.cryptkey.crypttabExtraOpts = ["fido2-device=auto"];
+    #luks.devices.cryptkey.crypttabExtraOpts = ["fido2-device=auto"];
   };
 
   age.secrets = {
