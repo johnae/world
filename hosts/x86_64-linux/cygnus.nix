@@ -3,8 +3,8 @@
   hostName,
   ...
 }: {
-  publicKey = "";
-  syncthingDeviceID = "";
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKEH+uJLUMT2PZ3AK+UNTiyc/MS58mXMyjxLFtdeN114";
+  syncthingDeviceID = "7HYSCXB-KGNIK4Y-24SOMMD-CYKJLYR-GLK7D3R-NWJFSYM-ZCBRNF2-KQJ7ZQW";
 
   imports = [
     ../../profiles/admin-user/home-manager.nix
@@ -31,14 +31,6 @@
   };
 
   age.secrets = {
-    spotnix = {
-      file = ../../secrets/spotnix.age;
-      owner = "${toString adminUser.uid}";
-    };
-    spotifyd = {
-      file = ../../secrets/spotifyd.age;
-      owner = "${toString adminUser.uid}";
-    };
     wifi-networks = {
       file = ../../secrets/wifi-networks.age;
     };
@@ -46,19 +38,6 @@
       file = ../../secrets/gh_copilot.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.config/github-copilot/hosts.json";
-    };
-    id_ed25519_agenda_updater = {
-      file = ../../secrets/id_ed25519_agenda_updater.age;
-      owner = "${toString adminUser.uid}";
-    };
-    id_ed25519_roam_updater = {
-      file = ../../secrets/id_ed25519_roam_updater.age;
-      owner = "${toString adminUser.uid}";
-    };
-    id_ed25519_bbph = {
-      file = ../../secrets/id_ed25519_bbph.age;
-      owner = "${toString adminUser.uid}";
-      path = "/home/${adminUser.name}/.ssh/id_ed25519_bbph";
     };
     id_ed25519_alt = {
       file = ../../secrets/id_ed25519_alt.age;
