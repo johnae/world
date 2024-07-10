@@ -214,13 +214,6 @@ in {
     };
   };
   programs.waybar.systemd.enable = true;
-  systemd.user.services.waybar = {
-    serviceConfig = {
-      RestartSec = 1;
-      RestartSteps = 4;
-      RestartMaxDelaySec = 10;
-    };
-  };
   programs.waybar.style = ''
     @define-color backgroundlight #eceff4;
     @define-color backgrounddark #5e81ac;
