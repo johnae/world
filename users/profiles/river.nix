@@ -169,6 +169,7 @@ in {
         "pointer-1739-52620-SYNA8005:00_06CB:CD8C_Touchpad"
         "pointer-1739-52710-DLL096D:01_06CB:CDE6_Touchpad"
         "pointer-1739-52804-MSFT0001:00_06CB:CE44_Touchpad"
+        "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad"
       ]);
 
     declare-mode = ["passthrough" "wmctl" "locked" "normal"];
