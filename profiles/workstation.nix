@@ -19,8 +19,8 @@
     pkgs.vaapiIntel
     pkgs.vaapiVdpau
     pkgs.libvdpau-va-gl
-    pkgs.rocm-opencl-icd
-    pkgs.rocm-opencl-runtime
+    # pkgs.rocm-opencl-icd
+    # pkgs.rocm-opencl-runtime
     pkgs.amdvlk
   ];
 
