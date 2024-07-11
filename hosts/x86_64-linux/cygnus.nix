@@ -17,7 +17,6 @@
     ../../profiles/home-manager.nix
     ../../profiles/interception-tools.nix
     ../../profiles/laptop.nix
-    ../../profiles/pamu2f.nix
     ../../profiles/restic-backup.nix
     ../../profiles/state.nix
     ../../profiles/syncthing.nix

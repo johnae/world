@@ -8,4 +8,7 @@
   ];
   boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "thunderbolt" "usb_storage" "sd_mod"];
   services.tlp.enable = lib.mkForce false;
+  environment.persistence."/keep" = {
+    directories = ["/var/lib/fprint"];
+  };
 }
