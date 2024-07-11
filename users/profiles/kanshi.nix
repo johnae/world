@@ -33,6 +33,37 @@
     }
 
     {
+      profile.name = "framework-13";
+      profile.outputs = [
+        {
+          criteria = "BOE 0x0BCA Unknown";
+          mode = "2256x1504";
+          position = "0,0";
+          scale = 1.0;
+        }
+      ];
+    }
+
+    {
+      profile.name = "framework-13-2";
+      profile.outputs = [
+        {
+          criteria = "BOE 0x0BCA Unknown";
+          mode = "2256x1504";
+          position = "0,0";
+          scale = 1.0;
+        }
+
+        {
+          criteria = "ViewSonic Corporation VX1655-OLED XBA235200337";
+          mode = "3840x2160";
+          position = "2256,0";
+          scale = 1.5;
+        }
+      ];
+    }
+
+    {
       profile.name = "office";
       profile.outputs = [
         {
