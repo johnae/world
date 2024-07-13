@@ -222,6 +222,7 @@
           "antares"
           "eris"
           "prometheus"
+          "cygnus"
           "orion"
           "hyperion"
           "icarus"
@@ -235,6 +236,7 @@
         devices = [
           "antares"
           "prometheus"
+          "cygnus"
           "orion"
           "eris"
         ];
@@ -244,6 +246,7 @@
         devices = [
           "antares"
           "eris"
+          "cygnus"
           "orion"
           "icarus"
           "s23ultra"

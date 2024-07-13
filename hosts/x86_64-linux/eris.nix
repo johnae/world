@@ -145,6 +145,7 @@
         devices = [
           "antares"
           "icarus"
+          "cygnus"
           "sirius"
           "orion"
           "titan"
@@ -157,6 +158,7 @@
         id = "pictures";
         devices = [
           "antares"
+          "cygnus"
           "orion"
           "sirius"
         ];
@@ -166,6 +168,7 @@
         devices = [
           "antares"
           "icarus"
+          "cygnus"
           "orion"
           "sirius"
           "s23ultra"

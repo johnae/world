@@ -308,6 +308,7 @@
           "antares"
           "eris"
           "hyperion"
+          "cygnus"
           "prometheus"
           "sirius"
           "icarus"
@@ -321,6 +322,7 @@
         devices = [
           "antares"
           "prometheus"
+          "cygnus"
           "sirius"
           "eris"
         ];
@@ -330,6 +332,7 @@
         devices = [
           "antares"
           "eris"
+          "cygnus"
           "sirius"
           "icarus"
           "s23ultra"

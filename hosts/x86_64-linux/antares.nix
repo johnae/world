@@ -104,6 +104,7 @@
           "icarus"
           "sirius"
           "orion"
+          "cygnus"
           "titan"
           "hyperion"
           "s23ultra"
@@ -116,6 +117,7 @@
           "eris"
           "orion"
           "sirius"
+          "cygnus"
         ];
       };
       folders."/home/${adminUser.name}/Photos" = {
@@ -125,6 +127,7 @@
           "icarus"
           "orion"
           "sirius"
+          "cygnus"
           "s23ultra"
         ];
         versioning.type = "staggered";
