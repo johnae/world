@@ -41,8 +41,8 @@
     pkgs.vaapiIntel
     pkgs.vaapiVdpau
     pkgs.libvdpau-va-gl
-    pkgs.rocmPackages.clr
-    pkgs.rocmPackages.clr.icd
+    # pkgs.rocmPackages.clr
+    # pkgs.rocmPackages.clr.icd
     pkgs.amdvlk
   ];
   services.xserver.videoDrivers = ["nvidia"];
