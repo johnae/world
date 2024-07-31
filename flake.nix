@@ -81,6 +81,8 @@
     pre-commit-hooks.inputs.flake-compat.follows = "flake-compat";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    rbw-static-linux-amd64.flake = false;
+    rbw-static-linux-amd64.url = "file+https://github.com/doy/rbw/releases/download/1.12.1/rbw_1.12.1_linux_amd64.tar.gz"; # gh-release-update
     rust-overlay.inputs.flake-utils.follows = "flake-utils";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";

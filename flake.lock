@@ -718,6 +718,18 @@
         "type": "github"
       }
     },
+    "rbw-static-linux-amd64": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-Vjs4r3wIP2siE+3pxrLWanBQ/jlCnyMS5SMLVuD85ro=",
+        "type": "file",
+        "url": "https://github.com/doy/rbw/releases/download/1.12.1/rbw_1.12.1_linux_amd64.tar.gz"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/doy/rbw/releases/download/1.12.1/rbw_1.12.1_linux_amd64.tar.gz"
+      }
+    },
     "root": {
       "inputs": {
         "age-plugin-yubikey": "age-plugin-yubikey",
@@ -747,6 +759,7 @@
         "nixpkgs": "nixpkgs",
         "nur": "nur",
         "pre-commit-hooks": "pre-commit-hooks",
+        "rbw-static-linux-amd64": "rbw-static-linux-amd64",
         "rust-overlay": "rust-overlay",
         "systems": "systems",
         "wezterm": "wezterm",

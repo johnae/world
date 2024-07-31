@@ -47,6 +47,10 @@
           p:
             map tofuProvider [p.null p.external p.hcloud p.cloudflare p.random]
         );
+        rbw = pkgs.runCommand "rbw" {} ''
+          mkdir -p $out/bin
+          tar -zxf ${inputs.rbw-static-linux-amd64} -C $out/bin
+        '';
         zjstatus = inputs.zjstatus.packages.${system}.default;
         zwift = inputs.zwift.packages.${system}.default;
         helix-latest = inputs.helix.packages.${system}.helix;
