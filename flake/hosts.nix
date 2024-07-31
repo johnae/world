@@ -76,6 +76,7 @@
         gid = 1337;
         userinfo = {
           email = "john@insane.se";
+          altEmail = "john@9000.dev";
           fullName = "John Axel Eriksson";
           githubUser = "johnae";
           gitlabUser = "johnae";
