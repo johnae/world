@@ -140,6 +140,7 @@
     settings = {
       devices.s23ultra.id = "WIEQUVJ-5TNGRPN-YD4E47D-WEXXBZO-2AGHFQZ-2K4DDRB-DFSD2UZ-34OCBQ4";
       devices.s8plus.id = "EI6DXMZ-3CMM3R3-LNJPFIF-CTXDVAG-2SXLOCY-4NEEZ3K-CYJBXU6-6W44TAV";
+      devices.z6fold.id = "2HBWA7C-4MR7BQQ-5JGQHNE-W7NBEY6-W6LAQQX-M52KWWD-JEAOZDJ-SKBBLAD";
       folders."/home/${adminUser.name}/Sync" = {
         id = "sync";
         devices = [
@@ -152,6 +153,7 @@
           "hyperion"
           "s23ultra"
           "s8plus"
+          "z6fold"
         ];
       };
       folders."/home/${adminUser.name}/Pictures" = {
@@ -172,6 +174,7 @@
           "orion"
           "sirius"
           "s23ultra"
+          "z6fold"
         ];
 
         versioning.type = "staggered";
