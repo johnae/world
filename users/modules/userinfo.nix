@@ -13,6 +13,12 @@
           type = types.str;
           example = "some@email.com";
         };
+      altEmail =
+        mkOption
+        {
+          type = types.str;
+          example = "some@email.com";
+        };
       githubUser =
         mkOption
         {
