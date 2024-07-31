@@ -24,7 +24,6 @@
     pkgs.amdvlk
   ];
 
-  sound.enable = false; ## see pipewire config below
   security.rtkit.enable = true;
   hardware.bluetooth.enable = true;
   networking.wireless.iwd.enable = true;
