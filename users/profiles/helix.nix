@@ -88,6 +88,7 @@ in {
         rust-analyzer = {
           config.check.command = "clippy";
         };
+        nixd.command = "nixd";
         yaml-language-server = {
           config.yaml.format.enable = true;
           config.yaml.validation = true;
