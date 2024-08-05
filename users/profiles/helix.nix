@@ -102,7 +102,7 @@ in {
         {
           name = "nix";
           formatter = {command = "alejandra";};
-          language-servers = ["nil"];
+          language-servers = ["nixd"];
           auto-format = true;
         }
       ];

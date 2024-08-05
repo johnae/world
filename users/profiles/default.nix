@@ -47,6 +47,7 @@ in {
     kustomize
     lm_sensors
     nil
+    nixd
     nix-index
     scripts
   ];
