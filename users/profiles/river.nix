@@ -64,7 +64,7 @@
   xcursor_theme = config.gtk.cursorTheme.name;
   terminal-bin = "${pkgs.alacritty}/bin/alacritty";
 
-  _dev-env-wezterm = {name}:
+  _dev-env = {name}:
     pkgs.writeShellApplication {
       inherit name;
       runtimeInputs = with pkgs; [wezterm];
@@ -73,40 +73,14 @@
       '';
     };
 
-  _dev-env = {
-    name,
-    host ? null,
-  }:
-    pkgs.writeShellApplication {
-      inherit name;
-      runtimeInputs = with pkgs; [alacritty];
-      text = ''
-        # shellcheck disable=SC2093,SC2016
-        exec alacritty --class=${name} \
-                       --working-directory="$HOME" \
-        ${
-          if host == null
-          then ''
-            --command zellij -s ${name} attach -c -f ${name}
-          ''
-          else ''
-            --command ssh -A -t ${host} 'ln -sf $env.SSH_AUTH_SOCK $"/run/user/(id -u)/ssh-auth.sock"; zellij -s ${name} attach -c -f ${name}'
-          ''
-        }
-      '';
-    };
-
-  dev-env = {
-    name,
-    host ? null,
-  }:
+  dev-env = {name}:
     pkgs.writeShellApplication {
       inherit name;
       runtimeInputs = with pkgs; [alacritty jq lswt];
       text = ''
         if ! lswt -j | jq -e '.[] | select(.app_id == "${name}")' > /dev/null; then
           # shellcheck disable=SC2093,SC2016
-          riverctl spawn '${_dev-env-wezterm {inherit name;}}/bin/${name}'
+          riverctl spawn '${_dev-env {inherit name;}}/bin/${name}'
         fi
         exec riverctl set-focused-tags 1
       '';
