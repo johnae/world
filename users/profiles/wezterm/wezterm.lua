@@ -15,7 +15,7 @@ local function project_name(str)
   local dirname_path = string.gsub(str, "(.*)/(.*)", "%1")
   local dirname = string.gsub(dirname_path, "(.*/)(.*)", "%2")
   if dirname ~= 'Development' then
-    name = dirname .. "/" .. name
+    name = dirname .. "/" ..  name
   end
   return name
 end
@@ -38,27 +38,31 @@ local function find_tab(t, v)
   return nil
 end
 
+local function spawn_project_window(window, pane)
+  local domain = pane:get_domain_name()
+  local cwd = pane:get_current_working_dir()
+  mux.spawn_window { domain = { DomainName = domain }, cwd = cwd.file_path }
+end
+
 local function open_project_action(window, pane)
   local domain = pane:get_domain_name()
-  wezterm.log_info('domain: ', domain)
+  local cwd = pane:get_current_working_dir()
+  local fd_cmd = 'fd \\.git$ /home/john/Development -d 3 -H -t d -x echo {//}'
+  for _,ssh_domain in pairs(config.ssh_domains) do
+    if ssh_domain.name == domain then
+      fd_cmd = 'ssh ' .. ssh_domain.username .. '@' .. ssh_domain.remote_address .. ' ' .. fd_cmd
+    end
+  end
+  wezterm.log_info('run cmd: ', fd_cmd)
+  status, out, err = wezterm.run_child_process (wezterm.shell_split(fd_cmd))
   local choices = {}
   local seen = {}
-  local status, out, err
-  if (domain == "remote-dev") then
-    status, out, err = wezterm.run_child_process (wezterm.shell_split('ssh <devRemote> fd \\.git /home/john/Development -d 3 -H -t d -x echo {//}'))
-  else
-    status, out, err = wezterm.run_child_process (wezterm.shell_split('fd \\.git /home/john/Development -d 3 -H -t d -x echo {//}'))
-  end
-  local tabs = window:mux_window():tabs()
-  for _, tab in ipairs(tabs) do
-    local title = tab:get_title()
-    if title == "" or title == nil then
-      title = "<unnamed>"
-    end
-    if (not seen[title]) then
-      table.insert(choices, { id = title, label = title })
-      seen[title] = true
-    end
+  local workspaces = mux.get_workspace_names()
+  local wstable = {}
+  for _, ws in ipairs(workspaces) do
+    table.insert(choices, { id = ws, label = ws })
+    wstable[ws] = true
+    seen[ws] = true
   end
   for line in out:gmatch("[^\r\n]+") do
     local name = project_name(line)
@@ -76,21 +80,14 @@ local function open_project_action(window, pane)
         else
           wezterm.log_info('select input, id: ', id, ' label: ', label)
           local name = project_name(id)
-          wezterm.log_info('tab find tab: ', name)
-          local project_tab = find_tab(tabs, name)
-          if project_tab == nil then
-            wezterm.log_info('project tab was nil, create new tab with name: ', name, ' id: ', id)
-            local tab, pane, window = window:mux_window():spawn_tab {
-              cwd = id,
+          if not wstable[name] then
+            wezterm.log_info('spawn window in ws: ', name)
+            mux.spawn_window { domain = { DomainName = domain }, workspace = name, cwd = id,
               args = wezterm.shell_split('nu -e "cd ' .. id .. '; if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
             }
-            cli_pane = pane:split { cwd = id, direction = 'Bottom', size = 0.25 }
-            pane:activate()
-            wezterm.log_info('tab set title: ', name)
-            tab:set_title(name)
-          else
-            project_tab:activate()
           end
+          wezterm.log_info('set active ws: ', name)
+          mux.set_active_workspace(name)
         end
       end),
       title = "Projects",
@@ -101,112 +98,178 @@ local function open_project_action(window, pane)
   )
 end
 
-wezterm.on('SplitHorizontal', function(window, pane)
-  if pane:get_title() == 'hx' then
-    window:perform_action(act.Multiple {
-      act.SendKey { key = 'w', mods = 'CTRL'},
-      act.SendKey { key = 'v'}
-    }, pane)
-  else
-    window:perform_action(act.SplitHorizontal {}, pane)
+
+-- The filled in variant of the < symbol
+local SOLID_LEFT_ARROW = wezterm.nerdfonts.pl_right_hard_divider
+
+-- The filled in variant of the > symbol
+local SOLID_RIGHT_ARROW = wezterm.nerdfonts.pl_left_hard_divider
+
+config.use_fancy_tab_bar = false
+config.tab_max_width = 64
+config.show_tabs_in_tab_bar = false
+config.show_new_tab_button_in_tab_bar = false
+
+wezterm.on('update-right-status', function(window, pane)
+  -- Each element holds the text for a cell in a "powerline" style << fade
+  local cells = {}
+
+  -- Figure out the cwd and host of the current pane.
+  -- This will pick up the hostname for the remote host if your
+  -- shell is using OSC 7 on the remote host.
+  local cwd_uri = pane:get_current_working_dir()
+  local domain = pane:get_domain_name()
+
+  local ws = window:active_workspace()
+  if cwd_uri then
+    local cwd = ''
+    local hostname = ''
+
+    if type(cwd_uri) == 'userdata' then
+      -- Running on a newer version of wezterm and we have
+      -- a URL object here, making this simple!
+
+      cwd = cwd_uri.file_path
+      hostname = cwd_uri.host or wezterm.hostname()
+    else
+      -- an older version of wezterm, 20230712-072601-f4abf8fd or earlier,
+      -- which doesn't have the Url object
+      cwd_uri = cwd_uri:sub(8)
+      local slash = cwd_uri:find '/'
+      if slash then
+        hostname = cwd_uri:sub(1, slash - 1)
+        -- and extract the cwd from the uri, decoding %-encoding
+        cwd = cwd_uri:sub(slash):gsub('%%(%x%x)', function(hex)
+          return string.char(tonumber(hex, 16))
+        end)
+      end
+    end
+
+    -- Remove the domain name portion of the hostname
+    local dot = hostname:find '[.]'
+    if dot then
+      hostname = hostname:sub(1, dot - 1)
+    end
+    if hostname == '' then
+      hostname = wezterm.hostname()
+    end
+
+    table.insert(cells, "")
+    table.insert(cells, ws)
+    table.insert(cells, cwd)
+    table.insert(cells, domain .. '/' .. hostname)
   end
+
+  -- The powerline < symbol
+  local LEFT_ARROW = utf8.char(0xe0b3)
+  -- The filled in variant of the < symbol
+  local SOLID_LEFT_ARROW = utf8.char(0xe0b2)
+
+  -- Color palette for the backgrounds of each cell
+  local colors = {
+    '#333333',
+    '#3c1361',
+    '#52307c',
+    '#663a82',
+    '#7c5295',
+    '#b491c8',
+  }
+
+  -- Foreground color for the text across the fade
+  local text_fg = '#c0c0c0'
+
+  -- The elements to be formatted
+  local elements = {}
+  -- How many cells have been formatted
+  local num_cells = 0
+
+  -- Translate a cell into elements
+  function push(text, is_last)
+    local cell_no = num_cells + 1
+    table.insert(elements, { Foreground = { Color = text_fg } })
+    table.insert(elements, { Background = { Color = colors[cell_no] } })
+    table.insert(elements, { Text = ' ' .. text .. ' ' })
+    if not is_last then
+      table.insert(elements, { Foreground = { Color = colors[cell_no + 1] } })
+      table.insert(elements, { Text = SOLID_LEFT_ARROW })
+    end
+    num_cells = num_cells + 1
+  end
+
+  while #cells > 0 do
+    local cell = table.remove(cells, 1)
+    push(cell, #cells == 0)
+  end
+
+  window:set_right_status(wezterm.format(elements))
 end)
 
-wezterm.on('SplitVertical', function(window, pane)
-  if pane:get_title() == 'hx' then
-    window:perform_action(act.Multiple {
-      act.SendKey { key = 'w', mods = 'CTRL'},
-      act.SendKey { key = 's'}
-    }, pane)
-  else
-    window:perform_action(act.SplitVertical {}, pane)
-  end
-end)
+
+local function open_gex_action(window, pane)
+  local domain = pane:get_domain_name()
+  local cwd = pane:get_current_working_dir()
+  wezterm.log_info('domain: ', domain)
+  wezterm.log_info('cwd: ', cwd)
+  wezterm.log_info('cwd: ', cwd.file_path)
+  wezterm.mux.spawn_window { cwd = cwd.file_path, domain = { DomainName = domain }, args = { "gex" } }
+  status, out, err = wezterm.run_child_process (wezterm.shell_split('bash -c "sleep 0.1; riverctl toggle-float"'))
+end
 
 wezterm.on('FindProject', open_project_action)
+wezterm.on('NewProjectWindow', spawn_project_window)
 
--- These two will work in practice as I don't have things laid out
--- in so many different ways - i.e don't need or want Up/Down as well
--- for example.
-wezterm.on('ActivateDirectionLeft', function(window, pane)
-  if pane:get_title() == 'hx' then
-    window:perform_action(act.Multiple {
-      act.SendKey { key = 'w', mods = 'CTRL' },
-      act.SendKey { key = 'LeftArrow' }
-    }, pane)
-  else
-    window:perform_action(act.ActivatePaneDirection('Left'), pane)
+-- hack for wayland / river as wezterm doesn't play very nice here
+local current_ws = "none"
+local current_num_windows = 0
+wezterm.on('window-focus-changed', function(window, pane)
+  ws = window:active_workspace()
+  local gui_windows = wezterm.gui.gui_windows()
+  num_windows = #gui_windows
+  wezterm.log_info('num windows: ', num_windows)
+  wezterm.log_info('prev num windows: ', current_num_windows)
+  if ws ~= current_ws or num_windows ~= current_num_windows then
+    wezterm.log_info('hacky-fix')
+    status, out, err = wezterm.run_child_process (wezterm.shell_split('riverctl toggle-fullscreen'))
+    wezterm.time.call_after(0.05, function()
+      status, out, err = wezterm.run_child_process (wezterm.shell_split('riverctl toggle-fullscreen'))
+      wezterm.log_info('dl status: ', status)
+      wezterm.log_info('dl out: ', out)
+      wezterm.log_info('dl err: ', err)
+    end)
+    wezterm.log_info('status: ', status)
+    wezterm.log_info('out: ', out)
+    wezterm.log_info('err: ', err)
   end
+  current_ws = ws
+  current_num_windows = num_windows
 end)
 
-wezterm.on('ActivateDirectionRight', function(window, pane)
-  if pane:get_title() == 'hx' then
-    window:perform_action(act.Multiple {
-      act.SendKey { key = 'w', mods = 'CTRL' },
-      act.SendKey { key = 'RightArrow' }
-    }, pane)
-  else
-    window:perform_action(act.ActivatePaneDirection('Right'), pane)
-  end
-end)
-
-wezterm.on('ActivateDirectionUp', function(window, pane)
-  window:perform_action(act.ActivatePaneDirection('Up'), pane)
-end)
-
-wezterm.on('ActivateDirectionDown', function(window, pane)
-  window:perform_action(act.ActivatePaneDirection('Down'), pane)
-end)
-
-wezterm.on('ActivateContextUI', function(window, pane)
-  local gitpane = pane:split { args = { "gex" } }
-  gitpane:activate()
-  window:perform_action(wezterm.action.TogglePaneZoomState, gitpane)
-end)
+wezterm.on('ActivateContextUI', open_gex_action)
 
 config.mux_env_remove = {}
-config.enable_tab_bar = false
+config.adjust_window_size_when_changing_font_size = false
+config.enable_wayland = true
+config.enable_tab_bar = true
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
 config.font_size = 14.0
 config.color_scheme = 'nord'
 config.colors = {
   -- Use a different background color than the theme background color
-  background = '#00374e',
+  -- background = '#2e3440',
 }
-config.hide_tab_bar_if_only_one_tab = true
+-- local dimmer = { brightness = 0.2 }
+-- config.background = {
+--   {
+--     source = {
+--       File = '/home/john/Sync/wez.png',
+--     },
+--     hsb = dimmer,
+--   },
+-- }
+config.hide_tab_bar_if_only_one_tab = false
 config.leader = { key='Space', mods='CTRL' }
 config.window_background_opacity = 0.95
 config.keys = {
-  {
-    key = 'LeftArrow',
-    mods = 'CTRL|SHIFT',
-    action = act.EmitEvent('ActivateDirectionLeft')
-  },
-  {
-    key = 'RightArrow',
-    mods = 'CTRL|SHIFT',
-    action = act.EmitEvent('ActivateDirectionRight')
-  },
-  {
-    key = 'UpArrow',
-    mods = 'CTRL|SHIFT',
-    action = act.EmitEvent('ActivateDirectionUp')
-  },
-  {
-    key = 'DownArrow',
-    mods = 'CTRL|SHIFT',
-    action = act.EmitEvent('ActivateDirectionDown')
-  },
-  {
-    key = 'RightArrow',
-    mods = 'LEADER',
-    action = act.EmitEvent('SplitHorizontal')
-  },
-  {
-    key = 'DownArrow',
-    mods = 'LEADER',
-    action = act.EmitEvent('SplitVertical')
-  },
   {
     key = 'Space',
     mods = 'LEADER|CTRL',
@@ -221,6 +284,11 @@ config.keys = {
     key = 'c',
     mods = 'LEADER',
     action = act.EmitEvent('ActivateContextUI')
+  },
+  {
+    key = 'n',
+    mods = 'LEADER',
+    action = act.EmitEvent('NewProjectWindow')
   },
   {
     key = 'q',
@@ -241,15 +309,25 @@ config.keys = {
     key = 'f',
     mods = 'LEADER',
     action = wezterm.action.TogglePaneZoomState,
+  },
+  {
+    key = 'w',
+    mods = 'LEADER',
+    action = act.ShowLauncherArgs {
+      flags = 'FUZZY|WORKSPACES'
+    },
   }
 }
 config.unix_domains = {
   {
     name = "local-dev",
   },
+}
+config.ssh_domains = {
   {
     name = "remote-dev",
-    proxy_command = wezterm.shell_split('ssh -T -A <devRemote> "ln -sf $env.SSH_AUTH_SOCK /run/user/1337/ssh-auth.sock; wezterm cli proxy"')
-  }
+    remote_address = "<devRemote>",
+    username = "john",
+  },
 }
 return config
