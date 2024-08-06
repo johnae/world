@@ -62,7 +62,7 @@
   };
 
   xcursor_theme = config.gtk.cursorTheme.name;
-  terminal-bin = "${pkgs.alacritty}/bin/alacritty";
+  terminal-bin = "${pkgs.wezterm}/bin/wezterm";
 
   _dev-env = {name}:
     pkgs.writeShellApplication {
