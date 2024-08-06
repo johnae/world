@@ -64,6 +64,15 @@
   xcursor_theme = config.gtk.cursorTheme.name;
   terminal-bin = "${pkgs.alacritty}/bin/alacritty";
 
+  _dev-env-wezterm = {name}:
+    pkgs.writeShellApplication {
+      inherit name;
+      runtimeInputs = with pkgs; [wezterm];
+      text = ''
+        exec wezterm start --class ${name} --domain ${name} --attach
+      '';
+    };
+
   _dev-env = {
     name,
     host ? null,
@@ -97,7 +106,7 @@
       text = ''
         if ! lswt -j | jq -e '.[] | select(.app_id == "${name}")' > /dev/null; then
           # shellcheck disable=SC2093,SC2016
-          riverctl spawn '${_dev-env {inherit name host;}}/bin/${name}'
+          riverctl spawn '${_dev-env-wezterm {inherit name;}}/bin/${name}'
         fi
         exec riverctl set-focused-tags 1
       '';
