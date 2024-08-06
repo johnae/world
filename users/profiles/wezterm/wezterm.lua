@@ -44,7 +44,7 @@ local function spawn_project_window(window, pane)
   mux.spawn_window { domain = { DomainName = domain }, cwd = cwd.file_path }
 end
 
-iiilocal function open_project_action(window, pane)
+local function open_project_action(window, pane)
   local domain = pane:get_domain_name()
   local cwd = pane:get_current_working_dir()
   local fd_cmd = 'fd \\.git$ /home/john/Development -d 3 -H -t d -x echo {//}'
