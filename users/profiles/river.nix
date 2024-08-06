@@ -89,8 +89,7 @@
   local-dev = dev-env {name = "local-dev";};
   remote-dev = dev-env {
     name = "remote-dev";
-    host = config.userinfo.devRemote;
-  };
+  # };
 
   river-menu = pkgs.writeShellApplication {
     name = "river-menu";
