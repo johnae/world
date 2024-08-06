@@ -89,7 +89,7 @@
   local-dev = dev-env {name = "local-dev";};
   remote-dev = dev-env {
     name = "remote-dev";
-  # };
+  };
 
   river-menu = pkgs.writeShellApplication {
     name = "river-menu";
