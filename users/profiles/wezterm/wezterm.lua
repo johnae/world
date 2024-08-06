@@ -44,7 +44,7 @@ local function spawn_project_window(window, pane)
   mux.spawn_window { domain = { DomainName = domain }, cwd = cwd.file_path }
 end
 
-local function open_project_action(window, pane)
+iiilocal function open_project_action(window, pane)
   local domain = pane:get_domain_name()
   local cwd = pane:get_current_working_dir()
   local fd_cmd = 'fd \\.git$ /home/john/Development -d 3 -H -t d -x echo {//}'
@@ -155,9 +155,8 @@ wezterm.on('update-right-status', function(window, pane)
     end
 
     table.insert(cells, "")
-    table.insert(cells, ws)
-    table.insert(cells, cwd)
     table.insert(cells, domain .. '/' .. hostname)
+    table.insert(cells, ws)
   end
 
   -- The powerline < symbol
@@ -208,9 +207,6 @@ end)
 local function open_gex_action(window, pane)
   local domain = pane:get_domain_name()
   local cwd = pane:get_current_working_dir()
-  wezterm.log_info('domain: ', domain)
-  wezterm.log_info('cwd: ', cwd)
-  wezterm.log_info('cwd: ', cwd.file_path)
   wezterm.mux.spawn_window { cwd = cwd.file_path, domain = { DomainName = domain }, args = { "gex" } }
   status, out, err = wezterm.run_child_process (wezterm.shell_split('bash -c "sleep 0.1; riverctl toggle-float"'))
 end
@@ -225,20 +221,12 @@ wezterm.on('window-focus-changed', function(window, pane)
   ws = window:active_workspace()
   local gui_windows = wezterm.gui.gui_windows()
   num_windows = #gui_windows
-  wezterm.log_info('num windows: ', num_windows)
-  wezterm.log_info('prev num windows: ', current_num_windows)
   if ws ~= current_ws or num_windows ~= current_num_windows then
     wezterm.log_info('hacky-fix')
     status, out, err = wezterm.run_child_process (wezterm.shell_split('riverctl toggle-fullscreen'))
     wezterm.time.call_after(0.05, function()
       status, out, err = wezterm.run_child_process (wezterm.shell_split('riverctl toggle-fullscreen'))
-      wezterm.log_info('dl status: ', status)
-      wezterm.log_info('dl out: ', out)
-      wezterm.log_info('dl err: ', err)
     end)
-    wezterm.log_info('status: ', status)
-    wezterm.log_info('out: ', out)
-    wezterm.log_info('err: ', err)
   end
   current_ws = ws
   current_num_windows = num_windows
@@ -268,7 +256,7 @@ config.colors = {
 -- }
 config.hide_tab_bar_if_only_one_tab = false
 config.leader = { key='Space', mods='CTRL' }
-config.window_background_opacity = 0.95
+config.window_background_opacity = 0.91
 config.keys = {
   {
     key = 'Space',
