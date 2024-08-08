@@ -218,6 +218,20 @@ wezterm.on('NewProjectWindow', spawn_project_window)
 local current_ws = "none"
 local current_num_windows = 0
 wezterm.on('window-focus-changed', function(window, pane)
+  local domain = pane:get_domain_name()
+  local overrides = window:get_config_overrides() or {}
+  if domain == 'local' then
+    overrides.colors = {
+      background = '#00374e'
+    }
+  elseif domain == 'local-dev' then
+    overrides.colors = {
+      background = '#0f291f'
+    }
+  end
+  window:set_config_overrides(overrides)
+  
+-- hack for wayland / river as wezterm doesn't play very nice here
   ws = window:active_workspace()
   local gui_windows = wezterm.gui.gui_windows()
   num_windows = #gui_windows
