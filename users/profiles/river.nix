@@ -226,11 +226,11 @@ in {
     set-cursor-warp = "on-focus-change";
 
     rule-add = [
-      "-app-id 'remote-dev' tags '128'"
-      "-app-id 'local-dev' tags '256'"
       "-app-id 'chromium-browser (/home/john/.config/chromium-work)' tags '2'"
       "-app-id 'firefox' tags '4'"
       "-app-id 'chromium-browser (/home/john/.config/chromium-private)' tags '8'"
+      "-app-id 'local-dev' tags '128'"
+      "-app-id 'remote-dev' tags '256'"
       "-app-id 'chromium-browser *' ssd"
       "-app-id 'org.gnome.Nautilus' ssd"
       "-app-id 'firefox' ssd"
