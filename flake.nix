@@ -58,12 +58,12 @@
     helix.inputs.rust-overlay.follows = "rust-overlay";
     helix.url = "github:AlexanderDickie/helix/copilot"; ## copilot support
     hetzner-csi-driver.flake = false;
-    hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.8.0/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
+    hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.9.0/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     impermanence.url = "github:nix-community/impermanence";
     juicefs-csi-driver.flake = false;
-    juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.4/deploy/k8s.yaml"; # gh-release-update
+    juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.5/deploy/k8s.yaml"; # gh-release-update
     kured.flake = false;
     kured.url = "github:kubereboot/kured";
     microvm.url = "github:astro/microvm.nix";
