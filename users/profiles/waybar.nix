@@ -101,7 +101,7 @@ in {
     };
     "river/tags" = {
       num-tags = 9;
-      tag-labels = ["1: " "2:  work" "3: " "4:  private" "5" "6" "7" "8" "9: "];
+      tag-labels = ["1: " "2:  work" "3: " "4:  private" "5" "6" "7" "8: local " "9: remote "];
       set-tags = [
         1
         2
