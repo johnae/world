@@ -159,11 +159,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1723059106,
-        "narHash": "sha256-Z7XKArxAsguAkYs+Q1fsEQUySBrL+pTLYsSZa1YcUzo=",
+        "lastModified": 1723156315,
+        "narHash": "sha256-0JrfahRMJ37Rf1i0iOOn+8Z4CLvbcGNwa2ChOAVrp/8=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "d796321cf460cff012768b341af45a1fbad1f8ce",
+        "rev": "ff5eb4f2accbcda963af67f1a1159e3f6c7f5f91",
         "type": "github"
       },
       "original": {
@@ -179,11 +179,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1722821805,
-        "narHash": "sha256-FGrUPUD+LMDwJsYyNSxNIzFMldtCm8wXiQuyL2PHSrM=",
+        "lastModified": 1723080788,
+        "narHash": "sha256-C5LbM5VMdcolt9zHeLQ0bYMRjUL+N+AL5pK7/tVTdes=",
         "owner": "nix-community",
         "repo": "disko",
-        "rev": "0257e44f4ad472b54f19a6dd1615aee7fa48ed49",
+        "rev": "ffc1f95f6c28e1c6d1e587b51a2147027a3e45ed",
         "type": "github"
       },
       "original": {
@@ -200,11 +200,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1723012113,
-        "narHash": "sha256-AJGsmwDnheWMjZWUqgiGtBjbxMmvLvMp5WJhmTRhJ4w=",
+        "lastModified": 1723098624,
+        "narHash": "sha256-TFg+lq7pHgCnsB4nRmMeTxSnZXHvzYJ2IHyEiw8zEF8=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "3dab4ada5b0c5a22d56dbfd7e140c16f3df2e69a",
+        "rev": "d6022ac563f2f48d8eeff89ca3589c8adc5235f6",
         "type": "github"
       },
       "original": {
@@ -388,13 +388,13 @@
     "hetzner-csi-driver": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-hVPKOwjWBCdNwe8xWG1cbIpbLmG6Yxr/SsGdPCa2RU8=",
+        "narHash": "sha256-TIepUZ4ClrfRBc4iHF2IjMCHvXfjp4EQBiOsEOsxvWM=",
         "type": "file",
-        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.8.0/deploy/kubernetes/hcloud-csi.yml"
+        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.9.0/deploy/kubernetes/hcloud-csi.yml"
       },
       "original": {
         "type": "file",
-        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.8.0/deploy/kubernetes/hcloud-csi.yml"
+        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.9.0/deploy/kubernetes/hcloud-csi.yml"
       }
     },
     "home-manager": {
@@ -435,13 +435,13 @@
     "juicefs-csi-driver": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-5yWY4Z9JYS7ikxjiay60FPRf6kGLx4SeGemdhtMNJbw=",
+        "narHash": "sha256-pzXSVHKhhGJ/ejla2Cymh4UpFMMpvzdmbR/TqdLg4so=",
         "type": "file",
-        "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.4/deploy/k8s.yaml"
+        "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.5/deploy/k8s.yaml"
       },
       "original": {
         "type": "file",
-        "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.4/deploy/k8s.yaml"
+        "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.5/deploy/k8s.yaml"
       }
     },
     "kured": {
@@ -489,11 +489,11 @@
         "spectrum": "spectrum"
       },
       "locked": {
-        "lastModified": 1722696400,
-        "narHash": "sha256-8bz0+XpjGgio5Bjte0PWsYRArVR2godIBoArly0D+HU=",
+        "lastModified": 1723156493,
+        "narHash": "sha256-ohQs9iCqkcGHWjKwe0P3X0INPjifb45PFH0ay9OnDdM=",
         "owner": "astro",
         "repo": "microvm.nix",
-        "rev": "dc326ff7fa41aa5cc210b99617743bbc51275924",
+        "rev": "e2ca6955e34de2a8654defb159640e8f545c001b",
         "type": "github"
       },
       "original": {
@@ -590,11 +590,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1722819251,
-        "narHash": "sha256-f99it92NQSZsrZ8AYbiwAUfrtb/ZpZRqUsl4q6rMA5s=",
+        "lastModified": 1723078345,
+        "narHash": "sha256-HSxOQEKNZXiJe9aWnckTTCThOhcRCabwHa32IduDKLk=",
         "owner": "nix-community",
         "repo": "nixos-generators",
-        "rev": "c8c3a20b8191819219dba1af79388aa6d555f634",
+        "rev": "d6c5d29f58acc10ea82afff1de2b28f038f572bd",
         "type": "github"
       },
       "original": {
@@ -605,11 +605,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1722332872,
-        "narHash": "sha256-2xLM4sc5QBfi0U/AANJAW21Bj4ZX479MHPMPkB+eKBU=",
+        "lastModified": 1723149858,
+        "narHash": "sha256-3u51s7jdhavmEL1ggtd8wqrTH2clTy5yaZmhLvAXTqc=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "14c333162ba53c02853add87a0000cbd7aa230c2",
+        "rev": "107bb46eef1f05e86fc485ee8af9b637e5157988",
         "type": "github"
       },
       "original": {
@@ -680,11 +680,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1723074332,
-        "narHash": "sha256-G3gIvVOXzAoowRJrRevBiX8ze8tWIaRygIA776P+TVs=",
+        "lastModified": 1723160234,
+        "narHash": "sha256-6TbIYokYNcLnyXlSEGDhoodYmYxLpBtcYu13OPgoyNU=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "da7b293a9e4c97328fa852fa44e1b74664b5c111",
+        "rev": "f6115c6b89b9cfe47f4ee38be369479a7db4ae24",
         "type": "github"
       },
       "original": {
@@ -770,11 +770,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1722925734,
-        "narHash": "sha256-5maDP51jkTUCHDU7tKdbsMQTk0QMNZjNGZw2z++YaaI=",
+        "lastModified": 1723042912,
+        "narHash": "sha256-Ff4nCgmlSWVOMvRVVf6gTYgmZjGw9EjIFHG0aUFg+D8=",
         "owner": "rust-lang",
         "repo": "rust-analyzer",
-        "rev": "b23142209ef632475915e858f5f20901ef7c12da",
+        "rev": "935883fd826c46e7e7e6de19cf24377c21f1b2ba",
         "type": "github"
       },
       "original": {
@@ -808,11 +808,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1722997267,
-        "narHash": "sha256-8Pncp8IKd0f0N711CRrCGTC4iLfBE+/5kaMqyWxnYic=",
+        "lastModified": 1723083652,
+        "narHash": "sha256-ait+SeO67n8b3lIaBWwuzVX6F1zyTJ0cY6cHWtvhTyc=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "d720bf3cebac38c2426d77ee2e59943012854cb8",
+        "rev": "69e0ad9289fc08ee5a313fb107f00e0f21e7cbb2",
         "type": "github"
       },
       "original": {
