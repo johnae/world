@@ -21,7 +21,7 @@ in {
     enable = true;
     package = helix-copilot;
     settings = {
-      theme = "nord";
+      theme = "catppuccin_mocha";
 
       editor = {
         line-number = "relative";
