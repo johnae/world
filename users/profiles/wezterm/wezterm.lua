@@ -225,7 +225,9 @@ wezterm.on('update-status', function(window, pane)
 end)
 
 
+local skip_hack = false
 local function open_gex_action(window, pane)
+  skip_hack = true
   local domain = pane:get_domain_name()
   local cwd = pane:get_current_working_dir()
   wezterm.mux.spawn_window { cwd = cwd.file_path, domain = { DomainName = domain }, args = { "gex" } }
@@ -252,6 +254,10 @@ wezterm.on('window-focus-changed', function(window, pane)
   end
   window:set_config_overrides(overrides)
   
+  if skip_hack then
+    skip_hack = false
+    return
+  end
 -- hack for wayland / river as wezterm doesn't play very nice here
   ws = window:active_workspace()
   local gui_windows = wezterm.gui.gui_windows()
