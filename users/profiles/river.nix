@@ -73,7 +73,10 @@
       '';
     };
 
-  dev-env = {name}:
+  dev-env = {
+    name,
+    tag,
+  }:
     pkgs.writeShellApplication {
       inherit name;
       runtimeInputs = with pkgs; [alacritty jq lswt];
@@ -82,13 +85,17 @@
           # shellcheck disable=SC2093,SC2016
           riverctl spawn '${_dev-env {inherit name;}}/bin/${name}'
         fi
-        exec riverctl set-focused-tags 1
+        exec riverctl set-focused-tags ${toString tag}
       '';
     };
 
-  local-dev = dev-env {name = "local-dev";};
+  local-dev = dev-env {
+    name = "local-dev";
+    tag = 128;
+  };
   remote-dev = dev-env {
     name = "remote-dev";
+    tag = 256;
   };
 
   river-menu = pkgs.writeShellApplication {
