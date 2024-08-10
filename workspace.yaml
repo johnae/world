@@ -1,0 +1,13 @@
+windows:
+- args: []
+- args:
+  - direnv
+  - exec
+  - .
+  - project-build
+- args:
+  - direnv
+  - exec
+  - .
+  - hx
+  - .
