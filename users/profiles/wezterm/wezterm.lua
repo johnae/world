@@ -38,6 +38,20 @@ local function find_tab(t, v)
   return nil
 end
 
+local run_child_process(window, pane, args)
+  local domain = pane:get_domain_name()
+  for _,ssh_domain in pairs(config.ssh_domains) do
+    if ssh_domain.name == domain then
+      args = { 'ssh', ssh_domain.username .. '@' .. ssh_domain.remote_address, unpack(args) }
+      break
+    end
+  end
+  wezterm.log_info('run cmd: ', args)
+  status, out, err = wezterm.run_child_process(args)
+  wezterm.log_info('result - status: ', status, ' out: ', out, ' err: ', err)
+  return status, out, err
+end
+
 local function spawn_project_window(window, pane)
   local domain = pane:get_domain_name()
   local cwd = pane:get_current_working_dir()
@@ -48,13 +62,7 @@ local function open_project_action(window, pane)
   local domain = pane:get_domain_name()
   local cwd = pane:get_current_working_dir()
   local fd_cmd = 'fd \\.git$ /home/john/Development -d 3 -H -t d -x echo {//}'
-  for _,ssh_domain in pairs(config.ssh_domains) do
-    if ssh_domain.name == domain then
-      fd_cmd = 'ssh ' .. ssh_domain.username .. '@' .. ssh_domain.remote_address .. ' ' .. fd_cmd
-    end
-  end
-  wezterm.log_info('run cmd: ', fd_cmd)
-  status, out, err = wezterm.run_child_process (wezterm.shell_split(fd_cmd))
+  status, out, err = run_child_process(window, pane, wezterm.shell_split(fd_cmd))
   local choices = {}
   local seen = {}
   local workspaces = mux.get_workspace_names()
@@ -275,6 +283,11 @@ end)
 
 wezterm.on('ActivateContextUI', open_gex_action)
 
+## hack for failing direnv loading
+wezterm.on('ReloadFixup', function(window, pane)
+  run_child_process(window, pane, wezterm.shell_split('pkill -HUP direnv'))
+end)
+
 config.mux_env_remove = {}
 config.adjust_window_size_when_changing_font_size = false
 config.enable_wayland = true
@@ -324,6 +337,11 @@ config.keys = {
     key = 'q',
     mods = 'LEADER|SHIFT',
     action = wezterm.action.CloseCurrentTab { confirm = true },
+  },
+  {
+    key = 'r',
+    mods = 'LEADER',
+    action = act.EmitEvent('ReloadFixup')
   },
   {
     key = 'g',
