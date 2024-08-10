@@ -283,7 +283,7 @@ end)
 
 wezterm.on('ActivateContextUI', open_gex_action)
 
-## hack for failing direnv loading
+-- hack for failing direnv loading
 wezterm.on('ReloadFixup', function(window, pane)
   run_child_process(window, pane, wezterm.shell_split('pkill -HUP direnv'))
 end)
