@@ -88,11 +88,28 @@ local function open_project_action(window, pane)
         else
           wezterm.log_info('select input, id: ', id, ' label: ', label)
           local name = project_name(id)
+          local workspaces = {
+            windows = {
+              {
+                args = {}
+              },
+            },
+          }
           if not wstable[name] then
+            status, out, err = run_child_process(window, pane, wezterm.shell_split("cat " .. id .. "/workspace.yaml"))
+            wezterm.log_info('status: ', status)
+            if status then
+              workspaces = wezterm.serde.yaml_decode(out)
+              wezterm.log_info('load workspace from: ', workspaces)
+            else
+              wezterm.log_info('fail load workspace: ', err)
+            end
+            wezterm.log_info('load workspace from: ', workspaces)
             wezterm.log_info('spawn window in ws: ', name)
-            mux.spawn_window { domain = { DomainName = domain }, workspace = name, cwd = id,
-              args = wezterm.shell_split('nu -e "cd ' .. id .. '; if (\'.envrc\' | path exists) { direnv exec . hx . } else { hx . }"')
-            }
+            for _, ws in ipairs(workspaces.windows) do
+              wezterm.log_info('spawn window in ws: ', ws.args)
+              mux.spawn_window { domain = { DomainName = domain }, workspace = name, cwd = id, args = ws.args }
+            end
           end
           wezterm.log_info('set active ws: ', name)
           mux.set_active_workspace(name)
@@ -379,4 +396,5 @@ config.ssh_domains = {
   },
 }
 return config
+
 
