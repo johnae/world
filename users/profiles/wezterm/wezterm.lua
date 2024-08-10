@@ -38,7 +38,7 @@ local function find_tab(t, v)
   return nil
 end
 
-local run_child_process(window, pane, args)
+local function run_child_process(window, pane, args)
   local domain = pane:get_domain_name()
   for _,ssh_domain in pairs(config.ssh_domains) do
     if ssh_domain.name == domain then
