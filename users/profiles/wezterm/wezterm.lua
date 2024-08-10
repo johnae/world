@@ -42,7 +42,7 @@ local function run_child_process(window, pane, args)
   local domain = pane:get_domain_name()
   for _,ssh_domain in pairs(config.ssh_domains) do
     if ssh_domain.name == domain then
-      args = { 'ssh', ssh_domain.username .. '@' .. ssh_domain.remote_address, unpack(args) }
+      args = { 'ssh', ssh_domain.username .. '@' .. ssh_domain.remote_address, table.unpack(args) }
       break
     end
   end
