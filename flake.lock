@@ -157,11 +157,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1723238470,
-        "narHash": "sha256-th7kebBibdBg+MB/c49uVD4ftEtXq1FJp4HddxUPeoc=",
+        "lastModified": 1723409744,
+        "narHash": "sha256-l6ZuOGR6SVWXki1emYka5Nn6uF8ZgIP9jQaFxpljOOg=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "25e48e98c19e9424d517a144db0d31a89536bf94",
+        "rev": "116159a4bfeaa79662f4c39dbfaf2fce6a5737f7",
         "type": "github"
       },
       "original": {
@@ -198,11 +198,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1723271337,
-        "narHash": "sha256-IUnCQ0xo0sJRhHbsXVDQ9ULpiQrkxbavmVOilhAXdlk=",
+        "lastModified": 1723357708,
+        "narHash": "sha256-y0FYxyHd45FQkl1S4PIq9eNaEe2tEemHpQ3sp+C19Pk=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "ca0a8350f4c278204475112dd600ba6f0d09110e",
+        "rev": "344945339ec0e01c62195b849ae8a67eaa1004a3",
         "type": "github"
       },
       "original": {
@@ -451,11 +451,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1723015306,
-        "narHash": "sha256-jQnFEtH20/OsDPpx71ntZzGdRlpXhUENSQCGTjn//NA=",
+        "lastModified": 1723399884,
+        "narHash": "sha256-97wn0ihhGqfMb8WcUgzzkM/TuAxce2Gd20A8oiruju4=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "b3d5ea65d88d67d4ec578ed11d4d2d51e3de525e",
+        "rev": "086f619dd991a4d355c07837448244029fc2d9ab",
         "type": "github"
       },
       "original": {
@@ -536,11 +536,11 @@
         "spectrum": "spectrum"
       },
       "locked": {
-        "lastModified": 1723251224,
-        "narHash": "sha256-d97zfb9GlQthU5bHuEHU7ztWDe5YUYppaYcyEHDgdak=",
+        "lastModified": 1723407630,
+        "narHash": "sha256-iBvdy5KAYWew4sAIVbrqrNL7jCMWFoB5hObocCXkHiY=",
         "owner": "astro",
         "repo": "microvm.nix",
-        "rev": "15bca94a8d503500169bcc508a1011f68cd91d6c",
+        "rev": "802ef1704f6a050f272bed5e226d0e86fa3e8c39",
         "type": "github"
       },
       "original": {
@@ -743,11 +743,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1723333488,
-        "narHash": "sha256-doh2p9FBCa6ZKn1b6huobhL4JIj6WbpmljMt7s+XV9I=",
+        "lastModified": 1723419898,
+        "narHash": "sha256-fUxZlPPZAYzHvqg4O8snIYVtqR17YCnEEMHKNL+sY4g=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "6fa6d1546dfc0b15f8ba384b80b8f03c81d9471a",
+        "rev": "f91e2cc78335cd634c103576f2b2e826d93bb291",
         "type": "github"
       },
       "original": {
@@ -833,11 +833,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1723195244,
-        "narHash": "sha256-UdydOPxlUpEE+uparyCgxTCSumwCn2URpxPm70G1K+Q=",
+        "lastModified": 1723304838,
+        "narHash": "sha256-xAxVDxuvCs8WWkrxVWjCiqxTkHhGj7sSppr1YMuEdT8=",
         "owner": "rust-lang",
         "repo": "rust-analyzer",
-        "rev": "56f63dfd8aeebf80e3fc87894fa3d5a40f98a329",
+        "rev": "0daeb5c0b05cfdf2101b0f078c27539099bf38e6",
         "type": "github"
       },
       "original": {
@@ -871,11 +871,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1723256423,
-        "narHash": "sha256-9iDTrfVM+mbcad31a47oqW8t8tfSA4C/si6F8F2DO/w=",
+        "lastModified": 1723343015,
+        "narHash": "sha256-oS8Qhpo71B/6OOsuVBFJbems7RKD/5e3TN2AdXhwMjg=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "615cfd85b4d9c51811a8d875374268fab5bd4089",
+        "rev": "ed4fe9af3814694d59c572649e881a6aa6eba533",
         "type": "github"
       },
       "original": {
@@ -933,11 +933,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1722353247,
-        "narHash": "sha256-pPH+IJ8pljR+PmeOdckoHvbQVfSBdStKbgXcaqdkTRk=",
+        "lastModified": 1723400962,
+        "narHash": "sha256-k/r7fRD5bd5E2PGqy63PBmqlvAftv8JYeSO1vfjrgbw=",
         "owner": "wez",
         "repo": "wezterm",
-        "rev": "56a27e93a9ee50aab50ff4d78308f9b3154b5122",
+        "rev": "0ac1e948c5b4fb1d1dee532eba36c4669a64774e",
         "type": "github"
       },
       "original": {
