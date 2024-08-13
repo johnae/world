@@ -23,6 +23,7 @@ locals {
   masters = 3
   agents = 2
   labels = {
+    "tfstate" : "k3s"
     "cluster_id" : random_string.cluster.id
     "tailscale" : "yes"
   }

@@ -665,6 +665,57 @@
         "type": "github"
       }
     },
+    "nixos-images": {
+      "inputs": {
+        "nixos-stable": "nixos-stable",
+        "nixos-unstable": "nixos-unstable"
+      },
+      "locked": {
+        "lastModified": 1723424148,
+        "narHash": "sha256-9itCzEEqvxQNRYVNoC6EjXVLMRH9e8AgPNCjgHSeyQ0=",
+        "owner": "nix-community",
+        "repo": "nixos-images",
+        "rev": "9b5fc2fccafe78544bca081da0b30ebbb09c7d37",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixos-images",
+        "type": "github"
+      }
+    },
+    "nixos-stable": {
+      "locked": {
+        "lastModified": 1723282977,
+        "narHash": "sha256-oTK91aOlA/4IsjNAZGMEBz7Sq1zBS0Ltu4/nIQdYDOg=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "a781ff33ae258bbcfd4ed6e673860c3e923bf2cc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixos-unstable": {
+      "locked": {
+        "lastModified": 1722586959,
+        "narHash": "sha256-ME29JBcYm+oYtFXacHIQDC894guXjvm/2jCdRGIVOEY=",
+        "owner": "Mic92",
+        "repo": "nixpkgs",
+        "rev": "73500c5f11587b262a43b4afb6b13618a48f3af9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "ref": "iproute2-nix-community",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1723175592,
@@ -737,6 +788,22 @@
       "original": {
         "owner": "NixOS",
         "ref": "nixos-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-tmp": {
+      "locked": {
+        "lastModified": 1722586959,
+        "narHash": "sha256-ME29JBcYm+oYtFXacHIQDC894guXjvm/2jCdRGIVOEY=",
+        "owner": "Mic92",
+        "repo": "nixpkgs",
+        "rev": "73500c5f11587b262a43b4afb6b13618a48f3af9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "ref": "iproute2-nix-community",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -819,7 +886,9 @@
         "nix2container": "nix2container",
         "nixos-generators": "nixos-generators",
         "nixos-hardware": "nixos-hardware",
+        "nixos-images": "nixos-images",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-tmp": "nixpkgs-tmp",
         "nur": "nur",
         "pre-commit-hooks": "pre-commit-hooks",
         "rbw-static-linux-amd64": "rbw-static-linux-amd64",
