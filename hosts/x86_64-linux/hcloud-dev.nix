@@ -22,8 +22,8 @@
   };
 
   age.secrets = {
-    ts-google-9k = {
-      file = ../../secrets/ts-google-9k.age;
+    ts-google-9k-hcloud-dev = {
+      file = ../../secrets/ts-google-9k-hcloud-dev.age;
       owner = "${toString adminUser.uid}";
     };
   };
@@ -37,7 +37,7 @@
     args.accept-routes = false;
     args.accept-dns = true;
     args.advertise-exit-node = true;
-    args.auth-key = "file:/var/run/agenix/ts-google-9k";
+    args.auth-key = "file:/var/run/agenix/ts-google-9k-hcloud-dev";
     args.hostname = "\"$NODENAME\"";
   };
 
