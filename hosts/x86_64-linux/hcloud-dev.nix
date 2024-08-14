@@ -7,7 +7,7 @@
     ../../profiles/hcloud.nix
     ../../profiles/hcloud-remote-unlock.nix
     ../../profiles/home-manager.nix
-    ../../profiles/disk/disko-basic.nix
+    ../../profiles/disk/disko-bcachefs.nix
     ../../profiles/tailscale.nix
     ../../profiles/zram.nix
   ];
@@ -18,7 +18,6 @@
     allowReboot = true;
     dates = "06:00";
     randomizedDelaySec = "5min";
-    enableSentinel = true; ## we're running kured on k8s for synchronized reboots
   };
 
   age.secrets = {
