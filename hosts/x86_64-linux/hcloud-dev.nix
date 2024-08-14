@@ -7,7 +7,7 @@
     ../../profiles/hcloud.nix
     ../../profiles/hcloud-remote-unlock.nix
     ../../profiles/home-manager.nix
-    ../../profiles/disk/disko-bcachefs.nix
+    ../../profiles/disk/disko-basic.nix
     ../../profiles/tailscale.nix
     ../../profiles/zram.nix
   ];
