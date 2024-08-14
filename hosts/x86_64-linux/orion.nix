@@ -35,14 +35,6 @@
     libvirtd.enable = true;
   };
 
-  microvm.autostart = [
-    "agent-8be5-d4a1"
-    "agent-8be5-15c3"
-    "agent-8be5-32c4"
-    "master-8be5-a0a1"
-    "master-8be5-c1ce"
-  ];
-
   programs.ssh.startAgent = true;
 
   boot.binfmt.emulatedSystems = ["aarch64-linux"];
@@ -173,7 +165,6 @@
   networking.nat = {
     enable = true;
     enableIPv6 = true;
-    internalInterfaces = ["microvm"];
   };
 
   services.networkd-dispatcher = let
@@ -196,12 +187,6 @@
 
   systemd.network = {
     enable = true;
-    netdevs = {
-      "10-microvm".netdevConfig = {
-        Kind = "bridge";
-        Name = "microvm";
-      };
-    };
     networks = {
       "10-wan" = {
         ## udevadm test-builtin net_id /sys/class/net/eth0
@@ -217,26 +202,10 @@
         ];
         linkConfig.RequiredForOnline = "routable";
       };
-      "10-microvm" = {
-        matchConfig.Name = "microvm";
-        networkConfig = {
-          DHCPServer = true;
-          IPv6SendRA = true;
-        };
-        addresses = [
-          {
-            addressConfig.Address = "10.100.0.1/24";
-          }
-        ];
-      };
-      "11-microvm" = {
-        matchConfig.Name = "vm-*";
-        networkConfig.Bridge = "microvm";
-      };
     };
   };
 
-  networking.firewall.trustedInterfaces = ["tailscale0" "microvm"];
+  networking.firewall.trustedInterfaces = ["tailscale0"];
 
   age.secrets = {
     initrd-key = {
