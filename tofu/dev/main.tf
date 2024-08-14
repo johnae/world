@@ -15,6 +15,11 @@ terraform {
   }
 }
 
+variable "kexec_tarball" {
+  type = string
+  description = "path/url to the kexec tarball to use"
+}
+
 locals {
   server_type = "cpx21" # AMD 3 vCPU, 4 GB RAM, 80 GB NVMe SSD
   region = "hel1"
@@ -71,7 +76,7 @@ module "dev-install" {
   target_host       = hcloud_server.dev.ipv4_address
   debug_logging = true
   # kexec_tarball_url = "$(nix build --print-out-paths .#packages.x86_64-linux.kexec-installer-nixos-unstable-noninteractive)/nixos-kexec-installer-noninteractive-x86_64-linux.tar.gz"
-  kexec_tarball_url = "../../result/nixos-kexec-installer-noninteractive-x86_64-linux.tar.gz"
+  kexec_tarball_url = var.kexec_tarball
   disk_encryption_key_scripts = [
     {
       path = "/tmp/disk.key"

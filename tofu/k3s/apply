@@ -6,7 +6,7 @@ sleep 10
 unlocked_all=1
 
 function unlock() {
-  for server in $(hcloud server list -o noheader | awk '{print $4}'); do
+  for server in $(hcloud server list -o noheader -l "tfstate=k3s" | awk '{print $4}'); do
     echo "Probing host ${server} on strPort 2222"
     if timeout 5 bash -c "</dev/tcp/${server}/2222"; then
       echo "Host ${server} is up, unlocking"
