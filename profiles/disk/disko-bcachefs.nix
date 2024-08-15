@@ -39,4 +39,5 @@
       };
     };
   };
+  fileSystems."/boot".neededForBoot = true;
 }
