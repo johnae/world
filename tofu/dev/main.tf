@@ -21,7 +21,8 @@ variable "kexec_tarball" {
 }
 
 locals {
-  server_type = "cpx21" # AMD 3 vCPU, 4 GB RAM, 80 GB NVMe SSD
+  #server_type = "cpx21" # AMD 3 vCPU, 4 GB RAM, 80 GB NVMe SSD
+  server_type = "cpx51" # AMD 16 vCPU, 32 GB RAM, 360 GB NVMe SSD
   region = "hel1"
   zone = "hel1-dc2"
   labels = {
@@ -47,6 +48,17 @@ resource "random_string" "host" {
 resource "hcloud_ssh_key" "default" {
   name       = "default"
   public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzm5RyD+1nfy1LquvkEog4SZtPgdhzjr49jSC8PAinp"
+}
+
+resource "hcloud_volume" "dev" {
+  name = "dev"
+  location = local.region
+  size     = 100
+}
+
+resource "hcloud_volume_attachment" "dev" {
+  volume_id = hcloud_volume.dev.id
+  server_id = hcloud_server.dev.id
 }
 
 resource "hcloud_server" "dev" {
