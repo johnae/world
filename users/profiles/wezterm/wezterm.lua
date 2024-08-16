@@ -251,11 +251,11 @@ end)
 
 
 local skip_hack = false
-local function open_gex_action(window, pane)
+local function open_git_commit_action(window, pane)
   skip_hack = true
   local domain = pane:get_domain_name()
   local cwd = pane:get_current_working_dir()
-  wezterm.mux.spawn_window { cwd = cwd.file_path, domain = { DomainName = domain }, args = { "gex" } }
+  wezterm.mux.spawn_window { cwd = cwd.file_path, domain = { DomainName = domain }, args = { "gitui" } }
   status, out, err = wezterm.run_child_process (wezterm.shell_split('bash -c "sleep 0.1; riverctl toggle-float"'))
 end
 
@@ -298,7 +298,7 @@ wezterm.on('window-focus-changed', function(window, pane)
   current_num_windows = num_windows
 end)
 
-wezterm.on('ActivateContextUI', open_gex_action)
+wezterm.on('ActivateContextUI', open_git_commit_action)
 
 -- hack for failing direnv loading
 wezterm.on('ReloadFixup', function(window, pane)

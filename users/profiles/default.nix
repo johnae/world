@@ -8,6 +8,7 @@ in {
   imports = [
     ./bat.nix
     ./git.nix
+    ./gitui.nix
     ./helix.nix
     ./kitty.nix
     ./kubie.nix
@@ -34,7 +35,6 @@ in {
     cachix
     carapace
     fzf # # for certain utilities that depend on it
-    gex
     gh
     git-branchless
     git-crypt

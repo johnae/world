@@ -277,7 +277,7 @@ in {
             bind "Ctrl q" { Quit; }
             bind "Ctrl e" { SwitchToMode "Locked"; }
             bind "Ctrl g" {
-              Run "${pkgs.gex}/bin/gex" {
+              Run "${pkgs.gitui}/bin/gitui" {
                 floating true
                 close_on_exit true
               }

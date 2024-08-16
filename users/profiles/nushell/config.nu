@@ -483,4 +483,4 @@ $env.config = {
 alias cat = bat
 def l [] { ls | grid -c }
 alias e = hx
-alias c = gex
+alias c = gitui

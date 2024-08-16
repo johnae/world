@@ -44,7 +44,7 @@
       "ctrl+shift+z" = "toggle_layout stack"; ## zoom
       "ctrl+space>q" = "close_window";
       "ctrl+space>shift+q" = "close_tab";
-      "ctrl+space>g" = "launch --cwd=current --type=overlay gex";
+      "ctrl+space>g" = "launch --cwd=current --type=overlay gitui";
       #"ctrl+space>f" = "launch --cwd=current --type=overlay find-project"
     };
   };
