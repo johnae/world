@@ -32,7 +32,7 @@ in {
   home.packages = with pkgs; [
     element-desktop-wayland
     gimp
-    gnome.nautilus
+    nautilus
     kanshi
     lswt
     mako

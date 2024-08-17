@@ -147,7 +147,7 @@
         };
         addresses = [
           {
-            addressConfig.Address = "10.100.1.1/24";
+            Address = "10.100.1.1/24";
           }
         ];
       };

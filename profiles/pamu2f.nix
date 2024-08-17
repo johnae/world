@@ -17,12 +17,12 @@
       userConfigs
     ));
 in {
-  security.pam.u2f.cue = true;
-  security.pam.u2f.origin = "pam://1337";
-  security.pam.u2f.appId = "pam://9000";
-  security.pam.u2f.enable = true;
-  security.pam.u2f.control = "required";
-  security.pam.u2f.authFile = writeU2fKeys u2fMappings;
+  security.pam.u2f.settings.cue = true;
+  security.pam.u2f.settings.origin = "pam://1337";
+  security.pam.u2f.settings.appid = "pam://9000";
+  security.pam.u2f.settings.enable = true;
+  security.pam.u2f.settings.control = "required";
+  security.pam.u2f.settings.authfile = writeU2fKeys u2fMappings;
 
   assertions = [
     {
