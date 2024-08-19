@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+export TF_VAR_kexec_tarball="$(nix build .#kexec-installer-nixos-unstable-noninteractive --print-out-paths --no-link)/nixos-kexec-installer-noninteractive-x86_64-linux.tar.gz"
+
+tofu plan
