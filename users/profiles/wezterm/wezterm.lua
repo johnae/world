@@ -394,6 +394,11 @@ config.ssh_domains = {
     remote_address = "orion",
     username = "john",
   },
+  {
+    name = "hcloud-dev",
+    remote_address = "hcloud-dev",
+    username = "john",
+  },
 }
 return config
 
