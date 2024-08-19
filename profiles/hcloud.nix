@@ -61,6 +61,15 @@ in {
     fi
   '';
 
+  security.pam.loginLimits = [
+    {
+      domain = "*";
+      type = "-";
+      item = "nofile";
+      value = "16384";
+    }
+  ];
+
   networking.usePredictableInterfaceNames = false;
   networking.dhcpcd.enable = false;
   networking.useDHCP = false;
@@ -107,6 +116,7 @@ in {
     pkgs.iptables
     pkgs.jq
     pkgs.lsof
+    pkgs.bottom
     pkgs.man-pages
     pkgs.mkpasswd
     pkgs.nmap

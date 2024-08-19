@@ -28,10 +28,6 @@
   };
 
   age.secrets = {
-    ts-google-9k-hcloud-dev = {
-      file = ../../secrets/ts-google-9k-hcloud-dev.age;
-      owner = "${toString adminUser.uid}";
-    };
     copilot-token = {
       file = ../../secrets/gh_copilot.age;
       owner = "${toString adminUser.uid}";
@@ -63,7 +59,7 @@
     args.accept-routes = false;
     args.accept-dns = true;
     args.advertise-exit-node = true;
-    args.auth-key = "file:/var/run/agenix/ts-google-9k-hcloud-dev";
+    args.auth-key = "file:/etc/ts-auth-key";
     args.hostname = "\"$NODENAME\"";
   };
 
