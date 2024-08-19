@@ -12,6 +12,9 @@ terraform {
     random = {
       source = "hashicorp/random"
     }
+    tailscale = {
+      source = "tailscale/tailscale"
+    }
   }
 }
 
@@ -20,15 +23,36 @@ variable "kexec_tarball" {
   description = "path/url to the kexec tarball to use"
 }
 
+variable "server_type" {
+  type = string
+  description = "The hetzner server_type to deploy"
+  default = "cpx31"
+}
+
 locals {
+  server_type = var.server_type
   #server_type = "cpx21" # AMD 3 vCPU, 4 GB RAM, 80 GB NVMe SSD
-  server_type = "cpx51" # AMD 16 vCPU, 32 GB RAM, 360 GB NVMe SSD
+  # server_type = "cpx51" # AMD 16 vCPU, 32 GB RAM, 360 GB NVMe SSD
+  # server_type = "ccx63" # AMD 48 vCPU, 192 GB RAM etc
   region = "hel1"
   zone = "hel1-dc2"
   labels = {
     "tfstate" : "dev"
     "tailscale" : "yes"
   }
+}
+
+resource "tailscale_tailnet_key" "dev" {
+  reusable      = false
+  ephemeral     = true
+  preauthorized = true
+  expiry        = 1800
+  description   = "hcloud-dev"
+  tags = [
+    "tag:hcloud",
+    "tag:k8s-admins",
+    "tag:server"
+  ]
 }
 
 resource "hcloud_placement_group" "default" {
@@ -86,6 +110,9 @@ module "dev-install" {
   nixos_system      = module.dev-system-build.result.out
   nixos_partitioner = module.dev-disko.result.out
   target_host       = hcloud_server.dev.ipv4_address
+  extra_environment = {
+    TS_AUTH_KEY = tailscale_tailnet_key.dev.key
+  }
   debug_logging = true
   # kexec_tarball_url = "$(nix build --print-out-paths .#packages.x86_64-linux.kexec-installer-nixos-unstable-noninteractive)/nixos-kexec-installer-noninteractive-x86_64-linux.tar.gz"
   kexec_tarball_url = var.kexec_tarball

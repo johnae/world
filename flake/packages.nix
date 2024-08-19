@@ -46,7 +46,7 @@
         };
         tofuWithPlugins = pkgs.opentofu.withPlugins (
           p:
-            map tofuProvider [p.null p.external p.hcloud p.cloudflare p.random]
+            map tofuProvider [p.null p.external p.hcloud p.cloudflare p.random p.tailscale]
         );
         rbw = pkgs.runCommand "rbw" {} ''
           mkdir -p $out/bin
