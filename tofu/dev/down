@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-export TF_VAR_kexec_tarball="dummy"
-tofu destroy -target=hcloud_server.dev -target=tailscale_tailnet_key.dev -auto-approve

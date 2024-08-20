@@ -16,6 +16,10 @@ terraform {
       source = "tailscale/tailscale"
     }
   }
+
+  backend "local" {
+    path = "/home/john/Sync/world-tfstate/terraform.tfstate"
+  }
 }
 
 variable "kexec_tarball" {
