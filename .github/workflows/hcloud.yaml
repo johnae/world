@@ -1,0 +1,16 @@
+name: Hcloud Cost Mgmt
+
+on:
+  workflow_dispatch: {}
+  schedule:
+  - cron: '0 23 * * *'
+
+jobs:
+  update-packages:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: hetznercloud/setup-hcloud@v1
+    - run: |
+        hcloud server delete hcloud-dev || true
+      env:
+        HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
