@@ -7,6 +7,7 @@
       "/var/lib/containers"
       "/var/lib/cups"
       "/var/lib/docker"
+      "/var/lib/nixos"
       "/var/lib/systemd"
       "/var/lib/tailscale"
       "/var/lib/wireguard"
