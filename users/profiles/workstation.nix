@@ -30,7 +30,7 @@ in {
     ];
 
   home.packages = with pkgs; [
-    element-desktop-wayland
+    # element-desktop-wayland
     gimp
     nautilus
     kanshi
