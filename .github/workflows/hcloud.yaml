@@ -6,7 +6,7 @@ on:
   - cron: '0 23 * * *'
 
 jobs:
-  update-packages:
+  cost-mgmt:
     runs-on: ubuntu-latest
     steps:
     - uses: hetznercloud/setup-hcloud@v1
