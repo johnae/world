@@ -11,6 +11,8 @@ jobs:
     steps:
     - uses: hetznercloud/setup-hcloud@v1
     - run: |
-        hcloud server delete hcloud-dev || true
+        for S in $(hcloud server list -l "tfstate=dev" -o json | jq -r  '.[].name'); do
+          hcloud server delete "$S"
+        done
       env:
         HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
