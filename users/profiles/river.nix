@@ -97,10 +97,6 @@
     name = "remote-dev";
     tag = 256;
   };
-  hcloud-dev = dev-env {
-    name = "hcloud-dev";
-    tag = 256;
-  };
 
   river-menu = pkgs.writeShellApplication {
     name = "river-menu";
@@ -198,7 +194,6 @@ in {
 
     map.normal."Super+Shift Minus" = "spawn 'passonly=y ${pkgs.scripts}/bin/fuzzel-rbw'";
     map.normal."Super+Shift R" = "spawn '${remote-dev}/bin/remote-dev'";
-    map.normal."Super+Shift T" = "spawn '${hcloud-dev}/bin/hcloud-dev'";
 
     map.normal."Super+Shift Space" = "send-layout-cmd luatile 'next_layout()'";
     map.normal."Super+Shift S" = "spawn '${screenshot}/bin/screenshot'";

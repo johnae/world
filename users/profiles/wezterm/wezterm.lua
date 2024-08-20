@@ -391,15 +391,8 @@ config.unix_domains = {
 config.ssh_domains = {
   {
     name = "remote-dev",
-    remote_address = "orion",
-    username = "john",
-  },
-  {
-    name = "hcloud-dev",
-    remote_address = "hcloud-dev",
+    remote_address = "<devRemote>",
     username = "john",
   },
 }
 return config
-
-
