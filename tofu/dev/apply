@@ -2,6 +2,20 @@
 
 export TF_VAR_kexec_tarball="$(nix build .#kexec-installer-nixos-unstable-noninteractive --print-out-paths --no-link)/nixos-kexec-installer-noninteractive-x86_64-linux.tar.gz"
 
+function destroy() {
+  tofu destroy \
+    -target=hcloud_server.dev \
+    -target=random_string.host \
+    -target=module.dev-system-build \
+    -target=module.dev-disko \
+    -target=module.dev-install \
+    -auto-approve
+}
+
+if hcloud server list -l "tfstate=dev" -o json | jq -e '. | any | not'; then
+  destroy
+fi
+
 tofu apply -auto-approve
 sleep 5
 
@@ -10,6 +24,7 @@ retries=5
 
 function unlock() {
   retries=$((retries - 1))
+  unlocked_all=1
   for server in $(hcloud server list -o noheader -l "tfstate=dev" | awk '{print $4}'); do
     echo "Probing host ${server} on strPort 2222"
     if timeout 5 bash -c "</dev/tcp/${server}/2222"; then
@@ -28,16 +43,21 @@ function unlock() {
 
 function purge() {
   echo "purging and recreating server"
-  ./down
+  destroy
   exec $0
 }
 
 unlock
-if [[ ${unlocked_all} -eq 0 ]]; then
-  if [ ${retries} -le 0 ]; then
-    purge
+while true; do
+  if [[ ${unlocked_all} -eq 0 ]]; then
+    if [ ${retries} -le 0 ]; then
+      purge
+    fi
+    echo "retrying unlocking in 5 seconds"
+    sleep 5
+    unlock
+  else
+    echo "unlocked all, exiting"
+    exit 0
   fi
-  echo "retrying unlocking in 5 seconds"
-  sleep 5
-  unlock
-fi
+done

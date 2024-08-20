@@ -81,7 +81,7 @@ resource "hcloud_ssh_key" "default" {
 resource "hcloud_volume" "dev" {
   name = "dev"
   location = local.region
-  size     = 100
+  size     = 50
 }
 
 resource "hcloud_volume_attachment" "dev" {
@@ -117,8 +117,6 @@ module "dev-install" {
   extra_environment = {
     TS_AUTH_KEY = tailscale_tailnet_key.dev.key
   }
-  debug_logging = true
-  # kexec_tarball_url = "$(nix build --print-out-paths .#packages.x86_64-linux.kexec-installer-nixos-unstable-noninteractive)/nixos-kexec-installer-noninteractive-x86_64-linux.tar.gz"
   kexec_tarball_url = var.kexec_tarball
   disk_encryption_key_scripts = [
     {
