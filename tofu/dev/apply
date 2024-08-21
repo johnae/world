@@ -58,11 +58,11 @@ function restore() {
       echo "Host ${TSIP} is up, restoring"
       ssh john@hcloud-dev "sudo restic-remote restore latest:/home/john/Development --target /home/john/Development --host hcloud-dev"
       ssh john@hcloud-dev "sudo chown -R john:users /home/john/Development"
-#      ssh john@hcloud-dev "sudo restic-remote restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host hcloud-dev"
+      ssh john@hcloud-dev "sudo restic-remote restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host hcloud-dev"
       ssh john@hcloud-dev "sudo systemctl stop vaultwarden"
       ssh john@hcloud-dev "sudo rm -rf /var/lib/vaultwarden/*"
-      # ssh john@hcloud-dev "sudo systemctl start vaultwarden"
-      # ssh john@hcloud-dev "sudo tailscale serve --bg localhost:8222"
+      ssh john@hcloud-dev "sudo systemctl start vaultwarden"
+      ssh john@hcloud-dev "sudo tailscale serve --bg localhost:8222"
       break
     else
       echo "Host ${IP} is down, retrying restore later"
