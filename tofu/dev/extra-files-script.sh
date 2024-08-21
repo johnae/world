@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-mkdir -p etc/ssh/secrets
+mkdir -p etc/ssh/secrets var/lib/nixos keep/var/lib/nixos
 
 if [ -n "$HCLOUD_DEV_SSH_HOSTKEY" ]; then
   echo "$HCLOUD_DEV_SSH_HOSTKEY" | base64 -d > etc/ssh/ssh_host_ed25519_key
@@ -21,3 +21,4 @@ fi
 
 chmod 0600 etc/ssh/ssh_host_ed25519_key
 chmod 0600 etc/ssh/secrets/initrd_ed25519_key
+chmod 0755 var/lib/nixos keep/var/lib/nixos

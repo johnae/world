@@ -78,16 +78,16 @@ resource "hcloud_ssh_key" "default" {
   public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzm5RyD+1nfy1LquvkEog4SZtPgdhzjr49jSC8PAinp"
 }
 
-resource "hcloud_volume" "dev" {
-  name = "dev"
-  location = local.region
-  size     = 50
-}
+# resource "hcloud_volume" "dev" {
+#   name = "dev"
+#   location = local.region
+#   size     = 50
+# }
 
-resource "hcloud_volume_attachment" "dev" {
-  volume_id = hcloud_volume.dev.id
-  server_id = hcloud_server.dev.id
-}
+# resource "hcloud_volume_attachment" "dev" {
+#   volume_id = hcloud_volume.dev.id
+#   server_id = hcloud_server.dev.id
+# }
 
 resource "hcloud_server" "dev" {
   name        = "dev-${random_string.host.id}"
