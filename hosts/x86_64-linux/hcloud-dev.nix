@@ -1,6 +1,8 @@
 {
   lib,
   adminUser,
+  hostName,
+  tailnet,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDErC2NyMr7hmuNA9gnuLveTxPjYVqkmpLL9j6kzf2a5";
@@ -48,9 +50,12 @@
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_rsa_alt";
     };
+    vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
   };
 
   networking.firewall.trustedInterfaces = ["tailscale0"];
+
+  security.sudo.wheelNeedsPassword = false;
 
   services.tailscale.auth = {
     enable = true;
@@ -62,6 +67,25 @@
     args.auth-key = "file:/etc/ts-auth-key";
     args.hostname = "\"$NODENAME\"";
   };
+
+  services.vaultwarden = {
+    enable = true;
+    environmentFile = "/run/agenix/vaultwarden-env";
+    backupDir = "/var/lib/vaultwarden-backup";
+
+    config = {
+      DOMAIN = "https://${hostName}.${tailnet}.ts.net";
+      SIGNUPS_ALLOWED = "false";
+      PASSWORD_HINTS_ALLOWED = "false";
+      ROCKET_ADDRESS = "127.0.0.1";
+      ROCKET_PORT = 8222;
+      PASSWORD_ITERATIONS = 600000;
+    };
+  };
+
+  services.restic.backups.remote.paths = [
+    "/var/lib/vaultwarden-backup"
+  ];
 
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzm5RyD+1nfy1LquvkEog4SZtPgdhzjr49jSC8PAinp"
@@ -115,47 +139,6 @@
           };
         };
       };
-    };
-
-    # disk.disk2 = {
-    #   device = lib.mkDefault "/dev/sdb";
-    #   type = "disk";
-    #   content = {
-    #     type = "gpt";
-    #     partitions = {
-    #       luks = {
-    #         size = "100%";
-    #         content = {
-    #           type = "luks";
-    #           name = "encryptedB";
-    #           settings.allowDiscards = true;
-    #           passwordFile = "/tmp/disk.key";
-    #           content = {
-    #             type = "filesystem";
-    #             format = "bcachefs";
-    #             mountpoint = "/keep";
-    #             mountOptions = ["defaults" "compression=zstd" "background_compression=zstd"];
-    #           };
-    #         };
-    #       };
-    #     };
-    #   };
-    # };
-  };
-  # fileSystems."/keep" = {
-  #   neededForBoot = true;
-  # };
-  #### after first install - remove above disk2, enable below
-  fileSystems."/keep" = {
-    device = "/dev/mapper/encryptedB";
-    fsType = "bcachefs";
-    options = ["defaults" "compression=zstd" "background_compression=zstd"];
-    neededForBoot = true;
-  };
-  boot.initrd.luks.devices = {
-    encryptedB = {
-      device = "/dev/disk/by-partlabel/disk-disk2-luks";
-      allowDiscards = true;
     };
   };
 }
