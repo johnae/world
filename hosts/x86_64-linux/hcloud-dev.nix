@@ -16,6 +16,7 @@
     ../../profiles/restic-backup.nix
     ../../profiles/state.nix
     ../../profiles/tailscale.nix
+    ../../profiles/vaultwarden.nix
     ../../profiles/zram.nix
   ];
 
