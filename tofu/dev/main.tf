@@ -17,8 +17,9 @@ terraform {
     }
   }
 
-  backend "local" {
-    path = "/home/john/Sync/world-tfstate/terraform.tfstate"
+  backend "gcs" {
+    prefix = "hcloud-dev"
+    bucket = "terraform-9000-248d"
   }
 }
 
