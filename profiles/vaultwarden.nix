@@ -8,7 +8,11 @@
   cfg = config.services.vaultwarden;
   user = config.users.users.vaultwarden.name;
   inherit (config.users.users.vaultwarden) group;
-  DATA_FOLDER = "/var/lib/bitwarden_rs";
+  dir =
+    if lib.versionOlder config.system.stateVersion "24.11"
+    then "bitwarden_rs"
+    else "vaultwarden";
+  DATA_FOLDER = "/var/lib/${dir}";
   backup = pkgs.writeText "backup.sh" ''
     export DIR="${cfg.backupDir}/backup-$(date '+%Y%m%d-%H%M')"
     if [ -d "$DIR" ]; then
@@ -16,8 +20,8 @@
       exit 0
     fi
     mkdir -p "$DIR"
-    ${pkgs.sqlite}/bin/sqlite3 /var/lib/bitwarden_rs/db.sqlite3 "VACUUM INTO '$DIR/db.sqlite3'";
-    cp -R /var/lib/bitwarden_rs/{attachments,sends,rsa_key*,icon_cache} "$DIR"/;
+    ${pkgs.sqlite}/bin/sqlite3 ${DATA_FOLDER}/db.sqlite3 "VACUUM INTO '$DIR/db.sqlite3'";
+    cp -R ${DATA_FOLDER}/{attachments,sends,rsa_key*,icon_cache} "$DIR"/;
     chown -R ${toString adminUser.uid}:${toString adminUser.gid} "${cfg.backupDir}"
     echo removing old backups
     (cd "${cfg.backupDir}";
@@ -39,11 +43,6 @@
   '';
 in {
   environment.persistence."/keep".directories = [DATA_FOLDER];
-  fileSystems."${cfg.backupDir}" = {
-    device = "/home/${adminUser.name}/Sync/vaultwarden-backup";
-    fsType = "none";
-    options = ["bind"];
-  };
   systemd.services.restore-vaultwarden-backup = {
     description = "restore vaultwarden backup";
     wantedBy = ["multi-user.target"];
