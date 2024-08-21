@@ -57,8 +57,8 @@ function restore() {
     if timeout 5 bash -c "</dev/tcp/${TSIP}/22"; then
       echo "Host ${TSIP} is up, restoring"
       ssh john@hcloud-dev "sudo restic-remote restore latest:/home/john/Development --target /home/john/Development --host hcloud-dev"
-      ssh john@hcloud-dev "sudo restic-remote restore latest:/var/lib/vaultwarden-backup --target /var/lib/vaultwarden-backup --host hcloud-dev"
       ssh john@hcloud-dev "sudo chown -R john:users /home/john/Development"
+#      ssh john@hcloud-dev "sudo restic-remote restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host hcloud-dev"
       ssh john@hcloud-dev "sudo systemctl stop vaultwarden"
       ssh john@hcloud-dev "sudo rm -rf /var/lib/vaultwarden/*"
       # ssh john@hcloud-dev "sudo systemctl start vaultwarden"

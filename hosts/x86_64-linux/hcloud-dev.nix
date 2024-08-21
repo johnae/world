@@ -71,7 +71,7 @@
   services.vaultwarden = {
     enable = true;
     environmentFile = "/run/agenix/vaultwarden-env";
-    backupDir = "/var/lib/vaultwarden-backup";
+    backupDir = "/var/lib/vw-backup";
 
     config = {
       DOMAIN = "https://${hostName}.${tailnet}.ts.net";
@@ -84,7 +84,7 @@
   };
 
   services.restic.backups.remote.paths = [
-    "/var/lib/vaultwarden-backup"
+    "/var/lib/vw-backup"
   ];
 
   users.users.root.openssh.authorizedKeys.keys = [
