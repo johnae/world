@@ -3,25 +3,10 @@
 TF_VAR_kexec_tarball="$(nix build .#kexec-installer-nixos-unstable-noninteractive --print-out-paths --no-link)/nixos-kexec-installer-noninteractive-x86_64-linux.tar.gz"
 export TF_VAR_kexec_tarball
 
-function destroy() {
-  tofu destroy -auto-approve
-  # tofu destroy \
-  #   -target=hcloud_server.dev \
-  #   -target=random_string.host \
-  #   -target=module.dev-system-build \
-  #   -target=module.dev-disko \
-  #   -target=module.dev-install \
-  #   -auto-approve
-}
-
-if hcloud server list -l "tfstate=dev" -o json | jq -e '. | any | not'; then
-  destroy
-fi
-
 tofu apply -auto-approve
 sleep 5
 
-IP="$(hcloud server list -o noheader -l "tfstate=dev" | head -1 | awk '{print $4}')"
+IP="$(tofu output -raw dev_ip)"
 
 function unlock() {
   retries=5
@@ -44,41 +29,4 @@ function unlock() {
   done
 }
 
-function restore() {
-  retries=5
-  while true; do
-    TSIP="$(getent hosts hcloud-dev | awk '{print $1}')"
-    if [ ${retries} -le 0 ]; then
-      echo "Failed to restore host"
-      exit 1
-    fi
-    retries=$((retries - 1))
-    echo "Probing host ${TSIP} on strPort 22"
-    if timeout 5 bash -c "</dev/tcp/${TSIP}/22"; then
-      echo "Host ${TSIP} is up, restoring"
-      ssh john@hcloud-dev "sudo restic-remote restore latest:/home/john/Development --target /home/john/Development --host hcloud-dev"
-      ssh john@hcloud-dev "sudo chown -R john:users /home/john/Development"
-      ssh john@hcloud-dev "sudo restic-remote restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host hcloud-dev"
-      ssh john@hcloud-dev "sudo systemctl stop vaultwarden"
-      ssh john@hcloud-dev "sudo rm -rf /var/lib/vaultwarden/*"
-      ssh john@hcloud-dev "sudo systemctl start vaultwarden"
-      ssh john@hcloud-dev "sudo tailscale serve --bg localhost:8222"
-      break
-    else
-      echo "Host ${IP} is down, retrying restore later"
-    fi
-    echo "Waiting 5 seconds..."
-    sleep 5
-  done
-}
-
-function purge() {
-  echo "purging and recreating server"
-  destroy
-  exec $0
-}
-
 unlock
-echo "Trying restore in 10 seconds"
-sleep 10
-restore
