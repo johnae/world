@@ -42,7 +42,7 @@
       rm -rf /var/lib/vaultwarden/*
 
       restic-remote restore latest:/home/john/Development --target /home/john/Development --host ${hostName}
-      chown -R ${adminUser.uid}:${adminUser.gid} /home/john/Development
+      chown -R ${toString adminUser.uid}:${toString adminUser.gid} /home/john/Development
 
       restic-remote restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName}
 
