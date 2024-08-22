@@ -127,3 +127,7 @@ module "dev-install" {
   ]
   extra_files_script = "./extra-files-script.sh"
 }
+
+output "dev_ip" {
+  value = hcloud_server.dev.ipv4_address
+}

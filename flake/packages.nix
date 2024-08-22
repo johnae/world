@@ -118,6 +118,62 @@
         zwift = inputs.zwift.packages.${system}.default;
         helix-latest = inputs.helix.packages.${system}.helix;
         wezterm = inputs.wezterm.packages.${system}.default;
+        unlockremote = pkgs.writeShellApplication {
+          name = "unlockremote";
+          runtimeInputs = with pkgs; [coreutils openssh];
+          text = ''
+
+            REMOTE_IP="$${REMOTE_IP:-}"
+            CLOUD_DISK_PASSWORD="$${CLOUD_DISK_PASSWORD:-}"
+            SSH_KEY="$${SSH_KEY:-}"
+
+            if [ -z "$CLOUD_DISK_PASSWORD" ]; then
+              echo Missing disk password
+              exit 1
+            fi
+
+            if [ -z "$IP" ]; then
+              echo Missing remote ip address
+              exit 1
+            fi
+
+            if [ -z "$SSH_KEY" ]; then
+              echo Missing ssh key
+              exit 1
+            fi
+
+            if [ ! -e "$SSH_KEY" ]; then
+              SSH_KEY_PATH="$(mktemp ~/sshkey.XXXXXX)"
+              echo "$SSH_KEY" | base64 -d > "$SSH_KEY_PATH"
+              SSH_KEY="$SSH_KEY_PATH"
+            fi
+            chmod 0600 "$SSH_KEY"
+            trap 'rm -f $SSH_KEY' EXIT
+
+            function unlock() {
+              retries=5
+              while true; do
+                if (( retries < 1 )) ; then
+                  echo "Failed to unlock host"
+                  exit 1
+                fi
+                retries=$((retries - 1))
+                echo "Probing host $REMOTE_IP on strPort 2222"
+                if timeout 5 bash -c "</dev/tcp/$REMOTE_IP/2222"; then
+                  echo "Host $REMOTE_IP is up, unlocking"
+                  echo "$CLOUD_DISK_PASSWORD" | ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i "$SSH_KEY" -p 2222 "root@$REMOTE_IP"
+                  break
+                else
+                  echo "Host $REMOTE_IP is down, retrying unlock later"
+                fi
+                echo "Waiting 5 seconds..."
+                sleep 5
+              done
+            }
+
+            unlock
+          '';
+        };
       };
   };
 }

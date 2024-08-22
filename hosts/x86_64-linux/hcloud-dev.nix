@@ -30,6 +30,30 @@
     randomizedDelaySec = "5min";
   };
 
+  systemd.services.bootstrap = {
+    description = "Bootstrap machine on first boot";
+    enable = true;
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = "yes";
+    };
+    script = ''
+      systemctl stop vaultwarden
+      rm -rf /var/lib/vaultwarden/*
+
+      restic-remote restore latest:/home/john/Development --target /home/john/Development --host ${hostName}
+      chown -R ${adminUser.uid}:${adminUser.gid} /home/john/Development
+
+      restic-remote restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName}
+
+      systemctl restart vaultwarden
+      tailscale serve --bg localhost:8222
+    '';
+    after = ["network-online.target" "tailscale-auth.service"];
+    requires = ["network-online.target" "tailscale-auth.service"];
+    wantedBy = ["multi-user.target"];
+  };
+
   age.secrets = {
     copilot-token = {
       file = ../../secrets/gh_copilot.age;
@@ -90,6 +114,7 @@
 
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzm5RyD+1nfy1LquvkEog4SZtPgdhzjr49jSC8PAinp"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ266FsDSw6v4gU9PwSun1aLKpS/BML4QOB1Cii9y1dM" ## gh
   ];
 
   home-manager = {
