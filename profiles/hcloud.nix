@@ -15,6 +15,7 @@ in {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
+    ./restic-helper.nix
   ];
 
   boot.loader.grub = {

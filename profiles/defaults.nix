@@ -7,25 +7,6 @@
   ...
 }: let
   inherit (lib // builtins) attrNames hasAttr mkIf length;
-  restic-pkgs =
-    lib.mapAttrsToList (
-      name: value:
-        pkgs.writeShellApplication {
-          name = "restic-${name}";
-          runtimeInputs = [pkgs.restic];
-          text = ''
-            while read -r line;
-            do
-              eval "export $line"
-            done < ${value.environmentFile}
-            export RESTIC_PASSWORD_FILE=${value.passwordFile}
-            export RESTIC_REPOSITORY=${value.repository}
-
-            restic "$@"
-          '';
-        }
-    )
-    config.services.restic.backups;
   hasState =
     hasAttr "persistence" config.environment
     && (length (attrNames config.environment.persistence)) > 0;
@@ -51,52 +32,50 @@ in {
     package = pkgs.nix;
   };
 
-  environment.systemPackages =
-    [
-      pkgs.binutils
-      pkgs.blueman
-      pkgs.bluez
-      pkgs.bluez-tools
-      pkgs.bmon
-      pkgs.bottom
-      pkgs.bridge-utils
-      pkgs.cacert
-      pkgs.curl
-      pkgs.fd
-      pkgs.file
-      pkgs.fish
-      pkgs.git
-      pkgs.gnupg
-      pkgs.headscale
-      pkgs.htop
-      pkgs.hyperfine
-      pkgs.iftop
-      pkgs.iptables
-      pkgs.jq
-      pkgs.lsof
-      pkgs.man-pages
-      pkgs.mkpasswd
-      pkgs.nmap
-      pkgs.openssl
-      pkgs.pavucontrol
-      pkgs.pciutils
-      pkgs.powertop
-      pkgs.procs
-      pkgs.psmisc
-      pkgs.ripgrep
-      pkgs.sd
-      pkgs.socat
-      pkgs.tmux
-      pkgs.tree
-      pkgs.unzip
-      pkgs.usbutils
-      pkgs.vim
-      pkgs.virt-manager
-      pkgs.wget
-      pkgs.wireguard-tools
-      pkgs.zip
-    ]
-    ++ restic-pkgs;
+  environment.systemPackages = [
+    pkgs.binutils
+    pkgs.blueman
+    pkgs.bluez
+    pkgs.bluez-tools
+    pkgs.bmon
+    pkgs.bottom
+    pkgs.bridge-utils
+    pkgs.cacert
+    pkgs.curl
+    pkgs.fd
+    pkgs.file
+    pkgs.fish
+    pkgs.git
+    pkgs.gnupg
+    pkgs.headscale
+    pkgs.htop
+    pkgs.hyperfine
+    pkgs.iftop
+    pkgs.iptables
+    pkgs.jq
+    pkgs.lsof
+    pkgs.man-pages
+    pkgs.mkpasswd
+    pkgs.nmap
+    pkgs.openssl
+    pkgs.pavucontrol
+    pkgs.pciutils
+    pkgs.powertop
+    pkgs.procs
+    pkgs.psmisc
+    pkgs.ripgrep
+    pkgs.sd
+    pkgs.socat
+    pkgs.tmux
+    pkgs.tree
+    pkgs.unzip
+    pkgs.usbutils
+    pkgs.vim
+    pkgs.virt-manager
+    pkgs.wget
+    pkgs.wireguard-tools
+    pkgs.zip
+  ];
 
   home-manager.useUserPackages = true;
   home-manager.useGlobalPkgs = true;

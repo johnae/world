@@ -5,6 +5,7 @@
 }: {
   imports = [
     ./defaults.nix
+    ./restic-helper.nix
     inputs.nixos-hardware.nixosModules.common-pc-ssd
   ];
 

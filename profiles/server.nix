@@ -9,6 +9,7 @@ in {
   imports = [
     "${nixos-hardware}/common/pc/ssd"
     ./defaults.nix
+    ./restic-helper.nix
   ];
 
   boot.kernel.sysctl = {
