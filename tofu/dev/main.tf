@@ -115,6 +115,7 @@ module "dev-install" {
   nixos_system      = module.dev-system-build.result.out
   nixos_partitioner = module.dev-disko.result.out
   target_host       = hcloud_server.dev.ipv4_address
+  build_on_remote = true
   extra_environment = {
     TS_AUTH_KEY = tailscale_tailnet_key.dev.key
   }
