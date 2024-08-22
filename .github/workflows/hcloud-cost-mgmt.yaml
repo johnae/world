@@ -36,9 +36,8 @@ jobs:
       env:
         HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
         TAILSCALE_API_KEY: ${{ secrets.TAILSCALE_API_KEY }}
+        TF_VAR_kexec_tarball: "dummy"
       run: |
-        TF_VAR_kexec_tarball="dummy"
-        export TF_VAR_kexec_tarball
         cd tofu/dev
         nix run .#tofuWithPlugins -- init
         nix run .#tofuWithPlugins -- destroy -auto-approve
