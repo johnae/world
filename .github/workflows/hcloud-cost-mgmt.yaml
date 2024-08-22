@@ -18,6 +18,7 @@ jobs:
       with:
         project_id: hallowed-port-433217-t0
         workload_identity_provider: projects/507949509448/locations/global/workloadIdentityPools/github/providers/world
+        export_environment_variables: 'true'
         create_credentials_file: 'true'
 
     - name: Set up Cloud SDK
@@ -39,5 +40,5 @@ jobs:
         TF_VAR_kexec_tarball="dummy"
         export TF_VAR_kexec_tarball
         cd tofu/dev
-        nix run .#tofuWithPlugins init
-        nix run .#tofuWithPlugins destroy -auto-approve
+        nix run .#tofuWithPlugins -- init
+        nix run .#tofuWithPlugins -- destroy -auto-approve

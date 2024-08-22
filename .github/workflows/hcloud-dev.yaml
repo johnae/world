@@ -44,9 +44,9 @@ jobs:
         TF_VAR_kexec_tarball="$(nix build .#kexec-installer-nixos-unstable-noninteractive --print-out-paths --no-link)/nixos-kexec-installer-noninteractive-x86_64-linux.tar.gz"
         export TF_VAR_kexec_tarball
         cd tofu/dev
-        nix run .#tofuWithPlugins init
-        nix run .#tofuWithPlugins apply -auto-approve
-        echo remote_ip="$(nix run .#tofuWithPlugins output -raw dev_ip)" >> "$GITHUB_OUTPUT"
+        nix run .#tofuWithPlugins -- init
+        nix run .#tofuWithPlugins -- apply -auto-approve
+        echo remote_ip="$(nix run .#tofuWithPlugins -- output -raw dev_ip)" >> "$GITHUB_OUTPUT"
 
     - name: Unlock
       env:
