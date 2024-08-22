@@ -1,5 +1,7 @@
 {
+  config,
   lib,
+  pkgs,
   adminUser,
   hostName,
   tailnet,
@@ -32,22 +34,33 @@
 
   systemd.services.bootstrap = {
     description = "Bootstrap machine on first boot";
+    environment = {
+      RESTIC_PASSWORD_FILE = config.services.restic.backups.remote.passwordFile;
+      RESTIC_REPOSITORY = config.services.restic.backups.remote.repository;
+      XDG_CACHE_HOME = "/root/.cache";
+      HOME = "/root";
+    };
     enable = true;
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = "yes";
+      EnvironmentFile = config.services.restic.backups.remote.environmentFile;
     };
     script = ''
+      mkdir -p /root/.cache
+      systemctl stop restic-backups-remote.timer
       systemctl stop vaultwarden
       rm -rf /var/lib/vaultwarden/*
 
-      restic-remote restore latest:/home/john/Development --target /home/john/Development --host ${hostName}
+      ${pkgs.restic}/bin/restic restore latest:/home/john/Development --target /home/john/Development --host ${hostName}
       chown -R ${toString adminUser.uid}:${toString adminUser.gid} /home/john/Development
 
-      restic-remote restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName}
+      ${pkgs.restic}/bin/restic restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName}
+
+      systemctl start restic-backups-remote.timer
 
       systemctl restart vaultwarden
-      tailscale serve --bg localhost:8222
+      ${pkgs.tailscale}/bin/tailscale serve --bg localhost:8222
     '';
     after = ["network-online.target" "tailscale-auth.service"];
     requires = ["network-online.target" "tailscale-auth.service"];
