@@ -18,7 +18,7 @@ jobs:
       with:
         project_id: hallowed-port-433217-t0
         workload_identity_provider: projects/507949509448/locations/global/workloadIdentityPools/github/providers/world
-        export_environment_variablesb: 'true'
+        export_environment_variables: 'true'
 
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
