@@ -1,0 +1,55 @@
+name: Hcloud Dev
+
+on:
+  workflow_dispatch: {}
+  # schedule:
+  # - cron: '0 6  * * MON,TUE,WED,THU,FRI'
+
+jobs:
+  start:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: google-github-actions/auth@v2
+      with:
+        project_id: hallowed-port-433217-t0
+        workload_identity_provider: projects/507949509448/locations/global/workloadIdentityPools/github/providers/world
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - uses: DeterminateSystems/nix-installer-action@v13
+      with:
+        extra-conf: |
+          accept-flake-config = true
+
+    - name: Run the Magic Nix Cache
+      uses: DeterminateSystems/magic-nix-cache-action@v7
+
+    - name: Tofu Apply
+      id: tofu
+      env:
+        HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
+        TAILSCALE_API_KEY: ${{ secrets.TAILSCALE_API_KEY }}
+        CLOUD_DISK_PASSWORD: ${{ secrets.CLOUD_DISK_PASSWORD }}
+        HCLOUD_DEV_SSH_HOSTKEY: ${{ secrets.HCLOUD_DEV_SSH_HOSTKEY }}
+        HCLOUD_DEV_SSH_INITRD_KEY: ${{ secrets.HCLOUD_DEV_SSH_INITRD_KEY }}
+    - run: |
+        TF_VAR_kexec_tarball="$(nix build .#kexec-installer-nixos-unstable-noninteractive --print-out-paths --no-link)/nixos-kexec-installer-noninteractive-x86_64-linux.tar.gz"
+        export TF_VAR_kexec_tarball
+        cd tofu/dev
+        nix run .#tofuWithPlugins init
+        nix run .#tofuWithPlugins apply -auto-approve
+        echo remote_ip="$(nix run .#tofuWithPlugins output -raw dev_ip)" >> "$GITHUB_OUTPUT"
+
+    - name: Unlock
+      env:
+        SSH_KEY: ${{ secrets.GH_SSH_INITRD_AUTHKEY }}
+        CLOUD_DISK_PASSWORD: ${{ secrets.CLOUD_DISK_PASSWORD }}
+        REMOTE_IP: ${{ steps.tofu.outputs.remote_ip }}
+      run: |
+        nix run .#unlockremote

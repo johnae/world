@@ -1,0 +1,42 @@
+name: Hcloud Cost Mgmt
+
+on:
+  workflow_dispatch: {}
+  schedule:
+  - cron: '0 23 * * *'
+
+jobs:
+  cost-mgmt:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: google-github-actions/auth@v2
+      with:
+        project_id: hallowed-port-433217-t0
+        workload_identity_provider: projects/507949509448/locations/global/workloadIdentityPools/github/providers/world
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - uses: DeterminateSystems/nix-installer-action@v13
+      with:
+        extra-conf: |
+          accept-flake-config = true
+
+    - name: Run the Magic Nix Cache
+      uses: DeterminateSystems/magic-nix-cache-action@v7
+
+    - name: Tofu Destroy
+      env:
+        HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
+        TAILSCALE_API_KEY: ${{ secrets.TAILSCALE_API_KEY }}
+    - run: |
+        TF_VAR_kexec_tarball="dummy"
+        export TF_VAR_kexec_tarball
+        cd tofu/dev
+        nix run .#tofuWithPlugins init
+        nix run .#tofuWithPlugins destroy -auto-approve
