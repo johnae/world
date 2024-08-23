@@ -19,8 +19,12 @@
       echo "Vaultwarden backup directory $DIR already exists, skipping backup"
       exit 0
     fi
+    if [ ! -e "${DATA_FOLDER}/db.sqlite3" ]; then
+      echo "Vaultwarden database does not exist, skipping backup"
+      exit 0
+    fi
     filesize=$(stat -c%s "${DATA_FOLDER}/db.sqlite3")
-    if (( filesize < 50000 )); then
+    if (( filesize < 300000 )); then
       echo 'Vaultwarden database is to small - new db?, skipping backup'
       exit 0
     fi
@@ -44,12 +48,27 @@
   restore-vw-backup = pkgs.writeText "restore-vw-backup.sh" ''
     BACKUP="$(ls "${cfg.backupDir}"/ | tail -n1)"
     echo possibly restoring from latest backup "$BACKUP"
-    if [ ! -e "${DATA_FOLDER}/db.sqlite3" ] && [ ! -z "$BACKUP" ]; then
-      cp -R ${cfg.backupDir}/"$BACKUP"/* ${DATA_FOLDER}/
-      chown -R ${user}:${group} ${DATA_FOLDER}
-    else
-      echo skipping restore
+    if [ -z "$BACKUP" ]; then
+      echo "No vaultwarden backup exists, skipping restore"
+      exit 0
     fi
+    if [ ! -e "$BACKUP/rsa_key.pem" ]; then
+      echo "No vaultwarden rsa_key.pem backup exists, skipping restore"
+      exit 0
+    fi
+    if [ ! -e "$BACKUP/db.sqlite3" ]; then
+      echo "No vaultwarden database backup exists, skipping restore"
+      exit 0
+    fi
+    filesize=$(stat -c%s "${DATA_FOLDER}/db.sqlite3")
+    if (( filesize > 300000 )); then
+      echo 'Vaultwarden database exists and is over 300k in size, skipping restore'
+      exit 0
+    fi
+    echo "Restoring vaultwarden backup"
+    rm -rf "${DATA_FOLDER}/*"
+    cp -R ${cfg.backupDir}/"$BACKUP"/* ${DATA_FOLDER}/
+    chown -R ${user}:${group} ${DATA_FOLDER}
   '';
 in {
   environment.persistence."/keep".directories = [DATA_FOLDER];
