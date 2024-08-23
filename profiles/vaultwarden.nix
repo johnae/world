@@ -16,9 +16,19 @@
   backup = pkgs.writeText "backup.sh" ''
     export DIR="${cfg.backupDir}/backup-$(date '+%Y%m%d-%H%M')"
     if [ -d "$DIR" ]; then
-      echo "Backup directory $DIR already exists, skipping backup"
+      echo "Vaultwarden backup directory $DIR already exists, skipping backup"
       exit 0
     fi
+    filesize=$(stat -c%s "${DATA_FOLDER}/db.sqlite3")
+    if (( filesize < 50000 )); then
+      echo 'Vaultwarden database is to small - new db?, skipping backup'
+      exit 0
+    fi
+    if [ ! -e "${DATA_FOLDER}/rsa_key.pem" ]; then
+      echo 'Vaultwarden rsa_key.pem file missing in data folder, skipping backup'
+      exit 0
+    fi
+    echo "Backing up vaultwarden folder ${DATA_FOLDER}"
     mkdir -p "$DIR"
     ${pkgs.sqlite}/bin/sqlite3 ${DATA_FOLDER}/db.sqlite3 "VACUUM INTO '$DIR/db.sqlite3'";
     cp -R ${DATA_FOLDER}/{attachments,sends,rsa_key*,icon_cache} "$DIR"/;
