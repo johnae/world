@@ -52,6 +52,7 @@
       echo "No vaultwarden backup exists, skipping restore"
       exit 0
     fi
+    BACKUP="${cfg.backupDir}/$BACKUP"
     if [ ! -e "$BACKUP/rsa_key.pem" ]; then
       echo "No vaultwarden rsa_key.pem backup exists, skipping restore"
       exit 0
