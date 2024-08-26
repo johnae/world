@@ -10,6 +10,6 @@ in {
     inherit (userinfo) email;
     lock_timeout = 3600 * 10;
     pinentry = pkgs.pinentry-gnome3;
-    base_url = "https://hcloud-dev.tail68e9c.ts.net";
+    base_url = "https://bw.9000.dev";
   };
 }
