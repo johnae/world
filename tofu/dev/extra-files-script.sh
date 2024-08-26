@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-mkdir -p etc/ssh/secrets var/lib/nixos keep/var/lib/nixos
+mkdir -p etc/ssh/secrets var/lib/nixos keep/var/lib/nixos keep/etc/ssh
 
 if [ -n "$HCLOUD_DEV_SSH_HOSTKEY" ]; then
   echo "$HCLOUD_DEV_SSH_HOSTKEY" | base64 -d > etc/ssh/ssh_host_ed25519_key
 else
   rbw get hetzner -- hcloud_dev_ssh_host_key | base64 -d > etc/ssh/ssh_host_ed25519_key
+  cp etc/ssh/ssh_host_ed25519_key keep/etc/ssh/
 fi
 
 if [ -n "$HCLOUD_DEV_SSH_INITRD_KEY" ]; then
@@ -20,5 +21,6 @@ if [ -n "$TS_AUTH_KEY" ]; then
 fi
 
 chmod 0600 etc/ssh/ssh_host_ed25519_key
+chmod 0600 keep/etc/ssh/ssh_host_ed25519_key
 chmod 0600 etc/ssh/secrets/initrd_ed25519_key
 chmod 0755 var/lib/nixos keep/var/lib/nixos
