@@ -4,12 +4,12 @@
   pkgs,
   adminUser,
   hostName,
-  tailnet,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDErC2NyMr7hmuNA9gnuLveTxPjYVqkmpLL9j6kzf2a5";
 
   imports = [
+    ../../profiles/acme.nix
     ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
     ../../profiles/hcloud.nix
@@ -47,20 +47,21 @@
       EnvironmentFile = config.services.restic.backups.remote.environmentFile;
     };
     script = ''
-      mkdir -p /root/.cache
+      systemctl stop acme-bw.9000.dev.timer
       systemctl stop restic-backups-remote.timer
       systemctl stop vaultwarden
+      mkdir -p /root/.cache
       rm -rf /var/lib/vaultwarden/*
 
-      ${pkgs.restic}/bin/restic restore latest:/home/john/Development --target /home/john/Development --host ${hostName}
+      ${pkgs.restic}/bin/restic restore latest:/home/john/Development --target /home/john/Development --host ${hostName} || true
       chown -R ${toString adminUser.uid}:${toString adminUser.gid} /home/john/Development
 
-      ${pkgs.restic}/bin/restic restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName}
+      ${pkgs.restic}/bin/restic restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName} | true
+      ${pkgs.restic}/bin/restic restore latest:/var/lib/acme --target /var/lib/acme --host ${hostName} || true
 
       systemctl start restic-backups-remote.timer
-
+      systemctl start acme-bw.9000.dev.timer
       systemctl restart vaultwarden
-      ${pkgs.tailscale}/bin/tailscale serve --bg localhost:8222
     '';
     after = ["network-online.target" "tailscale-auth.service"];
     requires = ["network-online.target" "tailscale-auth.service"];
@@ -88,6 +89,7 @@
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_rsa_alt";
     };
+    cloudflare-env.file = ../../secrets/cloudflare-env.age;
     vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
   };
 
@@ -106,13 +108,19 @@
     args.hostname = "\"$NODENAME\"";
   };
 
+  security.acme.certs = {
+    "bw.9000.dev" = {
+      group = "nginx";
+    };
+  };
+
   services.vaultwarden = {
     enable = true;
     environmentFile = "/run/agenix/vaultwarden-env";
     backupDir = "/var/lib/vw-backup";
 
     config = {
-      DOMAIN = "https://${hostName}.${tailnet}.ts.net";
+      DOMAIN = "https://bw.9000.dev";
       SIGNUPS_ALLOWED = "false";
       PASSWORD_HINTS_ALLOWED = "false";
       ROCKET_ADDRESS = "127.0.0.1";
@@ -121,8 +129,33 @@
     };
   };
 
+  services.nginx = {
+    enable = true;
+    recommendedTlsSettings = true;
+    recommendedProxySettings = true;
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    clientMaxBodySize = "300m";
+    virtualHosts = {
+      "bw.9000.dev" = {
+        useACMEHost = "bw.9000.dev";
+        locations."/".proxyPass = "http://localhost:8222";
+        locations."/".proxyWebsockets = true;
+        forceSSL = true;
+      };
+    };
+  };
+
+  services.restic.backups.remote.pruneOpts = [
+    "--keep-daily 10"
+    "--keep-weekly 7"
+    "--keep-monthly 12"
+    "--keep-yearly 75"
+  ];
+
   services.restic.backups.remote.paths = [
     "/var/lib/vw-backup"
+    "/var/lib/acme"
   ];
 
   boot.initrd.network.ssh.authorizedKeys = [
