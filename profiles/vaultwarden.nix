@@ -68,7 +68,7 @@
     fi
     echo "Restoring vaultwarden backup"
     rm -rf "${DATA_FOLDER}/*"
-    cp -R ${cfg.backupDir}/"$BACKUP"/* ${DATA_FOLDER}/
+    cp -R "$BACKUP"/* ${DATA_FOLDER}/
     chown -R ${user}:${group} ${DATA_FOLDER}
   '';
 in {
