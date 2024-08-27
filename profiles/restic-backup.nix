@@ -1,4 +1,8 @@
-{adminUser, ...}: {
+{
+  adminUser,
+  config,
+  ...
+}: {
   age.secrets = {
     restic-env = {
       file = ../secrets/restic.age;
@@ -19,8 +23,8 @@
           "/home/${adminUser.name}/Sync"
           "/home/${adminUser.name}/Photos"
         ];
-        environmentFile = "/run/agenix/restic-env";
-        passwordFile = "/run/agenix/restic-pw";
+        environmentFile = config.age.secrets.restic-env.path;
+        passwordFile = config.age.secrets.restic-pw.path;
         repository = "s3:https://b0850d27a4d43d7d0f8d36ebc6a1bfab.r2.cloudflarestorage.com/restic-9000-b147";
         initialize = true;
         timerConfig.OnCalendar = "*-*-* *:00:00";
