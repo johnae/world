@@ -256,7 +256,6 @@ local function open_git_commit_action(window, pane)
   local domain = pane:get_domain_name()
   local cwd = pane:get_current_working_dir()
   wezterm.mux.spawn_window { cwd = cwd.file_path, domain = { DomainName = domain }, args = { "gitui" } }
-  status, out, err = wezterm.run_child_process (wezterm.shell_split('bash -c "sleep 0.1; riverctl toggle-float"'))
 end
 
 wezterm.on('FindProject', open_project_action)
