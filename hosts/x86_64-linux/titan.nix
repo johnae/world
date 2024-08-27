@@ -46,7 +46,7 @@
     args.ssh = true;
     args.accept-routes = false;
     args.accept-dns = false;
-    args.auth-key = "file:${config.agenix.secrets.ts-google-9k.path}";
+    args.auth-key = "file:${config.age.secrets.ts-google-9k.path}";
   };
 
   networking = {
@@ -116,31 +116,31 @@
       enable = true;
       host = "65.109.85.161";
       port = 2222;
-      identityFile = config.agenix.secrets.id_ed25519_remote_unlock.path;
-      passwordFile = config.agenix.secrets.remote-disk-password.path;
+      identityFile = config.age.secrets.id_ed25519_remote_unlock.path;
+      passwordFile = config.age.secrets.remote-disk-password.path;
     }
     {
       enable = true;
       host = "65.109.92.173";
       port = 2222;
-      identityFile = config.agenix.secrets.id_ed25519_remote_unlock.path;
-      passwordFile = config.agenix.secrets.remote-disk-password.path;
+      identityFile = config.age.secrets.id_ed25519_remote_unlock.path;
+      passwordFile = config.age.secrets.remote-disk-password.path;
     }
     {
       enable = true;
       host = "144.76.201.232";
       port = 2222;
-      identityFile = config.agenix.secrets.id_ed25519_remote_unlock.path;
-      passwordFile = config.agenix.secrets.remote-disk-password.path;
+      identityFile = config.age.secrets.id_ed25519_remote_unlock.path;
+      passwordFile = config.age.secrets.remote-disk-password.path;
     }
   ];
 
   services.hcloud-remote-unlock-all = {
     enable = true;
 
-    hcloudTokenFile = config.agenix.secrets.hcloud-token.path;
-    identityFile = config.agenix.secrets.id_ed25519_remote_unlock.path;
-    diskpasswordFile = config.agenix.secrets.remote-cloud-disk-password.path;
+    hcloudTokenFile = config.age.secrets.hcloud-token.path;
+    identityFile = config.age.secrets.id_ed25519_remote_unlock.path;
+    diskpasswordFile = config.age.secrets.remote-cloud-disk-password.path;
   };
 
   home-manager = {
