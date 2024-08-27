@@ -1,6 +1,7 @@
 {
   adminUser,
   hostName,
+  config,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOteEiVr+H3Q1tSw1bGQfjbVWuPggc/+w1vVXSFde0Rt";
@@ -45,7 +46,7 @@
     args.ssh = true;
     args.accept-routes = false;
     args.accept-dns = false;
-    args.auth-key = "file:/var/run/agenix/ts-google-9k";
+    args.auth-key = "file:${config.agenix.secrets.ts-google-9k.path}";
   };
 
   networking = {
@@ -86,8 +87,8 @@
     user = "${adminUser.name}";
     group = "users";
     openDefaultPorts = true;
-    cert = "/run/agenix/syncthing-cert";
-    key = "/run/agenix/syncthing-key";
+    cert = config.age.secrets.syncthing-cert.path;
+    key = config.age.secrets.syncthing-key.path;
     dataDir = "/home/${adminUser.name}/.local/share/syncthing-data";
 
     settings = {
@@ -115,30 +116,31 @@
       enable = true;
       host = "65.109.85.161";
       port = 2222;
-      identityFile = "/run/agenix/id_ed25519_remote_unlock";
-      passwordFile = "/run/agenix/remote-disk-password";
+      identityFile = config.agenix.secrets.id_ed25519_remote_unlock.path;
+      passwordFile = config.agenix.secrets.remote-disk-password.path;
     }
     {
       enable = true;
       host = "65.109.92.173";
       port = 2222;
-      identityFile = "/run/agenix/id_ed25519_remote_unlock";
-      passwordFile = "/run/agenix/remote-disk-password";
+      identityFile = config.agenix.secrets.id_ed25519_remote_unlock.path;
+      passwordFile = config.agenix.secrets.remote-disk-password.path;
     }
     {
       enable = true;
       host = "144.76.201.232";
       port = 2222;
-      identityFile = "/run/agenix/id_ed25519_remote_unlock";
-      passwordFile = "/run/agenix/remote-disk-password";
+      identityFile = config.agenix.secrets.id_ed25519_remote_unlock.path;
+      passwordFile = config.agenix.secrets.remote-disk-password.path;
     }
   ];
 
   services.hcloud-remote-unlock-all = {
     enable = true;
-    hcloudTokenFile = "/run/agenix/hcloud-token";
-    diskpasswordFile = "/run/agenix/remote-cloud-disk-password";
-    identityFile = "/run/agenix/id_ed25519_remote_unlock";
+
+    hcloudTokenFile = config.agenix.secrets.hcloud-token.path;
+    identityFile = config.agenix.secrets.id_ed25519_remote_unlock.path;
+    diskpasswordFile = config.agenix.secrets.remote-cloud-disk-password.path;
   };
 
   home-manager = {

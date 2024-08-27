@@ -1,6 +1,7 @@
 {
   adminUser,
   hostName,
+  config,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPI8D16MUXSt7EcmYavSBD6k1eHoIoFfH4lu8T5o+4zX";
@@ -134,8 +135,8 @@
     user = "${adminUser.name}";
     group = "users";
     openDefaultPorts = true;
-    cert = "/run/agenix/syncthing-cert";
-    key = "/run/agenix/syncthing-key";
+    cert = config.age.secrets.syncthing-cert.path;
+    key = config.age.secrets.syncthing-key.path;
     dataDir = "/home/${adminUser.name}/.local/share/syncthing-data";
     settings = {
       devices.s23ultra.id = "WIEQUVJ-5TNGRPN-YD4E47D-WEXXBZO-2AGHFQZ-2K4DDRB-DFSD2UZ-34OCBQ4";
