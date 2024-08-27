@@ -144,7 +144,7 @@
   home-manager = {
     users.${adminUser.name} = {
       imports = [../../users/profiles/workstation.nix];
-      programs.git.extraConfig.user.signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzm5RyD+1nfy1LquvkEog4SZtPgdhzjr49jSC8PAinp";
+      programs.git.extraConfig.user.signingKey = config.age.secrets.id_ed25519_alt.path;
     };
   };
 }
