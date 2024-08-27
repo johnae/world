@@ -44,7 +44,10 @@
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = "yes";
-      EnvironmentFile = config.services.restic.backups.remote.environmentFile;
+      EnvironmentFile = [
+        config.services.restic.backups.remote.environmentFile
+        config.age.secrets.cloudflare-env.path
+      ];
     };
     script = ''
       systemctl stop acme-bw.9000.dev.timer
@@ -62,6 +65,11 @@
       systemctl start restic-backups-remote.timer
       systemctl start acme-bw.9000.dev.timer
       systemctl restart vaultwarden
+
+      RECORD_ID="$(${pkgs.flarectl}/bin/flarectl --json dns list --zone 9000.dev | ${pkgs.jq}/bin/jq -r '.[] | select(.Name == "bw.9000.dev") | .ID')"
+      TS_IP="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Self.TailscaleIPs[0]')"
+      echo "Map bw.9000.dev ($RECORD_ID) to $TS_IP"
+      ${pkgs.flarectl}/bin/flarectl --json dns update --zone 9000.dev --id "$RECORD_ID" --type A --ttl 60 --content "$TS_IP"
     '';
     after = ["network-online.target" "tailscale-auth.service"];
     requires = ["network-online.target" "tailscale-auth.service"];
@@ -116,7 +124,7 @@
 
   services.vaultwarden = {
     enable = true;
-    environmentFile = "/run/agenix/vaultwarden-env";
+    environmentFile = config.age.secrets.vaultwarden-env.path;
     backupDir = "/var/lib/vw-backup";
 
     config = {
