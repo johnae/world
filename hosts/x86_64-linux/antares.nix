@@ -1,6 +1,7 @@
 {
   adminUser,
   hostName,
+  config,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJgkTCs3JTN934N8RkPhuDwijFgFOEXt734tB7aQz57Z";
