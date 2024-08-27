@@ -1,4 +1,4 @@
-# Declarative Today. Utopia Tomorrow.
+ # Declarative Today. Utopia Tomorrow.
 
 This is the [NixOS](https://nixos.org) configuration repository for all my machines and custom packages (i.e not part of [nixpkgs](https://github.com/nixos/nixpkgs) yet). In some sense it is my world, which is how it got its name.
 
