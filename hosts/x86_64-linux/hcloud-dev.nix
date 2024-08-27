@@ -56,7 +56,7 @@
       ${pkgs.restic}/bin/restic restore latest:/home/john/Development --target /home/john/Development --host ${hostName} || true
       chown -R ${toString adminUser.uid}:${toString adminUser.gid} /home/john/Development
 
-      ${pkgs.restic}/bin/restic restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName} | true
+      ${pkgs.restic}/bin/restic restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName} || true
       ${pkgs.restic}/bin/restic restore latest:/var/lib/acme --target /var/lib/acme --host ${hostName} || true
 
       systemctl start restic-backups-remote.timer
