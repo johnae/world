@@ -63,7 +63,7 @@
     home-manager.url = "github:nix-community/home-manager";
     impermanence.url = "github:nix-community/impermanence";
     juicefs-csi-driver.flake = false;
-    juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.5/deploy/k8s.yaml"; # gh-release-update
+    juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.6/deploy/k8s.yaml"; # gh-release-update
     kured.flake = false;
     kured.url = "github:kubereboot/kured";
     microvm.url = "github:astro/microvm.nix";
