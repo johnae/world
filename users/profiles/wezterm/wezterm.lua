@@ -313,7 +313,7 @@ config.tab_bar_at_bottom = true
 config.hide_tab_bar_if_only_one_tab = false
 config.font = wezterm.font 'JetBrainsMono Nerd Font'
 config.font_size = 14.0
-config.color_scheme = 'Catppuccin Frappé (Gogh)'
+config.color_scheme = 'Nord (Gogh)'
 config.colors = {
   -- Use a different background color than the theme background color
   -- background = '#2e3440',
