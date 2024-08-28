@@ -40,10 +40,15 @@
       RemainAfterExit = "yes";
     };
     script = ''
-      systemctl stop acme-bw.9000.dev.timer || true
-      systemctl stop acme-bw.9000.dev.service || true
-      systemctl stop restic-backups-remote.timer || true
-      systemctl stop vaultwarden || true
+      if [ ! -e /run/stop-services-before-bootstrapping ]; then
+        touch /run/stop-services-before-bootstrapping
+        systemctl stop acme-bw.9000.dev.timer || true
+        systemctl stop acme-bw.9000.dev.service || true
+        systemctl stop restic-backups-remote.timer || true
+        systemctl stop vaultwarden || true
+      else
+        echo "skipping stop services before bootstrapping - /run/stop-services-before-bootstrapping exists"
+      fi
     '';
     before = ["acme-bw.9000.dev.timer" "acme-bw.9000.dev.service" "restic-backups-remote.timer" "vaultwarden.service" "bootstrap.service"];
     wantedBy = ["multi-user.target"];
@@ -67,27 +72,32 @@
       ];
     };
     script = ''
-      systemctl stop acme-bw.9000.dev.timer || true
-      systemctl stop acme-bw.9000.dev.service || true
-      systemctl stop restic-backups-remote.timer || true
-      systemctl stop vaultwarden || true
-      mkdir -p /root/.cache
-      rm -rf /var/lib/vaultwarden/*
+      if [ ! -e /run/bootstrapped ]; then
+        touch /run/bootstrapped
+        systemctl stop acme-bw.9000.dev.timer || true
+        systemctl stop acme-bw.9000.dev.service || true
+        systemctl stop restic-backups-remote.timer || true
+        systemctl stop vaultwarden || true
+        mkdir -p /root/.cache
+        rm -rf /var/lib/vaultwarden/*
 
-      ${pkgs.restic}/bin/restic restore latest:/home/john/Development --target /home/john/Development --host ${hostName} || true
-      chown -R ${toString adminUser.uid}:${toString adminUser.gid} /home/john/Development
+        ${pkgs.restic}/bin/restic restore latest:/home/john/Development --target /home/john/Development --host ${hostName} || true
+        chown -R ${toString adminUser.uid}:${toString adminUser.gid} /home/john/Development
 
-      ${pkgs.restic}/bin/restic restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName} || true
-      ${pkgs.restic}/bin/restic restore latest:/var/lib/acme --target /var/lib/acme --host ${hostName} || true
+        ${pkgs.restic}/bin/restic restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName} || true
+        ${pkgs.restic}/bin/restic restore latest:/var/lib/acme --target /var/lib/acme --host ${hostName} || true
 
-      systemctl start restic-backups-remote.timer
-      systemctl start acme-bw.9000.dev.timer
-      systemctl restart vaultwarden
+        systemctl start restic-backups-remote.timer
+        systemctl start acme-bw.9000.dev.timer
+        systemctl restart vaultwarden
 
-      RECORD_ID="$(${pkgs.flarectl}/bin/flarectl --json dns list --zone 9000.dev | ${pkgs.jq}/bin/jq -r '.[] | select(.Name == "bw.9000.dev") | .ID')"
-      TS_IP="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Self.TailscaleIPs[0]')"
-      echo "Map bw.9000.dev ($RECORD_ID) to $TS_IP"
-      ${pkgs.flarectl}/bin/flarectl --json dns update --zone 9000.dev --id "$RECORD_ID" --type A --ttl 60 --content "$TS_IP"
+        RECORD_ID="$(${pkgs.flarectl}/bin/flarectl --json dns list --zone 9000.dev | ${pkgs.jq}/bin/jq -r '.[] | select(.Name == "bw.9000.dev") | .ID')"
+        TS_IP="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Self.TailscaleIPs[0]')"
+        echo "Map bw.9000.dev ($RECORD_ID) to $TS_IP"
+        ${pkgs.flarectl}/bin/flarectl --json dns update --zone 9000.dev --id "$RECORD_ID" --type A --ttl 60 --content "$TS_IP"
+      else
+        echo "skipping bootstrap service - /run/bootstrapped exists"
+      fi
     '';
     after = ["network-online.target" "tailscale-auth.service" "stop-services-before-bootstrapping.service"];
     requires = ["network-online.target" "tailscale-auth.service" "stop-services-before-bootstrapping.service"];
