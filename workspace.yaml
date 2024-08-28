@@ -1,13 +1,10 @@
 windows:
 - args: []
 - args:
-  - direnv
-  - exec
-  - .
-  - project-build
+  - bash
+  - -c
+  - while true; do direnv exec . project-build; done
 - args:
-  - direnv
-  - exec
-  - .
-  - hx
-  - .
+  - bash
+  - -c
+  - while true; do direnv exec . hx .; done
