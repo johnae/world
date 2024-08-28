@@ -32,6 +32,23 @@
     randomizedDelaySec = "5min";
   };
 
+  systemd.services.stop-services-before-bootstrapping = {
+    description = "Stop services before bootstrapping";
+    enable = true;
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = "yes";
+    };
+    script = ''
+      systemctl stop acme-bw.9000.dev.timer || true
+      systemctl stop acme-bw.9000.dev.service || true
+      systemctl stop restic-backups-remote.timer || true
+      systemctl stop vaultwarden || true
+    '';
+    before = ["acme-bw.9000.dev.timer" "acme-bw.9000.dev.service" "restic-backups-remote.timer" "vaultwarden.service" "bootstrap.service"];
+    wantedBy = ["multi-user.target"];
+  };
+
   systemd.services.bootstrap = {
     description = "Bootstrap machine on first boot";
     environment = {
@@ -50,9 +67,10 @@
       ];
     };
     script = ''
-      systemctl stop acme-bw.9000.dev.timer
-      systemctl stop restic-backups-remote.timer
-      systemctl stop vaultwarden
+      systemctl stop acme-bw.9000.dev.timer || true
+      systemctl stop acme-bw.9000.dev.service || true
+      systemctl stop restic-backups-remote.timer || true
+      systemctl stop vaultwarden || true
       mkdir -p /root/.cache
       rm -rf /var/lib/vaultwarden/*
 
@@ -71,8 +89,8 @@
       echo "Map bw.9000.dev ($RECORD_ID) to $TS_IP"
       ${pkgs.flarectl}/bin/flarectl --json dns update --zone 9000.dev --id "$RECORD_ID" --type A --ttl 60 --content "$TS_IP"
     '';
-    after = ["network-online.target" "tailscale-auth.service"];
-    requires = ["network-online.target" "tailscale-auth.service"];
+    after = ["network-online.target" "tailscale-auth.service" "stop-services-before-bootstrapping.service"];
+    requires = ["network-online.target" "tailscale-auth.service" "stop-services-before-bootstrapping.service"];
     wantedBy = ["multi-user.target"];
   };
 
