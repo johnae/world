@@ -24,6 +24,10 @@
 
   programs.ssh.startAgent = true;
 
+  boot.kernel.sysctl = {
+    "fs.inotify.max_user_watches" = 12288;
+  };
+
   system.autoUpgrade = {
     enable = true;
     flake = "github:johnae/world";
