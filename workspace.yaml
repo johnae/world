@@ -1,10 +1,13 @@
 windows:
-- args:
-  - nu
-  - -c
-  - direnv exec . hx .; exec nu
-- args:
-  - nu
-  - -c
-  - direnv exec . project-build; exec nu
 - args: []
+- args:
+  - direnv
+  - exec
+  - .
+  - project-build
+- args:
+  - direnv
+  - exec
+  - .
+  - hx
+  - .
