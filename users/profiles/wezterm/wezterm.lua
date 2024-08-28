@@ -7,6 +7,13 @@ local function starts_with(str, start)
   return str:sub(1, #start) == start
 end
 
+local function reverse(t)
+  for i = 1, #t//2, 1 do
+    t[i], t[#t-i+1] = t[#t-i+1], t[i]
+  end
+  return t
+end
+
 local function project_name(str)
   if not starts_with(str, '/') then
     return str
@@ -106,7 +113,7 @@ local function open_project_action(window, pane)
             end
             wezterm.log_info('load workspace from: ', workspaces)
             wezterm.log_info('spawn window in ws: ', name)
-            for _, ws in ipairs(workspaces.windows) do
+            for _, ws in ipairs(reverse(workspaces.windows)) do
               wezterm.log_info('spawn window in ws: ', ws.args)
               mux.spawn_window { domain = { DomainName = domain }, workspace = name, cwd = id, args = ws.args }
             end
