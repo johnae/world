@@ -90,10 +90,13 @@
 
         ${pkgs.restic}/bin/restic restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName} || true
         ${pkgs.restic}/bin/restic restore latest:/var/lib/acme --target /var/lib/acme --host ${hostName} || true
+        chown acme:acme /var/lib/acme
+        chown -R acme:nginx /var/lib/acme/*
 
         systemctl start restic-backups-remote.timer
         systemctl start acme-bw.9000.dev.timer
         systemctl restart vaultwarden
+        systemctl nginx
 
         RECORD_ID="$(${pkgs.flarectl}/bin/flarectl --json dns list --zone 9000.dev | ${pkgs.jq}/bin/jq -r '.[] | select(.Name == "bw.9000.dev") | .ID')"
         TS_IP="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Self.TailscaleIPs[0]')"
