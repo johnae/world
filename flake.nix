@@ -8,12 +8,14 @@
       "https://insane.cachix.org"
       "https://cachix.cachix.org"
       "https://hyprland.cachix.org"
+      "https://cache.flox.dev"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o="
       "cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM="
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
     ];
   };
 
@@ -29,7 +31,6 @@
       devenv.follows = "devenv";
       flake-compat.follows = "flake-compat";
       nixpkgs.follows = "nixpkgs";
-      pre-commit-hooks.follows = "pre-commit-hooks";
     };
     cloud-native-pg.flake = false;
     cloud-native-pg.url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.0/cnpg-1.24.0.yaml"; # gh-release-update
@@ -80,10 +81,17 @@
     nixpkgs-tmp.url = "github:Mic92/nixpkgs/iproute2-nix-community";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nur.url = "github:nix-community/NUR";
+    persway.url = "github:johnae/persway";
+    persway.inputs.crane.follows = "crane";
+    persway.inputs.devenv.follows = "devenv";
+    persway.inputs.fenix.follows = "fenix";
+    persway.inputs.flake-parts.follows = "flake-parts";
+    persway.inputs.mk-shell-bin.follows = "mk-shell-bin";
+    persway.inputs.nix2container.follows = "nix2container";
+    persway.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.inputs.flake-compat.follows = "flake-compat";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-    rust-overlay.inputs.flake-utils.follows = "flake-utils";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
     systems.url = "github:nix-systems/default";
