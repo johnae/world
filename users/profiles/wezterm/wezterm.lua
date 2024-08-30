@@ -7,6 +7,13 @@ local function starts_with(str, start)
   return str:sub(1, #start) == start
 end
 
+local function reverse(t)
+  for i = 1, #t//2, 1 do
+    t[i], t[#t-i+1] = t[#t-i+1], t[i]
+  end
+  return t
+end
+
 local function project_name(str)
   if not starts_with(str, '/') then
     return str
@@ -106,10 +113,27 @@ local function open_project_action(window, pane)
             end
             wezterm.log_info('load workspace from: ', workspaces)
             wezterm.log_info('spawn window in ws: ', name)
-            for _, ws in ipairs(workspaces.windows) do
-              wezterm.log_info('spawn window in ws: ', ws.args)
-              mux.spawn_window { domain = { DomainName = domain }, workspace = name, cwd = id, args = ws.args }
-            end
+            for _, ws in ipairs(reverse(workspaces.windows)) do
+              local command = ws.command or ""
+              local restart = ws.restart or false
+              local exit_to_shell = ws.exit_to_shell or true
+              local args = {}
+              if command ~= "" then
+                table.insert(args, "bash")
+                table.insert(args, "-c")
+                local cmd = ""
+                if exit_to_shell then
+                  shell = os.getenv("SHELL")
+                  cmd = 'trap "exec ' .. shell .. '" SIGINT; '
+                end
+                if restart then
+                  cmd = cmd .. "while true; do " .. command .. "; sleep 1; done"
+                end
+                table.insert(args, cmd)
+              end
+              wezterm.log_info('spawn window in ws: ', args)
+              mux.spawn_window { domain = { DomainName = domain }, workspace = name, cwd = id, args = args }
+            end            
           end
           wezterm.log_info('set active ws: ', name)
           mux.set_active_workspace(name)
