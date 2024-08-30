@@ -23,7 +23,7 @@ in {
       ./river.nix
       ./rofi.nix
       # ./spotifyd.nix
-      # ./sway.nix
+      ./sway.nix
       ./waybar.nix
       ./wezterm/default.nix
       ./wlsunset.nix

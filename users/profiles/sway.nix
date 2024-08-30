@@ -4,7 +4,6 @@
   lib,
   ...
 }: let
-  inherit (config) gtk;
   swayservice = Description: ExecStart: {
     Unit = {
       inherit Description;
@@ -59,7 +58,7 @@
       swayidle -d -w timeout ${swaylockTimeout} swaylock-effects \
                      timeout ${swaylockSleepTimeout} 'swaymsg "output * dpms off"' \
                      resume 'swaymsg "output * dpms on"' \
-                     before-sleep swaylock-dope
+                     before-sleep swaylock-effects
     '';
   };
 
@@ -69,63 +68,6 @@
     text = ''
       mkdir -p ~/Pictures/screenshots
       slurp | grim -g - ~/Pictures/screenshots/"$(date +'%Y-%m-%dT%H.%M.%S.png')"
-    '';
-  };
-
-  # swapContainers = pkgs.writeShellApplication {
-  #   name = "swap-containers";
-  #   runtimeInputs = [pkgs.jq pkgs.sway];
-  #   text = ''
-  #     if swaymsg -t get_marks | jq -e 'any(.[] == "_swap"; .)'; then
-  #       exec swaymsg 'swap container with mark _swap; [con_mark=_swap] focus; [con_mark=_swap] unmark _swap'
-  #     else
-  #       exec swaymsg '[con_mark=_swap] unmark _swap; mark --add _swap'
-  #     fi
-  #   '';
-  # };
-
-  randomPicsumBackground = pkgs.writeShellApplication {
-    name = "random-picsum-background";
-    runtimeInputs = [pkgs.curl];
-    text = ''
-      category=''${1:-nature}
-      curl --silent --fail-with-body -Lo /tmp/wallpaper.jpg 'https://source.unsplash.com/featured/3200x1800/?'"$category" 2>/dev/null
-      if [ "$(stat -c "%s" "tmp/wallpaper.jpg")" -le 50000 ]; then
-        exit 1
-      fi
-      if [ -e "$HOME"/Pictures/wallpaper.jpg ]; then
-        mv "$HOME"/Pictures/wallpaper.jpg "$HOME"/Pictures/previous-wallpaper.jpg
-      fi
-      mv /tmp/wallpaper.jpg "$HOME"/Pictures/wallpaper.jpg
-      echo "$HOME"/Pictures/wallpaper.jpg
-    '';
-  };
-
-  swayBackground = pkgs.writeShellApplication {
-    name = "sway-background";
-    runtimeInputs = [randomPicsumBackground];
-    text = ''
-      category=''${1:-nature,abstract,space}
-      BG=$(random-picsum-background "$category")
-      exec swaymsg "output * bg '$BG' fill"
-    '';
-  };
-
-  rotatingBackground = pkgs.writeShellApplication {
-    name = "rotating-background";
-    runtimeInputs = [swayBackground pkgs.sway];
-    text = ''
-      category=''${1:-art,abstract,space}
-      while true; do
-      if ! sway-background "$category"; then
-        if [ -e "$HOME/Pictures/wallpaper.jpg" ]; then
-          exec swaymsg "output * bg '$HOME/Pictures/wallpaper.jpg' fill"
-        else
-          exec swaymsg "output * bg '$HOME/Pictures/default-background.jpg' fill"
-        fi
-      fi
-      sleep 600
-      done
     '';
   };
 
@@ -166,8 +108,17 @@
 
   modifier = "Mod4";
 
-  xcursor_theme = gtk.cursorTheme.name;
+  xcursor_theme = config.gtk.cursorTheme.name;
 in {
+  home.packages = with pkgs; [
+    kile-wl
+    rofi-wayland
+    fuzzel
+    light
+    pamixer
+    scripts
+    persway
+  ];
   home.sessionVariables = {
     GDK_BACKEND = "wayland";
     CLUTTER_BACKEND = "wayland";
@@ -187,11 +138,11 @@ in {
     systemd.enable = true;
     config = {
       inherit fonts modifier;
-      output = {
-        "*" = {
-          bg = "~/Pictures/wallpaper.jpg fill";
-        };
-      };
+      # output = {
+      #   "*" = {
+      #     bg = "~/Pictures/wallpaper.jpg fill";
+      #   };
+      # };
 
       seat = {
         "*" = {
@@ -240,24 +191,10 @@ in {
             command = "inhibit_idle fullscreen";
             criteria.shell = ".*";
           }
-          {
-            command = "kill";
-            criteria.title = "Firefox - Sharing Indicator";
-          }
-          {
-            ## only works with patch for sway, eg. packages/sway/sway-decouple-client-and-container-fullscreen.patch
-            command = let
-              nochrome = pkgs.writeShellApplication {
-                name = "nochrome";
-                runtimeInputs = [pkgs.sway pkgs.wtype];
-                text = ''
-                  wtype -k F11
-                  swaymsg fullscreen toggle
-                '';
-              };
-            in "exec ${nochrome}/bin/nochrome";
-            criteria.app_id = "chromium-browser";
-          }
+          # {
+          #   command = "kill";
+          #   criteria.title = "Firefox - Sharing Indicator";
+          # }
         ];
       };
 
@@ -307,10 +244,10 @@ in {
 
       gaps = {
         inner = 4;
-        top = -5;
-        bottom = -5;
-        left = -5;
-        right = -5;
+        top = 4;
+        bottom = 4;
+        left = 4;
+        right = 4;
       };
 
       modes = {
@@ -343,10 +280,10 @@ in {
         "${modifier}+Shift+x" = ''mode "disabled keybindings"'';
         "${modifier}+r" = ''mode "resize"'';
 
-        "${modifier}+Control+Tab" = "[con_mark=_swap] unmark _swap; mark --add _swap; [con_mark=_prev] focus; swap container with mark _swap; [con_mark=_swap] unmark _swap";
-        "${modifier}+Control+Left" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus left; swap container with mark _swap; [con_mark=_swap] unmark _swap";
-        "${modifier}+Control+Right" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus right; swap container with mark _swap; [con_mark=_swap] unmark _swap";
-        "${modifier}+Control+Down" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus down; swap container with mark _swap; [con_mark=_swap] unmark _swap";
+        # "${modifier}+Control+Tab" = "[con_mark=_swap] unmark _swap; mark --add _swap; [con_mark=_prev] focus; swap container with mark _swap; [con_mark=_swap] unmark _swap";
+        # "${modifier}+Control+Left" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus left; swap container with mark _swap; [con_mark=_swap] unmark _swap";
+        # "${modifier}+Control+Right" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus right; swap container with mark _swap; [con_mark=_swap] unmark _swap";
+        # "${modifier}+Control+Down" = "[con_mark=_swap] unmark _swap; mark --add _swap; focus down; swap container with mark _swap; [con_mark=_swap] unmark _swap";
 
         "${modifier}+space" = "exec persway stack-swap-main";
         "${modifier}+Control+space" = "exec persway stack-main-rotate-next";
@@ -375,8 +312,6 @@ in {
 
         "${modifier}+minus" = ''exec ${pkgs.scripts}/bin/rofi-rbw'';
         "${modifier}+Shift+minus" = ''exec passonly=y ${pkgs.scripts}/bin/rofi-rbw'';
-
-        "${modifier}+b" = ''exec ${swayBackground}/bin/sway-background'';
 
         "${modifier}+Shift+e" = ''exec ${editor}'';
 
@@ -425,7 +360,8 @@ in {
 
   systemd.user.services = {
     persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway daemon -w -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev' -d stack_main";
-    rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
+    # rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
+    wpaperd = swayservice "Sway BG service" "${pkgs.wpaperd}/bin/wpaperd";
     swayidle = swayservice "Sway Idle Service - lock screen etc" "${swayidleCommand}/bin/swayidle";
   };
 }
