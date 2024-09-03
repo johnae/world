@@ -110,18 +110,20 @@ in {
   name = "world";
 
   packages = with pkgs; [
-    age-plugin-yubikey
     agenix
+    age-plugin-yubikey
     alejandra
     hcloud
     installTestVM
     just
+    lua-language-server
     nil
     project-build
     rage
     runTestVM
     startTestVM
     statix
+    stylua
     tofuWithPlugins
     world
     yj

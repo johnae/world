@@ -106,6 +106,14 @@ in {
           language-servers = ["nixd"];
           auto-format = true;
         }
+        {
+          name = "lua";
+          formatter = {
+            command = "stylua";
+            args = ["-"];
+          };
+          auto-format = true;
+        }
       ];
     };
   };
