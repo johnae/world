@@ -6,7 +6,7 @@
   copilot = pkgs.writeShellApplication {
     name = "copilot";
     text = ''
-      exec ${pkgs.nodejs}/bin/node ${inputs.copilot-vim}/dist/agent.js "''$@"
+      exec ${pkgs.nodejs}/bin/node ${inputs.copilot-vim}/dist/language-server.js "''$@"
     '';
   };
   helix-copilot = pkgs.writeShellApplication {
