@@ -1,5 +1,5 @@
 windows:
-- command: direnv exec . hx .
+- command: direnv exec . hx -a .
   restart: true
 - command: direnv exec . project-build
   restart: true
