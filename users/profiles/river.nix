@@ -195,7 +195,10 @@ in {
     map.normal."Super+Shift Minus" = "spawn 'passonly=y ${pkgs.scripts}/bin/fuzzel-rbw'";
     map.normal."Super+Shift R" = "spawn '${remote-dev}/bin/remote-dev'";
 
-    map.normal."Super+Shift Space" = "send-layout-cmd luatile 'next_layout()'";
+    map.normal."Super+Shift Space" = "send-layout-cmd luatile 'next_tag_layout()'";
+
+    map.normal."Super+Shift Up" = "send-layout-cmd luatile 'adjust_main_ratio_by(0.05)'";
+    map.normal."Super+Shift Down" = "send-layout-cmd luatile 'adjust_main_ratio_by(-0.05)'";
     map.normal."Super+Shift S" = "spawn '${screenshot}/bin/screenshot'";
 
     map.normal."Super F11" = "enter-mode passthrough";

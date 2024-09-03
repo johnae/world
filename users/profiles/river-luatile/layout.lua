@@ -3,6 +3,21 @@ local main_ratio = 0.65
 local gaps = 10
 local smart_gaps = false
 local layout = "main-side-stack"
+local tag_layouts = {}
+
+function dump(o)
+	if type(o) == "table" then
+		local s = "{ "
+		for k, v in pairs(o) do
+			if type(k) ~= "number" then
+				k = '"' .. k .. '"'
+			end
+			s = s .. "[" .. k .. "] = " .. dump(v) .. ","
+		end
+		return s .. "} "
+	end
+	return tostring(o)
+end
 
 -- This layout function is a main window with a side window below which a stack of windows resides
 function main_side_stack(args)
@@ -189,14 +204,15 @@ end
 --  * Window height
 
 function handle_layout(args)
-  if layout == "main-side-stack" then
-    return main_side_stack(args)
-  elseif layout == "main-bottom-stack" then
-    return main_bottom_stack(args)
-  elseif layout == "monocle" then
+	local resolved_layout = tag_layouts[args.tags] or layout
+	if resolved_layout == "main-side-stack" then
+		return main_side_stack(args)
+	elseif resolved_layout == "main-bottom-stack" then
+		return main_bottom_stack(args)
+	elseif resolved_layout == "monocle" then
 		return monocle(args)
 	end
-  return main_stack(args)
+	return main_stack(args)
 end
 
 -- This optional function returns the metadata for the current layout.
@@ -222,32 +238,55 @@ end
 
 function set_main_ratio(ratio)
 	print("Setting main ratio to " .. ratio)
-  main_ratio = ratio
+	main_ratio = ratio
+end
+
+function adjust_main_ratio_by(val)
+	print("Adjust main ratio by " .. val)
+	main_ratio = main_ratio + val
 end
 
 function set_gaps(gap)
 	print("Setting gaps to " .. gap)
-  gaps = gap
+	gaps = gap
 end
 
 function set_smart_gaps(smart)
 	print("Setting smart gaps to " .. smart)
-  smart_gaps = smart
+	smart_gaps = smart
 end
 
 function set_layout(name)
 	print("Setting layout to " .. name)
-  layout = name
+	layout = name
+end
+
+function set_tag_layout(name)
+	print("Setting layout to " .. name)
+	tag_layouts[CMD_TAGS] = name
 end
 
 function next_layout()
-  if layout == "main-side-stack" then
+	if layout == "main-side-stack" then
 		set_layout("monocle")
-  elseif layout == "monocle" then
+	elseif layout == "monocle" then
 		set_layout("main-stack")
 	elseif layout == "main-stack" then
 		set_layout("main-bottom-stack")
-  else
+	else
 		set_layout("main-side-stack")
-  end
+	end
+end
+
+function next_tag_layout()
+	local resolved_layout = tag_layouts[CMD_TAGS] or layout
+	if resolved_layout == "main-side-stack" then
+		set_tag_layout("monocle")
+	elseif resolved_layout == "monocle" then
+		set_tag_layout("main-stack")
+	elseif resolved_layout == "main-stack" then
+		set_tag_layout("main-bottom-stack")
+	else
+		set_tag_layout("main-side-stack")
+	end
 end
