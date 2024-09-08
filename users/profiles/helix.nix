@@ -1,17 +1,7 @@
-{
-  pkgs,
-  inputs,
-  ...
-}: let
-  copilot = pkgs.writeShellApplication {
-    name = "copilot";
-    text = ''
-      exec ${pkgs.nodejs}/bin/node ${inputs.copilot-vim}/dist/language-server.js "''$@"
-    '';
-  };
-  helix-copilot = pkgs.writeShellApplication {
+{pkgs, ...}: let
+  helix-ai = pkgs.writeShellApplication {
     name = "hx";
-    runtimeInputs = [copilot];
+    runtimeInputs = [pkgs.lsp-ai];
     text = ''
       if [ -e /run/agenix/groq-lsp-ai ]; then
         GROQ_API_KEY="$(cat /run/agenix/groq-lsp-ai)"
@@ -21,19 +11,13 @@
         ANTHROPIC_API_KEY="$(cat /run/agenix/anthropic-lsp-ai)"
         export ANTHROPIC_API_KEY
       fi
-
-      if [ -n "$GROQ_API_KEY" ] || [ -n "$ANTHROPIC_API_KEY" ]; then
-        exec ${pkgs.helix-latest}/bin/hx "''$@"
-      else
-        exec ${pkgs.helix-latest}/bin/hx -a "''$@"
-      fi
+      exec ${pkgs.helix}/bin/hx "''$@"
     '';
   };
 in {
-  home.packages = [pkgs.lsp-ai];
   programs.helix = {
     enable = true;
-    package = helix-copilot;
+    package = helix-ai;
     settings = {
       theme = "catppuccin_frappe";
 
@@ -64,7 +48,6 @@ in {
           auto-signature-help = false;
           display-messages = true;
           display-inlay-hints = true;
-          #copilot-auto = true;
         };
 
         statusline = {
@@ -81,9 +64,6 @@ in {
       };
 
       keys = {
-        insert = {
-          right = "copilot_apply_completion";
-        };
         normal = {
           space = {
             t = ":open lsp-ai-chat.md";
@@ -96,10 +76,6 @@ in {
     };
     languages = {
       language-server = {
-        #copilot = {
-        #  command = "${copilot}/bin/copilot";
-        #  args = ["--stdio"];
-        #};
         lsp-ai = {
           command = "lsp-ai";
           config.memory.file_store = {};

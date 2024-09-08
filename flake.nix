@@ -53,11 +53,6 @@
     flake-utils.inputs.systems.follows = "systems";
     fluxcd-install.flake = false;
     fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v2.3.0/install.yaml"; # gh-release-update
-    helix.inputs.crane.follows = "crane";
-    helix.inputs.flake-utils.follows = "flake-utils";
-    helix.inputs.nixpkgs.follows = "nixpkgs";
-    helix.inputs.rust-overlay.follows = "rust-overlay";
-    helix.url = "github:AlexanderDickie/helix/copilot"; ## copilot support
     hetzner-csi-driver.flake = false;
     hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.9.0/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
     home-manager.inputs.nixpkgs.follows = "nixpkgs";

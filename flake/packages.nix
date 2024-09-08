@@ -124,7 +124,6 @@
         ];
         zjstatus = inputs.zjstatus.packages.${system}.default;
         zwift = inputs.zwift.packages.${system}.default;
-        helix-latest = inputs.helix.packages.${system}.helix;
         persway = inputs.persway.packages.${system}.default;
         wezterm = inputs.wezterm.packages.${system}.default;
         unlockremote = pkgs.writeShellApplication {

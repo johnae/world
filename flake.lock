@@ -420,36 +420,6 @@
         "type": "github"
       }
     },
-    "helix": {
-      "inputs": {
-        "crane": [
-          "crane"
-        ],
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-overlay": [
-          "rust-overlay"
-        ]
-      },
-      "locked": {
-        "lastModified": 1722890452,
-        "narHash": "sha256-+h2i8hkLc9tvsp3hqz5iQ3vJOWA+Y3e2maLMTAXx38o=",
-        "owner": "AlexanderDickie",
-        "repo": "helix",
-        "rev": "076d8dde4b9f7a951c1e9b74c26b79689eca5a74",
-        "type": "github"
-      },
-      "original": {
-        "owner": "AlexanderDickie",
-        "ref": "copilot",
-        "repo": "helix",
-        "type": "github"
-      }
-    },
     "hetzner-csi-driver": {
       "flake": false,
       "locked": {
@@ -932,7 +902,6 @@
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
         "fluxcd-install": "fluxcd-install",
-        "helix": "helix",
         "hetzner-csi-driver": "hetzner-csi-driver",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
