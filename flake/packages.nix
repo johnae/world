@@ -48,6 +48,14 @@
           p:
             map tofuProvider [p.null p.external p.hcloud p.cloudflare p.random p.tailscale]
         );
+        lsp-ai = pkgs.runCommand "lsp-ai" {} ''
+          ls -lah
+          ls -lah ${inputs.lsp-ai-bin}
+          mkdir -p $out/bin
+          gunzip -c ${inputs.lsp-ai-bin} > $out/bin/lsp-ai
+          patchelf --set-interpreter "$(cat ${pkgs.gcc}/nix-support/dynamic-linker)" $out/bin/lsp-ai
+          chmod +x $out/bin/lsp-ai
+        '';
         kexec-installer-nixos-unstable-noninteractive = kexec-installer inputs.nixpkgs-tmp [
           ({
             lib,

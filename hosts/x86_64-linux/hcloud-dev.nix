@@ -128,6 +128,14 @@
     };
     cloudflare-env.file = ../../secrets/cloudflare-env.age;
     vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
+    groq-lsp-ai = {
+      file = ../../secrets/groq-lsp-ai.age;
+      owner = "${toString adminUser.uid}";
+    };
+    anthropic-lsp-ai = {
+      file = ../../secrets/anthropic-lsp-ai.age;
+      owner = "${toString adminUser.uid}";
+    };
   };
 
   networking.firewall.trustedInterfaces = ["tailscale0"];

@@ -67,6 +67,8 @@
     juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.6/deploy/k8s.yaml"; # gh-release-update
     kured.flake = false;
     kured.url = "github:kubereboot/kured";
+    lsp-ai-bin.flake = false;
+    lsp-ai-bin.url = "https://github.com/SilasMarvin/lsp-ai/releases/download/v0.7.0/lsp-ai-x86_64-unknown-linux-gnu.gz"; # gh-release-update
     microvm.url = "github:astro/microvm.nix";
     microvm.inputs.flake-utils.follows = "flake-utils";
     microvm.inputs.nixpkgs.follows = "nixpkgs";

@@ -65,6 +65,14 @@
       file = ../../secrets/${hostName}/syncthing-key.age;
       owner = "${toString adminUser.uid}";
     };
+    groq-lsp-ai = {
+      file = ../../secrets/groq-lsp-ai.age;
+      owner = "${toString adminUser.uid}";
+    };
+    anthropic-lsp-ai = {
+      file = ../../secrets/anthropic-lsp-ai.age;
+      owner = "${toString adminUser.uid}";
+    };
   };
 
   services.syncthing = {
