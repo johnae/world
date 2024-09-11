@@ -206,6 +206,23 @@
         "type": "github"
       }
     },
+    "fennel-tree-sitter": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1706884626,
+        "narHash": "sha256-BdhgDS+yJ/DUYJknVksLSNHvei+MOkqVW7gp6AffKhU=",
+        "owner": "TravonteD",
+        "repo": "tree-sitter-fennel",
+        "rev": "15e4f8c417281768db17080c4447297f8ff5343a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "TravonteD",
+        "ref": "1.1.0",
+        "repo": "tree-sitter-fennel",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -427,6 +444,35 @@
         "owner": "harfbuzz",
         "ref": "8.4.0",
         "repo": "harfbuzz",
+        "type": "github"
+      }
+    },
+    "helix-editor": {
+      "inputs": {
+        "crane": [
+          "crane"
+        ],
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": [
+          "rust-overlay"
+        ]
+      },
+      "locked": {
+        "lastModified": 1725976743,
+        "narHash": "sha256-pLQQbiC9uO4lF58fAnlcDxlbsBB1XFWswsU1oZOIVqU=",
+        "owner": "helix-editor",
+        "repo": "helix",
+        "rev": "237cbe4bca46eed52efed39ed75eb44aaccbdde3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "helix-editor",
+        "repo": "helix",
         "type": "github"
       }
     },
@@ -992,10 +1038,12 @@
         "devenv": "devenv",
         "disko": "disko",
         "fenix": "fenix",
+        "fennel-tree-sitter": "fennel-tree-sitter",
         "flake-compat": "flake-compat",
         "flake-parts": "flake-parts_2",
         "flake-utils": "flake-utils_2",
         "fluxcd-install": "fluxcd-install",
+        "helix-editor": "helix-editor",
         "hetzner-csi-driver": "hetzner-csi-driver",
         "home-manager": "home-manager",
         "impermanence": "impermanence",

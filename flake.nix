@@ -4,18 +4,19 @@
   nixConfig = {
     extra-experimental-features = "nix-command flakes";
     extra-substituters = [
-      "https://nix-community.cachix.org"
-      "https://insane.cachix.org"
+      "https://cache.flox.dev"
       "https://cachix.cachix.org"
       "https://hyprland.cachix.org"
-      "https://cache.flox.dev"
+      "https://insane.cachix.org"
+      "https://nix-community.cachix.org"
     ];
+
     extra-trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o="
       "cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM="
-      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
+      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      "insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
 
@@ -45,6 +46,8 @@
     devenv.url = "github:cachix/devenv";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
+    fennel-tree-sitter.flake = false;
+    fennel-tree-sitter.url = "github:TravonteD/tree-sitter-fennel/1.1.0";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
     fenix.url = "github:nix-community/fenix";
     flake-compat.flake = false;
@@ -53,6 +56,11 @@
     flake-utils.inputs.systems.follows = "systems";
     fluxcd-install.flake = false;
     fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v2.3.0/install.yaml"; # gh-release-update
+    helix-editor.url = "github:helix-editor/helix";
+    helix-editor.inputs.nixpkgs.follows = "nixpkgs";
+    helix-editor.inputs.flake-utils.follows = "flake-utils";
+    helix-editor.inputs.rust-overlay.follows = "rust-overlay";
+    helix-editor.inputs.crane.follows = "crane";
     hetzner-csi-driver.flake = false;
     hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.9.0/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
     home-manager.inputs.nixpkgs.follows = "nixpkgs";

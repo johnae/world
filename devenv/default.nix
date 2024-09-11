@@ -113,6 +113,9 @@ in {
     agenix
     age-plugin-yubikey
     alejandra
+    fennel
+    fennel-ls
+    fnlfmt
     hcloud
     installTestVM
     just
