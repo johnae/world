@@ -222,7 +222,6 @@
         devices = [
           "antares"
           "eris"
-          "prometheus"
           "cygnus"
           "orion"
           "hyperion"
@@ -237,7 +236,6 @@
         id = "pictures";
         devices = [
           "antares"
-          "prometheus"
           "cygnus"
           "orion"
           "eris"

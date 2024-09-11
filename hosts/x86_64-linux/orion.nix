@@ -279,7 +279,6 @@
           "eris"
           "hyperion"
           "cygnus"
-          "prometheus"
           "sirius"
           "icarus"
           "s23ultra"
@@ -292,7 +291,6 @@
         id = "pictures";
         devices = [
           "antares"
-          "prometheus"
           "cygnus"
           "sirius"
           "eris"
