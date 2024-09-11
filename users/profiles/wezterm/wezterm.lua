@@ -7,11 +7,17 @@ local function starts_with(str, start)
 	return str:sub(1, #start) == start
 end
 
-local function reverse(t)
-	for i = 1, #t // 2, 1 do
-		t[i], t[#t - i + 1] = t[#t - i + 1], t[i]
+local function reverse_iter(t)
+	local i = #t
+	local function _iter()
+		if i == 0 then
+			return nil
+		end
+		local val = t[i]
+		i = i - 1
+		return val
 	end
-	return t
+	return _iter
 end
 
 local function project_name(str)
@@ -114,7 +120,7 @@ local function open_project_action(window, pane)
 						end
 						wezterm.log_info("load workspace from: ", workspaces)
 						wezterm.log_info("spawn window in ws: ", name)
-						for _, ws in ipairs(reverse(workspaces.windows)) do
+						for ws in reverse_iter(workspaces.windows) do
 							local command = ws.command or ""
 							local restart = ws.restart or false
 							local exit_to_shell = ws.exit_to_shell or true
