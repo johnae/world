@@ -136,6 +136,10 @@
       file = ../../secrets/anthropic-lsp-ai.age;
       owner = "${toString adminUser.uid}";
     };
+    openrouter-lsp-ai = {
+      file = ../../secrets/openrouter-lsp-ai.age;
+      owner = "${toString adminUser.uid}";
+    };
   };
 
   networking.firewall.trustedInterfaces = ["tailscale0"];

@@ -249,9 +249,9 @@ in {
     default-layout = "luatile";
     spawn =
       [
-        "${pkgs.wpaperd}/bin/wpaperd"
         "${swayidleCommand}/bin/swayidle"
         "${pkgs.kanshi}/bin/kanshi"
+        "${pkgs.wpaperd}/bin/wpaperd"
       ]
       ++
       ## layout gen

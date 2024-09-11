@@ -74,16 +74,6 @@
     cmd = "${pkgs.river}/bin/river";
   };
 
-  # runHyprland = runViaShell {
-  #   env = {
-  #     XDG_SESSION_TYPE = "wayland";
-  #     XDG_CURRENT_DESKTOP = "Hyprland";
-  #     XDG_SESSION_DESKTOP = "Hyprland";
-  #   };
-  #   name = "Hyprland";
-  #   cmd = "${pkgs.hyprland-unstable}/bin/Hyprland";
-  # };
-
   desktopSession = name: command:
     pkgs.writeText "${name}.desktop" ''
       [Desktop Entry]
@@ -94,26 +84,62 @@
 
   sessions = [
     {
-      name = "sway.desktop";
+      name = "wayland-sessions/sway.desktop";
       path = desktopSession "sway" "${runSway}/bin/sway";
     }
-    # {
-    #   name = "Hyprland.desktop";
-    #   path = desktopSession "Hyprland" "${runHyprland}/bin/Hyprland";
-    # }
     {
-      name = "river.desktop";
+      name = "wayland-sessions/river.desktop";
       path = desktopSession "river" "${runRiver}/bin/river";
     }
     {
-      name = "nushell.desktop";
+      name = "wayland-sessions/nushell.desktop";
       path = desktopSession "nushell" "${pkgs.nushell}/bin/nu";
     }
     {
-      name = "bash.desktop";
+      name = "wayland-sessions/bash.desktop";
       path = desktopSession "bash" "${pkgs.bashInteractive}/bin/bash";
     }
   ];
+
+  kanshiConf = let
+    conf = import ../users/profiles/kanshi.nix;
+  in
+    pkgs.writeText "kanshi-conf" (
+      builtins.concatStringsSep "\n" (
+        map (setting: ''
+          profile ${setting.profile.name} {
+          ${builtins.concatStringsSep "\n" (map (output: ''output "${output.criteria}" mode ${output.mode} position ${output.position} scale ${toString output.scale}'') setting.profile.outputs)}
+          }
+        '')
+        conf.services.kanshi.settings
+      )
+    );
+
+  regreetCss = pkgs.writeText "regreet-css" ''
+    button,
+    entry,
+    infobar.error > revealer > box {
+      background-color: transparent;
+      background-image: none;
+    }
+
+    frame {
+      /* background: transparent !important; */
+      /* background: alpha(black, 0.4) !important; */
+      /* background-color: alpha(black, 0.4) !important; */
+      box-shadow: 0px 0px 8px 0px black;
+      border: none;
+    }
+  '';
+
+  swayConfig = pkgs.writeText "sway-config" ''
+    exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+    exec ${pkgs.gnome.gnome-settings-daemon}/libexec/gsd-xsettings
+    exec ${pkgs.kanshi}/bin/kanshi -c ${kanshiConf}
+    output * bg ${../files/background.jpg} fill
+    exec "regreet -s ${regreetCss} ; swaymsg exit"
+    for_window [title=".*"] move container to output left
+  '';
 
   createGreeter = default: sessions: let
     sessionDir = pkgs.linkFarm "sessions" (
@@ -122,12 +148,37 @@
   in
     pkgs.writeShellApplication {
       name = "greeter";
-      runtimeInputs = [runSway pkgs.bashInteractive pkgs.nushell pkgs.systemd pkgs.greetd.tuigreet];
+      runtimeInputs = [runSway pkgs.bashInteractive pkgs.nushell pkgs.systemd pkgs.greetd.tuigreet pkgs.greetd.regreet];
       text = ''
-        tuigreet --sessions ${sessionDir} --time -r --remember-session --power-shutdown 'systemctl poweroff' --power-reboot 'systemctl reboot' --cmd ${default}
+        export XDG_DATA_DIRS="${sessionDir}"
+        ${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.sway} -c ${swayConfig}
       '';
     };
 in {
+  programs.regreet.enable = true;
+
+  environment.systemPackages = [pkgs.nordic pkgs.nordzy-cursor-theme pkgs.arc-icon-theme];
+
+  programs.regreet.settings = {
+    background = {
+      path = ../files/background.jpg;
+      fit = "Cover";
+    };
+    commands = {
+      reboot = ["systemctl" "reboot"];
+      poweroff = ["systemctl" "poweroff"];
+    };
+    appearance = {
+      greeting_msg = "Welcome back!";
+    };
+    GTK = {
+      cursor_theme_name = lib.mkForce "Nordzy-cursors";
+      font_name = lib.mkForce "Roboto Medium 14";
+      icon_theme_name = lib.mkForce "Arc";
+      theme_name = lib.mkForce "Nordic-darker";
+      application_prefer_dark_theme = lib.mkForce true;
+    };
+  };
   services.greetd = {
     enable = true;
     restart = true;
