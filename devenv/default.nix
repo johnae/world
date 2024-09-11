@@ -116,6 +116,7 @@ in {
     hcloud
     installTestVM
     just
+    lua
     lua-language-server
     nil
     project-build
