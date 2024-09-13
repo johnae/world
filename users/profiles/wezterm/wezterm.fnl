@@ -7,7 +7,8 @@
 (local project-dir :/home/john/Development)
 (local project-dirname (string.gsub project-dir "(.*/)(.*)" "%2"))
 (local project-dir-find-cmd
-       (.. "fd \\.git$ " project-dir " -d 3 -H -t d -x echo {//}"))
+       (wezterm.shell_split (.. "fd \\.git$ " project-dir
+                                " -d 3 -H -t d -x echo {//}")))
 
 (lambda table-concat [t1 t2]
   "Concatenate two tables"
@@ -65,8 +66,7 @@
 
 (lambda project-directory-list [window pane]
   "Returns a list of paths to projects"
-  (let [(status out err) (run-child-process window pane
-                                            (wezterm.shell_split project-dir-find-cmd))]
+  (let [(status out err) (run-child-process window pane project-dir-find-cmd)]
     (var listing [])
     ;\r
     (each [line (out:gmatch "[^\n]+")]
