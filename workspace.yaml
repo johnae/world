@@ -4,4 +4,4 @@ windows:
 - command: direnv exec . project-build
   restart: true
   exit_to_shell: false
-- command:
+- {}
