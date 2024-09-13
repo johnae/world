@@ -124,7 +124,7 @@
         ];
         helix-latest = inputs.helix-editor.packages.${system}.default.override {
           grammarOverlays = [
-            (final: prev: {
+            (_final: _prev: {
               fennel = pkgs.stdenv.mkDerivation {
                 pname = "helix-tree-sitter-fennel";
                 version = inputs.fennel-tree-sitter.rev;

@@ -103,7 +103,7 @@
     name = "project-build";
     runtimeInputs = [pkgs.watchexec];
     text = ''
-      watchexec -r -- 'world lint; world dead; world dscheck'
+      watchexec -- 'world lint; world dead; world dscheck'
     '';
   };
 in {
