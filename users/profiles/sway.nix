@@ -333,7 +333,7 @@ in {
           command = "${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources";
         }
         {
-          command = "${pkgs.gnome.gnome-settings-daemon}/libexec/gsd-xsettings";
+          command = "${pkgs.gnome-settings-daemon}/libexec/gsd-xsettings";
         }
         {
           command = "${pkgs.dbus.out}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP";

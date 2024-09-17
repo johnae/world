@@ -134,7 +134,7 @@
 
   swayConfig = pkgs.writeText "sway-config" ''
     exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
-    exec ${pkgs.gnome.gnome-settings-daemon}/libexec/gsd-xsettings
+    exec ${pkgs.gnome-settings-daemon}/libexec/gsd-xsettings
     exec ${pkgs.kanshi}/bin/kanshi -c ${kanshiConf}
     output * bg ${../files/background.jpg} fill
     exec "regreet -s ${regreetCss} ; swaymsg exit"
