@@ -174,6 +174,8 @@ in {
     map.normal."Super Down" = "focus-view down";
     map.normal."Super Left" = "focus-view left";
     map.normal."Super Right" = "focus-view right";
+    map.normal."Super V" = "focus-view next";
+    map.normal."Super+Shift V" = "focus-view previous";
     map.normal."Super M" = "focus-output next";
 
     map.normal."Super+Shift J" = "swap next";
