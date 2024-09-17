@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  inherit (config) xdg;
+  inherit (config) xdg home;
 in {
   xdg.configFile."wezterm/wezterm.fnl.lua".source =
     pkgs.runCommand "wezterm.fnl.lua" {
@@ -26,7 +26,7 @@ in {
         local fennel = dofile("${pkgs.lua54Packages.fennel}/share/lua/5.4/fennel.lua")
         config = fennel.dofile(os.getenv("WEZTERM_FNL"))
       else
-        config = dofile("${xdg.configFile."wezterm/wezterm.fnl.lua".target}")
+        config = dofile("${home.homeDirectory}/${xdg.configFile."wezterm/wezterm.fnl.lua".target}")
       end
       return config
     '';

@@ -28,6 +28,8 @@ in {
     USE_GKE_GCLOUD_AUTH_PLUGIN = "True";
   };
 
+  home.homeDirectory = "/home/${username}";
+
   home.packages = with pkgs; [
     alejandra
     awscli2

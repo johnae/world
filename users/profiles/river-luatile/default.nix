@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  inherit (config) xdg;
+  inherit (config) xdg home;
 in {
   xdg.configFile."river-luatile/layout.fnl.lua".source =
     pkgs.runCommand "layout.fnl.lua" {
@@ -21,7 +21,7 @@ in {
       local fennel = dofile("${pkgs.lua54Packages.fennel}/share/lua/5.4/fennel.lua")
       fennel.dofile(os.getenv("LUATILE_FNL"))
     else
-      dofile("${xdg.configFile."river-luatile/layout.fnl.lua".target}")
+      dofile("${home.homeDirectory}/${xdg.configFile."river-luatile/layout.fnl.lua".target}")
     end
   '';
 }
