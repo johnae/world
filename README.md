@@ -40,7 +40,7 @@ After that, just pick the host you're installing, like this:
 
 Hosts are defined in the [hosts/](hosts/) directory.
 
-_This setup is very customized to my taste. For example: all disks are encrypted using dm-crypt and then on top of that formatted as btrfs, swap is automatically setup to a "reasonable" value that is not ideal for a lot of use cases, root is mounted as tmpfs and will therefore use some amount of RAM and it'll also be ephemeral - a reboot results in a clean slate and you'll have to opt-in to what you want to keep._
+_This setup is very customized to my taste. You're welcome to use any or all of it for your own purposes but be advised that you'll probably want to make a lot of changes for it to work well for you._
 
 # Updating an existing machine
 
