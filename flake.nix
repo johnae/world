@@ -46,8 +46,6 @@
     devenv.url = "github:cachix/devenv";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
-    fennel-tree-sitter.flake = false;
-    fennel-tree-sitter.url = "github:TravonteD/tree-sitter-fennel/1.1.0";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
     fenix.url = "github:nix-community/fenix";
     flake-compat.flake = false;

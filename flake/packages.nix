@@ -122,57 +122,7 @@
             boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
           }
         ];
-        helix-latest = inputs.helix-editor.packages.${system}.default.override {
-          grammarOverlays = [
-            (_final: _prev: {
-              fennel = pkgs.stdenv.mkDerivation {
-                pname = "helix-tree-sitter-fennel";
-                version = inputs.fennel-tree-sitter.rev;
-                src = inputs.fennel-tree-sitter;
-                sourceRoot = "source";
-                dontConfigure = true;
-                FLAGS = [
-                  "-Isrc"
-                  "-g"
-                  "-O3"
-                  "-fPIC"
-                  "-fno-exceptions"
-                  "-Wl,-z,relro,-z,now"
-                ];
-                NAME = "fennel";
-                buildPhase = ''
-                  runHook preBuild
-
-                  if [[ -e src/scanner.cc ]]; then
-                    $CXX -c src/scanner.cc -o scanner.o $FLAGS
-                  elif [[ -e src/scanner.c ]]; then
-                    $CC -c src/scanner.c -o scanner.o $FLAGS
-                  fi
-
-                  $CC -c src/parser.c -o parser.o $FLAGS
-                  $CXX -shared -o $NAME.so *.o
-
-                  ls -al
-
-                  runHook postBuild
-                '';
-                installPhase = ''
-                  runHook preInstall
-                  mkdir $out
-                  mv $NAME.so $out/
-                  runHook postInstall
-                '';
-
-                # Strip failed on darwin: strip: error: symbols referenced by indirect symbol table entries that can't be stripped
-                fixupPhase = lib.optionalString pkgs.stdenv.isLinux ''
-                  runHook preFixup
-                  $STRIP $out/$NAME.so
-                  runHook postFixup
-                '';
-              };
-            })
-          ];
-        };
+        helix-latest = inputs.helix-editor.packages.${system}.default;
         zjstatus = inputs.zjstatus.packages.${system}.default;
         zwift = inputs.zwift.packages.${system}.default;
         persway = inputs.persway.packages.${system}.default;

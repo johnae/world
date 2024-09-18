@@ -206,23 +206,6 @@
         "type": "github"
       }
     },
-    "fennel-tree-sitter": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1706884626,
-        "narHash": "sha256-BdhgDS+yJ/DUYJknVksLSNHvei+MOkqVW7gp6AffKhU=",
-        "owner": "TravonteD",
-        "repo": "tree-sitter-fennel",
-        "rev": "15e4f8c417281768db17080c4447297f8ff5343a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "TravonteD",
-        "ref": "1.1.0",
-        "repo": "tree-sitter-fennel",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -1038,7 +1021,6 @@
         "devenv": "devenv",
         "disko": "disko",
         "fenix": "fenix",
-        "fennel-tree-sitter": "fennel-tree-sitter",
         "flake-compat": "flake-compat",
         "flake-parts": "flake-parts_2",
         "flake-utils": "flake-utils_2",

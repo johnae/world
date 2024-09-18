@@ -19,83 +19,157 @@
     '';
   };
 in {
+  xdg.configFile."helix/runtime/queries/fennel/injections.scm".source = pkgs.writeText "fennel-injections.scm" ''
+    ; inherits: scheme
+  '';
+  xdg.configFile."helix/runtime/queries/fennel/indents.scm".source = pkgs.writeText "fennel-indents.scm" ''
+      ; Exclude literals in the first patterns, since different rules apply for them.
+    ; Similarly, exclude certain keywords (detected by a regular expression).
+    ; If a list has 2 elements on the first line, it is aligned to the second element.
+    (list . (_) @first . (_) @anchor
+      (#same-line? @first @anchor)
+      (#set! "scope" "tail")
+      (#not-kind-eq? @first "boolean") (#not-kind-eq? @first "character") (#not-kind-eq? @first "string") (#not-kind-eq? @first "number")
+      (#not-match? @first "lambda.*|λ.*|let.*|set.*|fn.*")) @align
+    ; If the first element in a list is also a list and on a line by itself, the outer list is aligned to it
+    (list . (list) @anchor .
+      (#set! "scope" "tail")
+      (#not-kind-eq? @first "boolean") (#not-kind-eq? @first "character") (#not-kind-eq? @first "string") (#not-kind-eq? @first "number")) @align
+    (list . (list) @anchor . (_) @second
+      (#not-same-line? @anchor @second)
+      (#set! "scope" "tail")
+      (#not-kind-eq? @first "boolean") (#not-kind-eq? @first "character") (#not-kind-eq? @first "string") (#not-kind-eq? @first "number")
+      (#not-match? @first "lambda.*|λ.*|let.*|set.*|fn.*")) @align
+    ; If the first element in a list is not a list and on a line by itself, the outer list is aligned to
+    ; it plus 1 additional space. This cannot currently be modelled exactly by our indent queries,
+    ; but the following is equivalent, assuming that:
+    ; - the indent width is 2 (the default for scheme)
+    ; - There is no space between the opening parenthesis of the list and the first element
+    (list . (_) @first .
+      (#not-kind-eq? @first "boolean") (#not-kind-eq? @first "character") (#not-kind-eq? @first "string") (#not-kind-eq? @first "number")
+      (#not-match? @first "def.*|let.*|set!")) @indent
+    (list . (_) @first . (_) @second
+      (#not-same-line? @first @second)
+      (#not-kind-eq? @first "boolean") (#not-kind-eq? @first "character") (#not-kind-eq? @first "string") (#not-kind-eq? @first "number")
+      (#not-match? @first "lambda.*|λ.*|let.*|set.*|fn.*")) @indent
+
+    ; If the first element in a list is a literal, align the list to it
+    (list . [(boolean) (character) (string) (number)] @anchor
+      (#set! "scope" "tail")) @align
+
+    ; If the first element is among a set of predefined keywords, align the list to this element
+    ; plus 1 space (using the same workaround as above for now). This is a simplification since actually
+    ; the second line of the list should be indented by 2 spaces more in some cases. Supporting this would
+    ; be possible but require significantly more patterns.
+    (list . (symbol) @first
+      (#not-match? @first "lambda.*|λ.*|let.*|set.*|fn.*")) @indent
+  '';
   xdg.configFile."helix/runtime/queries/fennel/highlights.scm".source = pkgs.writeText "fennel-highlights.scm" ''
-    (comment) @comment
 
-    [ "(" ")" "{" "}" "[" "]" ] @punctuation.bracket
-
-    [ ":" ":until" "&" "&as" "?" ] @punctuation.special
-
-    (nil) @constant.builtin
-    (vararg) @punctuation.special
-
-    (boolean) @constant.builtin.boolean
     (number) @constant.numeric
+    (character) @constant.character
+    (boolean) @constant.builtin.boolean
 
     (string) @string
+
     (escape_sequence) @constant.character.escape
 
+    (comment) @comment.line
+    (block_comment) @comment.block
+    (directive) @keyword.directive
+
+    ; operators
+
+    ((symbol) @operator
+     (#match? @operator "^(\\+|-|\\*|/|=|>|<|>=|<=|~=|#|\\.|\\?\\.|\\.\\.|//|%|\\^)$"))
+
+    ; keywords
+
+    (list
+      .
+      ((symbol) @keyword.conditional
+       (#match? @keyword.conditional "^(if|case|match|when|unless)$"
+      )))
+
+    (list
+      .
+      (symbol) @keyword
+      (#match? @keyword
+       "^(let\\*|fn|lambda|λ|case|=>|set|let|do|else|and|if|or|not=|not|lshift|rshift|band|bor|bxor|bnot|length|when|unless|case|match|assert|require|global|local|var|comment|doc|eval-compiler|lua|macros|unquote|quote|tset|values|tail\\!)$"
+       ))
+
+    (list
+      .
+      (symbol) @function.builtin
+      (#match? @function.builtin
+       "^(assert|collectgarbage|dofile|error|getmetatable|ipairs|load|loadfile|next|pairs|pcall|print|rawequal|rawget|rawlen|rawset|require|select|setmetatable|tonumber|tostring|type|warn|xpcall|module|setfenv|loadstring|unpack|require-macros|import-macros|include)$"
+       ))
+
+    ; special forms
+
+    (list
+     "["
+     (symbol)+ @variable
+     "]")
+
+    (list
+     .
+     (symbol) @_f
+     .
+     (list
+       (symbol) @variable)
+     (#eq? @_f "lambda"))
+
+    (list
+     .
+     (symbol) @_f
+     .
+     (list
+       (list
+         (symbol) @variable.parameter))
+     (#match? @_f
+      "^(let|let\\*|let-syntax|let-values|let\\*-values|letrec|letrec\\*|letrec-syntax)$"))
+
+    ; quote
+
+    (list
+     .
+     (symbol) @_f
+     (#eq? @_f "quote")) @string.symbol
+
+    ; library
+
+    (list
+     .
+     (symbol) @_lib
+     .
+     (symbol) @namespace
+
+     (#eq? @_lib "library"))
+
+    ; procedure
+
+    (list
+      .
+      (symbol) @function)
+
+    ;; variables
 
     ((symbol) @variable.builtin
-     (#match? @variable.builtin "^[$]"))
+     (#eq? @variable.builtin "..."))
 
-    (binding) @symbol
+    ((symbol) @variable.builtin
+     (#eq? @variable.builtin "."))
 
-    [ "fn" "lambda" "hashfn" "#" ] @keyword.function
-
-    (fn name: [
-      (symbol) @function
-      (multi_symbol (symbol) @function .)
-    ])
-
-    (lambda name: [
-      (symbol) @function
-      (multi_symbol (symbol) @function .)
-    ])
-
-    (multi_symbol
-      "." @punctuation.delimiter
-      (symbol) @variable.other.member)
-
-    (multi_symbol_method
-      ":" @punctuation.delimiter
-      (symbol) @function.method .)
-
-    [ "for" "each" ] @keyword.control.repeat
-    ((symbol) @keyword.control.repeat
-     (#eq? @keyword.control.repeat
-      "while"))
-
-    [ "match" ] @keyword.control.conditional
-    ((symbol) @keyword.control.conditional
-     (#match? @keyword.control.conditional "^(if|when)$"))
-
-    [ "global" "local" "let" "set" "var" "where" "or" ] @keyword
-    ((symbol) @keyword
-     (#match? @keyword
-      "^(comment|do|doc|eval-compiler|lua|macros|quote|tset|values)$"))
-
-    ((symbol) @keyword.control.import
-     (#match? @keyword.control.import
-      "^(require|require-macros|import-macros|include)$"))
-
-    [ "collect" "icollect" "accumulate" ] @function.macro
-    ((symbol) @function.macro
-     (#match? @function.macro
-      "^(->|->>|-\\?>|-\\?>>|\\?\\.|doto|macro|macrodebug|partial|pick-args|pick-values|with-open)$"))
-
-    ; Lua builtins
-    ((symbol) @constant.builtin
-     (#match? @constant.builtin
-      "^(arg|_ENV|_G|_VERSION)$"))
-
-    ((symbol) @function.builtin
-     (#match? @function.builtin
-      "^(assert|collectgarbage|dofile|error|getmetatable|ipairs|load|loadfile|loadstring|module|next|pairs|pcall|print|rawequal|rawget|rawlen|rawset|require|select|setfenv|setmetatable|tonumber|tostring|type|unpack|warn|xpcall)$"))
-
-    (list . (symbol) @function)
-    (list . (multi_symbol (symbol) @function .))
     (symbol) @variable
+
+    ["(" ")" "[" "]" "{" "}"] @punctuation.bracket
+
+    (quote "'") @operator
+    (unquote_splicing ",@") @operator
+    (unquote ",") @operator
+    (quasiquote "`") @operator
+
   '';
   programs.helix = {
     enable = true;
@@ -455,7 +529,7 @@ in {
             args = ["-"];
           };
           language-servers = ["fennel-ls" "lsp-ai"];
-          grammar = "fennel";
+          grammar = "scheme";
           auto-format = true;
         }
         {
