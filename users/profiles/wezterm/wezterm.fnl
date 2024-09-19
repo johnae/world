@@ -158,7 +158,8 @@
                                                                                           : size
                                                                                           : args})]
                                                            (table.insert panes
-                                                                         new-pane))))))))))))))
+                                                                         new-pane))))))
+                                                 (-> (. panes 1) (: :activate))))))))))
         (wezterm.log_info "set active ws: " ?name)
         (mux.set_active_workspace ?name))))
 
