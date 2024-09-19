@@ -1,7 +1,11 @@
 windows:
 - command: direnv exec . hx .
   restart: true
-- command: direnv exec . project-build
-  restart: true
-  exit_to_shell: false
-- {}
+  panes:
+  - command: direnv exec . project-build
+    restart: true
+    exit_to_shell: false
+    size: 0.35
+    direction: Right
+  - size: 0.35
+    direction: Bottom

@@ -54,8 +54,6 @@
                    [:ssh (.. d.username "@" d.remote_address) (table.unpack a)]
                    a))
         (status out err) (wezterm.run_child_process args)]
-    (wezterm.log_info "run_child_process \"" (table.concat args " ")
-                      "\"\n  status: " status "\n  out: " out "\n  err: " err)
     (values status out err)))
 
 (lambda spawn-project-window [window pane]
@@ -95,6 +93,23 @@
                   (fn [item]
                     (= name item))))
 
+(lambda command-for [window-or-pane]
+  (var args [])
+  (var cmd "")
+  (when window-or-pane.command
+    (do
+      (table.insert args :bash)
+      (table.insert args :-c)
+      (when (or (= window-or-pane.exit_to_shell nil)
+                (= window-or-pane.exit_to_shell true))
+        (set cmd (.. cmd "trap \"exec $SHELL\" SIGINT; ")))
+      (if window-or-pane.restart
+          (set cmd (.. "while true; do " window-or-pane.command
+                       "; sleep 1; done"))
+          (set cmd (.. cmd window-or-pane.command)))
+      (table.insert args cmd)))
+  args)
+
 (lambda select-project-action-callback [window pane ?name ?directory]
   (if (not (and ?name ?directory))
       (wezterm.log_info "cancelled project selection")
@@ -104,32 +119,48 @@
           (if (not (has-workspace ?name))
               (let [workspace-config (project-workspace-config window pane
                                                                ?directory)]
-                (each [_ window (reverse-ipairs workspace-config.windows)]
-                  (var args [])
-                  (var cmd "")
-                  (when window.command
+                (each [_ window-conf (reverse-ipairs workspace-config.windows)]
+                  (let [args (command-for window-conf)
+                        (tab pane window) (mux.spawn_window {:domain {:DomainName domain}
+                                                             :workspace ?name
+                                                             :cwd ?directory
+                                                             : args})]
                     (do
-                      (print "insert bash -c")
-                      (table.insert args :bash)
-                      (table.insert args :-c))
-                    (when (or (= window.exit_to_shell nil)
-                              (= window.exit_to_shell true))
-                      (print "set cmd with trap")
-                      (set cmd (.. cmd "trap \"exec $SHELL\" SIGINT; ")))
-                    (if window.restart
-                        (set cmd
-                             (.. cmd "while true; do " window.command
-                                 "; sleep 1; done"))
-                        (set cmd window.command))
-                    (print "insert cmd in args: " cmd)
-                    (table.insert args cmd))
-                  (wezterm.log_info "spawn window in ws: " args)
-                  (mux.spawn_window {:domain {:DomainName domain}
-                                     :workspace ?name
-                                     :cwd ?directory
-                                     : args}))))
-          (wezterm.log_info "set active ws: " ?name)
-          (mux.set_active_workspace ?name)))))
+                      (wezterm.time.call_after 0.5
+                                               (fn []
+                                                 (print "args: " args)
+                                                 (print "panes: "
+                                                        window-conf.panes)
+                                                 (var panes [pane])
+                                                 (when window-conf.panes
+                                                   (print "panes: "
+                                                          window-conf.panes)
+                                                   (each [_ pane-conf (ipairs window-conf.panes)]
+                                                     (let [args (command-for pane-conf)
+                                                           direction (or pane-conf.direction
+                                                                         :Right)
+                                                           size (or pane-conf.size
+                                                                    0.5)]
+                                                       (do
+                                                         (print "pane-conf: "
+                                                                pane-conf)
+                                                         (print "args: " args
+                                                                " direction: "
+                                                                direction
+                                                                " size: " size)
+                                                         (let [from-pane (. panes
+                                                                            (or pane-conf.split_from
+                                                                                (length panes)))
+                                                               new-pane (from-pane:split {:cwd ?directory
+                                                                                          :domain {:DomainName domain}
+                                                                                          :workspace ?name
+                                                                                          : direction
+                                                                                          : size
+                                                                                          : args})]
+                                                           (table.insert panes
+                                                                         new-pane))))))))))))))
+        (wezterm.log_info "set active ws: " ?name)
+        (mux.set_active_workspace ?name))))
 
 (lambda open-select-project-window [window pane]
   (let [jump-list (project-jump-list window pane)]
@@ -146,7 +177,14 @@
                                :domain {:DomainName domain}
                                :args [:gitui]})))
 
-(wezterm.on :ActivateContextUI open-gitui-action)
+(lambda open-gitui-tab-action [window pane]
+  (wezterm.log_info "activate gitui tab action")
+  (let [domain (pane:get_domain_name)
+        cwd (pane:get_current_working_dir)]
+    ((-> (window:mux_window)
+         (: :spawn_tab {: cwd :domain {:DomainName domain} :args [:gitui]})))))
+
+(wezterm.on :ActivateContextUI open-gitui-tab-action)
 (wezterm.on :ReloadFixup
             (lambda [window pane]
               (run-child-process window pane [:pkill :-HUP :direnv])))
@@ -207,7 +245,6 @@
                                        (table.insert elements
                                                      {:Text solid-left-arrow})))
                                    elements))]
-                  (print elements)
                   (window:set_right_status (wezterm.format elements))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -237,9 +274,17 @@
       {:key :r :mods :LEADER :action (act.EmitEvent :ReloadFixup)}
       {:key :q :mods :LEADER :action (act.CloseCurrentPane {:confirm true})}
       {:key :g :mods :LEADER :action act.ShowTabNavigator}
+      {:key :z :mods :CTRL :action act.TogglePaneZoomState}
+      {:key :LeftArrow :mods :CTRL :action (act.ActivatePaneDirection :Left)}
+      {:key :RightArrow :mods :CTRL :action (act.ActivatePaneDirection :Right)}
+      {:key :UpArrow :mods :CTRL :action (act.ActivatePaneDirection :Up)}
+      {:key :DownArrow :mods :CTRL :action (act.ActivatePaneDirection :Down)}
       {:key :q
        :mods :LEADER|SHIFT
        :action (act.CloseCurrentTab {:confirm true})}
+      {:key :r :mods :CTRL :action (act.RotatePanes :CounterClockwise)}
+      {:key :r :mods :CTRL|SHIFT :action (act.RotatePanes :Clockwise)}
+      {:key :p :mods :CTRL :action (act.PaneSelect {:mode :SwapWithActive})}
       {:key :a :mods :LEADER :action (act.EmitEvent :FindProject)}
       {:key :f
        :mods :LEADER
