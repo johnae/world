@@ -62,14 +62,14 @@
   };
 
   xcursor_theme = config.gtk.cursorTheme.name;
-  terminal-bin = "${pkgs.wezterm}/bin/wezterm";
+  terminal-bin = "${pkgs.wezterm}/bin/wezterm start --always-new-process";
 
   _dev-env = {name}:
     pkgs.writeShellApplication {
       inherit name;
       runtimeInputs = with pkgs; [wezterm];
       text = ''
-        exec wezterm start --class ${name} --domain ${name} --attach
+        exec wezterm start --class ${name} --always-new-process
       '';
     };
 
@@ -79,9 +79,9 @@
   }:
     pkgs.writeShellApplication {
       inherit name;
-      runtimeInputs = with pkgs; [alacritty jq lswt];
+      runtimeInputs = with pkgs; [jq lswt];
       text = ''
-        if ! lswt -j | jq -e '.[] | select(.app_id == "${name}")' > /dev/null; then
+        if ! lswt -j | jq -e '.toplevels[] | select(."app-id" == "${name}")' > /dev/null; then
           # shellcheck disable=SC2093,SC2016
           riverctl spawn '${_dev-env {inherit name;}}/bin/${name}'
         fi
@@ -191,7 +191,7 @@ in {
     map.normal."Super K" = "spawn '${pkgs.kanshi}/bin/kanshictl reload'";
 
     map.normal."Super Minus" = "spawn '${pkgs.scripts}/bin/fuzzel-rbw'";
-    map.normal."Super Return" = "spawn ${terminal-bin}";
+    map.normal."Super Return" = "spawn '${terminal-bin}'";
     map.normal."Super+Shift E" = "spawn '${local-dev}/bin/local-dev'";
 
     map.normal."Super+Shift Minus" = "spawn 'passonly=y ${pkgs.scripts}/bin/fuzzel-rbw'";
