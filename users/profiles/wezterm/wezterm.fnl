@@ -110,58 +110,67 @@
       (table.insert args cmd)))
   args)
 
+(lambda setup-project-workspace [window pane name directory]
+  (let [domain (pane:get_domain_name)]
+    (if (not (has-workspace name))
+        (let [workspace-config (project-workspace-config window pane directory)]
+          (each [_ window-conf (reverse-ipairs workspace-config.windows)]
+            (let [args (command-for window-conf)
+                  (tab pane window) (mux.spawn_window {:domain {:DomainName domain}
+                                                       :workspace name
+                                                       :cwd directory
+                                                       : args})]
+              (do
+                (wezterm.time.call_after 0.5
+                                         (fn []
+                                           (print "args: " args)
+                                           (print "panes: " window-conf.panes)
+                                           (var panes [pane])
+                                           (when window-conf.panes
+                                             (print "panes: " window-conf.panes)
+                                             (each [_ pane-conf (ipairs window-conf.panes)]
+                                               (let [args (command-for pane-conf)
+                                                     direction (or pane-conf.direction
+                                                                   :Right)
+                                                     size (or pane-conf.size
+                                                              0.5)]
+                                                 (do
+                                                   (print "pane-conf: "
+                                                          pane-conf)
+                                                   (print "args: " args
+                                                          " direction: "
+                                                          direction " size: "
+                                                          size)
+                                                   (let [from-pane (. panes
+                                                                      (or pane-conf.split_from
+                                                                          (length panes)))
+                                                         new-pane (from-pane:split {:cwd directory
+                                                                                    :domain {:DomainName domain}
+                                                                                    :workspace name
+                                                                                    : direction
+                                                                                    : size
+                                                                                    : args})]
+                                                     (table.insert panes
+                                                                   new-pane))))))
+                                           (-> (. panes 1) (: :activate))))))))))
+  (wezterm.log_info "set active ws: " name)
+  (mux.set_active_workspace name))
+
+(lambda reload-workspace-action [window pane]
+  (let [name (window:active_workspace)
+        directory (pane:get_current_working_dir)]
+    (do
+      (window:perform_action (act.CloseCurrentTab {:confirm false}) pane)
+      (let [window (. (wezterm.gui.gui_windows) 1)
+            pane (window:active_pane)]
+        (setup-project-workspace window pane name directory.file_path)))))
+
 (lambda select-project-action-callback [window pane ?name ?directory]
   (if (not (and ?name ?directory))
       (wezterm.log_info "cancelled project selection")
       (do
         (wezterm.log_info "select project name: " ?name " dir: " ?directory)
-        (let [domain (pane:get_domain_name)]
-          (if (not (has-workspace ?name))
-              (let [workspace-config (project-workspace-config window pane
-                                                               ?directory)]
-                (each [_ window-conf (reverse-ipairs workspace-config.windows)]
-                  (let [args (command-for window-conf)
-                        (tab pane window) (mux.spawn_window {:domain {:DomainName domain}
-                                                             :workspace ?name
-                                                             :cwd ?directory
-                                                             : args})]
-                    (do
-                      (wezterm.time.call_after 0.5
-                                               (fn []
-                                                 (print "args: " args)
-                                                 (print "panes: "
-                                                        window-conf.panes)
-                                                 (var panes [pane])
-                                                 (when window-conf.panes
-                                                   (print "panes: "
-                                                          window-conf.panes)
-                                                   (each [_ pane-conf (ipairs window-conf.panes)]
-                                                     (let [args (command-for pane-conf)
-                                                           direction (or pane-conf.direction
-                                                                         :Right)
-                                                           size (or pane-conf.size
-                                                                    0.5)]
-                                                       (do
-                                                         (print "pane-conf: "
-                                                                pane-conf)
-                                                         (print "args: " args
-                                                                " direction: "
-                                                                direction
-                                                                " size: " size)
-                                                         (let [from-pane (. panes
-                                                                            (or pane-conf.split_from
-                                                                                (length panes)))
-                                                               new-pane (from-pane:split {:cwd ?directory
-                                                                                          :domain {:DomainName domain}
-                                                                                          :workspace ?name
-                                                                                          : direction
-                                                                                          : size
-                                                                                          : args})]
-                                                           (table.insert panes
-                                                                         new-pane))))))
-                                                 (-> (. panes 1) (: :activate))))))))))
-        (wezterm.log_info "set active ws: " ?name)
-        (mux.set_active_workspace ?name))))
+        (setup-project-workspace window pane ?name ?directory))))
 
 (lambda open-select-project-window [window pane]
   (let [jump-list (project-jump-list window pane)]
@@ -185,6 +194,7 @@
     ((-> (window:mux_window)
          (: :spawn_tab {: cwd :domain {:DomainName domain} :args [:gitui]})))))
 
+(wezterm.on :ReloadWorkspace reload-workspace-action)
 (wezterm.on :ActivateContextUI open-gitui-tab-action)
 (wezterm.on :ReloadFixup
             (lambda [window pane]
@@ -273,6 +283,7 @@
       {:key :c :mods :LEADER :action (act.EmitEvent :ActivateContextUI)}
       {:key :n :mods :LEADER :action (act.EmitEvent :NewProjectWindow)}
       {:key :r :mods :LEADER :action (act.EmitEvent :ReloadFixup)}
+      {:key :w :mods :CTRL|SHIFT :action (act.EmitEvent :ReloadWorkspace)}
       {:key :q :mods :LEADER :action (act.CloseCurrentPane {:confirm true})}
       {:key :g :mods :LEADER :action act.ShowTabNavigator}
       {:key :z :mods :CTRL :action act.TogglePaneZoomState}
