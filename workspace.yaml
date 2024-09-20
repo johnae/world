@@ -2,10 +2,11 @@ windows:
 - command: direnv exec . hx .
   restart: true
   panes:
-  - command: direnv exec . project-build
+  - size: 0.15
+    direction: Bottom
+  - command: direnv exec . watchexec -- 'world lint; world dead; world dscheck'
     restart: true
     exit_to_shell: false
-    size: 0.35
+    size: 0.15
     direction: Right
-  - size: 0.35
-    direction: Bottom
+    split_from: 1

@@ -129,6 +129,7 @@ in {
     statix
     stylua
     tofuWithPlugins
+    watchexec
     world
     yj
   ];
