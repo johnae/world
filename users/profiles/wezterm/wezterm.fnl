@@ -387,7 +387,10 @@
      [{:key :Space
        :mods :LEADER|CTRL
        :action (act.SendKey {:key :Space :mods :CTRL})}
-      {:key :c :mods :LEADER :action (act.EmitEvent :ActivateContextUI)}
+      {:key :g :mods :CTRL :action (act.EmitEvent :ActivateContextUI)}
+      {:key :t :mods :CTRL :action (act.EmitEvent :ActivateUtilUI)}
+      {:key :e :mods :CTRL :action (act.EmitEvent :ToggleMaximizeEditor)}
+      {:key :m :mods :CTRL :action (act.EmitEvent :ActivateMainUI)}
       {:key :n :mods :LEADER :action (act.EmitEvent :NewProjectWindow)}
       {:key :r :mods :LEADER :action (act.EmitEvent :ReloadFixup)}
       {:key :w :mods :CTRL|SHIFT :action (act.EmitEvent :ReloadWorkspace)}
