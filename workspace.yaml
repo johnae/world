@@ -1,12 +1,15 @@
 windows:
 - command: direnv exec . hx .
+  name: editor
   restart: true
   panes:
-  - size: 0.15
-    direction: Bottom
   - command: direnv exec . watchexec -- 'world lint; world dead; world dscheck'
+    name: tests
     restart: true
     exit_to_shell: false
-    size: 0.15
+    size: 0.10
     direction: Right
+  - size: 0.20
+    name: term
+    direction: Bottom
     split_from: 1

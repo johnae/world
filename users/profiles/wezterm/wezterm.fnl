@@ -110,49 +110,62 @@
       (table.insert args cmd)))
   args)
 
+(local workspaces {})
 (lambda setup-project-workspace [window pane name directory]
+  (var meta {:panes {}})
   (let [domain (pane:get_domain_name)]
     (if (not (has-workspace name))
-        (let [workspace-config (project-workspace-config window pane directory)]
-          (each [_ window-conf (reverse-ipairs workspace-config.windows)]
-            (let [args (command-for window-conf)
-                  (tab pane window) (mux.spawn_window {:domain {:DomainName domain}
-                                                       :workspace name
-                                                       :cwd directory
-                                                       : args})]
-              (do
-                (wezterm.time.call_after 0.5
-                                         (fn []
-                                           (print "args: " args)
-                                           (print "panes: " window-conf.panes)
-                                           (var panes [pane])
-                                           (when window-conf.panes
+        (do
+          (set (. workspaces name) meta)
+          (let [workspace-config (project-workspace-config window pane
+                                                           directory)]
+            (each [_ window-conf (reverse-ipairs workspace-config.windows)]
+              (let [args (command-for window-conf)
+                    (tab pane window) (mux.spawn_window {:domain {:DomainName domain}
+                                                         :workspace name
+                                                         :cwd directory
+                                                         : args})]
+                (do
+                  (tab:set_title :main)
+                  (wezterm.time.call_after 0.5
+                                           (fn []
+                                             (print "args: " args)
                                              (print "panes: " window-conf.panes)
-                                             (each [_ pane-conf (ipairs window-conf.panes)]
-                                               (let [args (command-for pane-conf)
-                                                     direction (or pane-conf.direction
-                                                                   :Right)
-                                                     size (or pane-conf.size
-                                                              0.5)]
-                                                 (do
-                                                   (print "pane-conf: "
-                                                          pane-conf)
-                                                   (print "args: " args
-                                                          " direction: "
-                                                          direction " size: "
-                                                          size)
-                                                   (let [from-pane (. panes
-                                                                      (or pane-conf.split_from
-                                                                          (length panes)))
-                                                         new-pane (from-pane:split {:cwd directory
-                                                                                    :domain {:DomainName domain}
-                                                                                    :workspace name
-                                                                                    : direction
-                                                                                    : size
-                                                                                    : args})]
-                                                     (table.insert panes
-                                                                   new-pane))))))
-                                           (-> (. panes 1) (: :activate))))))))))
+                                             (var panes [pane])
+                                             (set (. meta :panes
+                                                     window-conf.name)
+                                                  {:pane_id (pane:pane_id)})
+                                             (when window-conf.panes
+                                               (print "panes: "
+                                                      window-conf.panes)
+                                               (each [_ pane-conf (ipairs window-conf.panes)]
+                                                 (let [args (command-for pane-conf)
+                                                       direction (or pane-conf.direction
+                                                                     :Right)
+                                                       size (or pane-conf.size
+                                                                0.5)]
+                                                   (do
+                                                     (print "pane-conf: "
+                                                            pane-conf)
+                                                     (print "args: " args
+                                                            " direction: "
+                                                            direction " size: "
+                                                            size)
+                                                     (let [from-pane (. panes
+                                                                        (or pane-conf.split_from
+                                                                            (length panes)))
+                                                           new-pane (from-pane:split {:cwd directory
+                                                                                      :domain {:DomainName domain}
+                                                                                      :workspace name
+                                                                                      : direction
+                                                                                      : size
+                                                                                      : args})]
+                                                       (set (. meta :panes
+                                                               pane-conf.name)
+                                                            {:pane_id (new-pane:pane_id)})
+                                                       (table.insert panes
+                                                                     new-pane))))))
+                                             (-> (. panes 1) (: :activate)))))))))))
   (wezterm.log_info "set active ws: " name)
   (mux.set_active_workspace name))
 
@@ -187,15 +200,109 @@
                                :domain {:DomainName domain}
                                :args [:gitui]})))
 
+(lambda open-named-tab-action [window pane name]
+  (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
+    (when (= (muxtab:get_title) name)
+      (muxtab:activate))))
+
+(lambda open-context-tab-action [window pane name args]
+  (wezterm.log_info "activate " name " tab action")
+  (if (table-contains (-> (window:mux_window) (: :tabs))
+                      (fn [tab] (print "tabname: " (tab:get_title))
+                        (= (tab:get_title) name)))
+      (do
+        (if (= (-> (window:active_tab) (: :get_title)) name)
+            (open-named-tab-action window pane :main)
+            (open-named-tab-action window pane name)))
+      (let [domain (pane:get_domain_name)
+            cwd (pane:get_current_working_dir)
+            (tab pane window) (-> (window:mux_window)
+                                  (: :spawn_tab
+                                     {:cwd cwd.file_path
+                                      :domain {:DomainName domain}
+                                      : args}))]
+        (tab:set_title name))))
+
+(lambda toggle-maximized-pane [pane-name]
+  (lambda [window pane]
+    (let [ws (window:active_workspace)
+          tab (pane:tab)
+          pane-id (. workspaces ws :panes pane-name :pane_id)
+          zoomed (?. workspaces ws :panes pane-name :zoomed)]
+      (do
+        (wezterm.log_info "ws: " ws " tab: " tab " pane-id: " pane-id
+                          " zoomed: " zoomed)
+        (set (. workspaces ws :panes pane-name :zoomed) (not zoomed))
+        (each [_ p (ipairs (tab:panes))]
+          (when (= (p:pane_id) pane-id) (p:activate)
+            (tab:set_zoomed (not zoomed))))))))
+
+(lambda open-main-tab-action [window pane]
+  (open-named-tab-action window pane :main))
+
 (lambda open-gitui-tab-action [window pane]
-  (wezterm.log_info "activate gitui tab action")
-  (let [domain (pane:get_domain_name)
-        cwd (pane:get_current_working_dir)]
-    ((-> (window:mux_window)
-         (: :spawn_tab {: cwd :domain {:DomainName domain} :args [:gitui]})))))
+  (open-context-tab-action window pane :gitui [:gitui]))
+
+(lambda open-term-tab-action [window pane]
+  (wezterm.log_info "workspaces: " workspaces)
+  (open-context-tab-action window pane :term []))
+
+; (lambda open-gitui-tab-action [window pane]
+;   (wezterm.log_info "activate gitui tab action") ; (when (= (-> (window:active_tab) (: :get_title)) :gitui) ;   (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))] ;     (when (= (muxtab:get_title) :main) (muxtab:activate))))
+;   (if (table-contains (-> (window:mux_window) (: :tabs))
+;                       (fn [tabname] (= tabname :gitui)))
+;       (do
+;         (print "has gitui tab")
+;         (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
+;           (when (= (muxtab:get_title) :gitui) (muxtab:activate))))
+;       (let [domain (pane:get_domain_name)
+;             cwd (pane:get_current_working_dir)
+;             (tab pane window) (-> (window:mux_window)
+;                                   (: :spawn_tab
+;                                      {:cwd cwd.file_path
+;                                       :domain {:DomainName domain}
+;                                       :args [:gitui]}))]
+;         (tab:set_title :gitui))))
+
+; (lambda open-term-tab-action [window pane]
+;   (wezterm.log_info "activate term tab action")
+;   (if (table-contains (-> (window:mux_window) (: :tabs))
+;                       (fn [tab] (print "tabname: " (tab:get_title))
+;                         (= (tab:get_title) :term)))
+;       (do
+;         (if (= (-> (window:active_tab) (: :get_title)) :term)
+;             (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
+;               (when (= (muxtab:get_title) :main)
+;                 (print "activate main")
+;                 (muxtab:activate)))
+;             (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
+;               (when (= (muxtab:get_title) :term)
+;                 (print "activate term")
+;                 (muxtab:activate)))))
+;       (let [domain (pane:get_domain_name)
+;             cwd (pane:get_current_working_dir)
+;             (tab pane window) (-> (window:mux_window)
+;                                   (: :spawn_tab
+;                                      {:cwd cwd.file_path
+;                                       :domain {:DomainName domain}}))]
+;         (tab:set_title :term))))
+
+; (lambda open-gitui-tab-action [window pane]
+;   (wezterm.log_info "activate gitui tab action")
+;   (let [domain (pane:get_domain_name)
+;         cwd (pane:get_current_working_dir)
+;         (tab pane window) (-> (window:mux_window)
+;                               (: :spawn_tab
+;                                  {: cwd
+;                                   :domain {:DomainName domain}
+;                                   :args [:gitui]}))]
+;     (tab:set_title :gitui)))
 
 (wezterm.on :ReloadWorkspace reload-workspace-action)
 (wezterm.on :ActivateContextUI open-gitui-tab-action)
+(wezterm.on :ActivateUtilUI (toggle-maximized-pane :term))
+(wezterm.on :ToggleMaximizeEditor (toggle-maximized-pane :editor))
+(wezterm.on :ActivateMainUI open-main-tab-action)
 (wezterm.on :ReloadFixup
             (lambda [window pane]
               (run-child-process window pane [:pkill :-HUP :direnv])))
