@@ -24,7 +24,11 @@
     ../../profiles/syncthing.nix
     ../../profiles/tailscale.nix
     ../../profiles/zram.nix
+    ../../profiles/ollama.nix
   ];
+
+  services.ollama.rocmOverrideGfx = "10.1.0"; ## rdna 3 11.0.0
+  services.ollama.acceleration = "rocm";
 
   boot.loader.systemd-boot.memtest86.enable = true;
 
@@ -33,7 +37,6 @@
 
   boot.initrd = {
     systemd.enable = true;
-    #    luks.devices.cryptkey.crypttabExtraOpts = ["fido2-device=auto"];
   };
 
   networking.useDHCP = false;
