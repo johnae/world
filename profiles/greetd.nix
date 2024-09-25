@@ -132,14 +132,36 @@
     }
   '';
 
-  swayConfig = pkgs.writeText "sway-config" ''
-    exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
-    exec ${pkgs.gnome-settings-daemon}/libexec/gsd-xsettings
-    exec ${pkgs.kanshi}/bin/kanshi -c ${kanshiConf}
-    output * bg ${../files/background.jpg} fill
-    exec "regreet -s ${regreetCss} ; swaymsg exit"
-    for_window [title=".*"] move container to output left
-  '';
+  swayConfig = let
+    conf = pkgs.callPackage ../users/profiles/sway.nix {};
+  in
+    pkgs.writeText "sway-config" ''
+      exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+      exec ${pkgs.gnome-settings-daemon}/libexec/gsd-xsettings
+      exec ${pkgs.kanshi}/bin/kanshi -c ${kanshiConf}
+      output * bg ${../files/background.jpg} fill
+      exec "regreet -s ${regreetCss} ; swaymsg exit"
+      for_window [title=".*"] move container to output left
+      ${builtins.concatStringsSep "\n" (
+        lib.mapAttrsToList (name: value: ''
+          input "${name}" {
+          ${builtins.concatStringsSep "\n" (
+            lib.mapAttrsToList (name: value: ''
+              ${name} ${value}
+            '')
+            value
+          )}
+          }
+        '')
+        conf.wayland.windowManager.sway.config.input
+      )}
+
+      input "1267:12850:ELAN06A1:00_04F3:3232_Touchpad" {
+        dwt true
+        natural_scroll true
+        tap true
+      }
+    '';
 
   createGreeter = default: sessions: let
     sessionDir = pkgs.linkFarm "sessions" (
