@@ -80,11 +80,28 @@
       (table.insert listing line))
     listing))
 
+(local default-project-workspace-yaml-path
+       (.. wezterm.config_dir :/workspace.yaml))
+
+; (wezterm.log_info "package.loaded.fennel " package.loaded.fennel)
+; (wezterm.log_info "_G.debug " _G.debug)
+
+(fn _G.debug.traceback [] nil)
+
+(lambda default-project-workspace []
+  (let [(wsloaded err) (pcall #(with-open [wsyaml (io.open default-project-workspace-yaml-path
+                                                           :rb)]
+                                 (wezterm.serde.yaml_decode (wsyaml:read :*a))))]
+    (if wsloaded err {:windows [{}]})))
+
+(wezterm.log_info "default-project-workspace: " (default-project-workspace))
+
 (lambda project-workspace-config [window pane dir]
-  "Reads and returns the workspace config for a project"
+  "Reads and returns the effective workspace config for a project"
+  (wezterm.log_info "default-project-workspace " (default-project-workspace))
   (let [(status out err) (run-child-process window pane
                                             [:cat (.. dir :/workspace.yaml)])]
-    (if status (wezterm.serde.yaml_decode out) {:windows [{}]})))
+    (if status (wezterm.serde.yaml_decode out) (default-project-workspace))))
 
 (lambda project-jump-list [window pane]
   "Returns a jump list for use with the input selector"
