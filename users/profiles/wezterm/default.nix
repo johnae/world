@@ -5,6 +5,17 @@
 }: let
   inherit (config) xdg home;
 in {
+  xdg.configFile."wezterm/workspace.yaml".source = pkgs.writeText "workspace.yaml" ''
+    windows:
+    - command: direnv exec . hx .
+      name: editor
+      restart: true
+      panes:
+      - size: 0.20
+        name: term
+        direction: Bottom
+        split_from: 1
+  '';
   xdg.configFile."wezterm/wezterm.fnl.lua".source =
     pkgs.runCommand "wezterm.fnl.lua" {
       nativeBuildInputs = [pkgs.fennel];
@@ -17,12 +28,14 @@ in {
     extraConfig = ''
       _G.wezterm = wezterm
       _G.dev_remote = "${config.userinfo.devRemote}"
+      -- fake
+      local function getinfo()
+      end
+      local function traceback()
+      end
+      _G.debug = {getinfo = getinfo, traceback = traceback}
       local config
       if os.getenv("WEZTERM_FNL") then
-        -- fake
-        local function getinfo()
-        end
-        _G.debug = {getinfo = getinfo}
         local fennel = dofile("${pkgs.lua54Packages.fennel}/share/lua/5.4/fennel.lua")
         config = fennel.dofile(os.getenv("WEZTERM_FNL"))
       else
