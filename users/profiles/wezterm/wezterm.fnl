@@ -36,6 +36,15 @@
     (when (cmp value) (set found true)))
   found)
 
+(lambda table-find [tbl cmp]
+  "Return the first item for which the given cmp function returns true"
+  (var item nil)
+  (wezterm.log_info "table-find, tbl: " tbl)
+  (each [name value (pairs tbl) &until item]
+    (when (cmp name value) (set item value)))
+  (wezterm.log_info "table-find, returns: " item)
+  item)
+
 (lambda project-name [path]
   "Get the project/workspace name for the given path"
   (if (has-prefix path "/")
@@ -223,6 +232,18 @@
                                       : args}))]
         (tab:set_title name))))
 
+(lambda pane-name-for-id [window pane-id]
+  (wezterm.log_info window pane-id)
+  (var pane-name (tostring pane-id))
+  (let [ws (window:active_workspace)]
+    (do
+      (wezterm.log_info "ws: " ws " workspaces: " workspaces)
+      (when (?. workspaces ws :panes)
+        (each [name conf (pairs (. workspaces ws :panes))]
+          (when (= conf.pane_id pane-id) (set pane-name name))))))
+  (wezterm.log_info "pane-name: " pane-name)
+  pane-name)
+
 (lambda toggle-maximized-pane [pane-name]
   (lambda [window pane]
     (let [ws (window:active_workspace)
@@ -328,6 +349,11 @@
             (lambda [window pane]
               (var tab-bg local-term-color)
               (let [domain (pane:get_domain_name)
+                    pane-info (table-find (-> (window:active_tab)
+                                              (: :panes_with_info))
+                                          (fn [_ value]
+                                            (= (value.pane:pane_id)
+                                               (pane:pane_id))))
                     overrides (or (window:get_config_overrides) {})
                     cwd-uri (pane:get_current_working_dir)
                     (_ hostname _) (run-child-process window pane [:hostname])
@@ -344,7 +370,11 @@
                               "#04a5e5"
                               "#04a5e5"
                               "#7287fd"]
-                      cells ["" (.. domain "/" hostname) ws]
+                      cells [""
+                             (.. domain "/" hostname)
+                             ws
+                             (pane-name-for-id window (pane:pane_id))
+                             (if pane-info.is_zoomed " 👁 " "  ")]
                       elements (accumulate [elements [] i cell (reverse-ipairs cells)]
                                  (do
                                    (table.insert elements
