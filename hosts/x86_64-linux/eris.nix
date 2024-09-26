@@ -27,7 +27,7 @@
     ../../profiles/ollama.nix
   ];
 
-  services.ollama.rocmOverrideGfx = "10.1.0"; ## rdna 3 11.0.0
+  services.ollama.rocmOverrideGfx = "11.0.0"; ## rdna 3 11.0.0
   services.ollama.acceleration = "rocm";
 
   boot.loader.systemd-boot.memtest86.enable = true;
