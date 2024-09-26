@@ -234,7 +234,7 @@
 
 (lambda pane-name-for-id [window pane-id]
   (wezterm.log_info window pane-id)
-  (var pane-name (tostring pane-id))
+  (var pane-name (.. :pane- (tostring pane-id)))
   (let [ws (window:active_workspace)]
     (do
       (wezterm.log_info "ws: " ws " workspaces: " workspaces)
@@ -253,6 +253,8 @@
       (do
         (wezterm.log_info "ws: " ws " tab: " tab " pane-id: " pane-id
                           " zoomed: " zoomed)
+        (each [_ p (pairs (. workspaces ws :panes))]
+          (set (. p :zoomed) false))
         (set (. workspaces ws :panes pane-name :zoomed) (not zoomed))
         (each [_ p (ipairs (tab:panes))]
           (when (= (p:pane_id) pane-id) (p:activate)
