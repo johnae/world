@@ -83,11 +83,6 @@
 (local default-project-workspace-yaml-path
        (.. wezterm.config_dir :/workspace.yaml))
 
-; (wezterm.log_info "package.loaded.fennel " package.loaded.fennel)
-; (wezterm.log_info "_G.debug " _G.debug)
-
-(fn _G.debug.traceback [] nil)
-
 (lambda default-project-workspace []
   (let [(wsloaded err) (pcall #(with-open [wsyaml (io.open default-project-workspace-yaml-path
                                                            :rb)]
