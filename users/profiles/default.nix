@@ -38,7 +38,6 @@ in {
     carapace
     fzf # # for certain utilities that depend on it
     gh
-    git-branchless
     git-crypt
     google-cloud-sdk-gke
     jwt-cli
