@@ -10,6 +10,7 @@ in {
     ./git.nix
     ./gitui.nix
     ./helix.nix
+    ./jujutsu.nix
     ./kitty.nix
     ./kubie.nix
     ./nushell/default.nix
