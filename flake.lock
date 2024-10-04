@@ -863,22 +863,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-tmp": {
-      "locked": {
-        "lastModified": 1723797802,
-        "narHash": "sha256-KR1C6GDQRcF5F2bvJWEIihFAvXVZjHgito7d2oMgdak=",
-        "owner": "Mic92",
-        "repo": "nixpkgs",
-        "rev": "8248602cc2464fef696ae9ac1cd0870573801804",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Mic92",
-        "ref": "iproute2-nix-community",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1727802920,
@@ -1039,7 +1023,6 @@
         "nixos-hardware": "nixos-hardware",
         "nixos-images": "nixos-images",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-tmp": "nixpkgs-tmp",
         "nur": "nur",
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks_2",
