@@ -102,7 +102,7 @@ in {
       domain = "*";
       type = "-";
       item = "nofile";
-      value = "16384";
+      value = "65536";
     }
   ];
 
