@@ -127,6 +127,7 @@
         zwift = inputs.zwift.packages.${system}.default;
         persway = inputs.persway.packages.${system}.default;
         wezterm = inputs.wezterm.packages.${system}.default;
+        jujutsu-latest = inputs.jujutsu.packages.${system}.default;
         unlockremote = pkgs.writeShellApplication {
           name = "unlockremote";
           runtimeInputs = with pkgs; [coreutils openssh];
