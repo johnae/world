@@ -11,8 +11,8 @@ in {
     ediff = false;
     settings = {
       user = {
+        inherit (userinfo) email;
         name = userinfo.fullName;
-        email = userinfo.email;
       };
       ui = {
         editor = "hx";

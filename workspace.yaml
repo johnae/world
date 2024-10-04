@@ -3,7 +3,7 @@ windows:
   name: editor
   restart: true
   panes:
-  - command: direnv exec . watchexec -- 'world lint; world dead; world dscheck'
+  - command: direnv exec . watchexec --stdin-quit -- 'world lint; world dead; world dscheck'
     name: tests
     restart: true
     exit_to_shell: false
