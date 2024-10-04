@@ -15,7 +15,6 @@
       config.allowUnfree = true;
       overlays = [
         inputs.agenix.overlays.default
-        #inputs.fenix.overlays.default
         inputs.nur.overlay
         (_final: _prev: (filterAttrs (name: _: ((match "nu-.*" name == null) && (match "nu_.*" name == null))) config.packages))
         (_final: prev: {
