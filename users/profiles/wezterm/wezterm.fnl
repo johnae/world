@@ -39,10 +39,8 @@
 (lambda table-find [tbl cmp]
   "Return the first item for which the given cmp function returns true"
   (var item nil)
-  (wezterm.log_info "table-find, tbl: " tbl)
   (each [name value (pairs tbl) &until item]
     (when (cmp name value) (set item value)))
-  (wezterm.log_info "table-find, returns: " item)
   item)
 
 (lambda project-name [path]
@@ -115,29 +113,36 @@
                     (= name item))))
 
 (lambda command-for [window-or-pane]
+  (local pane-name (or window-or-pane.name :unknown))
   (var args [])
+  (var pane-name-bash-cmd
+       (.. "printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
+           pane-name " | base64`; "))
   (var cmd "")
-  (when window-or-pane.command
-    (do
-      (table.insert args :bash)
-      (table.insert args :-c)
-      (when (or (= window-or-pane.exit_to_shell nil)
-                (= window-or-pane.exit_to_shell true))
-        (set cmd (.. cmd "trap \"exec $SHELL\" SIGINT; ")))
-      (if window-or-pane.restart
-          (set cmd (.. "while true; do " window-or-pane.command
-                       "; sleep 1; done"))
-          (set cmd (.. cmd window-or-pane.command)))
-      (table.insert args cmd)))
+  (if window-or-pane.command
+      (do
+        (table.insert args :bash)
+        (table.insert args :-c)
+        (set cmd (.. cmd pane-name-bash-cmd))
+        (when (or (= window-or-pane.exit_to_shell nil)
+                  (= window-or-pane.exit_to_shell true))
+          (set cmd (.. cmd "trap \"exec $SHELL\" SIGINT; ")))
+        (if window-or-pane.restart
+            (set cmd (.. cmd "while true; do " window-or-pane.command
+                         "; sleep 1; done"))
+            (set cmd (.. cmd window-or-pane.command)))
+        (table.insert args cmd))
+      (do
+        (table.insert args :bash)
+        (table.insert args :-c)
+        (table.insert args (.. pane-name-bash-cmd "exec $SHELL"))))
+  (wezterm.log_info "command-for: " args)
   args)
 
-(local workspaces {})
 (lambda setup-project-workspace [window pane name directory]
-  (var meta {:panes {}})
   (let [domain (pane:get_domain_name)]
     (if (not (has-workspace name))
         (do
-          (set (. workspaces name) meta)
           (let [workspace-config (project-workspace-config window pane
                                                            directory)]
             (each [_ window-conf (reverse-ipairs workspace-config.windows)]
@@ -153,9 +158,6 @@
                                              (print "args: " args)
                                              (print "panes: " window-conf.panes)
                                              (var panes [pane])
-                                             (set (. meta :panes
-                                                     window-conf.name)
-                                                  {:pane_id (pane:pane_id)})
                                              (when window-conf.panes
                                                (print "panes: "
                                                       window-conf.panes)
@@ -181,9 +183,6 @@
                                                                                       : direction
                                                                                       : size
                                                                                       : args})]
-                                                       (set (. meta :panes
-                                                               pane-conf.name)
-                                                            {:pane_id (new-pane:pane_id)})
                                                        (table.insert panes
                                                                      new-pane))))))
                                              (-> (. panes 1) (: :activate)))))))))))
@@ -237,30 +236,42 @@
                                       : args}))]
         (tab:set_title name))))
 
+(lambda pane-with-id [window pane-id]
+  (var pane nil)
+  (each [_ p (ipairs (or (-?> (window:active_tab) (: :panes)) []))]
+    (when (= (p:pane_id) pane-id)
+      (set pane p)))
+  pane)
+
+(lambda pane-with-name [window pane-name]
+  (var pane nil)
+  (each [_ p (ipairs (or (-?> (window:active_tab) (: :panes)) []))]
+    (when (= (?. (p:get_user_vars) :pane_name) pane-name)
+      (set pane p)))
+  pane)
+
 (lambda pane-name-for-id [window pane-id]
-  (wezterm.log_info window pane-id)
-  (var pane-name (.. :pane- (tostring pane-id)))
-  (let [ws (window:active_workspace)]
-    (do
-      (wezterm.log_info "ws: " ws " workspaces: " workspaces)
-      (when (?. workspaces ws :panes)
-        (each [name conf (pairs (. workspaces ws :panes))]
-          (when (= conf.pane_id pane-id) (set pane-name name))))))
-  (wezterm.log_info "pane-name: " pane-name)
-  pane-name)
+  (-?> (pane-with-id window pane-id) (: :get_user_vars) (. :pane_name)))
+
+(lambda pane-id-for-name [window pane-name]
+  (-?> (pane-with-name window pane-name) (: :pane_id)))
+
+(lambda pane-information-for [pane]
+  (var pane-info nil)
+  (each [_ pinfo (ipairs (or (-?> (pane:tab) (: :panes_with_info)) []))]
+    (when (= (pinfo.pane:pane_id) (pane:pane_id)) (set pane-info pinfo)))
+  pane-info)
 
 (lambda toggle-maximized-pane [pane-name]
   (lambda [window pane]
     (let [ws (window:active_workspace)
           tab (pane:tab)
-          pane-id (. workspaces ws :panes pane-name :pane_id)
-          zoomed (?. workspaces ws :panes pane-name :zoomed)]
+          pane-id (pane-id-for-name window pane-name)
+          pane-info (pane-information-for (pane-with-name window pane-name))
+          zoomed (or (?. pane-info :is_zoomed) false)]
       (do
         (wezterm.log_info "ws: " ws " tab: " tab " pane-id: " pane-id
                           " zoomed: " zoomed)
-        (each [_ p (pairs (. workspaces ws :panes))]
-          (set (. p :zoomed) false))
-        (set (. workspaces ws :panes pane-name :zoomed) (not zoomed))
         (each [_ p (ipairs (tab:panes))]
           (when (= (p:pane_id) pane-id) (p:activate)
             (tab:set_zoomed (not zoomed))))))))
@@ -304,11 +315,8 @@
             (lambda [window pane]
               (var tab-bg local-term-color)
               (let [domain (pane:get_domain_name)
-                    pane-info (table-find (-> (window:active_tab)
-                                              (: :panes_with_info))
-                                          (fn [_ value]
-                                            (= (value.pane:pane_id)
-                                               (pane:pane_id))))
+                    pane-info (pane-information-for pane)
+                    zoomed (or (?. pane-info :is_zoomed) false)
                     overrides (or (window:get_config_overrides) {})
                     cwd-uri (pane:get_current_working_dir)
                     (_ hostname _) (run-child-process window pane [:hostname])
@@ -328,8 +336,9 @@
                       cells [""
                              (.. domain "/" hostname)
                              ws
-                             (pane-name-for-id window (pane:pane_id))
-                             (if pane-info.is_zoomed " 👁 " "  ")]
+                             (or (pane-name-for-id window (pane:pane_id))
+                                 (.. :pane- (tostring (pane:pane_id))))
+                             (if zoomed " 👁 " "  ")]
                       elements (accumulate [elements [] i cell (reverse-ipairs cells)]
                                  (do
                                    (table.insert elements
