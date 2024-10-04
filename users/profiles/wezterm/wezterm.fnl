@@ -214,13 +214,6 @@
                                                :fuzzy true})
                            pane)))
 
-(lambda open-gitui-action [window pane]
-  (let [domain (pane:get_domain_name)
-        cwd (pane:get_current_working_dir)]
-    (wezterm.mux.spawn_window {:cwd cwd.file_path
-                               :domain {:DomainName domain}
-                               :args [:gitui]})))
-
 (lambda open-named-tab-action [window pane name]
   (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
     (when (= (muxtab:get_title) name)
@@ -272,72 +265,20 @@
           (when (= (p:pane_id) pane-id) (p:activate)
             (tab:set_zoomed (not zoomed))))))))
 
-(lambda open-main-tab-action [window pane]
-  (open-named-tab-action window pane :main))
-
-(lambda open-gitui-tab-action [window pane]
-  (open-context-tab-action window pane :gitui [:gitui]))
-
-(lambda open-term-tab-action [window pane]
-  (wezterm.log_info "workspaces: " workspaces)
-  (open-context-tab-action window pane :term []))
-
-; (lambda open-gitui-tab-action [window pane]
-;   (wezterm.log_info "activate gitui tab action") ; (when (= (-> (window:active_tab) (: :get_title)) :gitui) ;   (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))] ;     (when (= (muxtab:get_title) :main) (muxtab:activate))))
-;   (if (table-contains (-> (window:mux_window) (: :tabs))
-;                       (fn [tabname] (= tabname :gitui)))
-;       (do
-;         (print "has gitui tab")
-;         (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
-;           (when (= (muxtab:get_title) :gitui) (muxtab:activate))))
-;       (let [domain (pane:get_domain_name)
-;             cwd (pane:get_current_working_dir)
-;             (tab pane window) (-> (window:mux_window)
-;                                   (: :spawn_tab
-;                                      {:cwd cwd.file_path
-;                                       :domain {:DomainName domain}
-;                                       :args [:gitui]}))]
-;         (tab:set_title :gitui))))
-
-; (lambda open-term-tab-action [window pane]
-;   (wezterm.log_info "activate term tab action")
-;   (if (table-contains (-> (window:mux_window) (: :tabs))
-;                       (fn [tab] (print "tabname: " (tab:get_title))
-;                         (= (tab:get_title) :term)))
-;       (do
-;         (if (= (-> (window:active_tab) (: :get_title)) :term)
-;             (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
-;               (when (= (muxtab:get_title) :main)
-;                 (print "activate main")
-;                 (muxtab:activate)))
-;             (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
-;               (when (= (muxtab:get_title) :term)
-;                 (print "activate term")
-;                 (muxtab:activate)))))
-;       (let [domain (pane:get_domain_name)
-;             cwd (pane:get_current_working_dir)
-;             (tab pane window) (-> (window:mux_window)
-;                                   (: :spawn_tab
-;                                      {:cwd cwd.file_path
-;                                       :domain {:DomainName domain}}))]
-;         (tab:set_title :term))))
-
-; (lambda open-gitui-tab-action [window pane]
-;   (wezterm.log_info "activate gitui tab action")
-;   (let [domain (pane:get_domain_name)
-;         cwd (pane:get_current_working_dir)
-;         (tab pane window) (-> (window:mux_window)
-;                               (: :spawn_tab
-;                                  {: cwd
-;                                   :domain {:DomainName domain}
-;                                   :args [:gitui]}))]
-;     (tab:set_title :gitui)))
-
 (wezterm.on :ReloadWorkspace reload-workspace-action)
-(wezterm.on :ActivateContextUI open-gitui-tab-action)
-(wezterm.on :ActivateUtilUI (toggle-maximized-pane :term))
+(wezterm.on :ActivateGitui
+            (lambda [window pane]
+              (open-context-tab-action window pane :gitui [:gitui])))
+
+(wezterm.on :ActivateLazyjj
+            (lambda [window pane]
+              (open-context-tab-action window pane :lazyjj [:lazyjj])))
+
+(wezterm.on :ToggleMaximizeTerminal (toggle-maximized-pane :term))
 (wezterm.on :ToggleMaximizeEditor (toggle-maximized-pane :editor))
-(wezterm.on :ActivateMainUI open-main-tab-action)
+(wezterm.on :ActivateMainUI
+            (lambda [window pane] (open-context-tab-action window pane :main)))
+
 (wezterm.on :ReloadFixup
             (lambda [window pane]
               (run-child-process window pane [:pkill :-HUP :direnv])))
@@ -431,8 +372,9 @@
      [{:key :Space
        :mods :LEADER|CTRL
        :action (act.SendKey {:key :Space :mods :CTRL})}
-      {:key :g :mods :CTRL :action (act.EmitEvent :ActivateContextUI)}
-      {:key :t :mods :CTRL :action (act.EmitEvent :ActivateUtilUI)}
+      {:key :g :mods :CTRL :action (act.EmitEvent :ActivateGitui)}
+      {:key :j :mods :CTRL :action (act.EmitEvent :ActivateLazyjj)}
+      {:key :t :mods :CTRL :action (act.EmitEvent :ToggleMaximizeTerminal)}
       {:key :e :mods :CTRL :action (act.EmitEvent :ToggleMaximizeEditor)}
       {:key :m :mods :CTRL :action (act.EmitEvent :ActivateMainUI)}
       {:key :n :mods :LEADER :action (act.EmitEvent :NewProjectWindow)}
