@@ -257,8 +257,9 @@
         "type": "github"
       },
       "original": {
-        "id": "flake-parts",
-        "type": "indirect"
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
       }
     },
     "flake-utils": {
@@ -288,24 +289,6 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "rev": "c1dfcf08411b08f6b8615f7d8971a2bfa81d5e8a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_3": {
-      "inputs": {
-        "systems": "systems"
-      },
-      "locked": {
-        "lastModified": 1710146030,
-        "narHash": "sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "b1d9ab70662946ef0850d488da1c9019f3a9752a",
         "type": "github"
       },
       "original": {
@@ -395,7 +378,6 @@
     "gitignore_2": {
       "inputs": {
         "nixpkgs": [
-          "pre-commit-hooks",
           "nixpkgs"
         ]
       },
@@ -908,7 +890,9 @@
         "flake-parts": [
           "flake-parts"
         ],
-        "flake-utils": "flake-utils_3",
+        "flake-utils": [
+          "flake-utils"
+        ],
         "mk-shell-bin": [
           "mk-shell-bin"
         ],
@@ -974,7 +958,9 @@
         "flake-compat": [
           "flake-compat"
         ],
-        "gitignore": "gitignore_2",
+        "gitignore": [
+          "gitignore"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -1009,6 +995,7 @@
         "flake-parts": "flake-parts_2",
         "flake-utils": "flake-utils_2",
         "fluxcd-install": "fluxcd-install",
+        "gitignore": "gitignore_2",
         "helix-editor": "helix-editor",
         "hetzner-csi-driver": "hetzner-csi-driver",
         "home-manager": "home-manager",
@@ -1027,7 +1014,7 @@
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks_2",
         "rust-overlay": "rust-overlay",
-        "systems": "systems_2",
+        "systems": "systems",
         "wezterm": "wezterm",
         "zjstatus": "zjstatus",
         "zwift": "zwift"
@@ -1087,21 +1074,6 @@
       }
     },
     "systems": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
-    "systems_2": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
