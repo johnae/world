@@ -500,6 +500,32 @@
         "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.7/deploy/k8s.yaml"
       }
     },
+    "jujutsu": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": [
+          "rust-overlay"
+        ]
+      },
+      "locked": {
+        "lastModified": 1728116332,
+        "narHash": "sha256-T1n0BrWKhf+2gMZ34q0zTDkR5cLHOLIboeA9uM+CK5k=",
+        "owner": "martinvonz",
+        "repo": "jj",
+        "rev": "cacd6a3fd05b6bf06c9112566ca1e82d8e40f3ac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "martinvonz",
+        "repo": "jj",
+        "type": "github"
+      }
+    },
     "kured": {
       "flake": false,
       "locked": {
@@ -1001,6 +1027,7 @@
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "juicefs-csi-driver": "juicefs-csi-driver",
+        "jujutsu": "jujutsu",
         "kured": "kured",
         "lsp-ai-bin": "lsp-ai-bin",
         "microvm": "microvm",
