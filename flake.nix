@@ -81,7 +81,6 @@
     nixos-generators.url = "github:nix-community/nixos-generators";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     nixos-images.url = "github:nix-community/nixos-images";
-    nixpkgs-tmp.url = "github:Mic92/nixpkgs/iproute2-nix-community";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nur.url = "github:nix-community/NUR";
     persway.url = "github:johnae/persway";
