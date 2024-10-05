@@ -43,6 +43,7 @@
     devenv.inputs.nixpkgs.follows = "nixpkgs";
     devenv.inputs.pre-commit-hooks.follows = "pre-commit-hooks";
     devenv.inputs.cachix.follows = "cachix";
+    devenv.inputs.flake-parts.follows = "flake-parts";
     devenv.url = "github:cachix/devenv";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
@@ -50,10 +51,13 @@
     fenix.url = "github:nix-community/fenix";
     flake-compat.flake = false;
     flake-compat.url = "github:edolstra/flake-compat";
+    flake-parts.url = "github:hercules-ci/flake-parts";
     flake-utils.url = "github:numtide/flake-utils";
     flake-utils.inputs.systems.follows = "systems";
     fluxcd-install.flake = false;
     fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v2.4.0/install.yaml"; # gh-release-update
+    gitignore.url = "github:hercules-ci/gitignore.nix";
+    gitignore.inputs.nixpkgs.follows = "nixpkgs";
     helix-editor.url = "github:helix-editor/helix";
     helix-editor.inputs.nixpkgs.follows = "nixpkgs";
     helix-editor.inputs.flake-utils.follows = "flake-utils";
@@ -85,7 +89,6 @@
     nixos-generators.url = "github:nix-community/nixos-generators";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     nixos-images.url = "github:nix-community/nixos-images";
-    nixpkgs-tmp.url = "github:Mic92/nixpkgs/iproute2-nix-community";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nur.url = "github:nix-community/NUR";
     persway.url = "github:johnae/persway";
@@ -96,8 +99,10 @@
     persway.inputs.mk-shell-bin.follows = "mk-shell-bin";
     persway.inputs.nix2container.follows = "nix2container";
     persway.inputs.nixpkgs.follows = "nixpkgs";
+    persway.inputs.flake-utils.follows = "flake-utils";
     pre-commit-hooks.inputs.flake-compat.follows = "flake-compat";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
+    pre-commit-hooks.inputs.gitignore.follows = "gitignore";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";

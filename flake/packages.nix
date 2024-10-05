@@ -56,7 +56,7 @@
           patchelf --set-interpreter "$(cat ${pkgs.gcc}/nix-support/dynamic-linker)" $out/bin/lsp-ai
           chmod +x $out/bin/lsp-ai
         '';
-        kexec-installer-nixos-unstable-noninteractive = kexec-installer inputs.nixpkgs-tmp [
+        kexec-installer-nixos-unstable-noninteractive = kexec-installer inputs.nixpkgs [
           ({
             lib,
             pkgs,
