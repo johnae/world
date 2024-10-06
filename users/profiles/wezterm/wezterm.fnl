@@ -7,7 +7,7 @@
 (local project-dir :/home/john/Development)
 (local project-dirname (string.gsub project-dir "(.*/)(.*)" "%2"))
 (local project-dir-find-cmd
-       (wezterm.shell_split (.. "fd \\.git$ " project-dir
+       (wezterm.shell_split (.. "fd '(\\.git|\\.jj)$' " project-dir
                                 " -d 3 -H -t d -x echo {//}")))
 
 (lambda table-concat [t1 t2]
