@@ -69,14 +69,24 @@
         cwd (pane:get_current_working_dir)]
     (mux.spawn_window {:domain {:DomainName domain} :cwd cwd.file_path})))
 
+(lambda unique [list]
+  (let [unique-items {}]
+    (do
+      (each [_ item (ipairs list)]
+        (set (. unique-items item) true))
+      (accumulate [list [] item _ (pairs unique-items)]
+        (do
+          (table.insert list item)
+          list)))))
+
 (lambda project-directory-list [window pane]
   "Returns a list of paths to projects"
-  (let [(status out err) (run-child-process window pane project-dir-find-cmd)]
-    (var listing [])
-    ;\r
-    (each [line (out:gmatch "[^\n]+")]
-      (table.insert listing line))
-    listing))
+  (let [(status out err) (run-child-process window pane project-dir-find-cmd)
+        listing []]
+    (do
+      (each [line (out:gmatch "[^\n]+")]
+        (table.insert listing line))
+      (unique listing))))
 
 (local default-project-workspace-yaml-path
        (.. wezterm.config_dir :/workspace.yaml))
@@ -267,7 +277,8 @@
     (let [ws (window:active_workspace)
           tab (pane:tab)
           pane-id (pane-id-for-name window pane-name)
-          pane-info (pane-information-for (pane-with-name window pane-name))
+          pane-info (or (pane-information-for (pane-with-name window pane-name))
+                        {})
           zoomed (or (?. pane-info :is_zoomed) false)]
       (do
         (wezterm.log_info "ws: " ws " tab: " tab " pane-id: " pane-id
