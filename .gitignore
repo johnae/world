@@ -1,6 +1,7 @@
 .devenv
 .direnv
-yubikey-identity.txt
+secrets/yubikey-identity.txt
+secrets/identity.txt
 .terraform
 terraform.tfstate*
 nvm*.img
