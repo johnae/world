@@ -2,15 +2,31 @@ name: Hcloud Dev
 
 on:
   workflow_dispatch: {}
-  # schedule:
-  # - cron: '0 6  * * MON,TUE,WED,THU,FRI'
+  schedule:
+  - cron: '0 6  * * MON,TUE,WED,THU,FRI'
 
 jobs:
+  create-runner:
+    name: Create Hetzner Cloud Runner
+    runs-on: ubuntu-latest
+    outputs:
+      server-name: ${{ steps.create-runner.outputs.server-name }}
+    steps:
+      name: Create Hetzner Runner
+      id: create-runner
+      uses: Kwarf/hetzner-ephemeral-runner@v1
+      with:
+        action: create
+        github-token: ${{ secrets.GH_TOKEN_HETZNER_RUNNER }}
+        hetzner-token: ${{ secrets.HCLOUD_TOKEN }}
+        server-location: hel1
+
   start:
     permissions:
       contents: read
       id-token: write
-    runs-on: ubuntu-latest
+    needs: create-runner
+    runs-on: ${{ needs.create-runner.outputs.server-name }}
     steps:
     - uses: actions/checkout@v4
 
@@ -40,6 +56,7 @@ jobs:
         CLOUD_DISK_PASSWORD: ${{ secrets.CLOUD_DISK_PASSWORD }}
         HCLOUD_DEV_SSH_HOSTKEY: ${{ secrets.HCLOUD_DEV_SSH_HOSTKEY }}
         HCLOUD_DEV_SSH_INITRD_KEY: ${{ secrets.HCLOUD_DEV_SSH_INITRD_KEY }}
+        TF_VAR_server_type: CX22
       run: |
         TF_VAR_kexec_tarball="$(nix build .#kexec-installer-nixos-unstable-noninteractive --print-out-paths --no-link)/nixos-kexec-installer-noninteractive-x86_64-linux.tar.gz"
         export TF_VAR_kexec_tarball
@@ -55,3 +72,19 @@ jobs:
         REMOTE_IP: ${{ steps.tofu.outputs.remote_ip }}
       run: |
         nix run .#unlockremote
+
+  remove-runner:
+    name: Remove runner
+    needs:
+      - create-runner
+      - start
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    steps:
+      - name: Remove runner
+        uses: Kwarf/hetzner-ephemeral-runner@v1
+        with:
+          action: remove
+          github-token: ${{ secrets.GH_TOKEN_HETZNER_RUNNER }}
+          hetzner-token: ${{ secrets.HCLOUD_TOKEN }}
+          server-name: ${{ needs.create-runner.outputs.server-name }}
