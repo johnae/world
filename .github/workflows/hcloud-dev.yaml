@@ -20,7 +20,7 @@ jobs:
         github-token: ${{ secrets.GH_TOKEN_HETZNER_RUNNER }}
         hetzner-token: ${{ secrets.HCLOUD_TOKEN }}
         server-location: hel1
-        server-type: cx22
+        server-type: cx42
 
   start:
     permissions:
