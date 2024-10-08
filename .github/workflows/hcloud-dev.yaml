@@ -64,8 +64,8 @@ jobs:
         cd tofu/dev
         nix run .#tofuWithPlugins -- init
         nix run .#tofuWithPlugins -- apply -auto-approve
-        echo remote_ip="$(nix run .#tofuWithPlugins -- output -raw dev_ip)" >> "$GITHUB_OUTPUT"
         NIXSH
+        echo remote_ip="$(nix run .#tofuWithPlugins -- output -raw dev_ip)" >> "$GITHUB_OUTPUT"
 
     - name: Unlock
       env:
