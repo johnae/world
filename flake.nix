@@ -37,13 +37,11 @@
     cloud-native-pg.url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.0/cnpg-1.24.0.yaml"; # gh-release-update
     copilot-vim.flake = false;
     copilot-vim.url = "github:github/copilot.vim";
-    crane.inputs.nixpkgs.follows = "nixpkgs";
     crane.url = "github:ipetkov/crane";
     devenv.inputs.flake-compat.follows = "flake-compat";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
     devenv.inputs.pre-commit-hooks.follows = "pre-commit-hooks";
     devenv.inputs.cachix.follows = "cachix";
-    devenv.inputs.flake-parts.follows = "flake-parts";
     devenv.url = "github:cachix/devenv";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";

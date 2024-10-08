@@ -106,6 +106,22 @@
       watchexec -- 'world lint; world dead; world dscheck'
     '';
   };
+
+  jjpr = pkgs.writeShellApplication {
+    name = "jjpr";
+    text = ''
+      REV="''${1:-}"
+      if [ -z "$REV" ]; then
+        echo Please provide the revision id
+        exit 1
+      fi
+      jj git push -c "$REV"
+      shift
+      GIT_BRANCH="$(jj bookmark list | grep push-"$REV" | awk -F: '{print $1}')"
+      gh pr create -H "$GIT_BRANCH" -f
+      gh pr merge "$GIT_BRANCH" -s "$@"
+    '';
+  };
 in {
   name = "world";
 
@@ -118,6 +134,7 @@ in {
     fnlfmt
     hcloud
     installTestVM
+    jjpr
     just
     lua
     lua-language-server
