@@ -56,7 +56,7 @@ jobs:
         CLOUD_DISK_PASSWORD: ${{ secrets.CLOUD_DISK_PASSWORD }}
         HCLOUD_DEV_SSH_HOSTKEY: ${{ secrets.HCLOUD_DEV_SSH_HOSTKEY }}
         HCLOUD_DEV_SSH_INITRD_KEY: ${{ secrets.HCLOUD_DEV_SSH_INITRD_KEY }}
-        TF_VAR_server_type: CX22
+        TF_VAR_server_type: CX42
       run: |
         nix shell nixpkgs#jq nixpkgs#bashInteractive --command bash <<NIXSH
         TF_VAR_kexec_tarball="$(nix build .#kexec-installer-nixos-unstable-noninteractive --print-out-paths --no-link)/nixos-kexec-installer-noninteractive-x86_64-linux.tar.gz"
