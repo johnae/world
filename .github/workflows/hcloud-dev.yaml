@@ -12,7 +12,7 @@ jobs:
     outputs:
       server-name: ${{ steps.create-runner.outputs.server-name }}
     steps:
-      name: Create Hetzner Runner
+    - name: Create Hetzner Runner
       id: create-runner
       uses: Kwarf/hetzner-ephemeral-runner@v1
       with:
@@ -81,10 +81,10 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:
-      - name: Remove runner
-        uses: Kwarf/hetzner-ephemeral-runner@v1
-        with:
-          action: remove
-          github-token: ${{ secrets.GH_TOKEN_HETZNER_RUNNER }}
-          hetzner-token: ${{ secrets.HCLOUD_TOKEN }}
-          server-name: ${{ needs.create-runner.outputs.server-name }}
+    - name: Remove runner
+      uses: Kwarf/hetzner-ephemeral-runner@v1
+      with:
+        action: remove
+        github-token: ${{ secrets.GH_TOKEN_HETZNER_RUNNER }}
+        hetzner-token: ${{ secrets.HCLOUD_TOKEN }}
+        server-name: ${{ needs.create-runner.outputs.server-name }}
