@@ -40,16 +40,6 @@
         })
 
         (_final: prev: {
-          lazyjj = prev.lazyjj.overrideAttrs (oa: {
-            patches =
-              (oa.patches or [])
-              ++ [
-                ../files/lazyjj-61.patch
-              ];
-          });
-        })
-
-        (_final: prev: {
           inherit inputs;
           google-cloud-sdk-gke = prev.google-cloud-sdk.withExtraComponents [
             prev.google-cloud-sdk.components.gke-gcloud-auth-plugin
