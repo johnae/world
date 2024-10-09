@@ -19,6 +19,8 @@
         forwardAgent = false;
         extraOptions = {
           preferredAuthentications = "publickey";
+          controlMaster = "no";
+          controlPath = "none";
         };
       };
     };
