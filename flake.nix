@@ -67,7 +67,7 @@
     home-manager.url = "github:nix-community/home-manager";
     impermanence.url = "github:nix-community/impermanence";
     juicefs-csi-driver.flake = false;
-    juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.24.7/deploy/k8s.yaml"; # gh-release-update
+    juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.25.0/deploy/k8s.yaml"; # gh-release-update
     jujutsu.url = "github:martinvonz/jj";
     jujutsu.inputs.flake-utils.follows = "flake-utils";
     jujutsu.inputs.rust-overlay.follows = "rust-overlay";
