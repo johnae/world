@@ -2,8 +2,8 @@ name: Hcloud Dev
 
 on:
   workflow_dispatch: {}
-  schedule:
-  - cron: '0 6  * * MON,TUE,WED,THU,FRI'
+  # schedule:
+  # - cron: '0 6  * * MON,TUE,WED,THU,FRI'
 
 jobs:
   create-runner:
