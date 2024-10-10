@@ -10,7 +10,7 @@
   ];
 
   boot.kernel.sysctl = {
-    "fs.inotify.max_user_watches" = 12288;
+    "fs.inotify.max_user_watches" = 65536;
   };
 
   hardware.graphics.enable = true;
