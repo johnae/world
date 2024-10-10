@@ -31,7 +31,7 @@
             side-w (- (- args.width (* gaps 3)) main-w)
             main-h (- args.height (* gaps 2))]
         (table.insert retval [gaps gaps main-w main-h])
-        (table.insert retval [(+ main-w (* gaps 2)) gaps main-w main-h]))
+        (table.insert retval [(+ main-w (* gaps 2)) gaps side-w main-h]))
     _ (let [main-w (* (- args.width (* gaps 3)) main-ratio)
             side-w (- (- args.width (* gaps 3)) main-w)
             main-h (- args.height (* gaps 2))]
