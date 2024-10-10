@@ -52,6 +52,7 @@ in {
     nixd
     nix-index
     scripts
+    tdf
   ];
 
   xdg.enable = true;
