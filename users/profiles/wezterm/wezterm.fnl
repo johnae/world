@@ -357,7 +357,8 @@
                          {:Foreground {:Color active-fg-color}}
                          {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
                                     " ")}
-                         {:Background {:Color inactive-bg-color}}
+                         {:Background {:Color (if last local-term-color
+                                                  inactive-bg-color)}}
                          {:Foreground {:Color active-bg-color}}
                          {:Text solid-right-arrow}]
                         [{:Background {:Color active-bg-color}}
