@@ -4,7 +4,7 @@
 (local config (wezterm.config_builder))
 
 (local dev-remote _G.dev_remote)
-(local project-dir :/home/john/Development)
+(local project-dir (.. wezterm.home_dir :/Development))
 (local project-dirname (string.gsub project-dir "(.*/)(.*)" "%2"))
 (local project-dir-find-cmd
        (wezterm.shell_split (.. "fd '(\\.git|\\.jj)$' " project-dir
@@ -68,6 +68,13 @@
   (let [domain (pane:get_domain_name)
         cwd (pane:get_current_working_dir)]
     (mux.spawn_window {:domain {:DomainName domain} :cwd cwd.file_path})))
+
+(lambda spawn-project-tab [window pane]
+  "Spawn a new tab in the current project/workspace and domain"
+  (let [domain (pane:get_domain_name)
+        cwd (pane:get_current_working_dir)]
+    (-> (window:mux_window)
+        (: :spawn_tab {:domain {:DomainName domain} :cwd cwd.file_path}))))
 
 (lambda unique [list]
   (let [unique-items {}]
@@ -160,9 +167,15 @@
                     (tab pane window) (mux.spawn_window {:domain {:DomainName domain}
                                                          :workspace name
                                                          :cwd directory
-                                                         : args})]
+                                                         : args})
+                    (tab2 pane2 window2) (-> (tab:window)
+                                             (: :spawn_tab
+                                                {:domain {:DomainName domain}
+                                                 :cwd directory
+                                                 :args (command-for {:name :term})}))]
                 (do
                   (tab:set_title :main)
+                  (tab2:set_title :tools)
                   (wezterm.time.call_after 0.5
                                            (fn []
                                              (print "args: " args)
@@ -203,7 +216,9 @@
   (let [name (window:active_workspace)
         directory (pane:get_current_working_dir)]
     (do
-      (window:perform_action (act.CloseCurrentTab {:confirm false}) pane)
+      (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
+        (window:perform_action (act.CloseCurrentTab {:confirm false})
+                               (window:active_pane))) ; (window:perform_action (act.CloseCurrentTab {:confirm false}) pane)
       (let [window (. (wezterm.gui.gui_windows) 1)
             pane (window:active_pane)]
         (setup-project-workspace window pane name directory.file_path)))))
@@ -307,6 +322,7 @@
 
 (wezterm.on :FindProject open-select-project-window)
 (wezterm.on :NewProjectWindow spawn-project-window)
+(wezterm.on :NewProjectTab spawn-project-tab)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; tab bar styling ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -321,6 +337,58 @@
 (local local-term-color "#22336e")
 
 (local text-fg "#c0c0c0")
+
+(wezterm.on :format-tab-title
+            (lambda [tab tabs panes config hover max_width]
+              (let [title (or tab.tab_title tab.active_pane.title)
+                    first (= tab.tab_index 0)
+                    last (= tab.tab_index (- (length tabs) 1))
+                    tab-bg (if first local-term-color local-term-color)
+                    active-bg-color "#51576d"
+                    inactive-bg-color "#0b0022"
+                    active-fg-color "#a9a6ac"
+                    inactive-fg-color "#66646c"]
+                (if tab.is_active
+                    (if first
+                        [{:Background {:Color active-bg-color}}
+                         {:Foreground {:Color active-bg-color}}
+                         {:Text " "}
+                         {:Background {:Color active-bg-color}}
+                         {:Foreground {:Color active-fg-color}}
+                         {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
+                                    " ")}
+                         {:Background {:Color inactive-bg-color}}
+                         {:Foreground {:Color active-bg-color}}
+                         {:Text solid-right-arrow}]
+                        [{:Background {:Color active-bg-color}}
+                         {:Foreground {:Color inactive-bg-color}}
+                         {:Text solid-right-arrow}
+                         {:Background {:Color active-bg-color}}
+                         {:Foreground {:Color active-fg-color}}
+                         {:Text (.. " " (tostring (+ tab.tab_index 1)) ": "
+                                    title " ")}
+                         {:Background {:Color (if last local-term-color
+                                                  inactive-bg-color)}}
+                         {:Foreground {:Color active-bg-color}}
+                         {:Text solid-right-arrow}])
+                    (if first
+                        [{:Background {:Color inactive-bg-color}}
+                         {:Foreground {:Color inactive-bg-color}}
+                         {:Text " "}
+                         {:Background {:Color inactive-bg-color}}
+                         {:Foreground {:Color inactive-fg-color}}
+                         {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
+                                    " ")}]
+                        [{:Background {:Color inactive-bg-color}}
+                         {:Foreground {:Color inactive-bg-color}}
+                         {:Text " "}
+                         {:Background {:Color inactive-bg-color}}
+                         {:Foreground {:Color inactive-fg-color}}
+                         {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
+                                    " ")}
+                         {:Background {:Color local-term-color}}
+                         {:Foreground {:Color inactive-bg-color}}
+                         {:Text solid-right-arrow}])))))
 
 (wezterm.on :update-status
             (lambda [window pane]
@@ -378,7 +446,7 @@
 (set config.enable_tab_bar true)
 (set config.use_fancy_tab_bar false)
 (set config.tab_max_width 64)
-(set config.show_tabs_in_tab_bar false)
+(set config.show_tabs_in_tab_bar true)
 (set config.show_new_tab_button_in_tab_bar false)
 (set config.tab_bar_at_bottom true)
 (set config.hide_tab_bar_if_only_one_tab false)
@@ -386,6 +454,11 @@
 (set config.font_size 14)
 (set config.color_scheme "Nord (Gogh)")
 (set config.window_background_opacity 0.91)
+(wezterm.add_to_config_reload_watch_list (.. project-dir
+                                             :/world/users/profiles/wezterm/wezterm.fnl))
+
+(wezterm.add_to_config_reload_watch_list (.. wezterm.home_dir
+                                             :/.config/wezterm/wezterm.fnl.lua))
 
 (set config.leader {:key :Space :mods :CTRL})
 (set config.keys
@@ -398,6 +471,7 @@
       {:key :e :mods :CTRL :action (act.EmitEvent :ToggleMaximizeEditor)}
       {:key :m :mods :CTRL :action (act.EmitEvent :ActivateMainUI)}
       {:key :n :mods :LEADER :action (act.EmitEvent :NewProjectWindow)}
+      {:key :t :mods :LEADER :action (act.EmitEvent :NewProjectTab)}
       {:key :r :mods :LEADER :action (act.EmitEvent :ReloadFixup)}
       {:key :w :mods :CTRL|SHIFT :action (act.EmitEvent :ReloadWorkspace)}
       {:key :q :mods :LEADER :action (act.CloseCurrentPane {:confirm true})}
@@ -417,6 +491,12 @@
       {:key :f
        :mods :LEADER
        :action (act.ShowLauncherArgs {:flags :FUZZY|WORKSPACES})}])
+
+(for [i 1 9]
+  (table.insert config.keys
+                {:key (tostring i)
+                 :mods :CTRL
+                 :action (act.ActivateTab (- i 1))}))
 
 (set config.unix_domains [{:name :local-dev}])
 (set config.ssh_domains [{:name :remote-dev
