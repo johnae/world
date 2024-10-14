@@ -47,6 +47,11 @@
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_ed25519_alt";
     };
+    id_ed25519_bbph = {
+      file = ../../secrets/id_ed25519_bbph.age;
+      owner = "${toString adminUser.uid}";
+      path = "/home/${adminUser.name}/.ssh/id_ed25519_bbph";
+    };
     id_rsa_alt = {
       file = ../../secrets/id_rsa_alt.age;
       owner = "${toString adminUser.uid}";
@@ -136,6 +141,11 @@
     users.${adminUser.name} = {
       imports = [../../users/profiles/workstation.nix];
       programs.git.extraConfig.user.signingKey = config.age.secrets.id_ed25519_alt.path;
+      programs.jujutsu.settings.signing = {
+        sign-all = true;
+        backend = "ssh";
+        key = config.age.secrets.id_ed25519_alt.path;
+      };
     };
   };
 }
