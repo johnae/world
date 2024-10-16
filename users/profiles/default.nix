@@ -11,7 +11,6 @@ in {
     ./gitui.nix
     ./helix.nix
     ./jujutsu.nix
-    ./kitty.nix
     ./kubie.nix
     ./nushell/default.nix
     ./rbw.nix
