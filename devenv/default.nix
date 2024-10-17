@@ -129,6 +129,7 @@ in {
     agenix
     age-plugin-yubikey
     alejandra
+    bash-language-server
     fennel
     fennel-ls
     fnlfmt
