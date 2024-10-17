@@ -6,15 +6,15 @@
       lib
       writeShellApplication
       buildEnv
+      dotool
       fd
       fire
+      fuzzel
       hostname
       pass
       rbw
       rofi-wayland
-      fuzzel
       skim
-      wtype
       wpa_supplicant
       ;
 
@@ -116,7 +116,7 @@
 
     rofi-rbw = writeShellApplication {
       name = "rofi-rbw";
-      runtimeInputs = [rofi-wayland rbw wtype];
+      runtimeInputs = [rofi-wayland rbw dotool];
       text = ''
         passonly=''${passonly:-}
         selection="$(rbw list --fields name,user | \
@@ -128,16 +128,16 @@
         pass="$(rbw get "$entry" "$login")"
 
         if [ -z "$passonly" ]; then
-          echo -en "$login\t$pass" | wtype -
+          echo -en "type $login\t$pass" | dotool
         else
-          echo -n "$pass" | wtype -
+          echo -n "type $pass" | dotool
         fi
       '';
     };
 
     fuzzel-rbw = writeShellApplication {
       name = "fuzzel-rbw";
-      runtimeInputs = [fuzzel rbw wtype];
+      runtimeInputs = [fuzzel rbw dotool];
       text = ''
         passonly=''${passonly:-}
         selection="$(rbw list --fields name,user | \
@@ -149,9 +149,9 @@
         pass="$(rbw get "$entry" "$login")"
 
         if [ -z "$passonly" ]; then
-          echo -en "$login\t$pass" | wtype -
+          echo -en "type $login\t$pass" | dotool
         else
-          echo -n "$pass" | wtype -
+          echo -n "type $pass" | dotool
         fi
       '';
     };
