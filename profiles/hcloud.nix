@@ -107,29 +107,29 @@ in {
 
   system.stateVersion = "24.11";
 
-  environment.systemPackages = [
-    pkgs.binutils
-    pkgs.cacert
-    pkgs.curl
-    pkgs.fd
-    pkgs.file
-    pkgs.git
-    pkgs.iptables
-    pkgs.jq
-    pkgs.lsof
-    pkgs.bottom
-    pkgs.man-pages
-    pkgs.mkpasswd
-    pkgs.nmap
-    pkgs.openssl
-    pkgs.procs
-    pkgs.psmisc
-    pkgs.ripgrep
-    pkgs.sd
-    pkgs.tree
-    pkgs.unzip
-    pkgs.vim
-    pkgs.wget
-    pkgs.zip
+  environment.systemPackages = with pkgs; [
+    binutils
+    cacert
+    curl
+    fd
+    file
+    git
+    iptables
+    jq
+    lsof
+    bottom
+    man-pages
+    mkpasswd
+    nmap
+    openssl
+    procs
+    psmisc
+    ripgrep
+    sd
+    tree
+    unzip
+    vim
+    wget
+    zip
   ];
 }
