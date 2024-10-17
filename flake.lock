@@ -73,13 +73,13 @@
     "cloud-native-pg": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-DiqcwKl0nHySHarAFbijmG6YfPD7/Q7HIAzIUZyTwxE=",
+        "narHash": "sha256-DkcHRlvPZrLvaIt9SRNID07/IPyKb9rUTGNLaNC9LB8=",
         "type": "file",
-        "url": "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.0/cnpg-1.24.0.yaml"
+        "url": "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.1/cnpg-1.24.1.yaml"
       },
       "original": {
         "type": "file",
-        "url": "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.0/cnpg-1.24.0.yaml"
+        "url": "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.1/cnpg-1.24.1.yaml"
       }
     },
     "copilot-vim": {
@@ -152,11 +152,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1729009702,
-        "narHash": "sha256-JTJNAJAksDdt8+pmOlAvYAkrOZ6LcEDJnAMWJN4ZaP8=",
+        "lastModified": 1729087493,
+        "narHash": "sha256-O1nookxwO7PTEHAYccg1PlMzPuWzhbBLEifPypH+hlU=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "67004f395b11fc32a9805d5e7da0012306323859",
+        "rev": "d612b77ff73912cd82e58256ab5e84d5904abef7",
         "type": "github"
       },
       "original": {
@@ -172,11 +172,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1729010169,
-        "narHash": "sha256-AjgIlXcreagCs6ltT8mzI1UYEiYgfhlwe4Tl3taxQSU=",
+        "lastModified": 1729099656,
+        "narHash": "sha256-VftVIg7UXTy1bq+tzi1aVYOWl7PQ35IpjW88yMYjjpc=",
         "owner": "nix-community",
         "repo": "disko",
-        "rev": "9ab6ae4e632016caac1c7e82e15b12b8c672ed76",
+        "rev": "d7d57edb72e54891fa67a6f058a46b2bb405663b",
         "type": "github"
       },
       "original": {
@@ -428,11 +428,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1729011239,
-        "narHash": "sha256-Rpb4ZEiJutUe3Y49jYTm+Mo205bR03bZs0CDnsWqx4s=",
+        "lastModified": 1729068734,
+        "narHash": "sha256-JOqmdtcdQohQL1qvTDrVJvd+nkydRm+Lyf3qVF5iQ5E=",
         "owner": "helix-editor",
         "repo": "helix",
-        "rev": "f2d54db24f8582a302fc21e64ed82be5d99a9aaa",
+        "rev": "d1b8129491124ce6068e95ccc58a7fefb1c9db45",
         "type": "github"
       },
       "original": {
@@ -475,11 +475,11 @@
     },
     "impermanence": {
       "locked": {
-        "lastModified": 1729064351,
-        "narHash": "sha256-bINxHw0Z8oVRf9W6t1neJvNp9A5KP5Z1kgbtMKJJ1RU=",
+        "lastModified": 1729068498,
+        "narHash": "sha256-C2sGRJl1EmBq0nO98TNd4cbUy20ABSgnHWXLIJQWRFA=",
         "owner": "nix-community",
         "repo": "impermanence",
-        "rev": "dff77f78e2a969b559b1b1814f00e3779037f339",
+        "rev": "e337457502571b23e449bf42153d7faa10c0a562",
         "type": "github"
       },
       "original": {
@@ -513,11 +513,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1729060151,
-        "narHash": "sha256-APrUyPmqeSxDq1U79Bcoa1fiVHzk7ZHUVDR/nIfkODE=",
+        "lastModified": 1729116545,
+        "narHash": "sha256-+OzVGzuYcyjLO8oQQX9EmbBOwaXO3Lz+TaiLl8BMg80=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "b795bf95625e60469debde02733e26d62e4142a3",
+        "rev": "33f9b893504ffd263da229efa03ffa67b6c57575",
         "type": "github"
       },
       "original": {
@@ -889,11 +889,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1729065447,
-        "narHash": "sha256-eKHJ8HDRwtaRddjotXtPQKgrbD2OlZFHUwyaQzms118=",
+        "lastModified": 1729122308,
+        "narHash": "sha256-fTX/MKPAbySZfz1Q7H1bL5ZJSUsbTP5bYUrTlYJ4vo8=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "d11ee7b2034fc7b0c3139853de9ffec289a16817",
+        "rev": "4286457de873ab04f746921c2205b5044e5c713a",
         "type": "github"
       },
       "original": {
@@ -993,11 +993,11 @@
         "nixpkgs-stable": "nixpkgs-stable_2"
       },
       "locked": {
-        "lastModified": 1728778939,
-        "narHash": "sha256-WybK5E3hpGxtCYtBwpRj1E9JoiVxe+8kX83snTNaFHE=",
+        "lastModified": 1729104314,
+        "narHash": "sha256-pZRZsq5oCdJt3upZIU4aslS9XwFJ+/nVtALHIciX/BI=",
         "owner": "cachix",
         "repo": "pre-commit-hooks.nix",
-        "rev": "ff68f91754be6f3427e4986d7949e6273659be1d",
+        "rev": "3c3e88f0f544d6bb54329832616af7eb971b6be6",
         "type": "github"
       },
       "original": {
