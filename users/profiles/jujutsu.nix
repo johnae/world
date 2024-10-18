@@ -9,7 +9,6 @@ in {
   programs.jujutsu = {
     enable = true;
     ediff = false;
-    package = pkgs.jujutsu-latest;
     settings = {
       user = {
         inherit (userinfo) email;
