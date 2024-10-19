@@ -13,6 +13,8 @@
     devices = ["/dev/mapper/encrypted_root" "/dev/mapper/encrypted_root1"];
   };
 
+  boot.initrd.luks.devices.cryptkey.keyFile = "/dev/disk/by-partlabel/alt_cryptkey";
+
   imports = [
     ../../profiles/acme.nix
     ../../profiles/admin-user/home-manager.nix
