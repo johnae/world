@@ -92,6 +92,25 @@
     ];
   };
 
+  systemd.services.stop-services-before-bootstrapping = {
+    description = "Stop services before bootstrapping";
+    enable = true;
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = "yes";
+    };
+    unitConfig.ConditionPathExists = "!/run/stop-services-before-bootstrapping";
+    script = ''
+      touch /run/stop-services-before-bootstrapping
+      systemctl stop acme-bw.9000.dev.timer || true
+      systemctl stop acme-bw.9000.dev.service || true
+      systemctl stop restic-backups-remote.timer || true
+      systemctl stop vaultwarden || true
+    '';
+    before = ["acme-bw.9000.dev.timer" "acme-bw.9000.dev.service" "restic-backups-remote.timer" "vaultwarden.service" "bootstrap.service"];
+    wantedBy = ["multi-user.target"];
+  };
+
   systemd.services.bootstrap = {
     description = "Bootstrap machine on first boot";
     environment = {
