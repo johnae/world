@@ -1,5 +1,7 @@
 {
   adminUser,
+  config,
+  pkgs,
   hostName,
   ...
 }: {
@@ -89,7 +91,56 @@
     ];
   };
 
+  systemd.services.bootstrap = {
+    description = "Bootstrap machine on first boot";
+    environment = {
+      RESTIC_PASSWORD_FILE = config.services.restic.backups.remote.passwordFile;
+      RESTIC_REPOSITORY = config.services.restic.backups.remote.repository;
+      XDG_CACHE_HOME = "/root/.cache";
+      HOME = "/root";
+    };
+    enable = true;
+    unitConfig.ConditionPathExists = "!/run/bootstrapped";
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = "yes";
+      EnvironmentFile = [
+        config.services.restic.backups.remote.environmentFile
+        config.age.secrets.cloudflare-env.path
+      ];
+    };
+    script = ''
+      touch /run/bootstrapped
+      systemctl stop acme-bw.9000.dev.timer || true
+      systemctl stop acme-bw.9000.dev.service || true
+      systemctl stop restic-backups-remote.timer || true
+      systemctl stop vaultwarden || true
+      mkdir -p /root/.cache
+      rm -rf /var/lib/vaultwarden/*
+
+      ${pkgs.restic}/bin/restic restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName} || true
+      ${pkgs.restic}/bin/restic restore latest:/var/lib/acme --target /var/lib/acme --host ${hostName} || true
+      chown acme:acme /var/lib/acme
+      chown -R acme:nginx /var/lib/acme/*
+
+      systemctl start restic-backups-remote.timer
+      systemctl start acme-bw.9000.dev.timer
+      systemctl restart vaultwarden
+      systemctl restart nginx
+
+      RECORD_ID="$(${pkgs.flarectl}/bin/flarectl --json dns list --zone 9000.dev | ${pkgs.jq}/bin/jq -r '.[] | select(.Name == "bw.9000.dev") | .ID')"
+      TS_IP="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Self.TailscaleIPs[0]')"
+      echo "Map bw.9000.dev ($RECORD_ID) to $TS_IP"
+      ${pkgs.flarectl}/bin/flarectl --json dns update --zone 9000.dev --id "$RECORD_ID" --type A --ttl 60 --content "$TS_IP"
+    '';
+    after = ["network-online.target" "tailscale-auth.service" "stop-services-before-bootstrapping.service"];
+    requires = ["network-online.target" "tailscale-auth.service" "stop-services-before-bootstrapping.service"];
+    wantedBy = ["multi-user.target"];
+  };
+
   age.secrets = {
+    cloudflare-env.file = ../../secrets/cloudflare-env.age;
+    vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
     syncthing-cert = {
       file = ../../secrets/${hostName}/syncthing-cert.age;
       owner = "${toString adminUser.uid}";
@@ -101,6 +152,61 @@
     ts-google-9k = {
       file = ../../secrets/ts-google-9k.age;
       owner = "${toString adminUser.uid}";
+    };
+  };
+
+  security.acme.certs = {
+    "bw.9000.dev" = {
+      group = "nginx";
+    };
+  };
+
+  services.vaultwarden = {
+    enable = true;
+    environmentFile = config.age.secrets.vaultwarden-env.path;
+    backupDir = "/var/lib/vw-backup";
+
+    config = {
+      DOMAIN = "https://bw.9000.dev";
+      SIGNUPS_ALLOWED = "false";
+      PASSWORD_HINTS_ALLOWED = "false";
+      ROCKET_ADDRESS = "127.0.0.1";
+      ROCKET_PORT = 8222;
+      PASSWORD_ITERATIONS = 600000;
+    };
+  };
+
+  services.nginx = {
+    enable = true;
+    recommendedTlsSettings = true;
+    recommendedProxySettings = true;
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    clientMaxBodySize = "300m";
+    virtualHosts = {
+      "bw.9000.dev" = {
+        useACMEHost = "bw.9000.dev";
+        locations."/".proxyPass = "http://localhost:8222";
+        locations."/".proxyWebsockets = true;
+        forceSSL = true;
+      };
+    };
+  };
+
+  services.restic = {
+    backups = {
+      remote = {
+        pruneOpts = [
+          "--keep-daily 10"
+          "--keep-weekly 7"
+          "--keep-monthly 12"
+          "--keep-yearly 75"
+        ];
+        paths = [
+          "/var/lib/vw-backup"
+          "/var/lib/acme"
+        ];
+      };
     };
   };
 
