@@ -14,7 +14,6 @@
   };
 
   boot.initrd.luks.devices.cryptkey.keyFile = "/dev/disk/by-partlabel/alt_cryptkey";
-  boot.initrd.luks.devices.cryptkey.keyFileTimeout = 30;
 
   imports = [
     ../../profiles/acme.nix
