@@ -102,9 +102,9 @@
       Type = "oneshot";
       RemainAfterExit = "yes";
     };
-    unitConfig.ConditionPathExists = "!/run/stop-services-before-bootstrapping";
+    unitConfig.ConditionPathExists = "!/keep/stop-services-before-bootstrapping";
     script = ''
-      touch /run/stop-services-before-bootstrapping
+      touch /keep/stop-services-before-bootstrapping
       systemctl stop acme-bw.9000.dev.timer || true
       systemctl stop acme-bw.9000.dev.service || true
       systemctl stop restic-backups-remote.timer || true
@@ -123,7 +123,7 @@
       HOME = "/root";
     };
     enable = true;
-    unitConfig.ConditionPathExists = "!/run/bootstrapped";
+    unitConfig.ConditionPathExists = "!/keep/bootstrapped";
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = "yes";
@@ -133,7 +133,7 @@
       ];
     };
     script = ''
-      touch /run/bootstrapped
+      touch /keep/bootstrapped
       systemctl stop acme-bw.9000.dev.timer || true
       systemctl stop acme-bw.9000.dev.service || true
       systemctl stop restic-backups-remote.timer || true
