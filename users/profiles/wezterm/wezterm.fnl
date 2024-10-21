@@ -184,8 +184,21 @@
                                                  :cwd directory
                                                  :args (command-for {:name :term})}))]
                 (do
-                  (tab:set_title :main)
-                  (tab2:set_title :tools)
+                  ; (tab:set_title :main) ; (tab2:set_title :tools) ; workaround for https://github.com/wez/wezterm/issues/5849
+                  (run-child-process window pane
+                                     [:wezterm
+                                      :cli
+                                      :set-tab-title
+                                      :--tab-id
+                                      (tab:tab_id)
+                                      :main])
+                  (run-child-process window pane
+                                     [:wezterm
+                                      :cli
+                                      :set-tab-title
+                                      :--tab-id
+                                      (tab2:tab_id)
+                                      :tools])
                   (wezterm.time.call_after 0.5
                                            (fn []
                                              (print "args: " args)
