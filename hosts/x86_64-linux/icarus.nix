@@ -109,15 +109,59 @@
     args.auth-key = "file:/var/run/agenix/ts-google-9k";
   };
 
-  networking = {
-    defaultGateway = "192.168.20.1";
-    firewall.trustedInterfaces = ["tailscale0"];
-    interfaces.eth0.ipv4.addresses = [
-      {
-        address = "192.168.20.143";
-        prefixLength = 24;
-      }
-    ];
+  # microvm.autostart = [
+  #   "agent-8be5-ac2e"
+  #   "agent-8be5-9792"
+  #   "agent-8be5-c91d"
+  #   "master-8be5-f2ba"
+  # ];
+
+  networking.useDHCP = false;
+  networking.nat = {
+    enable = true;
+    enableIPv6 = true;
+    internalInterfaces = ["microvm"];
+  };
+  networking.firewall.trustedInterfaces = ["tailscale0" "microvm"];
+
+  systemd.network = {
+    enable = true;
+    netdevs = {
+      "10-microvm".netdevConfig = {
+        Kind = "bridge";
+        Name = "microvm";
+      };
+    };
+    networks = {
+      "10-wan" = {
+        ## udevadm test-builtin net_id /sys/class/net/eth0
+        ## https://www.freedesktop.org/software/systemd/man/latest/systemd.net-naming-scheme.html
+        matchConfig.Name = ["enp*"];
+        address = [
+          "192.168.20.143/24"
+        ];
+        routes = [
+          {routeConfig.Gateway = "192.168.20.1";}
+        ];
+        linkConfig.RequiredForOnline = "routable";
+      };
+      "10-microvm" = {
+        matchConfig.Name = "microvm";
+        networkConfig = {
+          DHCPServer = true;
+          IPv6SendRA = true;
+        };
+        addresses = [
+          {
+            Address = "10.100.1.1/24";
+          }
+        ];
+      };
+      "11-microvm" = {
+        matchConfig.Name = "vm-*";
+        networkConfig.Bridge = "microvm";
+      };
+    };
   };
 
   systemd.services.stop-services-before-bootstrapping = {
