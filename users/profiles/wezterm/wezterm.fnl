@@ -6,9 +6,17 @@
 (local dev-remote _G.dev_remote)
 (local project-dir (.. wezterm.home_dir :/Development))
 (local project-dirname (string.gsub project-dir "(.*/)(.*)" "%2"))
-(local project-dir-find-cmd
-       (wezterm.shell_split (.. "fd '(\\.git|\\.jj)$' " project-dir
-                                " -d 3 -H -t d -x echo {//}")))
+(local project-dir-find-cmd [:fd
+                             "'(\\.git|\\.jj)$'"
+                             project-dir
+                             :-d
+                             :3
+                             :-H
+                             :-t
+                             :d
+                             :-x
+                             :echo
+                             "{//}"])
 
 (lambda table-concat [t1 t2]
   "Concatenate two tables"
@@ -57,9 +65,11 @@
   (let [domain (pane:get_domain_name)
         args (accumulate [a args _ d (pairs config.ssh_domains)
                           &until (= :ssh (. a 1))]
-               (if (= d domain)
+               (if (= d.name domain)
                    [:ssh (.. d.username "@" d.remote_address) (table.unpack a)]
                    a))
+        args (if (= (. args 1) :ssh) args
+                 (icollect [_ a (ipairs args)] (. (wezterm.shell_split a) 1)))
         (status out err) (wezterm.run_child_process args)]
     (values status out err)))
 
@@ -343,7 +353,7 @@
               (let [title (or tab.tab_title tab.active_pane.title)
                     first (= tab.tab_index 0)
                     last (= tab.tab_index (- (length tabs) 1))
-                    tab-bg (if first local-term-color local-term-color)
+                    tab-bg config.colors.tab_bar.background
                     active-bg-color "#51576d"
                     inactive-bg-color "#0b0022"
                     active-fg-color "#a9a6ac"
@@ -357,8 +367,7 @@
                          {:Foreground {:Color active-fg-color}}
                          {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
                                     " ")}
-                         {:Background {:Color (if last local-term-color
-                                                  inactive-bg-color)}}
+                         {:Background {:Color (if last tab-bg inactive-bg-color)}}
                          {:Foreground {:Color active-bg-color}}
                          {:Text solid-right-arrow}]
                         [{:Background {:Color active-bg-color}}
@@ -368,8 +377,7 @@
                          {:Foreground {:Color active-fg-color}}
                          {:Text (.. " " (tostring (+ tab.tab_index 1)) ": "
                                     title " ")}
-                         {:Background {:Color (if last local-term-color
-                                                  inactive-bg-color)}}
+                         {:Background {:Color (if last tab-bg inactive-bg-color)}}
                          {:Foreground {:Color active-bg-color}}
                          {:Text solid-right-arrow}])
                     (if first
@@ -387,8 +395,7 @@
                          {:Foreground {:Color inactive-fg-color}}
                          {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
                                     " ")}
-                         {:Background {:Color (if last local-term-color
-                                                  inactive-bg-color)}}
+                         {:Background {:Color (if last tab-bg inactive-bg-color)}}
                          {:Foreground {:Color inactive-bg-color}}
                          {:Text solid-right-arrow}])))))
 
