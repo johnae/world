@@ -80,7 +80,7 @@
           fullName = "John Axel Eriksson";
           githubUser = "johnae";
           gitlabUser = "johnae";
-          devRemote = "hcloud-dev";
+          devRemote = "icarus";
         };
       };
     in {
