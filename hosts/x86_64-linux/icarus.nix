@@ -40,8 +40,33 @@
     enableSentinel = false; ## not running kubernetes here
   };
 
-  ## for tailscale exit node functionality
-  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+  boot.kernel = {
+    ## for tailscale exit node functionality
+    sysctl."net.ipv4.ip_forward" = 1;
+
+    # Reboot this many seconds after panic
+    sysctl."kernel.panic" = 20;
+
+    # Panic if the kernel detects an I/O channel
+    # check (IOCHK). 0=no | 1=yes
+    sysctl."kernel.panic_on_io_nmi" = 1;
+
+    # Panic if a hung task was found. 0=no, 1=yes
+    sysctl."kernel.hung_task_panic" = 1;
+
+    # Setup timeout for hung task,
+    # in seconds (suggested 300)
+    sysctl."kernel.hung_task_timeout_secs" = 300;
+
+    # Panic on out of memory.
+    # 0=no | 1=usually | 2=always
+    sysctl."vm.panic_on_oom" = 1;
+
+    # Panic when the kernel detects an NMI
+    # that usually indicates an uncorrectable
+    # parity or ECC memory error. 0=no | 1=yes
+    sysctl."kernel.panic_on_unrecovered_nmi" = 1;
+  };
 
   boot.kernelParams = [
     "ip=192.168.20.143::192.168.20.1:255.255.255.0:${hostName}:eth0:none"
