@@ -64,18 +64,27 @@
   xcursor_theme = config.gtk.cursorTheme.name;
   terminal-bin = "${pkgs.wezterm}/bin/wezterm start --always-new-process";
 
-  _dev-env = {name}:
+  _dev-env = {
+    name,
+    domain ? null,
+  }:
     pkgs.writeShellApplication {
       inherit name;
       runtimeInputs = with pkgs; [wezterm];
-      text = ''
-        exec wezterm start --class ${name} --always-new-process
-      '';
+      text =
+        if domain == null
+        then ''
+          exec wezterm start --class ${name} --always-new-process
+        ''
+        else ''
+          exec wezterm start --class ${name} --domain ${name} --always-new-process --attach
+        '';
     };
 
   dev-env = {
     name,
     tag,
+    domain ? null,
   }:
     pkgs.writeShellApplication {
       inherit name;
@@ -83,7 +92,7 @@
       text = ''
         if ! lswt -j | jq -e '.toplevels[] | select(."app-id" == "${name}")' > /dev/null; then
           # shellcheck disable=SC2093,SC2016
-          riverctl spawn '${_dev-env {inherit name;}}/bin/${name}'
+          riverctl spawn '${_dev-env {inherit name domain;}}/bin/${name}'
         fi
         exec riverctl set-focused-tags ${toString tag}
       '';
@@ -93,9 +102,11 @@
     name = "local-dev";
     tag = 128;
   };
+
   remote-dev = dev-env {
     name = "remote-dev";
     tag = 256;
+    domain = "remote-dev";
   };
 
   river-menu = pkgs.writeShellApplication {
