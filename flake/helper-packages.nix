@@ -15,6 +15,7 @@
       rbw
       rofi-wayland
       skim
+      util-linux
       wpa_supplicant
       ;
 
@@ -47,22 +48,12 @@
 
     rbw-atomic-unlock = writeShellApplication {
       name = "rbw-atomic-unlock";
-      runtimeInputs = [rbw];
+      runtimeInputs = [rbw util-linux];
       text = ''
-        rbw_lock=/tmp/lock.rbw.lock
-        rbw_pid_lock="/tmp/lock.$$.tmp"
-        trap 'rm -f $rbw_lock $rbw_pid_lock' EXIT
-        if ! rbw unlocked 2>/dev/null; then
-          touch "$rbw_pid_lock"
-          if ln "$rbw_pid_lock" "$rbw_lock" 2>/dev/null; then
-              rbw unlock
-              rm -f "$rbw_lock"
-          else
-              while ! rbw unlocked 2>/dev/null; do
-                sleep 0.2
-              done
-          fi
-        fi
+        rbw_lock="/tmp/rbw-unlock.lock"
+        exec 200>"$rbw_lock"
+        flock -w 15 200
+        rbw unlocked || rbw unlock
       '';
     };
 
