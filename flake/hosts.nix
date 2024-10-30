@@ -92,6 +92,7 @@
             hostName = name;
             tailnet = "tail68e9c";
             inherit adminUser;
+            inherit self;
             hostConfigurations =
               mapAttrs' (name: conf: {
                 inherit name;
