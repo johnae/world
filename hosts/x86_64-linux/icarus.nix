@@ -3,6 +3,7 @@
   config,
   pkgs,
   hostName,
+  self,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHaa82NwBC+ty4Wyeuf5kdava7huSYF6k0NYF2ahwayW";
@@ -115,6 +116,22 @@
   #   "agent-8be5-c91d"
   #   "master-8be5-f2ba"
   # ];
+
+  microvm = let
+    vms = [
+      "playground"
+    ];
+  in {
+    vms = builtins.listToAttrs (map (name: {
+        inherit name;
+        value = {
+          flake = self;
+          updateFlake = "github:johnae/world";
+        };
+      })
+      vms);
+    autostart = vms;
+  };
 
   networking.useDHCP = false;
   networking.nat = {
@@ -244,6 +261,11 @@
     ts-google-9k = {
       file = ../../secrets/ts-google-9k.age;
       owner = "${toString adminUser.uid}";
+    };
+    ssh_host_microvm_ed25519_key = {
+      file = ../../secrets/ssh_host_microvm_ed25519_key.age;
+      path = "/var/lib/microvm-secrets/ssh_host_ed25519_key";
+      symlink = false;
     };
   };
 
