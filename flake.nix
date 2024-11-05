@@ -67,7 +67,7 @@
     home-manager.url = "github:nix-community/home-manager";
     impermanence.url = "github:nix-community/impermanence";
     juicefs-csi-driver.flake = false;
-    juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.25.0/deploy/k8s.yaml"; # gh-release-update
+    juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.25.2/deploy/k8s.yaml"; # gh-release-update
     kured.flake = false;
     kured.url = "github:kubereboot/kured";
     lsp-ai-bin.flake = false;
