@@ -183,6 +183,25 @@
         "type": "github"
       }
     },
+    "emacs-overlay": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2",
+        "nixpkgs-stable": "nixpkgs-stable_2"
+      },
+      "locked": {
+        "lastModified": 1731057136,
+        "narHash": "sha256-/E0UgOD6LnDfJPqCwqa1WVEgwDQ6NXXH+Wq89cMUris=",
+        "owner": "nix-community",
+        "repo": "emacs-overlay",
+        "rev": "2313c4189eaef014d01fb260313f58554ddb5e31",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "emacs-overlay",
+        "type": "github"
+      }
+    },
     "fenix": {
       "inputs": {
         "nixpkgs": [
@@ -839,6 +858,42 @@
       "locked": {
         "lastModified": 1730741070,
         "narHash": "sha256-edm8WG19kWozJ/GqyYx2VjW99EdhjKwbY3ZwdlPAAlo=",
+        "lastModified": 1730883749,
+        "narHash": "sha256-mwrFF0vElHJP8X3pFCByJR365Q2463ATp2qGIrDUdlE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "dba414932936fde69f0606b4f1d87c5bc0003ede",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-stable_3": {
+      "locked": {
+        "lastModified": 1720386169,
+        "narHash": "sha256-NGKVY4PjzwAa4upkGtAMz1npHGoRzWotlSnVlqI40mo=",
+         "lastModified": 1730883749,
+         "narHash": "sha256-mwrFF0vElHJP8X3pFCByJR365Q2463ATp2qGIrDUdlE=",
+         "owner": "NixOS",
+         "repo": "nixpkgs",
+         "rev": "dba414932936fde69f0606b4f1d87c5bc0003ede",
+         "type": "github"
+       },
+       "original": {
+         "owner": "NixOS",
+         "ref": "nixos-24.05",
+         "repo": "nixpkgs",
+         "type": "github"
+       }
+     },
+     "nixpkgs-stable_3": {
+       "locked": {
+         "lastModified": 1720386169,
+         "narHash": "sha256-NGKVY4PjzwAa4upkGtAMz1npHGoRzWotlSnVlqI40mo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "d063c1dd113c91ab27959ba540c0d9753409edf3",
@@ -853,6 +908,40 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1730785428,
+        "narHash": "sha256-Zwl8YgTVJTEum+L+0zVAWvXAGbWAuXHax3KzuejaDyo=",
+        "lastModified": 1730785428,
+        "narHash": "sha256-Zwl8YgTVJTEum+L+0zVAWvXAGbWAuXHax3KzuejaDyo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "4aa36568d413aca0ea84a1684d2d46f55dbabad7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1730531603,
+        "narHash": "sha256-Dqg6si5CqIzm87sp57j5nTaeBbWhHFaVyG7V6L8k3lY=",
+         "owner": "NixOS",
+         "repo": "nixpkgs",
+         "rev": "4aa36568d413aca0ea84a1684d2d46f55dbabad7",
+         "type": "github"
+       },
+       "original": {
+         "owner": "NixOS",
+         "ref": "nixos-unstable",
+         "repo": "nixpkgs",
+         "type": "github"
+       }
+     },
+     "nixpkgs_3": {
+       "locked": {
         "lastModified": 1730785428,
         "narHash": "sha256-Zwl8YgTVJTEum+L+0zVAWvXAGbWAuXHax3KzuejaDyo=",
         "owner": "NixOS",
@@ -934,7 +1023,7 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "nixpkgs-stable": "nixpkgs-stable_2"
+        "nixpkgs-stable": "nixpkgs-stable_3"
       },
       "locked": {
         "lastModified": 1730814269,
@@ -960,6 +1049,7 @@
         "crane": "crane",
         "devenv": "devenv",
         "disko": "disko",
+        "emacs-overlay": "emacs-overlay",
         "fenix": "fenix",
         "flake-compat": "flake-compat",
         "flake-parts": "flake-parts_2",
@@ -979,7 +1069,7 @@
         "nixos-generators": "nixos-generators",
         "nixos-hardware": "nixos-hardware",
         "nixos-images": "nixos-images",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "nur": "nur",
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks",

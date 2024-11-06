@@ -45,6 +45,7 @@
     devenv.url = "github:cachix/devenv";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
     fenix.url = "github:nix-community/fenix";
     flake-compat.flake = false;
