@@ -83,6 +83,19 @@
   :ensure t
   :mode "\\.nix\\'")
 
+(use-package java-mode)
+
+(use-package java-ts-mode)
+
+(use-package java-ts-mode)
+(use-package lsp-java
+  :ensure t)
+  ;; :init
+  ;; :config
+  ;; (add-hook 'java-mode-hook 'lsp)
+  ;; (add-hook 'java-ts-mode-hook 'lsp)
+  ;; (add-to-list 'lsp-language-id-configuration '(java-ts-mode . "java")))
+
 ;; Emacs ships with a lot of popular programming language modes. If it's not
 ;; built in, you're almost certain to find a mode for the language you're
 ;; looking for with a quick Internet search.

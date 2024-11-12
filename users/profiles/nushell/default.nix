@@ -6,6 +6,10 @@
 }: let
   inherit (config) home;
   nu-scripts = "${pkgs.nu_scripts}/share/nu_scripts";
+  configDir =
+    if pkgs.stdenv.isDarwin && !config.xdg.enable
+    then "Library/Application Support/nushell"
+    else "${config.xdg.configHome}/nushell";
 in {
   home.packages = [
     pkgs.jwt-cli ## see env.nu for impl
@@ -25,8 +29,15 @@ in {
     configFile.source = ./config.nu;
     envFile.source = ./env.nu;
     extraConfig = ''
-      source ~/.config/nushell/home.nu
-      source ~/.config/nushell/starship.nu
+      source "~/${configDir}/home.nu"
+      source "~/${configDir}/starship.nu"
+      ${
+        if pkgs.stdenv.isDarwin
+        then ''
+          $env.PATH = ($env.PATH | split row (char esep) | prepend '/opt/homebrew/bin')
+        ''
+        else ""
+      }
 
       $env.config.hooks.pre_prompt = [
        {
@@ -85,8 +96,8 @@ in {
       use ${nu-scripts}/custom-completions/yarn/yarn-v4-completions.nu
     '';
   };
-  xdg.configFile."nushell/starship.nu".source = ./starship.nu;
-  xdg.configFile."nushell/home.nu".source = pkgs.writeText "home.nu" ''
+  home.file."${configDir}/starship.nu".source = ./starship.nu;
+  home.file."${configDir}/home.nu".source = pkgs.writeText "home.nu" ''
     ${
       lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "$env.${name} = \"${value}\"") home.sessionVariables)
     }

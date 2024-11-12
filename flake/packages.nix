@@ -1,6 +1,7 @@
 {
   inputs,
   self,
+  stdenv,
   ...
 }: {
   perSystem = {
@@ -37,13 +38,45 @@
       )
       // locallyDefinedPackages
       // {
-        world = pkgs.writeShellApplication {
-          name = "world";
-          runtimeInputs = with pkgs; [just nushell statix deadnix];
-          text = ''
-            just -f ${../Justfile} -d "$(pwd)" "$@"
-          '';
-        };
+        world = let
+          upgrade =
+            if pkgs.stdenv.isDarwin
+            then ''
+              # upgrade the system using given flake ref
+              upgrade flake="github:johnae/world":
+                @rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
+                @darwin-rebuild switch --flake '{{flake}}'
+            ''
+            else ''
+              # upgrade the system using given flake ref
+              upgrade flake="github:johnae/world":
+                @rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
+                @nixos-rebuild boot --flake '{{flake}}' --use-remote-sudo -L
+                @if (echo initrd kernel kernel-modules | all { |it| (readlink $"/run/booted-system/($it)") != (readlink $"/nix/var/nix/profiles/system/($it)") }) { echo "The system must be rebooted for the changes to take effect" } else { nixos-rebuild switch --flake '{{flake}}' --use-remote-sudo -L }
+            '';
+
+          build =
+            if pkgs.stdenv.isDarwin
+            then ''
+              # build the system using given flake ref
+              build flake="github:johnae/world":
+                @darwin-rebuild build --flake '{{flake}}'
+            ''
+            else ''
+              # build the system using given flake ref
+              build flake="github:johnae/world":
+                @nixos-rebuild build --flake '{{flake}}' --use-remote-sudo -L
+            '';
+        in
+          pkgs.writeShellApplication {
+            name = "world";
+            runtimeInputs = with pkgs; [just nushell statix deadnix];
+            text = ''
+              just -f ${pkgs.replaceVars ../files/Justfile.template {
+                inherit upgrade build;
+              }} -d "$(pwd)" "$@"
+            '';
+          };
         tofuWithPlugins = pkgs.opentofu.withPlugins (
           p:
             map tofuProvider [p.null p.external p.hcloud p.cloudflare p.random p.tailscale]
@@ -124,8 +157,15 @@
         ];
         helix-latest = inputs.helix-editor.packages.${system}.default;
         zjstatus = inputs.zjstatus.packages.${system}.default;
-        zwift = inputs.zwift.packages.${system}.default;
-        persway = inputs.persway.packages.${system}.default;
+        ## fix this one on darwin
+        zwift =
+          if pkgs.stdenv.isLinux
+          then inputs.zwift.packages.${system}.default
+          else pkgs.hello;
+        persway =
+          if pkgs.stdenv.isLinux
+          then inputs.persway.packages.${system}.default
+          else pkgs.hello;
         wezterm = inputs.wezterm.packages.${system}.default;
         unlockremote = pkgs.writeShellApplication {
           name = "unlockremote";
