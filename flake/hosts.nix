@@ -19,6 +19,8 @@
     substring
     ;
 
+  inherit (inputs.nix-darwin.lib) darwinSystem;
+
   nixSettings = {
     nix.registry.nixpkgs = {flake = inputs.nixpkgs;};
     nix.registry.world = {flake = inputs.self;};
@@ -56,6 +58,22 @@
       ) (builtins.readDir ../microvms/${system}))
   ) {};
 
+  mapMacs = foldl' (
+    hosts: system:
+      hosts
+      // (mapAttrs' (
+        filename: _: let
+          name = replaceStrings [".nix"] [""] filename;
+        in {
+          inherit name;
+          value = {
+            inherit system;
+            hostconf = ../darwin + "/${system}/${filename}";
+          };
+        }
+      ) (builtins.readDir ../darwin/${system}))
+  ) {};
+
   defaultModules = [
     nixSettings
     inputs.agenix.nixosModules.age
@@ -66,6 +84,63 @@
     inputs.nixpkgs.nixosModules.notDetected
     ../modules/default.nix
   ];
+
+  darwinDefaultModules = [
+    nixSettings
+    inputs.agenix.nixosModules.age
+    inputs.determinate.darwinModules.default
+    inputs.home-manager.darwinModules.home-manager
+    inputs.mac-app-util.darwinModules.default
+    ../modules/default-darwin.nix
+  ];
+
+  darwinConfigurations = mapAttrs' (
+    name: conf: let
+      inherit (conf) system hostconf;
+      adminUser = {
+        name = "johnaxele";
+        uid = 501;
+        gid = 20;
+        userinfo = {
+          email = "john@insane.se";
+          altEmail = "johnxele@spotify.com";
+          fullName = "John Axel Eriksson";
+          githubUser = "johnae";
+          gitlabUser = "johnae";
+          devRemote = "icarus";
+        };
+      };
+    in {
+      inherit name;
+      value = withSystem system ({pkgs, ...}:
+        makeOverridable darwinSystem {
+          inherit system;
+          specialArgs = {
+            hostName = name;
+            tailnet = "tail68e9c";
+            inherit adminUser;
+            inherit self;
+            inherit inputs;
+          };
+          modules =
+            [
+              {inherit adminUser;}
+              {
+                nixpkgs.pkgs = pkgs;
+                nixpkgs.hostPlatform = system;
+                system.stateVersion = 5;
+                environment.systemPackages = [
+                  pkgs.world
+                ];
+              }
+            ]
+            ++ darwinDefaultModules
+            ++ [
+              hostconf
+            ];
+        });
+    }
+  ) (mapMacs (mapSystems ../darwin));
 
   nixosConfigurations = mapAttrs' (
     name: conf: let
@@ -124,6 +199,6 @@
   ) ((mapHosts (mapSystems ../hosts)) // (mapMicrovms (mapSystems ../microvms)));
 in {
   flake = {
-    inherit nixosConfigurations;
+    inherit nixosConfigurations darwinConfigurations;
   };
 }

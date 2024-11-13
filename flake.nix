@@ -38,6 +38,7 @@
     copilot-vim.flake = false;
     copilot-vim.url = "github:github/copilot.vim";
     crane.url = "github:ipetkov/crane";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
     devenv.inputs.flake-compat.follows = "flake-compat";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
     devenv.inputs.pre-commit-hooks.follows = "pre-commit-hooks";
@@ -73,6 +74,7 @@
     kured.url = "github:kubereboot/kured";
     lsp-ai-bin.flake = false;
     lsp-ai-bin.url = "https://github.com/SilasMarvin/lsp-ai/releases/download/v0.7.1/lsp-ai-x86_64-unknown-linux-gnu.gz"; # gh-release-update
+    mac-app-util.url = "github:hraban/mac-app-util";
     microvm.url = "github:astro/microvm.nix";
     microvm.inputs.flake-utils.follows = "flake-utils";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
@@ -84,7 +86,10 @@
     nixos-generators.url = "github:nix-community/nixos-generators";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     nixos-images.url = "github:nix-community/nixos-images";
+    nixpkgs-stable-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
     persway.url = "github:johnae/persway";
     persway.inputs.crane.follows = "crane";

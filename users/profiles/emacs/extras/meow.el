@@ -29,7 +29,13 @@
   (meow-yank)
   (previous-line))
 
-(keymap-global-set "C-t" 'project-eshell)
+;(keymap-global-set "C-t" 'project-eshell)
+
+(global-set-key (kbd "M-<down>") 'scroll-up)
+(global-set-key (kbd "M-<up>") 'scroll-down)
+
+(global-set-key (kbd "C-.") 'scroll-up)
+(global-set-key (kbd "M-,") 'scroll-down)
 
 (defun meow-setup-helix-style ()
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)

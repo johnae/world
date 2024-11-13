@@ -42,7 +42,10 @@ in {
     package = pkgs.emacsWithPackagesFromUsePackage {
       config = emacsInit;
       defaultInitFile = false;
-      package = pkgs.emacs30-pgtk;
+      package =
+        if pkgs.stdenv.isDarwin
+        then pkgs.emacs30
+        else pkgs.emacs30-pgtk;
       extraEmacsPackages = epkgs:
         with epkgs; [
           tree-sitter-langs
