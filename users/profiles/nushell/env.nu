@@ -106,4 +106,3 @@ def "timestamp into datetime" [] {
 }
 
 def --wrapped k [...args] { ^kubectl ...$args | from ssv }
-def --wrapped kubectl [...args] { k ...$args }
