@@ -150,11 +150,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1731361978,
-        "narHash": "sha256-MvtuMqGVMUcyt8niWadt6QWNdfhl+MJvmIe6aZEkIzE=",
+        "lastModified": 1731407985,
+        "narHash": "sha256-CnkW+Bigb4ocHtUXoRZ3PBlpGuRNFgHYK0IDk7SNyDg=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "4b770aa91211fc1875d9d07aedf80ea2eae012d5",
+        "rev": "9d3bf4d4c3fef89d2b6b29ebd64047a29ee932ea",
         "type": "github"
       },
       "original": {
@@ -189,11 +189,11 @@
         "nixpkgs-stable": "nixpkgs-stable_2"
       },
       "locked": {
-        "lastModified": 1731345267,
-        "narHash": "sha256-mT7dmNszhVg2LbWWW+4qZIiS4d6WxrdJZYWvnB1K4Zs=",
+        "lastModified": 1731431553,
+        "narHash": "sha256-lpC1jVxInrschdB8E9ps7SAe6UmnnDBpZN7i63lWf28=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "914e8cd43c10d41f6bba21abaf0d8b29554d69c9",
+        "rev": "af086b3eaccec54cb18c6d3cf376d8f94b81d482",
         "type": "github"
       },
       "original": {
@@ -210,11 +210,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1731306807,
-        "narHash": "sha256-Z8r5l7GdIPt3sP9D3mZSiAdpLc75/ohmtLheG/Lo44w=",
+        "lastModified": 1731393059,
+        "narHash": "sha256-rmzi0GHEwpzg1LGfGPO4SRD7D6QGV3UYGQxkJvn+J5U=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "b7206c170fa6b4695eb8211e10fdd0be0de9a248",
+        "rev": "fda8d5b59bb0dc0021ad3ba1d722f9ef6d36e4d9",
         "type": "github"
       },
       "original": {
@@ -496,13 +496,13 @@
     "hetzner-csi-driver": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-cZtIYTVu+uoaKk4x4NuZ0uZEoRxSW74lAKxzDsIR8TU=",
+        "narHash": "sha256-GQfvNA+zn3xSRiQL0UQEr9gGbrD+/cJmI0xfXTBjsFE=",
         "type": "file",
-        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.10.0/deploy/kubernetes/hcloud-csi.yml"
+        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.10.1/deploy/kubernetes/hcloud-csi.yml"
       },
       "original": {
         "type": "file",
-        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.10.0/deploy/kubernetes/hcloud-csi.yml"
+        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.10.1/deploy/kubernetes/hcloud-csi.yml"
       }
     },
     "home-manager": {
@@ -746,11 +746,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1731332224,
-        "narHash": "sha256-0ctfVp27ingWtY7dbP5+QpSQ98HaOZleU0teyHQUAw0=",
+        "lastModified": 1731403644,
+        "narHash": "sha256-T9V7CTucjRZ4Qc6pUEV/kpgNGzQbHWfGcfK6JJLfUeI=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "184687ae1a3139faa4746168baf071f60d0310c8",
+        "rev": "f6581f1c3b137086e42a08a906bdada63045f991",
         "type": "github"
       },
       "original": {
@@ -920,11 +920,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1731365127,
-        "narHash": "sha256-nLtHRaEG/MIMmU+5H29GWTi2B8RsQ/BMi6XU4YD2Su0=",
+        "lastModified": 1731450879,
+        "narHash": "sha256-HDZRerqM701nge7KnkO28+Wumrr9c83nQLMYPjN0fzk=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "02bf26939ee7b23e1ec45a33372b42fcefdd59cd",
+        "rev": "a180e6461d394d215b3645f068a070c7d9a6f7f6",
         "type": "github"
       },
       "original": {
@@ -1045,11 +1045,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1731264417,
-        "narHash": "sha256-TDI1s2Sc/rpMLwful1NcTjYBbqzbQ4Mjw5PPOuOXVfg=",
+        "lastModified": 1731342671,
+        "narHash": "sha256-36eYDHoPzjavnpmEpc2MXdzMk557S0YooGms07mDuKk=",
         "owner": "rust-lang",
         "repo": "rust-analyzer",
-        "rev": "30e71b609b493897ed81f4fec95eb75d903820c9",
+        "rev": "fc98e0657abf3ce07eed513e38274c89bbb2f8ad",
         "type": "github"
       },
       "original": {
@@ -1066,11 +1066,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1731292155,
-        "narHash": "sha256-fYVoUUtSadbOrH0z0epVQDsStBDS/S/fAK//0ECQAAI=",
+        "lastModified": 1731378398,
+        "narHash": "sha256-a0QWaiX8+AJ9/XBLGMDy6c90GD7HzpxKVdlFwCke5Pw=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "7c4cd99ed7604b79e8cb721099ac99c66f656b3a",
+        "rev": "0ae9fc2f2fe5361837d59c0bdebbda176427111e",
         "type": "github"
       },
       "original": {
