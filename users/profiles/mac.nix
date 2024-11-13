@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  inherit (config.home) username homeDirectory;
+  inherit (config.home) homeDirectory;
 in {
   imports = [
     ./bat.nix

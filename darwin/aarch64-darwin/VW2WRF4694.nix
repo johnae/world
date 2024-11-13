@@ -35,6 +35,12 @@
   system.defaults.NSGlobalDomain.InitialKeyRepeat = 15;
   system.defaults.NSGlobalDomain.KeyRepeat = 2;
 
+  system.defaults.CustomSystemPreferences."com.apple.Terminal" = {
+    Shell = "/Users/johnaxele/.nushim.sh";
+    "Default Window Settings" = "Pro";
+    "Startup Window Settings" = "Pro";
+  };
+
   services.tailscale.enable = true;
 
   services.yabai.enable = false;
@@ -86,16 +92,28 @@
   home-manager.useUserPackages = true;
   home-manager.useGlobalPkgs = true;
 
+  environment.etc."zshrc.local".text = ''
+    export PATH=/opt/homebrew/bin:$PATH
+  '';
+
+  environment.etc."bash.local".text = ''
+    export PATH=/opt/homebrew/bin:$PATH
+  '';
+
   home-manager.users.${adminUser.name} = {
     home.stateVersion = "21.05";
     home.username = "${adminUser.name}";
     home.homeDirectory = "/Users/${adminUser.name}";
+    home.file.".nushim.sh" = {
+      executable = true;
+      text = ''
+	source /etc/bashrc
+	exec nu
+      '';
+    };
     home.packages = [
       pkgs.jetbrains.idea-ultimate
       pkgs.grpcurl
-    ];
-    home.sessionPath = [
-      "/opt/homebrew/bin"
     ];
     imports = [../../users/profiles/mac.nix];
     inherit (adminUser) userinfo;
