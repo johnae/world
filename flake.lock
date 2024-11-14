@@ -806,18 +806,6 @@
         "type": "github"
       }
     },
-    "lsp-ai-bin": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-3LTSOQUwVRrjUjFjlns11IPg+dyyIDCx32EvJESjJWI=",
-        "type": "file",
-        "url": "https://github.com/SilasMarvin/lsp-ai/releases/download/v0.7.1/lsp-ai-x86_64-unknown-linux-gnu.gz"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/SilasMarvin/lsp-ai/releases/download/v0.7.1/lsp-ai-x86_64-unknown-linux-gnu.gz"
-      }
-    },
     "mac-app-util": {
       "inputs": {
         "cl-nix-lite": "cl-nix-lite",
@@ -1420,7 +1408,6 @@
         "impermanence": "impermanence",
         "juicefs-csi-driver": "juicefs-csi-driver",
         "kured": "kured",
-        "lsp-ai-bin": "lsp-ai-bin",
         "mac-app-util": "mac-app-util",
         "microvm": "microvm",
         "mk-shell-bin": "mk-shell-bin",

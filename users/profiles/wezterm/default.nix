@@ -41,6 +41,13 @@ in {
       else
         config = dofile("${home.homeDirectory}/${xdg.configFile."wezterm/wezterm.fnl.lua".target}")
       end
+      ${
+        if pkgs.stdenv.isDarwin
+        then ''
+          config.front_end = "WebGpu"
+        ''
+        else ""
+      }
       return config
     '';
   };
