@@ -29,6 +29,16 @@
 in {
   name = "world";
 
+  files.".jj/repo/config.toml".toml = {
+    revset-aliases = {
+      "trunk()" = "main@origin";
+    };
+    user = {
+      email = "john@insane.se";
+      name = "John Axel Eriksson";
+    };
+  };
+
   packages = with pkgs; [
     agenix
     age-plugin-yubikey
