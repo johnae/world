@@ -4,6 +4,11 @@
   ...
 }: let
   inherit (config.home) homeDirectory;
+  nushim = pkgs.writeShellScriptBin "nushim" ''
+    source /etc/bashrc
+    export SHELL=nu
+    exec nu
+  '';
 in {
   imports = [
     ./bat.nix
@@ -48,6 +53,7 @@ in {
     nil
     nixd
     nix-index
+    nushim
   ];
 
   xdg.enable = false;
