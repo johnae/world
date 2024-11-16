@@ -23,6 +23,7 @@
   homebrew.brews = [
     "spotify/sptaps/kubectl-site"
     "spotify/sptaps/hmtools"
+    "spotify/sptaps/protoman"
   ];
 
   #services.karabiner-elements.enable = true; ## doesn't work atm
@@ -34,12 +35,7 @@
   system.defaults.NSGlobalDomain."com.apple.trackpad.trackpadCornerClickBehavior" = 1;
   system.defaults.NSGlobalDomain.InitialKeyRepeat = 15;
   system.defaults.NSGlobalDomain.KeyRepeat = 2;
-
-  system.defaults.CustomSystemPreferences."com.apple.Terminal" = {
-    Shell = "/Users/johnaxele/.nushim.sh";
-    "Default Window Settings" = "Pro";
-    "Startup Window Settings" = "Pro";
-  };
+  system.defaults.NSGlobalDomain.ApplePressAndHoldEnabled = 0;
 
   services.tailscale.enable = true;
 
@@ -94,10 +90,12 @@
 
   environment.etc."zshrc.local".text = ''
     export PATH=/opt/homebrew/bin:$PATH
+    export SHELL=nu
   '';
 
   environment.etc."bash.local".text = ''
     export PATH=/opt/homebrew/bin:$PATH
+    export SHELL=nu
   '';
 
   home-manager.users.${adminUser.name} = {
@@ -107,8 +105,9 @@
     home.file.".nushim.sh" = {
       executable = true;
       text = ''
-	source /etc/bashrc
-	exec nu
+        source /etc/bashrc
+        export SHELL=nu
+        exec nu
       '';
     };
     home.packages = [
