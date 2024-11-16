@@ -73,6 +73,10 @@
 (use-package json-mode
   :ensure t)
 
+(use-package just-mode
+  :ensure t
+  :mode "\\[Jj]ustfile.*\\'")
+
 (use-package rust-mode
   :ensure t
   :hook ((rust-mode . eglot-ensure))
@@ -83,19 +87,12 @@
   :ensure t
   :mode "\\.nix\\'")
 
-;(use-package java-mode)
-
 (use-package java-ts-mode)
 
 (use-package java-ts-mode)
 
 (use-package lsp-java
   :ensure t)
-  ;; :init
-  ;; :config
-  ;; (add-hook 'java-mode-hook 'lsp)
-  ;; (add-hook 'java-ts-mode-hook 'lsp)
-;; (add-to-list 'lsp-language-id-configuration '(java-ts-mode . "java")))
 
 (use-package apheleia
   :ensure t
@@ -125,8 +122,8 @@
   ;; no :ensure t here because it's built-in
 
   ;; Configure hooks to automatically turn-on eglot for selected modes
-  ; :hook
-  ; (((python-mode ruby-mode elixir-mode) . eglot))
+					; :hook
+					; (((python-mode ruby-mode elixir-mode) . eglot))
 
   :custom
   (eglot-send-changes-idle-time 0.1)
@@ -135,6 +132,6 @@
   :config
   (fset #'jsonrpc--log-event #'ignore)  ; massive perf boost---don't log every event
   ;; Sometimes you need to tell Eglot where to find the language server
-  ; (add-to-list 'eglot-server-programs
-  ;              '(haskell-mode . ("haskell-language-server-wrapper" "--lsp")))
+					; (add-to-list 'eglot-server-programs
+					;              '(haskell-mode . ("haskell-language-server-wrapper" "--lsp")))
   )
