@@ -71,6 +71,7 @@
     pkgs.sd
     pkgs.vim
     pkgs.zip
+    pkgs.devenv
   ];
 
   fonts.packages = with pkgs; [
