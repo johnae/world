@@ -35,7 +35,7 @@
   system.defaults.NSGlobalDomain."com.apple.trackpad.trackpadCornerClickBehavior" = 1;
   system.defaults.NSGlobalDomain.InitialKeyRepeat = 15;
   system.defaults.NSGlobalDomain.KeyRepeat = 2;
-  system.defaults.NSGlobalDomain.ApplePressAndHoldEnabled = 0;
+  system.defaults.NSGlobalDomain.ApplePressAndHoldEnabled = false;
 
   services.tailscale.enable = true;
 
