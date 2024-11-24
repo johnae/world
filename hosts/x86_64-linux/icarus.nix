@@ -100,6 +100,7 @@
     };
   };
 
+  nix.settings.trusted-users = ["buildkite-agent-nix-build"];
   services.buildkite-agents.nix-build = {
     tokenPath = config.age.secrets.buildkite-token.path;
     privateSshKeyPath = config.age.secrets.buildkite-ssh-key.path;
