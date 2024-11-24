@@ -100,6 +100,16 @@
     };
   };
 
+  services.buildkite-agents.nix-build = {
+    tokenPath = config.age.secrets.buildkite-token.path;
+    privateSshKeyPath = config.age.secrets.buildkite-ssh-key.path;
+    tags = {
+      nix = "true";
+      nixos = "true";
+      queue = "default";
+    };
+  };
+
   services.tailscale.auth = {
     enable = true;
     args.advertise-tags = ["tag:server"];
@@ -107,7 +117,7 @@
     args.accept-routes = false;
     args.accept-dns = false;
     args.advertise-exit-node = true;
-    args.auth-key = "file:/var/run/agenix/ts-google-9k";
+    args.auth-key = config.age.secrets.ts-google-9k.path;
   };
 
   # microvm.autostart = [
@@ -267,6 +277,12 @@
       path = "/var/lib/microvm-secrets/ssh_host_ed25519_key";
       symlink = false;
     };
+    buildkite-token = {
+      file = ../../secrets/buildkite-token.age;
+    };
+    buildkite-ssh-key = {
+      file = ../../secrets/buildkite-ssh-key.age;
+    };
   };
 
   security.acme.certs = {
@@ -329,8 +345,8 @@
     user = "${adminUser.name}";
     group = "users";
     openDefaultPorts = true;
-    cert = "/run/agenix/syncthing-cert";
-    key = "/run/agenix/syncthing-key";
+    cert = config.age.secrets.syncthing-cert.path;
+    key = config.age.secrets.syncthing-key.path;
     dataDir = "/home/${adminUser.name}/.local/share/syncthing-data";
 
     settings = {
