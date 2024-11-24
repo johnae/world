@@ -106,7 +106,7 @@
     tags = {
       nix = "true";
       nixos = "true";
-      queue = "default";
+      queue = "default-queue";
     };
   };
 
