@@ -104,6 +104,9 @@
   services.buildkite-agents.nix-build = {
     tokenPath = config.age.secrets.buildkite-token.path;
     privateSshKeyPath = config.age.secrets.buildkite-ssh-key.path;
+    extraConfig = ''
+      spawn=4
+    '';
     tags = {
       nix = "true";
       nixos = "true";
