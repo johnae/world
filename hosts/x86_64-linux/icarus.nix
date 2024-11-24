@@ -104,6 +104,7 @@
   services.buildkite-agents.nix-build = {
     tokenPath = config.age.secrets.buildkite-token.path;
     privateSshKeyPath = config.age.secrets.buildkite-ssh-key.path;
+    runtimePackages = [pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix pkgs.cachix];
     extraConfig = ''
       spawn=4
     '';
@@ -115,7 +116,13 @@
     hooks = {
       environment = ''
         CACHIX_SIGNING_KEY="$(head -1 ${config.age.secrets.cachix-signing-key.path})"
-        export CACHIX_SIGNING_KEY
+        CACHE_NAME=insane
+        export CACHIX_SIGNING_KEY CACHE_NAME
+      '';
+      command = ''
+        #!/usr/bin/env bash
+        cachix use "$CACHE_NAME"
+        cachix watch-exec "$CACHE_NAME" -- "$BUILDKITE_COMMAND"
       '';
     };
   };
