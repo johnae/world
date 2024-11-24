@@ -119,10 +119,18 @@
         CACHE_NAME=insane
         export CACHIX_SIGNING_KEY CACHE_NAME
       '';
-      command = ''
+      pre-command = ''
         #!/usr/bin/env bash
         cachix use "$CACHE_NAME"
-        cachix watch-exec "$CACHE_NAME" -- "$BUILDKITE_COMMAND"
+        cachix watch-store "$CACHE_NAME" &
+        CACHIX_PID="$!"
+        echo cachix pid is "$CACHIX_PID"
+        echo "$CACHIX_PID" > /tmp/"$BUILDKITE_AGENT_ID".cachix.pid
+      '';
+      post-command = ''
+        #!/usr/bin/env bash
+        echo "killing cachix"
+        kill "$(cat /tmp/"$BUILDKITE_AGENT_ID".cachix.pid)"
       '';
     };
   };
