@@ -129,8 +129,9 @@
       '';
       post-command = ''
         #!/usr/bin/env bash
-        echo "killing cachix"
-        kill "$(cat /tmp/"$BUILDKITE_AGENT_ID".cachix.pid)"
+        CACHIX_PID="$(cat /tmp/"$BUILDKITE_AGENT_ID".cachix.pid)"
+        echo "killing cachix with pid $CACHIX_PID"
+        kill "$CACHIX_PID" || true
       '';
     };
   };
