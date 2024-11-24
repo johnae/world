@@ -70,7 +70,7 @@
         in
           pkgs.writeShellApplication {
             name = "world";
-            runtimeInputs = with pkgs; [just nushell statix deadnix];
+            runtimeInputs = with pkgs; [just nushell statix deadnix cachix];
             text = ''
               just -f ${pkgs.replaceVars ../files/Justfile.template {
                 inherit upgrade build;
