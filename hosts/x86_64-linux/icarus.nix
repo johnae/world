@@ -117,21 +117,21 @@
   #   "master-8be5-f2ba"
   # ];
 
-  microvm = let
-    vms = [
-      "playground"
-    ];
-  in {
-    vms = builtins.listToAttrs (map (name: {
-        inherit name;
-        value = {
-          flake = self;
-          updateFlake = "github:johnae/world";
-        };
-      })
-      vms);
-    autostart = vms;
-  };
+  # microvm = let
+  #   vms = [
+  #     "playground"
+  #   ];
+  # in {
+  #   vms = builtins.listToAttrs (map (name: {
+  #       inherit name;
+  #       value = {
+  #         flake = self;
+  #         updateFlake = "github:johnae/world";
+  #       };
+  #     })
+  #     vms);
+  #   autostart = vms;
+  # };
 
   networking.useDHCP = false;
   networking.nat = {
