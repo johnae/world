@@ -126,6 +126,7 @@
         CACHIX_PID="$!"
         echo cachix pid is "$CACHIX_PID"
         echo "$CACHIX_PID" > /tmp/"$BUILDKITE_AGENT_ID".cachix.pid
+        ps aux | grep cachix
       '';
       post-command = ''
         #!/usr/bin/env bash
