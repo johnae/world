@@ -279,9 +279,11 @@
     };
     buildkite-token = {
       file = ../../secrets/buildkite-token.age;
+      owner = "buildkite-agent-nix-build";
     };
     buildkite-ssh-key = {
       file = ../../secrets/buildkite-ssh-key.age;
+      owner = "buildkite-agent-nix-build";
     };
   };
 
