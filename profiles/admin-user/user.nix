@@ -4,6 +4,7 @@
   ...
 }: {
   nix.settings.trusted-users = [adminUser.name];
+  hardware.uinput.enable = true; ## dotool
   users = {
     users.${adminUser.name} = {
       inherit (adminUser) uid;
@@ -15,7 +16,7 @@
         "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIAwJWtQ5ZU9U0szWzJ+/GH2uvXZ15u9lL0RdcHdsXM0VAAAABHNzaDo="
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+trOinD68RD1efI6p05HeaNA0SjzeRnUvpf22+jsq+"
       ];
-      extraGroups = ["wheel" "docker" "video" "audio" "kvm" "libvirtd"];
+      extraGroups = ["wheel" "docker" "video" "audio" "kvm" "libvirtd" "uinput"];
     };
   };
 }
