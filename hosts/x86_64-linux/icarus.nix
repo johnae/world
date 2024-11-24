@@ -111,6 +111,7 @@
     hooks = {
       environment = ''
         CACHIX_SIGNING_KEY="$(head -1 ${config.age.secrets.cachix-signing-key.path})"
+        export CACHIX_SIGNING_KEY
       '';
     };
   };
