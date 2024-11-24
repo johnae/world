@@ -108,6 +108,11 @@
       nixos = "true";
       queue = "default-queue";
     };
+    hooks = {
+      environment = ''
+        CACHIX_SIGNING_KEY="$(head -1 ${config.age.secrets.cachix-signing-key.path})"
+      '';
+    };
   };
 
   services.tailscale.auth = {
@@ -283,6 +288,10 @@
     };
     buildkite-ssh-key = {
       file = ../../secrets/buildkite-ssh-key.age;
+      owner = "buildkite-agent-nix-build";
+    };
+    cachix-signing-key = {
+      file = ../../secrets/cachix-signing-key.age;
       owner = "buildkite-agent-nix-build";
     };
   };
