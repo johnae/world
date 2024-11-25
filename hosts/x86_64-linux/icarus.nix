@@ -3,7 +3,6 @@
   config,
   pkgs,
   hostName,
-  self,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHaa82NwBC+ty4Wyeuf5kdava7huSYF6k0NYF2ahwayW";
@@ -104,7 +103,7 @@
   services.buildkite-agents.nix-build = {
     tokenPath = config.age.secrets.buildkite-token.path;
     privateSshKeyPath = config.age.secrets.buildkite-ssh-key.path;
-    runtimePackages = [pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix pkgs.cachix];
+    runtimePackages = [pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix pkgs.cachix pkgs.procps];
     extraConfig = ''
       spawn=4
     '';
@@ -122,17 +121,10 @@
       pre-command = ''
         #!/usr/bin/env bash
         cachix use "$CACHE_NAME"
-        cachix watch-store "$CACHE_NAME" &
-        CACHIX_PID="$!"
-        echo cachix pid is "$CACHIX_PID"
-        echo "$CACHIX_PID" > /tmp/"$BUILDKITE_AGENT_ID".cachix.pid
-        ps aux | grep cachix
       '';
-      post-command = ''
+      command = ''
         #!/usr/bin/env bash
-        CACHIX_PID="$(cat /tmp/"$BUILDKITE_AGENT_ID".cachix.pid)"
-        echo "killing cachix with pid $CACHIX_PID"
-        kill "$CACHIX_PID" || true
+        cachix --verbose watch-exec "$CACHE_NAME" -- bash -c "$BUILDKITE_COMMAND"
       '';
     };
   };
