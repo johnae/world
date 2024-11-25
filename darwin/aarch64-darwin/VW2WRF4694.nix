@@ -1,7 +1,5 @@
 {
   adminUser,
-  hostName,
-  config,
   pkgs,
   ...
 }: {
