@@ -102,14 +102,6 @@
     home.stateVersion = "21.05";
     home.username = "${adminUser.name}";
     home.homeDirectory = "/Users/${adminUser.name}";
-    home.file.".nushim.sh" = {
-      executable = true;
-      text = ''
-        source /etc/bashrc
-        export SHELL=nu
-        exec nu
-      '';
-    };
     home.packages = [
       pkgs.jetbrains.idea-ultimate
       pkgs.grpcurl
