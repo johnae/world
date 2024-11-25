@@ -77,6 +77,16 @@
               }} -d "$(pwd)" "$@"
             '';
           };
+        rbw-atomic-unlock = pkgs.writeShellApplication {
+          name = "rbw-atomic-unlock";
+          runtimeInputs = [pkgs.rbw pkgs.util-linux];
+          text = ''
+            rbw_lock="/tmp/rbw-unlock.lock"
+            exec 200>"$rbw_lock"
+            flock -w 15 200
+            rbw unlocked || rbw unlock
+          '';
+        };
         tofuWithPlugins = pkgs.opentofu.withPlugins (
           p:
             map tofuProvider [p.null p.external p.hcloud p.cloudflare p.random p.tailscale]

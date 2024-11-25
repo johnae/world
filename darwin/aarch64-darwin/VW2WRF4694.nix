@@ -70,6 +70,7 @@
     pkgs.vim
     pkgs.zip
     pkgs.devenv
+    pkgs.rbw-atomic-unlock
   ];
 
   fonts.packages = with pkgs; [
