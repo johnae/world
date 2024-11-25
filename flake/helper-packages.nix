@@ -46,17 +46,6 @@
       '';
     };
 
-    rbw-atomic-unlock = writeShellApplication {
-      name = "rbw-atomic-unlock";
-      runtimeInputs = [rbw util-linux];
-      text = ''
-        rbw_lock="/tmp/rbw-unlock.lock"
-        exec 200>"$rbw_lock"
-        flock -w 15 200
-        rbw unlocked || rbw unlock
-      '';
-    };
-
     sk-sk = writeShellApplication {
       name = "sk-sk";
       runtimeInputs = [skim];
@@ -211,7 +200,6 @@
           launch
           project-select
           rbw-git-creds
-          rbw-atomic-unlock
           rofi-rbw
           fuzzel-rbw
           update-wifi-networks

@@ -63,6 +63,7 @@ in {
     pkgs.powertop
     pkgs.procs
     pkgs.psmisc
+    pkgs.rbw-atomic-unlock
     pkgs.ripgrep
     pkgs.sd
     pkgs.socat
