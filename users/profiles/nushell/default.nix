@@ -10,7 +10,10 @@
     if pkgs.stdenv.isDarwin && !config.xdg.enable
     then "Library/Application Support/nushell"
     else "${config.xdg.configHome}/nushell";
-  configPath = path: if (builtins.substring 0 1 configDir) == "/" then configDir else "~/${configDir}";
+  configPath = path:
+    if (builtins.substring 0 1 path) == "/"
+    then path
+    else "~/${path}";
 in {
   home.packages = [
     pkgs.jwt-cli ## see env.nu for impl
