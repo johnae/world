@@ -1,7 +1,6 @@
 {
   withSystem,
   lib,
-  self,
   ...
 }: let
   inherit (lib) mapAttrsToList filterAttrs hasPrefix filter elem;
