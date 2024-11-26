@@ -38,45 +38,13 @@
       )
       // locallyDefinedPackages
       // {
-        world = let
-          upgrade =
-            if pkgs.stdenv.isDarwin
-            then ''
-              # upgrade the system using given flake ref
-              upgrade flake="github:johnae/world":
-                @rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
-                @darwin-rebuild switch --flake '{{flake}}'
-            ''
-            else ''
-              # upgrade the system using given flake ref
-              upgrade flake="github:johnae/world":
-                @rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
-                @nixos-rebuild boot --flake '{{flake}}' --use-remote-sudo -L
-                @if (echo initrd kernel kernel-modules | all { |it| (readlink $"/run/booted-system/($it)") != (readlink $"/nix/var/nix/profiles/system/($it)") }) { echo "The system must be rebooted for the changes to take effect" } else { nixos-rebuild switch --flake '{{flake}}' --use-remote-sudo -L }
-            '';
-
-          build =
-            if pkgs.stdenv.isDarwin
-            then ''
-              # build the system using given flake ref
-              build flake="github:johnae/world":
-                @darwin-rebuild build --flake '{{flake}}'
-            ''
-            else ''
-              # build the system using given flake ref
-              build flake="github:johnae/world":
-                @nixos-rebuild build --flake '{{flake}}' --use-remote-sudo -L
-            '';
-        in
-          pkgs.writeShellApplication {
-            name = "world";
-            runtimeInputs = with pkgs; [just nushell statix deadnix cachix];
-            text = ''
-              just -f ${pkgs.replaceVars ../files/Justfile.template {
-                inherit upgrade build;
-              }} -d "$(pwd)" "$@"
-            '';
-          };
+        world = pkgs.writeShellApplication {
+          name = "world";
+          runtimeInputs = with pkgs; [just nushell statix deadnix cachix];
+          text = ''
+            just -f ${../files/Justfile} -d "$(pwd)" "$@"
+          '';
+        };
         rbw-atomic-unlock = pkgs.writeShellApplication {
           name = "rbw-atomic-unlock";
           runtimeInputs = [pkgs.rbw pkgs.util-linux];
