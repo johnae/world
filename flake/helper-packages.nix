@@ -15,7 +15,6 @@
       rbw
       rofi-wayland
       skim
-      util-linux
       wpa_supplicant
       ;
 
