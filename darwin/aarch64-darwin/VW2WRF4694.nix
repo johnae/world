@@ -24,6 +24,10 @@
     "spotify/sptaps/protoman"
   ];
 
+  homebrew.casks = [
+    "logi-options+"
+  ];
+
   #services.karabiner-elements.enable = true; ## doesn't work atm
   system.defaults.dock.autohide = true;
   security.pam.enableSudoTouchIdAuth = true;
