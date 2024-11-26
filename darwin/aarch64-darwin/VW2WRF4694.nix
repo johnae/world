@@ -98,6 +98,15 @@
     export SHELL=nu
   '';
 
+  ## this sets the PATH for GUI apps
+  ## needs a restart
+  launchd.user.agents = {
+    user-paths = {
+      command = "/bin/launchctl config user path '/opt/homebrew/bin:/Users/johnaxele/.nix-profile/bin:/etc/profiles/per-user/johnaxele/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin'";
+      serviceConfig.RunAtLoad = true;
+    };
+  };
+
   home-manager.users.${adminUser.name} = {
     home.stateVersion = "21.05";
     home.username = "${adminUser.name}";
