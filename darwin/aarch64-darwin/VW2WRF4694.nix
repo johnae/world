@@ -54,7 +54,25 @@
     window_gap = 10;
   };
 
-  nix.settings.trusted-users = [adminUser.name];
+  nix = {
+    settings.trusted-users = ["root" adminUser.name];
+    extraOptions = ''
+      experimental-features = nix-command flakes
+      keep-outputs = true
+      keep-derivations = true
+      tarball-ttl = 900
+    '';
+    gc = {
+      automatic = true;
+      interval = {
+        Weekday = 0;
+        Hour = 0;
+        Minute = 0;
+      };
+      options = "--delete-older-than 30d";
+    };
+  };
+
   users = {
     users.${adminUser.name} = {
       inherit (adminUser) uid;
