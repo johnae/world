@@ -166,7 +166,6 @@
           "orion"
           "titan"
           "hyperion"
-          "s23ultra"
           "s8plus"
           "z6fold"
         ];
@@ -188,7 +187,6 @@
           "cygnus"
           "orion"
           "sirius"
-          "s23ultra"
           "z6fold"
         ];
 
