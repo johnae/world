@@ -386,6 +386,7 @@
           "sirius"
           "s8plus"
           "titan"
+          "cygnus"
           "z6fold"
         ];
       };
@@ -394,6 +395,7 @@
         devices = [
           "antares"
           "eris"
+          "cygnus"
           "sirius"
         ];
         versioning.type = "staggered";
