@@ -87,7 +87,6 @@
           "antares"
           "titan"
           "sirius"
-          "s23ultra"
           "s8plus"
         ];
       };
