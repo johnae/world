@@ -384,9 +384,9 @@
           "eris"
           "hyperion"
           "sirius"
-          "s23ultra"
           "s8plus"
           "titan"
+          "z6fold"
         ];
       };
       folders."/home/${adminUser.name}/Photos" = {
@@ -395,7 +395,6 @@
           "antares"
           "eris"
           "sirius"
-          "s23ultra"
         ];
         versioning.type = "staggered";
         versioning.params.cleanInterval = "3600";
