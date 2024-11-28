@@ -116,7 +116,8 @@
       environment = ''
         CACHIX_SIGNING_KEY="$(head -1 ${config.age.secrets.cachix-signing-key.path})"
         CACHE_NAME=insane
-        export CACHIX_SIGNING_KEY CACHE_NAME
+        GITHUB_APP_RSA_KEY_FILE="${config.age.secrets.github-app-bk-auth.path}"
+        export CACHIX_SIGNING_KEY CACHE_NAME GITHUB_APP_RSA_KEY_FILE
       '';
       pre-command = ''
         #!/usr/bin/env bash
@@ -306,6 +307,10 @@
     };
     cachix-signing-key = {
       file = ../../secrets/cachix-signing-key.age;
+      owner = "buildkite-agent-nix-build";
+    };
+    github-app-bk-auth = {
+      file = ../../secrets/github-app-bk-auth.age;
       owner = "buildkite-agent-nix-build";
     };
   };
