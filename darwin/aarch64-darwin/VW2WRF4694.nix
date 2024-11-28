@@ -26,6 +26,7 @@
 
   homebrew.casks = [
     "logi-options+"
+    "chromium"
   ];
 
   #services.karabiner-elements.enable = true; ## doesn't work atm
