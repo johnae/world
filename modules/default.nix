@@ -1,12 +1,13 @@
 {
   imports = [
     ./auto-upgrade-enhanced.nix
+    ./buildkite-nix-build.nix
     ./home.nix
-    ./my-matrix.nix
     ./host-config.nix
     ./innernet.nix
     ./k3s.nix
     ./my-cloudflared.nix
+    ./my-matrix.nix
     ./router.nix
     ./services.nix
     ./tailscale-auth.nix

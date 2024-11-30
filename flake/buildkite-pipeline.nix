@@ -20,7 +20,54 @@
   );
 in {
   flake = {
-    buildkite-pipeline = {
+    buildkite-flake-updater = {
+      env = {
+        CACHE_NAME = "insane";
+        NIX_CONFIG = "accept-flake-config = true";
+      };
+      steps = [
+        {
+          label = ":nix: Update packages";
+          plugins = [
+            {
+              "johnae/github-app-auth#v1.0.1" = {
+                installation_id = 57780546;
+                app_id = 1073609;
+              };
+            }
+          ];
+          command = ''
+            nix shell .#world nixpkgs#gh nixpkgs#git nixpkgs#gnugrep nixpkgs#gawk -c bash<<'BASH'
+            echo "+++ Authenticated as GitHub App"
+            gh auth status
+            GHUSER="$(gh auth status | awk '{ if ($2 == "Logged" && $6 == "account") { print $7 }}')"
+            echo "Github user: $GHUSER"
+
+            echo "~~~ Setup git"
+            git config user.name "$GHUSER"
+            git config user.email '|-<>-|'
+
+            echo "+++ Update packages"
+            world gh-release-update
+            nix flake update
+
+            echo "--- Commit changes"
+            git branch -D automatic-updates
+            git checkout -b automatic-updates
+            git commit -am "chore(auto): update flake inputs"
+            git push -f origin automatic-updates
+
+            echo "+++ Create pull request"
+            PR="$(gh pr create -a johnae -r johnae -H automatic-updates -b main -f)"
+
+            echo "+++ Enable PR auto merge"
+            gh pr merge --auto -d -s "$PR"
+            BASH
+          '';
+        }
+      ];
+    };
+    buildkite-flake-builder = {
       env = {
         CACHE_NAME = "insane";
         NIX_CONFIG = "accept-flake-config = true";
