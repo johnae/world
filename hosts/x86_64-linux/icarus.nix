@@ -99,34 +99,25 @@
     };
   };
 
-  nix.settings.trusted-users = ["buildkite-agent-nix-build"];
-  services.buildkite-agents.nix-build = {
-    tokenPath = config.age.secrets.buildkite-token.path;
-    privateSshKeyPath = config.age.secrets.buildkite-ssh-key.path;
-    runtimePackages = [pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix pkgs.cachix pkgs.procps];
-    extraConfig = ''
-      spawn=4
-    '';
+  services.buildkite-nix-builder = {
+    enable = true;
+    runtimePackages = [
+      pkgs.bash
+      pkgs.cachix
+      pkgs.coreutils
+      pkgs.curl
+      pkgs.git
+      pkgs.gnutar
+      pkgs.gzip
+      pkgs.jq
+      pkgs.nix
+      pkgs.openssl
+      pkgs.procps
+    ];
     tags = {
       nix = "true";
       nixos = "true";
       queue = "default-queue";
-    };
-    hooks = {
-      environment = ''
-        CACHIX_SIGNING_KEY="$(head -1 ${config.age.secrets.cachix-signing-key.path})"
-        CACHE_NAME=insane
-        GITHUB_APP_RSA_KEY_FILE="${config.age.secrets.github-app-bk-auth.path}"
-        export CACHIX_SIGNING_KEY CACHE_NAME GITHUB_APP_RSA_KEY_FILE
-      '';
-      pre-command = ''
-        #!/usr/bin/env bash
-        cachix use "$CACHE_NAME"
-      '';
-      command = ''
-        #!/usr/bin/env bash
-        cachix --verbose watch-exec "$CACHE_NAME" -- bash -c "$BUILDKITE_COMMAND"
-      '';
     };
   };
 
@@ -296,22 +287,6 @@
       file = ../../secrets/ssh_host_microvm_ed25519_key.age;
       path = "/var/lib/microvm-secrets/ssh_host_ed25519_key";
       symlink = false;
-    };
-    buildkite-token = {
-      file = ../../secrets/buildkite-token.age;
-      owner = "buildkite-agent-nix-build";
-    };
-    buildkite-ssh-key = {
-      file = ../../secrets/buildkite-ssh-key.age;
-      owner = "buildkite-agent-nix-build";
-    };
-    cachix-signing-key = {
-      file = ../../secrets/cachix-signing-key.age;
-      owner = "buildkite-agent-nix-build";
-    };
-    github-app-bk-auth = {
-      file = ../../secrets/github-app-bk-auth.age;
-      owner = "buildkite-agent-nix-build";
     };
   };
 
