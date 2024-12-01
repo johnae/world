@@ -58,16 +58,13 @@ in {
             if [[ -n "$(git status --porcelain)" ]]; then
               BRANCH_EXISTS=$(git ls-remote --heads origin "automatic-updates")
               git checkout main
-              if [[ -z "$BRANCH_EXISTS" ]]; then
-                echo "--- Branch automatic-updates does not exist. Creating it."
-                git checkout -b automatic-updates
-                git commit -am "chore(auto): update flake inputs"
-              else
-                echo "--- Branch automatic-updates exists. Updating it."
+              if [[ -n "$BRANCH_EXISTS" ]]; then
+                echo "--- Branch automatic-updates exists. Deleting and updating it."
                 git fetch origin automatic-updates
-                git checkout -b automatic-updates
-                git commit --amend --no-edit
+                git branch -D automatic-updates
               fi
+              git checkout -b automatic-updates
+              git commit -am "chore(auto): update flake inputs"
               git push -f origin automatic-updates
 
               echo "--- Check if pull request exists"
