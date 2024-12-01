@@ -10,7 +10,7 @@
     "container-shell"
     "devenv-up"
   ];
-  matrix = withSystem "x86_64-linux" (
+  pkgList = withSystem "x86_64-linux" (
     ctx @ {pkgs, ...}: let
       skip =
         (mapAttrsToList (name: _: name) (filterAttrs (name: _: hasPrefix "images/" name) pkgs))
@@ -18,6 +18,7 @@
     in
       filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) ctx.config.packages)
   );
+  arch = ["x86_64-linux"];
 in {
   flake = {
     buildkite-flake-updater = {
@@ -28,6 +29,9 @@ in {
       steps = [
         {
           label = ":nix: Update packages";
+          agents = [
+            "queue=default-queue"
+          ];
           plugins = [
             {
               "johnae/github-app-auth#v1.0.1" = {
@@ -84,33 +88,41 @@ in {
         CACHE_NAME = "insane";
         NIX_CONFIG = "accept-flake-config = true";
       };
-      steps = [
-        {
-          group = ":broom: Linting and syntax checks";
-          key = "checks";
-          steps = [
-            {
-              label = ":nix: Lint";
-              command = "nix run .#world -- lint";
-            }
-            {
-              label = ":nix: Check";
-              command = "nix run .#world -- check";
-            }
-          ];
-        }
-        {
-          group = ":hammer_and_pick: Building packages";
-          key = "packages";
-          steps = [
-            {
-              label = ":nix: {{matrix}} build";
-              command = "nix build .#packages.x86_64-linux.{{matrix}} -L";
-              inherit matrix;
-            }
-          ];
-        }
-      ];
+      steps =
+        [
+          {
+            group = ":broom: Linting and syntax checks";
+            key = "checks";
+            steps = [
+              {
+                label = ":nix: Lint";
+                command = "nix run .#world -- lint";
+              }
+              {
+                label = ":nix: Check";
+                command = "nix run .#world -- check";
+              }
+            ];
+          }
+        ]
+        ++ (map (arch: {
+            group = ":hammer_and_pick: Building packages for ${arch}";
+            key = "packages-${arch}";
+            steps =
+              map (
+                pkg: {
+                  agents = [
+                    "queue=default-queue"
+                    "nix=true"
+                    "arch=${arch}"
+                  ];
+                  label = ":nix: ${pkg} ${arch} build";
+                  command = "nix build .#packages.${arch}.${pkg} -L";
+                }
+              )
+              pkgList;
+          })
+          arch);
     };
   };
 }
