@@ -50,20 +50,19 @@ in {
             git config user.name "$GHUSER"
             git config user.email '|-<>-|'
 
+            echo "--- Updating checkout"
+            git checkout main
+            git fetch origin automatic-updates || true
+            git branch -D automatic-updates || true
+            git pull
+            git checkout -b automatic-updates
+
             echo "+++ Update packages"
             world gh-release-update
             nix flake update
 
             echo "--- Commit changes"
             if [[ -n "$(git status --porcelain)" ]]; then
-              BRANCH_EXISTS=$(git ls-remote --heads origin "automatic-updates")
-              git checkout main
-              if [[ -n "$BRANCH_EXISTS" ]]; then
-                echo "--- Branch automatic-updates exists. Deleting and updating it."
-                git fetch origin automatic-updates
-                git branch -D automatic-updates
-              fi
-              git checkout -b automatic-updates
               git commit -am "chore(auto): update flake inputs"
               git push -f origin automatic-updates
 
