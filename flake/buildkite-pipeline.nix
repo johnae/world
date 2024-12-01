@@ -52,7 +52,7 @@ in {
             nix flake update
 
             echo "--- Commit changes"
-            if [[ -n "$(git status --porcelain)"]]; then
+            if [[ -n "$(git status --porcelain)" ]]; then
               BRANCH_EXISTS=$(git ls-remote --heads origin "automatic-updates")
               git checkout main
               if [[ -z "$BRANCH_EXISTS" ]]; then
