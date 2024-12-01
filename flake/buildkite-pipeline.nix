@@ -10,7 +10,7 @@
     "container-shell"
     "devenv-up"
   ];
-  pkgList = withSystem "x86_64-linux" (
+  pkgs.x86_64-linux = withSystem "x86_64-linux" (
     ctx @ {pkgs, ...}: let
       skip =
         (mapAttrsToList (name: _: name) (filterAttrs (name: _: hasPrefix "images/" name) pkgs))
@@ -18,7 +18,6 @@
     in
       filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) ctx.config.packages)
   );
-  arch = ["x86_64-linux"];
 in {
   flake = {
     buildkite-flake-updater = {
@@ -120,9 +119,9 @@ in {
                   command = "nix build .#packages.${arch}.${pkg} -L";
                 }
               )
-              pkgList;
+              pkgs."${arch}";
           })
-          arch);
+          (builtins.attrNames pkgs));
     };
   };
 }
