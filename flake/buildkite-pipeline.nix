@@ -51,11 +51,8 @@ in {
             git config user.email '|-<>-|'
 
             echo "--- Updating checkout"
-            git checkout main
-            git fetch origin automatic-updates || true
-            git branch -D automatic-updates || true
-            git pull
-            git checkout -b automatic-updates
+            git fetch origin main
+            git checkout --no-track -B automatic-updates origin/main
 
             echo "+++ Update packages"
             world gh-release-update
