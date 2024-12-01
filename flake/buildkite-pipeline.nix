@@ -37,7 +37,9 @@ in {
             }
           ];
           command = ''
-            export NIX_CONFIG="$NIX_CONFIG\naccess-tokens = github.com=$GH_TOKEN"
+            NIX_CONFIG="$NIX_CONFIG
+            access-tokens = github.com=$GH_TOKEN"
+            export NIX_CONFIG
             nix shell .#world nixpkgs#gh nixpkgs#git nixpkgs#gnugrep nixpkgs#gawk -c bash<<'BASH'
             echo "+++ Authenticated as GitHub App"
             gh auth status
