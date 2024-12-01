@@ -117,6 +117,8 @@
     tags = {
       nix = "true";
       nixos = "true";
+      linux = "true";
+      arch = "x86_64-linux";
       queue = "default-queue";
     };
   };
