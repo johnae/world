@@ -198,8 +198,8 @@
           "2a01:4f9:3051:5389::2/64"
         ];
         routes = [
-          {routeConfig.Gateway = "65.109.85.129";}
-          {routeConfig.Gateway = "fe80::1";}
+          {Gateway = "65.109.85.129";}
+          {Gateway = "fe80::1";}
         ];
         linkConfig.RequiredForOnline = "routable";
       };

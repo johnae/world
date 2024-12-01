@@ -134,8 +134,8 @@
           "2a01:4f9:3051:46ed::2/64"
         ];
         routes = [
-          {routeConfig.Gateway = "65.109.92.129";}
-          {routeConfig.Gateway = "fe80::1";}
+          {Gateway = "65.109.92.129";}
+          {Gateway = "fe80::1";}
         ];
         linkConfig.RequiredForOnline = "routable";
       };
