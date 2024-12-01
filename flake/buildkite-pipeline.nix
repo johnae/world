@@ -52,16 +52,32 @@ in {
             nix flake update
 
             echo "--- Commit changes"
-            git branch -D automatic-updates
-            git checkout -b automatic-updates
-            git commit -am "chore(auto): update flake inputs"
-            git push -f origin automatic-updates
+            if [[ -n "$(git status --porcelain)"]]; then
+              BRANCH_EXISTS=$(git ls-remote --heads origin "automatic-updates")
+              git checkout main
+              if [[ -z "$BRANCH_EXISTS" ]]; then
+                echo "--- Branch automatic-updates does not exist. Creating it."
+                git checkout -b automatic-updates
+                git commit -am "chore(auto): update flake inputs"
+              else
+                echo "--- Branch automatic-updates exists. Updating it."
+                git fetch origin automatic-updates
+                git checkout -b automatic-updates
+                git commit --amend --no-edit
+              fi
+              git push -f origin automatic-updates
 
-            echo "+++ Create pull request"
-            PR="$(gh pr create -a johnae -r johnae -H automatic-updates -b main -f)"
+              echo "--- Check if pull request exists"
+              PR="$(gh pr list --head automatic-updates --json number --jq '.[0].number')"
 
-            echo "+++ Enable PR auto merge"
-            gh pr merge --auto -d -s "$PR"
+              if [[ -z "$PR" ]]; then
+                PR="$(gh pr create -a johnae -r johnae -H automatic-updates -b main -f)"
+              fi
+              echo "+++ Enable PR auto merge"
+              gh pr merge --auto -d -s "$PR"
+            else
+              echo "--- No changes, no PR"
+            fi
             BASH
           '';
         }
