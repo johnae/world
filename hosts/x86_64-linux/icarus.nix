@@ -179,7 +179,7 @@
           "192.168.20.143/24"
         ];
         routes = [
-          {routeConfig.Gateway = "192.168.20.1";}
+          {Gateway = "192.168.20.1";}
         ];
         linkConfig.RequiredForOnline = "routable";
       };
