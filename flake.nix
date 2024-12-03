@@ -41,7 +41,6 @@
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
     devenv.inputs.flake-compat.follows = "flake-compat";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
-    devenv.inputs.pre-commit-hooks.follows = "pre-commit-hooks";
     devenv.inputs.cachix.follows = "cachix";
     devenv.url = "github:cachix/devenv";
     disko.inputs.nixpkgs.follows = "nixpkgs";
