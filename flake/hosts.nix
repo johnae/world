@@ -87,7 +87,7 @@
 
   darwinDefaultModules = [
     nixSettings
-    inputs.agenix.nixosModules.age
+    inputs.agenix.darwinModules.age
     inputs.home-manager.darwinModules.home-manager
     inputs.mac-app-util.darwinModules.default
     ../modules/default-darwin.nix
