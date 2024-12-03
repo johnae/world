@@ -10,11 +10,55 @@
     "container-shell"
     "devenv-up"
   ];
+  darwinSkip = [
+    "agent-8be5-15c3-diskformat"
+    "agent-8be5-32c4-diskformat"
+    "agent-8be5-9792-diskformat"
+    "agent-8be5-ac2e-diskformat"
+    "agent-8be5-c91d-diskformat"
+    "agent-8be5-d4a1-diskformat"
+    "alnitak-diskformat"
+    "antares-diskformat"
+    "cygnus-diskformat"
+    "eris-diskformat"
+    "fluxcd-yaml"
+    "hcloud-dev-diskformat"
+    "hcloud-k3s-agent-diskformat"
+    "hcloud-k3s-master-diskformat"
+    "hcloud-k3s-master-init-diskformat"
+    "hetzner-csi-driver-yaml"
+    "hyperion-diskformat"
+    "icarus-diskformat"
+    "installer-diskformat"
+    "juicefs-csi-driver-yaml"
+    "kexec-installer-nixos-unstable-noninteractive"
+    "kured-yaml"
+    "master-8be5-a0a1-diskformat"
+    "master-8be5-c1ce-diskformat"
+    "master-8be5-f2ba-diskformat"
+    "orion-diskformat"
+    "persway"
+    "playground-diskformat"
+    "rbw-atomic-unlock"
+    "scripts"
+    "sirius-diskformat"
+    "test-diskformat"
+    "titan-diskformat"
+  ];
   pkgs.x86_64-linux = withSystem "x86_64-linux" (
     ctx @ {pkgs, ...}: let
       skip =
         (mapAttrsToList (name: _: name) (filterAttrs (name: _: hasPrefix "images/" name) pkgs))
         ++ defaultSkip;
+    in
+      filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) ctx.config.packages)
+  );
+  pkgs.aarch64-darwin = withSystem "aarch64-darwin" (
+    ctx @ {pkgs, ...}: let
+      skip =
+        (mapAttrsToList (name: _: name) (filterAttrs (name: _: hasPrefix "images/" name) pkgs))
+        ++ defaultSkip
+        ++ darwinSkip;
     in
       filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) ctx.config.packages)
   );
