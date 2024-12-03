@@ -334,6 +334,10 @@
             (lambda [window pane]
               (open-context-tab-action window pane :lazyjj [:lazyjj])))
 
+(wezterm.on :ActivateSerpl
+            (lambda [window pane]
+              (open-context-tab-action window pane :serpl [:serpl])))
+
 (wezterm.on :ToggleMaximizeTerminal (toggle-maximized-pane :term))
 (wezterm.on :ToggleMaximizeEditor (toggle-maximized-pane :editor))
 (wezterm.on :ActivateMainUI
@@ -460,8 +464,7 @@
                                    elements))]
                   (window:set_right_status (wezterm.format elements))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;|\
 (set config.mux_env_remove {})
 (set config.adjust_window_size_when_changing_font_size false)
 (set config.enable_wayland true)
@@ -476,6 +479,8 @@
 (set config.font_size 14)
 (set config.color_scheme "Nord (Gogh)")
 (set config.window_background_opacity 0.91)
+; (set config.pane_focus_follows_mouse true)
+(set config.switch_to_last_active_tab_when_closing_tab true)
 (wezterm.add_to_config_reload_watch_list (.. project-dir
                                              :/world/users/profiles/wezterm/wezterm.fnl))
 
@@ -489,16 +494,27 @@
        :action (act.SendKey {:key :Space :mods :CTRL})}
       {:key :g :mods :CTRL :action (act.EmitEvent :ActivateGitui)}
       {:key :j :mods :CTRL :action (act.EmitEvent :ActivateLazyjj)}
+      {:key :s :mods :CTRL :action (act.EmitEvent :ActivateSerpl)}
       {:key :t :mods :CTRL :action (act.EmitEvent :ToggleMaximizeTerminal)}
       {:key :e :mods :CTRL :action (act.EmitEvent :ToggleMaximizeEditor)}
-      {:key :m :mods :CTRL :action (act.EmitEvent :ActivateMainUI)}
       {:key :n :mods :LEADER :action (act.EmitEvent :NewProjectWindow)}
       {:key :t :mods :LEADER :action (act.EmitEvent :NewProjectTab)}
       {:key :r :mods :LEADER :action (act.EmitEvent :ReloadFixup)}
-      {:key :w :mods :CTRL|SHIFT :action (act.EmitEvent :ReloadWorkspace)}
+      {:key :w :mods :LEADER :action (act.EmitEvent :ReloadWorkspace)}
       {:key :q :mods :LEADER :action (act.CloseCurrentPane {:confirm true})}
-      {:key :g :mods :LEADER :action act.ShowTabNavigator}
-      {:key :z :mods :CTRL :action act.TogglePaneZoomState}
+      {:key :z :mods :LEADER :action act.TogglePaneZoomState}
+      {:key :RightArrow
+       :mods :LEADER
+       :action (act.SplitPane {:direction :Right :size {:Percent 50}})}
+      {:key :LeftArrow
+       :mods :LEADER
+       :action (act.SplitPane {:direction :Left :size {:Percent 50}})}
+      {:key :DownArrow
+       :mods :LEADER
+       :action (act.SplitPane {:direction :Down :size {:Percent 50}})}
+      {:key :UpArrow
+       :mods :LEADER
+       :action (act.SplitPane {:direction :Up :size {:Percent 50}})}
       {:key :LeftArrow :mods :CTRL :action (act.ActivatePaneDirection :Left)}
       {:key :RightArrow :mods :CTRL :action (act.ActivatePaneDirection :Right)}
       {:key :UpArrow :mods :CTRL :action (act.ActivatePaneDirection :Up)}
@@ -508,7 +524,7 @@
        :action (act.CloseCurrentTab {:confirm true})}
       {:key :r :mods :CTRL :action (act.RotatePanes :CounterClockwise)}
       {:key :r :mods :CTRL|SHIFT :action (act.RotatePanes :Clockwise)}
-      {:key :p :mods :CTRL :action (act.PaneSelect {:mode :SwapWithActive})}
+      {:key :p :mods :LEADER :action (act.PaneSelect {:mode :SwapWithActive})}
       {:key :a :mods :LEADER :action (act.EmitEvent :FindProject)}
       {:key :f
        :mods :LEADER
@@ -526,4 +542,3 @@
                           :username :john}])
 
 config
-
