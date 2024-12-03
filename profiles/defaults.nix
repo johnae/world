@@ -66,6 +66,7 @@ in {
     pkgs.rbw-atomic-unlock
     pkgs.ripgrep
     pkgs.sd
+    pkgs.serpl
     pkgs.socat
     pkgs.tmux
     pkgs.tree

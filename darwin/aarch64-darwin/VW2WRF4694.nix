@@ -83,17 +83,18 @@
   };
 
   environment.systemPackages = [
-    pkgs.git
-    pkgs.fd
-    pkgs.ripgrep
     pkgs.bottom
+    pkgs.devenv
+    pkgs.fd
+    pkgs.git
     pkgs.hyperfine
     pkgs.jq
+    pkgs.rbw-atomic-unlock
+    pkgs.ripgrep
     pkgs.sd
+    pkgs.serpl
     pkgs.vim
     pkgs.zip
-    pkgs.devenv
-    pkgs.rbw-atomic-unlock
   ];
 
   fonts.packages = with pkgs; [
