@@ -55,7 +55,7 @@
 
   nix.settings.trusted-users = ["root" adminUser.name "buildkite-agent-nix-build"];
   services.buildkite-agents.nix-build = let
-    dataDir = inherit (config.services.buildkite-agents.nix-build) dataDir;
+    inherit (config.services.buildkite-agents.nix-build) dataDir;
   in {
     enable = true;
     tokenPath = config.age.secrets.buildkite-agent-nix-build-token.path;
