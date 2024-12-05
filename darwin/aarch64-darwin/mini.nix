@@ -23,7 +23,7 @@
       owner = "${toString adminUser.uid}";
     };
     buildkite-agent-nix-build-github-app-auth-key = {
-      file = ../secrets/github-app-bk-auth.age;
+      file = ../../secrets/github-app-bk-auth.age;
       owner = "${toString adminUser.uid}";
     };
   };
