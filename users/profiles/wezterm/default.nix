@@ -45,7 +45,6 @@ in {
         if pkgs.stdenv.isDarwin
         then ''
           config.front_end = "WebGpu"
-          config.window_background_opacity = 0.9
           config.macos_window_background_blur = 20
         ''
         else ""
