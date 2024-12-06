@@ -61,7 +61,7 @@
     tokenPath = config.age.secrets.buildkite-agent-nix-build-token.path;
     privateSshKeyPath = config.age.secrets.buildkite-agent-nix-build-ssh-key.path;
     extraConfig = ''
-      plugins=${dataDir}/plugins
+      plugins-path=${dataDir}/plugins
       spawn=4
     '';
     runtimePackages = [
