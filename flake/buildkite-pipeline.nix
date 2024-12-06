@@ -140,6 +140,9 @@ in {
               {
                 label = ":nix: Lint";
                 command = "nix run .#world -- lint";
+                agents = [
+                  "nixos=true" ## arguably should be made to work on darwin as well
+                ];
               }
               {
                 label = ":nix: Check";
