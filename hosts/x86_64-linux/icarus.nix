@@ -31,6 +31,10 @@
     ../../profiles/zram.nix
   ];
 
+  virtualisation.docker.enable = false;
+  virtualisation.podman.enable = true;
+  virtualisation.podman.dockerCompat = true;
+
   system.autoUpgrade = {
     enable = true;
     flake = "github:johnae/world";
