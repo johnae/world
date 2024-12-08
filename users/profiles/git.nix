@@ -1,9 +1,13 @@
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   inherit (config) userinfo;
 in {
   programs.git = {
-    userName = userinfo.fullName;
-    userEmail = userinfo.email;
+    userName = lib.mkDefault userinfo.fullName;
+    userEmail = lib.mkDefault userinfo.email;
     enable = true;
     lfs.enable = true;
     delta = {
@@ -16,8 +20,8 @@ in {
       ".devenv*"
     ];
     extraConfig = {
-      github.user = userinfo.githubUser;
-      gitlab.user = userinfo.gitlabUser;
+      github.user = lib.mkDefault userinfo.githubUser;
+      gitlab.user = lib.mkDefault userinfo.gitlabUser;
       core.editor = "hx";
       push.default = "upstream";
       pull.rebase = true;
