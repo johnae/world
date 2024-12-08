@@ -12,7 +12,8 @@ in {
     };
     ignores = [
       "*~"
-      ".direnv"
+      ".direnv*"
+      ".devenv*"
     ];
     extraConfig = {
       github.user = userinfo.githubUser;
