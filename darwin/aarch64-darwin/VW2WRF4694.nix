@@ -93,6 +93,7 @@
     pkgs.ripgrep
     pkgs.sd
     pkgs.serpl
+    pkgs.stats
     pkgs.vim
     pkgs.zip
   ];
@@ -143,14 +144,6 @@
     ];
     imports = [../../users/profiles/mac.nix];
     inherit (adminUser) userinfo;
-    programs = {
-      git = {
-        extraConfig = {
-          gpg.format = "ssh";
-          commit.gpgSign = true;
-          tag.forceSignAnnotated = true;
-        };
-      };
-    };
+    programs.git.userEmail = "johnaxele@spotify.com";
   };
 }
