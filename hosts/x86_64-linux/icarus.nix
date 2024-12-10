@@ -263,14 +263,9 @@
       systemctl start acme-bw.9000.dev.timer
       systemctl restart vaultwarden
       systemctl restart nginx
-
-      RECORD_ID="$(${pkgs.flarectl}/bin/flarectl --json dns list --zone 9000.dev | ${pkgs.jq}/bin/jq -r '.[] | select(.Name == "bw.9000.dev") | .ID')"
-      TS_IP="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Self.TailscaleIPs[0]')"
-      echo "Map bw.9000.dev ($RECORD_ID) to $TS_IP"
-      ${pkgs.flarectl}/bin/flarectl --json dns update --zone 9000.dev --id "$RECORD_ID" --type A --ttl 60 --content "$TS_IP"
     '';
-    after = ["network-online.target" "tailscale-auth.service" "stop-services-before-bootstrapping.service"];
-    requires = ["network-online.target" "tailscale-auth.service" "stop-services-before-bootstrapping.service"];
+    after = ["network-online.target" "stop-services-before-bootstrapping.service"];
+    requires = ["network-online.target" "stop-services-before-bootstrapping.service"];
     wantedBy = ["multi-user.target"];
   };
 
@@ -300,6 +295,28 @@
     "bw.9000.dev" = {
       group = "nginx";
     };
+    "chat.9000.dev" = {
+      group = "nginx";
+    };
+  };
+
+  services.cloudflare-tailscale-dns.bw = {
+    enable = true;
+    zone = "9000.dev";
+    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+  };
+
+  services.cloudflare-tailscale-dns.chat = {
+    enable = true;
+    zone = "9000.dev";
+    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+  };
+
+  services.nginx.tailscaleAuth = {
+    enable = true;
+    virtualHosts = [
+      "chat.9000.dev"
+    ];
   };
 
   services.vaultwarden = {
@@ -317,6 +334,26 @@
     };
   };
 
+  services.open-webui.enable = true;
+  services.open-webui.port = 11112;
+  services.open-webui.environment = {
+    # PYDANTIC_SKIP_VALIDATING_CORE_SCHEMAS = "True";
+    WEBUI_AUTH = "False";
+    OLLAMA_BASE_URL = "http://eris:11434";
+    ENABLE_OLLAMA_API = "true";
+    DEFAULT_USER_ROLE = "user";
+    WEBUI_AUTH = "true";
+    WEBUI_AUTH_TRUSTED_EMAIL_HEADER = "X-Webauth-Login";
+    WEBUI_AUTH_TRUSTED_NAME_HEADER = "X-Webauth-Name";
+    ENABLE_OAUTH_SIGNUP = "true";
+    ENABLE_SIGNUP = "true";
+    WEBUI_URL = "https://chat.9000.dev";
+    OAUTH_MERGE_ACCOUNTS_BY_EMAIL = "true";
+  };
+  environment.persistence."/keep".directories = [
+    "/var/lib/open-webui"
+  ];
+
   services.nginx = {
     enable = true;
     recommendedTlsSettings = true;
@@ -328,6 +365,12 @@
       "bw.9000.dev" = {
         useACMEHost = "bw.9000.dev";
         locations."/".proxyPass = "http://localhost:8222";
+        locations."/".proxyWebsockets = true;
+        forceSSL = true;
+      };
+      "chat.9000.dev" = {
+        useACMEHost = "chat.9000.dev";
+        locations."/".proxyPass = "http://localhost:11112";
         locations."/".proxyWebsockets = true;
         forceSSL = true;
       };
