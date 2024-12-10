@@ -24,9 +24,9 @@
     ../../profiles/syncthing.nix
     ../../profiles/tailscale.nix
     ../../profiles/zram.nix
-    ../../profiles/ollama.nix
   ];
 
+  services.ollama.enable = true;
   services.ollama.rocmOverrideGfx = "11.0.0"; ## rdna 3 11.0.0
   services.ollama.acceleration = "rocm";
 
