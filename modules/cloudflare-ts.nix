@@ -5,8 +5,8 @@
   ...
 }: let
   inherit (lib) types;
+  inherit (config.services.tailscale.auth) enable;
   cfg = config.services.cloudflare-tailscale-dns;
-  tsAuthCfg = config.services.tailscale.auth;
 in {
   options.services.cloudflare-tailscale-dns = lib.mkOption {
     type = lib.attrsOf (lib.submodule ({name, ...}: {
@@ -32,20 +32,29 @@ in {
   };
 
   config = lib.mkMerge (lib.mapAttrsToList (
-      name: cfg: {
-        systemd.services."cloudflare-tailscale-dns-${name}.${cfg.zone}" = {
-          description = "Cloudflare dns records mapping ${name}.${cfg.zone} to host tailscale ip";
-          inherit (tsAuthCfg) enable;
+      name: value: {
+        systemd.services."cloudflare-tailscale-dns-${name}.${value.zone}" = {
+          description = "Cloudflare dns records mapping ${name}.${value.zone} to host tailscale ip";
+          inherit enable;
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = "yes";
             EnvironmentFile = [
-              cfg.cloudflareEnvFile
+              value.cloudflareEnvFile
             ];
           };
           script = ''
             TS_IP="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Self.TailscaleIPs[0]')"
-            ${pkgs.flarectl}/bin/flarectl dns create-or-update --zone ${cfg.zone} --name "${cfg.name}" --type A --ttl 60 --content "$TS_IP"
+            ${
+              if value.delete
+              then ''
+                RECORD_ID="$(${pkgs.flarectl}/bin/flarectl --json dns list --zone 9000.dev | ${pkgs.jq}/bin/jq -r '.[] | select(.Name == "${cfg.name}.${cfg.zone}") | .ID')"
+                ${pkgs.flarectl}/bin/flarectl dns delete --zone ${value.zone} --id "$RECORD_ID"
+              ''
+              else ''
+                ${pkgs.flarectl}/bin/flarectl dns create-or-update --zone ${value.zone} --name "${cfg.name}" --type A --ttl 60 --content "$TS_IP"
+              ''
+            }
           '';
           after = ["network-online.target" "tailscale-auth.service"];
           requires = ["network-online.target" "tailscale-auth.service"];
