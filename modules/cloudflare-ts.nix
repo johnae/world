@@ -16,11 +16,11 @@ in {
           type = lib.bool;
           default = false;
         };
-        name = mkOption {
+        name = lib.mkOption {
           type = str;
           default = name;
         };
-        zone = mkOption {
+        zone = lib.mkOption {
           type = str;
         };
         cloudflareEnvFile = lib.mkOption {
