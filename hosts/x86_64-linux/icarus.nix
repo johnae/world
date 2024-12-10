@@ -338,7 +338,6 @@
   services.open-webui.port = 11112;
   services.open-webui.environment = {
     # PYDANTIC_SKIP_VALIDATING_CORE_SCHEMAS = "True";
-    WEBUI_AUTH = "False";
     OLLAMA_BASE_URL = "http://eris:11434";
     ENABLE_OLLAMA_API = "true";
     DEFAULT_USER_ROLE = "user";
