@@ -13,15 +13,15 @@ in {
       options = {
         enable = lib.mkEnableOption "Enable this cloudflare dns tailscale mapping";
         delete = lib.mkOption {
-          type = lib.bool;
+          type = types.bool;
           default = false;
         };
         name = lib.mkOption {
-          type = str;
+          type = types.str;
           default = name;
         };
         zone = lib.mkOption {
-          type = str;
+          type = types.str;
         };
         cloudflareEnvFile = lib.mkOption {
           type = types.path;
