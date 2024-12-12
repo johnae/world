@@ -107,7 +107,6 @@ in {
               children
             }
           }
-          ${zjstatusPane}
       }
 
       tab_template name="main" {
@@ -135,7 +134,6 @@ in {
             }
         }
 
-        ${zjstatusPane}
       }
 
       main focus=true hide_floating_panes=true name="main"
@@ -147,7 +145,6 @@ in {
       pane split_direction="horizontal" {
         pane
       }
-      ${zjstatusPane}
     }
   '';
   xdg.configFile."zellij/config.kdl".text = ''

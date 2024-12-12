@@ -1,0 +1,18 @@
+:100644 100644 d7658b3 0000000 M	Cargo.toml
+
+diff --git a/Cargo.toml b/Cargo.toml
+index d7658b3..ea1075a 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -6,9 +6,11 @@ name = "widgets"
+ 
+ [[bin]]
+ name = "zjstatus"
++path = "src/bin/zjstatus.rs"
+ 
+ [[bin]]
+ name = "zjframes"
++path = "src/bin/zjframes.rs"
+ 
+ [dependencies]
+ anstyle = "1.0.10"
