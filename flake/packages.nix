@@ -126,7 +126,9 @@
           }
         ];
         helix-latest = inputs.helix-editor.packages.${system}.default;
-        zjstatus = inputs.zjstatus.packages.${system}.default;
+        # zjstatus = inputs.zjstatus.packages.${system}.default.overrideAttrs (oa: {
+        #   patches = [../files/zjstatus_cargo_patch.patch];
+        # });
         ## fix this one on darwin
         zwift =
           if pkgs.stdenv.isLinux
