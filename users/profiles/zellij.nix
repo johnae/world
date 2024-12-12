@@ -33,11 +33,6 @@
           ReadApplicationState
           ChangeApplicationState
       }
-      "${pkgs.zjstatus}/bin/zjstatus.wasm" {
-          ChangeApplicationState
-          RunCommands
-          ReadApplicationState
-      }
       EOF
       zellij "$@"
     '';
