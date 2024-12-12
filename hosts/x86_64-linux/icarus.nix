@@ -342,7 +342,7 @@
     ENABLE_OLLAMA_API = "true";
     DEFAULT_USER_ROLE = "user";
     WEBUI_AUTH = "true";
-    WEBUI_AUTH_TRUSTED_EMAIL_HEADER = "X-Webauth-Login";
+    WEBUI_AUTH_TRUSTED_EMAIL_HEADER = "X-Webauth-Email";
     WEBUI_AUTH_TRUSTED_NAME_HEADER = "X-Webauth-Name";
     ENABLE_OAUTH_SIGNUP = "true";
     ENABLE_SIGNUP = "true";
@@ -350,7 +350,7 @@
     OAUTH_MERGE_ACCOUNTS_BY_EMAIL = "true";
   };
   environment.persistence."/keep".directories = [
-    "/var/lib/open-webui"
+    "/var/lib/private/open-webui"
   ];
 
   services.nginx = {
@@ -360,6 +360,13 @@
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     clientMaxBodySize = "300m";
+    commonHttpConfig = ''
+      map $auth_user $auth_email {
+        ~^(?<user_no_dash>[^-]+)-.*$ $user_no_dash@9000.dev;
+        ~^(?<user>[^@]+)@passkey$ $user@9000.dev;
+        default $auth_user;
+      }
+    '';
     virtualHosts = {
       "bw.9000.dev" = {
         useACMEHost = "bw.9000.dev";
@@ -371,6 +378,9 @@
         useACMEHost = "chat.9000.dev";
         locations."/".proxyPass = "http://localhost:11112";
         locations."/".proxyWebsockets = true;
+        locations."/".extraConfig = ''
+          proxy_set_header X-Webauth-Email "$auth_email";
+        '';
         forceSSL = true;
       };
     };
