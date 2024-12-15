@@ -23,6 +23,10 @@ in {
         zone = lib.mkOption {
           type = types.str;
         };
+        host = lib.mkOption {
+          type = types.nullOr types.str;
+          default = null;
+        };
         cloudflareEnvFile = lib.mkOption {
           type = types.path;
         };
@@ -45,7 +49,15 @@ in {
           ];
         };
         script = ''
-          TS_IP="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Self.TailscaleIPs[0]')"
+          ${
+            if value.host == null
+            then ''
+              TS_IP="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Self.TailscaleIPs[0]')"
+            ''
+            else ''
+              TS_IP="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Peer[] | select(.DNSName | startswith("${value.host}.")) | .TailscaleIPs[0]')"
+            ''
+          }
           ${
             if value.delete
             then ''

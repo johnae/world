@@ -298,9 +298,25 @@
     "chat.9000.dev" = {
       group = "nginx";
     };
+    "tika.9000.dev" = {
+      group = "nginx";
+    };
+  };
+
+  services.cloudflare-tailscale-dns.ollama = {
+    enable = true;
+    zone = "9000.dev";
+    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+    host = "eris";
   };
 
   services.cloudflare-tailscale-dns.bw = {
+    enable = true;
+    zone = "9000.dev";
+    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+  };
+
+  services.cloudflare-tailscale-dns.tika = {
     enable = true;
     zone = "9000.dev";
     cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
@@ -318,6 +334,8 @@
       "chat.9000.dev"
     ];
   };
+
+  services.tika.enable = true;
 
   services.vaultwarden = {
     enable = true;
@@ -368,6 +386,12 @@
       }
     '';
     virtualHosts = {
+      "tika.9000.dev" = {
+        useACMEHost = "tika.9000.dev";
+        locations."/".proxyPass = "http://localhost:9998";
+        locations."/".proxyWebsockets = true;
+        forceSSL = true;
+      };
       "bw.9000.dev" = {
         useACMEHost = "bw.9000.dev";
         locations."/".proxyPass = "http://localhost:8222";
