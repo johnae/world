@@ -59,7 +59,7 @@
   swapCycle = dir:
     pkgs.writeShellApplication {
       name = "swap-${dir}";
-      runtimeInputs = [pkgs.hyprland-unstable pkgs.jq];
+      runtimeInputs = [pkgs.hyprland pkgs.jq];
       text = ''
         WS="$(hyprctl activeworkspace -j | jq -r .id)"
         STACKLEN="$(hyprctl clients -j | jq '[.[] | select(.workspace.id == '"$WS"' and .hidden == false)] | length - 2')"
@@ -83,72 +83,46 @@
   swapCyclePrev = swapCycle "prev";
 
   xcursor_theme = config.gtk.cursorTheme.name;
-  terminal-bin = "${pkgs.alacritty}/bin/alacritty";
-  #terminal-bin = "${pkgs.kitty}/bin/kitty";
-  #terminal-bin = "${pkgs.wezterm}/bin/wezterm start --always-new-process";
-  # dev-env = name:
-  #   pkgs.writeShellApplication {
-  #     inherit name;
-  #     runtimeInputs = with pkgs; [wezterm];
-  #     text = ''
-  #       exec wezterm connect --class=${name} ${name}
-  #     '';
-  #   };
+  terminal-bin = "${pkgs.wezterm}/bin/wezterm start --always-new-process";
 
-  # dev-env = {
-  #   name,
-  #   host ? null,
-  # }:
-  #   pkgs.writeShellApplication {
-  #     inherit name;
-  #     runtimeInputs = with pkgs; [kitty];
-  #     text = ''
-  #       ${
-  #         if host == null
-  #         then ''
-  #           exec kitty -1 --instance-group=${name} --class=${name}
-  #         ''
-  #         else ''
-  #           exec kitty -1 --instance-group=${name} --class=${name} kitten ssh ${host}
-  #         ''
-  #       }
-  #     '';
-  #   };
-
-  dev-env = {
+  _dev-env = {
     name,
-    host ? null,
+    domain ? null,
   }:
     pkgs.writeShellApplication {
       inherit name;
-      runtimeInputs = with pkgs; [alacritty hyprland-unstable jq];
+      runtimeInputs = with pkgs; [wezterm];
+      text =
+        if domain == null
+        then ''
+          exec wezterm start --class ${name} --always-new-process
+        ''
+        else ''
+          exec wezterm start --class ${name} --domain ${domain} --always-new-process --attach
+        '';
+    };
+
+  dev-env = {
+    name,
+    domain ? null,
+  }:
+    pkgs.writeShellApplication {
+      inherit name;
+      runtimeInputs = with pkgs; [hyprland jq];
       text = ''
-        PID="$(hyprctl clients -j | jq '[.[] | select(.class == "${name}" and .initialTitle == "Alacritty")] | first | .pid')"
+        PID="$(hyprctl clients -j | jq '[.[] | select(.class == "${name}")] | first | .pid')"
         if [ "$PID" != "null" ]; then
           exec hyprctl dispatch focuswindow "pid:$PID"
         fi
         # shellcheck disable=SC2093,SC2016
-        exec alacritty --class=${name} \
-                       --working-directory="$HOME" \
-        ${
-          if host == null
-          then ''
-            --command zellij -s ${name} attach -c -f ${name}
-          ''
-          else ''
-            --command ssh -A -t ${host} 'ln -sf $env.SSH_AUTH_SOCK $"/run/user/(id -u)/ssh-auth.sock"; zellij -s ${name} attach -c -f ${name}'
-          ''
-        }
+        exec ${_dev-env {inherit name domain;}}/bin/${name}
       '';
     };
-
-  # local-dev = dev-env "local-dev";
-  # remote-dev = dev-env "remote-dev";
 
   local-dev = dev-env {name = "local-dev";};
   remote-dev = dev-env {
     name = "remote-dev";
-    host = config.userinfo.devRemote;
+    domain = "remote-dev";
   };
 in {
   home.sessionVariables = {
@@ -166,7 +140,7 @@ in {
   };
 
   wayland.windowManager.hyprland.enable = true;
-  wayland.windowManager.hyprland.package = pkgs.hyprland-unstable;
+  # wayland.windowManager.hyprland.package = pkgs.hyprland-unstable;
   wayland.windowManager.hyprland.extraConfig = ''
     bind=$mod,escape,submap,(p)oweroff, (s)uspend, (h)ibernate, (r)eboot, (l)ogout
     submap=(p)oweroff, (s)uspend, (h)ibernate, (r)eboot, (l)ogout
@@ -206,6 +180,8 @@ in {
         "$mod, right, movefocus, r"
         "$mod, up, movefocus, u"
         "$mod, down, movefocus, d"
+        "$mod CONTROL, left, workspace, -1"
+        "$mod CONTROL, right, workspace, +1"
         "$mod, m, movecurrentworkspacetomonitor, +1"
         "$mod, minus, exec, ${pkgs.scripts}/bin/rofi-rbw"
         "$mod SHIFT, minus, exec, passonly=y ${pkgs.scripts}/bin/rofi-rbw"
@@ -225,7 +201,7 @@ in {
         "$mod SHIFT, space, exec, ${swapCyclePrev}/bin/swap-prev"
         "$mod CONTROL, space, layoutmsg, swapwithmaster"
         "$mod, f, fullscreen"
-        "$mod SHIFT, f, fakefullscreen"
+        "$mod SHIFT, f, fullscreenstate, 0, 3"
       ];
 
     group = {
@@ -248,7 +224,7 @@ in {
     animations = {
       enabled = true;
       animation = [
-        "workspaces,1,2,default,slidefade 10%"
+        "workspaces,1,4,default"
         "windows,1,1,default"
         "fade,1,5,default"
         "border,1,1,default"
@@ -262,32 +238,34 @@ in {
 
     general = {
       layout = "master";
-      border_size = 0;
+      border_size = 3;
       gaps_in = 8;
       gaps_out = 16;
-      "col.active_border" = "0xf0f000aa";
-      "col.inactive_border" = "0x00000000";
+      "col.active_border" = "0x00003366";
+      "col.inactive_border" = "0x000000aa";
     };
 
     decoration = {
-      rounding = 12;
+      rounding = 10;
       blur = {
         enabled = true;
-        size = 9;
+        size = 7;
         passes = 4;
         xray = true;
-        ignore_opacity = true;
+        ignore_opacity = false;
         new_optimizations = true;
         noise = 0.02;
-        contrast = 1.05;
-        brightness = 1.2;
+        contrast = 1.04;
+        brightness = 1.3;
       };
-      drop_shadow = true;
-      shadow_range = 20;
-      shadow_render_power = 2;
-      shadow_offset = "3 3";
-      "col.shadow" = "0x99000000";
-      "col.shadow_inactive" = "0x55000000";
+      shadow = {
+        enabled = true;
+        range = 20;
+        render_power = 2;
+        offset = "3 3";
+        color = "0x99000000";
+        color_inactive = "0x55000000";
+      };
       active_opacity = 0.95;
       inactive_opacity = 0.87;
       fullscreen_opacity = 1.0;
@@ -301,12 +279,12 @@ in {
 
     master = {
       # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
-      new_is_master = true;
+      new_status = "master";
       mfact = 0.7;
-      orientation = "right";
+      orientation = "left";
     };
 
-    # layerrule = ["blur,waybar"];
+    layerrule = ["blur,waybar" "ignorealpha,waybar"];
 
     windowrulev2 = [
       "dimaround,class:gcr-prompter"
@@ -326,6 +304,8 @@ in {
       kb_rules = "";
 
       follow_mouse = 1;
+      repeat_delay = 300;
+      repeat_rate = 20;
 
       touchpad = {
         natural_scroll = true;
