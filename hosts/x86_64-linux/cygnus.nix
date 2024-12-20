@@ -34,6 +34,10 @@
   };
 
   age.secrets = {
+    aichat-env = {
+      file = ../../secrets/aichat-env.age;
+      owner = "${toString adminUser.uid}";
+    };
     wifi-networks = {
       file = ../../secrets/wifi-networks.age;
     };
@@ -70,16 +74,20 @@
       file = ../../secrets/${hostName}/syncthing-key.age;
       owner = "${toString adminUser.uid}";
     };
-    groq-lsp-ai = {
-      file = ../../secrets/groq-lsp-ai.age;
+    groq-api-key = {
+      file = ../../secrets/groq-api-key.age;
       owner = "${toString adminUser.uid}";
     };
-    anthropic-lsp-ai = {
-      file = ../../secrets/anthropic-lsp-ai.age;
+    anthropic-api-key = {
+      file = ../../secrets/anthropic-api-key.age;
       owner = "${toString adminUser.uid}";
     };
-    openrouter-lsp-ai = {
-      file = ../../secrets/openrouter-lsp-ai.age;
+    openrouter-api-key = {
+      file = ../../secrets/openrouter-api-key.age;
+      owner = "${toString adminUser.uid}";
+    };
+    openai-api-key = {
+      file = ../../secrets/openai-api-key.age;
       owner = "${toString adminUser.uid}";
     };
   };

@@ -3,6 +3,19 @@
   pkgs,
   ...
 }: {
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKCP9Tx9xhe3GbxOUGqXxxQ1O/QO8h+IfJaDSlal25Ek";
+
+  age.secrets = {
+    openai-api-key = {
+      file = ../../secrets/openai-api-key.age;
+      owner = "${toString adminUser.uid}";
+    };
+    anthropic-api-key = {
+      file = ../../secrets/anthropic-api-key.age;
+      owner = "${toString adminUser.uid}";
+    };
+  };
+
   imports = [
     ../../profiles/home-manager.nix
   ];
