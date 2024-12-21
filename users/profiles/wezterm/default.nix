@@ -15,6 +15,10 @@ in {
         name: term
         direction: Bottom
         split_from: 1
+      - size: 0.30
+        name: aichat
+        command: direnv exec . aichat
+        direction: Right
   '';
   xdg.configFile."wezterm/wezterm.fnl.lua".source =
     pkgs.runCommand "wezterm.fnl.lua" {
