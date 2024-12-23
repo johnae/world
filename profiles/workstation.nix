@@ -36,6 +36,7 @@
       auth include login
     '';
   };
+  security.pam.services.hyprlock = {};
 
   security.polkit.enable = true;
   systemd.user.services.polkit-gnome-authentication-agent-1 = {

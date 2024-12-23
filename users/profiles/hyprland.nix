@@ -4,49 +4,6 @@
   pkgs,
   ...
 }: let
-  swaylockTimeout = "300";
-  swaylockSleepTimeout = "310";
-
-  swaylockEffects = pkgs.writeShellApplication {
-    name = "swaylock-effects";
-    runtimeInputs = [pkgs.swaylock-effects];
-    text = ''
-      exec swaylock \
-       --screenshots \
-       --indicator-radius 100 \
-       --indicator-thickness 7 \
-       --effect-blur 15x3 \
-       --effect-greyscale \
-       --ring-color ffffff \
-       --ring-clear-color baffba \
-       --ring-ver-color bababa \
-       --ring-wrong-color ffbaba \
-       --key-hl-color bababa \
-       --line-color ffffffaa \
-       --inside-color ffffffaa \
-       --inside-ver-color bababaaa \
-       --line-ver-color bababaaa \
-       --inside-clear-color baffbaaa \
-       --line-clear-color baffbaaa \
-       --inside-wrong-color ffbabaaa \
-       --line-wrong-color ffbabaaa \
-       --separator-color 00000000 \
-       --grace 2 \
-       --fade-in 0.2
-    '';
-  };
-
-  swayidleCommand = pkgs.writeShellApplication {
-    name = "swayidle";
-    runtimeInputs = [pkgs.bash swaylockEffects pkgs.swayidle];
-    text = ''
-      exec swayidle -d -w timeout ${swaylockTimeout} swaylock-effects \
-                     timeout ${swaylockSleepTimeout} 'hyprctl dispatch dpms off' \
-                     resume 'hyprctl dispatch dpms on' \
-                     before-sleep swaylock-effects
-    '';
-  };
-
   screenshot = pkgs.writeShellApplication {
     name = "screenshot";
     runtimeInputs = [pkgs.slurp pkgs.grim];
@@ -55,7 +12,6 @@
       slurp | grim -g - ~/Sync/screenshots/"$(date +'%Y-%m-%dT%H.%M.%S.png')"
     '';
   };
-
   swapCycle = dir:
     pkgs.writeShellApplication {
       name = "swap-${dir}";
@@ -139,6 +95,61 @@ in {
     _JAVA_AWT_WM_NONREPARENTING = "1";
   };
 
+  programs.hyprlock = {
+    enable = true;
+    settings = {
+      general = {
+        disable_loading_bar = true;
+        grace = 10;
+        hide_cursor = true;
+        no_fade_in = false;
+      };
+
+      background = [
+        {
+          path = "screenshot";
+          blur_passes = 3;
+          blur_size = 8;
+        }
+      ];
+      input-field = [
+        {
+          size = "200, 50";
+          position = "0, -80";
+          monitor = "";
+          dots_center = true;
+          fade_on_empty = false;
+          font_color = "rgb(202, 211, 245)";
+          inner_color = "rgb(91, 96, 120)";
+          outer_color = "rgb(24, 25, 38)";
+          outline_thickness = 5;
+          placeholder_text = ''<span foreground="##cad3f5">Password...</span>'';
+          shadow_passes = 2;
+        }
+      ];
+    };
+  };
+  services.hypridle = {
+    enable = true;
+    settings = {
+      general = {
+        after_sleep_cmd = "hyprctl dispatch dpms on";
+        ignore_dbus_inhibit = false;
+        lock_cmd = "hyprlock";
+      };
+      listener = [
+        {
+          timeout = 900;
+          on-timeout = "hyprlock";
+        }
+        {
+          timeout = 1200;
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on";
+        }
+      ];
+    };
+  };
   wayland.windowManager.hyprland.enable = true;
   # wayland.windowManager.hyprland.package = pkgs.hyprland-unstable;
   wayland.windowManager.hyprland.extraConfig = ''
@@ -175,7 +186,7 @@ in {
         "$mod SHIFT, e, exec, ${local-dev}/bin/local-dev"
         "$mod SHIFT, r, exec, ${remote-dev}/bin/remote-dev"
         "$mod SHIFT, s, exec, ${screenshot}/bin/screenshot"
-        "$mod CONTROL, l, exec, ${swaylockEffects}/bin/swaylock-effects"
+        "$mod CONTROL, l, exec, hyprlock"
         "$mod, left, movefocus, l"
         "$mod, right, movefocus, r"
         "$mod, up, movefocus, u"
@@ -318,7 +329,6 @@ in {
     ];
     exec-once = [
       "${pkgs.wpaperd}/bin/wpaperd"
-      "${swayidleCommand}/bin/swayidle"
     ];
   };
 }
