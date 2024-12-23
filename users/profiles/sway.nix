@@ -136,6 +136,18 @@ in {
   wayland.windowManager.sway = {
     enable = true;
     systemd.enable = true;
+    package = pkgs.swayfx;
+    checkConfig = false;
+    extraConfigEarly = ''
+      blur enable
+      blur_brightness 1.2
+      blur_saturation 1.1
+      shadows enable
+      layer_effects "waybar" blur enable; shadows enable; corner_radius 8
+      default_dim_inactive 0.15
+      corner_radius 8
+      smart_corner_radius enable
+    '';
     config = {
       inherit fonts modifier;
       # output = {
@@ -209,33 +221,10 @@ in {
           xkb_model = "pc105";
           xkb_options = "ctrl:nocaps,grp:switch,compose:rctrl";
           xkb_variant = "\"\"";
+          repeat_delay = "300";
+          repeat_rate = "20";
         };
-        "1739:52804:MSFT0001:00_06CB:CE44_Touchpad" = {
-          dwt = "true";
-          natural_scroll = "true";
-          tap = "true";
-        };
-        "1739:30383:DLL075B:01_06CB:76AF_Touchpad" = {
-          dwt = "true";
-          natural_scroll = "true";
-          tap = "true";
-        };
-        "1739:30383:DELL07E6:00_06CB:76AF_Touchpad" = {
-          dwt = "true";
-          natural_scroll = "true";
-          tap = "true";
-        };
-        "1739:52710:DLL096D:01_06CB:CDE6_Touchpad" = {
-          dwt = "true";
-          natural_scroll = "true";
-          tap = "true";
-        };
-        "1267:12850:ELAN06A1:00_04F3:3232_Touchpad" = {
-          dwt = "true";
-          natural_scroll = "true";
-          tap = "true";
-        };
-        "1739:52620:SYNA8005:00_06CB:CD8C_Touchpad" = {
+        "type:touchpad" = {
           dwt = "true";
           natural_scroll = "true";
           tap = "true";
@@ -243,11 +232,12 @@ in {
       };
 
       gaps = {
-        inner = 4;
-        top = 4;
-        bottom = 4;
-        left = 4;
-        right = 4;
+        inner = 8;
+        top = 16;
+        bottom = 16;
+        left = 16;
+        right = 16;
+        smartBorders = "on";
       };
 
       modes = {
