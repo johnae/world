@@ -36,8 +36,8 @@
       profile.name = "framework-13";
       profile.outputs = [
         {
-          criteria = "BOE 0x0BCA Unknown";
-          mode = "2256x1504";
+          criteria = "BOE NE135A1M-NY1 Unknown";
+          mode = "2880x1920";
           position = "0,0";
           scale = 1.0;
         }
@@ -48,8 +48,8 @@
       profile.name = "framework-13-2";
       profile.outputs = [
         {
-          criteria = "BOE 0x0BCA Unknown";
-          mode = "2256x1504";
+          criteria = "BOE NE135A1M-NY1 Unknown";
+          mode = "2880x1920";
           position = "0,0";
           scale = 1.0;
         }
