@@ -13,3 +13,7 @@ windows:
     name: term
     direction: Bottom
     split_from: 1
+  - size: 0.30
+    name: aichat
+    command: direnv exec . aichat -m openai:gpt-4o -s world --prompt "You are a helpful programming assistant. You are part of a developer workflow in the terminal, together with a terminal, an editor (helix), nix shell and other such tooling. You will be asked mainly tech and programming questions."
+    direction: Right

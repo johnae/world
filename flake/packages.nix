@@ -139,6 +139,14 @@
           then inputs.persway.packages.${system}.default
           else pkgs.hello;
         wezterm = inputs.wezterm.packages.${system}.default;
+
+        inherit
+          (inputs.hyprland.packages.${system})
+          hyprland
+          hyprland-unwrapped
+          xdg-desktop-portal-hyprland
+          ;
+
         unlockremote = pkgs.writeShellApplication {
           name = "unlockremote";
           runtimeInputs = with pkgs; [coreutils openssh];

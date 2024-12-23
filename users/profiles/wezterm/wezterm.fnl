@@ -340,6 +340,7 @@
 
 (wezterm.on :ToggleMaximizeTerminal (toggle-maximized-pane :term))
 (wezterm.on :ToggleMaximizeEditor (toggle-maximized-pane :editor))
+(wezterm.on :ToggleMaximizeAI (toggle-maximized-pane :aichat))
 (wezterm.on :ActivateMainUI
             (lambda [window pane] (open-context-tab-action window pane :main)))
 
@@ -497,6 +498,7 @@
       {:key :s :mods :CTRL :action (act.EmitEvent :ActivateSerpl)}
       {:key :t :mods :CTRL :action (act.EmitEvent :ToggleMaximizeTerminal)}
       {:key :e :mods :CTRL :action (act.EmitEvent :ToggleMaximizeEditor)}
+      {:key :a :mods :CTRL :action (act.EmitEvent :ToggleMaximizeAI)}
       {:key :n :mods :LEADER :action (act.EmitEvent :NewProjectWindow)}
       {:key :t :mods :LEADER :action (act.EmitEvent :NewProjectTab)}
       {:key :r :mods :LEADER :action (act.EmitEvent :ReloadFixup)}

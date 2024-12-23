@@ -38,6 +38,7 @@ in {
     # azure-cli
     cachix
     carapace
+    devenv
     fzf # # for certain utilities that depend on it
     gh
     git-crypt

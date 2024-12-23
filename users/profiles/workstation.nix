@@ -14,7 +14,7 @@ in {
       ./firefox.nix
       ./foot.nix
       ./fuzzel.nix
-      # ./hyprland.nix
+      ./hyprland.nix
       ./kanshi.nix
       ./mako.nix
       ./obs.nix
