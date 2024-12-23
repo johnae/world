@@ -34,10 +34,6 @@
   };
 
   age.secrets = {
-    aichat-env = {
-      file = ../../secrets/aichat-env.age;
-      owner = "${toString adminUser.uid}";
-    };
     wifi-networks = {
       file = ../../secrets/wifi-networks.age;
     };
