@@ -54,6 +54,16 @@
       '';
     };
 
+  runHyprland = runViaShell {
+    env = {
+      XDG_SESSION_TYPE = "wayland";
+      XDG_CURRENT_DESKTOP = "Hyprland";
+      XDG_SESSION_DESKTOP = "Hyprland";
+    };
+    name = "hyprland";
+    cmd = "${pkgs.hyprland}/bin/Hyprland";
+  };
+
   runSway = runViaShell {
     env = {
       XDG_SESSION_TYPE = "wayland";
@@ -84,19 +94,23 @@
 
   sessions = [
     {
-      name = "wayland-sessions/sway.desktop";
+      name = "sway.desktop";
       path = desktopSession "sway" "${runSway}/bin/sway";
     }
     {
-      name = "wayland-sessions/river.desktop";
+      name = "river.desktop";
       path = desktopSession "river" "${runRiver}/bin/river";
     }
     {
-      name = "wayland-sessions/nushell.desktop";
+      name = "hyprland.desktop";
+      path = desktopSession "Hyprland" "${runHyprland}/bin/hyprland";
+    }
+    {
+      name = "nushell.desktop";
       path = desktopSession "nushell" "${pkgs.nushell}/bin/nu";
     }
     {
-      name = "wayland-sessions/bash.desktop";
+      name = "bash.desktop";
       path = desktopSession "bash" "${pkgs.bashInteractive}/bin/bash";
     }
   ];
@@ -170,7 +184,7 @@
   in
     pkgs.writeShellApplication {
       name = "greeter";
-      runtimeInputs = [runSway pkgs.bashInteractive pkgs.nushell pkgs.systemd pkgs.greetd.tuigreet];
+      runtimeInputs = [runSway runRiver runHyprland pkgs.bashInteractive pkgs.nushell pkgs.systemd pkgs.greetd.tuigreet];
       text = ''
         tuigreet --sessions ${sessionDir} --time -r --remember-session --power-shutdown 'systemctl poweroff' --power-reboot 'systemctl reboot' --cmd ${default}
       '';
@@ -204,7 +218,7 @@ in {
     enable = true;
     restart = true;
     settings = {
-      default_session.command = "${createGreeter "${runRiver}/bin/river" sessions}/bin/greeter";
+      default_session.command = "${createGreeter "${runHyprland}/bin/hyprland" sessions}/bin/greeter";
     };
   };
   ## prevents systemd spewing the console with log messages when greeter is active

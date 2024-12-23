@@ -28,6 +28,8 @@
     "hcloud-k3s-master-init-diskformat"
     "hetzner-csi-driver-yaml"
     "hyperion-diskformat"
+    "hyprland"
+    "hyprland-unwrapped"
     "icarus-diskformat"
     "installer-diskformat"
     "juicefs-csi-driver-yaml"
@@ -44,6 +46,7 @@
     "sirius-diskformat"
     "test-diskformat"
     "titan-diskformat"
+    "xdg-desktop-portal-hyprland"
   ];
   pkgs.x86_64-linux = withSystem "x86_64-linux" (
     ctx @ {pkgs, ...}: let
