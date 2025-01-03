@@ -71,7 +71,7 @@
       XDG_SESSION_DESKTOP = "sway";
     };
     name = "sway";
-    cmd = "${pkgs.sway}/bin/sway";
+    cmd = "${pkgs.swayfx}/bin/sway";
   };
 
   runRiver = runViaShell {
