@@ -77,6 +77,7 @@ in {
           label = ":nix: Update packages";
           agents = [
             "queue=default-queue"
+            "nixos=true"
           ];
           plugins = [
             {
