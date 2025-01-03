@@ -97,7 +97,7 @@
     '';
   };
 
-  terminal-bin = "${pkgs.wezterm}/bin/wezterm";
+  terminal-bin = "${pkgs.wezterm}/bin/wezterm start --always-new-process";
   editor = ''${terminal-bin} start --class=hx hx'';
 
   fonts = {
@@ -232,11 +232,11 @@ in {
       };
 
       gaps = {
-        inner = 8;
-        top = 16;
-        bottom = 16;
-        left = 16;
-        right = 16;
+        inner = 12;
+        top = 6;
+        bottom = 6;
+        left = 6;
+        right = 6;
         smartBorders = "on";
       };
 
@@ -277,6 +277,7 @@ in {
 
         "${modifier}+space" = "exec persway stack-swap-main";
         "${modifier}+Control+space" = "exec persway stack-main-rotate-next";
+        "${modifier}+Control+Shift+space" = "exec persway stack-main-rotate-prev";
 
         "${modifier}+Tab" = "exec persway stack-focus-next";
         "${modifier}+Shift+Tab" = "exec persway stack-focus-prev";
@@ -325,11 +326,14 @@ in {
         {
           command = "${pkgs.gnome-settings-daemon}/libexec/gsd-xsettings";
         }
-        {
-          command = "${pkgs.dbus.out}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP";
-        }
+        # {
+        #   command = "${pkgs.dbus.out}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP";
+        # }
         {
           command = "${pkgs.polkit_gnome.out}/libexec/polkit-gnome-authentication-agent-1";
+        }
+        {
+          command = "${pkgs.persway}/bin/persway daemon -w -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev' -d stack_main";
         }
         {
           command = "${swayOnReload}/bin/sway-on-reload";
@@ -349,7 +353,7 @@ in {
   };
 
   systemd.user.services = {
-    persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway daemon -w -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev' -d stack_main";
+    # persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway daemon -w -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev' -d stack_main";
     # rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
     wpaperd = swayservice "Sway BG service" "${pkgs.wpaperd}/bin/wpaperd";
     swayidle = swayservice "Sway Idle Service - lock screen etc" "${swayidleCommand}/bin/swayidle";
