@@ -218,7 +218,7 @@ in {
     enable = true;
     restart = true;
     settings = {
-      default_session.command = "${createGreeter "${runHyprland}/bin/hyprland" sessions}/bin/greeter";
+      default_session.command = "${createGreeter "${runSway}/bin/sway" sessions}/bin/greeter";
     };
   };
   ## prevents systemd spewing the console with log messages when greeter is active
