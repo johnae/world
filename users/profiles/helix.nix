@@ -227,6 +227,12 @@ in {
             q = ":quit";
             space = "goto_last_accessed_file";
           };
+          "+" = {
+            i = ":pipe aichat -r coder-openai";
+            r = ":pipe aichat -r refactor-openai";
+            c = ":pipe aichat -r coder-claude";
+            t = ":pipe aichat -r refactor-claude";
+          };
         };
       };
     };
