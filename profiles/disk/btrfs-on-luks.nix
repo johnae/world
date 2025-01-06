@@ -4,12 +4,12 @@
   ...
 }: let
   btrfsDisks = config.btrfs.disks;
-  tmpfsRootSizeGb = config.tmpfsRoot.sizegb;
+  tmpfsRootSize = config.tmpfsRoot.size;
 in {
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
-    options = ["defaults" "size=${toString tmpfsRootSizeGb}G" "mode=755"];
+    options = ["defaults" "size=${tmpfsRootSize}" "mode=755"];
   };
 
   fileSystems."/nix" = {
