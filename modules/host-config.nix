@@ -1,6 +1,6 @@
 {lib, ...}: let
   inherit (lib) mkOption;
-  inherit (lib.types) str nullOr attrsOf listOf enum bool ints attrs;
+  inherit (lib.types) str nullOr attrsOf listOf enum bool ints attrs strMatching;
 in {
   options = {
     publicKey = mkOption {
@@ -58,6 +58,10 @@ in {
     tmpfsRoot.sizegb = mkOption {
       type = ints.between 2 64;
       default = 8;
+    };
+    tmpfsRoot.size = mkOption {
+      type = strMatching "^([0-9]{1,2}|100)%$";
+      default = "50%";
     };
     adminUser = mkOption {
       type = attrs;
