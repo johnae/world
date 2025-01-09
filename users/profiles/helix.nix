@@ -158,6 +158,7 @@
       theme = "catppuccin_frappe";
 
       editor = {
+        end-of-line-diagnostics = "hint";
         line-number = "relative";
         mouse = true;
         bufferline = "multiple";
@@ -178,6 +179,10 @@
 
         file-picker = {
           hidden = false;
+        };
+
+        inline-diagnostics = {
+          cursor-line = "error";
         };
 
         lsp = {
