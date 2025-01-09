@@ -209,11 +209,11 @@
           "+" = {
             i = ":pipe aichat -r coder-openai";
             r = ":pipe aichat -r refactor-openai";
-            e = ":pipe aichat -r explain-openai";
+            e = [":pipe-to tee /tmp/helix-tmp-explain" ":sh aichat -f /tmp/helix-tmp-explain -r explain-openai"];
 
             c = ":pipe aichat -r coder-claude";
             t = ":pipe aichat -r refactor-claude";
-            y = ":pipe aichat -r explain-claude";
+            y = [":pipe-to tee /tmp/helix-tmp-explain" ":sh aichat -f /tmp/helix-tmp-explain -r explain-claude"];
           };
         };
       };

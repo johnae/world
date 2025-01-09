@@ -136,39 +136,27 @@ in {
     ---
     model: openai:gpt-4o
     ---
-    Explain what the given code does in a clear and concise manner. Comment the explanation in a way suitable for inclusion
-    in the given code. Just respond with the comment before the code. Nothing else, do NOT wrap in markdown.
+    Explain what the given code does in a clear and concise manner. Use a style suitable for showing in a modern terminal.
     ### INPUT:
     async function timeout(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
     ### OUTPUT:
-    /*
     This function returns a promise that can be awaited. When awaited it the function will sleep for at least the given number
     of milliseconds.
-    */
-    async function timeout(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
   '';
   home.file."${configDir}/roles/explain-claude.md".text = ''
     ---
     model: claude:claude-3-5-sonnet-latest
     ---
-    Explain what the given code does in a clear and concise manner. Comment the explanation in a way suitable for inclusion
-    in the given code. Just respond with the comment before the code. Nothing else, do NOT wrap in markdown.
+    Explain what the given code does in a clear and concise manner. Use a style suitable for showing in a modern terminal.
     ### INPUT:
     async function timeout(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
     ### OUTPUT:
-    /*
     This function returns a promise that can be awaited. When awaited it the function will sleep for at least the given number
     of milliseconds.
-    */
-    async function timeout(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
   '';
   home.file."${configDir}/config.yaml".source = (pkgs.formats.yaml {}).generate "aichat-config.yaml" {
     model = "openai:gpt-4o";
