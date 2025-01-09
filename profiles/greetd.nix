@@ -115,68 +115,6 @@
     }
   ];
 
-  # kanshiConf = let
-  #   conf = import ../users/profiles/kanshi.nix;
-  # in
-  #   pkgs.writeText "kanshi-conf" (
-  #     builtins.concatStringsSep "\n" (
-  #       map (setting: ''
-  #         profile ${setting.profile.name} {
-  #         ${builtins.concatStringsSep "\n" (map (output: ''output "${output.criteria}" mode ${output.mode} position ${output.position} scale ${toString output.scale}'') setting.profile.outputs)}
-  #         }
-  #       '')
-  #       conf.services.kanshi.settings
-  #     )
-  #   );
-
-  # regreetCss = pkgs.writeText "regreet-css" ''
-  #   button,
-  #   entry,
-  #   infobar.error > revealer > box {
-  #     background-color: transparent;
-  #     background-image: none;
-  #   }
-
-  #   frame {
-  #     /* background: transparent !important; */
-  #     /* background: alpha(black, 0.4) !important; */
-  #     /* background-color: alpha(black, 0.4) !important; */
-  #     box-shadow: 0px 0px 8px 0px black;
-  #     border: none;
-  #   }
-  # '';
-
-  # swayConfig = let
-  #   conf = pkgs.callPackage ../users/profiles/sway.nix {};
-  # in
-  #   pkgs.writeText "sway-config" ''
-  #     exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
-  #     exec ${pkgs.gnome-settings-daemon}/libexec/gsd-xsettings
-  #     exec ${pkgs.kanshi}/bin/kanshi -c ${kanshiConf}
-  #     output * bg ${../files/background.jpg} fill
-  #     exec "regreet -s ${regreetCss} ; swaymsg exit"
-  #     for_window [title=".*"] move container to output left
-  #     ${builtins.concatStringsSep "\n" (
-  #       lib.mapAttrsToList (name: value: ''
-  #         input "${name}" {
-  #         ${builtins.concatStringsSep "\n" (
-  #           lib.mapAttrsToList (name: value: ''
-  #             ${name} ${value}
-  #           '')
-  #           value
-  #         )}
-  #         }
-  #       '')
-  #       conf.wayland.windowManager.sway.config.input
-  #     )}
-
-  #     input "1267:12850:ELAN06A1:00_04F3:3232_Touchpad" {
-  #       dwt true
-  #       natural_scroll true
-  #       tap true
-  #     }
-  #   '';
-
   createGreeter = default: sessions: let
     sessionDir = pkgs.linkFarm "sessions" (
       builtins.filter (item: item.name != "${default}.desktop") sessions
