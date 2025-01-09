@@ -153,7 +153,6 @@
   '';
   programs.helix = {
     enable = true;
-    package = helix-ai;
     settings = {
       theme = "catppuccin_frappe";
 
