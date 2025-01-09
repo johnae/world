@@ -132,30 +132,6 @@ in {
             .reduce((sum, num) => sum + num, 0);
     }
   '';
-  home.file."${configDir}/roles/coder-openai.md".text = ''
-     ---
-     model: openai:gpt-4o
-     ---
-     Provide only code without comments or explanations. Do not wrap in markdown. Just respond with the code, nothing else.
-     ### INPUT:
-     async sleep in js
-     ### OUTPUT:
-     async function timeout(ms) {
-       return new Promise(resolve => setTimeout(resolve, ms));
-    }
-  '';
-  home.file."${configDir}/roles/coder-claude.md".text = ''
-    ---
-    model: claude:claude-3-5-sonnet-latest
-    ---
-    Provide only code without comments or explanations. Do not wrap in markdown. Just respond with the code, nothing else.
-    ### INPUT:
-    async sleep in js
-    ### OUTPUT:
-    async function timeout(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-  '';
   home.file."${configDir}/roles/explain-openai.md".text = ''
     ---
     model: openai:gpt-4o
@@ -192,94 +168,6 @@ in {
     */
     async function timeout(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
-    }
-  '';
-  home.file."${configDir}/roles/refactor-openai.md".text = ''
-    ---
-    model: openai:gpt-4o
-    ---
-    Provide only code without comments or explanations. Take the input and refactor it to be more succinct, simpler and best-practice.
-    Do not change the interface or return values. It must still work the same.
-
-    Do not wrap in markdown. Just respond with the code, nothing else.
-    ### INPUT:
-    // Function to calculate the sum of all even numbers in an array
-    function calculateSumOfEvens(array) {
-        if (array === null || array === undefined || !Array.isArray(array)) {
-            return "Invalid input";
-        }
-
-        let sum = 0;
-        for (let i = 0; i < array.length; i++) {
-            if (typeof array[i] === 'number') {
-                if (array[i] % 2 === 0) {
-                    sum = sum + array[i];
-                }
-            } else {
-                console.log("Skipping non-numeric value: " + array[i]);
-            }
-        }
-
-        return sum;
-    }
-    ### OUTPUT:
-    /**
-     * Calculates the sum of all even numbers in an array.
-     * @param {Array} array - The array to process.
-     * @returns {number} The sum of even numbers. Returns 0 if the array is empty or contains no valid numbers.
-     */
-    function calculateSumOfEvens(array) {
-        if (!Array.isArray(array)) {
-            throw new TypeError("Input must be an array");
-        }
-
-        return array
-            .filter(item => typeof item === 'number' && item % 2 === 0)
-            .reduce((sum, num) => sum + num, 0);
-    }
-  '';
-  home.file."${configDir}/roles/refactor-claude.md".text = ''
-    ---
-    model: claude:claude-3-5-sonnet-latest
-    ---
-    Provide only code without comments or explanations. Take the input and refactor it to be more succinct, simpler and best-practice.
-    Do not change the interface or return values. It must still work the same.
-
-    Do not wrap in markdown. Just respond with the code, nothing else.
-    ### INPUT:
-    // Function to calculate the sum of all even numbers in an array
-    function calculateSumOfEvens(array) {
-        if (array === null || array === undefined || !Array.isArray(array)) {
-            return "Invalid input";
-        }
-
-        let sum = 0;
-        for (let i = 0; i < array.length; i++) {
-            if (typeof array[i] === 'number') {
-                if (array[i] % 2 === 0) {
-                    sum = sum + array[i];
-                }
-            } else {
-                console.log("Skipping non-numeric value: " + array[i]);
-            }
-        }
-
-        return sum;
-    }
-    ### OUTPUT:
-    /**
-     * Calculates the sum of all even numbers in an array.
-     * @param {Array} array - The array to process.
-     * @returns {number} The sum of even numbers. Returns 0 if the array is empty or contains no valid numbers.
-     */
-    function calculateSumOfEvens(array) {
-        if (!Array.isArray(array)) {
-            throw new TypeError("Input must be an array");
-        }
-
-        return array
-            .filter(item => typeof item === 'number' && item % 2 === 0)
-            .reduce((sum, num) => sum + num, 0);
     }
   '';
   home.file."${configDir}/config.yaml".source = (pkgs.formats.yaml {}).generate "aichat-config.yaml" {
