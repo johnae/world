@@ -233,6 +233,15 @@ in {
             c = ":pipe aichat -r coder-claude";
             t = ":pipe aichat -r refactor-claude";
           };
+          "+" = {
+            i = ":pipe aichat -r coder-openai";
+            r = ":pipe aichat -r refactor-openai";
+            e = ":pipe aichat -r explain-openai";
+
+            c = ":pipe aichat -r coder-claude";
+            t = ":pipe aichat -r refactor-claude";
+            y = ":pipe aichat -r explain-claude";
+          };
         };
       };
     };
