@@ -1,24 +1,4 @@
-{pkgs, ...}: let
-  helix-ai = pkgs.writeShellApplication {
-    name = "hx";
-    runtimeInputs = [pkgs.lsp-ai];
-    text = ''
-      if [ -e /run/agenix/groq-lsp-ai ]; then
-        GROQ_API_KEY="$(cat /run/agenix/groq-lsp-ai)"
-        export GROQ_API_KEY
-      fi
-      if [ -e /run/agenix/anthropic-lsp-ai ]; then
-        ANTHROPIC_API_KEY="$(cat /run/agenix/anthropic-lsp-ai)"
-        export ANTHROPIC_API_KEY
-      fi
-      if [ -e /run/agenix/openrouter-lsp-ai ]; then
-        OPENROUTER_API_KEY="$(cat /run/agenix/openrouter-lsp-ai)"
-        export OPENROUTER_API_KEY
-      fi
-      exec ${pkgs.helix-latest}/bin/hx "''$@"
-    '';
-  };
-in {
+{pkgs, ...}: {
   xdg.configFile."helix/runtime/queries/fennel/injections.scm".source = pkgs.writeText "fennel-injections.scm" ''
     ; inherits: scheme
   '';
@@ -222,7 +202,6 @@ in {
       keys = {
         normal = {
           space = {
-            t = ":open lsp-ai-chat.md";
             e = ":write";
             q = ":quit";
             space = "goto_last_accessed_file";
@@ -262,20 +241,20 @@ in {
         {
           name = "nix";
           formatter = {command = "alejandra";};
-          language-servers = ["nixd" "lsp-ai"];
+          language-servers = ["nixd"];
           auto-format = true;
         }
         {
           name = "markdown";
-          language-servers = ["marksman" "markdown-oxide" "lsp-ai"];
+          language-servers = ["marksman" "markdown-oxide"];
         }
         {
           name = "rust";
-          language-servers = ["rust-analyzer" "lsp-ai"];
+          language-servers = ["rust-analyzer"];
         }
         {
           name = "yaml";
-          language-servers = ["yaml-language-server" "lsp-ai"];
+          language-servers = ["yaml-language-server"];
         }
         {
           name = "fennel";
@@ -293,7 +272,7 @@ in {
             command = "fnlfmt";
             args = ["-"];
           };
-          language-servers = ["fennel-ls" "lsp-ai"];
+          language-servers = ["fennel-ls"];
           grammar = "scheme";
           auto-format = true;
         }
@@ -303,7 +282,7 @@ in {
             command = "stylua";
             args = ["-"];
           };
-          language-servers = ["lua-language-server" "lsp-ai"];
+          language-servers = ["lua-language-server"];
           auto-format = true;
         }
       ];
