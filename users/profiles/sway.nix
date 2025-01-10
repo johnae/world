@@ -71,6 +71,17 @@
     '';
   };
 
+  swayLidClose = pkgs.writeShellApplication {
+    name = "sway-lid-close";
+    runtimeInputs = [pkgs.sway pkgs.jq];
+    text = ''
+      # Check if external monitors are connected - then disable internal display
+      if swaymsg -t get_outputs | jq -e '[.[] | select(.active == true and .name != "eDP-1")] | length > 0'; then
+        swaymsg output eDP-1 disable
+      fi
+    '';
+  };
+
   swayOnReload = pkgs.writeShellApplication {
     name = "sway-on-reload";
     runtimeInputs = [pkgs.sway];
@@ -343,10 +354,11 @@ in {
 
       bars = [];
     };
+    ### fixthis
     extraConfig = ''
       no_focus [window_role="browser"]
       popup_during_fullscreen smart
-      bindswitch --reload --locked lid:on output eDP-1 disable
+      bindswitch --reload --locked lid:on exec ${swayLidClose}/bin/sway-lid-close
       bindswitch --reload --locked lid:off output eDP-1 enable
       titlebar_border_thickness 0
     '';
