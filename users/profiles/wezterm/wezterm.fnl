@@ -493,49 +493,51 @@
      [{:key :Space
        :mods :LEADER|CTRL
        :action (act.SendKey {:key :Space :mods :CTRL})}
-      {:key :g :mods :CTRL :action (act.EmitEvent :ActivateGitui)}
-      {:key :j :mods :CTRL :action (act.EmitEvent :ActivateLazyjj)}
-      {:key :s :mods :CTRL :action (act.EmitEvent :ActivateSerpl)}
-      {:key :t :mods :CTRL :action (act.EmitEvent :ToggleMaximizeTerminal)}
-      {:key :e :mods :CTRL :action (act.EmitEvent :ToggleMaximizeEditor)}
-      {:key :a :mods :CTRL :action (act.EmitEvent :ToggleMaximizeAI)}
-      {:key :n :mods :LEADER :action (act.EmitEvent :NewProjectWindow)}
-      {:key :t :mods :LEADER :action (act.EmitEvent :NewProjectTab)}
+      {:key :g :mods :LEADER :action (act.EmitEvent :ActivateGitui)}
+      {:key :j :mods :LEADER :action (act.EmitEvent :ActivateLazyjj)}
+      {:key :s :mods :LEADER :action (act.EmitEvent :ActivateSerpl)}
+      {:key :t :mods :LEADER :action (act.EmitEvent :ToggleMaximizeTerminal)}
+      {:key :e :mods :LEADER :action (act.EmitEvent :ToggleMaximizeEditor)}
+      {:key :a :mods :LEADER :action (act.EmitEvent :ToggleMaximizeAI)}
+      {:key :n :mods :LEADER|CTRL :action (act.EmitEvent :NewProjectWindow)}
+      {:key :t :mods :LEADER|CTRL :action (act.EmitEvent :NewProjectTab)}
       {:key :r :mods :LEADER :action (act.EmitEvent :ReloadFixup)}
       {:key :w :mods :LEADER :action (act.EmitEvent :ReloadWorkspace)}
       {:key :q :mods :LEADER :action (act.CloseCurrentPane {:confirm true})}
       {:key :z :mods :LEADER :action act.TogglePaneZoomState}
       {:key :RightArrow
-       :mods :LEADER
+       :mods :LEADER|CTRL
        :action (act.SplitPane {:direction :Right :size {:Percent 50}})}
       {:key :LeftArrow
-       :mods :LEADER
+       :mods :LEADER|CTRL
        :action (act.SplitPane {:direction :Left :size {:Percent 50}})}
       {:key :DownArrow
-       :mods :LEADER
+       :mods :LEADER|CTRL
        :action (act.SplitPane {:direction :Down :size {:Percent 50}})}
       {:key :UpArrow
-       :mods :LEADER
+       :mods :LEADER|CTRL
        :action (act.SplitPane {:direction :Up :size {:Percent 50}})}
-      {:key :LeftArrow :mods :CTRL :action (act.ActivatePaneDirection :Left)}
-      {:key :RightArrow :mods :CTRL :action (act.ActivatePaneDirection :Right)}
-      {:key :UpArrow :mods :CTRL :action (act.ActivatePaneDirection :Up)}
-      {:key :DownArrow :mods :CTRL :action (act.ActivatePaneDirection :Down)}
+      {:key :LeftArrow :mods :LEADER :action (act.ActivatePaneDirection :Left)}
+      {:key :RightArrow
+       :mods :LEADER
+       :action (act.ActivatePaneDirection :Right)}
+      {:key :UpArrow :mods :LEADER :action (act.ActivatePaneDirection :Up)}
+      {:key :DownArrow :mods :LEADER :action (act.ActivatePaneDirection :Down)}
       {:key :q
        :mods :LEADER|SHIFT
        :action (act.CloseCurrentTab {:confirm true})}
-      {:key :r :mods :CTRL :action (act.RotatePanes :CounterClockwise)}
-      {:key :r :mods :CTRL|SHIFT :action (act.RotatePanes :Clockwise)}
+      {:key :r :mods :LEADER|CTRL :action (act.RotatePanes :CounterClockwise)}
+      {:key :r :mods :LEADER|CTRL|SHIFT :action (act.RotatePanes :Clockwise)}
       {:key :p :mods :LEADER :action (act.PaneSelect {:mode :SwapWithActive})}
-      {:key :a :mods :LEADER :action (act.EmitEvent :FindProject)}
+      {:key :a :mods :LEADER|CTRL :action (act.EmitEvent :FindProject)}
       {:key :f
-       :mods :LEADER
+       :mods :LEADER|CTRL
        :action (act.ShowLauncherArgs {:flags :FUZZY|WORKSPACES})}])
 
 (for [i 1 9]
   (table.insert config.keys
                 {:key (tostring i)
-                 :mods :CTRL
+                 :mods :LEADER
                  :action (act.ActivateTab (- i 1))}))
 
 (set config.unix_domains [{:name :local-dev}])
