@@ -11,9 +11,9 @@
     ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/u2fmappings.nix
     ../../profiles/admin-user/user.nix
-    ../../profiles/disk/bcachefs.nix
+    ../../profiles/disk/bcachefs-on-luks.nix
     ../../profiles/greetd.nix
-    ../../profiles/hardware/usbcore.nix
+    # ../../profiles/hardware/usbcore.nix
     ../../profiles/hardware/framework-13-amd.nix
     ../../profiles/home-manager.nix
     ../../profiles/interception-tools.nix
@@ -26,7 +26,7 @@
   ];
 
   bcachefs.disks = ["/dev/nvme0n1"];
-  bcachefs.devices = ["/dev/nvme0n1p3"];
+  bcachefs.devices = ["/dev/mapper/encrypted_root"];
 
   boot.initrd = {
     systemd.enable = true;
