@@ -53,6 +53,10 @@ build flake="github:johnae/world":
 build flake="github:johnae/world":
   @nixos-rebuild build --flake '{{flake}}' --use-remote-sudo -L
 
+[linux]
+build-installer flake="github:johnae/world":
+  @nix build '{{flake}}#nixosConfigurations.installer.config.system.build.isoImage'
+
 [private]
 echo +args:
   @echo '{{args}}'
