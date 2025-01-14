@@ -61,7 +61,7 @@ in {
     };
     dnsMasqSettings = mkOption {
       type = attrsOf anything;
-      description = "Extran dnsmasq settings";
+      description = "Extra dnsmasq settings";
     };
     externalInterface = mkOption {
       type = str;
@@ -85,21 +85,34 @@ in {
     networking.useDHCP = false;
     networking.firewall.trustedInterfaces = internalInterfaceNames;
 
-    networking.interfaces =
-      {
-        ${cfg.externalInterface}.useDHCP = true;
-      }
-      // (
-        mapAttrs (_: net: {
-          useDHCP = false;
-          ipv4.addresses = [{inherit (net) address prefixLength;}];
-        })
-        internalInterfaces
-      );
+    systemd.network = {
+      enable = true;
+      networks =
+        {
+          "10-wan" = {
+            matchConfig.Name = cfg.externalInterface;
+            networkConfig.DHCP = "ipv4";
+          };
+        }
+        // (lib.mapAttrs' (name: net: {
+            name = "11-${name}";
+            value = {
+              matchConfig.Name = name;
+              addresses = [
+                {
+                  Address = "${net.address}/${toString net.prefixLength}";
+                }
+              ];
+            };
+          })
+          internalInterfaces);
+    };
 
-    networking.nat.enable = true;
-    networking.nat.externalInterface = cfg.externalInterface;
-    networking.nat.internalInterfaces = internalInterfaceNames;
+    networking.nat = {
+      enable = true;
+      externalInterface = cfg.externalInterface;
+      internalInterfaces = internalInterfaceNames;
+    };
 
     environment.persistence."/keep".directories = ["/var/lib/dnsmasq"];
 
