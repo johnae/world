@@ -70,6 +70,7 @@ in {
     pkgs.socat
     pkgs.tmux
     pkgs.tree
+    pkgs.tpm2-tss
     pkgs.unzip
     pkgs.usbutils
     pkgs.vim
