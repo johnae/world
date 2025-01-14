@@ -30,6 +30,7 @@
 
   boot.initrd = {
     systemd.enable = true;
+    systemd.tpm2.enable = true;
     #luks.devices.cryptkey.crypttabExtraOpts = ["fido2-device=auto"];
   };
 
