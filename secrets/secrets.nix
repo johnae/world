@@ -48,6 +48,7 @@ let
   johnae = [
     "age1yubikey1qt7cjux5unxcsrw9dnkq8qsh0jgnwwvxzxm2jn2pxetjchtclmlk6xvpckq"
     "age1yubikey1qvkk2zuwvypyfkwanf08wzq369a07ukstj5czuwavdn2peczyec764ywpxw"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMnqT0GryuEpFxGD36B476OPwkOlbNpUM527jiFfhIIb"
   ];
 in
   listToAttrs (map (name: {
