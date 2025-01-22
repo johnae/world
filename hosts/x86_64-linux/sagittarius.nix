@@ -98,8 +98,6 @@
     dnsMasqSettings.strict-order = true;
   };
 
-  services.dnsmasq.enable = lib.mkForce false; ## remove
-
   age.secrets = {
     ts-google-9k = {
       file = ../../secrets/ts-google-9k.age;
