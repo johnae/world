@@ -4,7 +4,7 @@
   config,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPYdbWkrNaOaGKy7P+wX5jKCZ0FLeFQ0rH2WHqTzrMHc";
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBuvF7J7SOl5OQ7GS6Fwr6TdYaue0iwTwmtGAAtChmO0";
   syncthingDeviceID = "7HYSCXB-KGNIK4Y-24SOMMD-CYKJLYR-GLK7D3R-NWJFSYM-ZCBRNF2-KQJ7ZQW";
 
   imports = [
