@@ -21,7 +21,7 @@ in {
     };
     cryptsetup.luksFormat.extraParams = mkOption {
       type = str;
-      default = "-v --type luks2 --hash sha256 --key-size 256 --use-urandom --cipher aes-xts-plain64";
+      default = "-v";
     };
     machinePurpose = mkOption {
       type = enum ["server" "workstation"];
