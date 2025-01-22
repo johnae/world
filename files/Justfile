@@ -57,6 +57,25 @@ build flake="github:johnae/world":
 build-installer flake="github:johnae/world":
   @nix build '{{flake}}#nixosConfigurations.installer.config.system.build.isoImage'
 
+rekey:
+  #!/usr/bin/env bash
+  EIDENTITY="id_ed25519_agenix.age"
+  if [ ! -e "$EIDENTITY" ] && [ -d secrets ]; then
+    cd secrets
+  else
+    echo "no $EIDENTITY found and no secrets directory"
+    exit 1
+  fi
+  if [ ! -e "identity.txt" ]; then
+    echo identity.txt missing
+    echo please generate it using age-plugin-yubikey
+    exit 1
+  fi
+  IDENTITY="$(mktemp XXXXXX.agenix)"
+  trap 'rm -f $IDENTITY' EXIT
+  rage -i identity.txt -d "$EIDENTITY" > "$IDENTITY"
+  agenix -i "$IDENTITY" -r
+
 [private]
 echo +args:
   @echo '{{args}}'
