@@ -18,7 +18,7 @@ in {
   home.packages = [
     pkgs.jwt-cli ## see env.nu for impl
   ];
-  programs.atuin.enable = true;
+  programs.atuin.enable = false; ## disable for now
   programs.atuin.settings = {
     auto_sync = true;
     sync_frequency = "5m";
@@ -26,7 +26,7 @@ in {
     sync.records = true;
   };
   programs.direnv.enableNushellIntegration = false;
-  programs.atuin.enableNushellIntegration = true;
+  programs.atuin.enableNushellIntegration = false; ## disable for now
   programs.nushell = {
     enable = true;
     package = pkgs.nushell;
