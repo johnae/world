@@ -92,7 +92,7 @@
     ];
     externalInterface = "enp1s0f0";
     internalInterface = "enp2s0";
-    internalInterfaceIP = "192.168.20.3"; ## fix
+    internalInterfaceIP = "192.168.20.1";
     dnsMasqSettings.no-resolv = true;
     dnsMasqSettings.bogus-priv = true;
     dnsMasqSettings.strict-order = true;
