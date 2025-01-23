@@ -8,8 +8,12 @@ alias help := default
 import? '~/.just/world.extras.just'
 
 default:
-  @just --list -f {{justfile()}} -d {{invocation_directory()}}
-  @if (echo {{invocation_directory()}} | str contains "world") { echo "\n    lint\n    check" }
+  #!/usr/bin/env nu
+  just --list -f {{justfile()}} -d {{invocation_directory()}}
+  if (echo {{invocation_directory()}} | str contains "world") {
+    print "\nPrivate (in repo only):"
+    awk -F ':| ' '/^\[private\]/ { in_private = 1; next} /^(^\[private\])/ { in_private = 0 } in_private && /^[a-z]/ { print "    "$1 }' {{justfile()}}
+  }
 
 # search for packages
 search query:
@@ -60,6 +64,9 @@ build-installer flake="github:johnae/world":
 [private]
 rekey:
   #!/usr/bin/env bash
+  set -euo pipefail
+  GITROOT="$(git rev-parse --show-toplevel)"
+  cd "$GITROOT"
   RULES="$(mktemp /tmp/XXXXXX.secrets.nix)"
   export RULES
   trap 'rm -f $RULES' EXIT
