@@ -384,7 +384,6 @@
 
   services.grafana.enable = true;
   services.grafana.settings = {
-    instance_name = "grafana-9000";
     server = {
       enable_gzip = true;
       http_port = 3000;
