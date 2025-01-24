@@ -90,6 +90,25 @@
     }
 
     {
+      profile.name = "framework-13-4-lid-closed";
+      profile.outputs = [
+        {
+          criteria = "LG Electronics LG HDR 4K 0x0007A976";
+          mode = "3840x2160@59.997Hz";
+          position = "0,0";
+          scale = 1.0;
+        }
+
+        {
+          criteria = "Samsung Electric Company Odyssey G80SD H1AK500000";
+          mode = "3840x2160@120.000Hz";
+          position = "3840,0";
+          scale = 1.0;
+        }
+      ];
+    }
+
+    {
       profile.name = "office";
       profile.outputs = [
         {
