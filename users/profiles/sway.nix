@@ -154,7 +154,7 @@ in {
       blur_brightness 1.2
       blur_saturation 1.1
       shadows enable
-      layer_effects "waybar" blur enable; shadows enable; corner_radius 8
+      layer_effects "waybar" blur enable; shadows enable
       default_dim_inactive 0.15
       corner_radius 8
       smart_corner_radius enable
