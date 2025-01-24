@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{config, ...}: let
   inherit (config) userinfo;
 in {
   # home.packages = [pkgs.lazyjj];
