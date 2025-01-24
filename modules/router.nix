@@ -16,7 +16,6 @@
     (builtins)
     attrNames
     head
-    mapAttrs
     tail
     ;
 

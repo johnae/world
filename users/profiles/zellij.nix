@@ -48,48 +48,40 @@
       fi
     '';
   };
-  zjstatusPane = ''
-    pane size=1 borderless=true {
-      plugin location="file://${pkgs.zjstatus}/bin/zjstatus.wasm" {
-
-        format_left  "{mode}#[fg=#89B4FA,bg=#181825,bold] {session}#[bg=#181825] {tabs}"
-        format_center "{command_hostname}"
-        format_right "{command_git_branch} {command_kubectx} {command_kubens} {datetime}"
-        format_space "#[bg=#181825]"
-
-        mode_normal          "#[bg=#89B4FA,fg=#000000] {name} "
-        mode_tmux            "#[bg=#ffc387,fg=#000000] {name} "
-        mode_default_to_mode "tmux"
-
-        tab_normal               "#[fg=#6C7086,bg=#181825] {index} {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"
-        tab_active               "#[fg=#9399B2,bg=#181825,bold,italic] {index} {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"
-        tab_fullscreen_indicator "□ "
-        tab_sync_indicator       "  "
-        tab_floating_indicator   "󰉈 "
-
-        command_kubectx_command  "kubectx -c"
-        command_kubectx_format   "#[fg=#6C7086,bg=#181825,italic] {stdout}"
-        command_kubectx_interval "2"
-
-        command_kubens_command  "kubens -c"
-        command_kubens_format   "#[fg=#6C7086,bg=#181825,bold]{stdout} "
-        command_kubens_interval "2"
-
-        command_hostname_command  "hostname"
-        command_hostname_format   "#[fg=#6C7086,bg=#181825,bold]{stdout} "
-        command_hostname_interval "30"
-
-        command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
-        command_git_branch_format      "#[fg=#89B4FA,bg=#181825,bold] on {stdout} "
-        command_git_branch_interval    "2"
-        command_git_branch_rendermode  "static"
-
-        datetime          "#[fg=#9399B2,bg=#181825] {format} "
-        datetime_format   "%A, %d %b %Y %H:%M"
-        datetime_timezone "Europe/Stockholm"
-      }
-    }
-  '';
+  # zjstatusPane = ''
+  #   pane size=1 borderless=true {
+  #     plugin location="file://${pkgs.zjstatus}/bin/zjstatus.wasm" {
+  #       format_left  "{mode}#[fg=#89B4FA,bg=#181825,bold] {session}#[bg=#181825] {tabs}"
+  #       format_center "{command_hostname}"
+  #       format_right "{command_git_branch} {command_kubectx} {command_kubens} {datetime}"
+  #       format_space "#[bg=#181825]"
+  #       mode_normal          "#[bg=#89B4FA,fg=#000000] {name} "
+  #       mode_tmux            "#[bg=#ffc387,fg=#000000] {name} "
+  #       mode_default_to_mode "tmux"
+  #       tab_normal               "#[fg=#6C7086,bg=#181825] {index} {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"
+  #       tab_active               "#[fg=#9399B2,bg=#181825,bold,italic] {index} {name} {fullscreen_indicator}{sync_indicator}{floating_indicator}"
+  #       tab_fullscreen_indicator "□ "
+  #       tab_sync_indicator       "  "
+  #       tab_floating_indicator   "󰉈 "
+  #       command_kubectx_command  "kubectx -c"
+  #       command_kubectx_format   "#[fg=#6C7086,bg=#181825,italic] {stdout}"
+  #       command_kubectx_interval "2"
+  #       command_kubens_command  "kubens -c"
+  #       command_kubens_format   "#[fg=#6C7086,bg=#181825,bold]{stdout} "
+  #       command_kubens_interval "2"
+  #       command_hostname_command  "hostname"
+  #       command_hostname_format   "#[fg=#6C7086,bg=#181825,bold]{stdout} "
+  #       command_hostname_interval "30"
+  #       command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
+  #       command_git_branch_format      "#[fg=#89B4FA,bg=#181825,bold] on {stdout} "
+  #       command_git_branch_interval    "2"
+  #       command_git_branch_rendermode  "static"
+  #       datetime          "#[fg=#9399B2,bg=#181825] {format} "
+  #       datetime_format   "%A, %d %b %Y %H:%M"
+  #       datetime_timezone "Europe/Stockholm"
+  #     }
+  #   }
+  # '';
 in {
   home.packages = [direnvExecMaybe];
   xdg.configFile."zellij/layouts/dev.kdl".text = ''
