@@ -390,17 +390,15 @@
       http_port = 3000;
       http_addr = "127.0.0.1";
     };
-    auth = {
-      proxy = {
-        enabled = true;
-        header_name = "X-WebAuth-Email";
-        header_property = "username";
-        auto_sign_up = true;
-        sync_ttl = 60;
-        whitelist = "127.0.0.1";
-        headers = "Name:X-WebAuth-Name Email:X-WebAuth-Email";
-        enable_login_token = true;
-      };
+    "auth.proxy" = {
+      enabled = true;
+      header_name = "X-WebAuth-Email";
+      header_property = "username";
+      auto_sign_up = true;
+      sync_ttl = 60;
+      whitelist = "127.0.0.1";
+      headers = "Name:X-WebAuth-Name Email:X-WebAuth-Email";
+      enable_login_token = true;
     };
   };
 
