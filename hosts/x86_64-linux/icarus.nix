@@ -301,6 +301,9 @@
     "tika.9000.dev" = {
       group = "nginx";
     };
+    "grafana.9000.dev" = {
+      group = "nginx";
+    };
   };
 
   services.cloudflare-tailscale-dns.ollama = {
@@ -328,10 +331,17 @@
     cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
   };
 
+  services.cloudflare-tailscale-dns.grafana = {
+    enable = true;
+    zone = "9000.dev";
+    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+  };
+
   services.nginx.tailscaleAuth = {
     enable = true;
     virtualHosts = [
       "chat.9000.dev"
+      "grafana.9000.dev"
     ];
   };
 
@@ -369,7 +379,32 @@
   };
   environment.persistence."/keep".directories = [
     "/var/lib/private/open-webui"
+    "/var/lib/victoriametrics"
   ];
+
+  services.grafana.enable = true;
+  services.grafana.settings = {
+    instance_name = "grafana-9000";
+    server = {
+      enable_gzip = true;
+      http_port = 3000;
+      http_addr = "127.0.0.1";
+    };
+    auth = {
+      proxy = {
+        enabled = true;
+        header_name = "X-WebAuth-Email";
+        header_property = "username";
+        auto_sign_up = true;
+        sync_ttl = 60;
+        whitelist = "127.0.0.1";
+        headers = "Name:X-WebAuth-Name Email:X-WebAuth-Email";
+        enable_login_token = true;
+      };
+    };
+  };
+
+  services.victoriametrics.enable = true;
 
   services.nginx = {
     enable = true;
@@ -401,6 +436,15 @@
       "chat.9000.dev" = {
         useACMEHost = "chat.9000.dev";
         locations."/".proxyPass = "http://localhost:11112";
+        locations."/".proxyWebsockets = true;
+        locations."/".extraConfig = ''
+          proxy_set_header X-Webauth-Email "$auth_email";
+        '';
+        forceSSL = true;
+      };
+      "grafana.9000.dev" = {
+        useACMEHost = "grafana.9000.dev";
+        locations."/".proxyPass = "http://localhost:3000";
         locations."/".proxyWebsockets = true;
         locations."/".extraConfig = ''
           proxy_set_header X-Webauth-Email "$auth_email";
