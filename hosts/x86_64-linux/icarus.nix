@@ -400,23 +400,23 @@
         external_labels = {
           "host" = hostName;
         };
-        scrape_configs = [
-          {
-            job_name = "node";
-            scrape_interval = "10s";
-            static_configs = [
-              {targets = ["127.0.0.1:9100"];}
-            ];
-          }
-          {
-            job_name = "vmagent";
-            scrape_interval = "10s";
-            static_configs = [
-              {targets = ["127.0.0.1:8429"];}
-            ];
-          }
-        ];
       };
+      scrape_configs = [
+        {
+          job_name = "node";
+          scrape_interval = "10s";
+          static_configs = [
+            {targets = ["127.0.0.1:9100"];}
+          ];
+        }
+        {
+          job_name = "vmagent";
+          scrape_interval = "10s";
+          static_configs = [
+            {targets = ["127.0.0.1:8429"];}
+          ];
+        }
+      ];
     };
   };
   services.grafana.enable = true;
