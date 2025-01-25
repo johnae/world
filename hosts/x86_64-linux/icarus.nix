@@ -379,7 +379,7 @@
   };
   environment.persistence."/keep".directories = [
     "/var/lib/private/open-webui"
-    "/var/lib/victoriametrics"
+    "/var/lib/private/victoriametrics"
   ];
 
   services.grafana.enable = true;
