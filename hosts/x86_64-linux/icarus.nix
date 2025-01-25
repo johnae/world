@@ -391,7 +391,7 @@
   services.prometheus.exporters.node.enable = true;
   services.vmagent = {
     enable = true;
-    remoteWrite.url = "http://victoriametrics.9000.dev:8428/api/v1/write";
+    remoteWrite.url = "https://victoriametrics.9000.dev/api/v1/write";
     prometheusConfig = {
       global = {
         external_labels = {
@@ -486,6 +486,12 @@
         locations."/".extraConfig = ''
           proxy_set_header X-Webauth-Email "$auth_email";
         '';
+        forceSSL = true;
+      };
+      "victoriametrics.9000.dev" = {
+        useACMEHost = "victoriametrics.9000.dev";
+        locations."/".proxyPass = "http://localhost:8428";
+        locations."/".proxyWebsockets = true;
         forceSSL = true;
       };
     };
