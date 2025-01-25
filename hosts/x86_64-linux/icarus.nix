@@ -304,6 +304,9 @@
     "grafana.9000.dev" = {
       group = "nginx";
     };
+    "victoriametrics.9000.dev" = {
+      group = "nginx";
+    };
   };
 
   services.cloudflare-tailscale-dns.ollama = {
