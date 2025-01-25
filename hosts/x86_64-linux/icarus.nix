@@ -337,6 +337,12 @@
     cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
   };
 
+  services.cloudflare-tailscale-dns.victoriametrics = {
+    enable = true;
+    zone = "9000.dev";
+    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+  };
+
   services.nginx.tailscaleAuth = {
     enable = true;
     virtualHosts = [
@@ -382,7 +388,38 @@
     "/var/lib/private/victoriametrics"
   ];
 
+  services.prometheus.exporters.node.enable = true;
+  services.vmagent = {
+    enable = true;
+    remoteWrite.url = "http://victoriametrics.9000.dev:8428/api/v1/write";
+    prometheusConfig = {
+      global = {
+        external_labels = {
+          "host" = hostName;
+        };
+        scrape_configs = [
+          {
+            job_name = "node";
+            scrape_interval = "10s";
+            static_configs = [
+              {targets = ["127.0.0.1:9100"];}
+            ];
+          }
+          {
+            job_name = "vmagent";
+            scrape_interval = "10s";
+            static_configs = [
+              {targets = ["127.0.0.1:8429"];}
+            ];
+          }
+        ];
+      };
+    };
+  };
   services.grafana.enable = true;
+  # services.grafana.provision.enable = true;
+  # services.grafana.provision.datasources = {
+  # };
   services.grafana.settings = {
     server = {
       enable_gzip = true;
@@ -398,6 +435,9 @@
       whitelist = "127.0.0.1";
       headers = "Name:X-WebAuth-Name Email:X-WebAuth-Email";
       enable_login_token = true;
+    };
+    plugins = {
+      allow_loading_unsigned_plugins = "victoriametrics-metrics-datasource";
     };
   };
 
