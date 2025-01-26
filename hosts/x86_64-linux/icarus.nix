@@ -414,7 +414,7 @@
       enable_login_token = true;
     };
     plugins = {
-      allow_loading_unsigned_plugins = "victoriametrics-metrics-datasource";
+      allow_loading_unsigned_plugins = "victoriametrics-metrics-datasource,victoriametrics-logs-datasource";
     };
   };
 
