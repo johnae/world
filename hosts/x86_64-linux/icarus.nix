@@ -162,21 +162,22 @@
   # };
 
   networking.useDHCP = false;
-  networking.nat = {
-    enable = true;
-    enableIPv6 = true;
-    internalInterfaces = ["microvm"];
-  };
-  networking.firewall.trustedInterfaces = ["tailscale0" "microvm"];
+  # networking.nat = {
+  #   enable = true;
+  #   enableIPv6 = true;
+  #   internalInterfaces = ["microvm"];
+  # };
+  # networking.firewall.trustedInterfaces = ["tailscale0" "microvm"];
+  networking.firewall.trustedInterfaces = ["tailscale0"];
 
   systemd.network = {
     enable = true;
-    netdevs = {
-      "10-microvm".netdevConfig = {
-        Kind = "bridge";
-        Name = "microvm";
-      };
-    };
+    # netdevs = {
+    #   "10-microvm".netdevConfig = {
+    #     Kind = "bridge";
+    #     Name = "microvm";
+    #   };
+    # };
     networks = {
       "10-wan" = {
         ## udevadm test-builtin net_id /sys/class/net/eth0
@@ -190,22 +191,22 @@
         ];
         linkConfig.RequiredForOnline = "routable";
       };
-      "10-microvm" = {
-        matchConfig.Name = "microvm";
-        networkConfig = {
-          DHCPServer = true;
-          IPv6SendRA = true;
-        };
-        addresses = [
-          {
-            Address = "10.100.1.1/24";
-          }
-        ];
-      };
-      "11-microvm" = {
-        matchConfig.Name = "vm-*";
-        networkConfig.Bridge = "microvm";
-      };
+      # "10-microvm" = {
+      #   matchConfig.Name = "microvm";
+      #   networkConfig = {
+      #     DHCPServer = true;
+      #     IPv6SendRA = true;
+      #   };
+      #   addresses = [
+      #     {
+      #       Address = "10.100.1.1/24";
+      #     }
+      #   ];
+      # };
+      # "11-microvm" = {
+      #   matchConfig.Name = "vm-*";
+      #   networkConfig.Bridge = "microvm";
+      # };
     };
   };
 
