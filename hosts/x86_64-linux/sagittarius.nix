@@ -16,6 +16,7 @@
   imports = [
     ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
+    ../../profiiles/core-metrics.nix
     ../../profiles/disk/bcachefs-on-luks.nix
     ../../profiles/hardware/tlsense.nix
     ../../profiles/home-manager.nix
@@ -97,35 +98,6 @@
     dnsMasqSettings.no-resolv = true;
     dnsMasqSettings.bogus-priv = true;
     dnsMasqSettings.strict-order = true;
-  };
-
-  services.prometheus.exporters.node.enable = true;
-  services.vmagent = {
-    enable = true;
-    remoteWrite.url = "https://victoriametrics.9000.dev/api/v1/write";
-    prometheusConfig = {
-      global = {
-        external_labels = {
-          "host" = hostName;
-        };
-      };
-      scrape_configs = [
-        {
-          job_name = "node";
-          scrape_interval = "10s";
-          static_configs = [
-            {targets = ["127.0.0.1:9100"];}
-          ];
-        }
-        {
-          job_name = "vmagent";
-          scrape_interval = "10s";
-          static_configs = [
-            {targets = ["127.0.0.1:8429"];}
-          ];
-        }
-      ];
-    };
   };
 
   age.secrets = {
