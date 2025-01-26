@@ -394,9 +394,24 @@
   ];
 
   services.grafana.enable = true;
-  # services.grafana.provision.enable = true;
-  # services.grafana.provision.datasources = {
-  # };
+  services.grafana.declarativePlugins = [pkgs.victoriametrics-logs-datasource-plugin pkgs.victoriametrics-metrics-datasource-plugin];
+  services.grafana.provision.enable = true;
+  services.grafana.provision.datasources.settings = {
+    datasources.victorialogs = {
+      name = "VictoriaLogs";
+      type = "victoriametrics-logs-datasource";
+      access = "proxy";
+      url = "https://victorialogs.9000.dev";
+      isDefault = true;
+    };
+    datasources.victoriametrics = {
+      name = "VictoriaMetrics";
+      type = "victoriametrics-metrics-datasource";
+      access = "proxy";
+      url = "https://victoriametrics.9000.dev";
+      isDefault = true;
+    };
+  };
   services.grafana.settings = {
     server = {
       enable_gzip = true;

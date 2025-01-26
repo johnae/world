@@ -1872,6 +1872,8 @@
         "pre-commit-hooks": "pre-commit-hooks_2",
         "rust-overlay": "rust-overlay",
         "systems": "systems_3",
+        "victoriametrics-logs-datasource-plugin": "victoriametrics-logs-datasource-plugin",
+        "victoriametrics-metrics-datasource-plugin": "victoriametrics-metrics-datasource-plugin",
         "wezterm": "wezterm",
         "zjstatus": "zjstatus",
         "zwift": "zwift"
@@ -1994,6 +1996,32 @@
         "owner": "numtide",
         "repo": "treefmt-nix",
         "type": "github"
+      }
+    },
+    "victoriametrics-logs-datasource-plugin": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1737729922,
+        "narHash": "sha256-n0mumja+Y8/KIzA7L7eyOaXAeFL9mlQTtGTR31U8QVA=",
+        "type": "tarball",
+        "url": "https://github.com/VictoriaMetrics/victorialogs-datasource/releases/download/v0.13.5/victoriametrics-logs-datasource-v0.13.5.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/VictoriaMetrics/victorialogs-datasource/releases/download/v0.13.5/victoriametrics-logs-datasource-v0.13.5.tar.gz"
+      }
+    },
+    "victoriametrics-metrics-datasource-plugin": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1737731203,
+        "narHash": "sha256-nlCGDWWfR50Ts+RYhbEi4a3iXfqT+dqR8c/b04r/EFU=",
+        "type": "tarball",
+        "url": "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v0.12.2/victoriametrics-metrics-datasource-v0.12.2.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v0.12.2/victoriametrics-metrics-datasource-v0.12.2.tar.gz"
       }
     },
     "wezterm": {
