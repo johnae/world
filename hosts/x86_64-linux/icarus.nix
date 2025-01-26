@@ -21,7 +21,7 @@
     ../../profiles/admin-user/user.nix
     ../../profiles/disk/bcachefs-on-luks.nix
     ../../profiles/hardware/b550.nix
-    ../../profiiles/core-metrics.nix
+    ../../profiles/core-metrics.nix
     ../../profiles/home-manager.nix
     ../../profiles/restic-backup.nix
     ../../profiles/server.nix

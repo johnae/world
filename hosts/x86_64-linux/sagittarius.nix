@@ -16,9 +16,9 @@
   imports = [
     ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
-    ../../profiiles/core-metrics.nix
     ../../profiles/disk/bcachefs-on-luks.nix
     ../../profiles/hardware/tlsense.nix
+    ../../profiles/core-metrics.nix
     ../../profiles/home-manager.nix
     ../../profiles/server.nix
     ../../profiles/state.nix
