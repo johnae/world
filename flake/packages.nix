@@ -140,6 +140,30 @@
           else pkgs.hello;
         wezterm = inputs.wezterm.packages.${system}.default;
 
+        victoriametrics-metrics-datasource-plugin = pkgs.stdenvNoCC.mkDerivation {
+          pname = "victoriametrics-metrics-datasource-plugin";
+          version = "latest";
+          src = inputs.victoriametrics-metrics-datasource-plugin;
+          nativeBuildInputs = [pkgs.unzip];
+          installPhase = ''
+            cp -R "." "$out"
+            chmod -R a-w "$out"
+            chmod u+w "$out"
+          '';
+        };
+
+        victoriametrics-logs-datasource-plugin = pkgs.stdenvNoCC.mkDerivation {
+          pname = "victoriametrics-logs-datasource-plugin";
+          version = "latest";
+          src = inputs.victoriametrics-logs-datasource-plugin;
+          nativeBuildInputs = [pkgs.unzip];
+          installPhase = ''
+            cp -R "." "$out"
+            chmod -R a-w "$out"
+            chmod u+w "$out"
+          '';
+        };
+
         inherit
           (inputs.hyprland.packages.${system})
           hyprland
