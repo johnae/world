@@ -403,7 +403,6 @@
         type = "victoriametrics-logs-datasource";
         access = "proxy";
         url = "https://victorialogs.9000.dev";
-        isDefault = true;
       }
       {
         name = "VictoriaMetrics";
