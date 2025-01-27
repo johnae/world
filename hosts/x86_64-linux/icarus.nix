@@ -309,6 +309,9 @@
     "victoriametrics.9000.dev" = {
       group = "nginx";
     };
+    "victorialogs.9000.dev" = {
+      group = "nginx";
+    };
   };
 
   services.cloudflare-tailscale-dns.ollama = {
@@ -343,6 +346,12 @@
   };
 
   services.cloudflare-tailscale-dns.victoriametrics = {
+    enable = true;
+    zone = "9000.dev";
+    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+  };
+
+  services.cloudflare-tailscale-dns.victorialogs = {
     enable = true;
     zone = "9000.dev";
     cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
@@ -391,6 +400,7 @@
   environment.persistence."/keep".directories = [
     "/var/lib/private/open-webui"
     "/var/lib/private/victoriametrics"
+    "/var/lib/private/victorialogs"
   ];
 
   age.secrets = {
@@ -401,14 +411,6 @@
   };
 
   services.prometheus.exporters = {
-    ## may be expensive? https://github.com/ngosang/restic-exporter/issues/35
-    ## also never seemed to start properly
-    # restic = {
-    #   enable = true;
-    #   environmentFile = config.age.secrets.restic-env.path;
-    #   passwordFile = config.age.secrets.restic-pw.path;
-    #   inherit (config.services.restic.backups.remote) repository;
-    # };
     buildkite-agent = {
       enable = true;
       tokenPath = config.age.secrets.buildkite-agent-exporter-token.path;
@@ -494,6 +496,8 @@
   };
 
   services.victoriametrics.enable = true;
+  services.victorialogs.enable = true;
+  services.journald.upload.settings.Upload.URL = "https://victorialogs.9000.dev/insert/journald";
 
   services.nginx = {
     enable = true;
@@ -543,6 +547,12 @@
       "victoriametrics.9000.dev" = {
         useACMEHost = "victoriametrics.9000.dev";
         locations."/".proxyPass = "http://localhost:8428";
+        locations."/".proxyWebsockets = true;
+        forceSSL = true;
+      };
+      "victorialogs.9000.dev" = {
+        useACMEHost = "victorialogs.9000.dev";
+        locations."/".proxyPass = "http://localhost:9428";
         locations."/".proxyWebsockets = true;
         forceSSL = true;
       };
