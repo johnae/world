@@ -405,7 +405,7 @@
       enable = true;
       environmentFile = config.age.secrets.restic-env.path;
       passwordFile = config.age.secrets.restic-pw.path;
-      repository = config.services.restic.backups.remote.repository;
+      inherit (config.services.restic.backups.remote) repository;
     };
     buildkite-agent = {
       enable = true;
