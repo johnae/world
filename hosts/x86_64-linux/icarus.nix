@@ -464,6 +464,12 @@
         url = "https://victoriametrics.9000.dev";
         isDefault = true;
       }
+      {
+        name = "Prometheus";
+        type = "prometheus";
+        access = "proxy";
+        url = "https://victoriametrics.9000.dev";
+      }
     ];
   };
   services.grafana.settings = {
