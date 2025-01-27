@@ -393,6 +393,56 @@
     "/var/lib/private/victoriametrics"
   ];
 
+  age.secrets = {
+    "buildkite-agent-exporter-token" = {
+      file = ../secrets/buildkite-token.age;
+      owner = config.services.prometheus.exporters.buildkite-agent.user;
+    };
+  };
+
+  services.prometheus.exporters = {
+    restic = {
+      enable = true;
+      environmentFile = config.age.secrets.restic-env.path;
+      passwordFile = config.age.secrets.restic-pw.path;
+    };
+    buildkite-agent = {
+      enable = true;
+      tokenPath = config.age.secrets.buildkite-agent-exporter-token.path;
+    };
+  };
+
+  services.vmagent = {
+    prometheusConfig = let
+      relabel_configs = [
+        {
+          action = "replace";
+          replacement = hostName;
+          target_label = "instance";
+        }
+      ];
+    in {
+      scrape_configs = [
+        {
+          job_name = "restic";
+          scrape_interval = "10s";
+          static_configs = [
+            {targets = ["127.0.0.1:9753"];}
+          ];
+          inherit relabel_configs;
+        }
+        {
+          job_name = "buildkite-agent";
+          scrape_interval = "10s";
+          static_configs = [
+            {targets = ["127.0.0.1:9876"];}
+          ];
+          inherit relabel_configs;
+        }
+      ];
+    };
+  };
+
   services.grafana.enable = true;
   services.grafana.declarativePlugins = [pkgs.victoriametrics-logs-datasource-plugin pkgs.victoriametrics-metrics-datasource-plugin];
   services.grafana.provision.enable = true;
