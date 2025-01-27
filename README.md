@@ -36,6 +36,7 @@ After that, just pick the host you're installing, like this:
   nix build .#"$host"-diskformat
   ./result/bin/diskformat
   nixos-install --flake .#"$host" --no-root-passwd
+  chown -R 1337:100 /keep/home/<your-user>
 ```
 
 Hosts are defined in the [hosts/](hosts/) directory.
