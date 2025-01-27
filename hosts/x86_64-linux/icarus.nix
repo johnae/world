@@ -491,6 +491,7 @@
   services.victorialogs.enable = true;
   services.journald.upload.enable = true;
   services.journald.upload.settings.Upload.URL = "https://victorialogs.9000.dev/insert/journald";
+  services.journald.upload.settings.Upload.TrustedCertificateFile = "/etc/ssl/certs/ca-certificates.crt";
 
   services.nginx = {
     enable = true;
