@@ -429,14 +429,6 @@
     in {
       scrape_configs = [
         {
-          job_name = "restic";
-          scrape_interval = "10s";
-          static_configs = [
-            {targets = ["127.0.0.1:9753"];}
-          ];
-          inherit relabel_configs;
-        }
-        {
           job_name = "buildkite-agent";
           scrape_interval = "10s";
           static_configs = [
