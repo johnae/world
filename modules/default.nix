@@ -12,5 +12,6 @@
     ./router.nix
     ./services.nix
     ./tailscale-auth.nix
+    ./victorialogs.nix
   ];
 }
