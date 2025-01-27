@@ -395,7 +395,7 @@
 
   age.secrets = {
     "buildkite-agent-exporter-token" = {
-      file = ../secrets/buildkite-token.age;
+      file = ../../secrets/buildkite-token.age;
       owner = config.services.prometheus.exporters.buildkite-agent.user;
     };
   };
