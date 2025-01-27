@@ -401,12 +401,14 @@
   };
 
   services.prometheus.exporters = {
-    restic = {
-      enable = true;
-      environmentFile = config.age.secrets.restic-env.path;
-      passwordFile = config.age.secrets.restic-pw.path;
-      inherit (config.services.restic.backups.remote) repository;
-    };
+    ## may be expensive? https://github.com/ngosang/restic-exporter/issues/35
+    ## also never seemed to start properly
+    # restic = {
+    #   enable = true;
+    #   environmentFile = config.age.secrets.restic-env.path;
+    #   passwordFile = config.age.secrets.restic-pw.path;
+    #   inherit (config.services.restic.backups.remote) repository;
+    # };
     buildkite-agent = {
       enable = true;
       tokenPath = config.age.secrets.buildkite-agent-exporter-token.path;
