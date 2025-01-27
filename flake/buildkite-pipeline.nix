@@ -46,6 +46,9 @@
     "sirius-diskformat"
     "test-diskformat"
     "titan-diskformat"
+    "victoriametrics-logs-datasource-plugin"
+    "victoriametrics-logs-datasource-plugin"
+    "victoriametrics-metrics-datasource-plugin"
     "xdg-desktop-portal-hyprland"
   ];
   pkgs.x86_64-linux = withSystem "x86_64-linux" (

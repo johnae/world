@@ -144,7 +144,6 @@
           pname = "victoriametrics-metrics-datasource-plugin";
           version = "latest";
           src = inputs.victoriametrics-metrics-datasource-plugin;
-          nativeBuildInputs = [pkgs.unzip];
           installPhase = ''
             cp -R "." "$out"
             chmod -R a-w "$out"
@@ -156,11 +155,21 @@
           pname = "victoriametrics-logs-datasource-plugin";
           version = "latest";
           src = inputs.victoriametrics-logs-datasource-plugin;
-          nativeBuildInputs = [pkgs.unzip];
           installPhase = ''
             cp -R "." "$out"
             chmod -R a-w "$out"
             chmod u+w "$out"
+          '';
+        };
+
+        victorialogs = pkgs.stdenvNoCC.mkDerivation {
+          pname = "victorialogs";
+          version = "latest";
+          src = inputs.victorialogs;
+          installPhase = ''
+            mkdir -p "$out"/bin
+            cp victoria-logs-prod "$out"/bin/victoria-logs
+            chmod +x "$out"/bin/victoria-logs
           '';
         };
 

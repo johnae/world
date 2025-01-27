@@ -1872,6 +1872,7 @@
         "pre-commit-hooks": "pre-commit-hooks_2",
         "rust-overlay": "rust-overlay",
         "systems": "systems_3",
+        "victorialogs": "victorialogs",
         "victoriametrics-logs-datasource-plugin": "victoriametrics-logs-datasource-plugin",
         "victoriametrics-metrics-datasource-plugin": "victoriametrics-metrics-datasource-plugin",
         "wezterm": "wezterm",
@@ -1996,6 +1997,19 @@
         "owner": "numtide",
         "repo": "treefmt-nix",
         "type": "github"
+      }
+    },
+    "victorialogs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1737742283,
+        "narHash": "sha256-b8kwAGFvQxQgPpkhNhmTjA8Gc7ptYshdD8PLxDX5JFA=",
+        "type": "tarball",
+        "url": "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/download/v1.8.0-victorialogs/victoria-logs-linux-amd64-v1.8.0-victorialogs.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/download/v1.8.0-victorialogs/victoria-logs-linux-amd64-v1.8.0-victorialogs.tar.gz"
       }
     },
     "victoriametrics-logs-datasource-plugin": {

@@ -105,6 +105,8 @@
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
     systems.url = "github:nix-systems/default";
+    victorialogs.flake = false;
+    victorialogs.url = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/download/v1.8.0-victorialogs/victoria-logs-linux-amd64-v1.8.0-victorialogs.tar.gz"; # gh-release-update
     victoriametrics-logs-datasource-plugin.flake = false;
     victoriametrics-logs-datasource-plugin.url = "https://github.com/VictoriaMetrics/victorialogs-datasource/releases/download/v0.13.5/victoriametrics-logs-datasource-v0.13.5.tar.gz"; # gh-release-update
     victoriametrics-metrics-datasource-plugin.flake = false;
