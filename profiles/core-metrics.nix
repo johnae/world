@@ -7,7 +7,11 @@
     }
   ];
 in {
-  services.prometheus.exporters.node.enable = true;
+  services.prometheus.exporters = {
+    node.enable = true;
+    systemd.enable = true;
+    process.enable = true;
+  };
   services.vmagent = {
     enable = true;
     remoteWrite.url = "https://victoriametrics.9000.dev/api/v1/write";
@@ -23,6 +27,22 @@ in {
           scrape_interval = "10s";
           static_configs = [
             {targets = ["127.0.0.1:9100"];}
+          ];
+          inherit relabel_configs;
+        }
+        {
+          job_name = "systemd";
+          scrape_interval = "10s";
+          static_configs = [
+            {targets = ["127.0.0.1:9558"];}
+          ];
+          inherit relabel_configs;
+        }
+        {
+          job_name = "process";
+          scrape_interval = "10s";
+          static_configs = [
+            {targets = ["127.0.0.1:9256"];}
           ];
           inherit relabel_configs;
         }

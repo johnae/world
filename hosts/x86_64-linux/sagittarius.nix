@@ -100,6 +100,36 @@
     dnsMasqSettings.strict-order = true;
   };
 
+  services.prometheus.exporters = {
+    dnsmasq = {
+      enable = true;
+      dnsmasqListenAddress = "localhost:5342";
+    };
+  };
+
+  services.vmagent = {
+    prometheusConfig = let
+      relabel_configs = [
+        {
+          action = "replace";
+          replacement = hostName;
+          target_label = "instance";
+        }
+      ];
+    in {
+      scrape_configs = [
+        {
+          job_name = "dnsmasq";
+          scrape_interval = "10s";
+          static_configs = [
+            {targets = ["127.0.0.1:9153"];}
+          ];
+          inherit relabel_configs;
+        }
+      ];
+    };
+  };
+
   age.secrets = {
     ts-google-9k = {
       file = ../../secrets/ts-google-9k.age;
