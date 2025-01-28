@@ -48,7 +48,6 @@ in
             max_request_size = 20000000;
             port = 6167;
             database_backend = "rocksdb";
-            database_path = "/var/lib/matrix-conduwuit";
           };
           extraEnvironment = {
             CONDUWUIT_MAX_CONCURRENT_REQUESTS = "100";
