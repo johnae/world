@@ -208,6 +208,15 @@ in {
             example = "http_status:404";
           };
 
+          originCertPath = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            example = "/path/to/cert.pem";
+            description = lib.mdDoc ''
+              Path to the cert.pem that was generated as part of `cloudflared tunnel login`
+            '';
+          };
+
           ingress = mkOption {
             type = with types;
               attrsOf (either str (submodule {
@@ -295,6 +304,8 @@ in {
           fullConfig = {
             tunnel = name;
             "credentials-file" = tunnel.credentialsFile;
+            origincert = mkIf (tunnel.originCertPath != null) tunnel.originCertPath;
+
             originRequest = lib.filterAttrs (_: val: val != null) tunnel.originRequest;
             ingress =
               (map
