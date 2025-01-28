@@ -57,6 +57,8 @@ in
             CONDUWUIT_TURN_URIS = "[\"turn:staticauth.turn.openrelay.metered.ca:443?transport=udp\+
 \", \"turn:staticauth.turn.openrelay.metered.ca:443?transport=tcp\"]";
             CONDUWUIT_TURN_SECRET = "openrelayprojectsecret";
+            CONDUWUIT_ALLOW_REGISTRATION = "true";
+            CONDUWUIT_REGISTRATION_TOKEN_FILE = config.age.secrets.conduwuit-registration-token.path;
           };
         };
         services.matrix-conduit.package = pkgs.conduwuit;
