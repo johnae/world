@@ -274,6 +274,7 @@
 
   age.secrets = {
     cloudflare-env.file = ../../secrets/cloudflare-env.age;
+    cloudflare-tunnel-9k.file = ../../secrets/cloudflare-tunnel-9k.age;
     vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
     syncthing-cert = {
       file = ../../secrets/${hostName}/syncthing-cert.age;
@@ -313,6 +314,20 @@
     "victorialogs.9000.dev" = {
       group = "nginx";
     };
+  };
+
+  services.my-cloudflared = {
+    enable = true;
+    tunnels."9000-tunnel" = {
+      credentialsFile = config.age.secrets.cloudflare-tunnel-9k.path;
+      default = "http://localhost";
+      originRequest.noTLSVerify = true;
+    };
+  };
+
+  services.my-matrix = {
+    enable = true;
+    server_name = "matrix.9000.dev";
   };
 
   services.cloudflare-tailscale-dns.ollama = {
@@ -398,6 +413,7 @@
     WEBUI_URL = "https://chat.9000.dev";
     OAUTH_MERGE_ACCOUNTS_BY_EMAIL = "true";
   };
+
   environment.persistence."/keep".directories = [
     "/var/lib/private/open-webui"
     "/var/lib/private/victoriametrics"
