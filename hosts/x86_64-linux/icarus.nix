@@ -22,6 +22,7 @@
     ../../profiles/disk/bcachefs-on-luks.nix
     ../../profiles/hardware/b550.nix
     ../../profiles/core-metrics.nix
+    ../../profiles/core-logging.nix
     ../../profiles/home-manager.nix
     ../../profiles/restic-backup.nix
     ../../profiles/server.nix
@@ -489,11 +490,6 @@
 
   services.victoriametrics.enable = true;
   services.victorialogs.enable = true;
-  services.journald.upload.enable = true;
-  services.journald.upload.settings.Upload.URL = "https://victorialogs.9000.dev/insert/journald";
-  services.journald.upload.settings.Upload.TrustedCertificateFile = "-/all";
-  services.journald.upload.settings.Upload.ServerKeyFile = "-";
-  services.journald.upload.settings.Upload.ServerCertificateFile = "-";
 
   services.nginx = {
     enable = true;
