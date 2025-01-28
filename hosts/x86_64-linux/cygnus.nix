@@ -12,6 +12,8 @@
     ../../profiles/admin-user/u2fmappings.nix
     ../../profiles/admin-user/user.nix
     ../../profiles/disk/bcachefs-on-luks.nix
+    ../../profiles/core-metrics.nix
+    ../../profiles/core-logging.nix
     ../../profiles/greetd.nix
     # ../../profiles/hardware/usbcore.nix
     ../../profiles/hardware/framework-13-amd.nix
