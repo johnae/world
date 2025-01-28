@@ -1,6 +1,7 @@
-{
+{pkgs, ...}: {
   services.opentelemetry-collector = {
     enable = true;
+    package = pkgs.opentelemetry-collector-contrib;
     settings = {
       receivers.journald = {
         directory = "/var/log/journal";
