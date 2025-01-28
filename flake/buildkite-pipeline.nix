@@ -47,6 +47,7 @@
     "sirius-diskformat"
     "test-diskformat"
     "titan-diskformat"
+    "victorialogs"
     "victoriametrics-logs-datasource-plugin"
     "victoriametrics-logs-datasource-plugin"
     "victoriametrics-metrics-datasource-plugin"
