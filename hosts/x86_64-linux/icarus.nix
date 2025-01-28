@@ -282,6 +282,10 @@
       file = ../../secrets/cloudflare-tunnel-cert-9k.age;
       owner = "cloudflare";
     };
+    conduwuit-registration-token = {
+      file = ../../secrets/conduwuit-registration-token.age;
+      mode = "777";
+    };
     vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
     syncthing-cert = {
       file = ../../secrets/${hostName}/syncthing-cert.age;
