@@ -9,6 +9,7 @@
       };
       exporters.otlphttp.logs_endpoint = "https://victorialogs.9000.dev/insert/opentelemetry/v1/logs";
       processors = {
+        batch = {};
         "resourcedetection/system" = {
           detectors = ["system"];
           system.hostname_sources = ["os"];
