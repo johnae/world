@@ -37,6 +37,7 @@
     cloud-native-pg.url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.1/cnpg-1.24.1.yaml"; # gh-release-update
     copilot-vim.flake = false;
     copilot-vim.url = "github:github/copilot.vim";
+    conduwuit.url = "github:girlbossceo/conduwuit";
     crane.url = "github:ipetkov/crane";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
     devenv.inputs.flake-compat.follows = "flake-compat";
