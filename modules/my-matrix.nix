@@ -36,7 +36,7 @@ in
     config =
       mkIf config.services.my-matrix.enable {
         environment.persistence."/keep".directories = [
-          cfg.settings.global.database_path
+          "/var/lib/private/matrix-conduit"
         ];
         services.matrix-conduit.enable = true;
         services.matrix-conduit.settings = {
