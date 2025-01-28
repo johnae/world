@@ -40,7 +40,7 @@ in
         ];
         services.matrix-conduit.enable = true;
 
-        systemd.services.conduit.serviceConfig.ExecStart = "${cfg.package}/bin/conduwuit";
+        systemd.services.conduit.serviceConfig.ExecStart = lib.mkForce "${cfg.package}/bin/conduwuit";
 
         services.matrix-conduit.settings = {
           global = {
