@@ -274,8 +274,14 @@
 
   age.secrets = {
     cloudflare-env.file = ../../secrets/cloudflare-env.age;
-    cloudflare-tunnel-9k.file = ../../secrets/cloudflare-tunnel-9k.age;
-    cloudflare-tunnel-cert-9k.file = ../../secrets/cloudflare-tunnel-cert-9k.age;
+    cloudflare-tunnel-9k = {
+      file = ../../secrets/cloudflare-tunnel-9k.age;
+      owner = "cloudflare";
+    };
+    cloudflare-tunnel-cert-9k = {
+      file = ../../secrets/cloudflare-tunnel-cert-9k.age;
+      owner = "cloudflare";
+    };
     vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
     syncthing-cert = {
       file = ../../secrets/${hostName}/syncthing-cert.age;
