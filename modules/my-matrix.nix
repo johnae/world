@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  inputs,
   pkgs,
   ...
 }: let
@@ -36,6 +35,9 @@ in
 
     config =
       mkIf config.services.my-matrix.enable {
+        environment.persistence."/keep".directories = [
+          cfg.settings.global.database_path
+        ];
         services.matrix-conduit.enable = true;
         services.matrix-conduit.settings = {
           global = {
@@ -45,16 +47,17 @@ in
             allow_registration = false;
             max_request_size = 20000000;
             port = 6167;
-            database_backend = "sqlite";
+            database_backend = "rocksdb";
+            database_path = "/var/lib/matrix-conduwuit";
           };
           extraEnvironment = {
-            CONDUIT_MAX_CONCURRENT_REQUESTS = "100";
-            CONDUIT_TURN_URIS = "[\"turn:staticauth.turn.openrelay.metered.ca:443?transport=udp\+
+            CONDUWUIT_MAX_CONCURRENT_REQUESTS = "100";
+            CONDUWUIT_TURN_URIS = "[\"turn:staticauth.turn.openrelay.metered.ca:443?transport=udp\+
 \", \"turn:staticauth.turn.openrelay.metered.ca:443?transport=tcp\"]";
-            CONDUIT_TURN_SECRET = "openrelayprojectsecret";
+            CONDUWUIT_TURN_SECRET = "openrelayprojectsecret";
           };
         };
-        services.matrix-conduit.package = inputs.matrix-conduit.packages.${pkgs.system}.default;
+        services.matrix-conduit.package = pkgs.conduwuit;
         services.nginx.virtualHosts = {
           "matrix.${cfg.settings.global.server_name}" = {
             locations."/_matrix" = {

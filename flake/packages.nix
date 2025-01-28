@@ -173,6 +173,8 @@
           '';
         };
 
+        inherit (inputs.conduwuit.packages.${system}) conduwuit;
+
         inherit
           (inputs.hyprland.packages.${system})
           hyprland
