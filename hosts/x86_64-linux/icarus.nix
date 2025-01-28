@@ -335,7 +335,7 @@
 
   services.my-matrix = {
     enable = true;
-    server_name = "matrix.9000.dev";
+    server_name = "9000.dev";
   };
 
   services.cloudflare-tailscale-dns.ollama = {
