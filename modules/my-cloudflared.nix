@@ -304,7 +304,7 @@ in {
           fullConfig = {
             tunnel = name;
             "credentials-file" = tunnel.credentialsFile;
-            origincert = mkIf (tunnel.originCertPath != null) tunnel.originCertPath;
+            origincert = tunnel.originCertPath;
 
             originRequest = lib.filterAttrs (_: val: val != null) tunnel.originRequest;
             ingress =
