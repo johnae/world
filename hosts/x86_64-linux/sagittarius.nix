@@ -19,6 +19,7 @@
     ../../profiles/disk/bcachefs-on-luks.nix
     ../../profiles/hardware/tlsense.nix
     ../../profiles/core-metrics.nix
+    ../../profiles/core-logging.nix
     ../../profiles/home-manager.nix
     ../../profiles/server.nix
     ../../profiles/state.nix
