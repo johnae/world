@@ -19,6 +19,7 @@
     "agent-8be5-d4a1-diskformat"
     "alnitak-diskformat"
     "antares-diskformat"
+    "conduwuit"
     "cygnus-diskformat"
     "eris-diskformat"
     "fluxcd-yaml"
