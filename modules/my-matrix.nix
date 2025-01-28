@@ -39,6 +39,9 @@ in
           "/var/lib/private/matrix-conduit"
         ];
         services.matrix-conduit.enable = true;
+
+        systemd.services.conduit.serviceConfig.ExecStart = "${cfg.package}/bin/conduwuit";
+
         services.matrix-conduit.settings = {
           global = {
             inherit (config.services.my-matrix) server_name;
