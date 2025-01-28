@@ -80,6 +80,15 @@ with lib; let
       '';
     };
 
+    originCertPath = mkOption {
+      type = with types; nullOr str;
+      default = null;
+      example = "/path/to/cert.pem";
+      description = lib.mdDoc ''
+        Path to the cert.pem that was generated as part of `cloudflared tunnel login`
+      '';
+    };
+
     caPool = mkOption {
       type = with types; nullOr (either str path);
       default = null;

@@ -275,6 +275,7 @@
   age.secrets = {
     cloudflare-env.file = ../../secrets/cloudflare-env.age;
     cloudflare-tunnel-9k.file = ../../secrets/cloudflare-tunnel-9k.age;
+    cloudflare-tunnel-cert-9k.file = ../../secrets/cloudflare-tunnel-cert-9k.age;
     vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
     syncthing-cert = {
       file = ../../secrets/${hostName}/syncthing-cert.age;
@@ -322,6 +323,7 @@
       credentialsFile = config.age.secrets.cloudflare-tunnel-9k.path;
       default = "http://localhost";
       originRequest.noTLSVerify = true;
+      originCertPath = config.age.secrets.cloudflare-tunnel-cert-9k.path;
     };
   };
 
