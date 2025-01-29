@@ -56,7 +56,7 @@ in
           database_backend = "rocksdb";
         };
       };
-      services.matrix-conduit.package = pkgs.conduwuit;
+      services.matrix-conduit.package = pkgs.conduwuit-latest;
       services.nginx.virtualHosts = {
         "matrix.${cfg.settings.global.server_name}" = {
           locations."/_matrix" = {
