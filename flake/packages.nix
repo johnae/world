@@ -173,7 +173,7 @@
           '';
         };
 
-        conduwuit = inputs.conduwuit.packages.${system}.default;
+        conduwuit-latest = inputs.conduwuit.packages.${system}.default;
 
         inherit
           (inputs.hyprland.packages.${system})
