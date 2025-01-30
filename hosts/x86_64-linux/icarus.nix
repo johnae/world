@@ -582,6 +582,7 @@
   services.restic = {
     backups = {
       remote = {
+        backupPrepareCommand = "${pkgs.restic}/bin/restic unlock";
         pruneOpts = [
           "--keep-daily 10"
           "--keep-weekly 7"
