@@ -276,11 +276,11 @@
     cloudflare-env.file = ../../secrets/cloudflare-env.age;
     cloudflare-tunnel-9k = {
       file = ../../secrets/cloudflare-tunnel-9k.age;
-      owner = "cloudflare";
+      owner = "cloudflared";
     };
     cloudflare-tunnel-cert-9k = {
       file = ../../secrets/cloudflare-tunnel-cert-9k.age;
-      owner = "cloudflare";
+      owner = "cloudflared";
     };
     conduwuit-registration-token = {
       file = ../../secrets/conduwuit-registration-token.age;
