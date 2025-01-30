@@ -46,8 +46,7 @@ in
           inherit (config.services.my-matrix) server_name;
           allow_federation = true;
           allow_encryption = true;
-          allow_registration = true;
-          registration_token_file = config.age.secrets.conduwuit-registration-token.path;
+          allow_registration = false;
           max_request_size = 20000000;
           max_concurrent_requests = 100;
           turn_uris = ["turn:staticauth.turn.openrelay.metered.ca:443?transport=udp" "turn:staticauth.turn.openrelay.metered.ca:443?transport=tcp"];
