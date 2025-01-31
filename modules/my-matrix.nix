@@ -47,6 +47,7 @@ in
           allow_federation = true;
           allow_encryption = true;
           allow_registration = true;
+          database_backup_path = "/var/lib/matrix-conduit/backups";
           registration_token_file = config.age.secrets.conduwuit-registration-token.path;
           max_request_size = 20000000;
           max_concurrent_requests = 100;
