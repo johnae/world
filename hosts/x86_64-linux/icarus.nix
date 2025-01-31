@@ -591,6 +591,7 @@
         ];
         paths = [
           "/var/lib/vw-backup"
+          "/var/lib/matric-conduit/backups"
           "/var/lib/acme"
         ];
       };
