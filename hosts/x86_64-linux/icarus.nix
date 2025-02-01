@@ -304,6 +304,22 @@
       path = "/var/lib/microvm-secrets/ssh_host_ed25519_key";
       symlink = false;
     };
+    groq-api-key = {
+      file = ../../secrets/groq-api-key.age;
+      owner = "${toString adminUser.uid}";
+    };
+    anthropic-api-key = {
+      file = ../../secrets/anthropic-api-key.age;
+      owner = "${toString adminUser.uid}";
+    };
+    openrouter-api-key = {
+      file = ../../secrets/openrouter-api-key.age;
+      owner = "${toString adminUser.uid}";
+    };
+    openai-api-key = {
+      file = ../../secrets/openai-api-key.age;
+      owner = "${toString adminUser.uid}";
+    };
   };
 
   security.acme.certs = {
