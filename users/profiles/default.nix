@@ -87,7 +87,5 @@ in {
     Install.WantedBy = ["timers.target"];
   };
 
-  services.syncthing.enable = true;
-
   home.stateVersion = "21.05";
 }
