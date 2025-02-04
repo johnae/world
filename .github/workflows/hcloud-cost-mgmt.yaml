@@ -30,7 +30,7 @@ jobs:
           accept-flake-config = true
 
     - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v8
+      uses: DeterminateSystems/magic-nix-cache-action@v9
 
     - name: Tofu Destroy
       env:
