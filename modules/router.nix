@@ -134,14 +134,13 @@ in {
         dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
         add-mac = "text";
         add-subnet = "32,128";
-        port = 53;
-        listen-address = "::1,127.0.0.1";
+        port = 5342;
       }
       // cfg.dnsMasqSettings;
 
     services.resolved.enable = false;
     services.nextdns.enable = cfg.useNextDns;
-    services.nextdns.arguments = (flatten (map (mac: ["-profile" "${mac}=\${KIDSDNS_ID}"]) cfg.restrictedMacs)) ++ ["-profile" "${cfg.internalInterfaceIP}/24=\${NEXTDNS_ID}" "-cache-size" "10MB" "-discovery-dns" "127.0.0.1:53" "-report-client-info" "-listen" "${cfg.internalInterfaceIP}:53"];
+    services.nextdns.arguments = (flatten (map (mac: ["-profile" "${mac}=\${KIDSDNS_ID}"]) cfg.restrictedMacs)) ++ ["-profile" "${cfg.internalInterfaceIP}/24=\${NEXTDNS_ID}" "-cache-size" "10MB" "-discovery-dns" "127.0.0.1:5342" "-report-client-info" "-listen" "${cfg.internalInterfaceIP}:53" "-listen" "127.0.0.1:53"];
     systemd.services.nextdns = mkIf cfg.useNextDns {
       serviceConfig.EnvironmentFile = cfg.nextDnsEnvFile;
     };
