@@ -116,6 +116,22 @@ in {
 
     environment.persistence."/keep".directories = ["/var/lib/dnsmasq"];
 
+    systemd.timers.kill-nextdns = {
+      description = "Kill nextdns 5 minutes after boot. What a hack.";
+      wantedBy = ["timers.target"];
+      timerConfig.onBootSec = "5m";
+    };
+    systemd.services.kill-nextdns = {
+      description = "Kill nextdns 5 minutes after boot. What a hack.";
+      after = ["network-online.target"];
+      wantedBy = ["multi-user.target"];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStartPre = "/run/current-system/sw/bin/pkill -9 nextdns";
+        ExecStart = "/run/current-system/sw/bin/systemctl restart nextdns";
+      };
+    };
+
     services.dnsmasq.enable = true;
     services.dnsmasq.resolveLocalQueries = true;
     services.dnsmasq.settings =
