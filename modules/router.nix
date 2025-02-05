@@ -119,8 +119,7 @@ in {
     systemd.timers.kill-nextdns = {
       description = "Kill nextdns 5 minutes after boot. What a hack.";
       wantedBy = ["timers.target"];
-      timerConfig.onBootSec = "5m";
-      timerConfig.Unit = "kill-nextdns.service";
+      timerConfig.OnBootSec = "5m";
     };
     systemd.services.kill-nextdns = {
       description = "Kill nextdns 5 minutes after boot. What a hack.";
