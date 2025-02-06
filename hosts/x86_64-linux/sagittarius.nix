@@ -127,6 +127,14 @@
           ];
           inherit relabel_configs;
         }
+        {
+          job_name = "corerad";
+          scrape_interval = "10s";
+          static_configs = [
+            {targets = ["127.0.0.1:9430"];}
+          ];
+          inherit relabel_configs;
+        }
       ];
     };
   };

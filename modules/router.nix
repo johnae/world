@@ -132,6 +132,27 @@ in {
       };
     };
 
+    ## enable ipv6 on local network
+    services.corerad = {
+      settings = {
+        debug = {
+          address = "localhost:9430";
+          prometheus = true;
+        };
+        interfaces = [
+          {
+            name = cfg.internalInterface;
+            advertise = true;
+            prefix = [
+              {
+                prefix = "::/64";
+              }
+            ];
+          }
+        ];
+      };
+    };
+
     services.dnsmasq.enable = true;
     services.dnsmasq.resolveLocalQueries = true;
     services.dnsmasq.settings =
