@@ -134,6 +134,7 @@ in {
 
     ## enable ipv6 on local network
     services.corerad = {
+      enable = true;
       settings = {
         debug = {
           address = "localhost:9430";
