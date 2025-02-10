@@ -159,8 +159,7 @@ $env.config = {
     algorithm: "prefix"  # prefix, fuzzy
   }
   filesize: {
-    metric: true
-    format: "auto"
+    unit: "metric"
   }
   table: {
     mode: rounded # basic, compact, compact_double, light, thin, with_love, rounded, reinforced, heavy, none, other
