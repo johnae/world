@@ -36,6 +36,28 @@
     #luks.devices.cryptkey.crypttabExtraOpts = ["fido2-device=auto"];
   };
 
+  networking.useDHCP = false;
+  systemd.network = {
+    enable = true;
+    wait-online.anyInterface = true;
+    networks = {
+      "10-lan" = {
+        matchConfig.Name = ["enp*" "wlan*" "wlp*"];
+        networkConfig.DHCP = "yes";
+        networkConfig.IgnoreCarrierLoss = "3s";
+        networkConfig.IPv6PrivacyExtensions = "yes";
+        networkConfig.IPv6AcceptRA = "yes";
+        # networkConfig.LinkLocalAddressing = "ipv6";
+        # dhcpV4Config = {
+        #   RouteMetric = 100;
+        # };
+        # IPv6AcceptRA = {
+        #   RouteMetric = 100;
+        # };
+      };
+    };
+  };
+
   age.secrets = {
     wifi-networks = {
       file = ../../secrets/wifi-networks.age;
