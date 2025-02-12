@@ -90,14 +90,21 @@ in {
         {
           "10-wan" = {
             matchConfig.Name = cfg.externalInterface;
-            networkConfig.DHCP = "ipv4";
+            networkConfig.DHCP = "yes";
+            networkConfig.IPv6AcceptRA = "yes";
             networkConfig.DNS = "127.0.0.1";
+            networkConfig.DHCPPrefixDelegation = "yes";
+            dhcpV6Config = {
+              WithoutRA = "no";
+            };
           };
         }
         // (lib.mapAttrs' (name: net: {
             name = "11-${name}";
             value = {
               matchConfig.Name = name;
+              networkConfig.DHCPPrefixDelegation = "yes";
+              networkConfig.IPv6SendRA = "yes";
               addresses = [
                 {
                   Address = "${net.address}/${toString net.prefixLength}";
@@ -124,6 +131,7 @@ in {
     systemd.services.kill-nextdns = {
       description = "Kill nextdns 5 minutes after boot. What a hack.";
       after = ["network-online.target"];
+      wants = ["network-online.target"];
       wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "oneshot";
@@ -187,9 +195,8 @@ in {
     boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = true;
     boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
 
-    # don't automatically configure any ipv6 addresses
-    boot.kernel.sysctl."net.ipv6.conf.all.accept_ra" = 0;
-    boot.kernel.sysctl."net.ipv6.conf.all.autoconf" = 0;
+    boot.kernel.sysctl."net.ipv6.conf.all.accept_ra" = 1;
+    boot.kernel.sysctl."net.ipv6.conf.all.autoconf" = 1;
     boot.kernel.sysctl."net.ipv6.conf.all.use_tempaddr" = 0;
 
     # allow ipv6 autoconfiguration and temporary address use on wan
