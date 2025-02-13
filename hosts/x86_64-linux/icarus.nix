@@ -427,7 +427,7 @@
     };
   };
 
-  services.open-webui.enable = true;
+  services.open-webui.enable = false;
   services.open-webui.port = 11112;
   services.open-webui.environment = {
     # PYDANTIC_SKIP_VALIDATING_CORE_SCHEMAS = "True";
