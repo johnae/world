@@ -23,6 +23,7 @@
     ../../profiles/hardware/b550.nix
     ../../profiles/core-metrics.nix
     ../../profiles/core-logging.nix
+    ../../profiles/forgejo.nix
     ../../profiles/home-manager.nix
     ../../profiles/restic-backup.nix
     ../../profiles/server.nix
