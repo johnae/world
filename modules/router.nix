@@ -157,6 +157,12 @@ in {
                 prefix = "::/64";
               }
             ];
+            rdnss = [
+              {
+                servers = ["::"];
+                lifetime = "auto";
+              }
+            ];
           }
         ];
       };
