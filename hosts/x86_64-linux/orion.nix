@@ -150,7 +150,7 @@
   services.vaultwarden = {
     enable = true;
     environmentFile = "/run/agenix/vaultwarden-env";
-    backupDir = "/var/lib/vaultwarden-backup";
+    backupDir = "/var/lib/vw-backup";
 
     config = {
       DOMAIN = "https://bw.9000.dev";

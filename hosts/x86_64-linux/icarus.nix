@@ -257,6 +257,7 @@
       systemctl stop vaultwarden || true
       mkdir -p /root/.cache
       rm -rf /var/lib/vaultwarden/*
+      rm -rf /var/lib/bitwarden_rs/*
 
       ${pkgs.restic}/bin/restic restore latest:/var/lib/vw-backup --target /var/lib/vw-backup --host ${hostName} || true
       ${pkgs.restic}/bin/restic restore latest:/var/lib/acme --target /var/lib/acme --host ${hostName} || true

@@ -19,6 +19,7 @@ in {
       ".direnv*"
       ".devenv*"
     ];
+    signing.format = "ssh";
     extraConfig = {
       github.user = lib.mkDefault userinfo.githubUser;
       gitlab.user = lib.mkDefault userinfo.gitlabUser;

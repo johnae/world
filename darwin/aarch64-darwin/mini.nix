@@ -1,6 +1,7 @@
 {
   adminUser,
   config,
+  lib,
   pkgs,
   ...
 }: {
@@ -181,7 +182,7 @@
   };
 
   home-manager.users.${adminUser.name} = {
-    home.stateVersion = "21.05";
+    home.stateVersion = "25.05";
     home.username = "${adminUser.name}";
     home.homeDirectory = "/Users/${adminUser.name}";
     home.packages = [
@@ -192,8 +193,8 @@
     inherit (adminUser) userinfo;
     programs = {
       git = {
+        signing.format = "ssh";
         extraConfig = {
-          gpg.format = "ssh";
           commit.gpgSign = true;
           tag.forceSignAnnotated = true;
         };
