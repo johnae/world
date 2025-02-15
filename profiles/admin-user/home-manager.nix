@@ -1,5 +1,6 @@
 {
   adminUser,
+  lib,
   pkgs,
   ...
 }: {
@@ -9,8 +10,8 @@
       inherit (adminUser) userinfo;
       programs = {
         git = {
+          signing.format = "ssh";
           extraConfig = {
-            gpg.format = "ssh";
             commit.gpgSign = true;
             tag.forceSignAnnotated = true;
           };

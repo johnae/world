@@ -1,7 +1,6 @@
 {
   inputs,
   self,
-  stdenv,
   ...
 }: {
   perSystem = {
@@ -122,6 +121,7 @@
           })
           {
             system.kexec-installer.name = "nixos-kexec-installer-noninteractive";
+            system.stateVersion = lib.mkForce "25.05";
             boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
           }
         ];
@@ -138,7 +138,13 @@
           if pkgs.stdenv.isLinux
           then inputs.persway.packages.${system}.default
           else pkgs.hello;
-        wezterm = inputs.wezterm.packages.${system}.default;
+        wezterm =
+          if pkgs.stdenv.isLinux
+          then inputs.wezterm.packages.${system}.default
+          else
+            inputs.wezterm.packages.${system}.default.overrideAttrs (oa: {
+              buildInputs = oa.buildInputs ++ [pkgs.openssl];
+            });
 
         victoriametrics-metrics-datasource-plugin = pkgs.stdenvNoCC.mkDerivation {
           pname = "victoriametrics-metrics-datasource-plugin";
