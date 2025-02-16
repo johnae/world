@@ -13,6 +13,9 @@
     devices = ["/dev/mapper/encrypted_root"];
   };
 
+  ## always fsck and fix errors
+  fileSystems."/keep".options = lib.mkForce ["defaults" "compression=zstd" "background_compression=zstd" "fsck" "fix_errors"];
+
   imports = [
     ../../profiles/admin-user/home-manager.nix
     ../../profiles/admin-user/user.nix
