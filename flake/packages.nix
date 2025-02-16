@@ -192,56 +192,69 @@
           name = "unlockremote";
           runtimeInputs = with pkgs; [coreutils openssh];
           text = ''
-
-            REMOTE_IP="$${REMOTE_IP:-}"
-            CLOUD_DISK_PASSWORD="$${CLOUD_DISK_PASSWORD:-}"
-            SSH_KEY="$${SSH_KEY:-}"
-
-            if [ -z "$CLOUD_DISK_PASSWORD" ]; then
-              echo Missing disk password
-              exit 1
-            fi
-
-            if [ -z "$IP" ]; then
-              echo Missing remote ip address
-              exit 1
-            fi
-
-            if [ -z "$SSH_KEY" ]; then
-              echo Missing ssh key
-              exit 1
-            fi
-
-            if [ ! -e "$SSH_KEY" ]; then
-              SSH_KEY_PATH="$(mktemp ~/sshkey.XXXXXX)"
-              echo "$SSH_KEY" | base64 -d > "$SSH_KEY_PATH"
-              SSH_KEY="$SSH_KEY_PATH"
-            fi
-            chmod 0600 "$SSH_KEY"
-            trap 'rm -f $SSH_KEY' EXIT
-
-            function unlock() {
-              retries=5
-              while true; do
-                if (( retries < 1 )) ; then
-                  echo "Failed to unlock host"
-                  exit 1
-                fi
-                retries=$((retries - 1))
-                echo "Probing host $REMOTE_IP on strPort 2222"
-                if timeout 5 bash -c "</dev/tcp/$REMOTE_IP/2222"; then
-                  echo "Host $REMOTE_IP is up, unlocking"
-                  echo "$CLOUD_DISK_PASSWORD" | ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i "$SSH_KEY" -p 2222 "root@$REMOTE_IP"
-                  break
-                else
-                  echo "Host $REMOTE_IP is down, retrying unlock later"
-                fi
-                echo "Waiting 5 seconds..."
-                sleep 5
-              done
+            check_required_vars() {
+                for var in CLOUD_DISK_PASSWORD IP SSH_KEY; do
+                    if [ -z "''${!var}" ]; then
+                        echo "Missing environment variable $var"
+                        exit 1
+                    fi
+                done
             }
 
-            unlock
+            setup_ssh_key() {
+                if [ ! -e "$SSH_KEY" ]; then
+                    SSH_KEY_PATH="$(mktemp ~/sshkey.XXXXXX)"
+                    echo "$SSH_KEY" | base64 -d > "$SSH_KEY_PATH"
+                    SSH_KEY="$SSH_KEY_PATH"
+                fi
+                chmod 0600 "$SSH_KEY"
+                trap 'rm -f $SSH_KEY' EXIT
+            }
+
+            probe_host() {
+                echo "Probing host $REMOTE_IP on port 2222"
+                timeout 5 bash -c "</dev/tcp/$REMOTE_IP/2222"
+            }
+
+            ssh_unlock() {
+                echo "Host $REMOTE_IP is up, unlocking"
+                echo "$CLOUD_DISK_PASSWORD" | ssh -oStrictHostKeyChecking=no \
+                    -oUserKnownHostsFile=/dev/null \
+                    -i "$SSH_KEY" \
+                    -p 2222 \
+                    "root@$REMOTE_IP"
+            }
+
+            unlock() {
+                local retries=5
+                while (( retries > 0 )); do
+                    if probe_host; then
+                        ssh_unlock
+                        return 0
+                    else
+                        echo "Host $REMOTE_IP is down, retrying unlock later"
+                        retries=$((retries - 1))
+                        if (( retries < 1 )); then
+                            echo "Failed to unlock host"
+                            exit 1
+                        fi
+                        echo "Waiting 5 seconds..."
+                        sleep 5
+                    fi
+                done
+            }
+
+            main() {
+                REMOTE_IP="''${REMOTE_IP:-}"
+                CLOUD_DISK_PASSWORD="''${CLOUD_DISK_PASSWORD:-}"
+                SSH_KEY="''${SSH_KEY:-}"
+
+                check_required_vars
+                setup_ssh_key
+                unlock
+            }
+
+            main
           '';
         };
       };
