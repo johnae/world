@@ -37,6 +37,7 @@
 
   boot.initrd = {
     systemd.enable = true;
+    systemd.emergencyAccess = config.users.users.${adminUser.name}.hashedPassword;
   };
 
   networking.useDHCP = false;
