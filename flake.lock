@@ -2349,6 +2349,7 @@
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks_2",
         "rust-overlay": "rust-overlay",
+        "swayfx": "swayfx",
         "systems": "systems_3",
         "victorialogs": "victorialogs",
         "victoriametrics-logs-datasource-plugin": "victoriametrics-logs-datasource-plugin",
@@ -2395,6 +2396,27 @@
         "type": "github"
       }
     },
+    "scenefx": {
+      "inputs": {
+        "nixpkgs": [
+          "swayfx",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1739733667,
+        "narHash": "sha256-BLIADMQwPJUtl6hFBhh5/xyYwLFDnNQz0RtgWO/Ua8s=",
+        "owner": "wlrfx",
+        "repo": "scenefx",
+        "rev": "87c0e8b6d5c86557a800445e8e4c322f387fe19c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wlrfx",
+        "repo": "scenefx",
+        "type": "github"
+      }
+    },
     "spectrum": {
       "flake": false,
       "locked": {
@@ -2409,6 +2431,28 @@
       "original": {
         "type": "git",
         "url": "https://spectrum-os.org/git/spectrum"
+      }
+    },
+    "swayfx": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "scenefx": "scenefx"
+      },
+      "locked": {
+        "lastModified": 1739829055,
+        "narHash": "sha256-oSEgzaDJDPDxpO51sqTBUEobm5ScIe5x6RgqkV3FvWs=",
+        "owner": "johnae",
+        "repo": "swayfx",
+        "rev": "ad715413fd1a145314fe671f70f6ba76a9c880e2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "johnae",
+        "ref": "push-syrvlxwyzskq",
+        "repo": "swayfx",
+        "type": "github"
       }
     },
     "systems": {
