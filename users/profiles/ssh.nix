@@ -6,6 +6,10 @@
     controlMaster = "auto";
     controlPersist = "30m";
     matchBlocks = {
+      "gitssh gitssh.9000.dev" = {
+        user = "forgejo";
+        port = 2222;
+      };
       "*.compute.amazonaws.com" = {
         forwardAgent = false;
         extraOptions = {
