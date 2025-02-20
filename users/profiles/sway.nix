@@ -147,13 +147,14 @@ in {
   wayland.windowManager.sway = {
     enable = true;
     systemd.enable = true;
-    package = pkgs.swayfx;
+    package = pkgs.swayfx-latest;
     checkConfig = false;
     extraConfigEarly = ''
       blur enable
-      blur_brightness 1.2
-      blur_saturation 1.1
+      blur_brightness 1.3
+      blur_saturation 1.9
       shadows enable
+      shadow_blur_radius 25
       layer_effects "waybar" blur enable; shadows enable
       default_dim_inactive 0.15
       corner_radius 8
