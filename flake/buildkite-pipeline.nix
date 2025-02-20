@@ -45,6 +45,7 @@
     "rbw-atomic-unlock"
     "scripts"
     "sirius-diskformat"
+    "swayfx-latest"
     "test-diskformat"
     "titan-diskformat"
     "victorialogs"
