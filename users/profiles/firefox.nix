@@ -8,7 +8,7 @@ in {
     package = firefox;
     profiles = {
       default = {
-        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
           tridactyl
           adsum-notabs
           ublock-origin
