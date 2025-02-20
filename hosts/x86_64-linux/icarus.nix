@@ -348,6 +348,9 @@
     "victorialogs.9000.dev" = {
       group = "nginx";
     };
+    "ha.9000.dev" = {
+      group = "nginx";
+    };
   };
 
   services.my-cloudflared = {
