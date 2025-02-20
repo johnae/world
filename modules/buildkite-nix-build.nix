@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: let
   inherit (lib) types;
@@ -48,6 +49,7 @@ in {
         inherit (cfg) tags runtimePackages;
         tokenPath = config.age.secrets."buildkite-agent-${agentName}-token".path;
         privateSshKeyPath = config.age.secrets."buildkite-agent-${agentName}-ssh-key".path;
+        package = pkgs.buildkite-agent-patched;
         extraConfig = ''
           plugins-path=${dataDir}/plugins
         '';
