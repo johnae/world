@@ -181,6 +181,13 @@
           '';
         };
 
+        buildkite-agent-patched = pkgs.buildkite-agent.overrideAttrs (oa: {
+          postPatch = ''
+            ${oa.postPatch}
+            substituteInPlace version/version.go --replace 'buildNumber = "x"' 'buildNumber = "123"'
+          '';
+        });
+
         conduwuit-latest = inputs.conduwuit.packages.${system}.default;
 
         inherit
