@@ -4,13 +4,13 @@
   config,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPI8D16MUXSt7EcmYavSBD6k1eHoIoFfH4lu8T5o+4zX";
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIInNFRkSTXPiS0TiQOBS+AT/N2l5HS5/cnCfbWN1sSik";
   syncthingDeviceID = "ZL2OU7Q-IRYWF7H-VNX6A65-RHWQXIF-AK2G22Y-KB43E2U-DAMNCFP-66IWKQX";
 
   imports = [
     ../../profiles/hardware/usbcore.nix
     ../../profiles/hardware/x570.nix
-    ../../profiles/disk/bcachefs.nix
+    ../../profiles/disk/bcachefs-on-luks.nix
     ../../profiles/admin-user/user.nix
     ../../profiles/admin-user/u2fmappings.nix
     ../../profiles/admin-user/home-manager.nix
@@ -33,11 +33,12 @@
   boot.loader.systemd-boot.memtest86.enable = true;
 
   bcachefs.disks = ["/dev/nvme0n1"];
-  bcachefs.devices = ["/dev/nvme0n1p3"];
+  bcachefs.devices = ["/dev/mapper/encrypted_root"];
 
   boot.initrd = {
     systemd.enable = true;
     systemd.emergencyAccess = config.users.users.${adminUser.name}.hashedPassword;
+    systemd.tpm2.enable = true;
   };
 
   networking.useDHCP = false;
