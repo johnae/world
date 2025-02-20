@@ -29,6 +29,7 @@
   services.ollama.enable = true;
   services.ollama.rocmOverrideGfx = "11.0.0"; ## rdna 3 11.0.0
   services.ollama.acceleration = "rocm";
+  services.ollama.host = "0.0.0.0";
 
   boot.loader.systemd-boot.memtest86.enable = true;
 
