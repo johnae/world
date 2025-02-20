@@ -35,7 +35,7 @@ To add a new machine, create a file in the relevant architecture folder under [h
    nix build .#"$host"-diskformat
    ./result/bin/diskformat
    nixos-install --flake .#"$host" --no-root-passwd
-   chown -R 1337:100 /keep/home/<your-user>
+   chown -R 1337:100 /mnt/keep/home/<your-user>
    ```
 
    Hosts are defined in [hosts/](hosts/).  
