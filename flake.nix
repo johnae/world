@@ -112,6 +112,8 @@
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
+    swayfx.url = "github:johnae/swayfx/push-syrvlxwyzskq";
+    swayfx.inputs.nixpkgs.follows = "nixpkgs";
     systems.url = "github:nix-systems/default";
     victorialogs.flake = false;
     victorialogs.url = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/download/v1.8.0-victorialogs/victoria-logs-linux-amd64-v1.8.0-victorialogs.tar.gz"; # gh-release-update
