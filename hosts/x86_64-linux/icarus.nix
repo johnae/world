@@ -28,6 +28,7 @@
     ../../profiles/core-metrics.nix
     ../../profiles/core-logging.nix
     ../../profiles/forgejo.nix
+    ../../profiles/home-assistant.nix
     ../../profiles/home-manager.nix
     ../../profiles/restic-backup.nix
     ../../profiles/server.nix
@@ -407,6 +408,12 @@
     cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
   };
 
+  services.cloudflare-tailscale-dns.ha = {
+    enable = true;
+    zone = "9000.dev";
+    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+  };
+
   services.nginx.tailscaleAuth = {
     enable = true;
     virtualHosts = [
@@ -595,6 +602,12 @@
       "victorialogs.9000.dev" = {
         useACMEHost = "victorialogs.9000.dev";
         locations."/".proxyPass = "http://localhost:9428";
+        locations."/".proxyWebsockets = true;
+        forceSSL = true;
+      };
+      "ha.9000.dev" = {
+        useACMEHost = "ha.9000.dev";
+        locations."/".proxyPass = "http://localhost:8123";
         locations."/".proxyWebsockets = true;
         forceSSL = true;
       };
