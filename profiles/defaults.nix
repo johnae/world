@@ -80,6 +80,9 @@ in {
     pkgs.zip
   ];
 
+  ## disable that slow "building man-cache" step
+  documentation.man.generateCaches = lib.mkForce false;
+
   home-manager.useUserPackages = true;
   home-manager.useGlobalPkgs = true;
 
