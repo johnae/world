@@ -6,7 +6,8 @@
     controlMaster = "auto";
     controlPersist = "30m";
     matchBlocks = {
-      "gitssh gitssh.9000.dev" = {
+      "git git.9000.dev" = {
+        hostname = "gitssh.9000.dev";
         user = "forgejo";
         port = 2222;
       };
