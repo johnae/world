@@ -1,4 +1,8 @@
-{config, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
   cfg = config.services.forgejo;
   srv = cfg.settings.server;
 in {
@@ -10,6 +14,18 @@ in {
       HTTP_PORT = 3121;
     };
     service.DISABLE_REGISTRATION = true;
+  };
+  systemd.services.tailscale-serve-ssh = {
+    description = "Tailscale serve forgejo ssh";
+    wantedBy = ["tailscaled.service"];
+    after = ["tailscaled.service"];
+    serviceConfig = {
+      RestartSec = 10;
+      Restart = "on-failure";
+      ExecStart = pkgs.writeShellScript "tailscale-serve-ssh" ''
+        ${pkgs.tailscale}/bin/tailscale serve --tcp 2222 tcp://localhost:22
+      '';
+    };
   };
   environment.persistence."/keep".directories = [
     cfg.stateDir
