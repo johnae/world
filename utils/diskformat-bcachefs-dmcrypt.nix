@@ -340,7 +340,7 @@ in
             );
         in ''
           echo Creating bcachefs filesystem on ${concatStringsSep "," disks}
-          bcachefs format --discard --compression=zstd --replicas=${toString (builtins.length bcacheFsDisks)} -L root ${concatStringsSep " " (lib.imap1 (idx: disk: ''--label=ssd.ssd${toString idx} ${disk}'') disks)}
+          bcachefs format --force --discard --compression=zstd --replicas=${toString (builtins.length bcacheFsDisks)} -L root ${concatStringsSep " " (lib.imap1 (idx: disk: ''--label=ssd.ssd${toString idx} ${disk}'') disks)}
 
           echo Mounting bcachefs volume at /mnt/keep
           bcachefs mount ${concatStringsSep ":" disks} /mnt/keep
