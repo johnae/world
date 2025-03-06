@@ -6,7 +6,7 @@
   lib,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIOWdmZbf9/MQKKJEvb8LlOI/xeuAMt+GhNQjlKYzTCI";
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINssAv/UibH5i9JxHFFWNNodKzmjYvPxx4mhTys3S1ZX";
 
   bcachefs = {
     disks = ["/dev/nvme0n1"];
