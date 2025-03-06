@@ -14,9 +14,6 @@
     devices = ["/dev/mapper/encrypted_root" "/dev/mapper/encrypted_root1"];
   };
 
-  ## always fsck and fix errors
-  fileSystems."/keep".options = lib.mkForce ["defaults" "compression=zstd" "background_compression=zstd" "fsck" "fix_errors"];
-
   boot.initrd.luks.devices.cryptkey.keyFile = "/dev/disk/by-partlabel/alt_cryptkey";
 
   imports = [
