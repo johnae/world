@@ -466,6 +466,7 @@
                   (window:set_right_status (wezterm.format elements))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;|\
+(set config.check_for_updates false)
 (set config.mux_env_remove {})
 (set config.adjust_window_size_when_changing_font_size false)
 (set config.enable_wayland true)
