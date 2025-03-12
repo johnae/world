@@ -315,6 +315,7 @@ in {
 
         "${modifier}+minus" = ''exec ${pkgs.scripts}/bin/rofi-rbw'';
         "${modifier}+Shift+minus" = ''exec passonly=y ${pkgs.scripts}/bin/rofi-rbw'';
+        "${modifier}+Shift+equal" = ''exec codeonly=y ${pkgs.scripts}/bin/rofi-rbw'';
 
         "${modifier}+Shift+e" = ''exec ${editor}'';
 
