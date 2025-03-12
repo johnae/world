@@ -25,7 +25,7 @@
         ];
         environmentFile = config.age.secrets.restic-env.path;
         passwordFile = config.age.secrets.restic-pw.path;
-        repository = "s3:https://b0850d27a4d43d7d0f8d36ebc6a1bfab.r2.cloudflarestorage.com/restic-9000-b147";
+        repository = "s3:https://hel1.your-objectstorage.com/9000";
         initialize = true;
         timerConfig.OnCalendar = "*-*-* *:00:00";
         timerConfig.RandomizedDelaySec = "5m";
