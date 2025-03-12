@@ -98,6 +98,7 @@
       runtimeInputs = [rofi-wayland rbw dotool];
       text = ''
         passonly=''${passonly:-}
+        codeonly=''${codeonly:-}
         selection="$(rbw list --fields name,user | \
            sed 's|\t|/|g' | \
            rofi -normal-window -matching fuzzy -i -dmenu)"
@@ -106,10 +107,13 @@
         login="$(echo "$selection" | awk -F'/' '{print $2}')"
         pass="$(rbw get "$entry" "$login")"
 
-        if [ -z "$passonly" ]; then
-          echo -en "type $login\t$pass" | dotool
-        else
+        if [ -n "$passonly" ]; then
           echo -n "type $pass" | dotool
+        elif [ -n "$codeonly" ]; then
+          code="$(rbw code "$entry" "$login")"
+          echo -n "type $code" | dotool
+        else
+          echo -en "type $login\t$pass" | dotool
         fi
       '';
     };
