@@ -644,7 +644,6 @@
             client_max_body_size 0;
             proxy_buffering off;
             proxy_request_buffering off;
-            proxy_timeout 300s;
           '';
         };
         forceSSL = true;
@@ -662,7 +661,6 @@
             client_max_body_size 0;
             proxy_buffering off;
             proxy_request_buffering off;
-            proxy_timeout 300s;
           '';
         };
         forceSSL = true;
