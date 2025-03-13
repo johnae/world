@@ -212,7 +212,7 @@
       imports = [../../users/profiles/workstation.nix];
       programs.git.extraConfig.user.signingKey = config.age.secrets.id_ed25519_alt.path;
       programs.jujutsu.settings.signing = {
-        sign-all = true;
+        behavior = "own";
         backend = "ssh";
         key = config.age.secrets.id_ed25519_alt.path;
       };
