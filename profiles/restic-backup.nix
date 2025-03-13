@@ -22,6 +22,7 @@
           "/home/${adminUser.name}/Documents"
           "/home/${adminUser.name}/Sync"
           "/home/${adminUser.name}/Photos"
+          "/home/${adminUser.name}/Mail"
         ];
         environmentFile = config.age.secrets.restic-env.path;
         passwordFile = config.age.secrets.restic-pw.path;
