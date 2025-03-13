@@ -41,12 +41,18 @@ in {
             cat<<EOF>/var/lib/iwd/"$file"
         [Security]
         EOF
-            for field in $(jq -r ".\"$key\" | keys | .[]" "$SECRETS"); do
+            for field in $(jq -r ".\"$key\" | keys | .[] | select(. != \"Band\")" "$SECRETS"); do
                 value=$(jq -r ".\"$key\".\"$field\"" "$SECRETS")
                 cat<<EOF>>/var/lib/iwd/"$file"
         $field=$value
         EOF
             done
+            if jq -e ".\"$key\" | keys | any(. == \"Band\")" "$SECRETS" > /dev/null; then
+              cat<<EOF>>/var/lib/iwd/"$file"
+        [Settings]
+        Band=$(jq -r ".\"$key\" | .Band" "$SECRETS")
+        EOF
+            fi
         done
       '';
       wantedBy = ["network.target"];
