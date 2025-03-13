@@ -27,6 +27,7 @@
     ../../profiles/forgejo.nix
     ../../profiles/home-assistant.nix
     ../../profiles/home-manager.nix
+    ../../profiles/minio.nix
     ../../profiles/restic-backup.nix
     ../../profiles/server.nix
     ../../profiles/state.nix
@@ -290,6 +291,7 @@
       file = ../../secrets/conduwuit-registration-token.age;
       mode = "777";
     };
+    minio-root-credentials-env.file = ../../secrets/minio-root-credentials-env.age;
     vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
     syncthing-cert = {
       file = ../../secrets/${hostName}/syncthing-cert.age;
@@ -346,6 +348,12 @@
       group = "nginx";
     };
     "ha.9000.dev" = {
+      group = "nginx";
+    };
+    "storage.9000.dev" = {
+      group = "nginx";
+    };
+    "storage-admin.9000.dev" = {
       group = "nginx";
     };
   };
@@ -409,6 +417,18 @@
   };
 
   services.cloudflare-tailscale-dns.ha = {
+    enable = true;
+    zone = "9000.dev";
+    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+  };
+
+  services.cloudflare-tailscale-dns.storage = {
+    enable = true;
+    zone = "9000.dev";
+    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+  };
+
+  services.cloudflare-tailscale-dns.storage-admin = {
     enable = true;
     zone = "9000.dev";
     cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
@@ -554,8 +574,10 @@
     recommendedProxySettings = true;
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
-    clientMaxBodySize = "300m";
+    recommendedBrotliSettings = true;
+    recommendedZstdSettings = true;
     commonHttpConfig = ''
+      ignore_invalid_headers off;
       map $auth_user $auth_email {
         ~^(?<user_no_dash>[^-]+)-.*$ $user_no_dash@9000.dev;
         ~^(?<user>[^@]+)@passkey$ $user@9000.dev;
@@ -609,6 +631,40 @@
         useACMEHost = "ha.9000.dev";
         locations."/".proxyPass = "http://localhost:8123";
         locations."/".proxyWebsockets = true;
+        forceSSL = true;
+      };
+
+      "storage.9000.dev" = {
+        useACMEHost = "storage.9000.dev";
+        locations."/" = {
+          proxyPass = "https://localhost:9000";
+          proxyWebsockets = true;
+          extraConfig = ''
+            chunked_transfer_encoding off;
+            client_max_body_size 0;
+            proxy_buffering off;
+            proxy_request_buffering off;
+            proxy_timeout 300s;
+          '';
+        };
+        forceSSL = true;
+      };
+
+      "storage-admin.9000.dev" = {
+        useACMEHost = "storage-admin.9000.dev";
+        locations."/" = {
+          proxyPass = "https://localhost:9001";
+          proxyWebsockets = true;
+          extraConfig = ''
+            chunked_transfer_encoding off;
+            proxy_set_header X-NginX-Proxy true;
+            real_ip_header X-Real-IP;
+            client_max_body_size 0;
+            proxy_buffering off;
+            proxy_request_buffering off;
+            proxy_timeout 300s;
+          '';
+        };
         forceSSL = true;
       };
     };
