@@ -637,7 +637,7 @@
       "storage.9000.dev" = {
         useACMEHost = "storage.9000.dev";
         locations."/" = {
-          proxyPass = "https://localhost:9000";
+          proxyPass = "http://localhost:9000";
           proxyWebsockets = true;
           extraConfig = ''
             chunked_transfer_encoding off;
@@ -652,7 +652,7 @@
       "storage-admin.9000.dev" = {
         useACMEHost = "storage-admin.9000.dev";
         locations."/" = {
-          proxyPass = "https://localhost:9001";
+          proxyPass = "http://localhost:9001";
           proxyWebsockets = true;
           extraConfig = ''
             chunked_transfer_encoding off;
