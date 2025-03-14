@@ -1,7 +1,6 @@
 {
   adminUser,
   config,
-  lib,
   pkgs,
   hostName,
   ...
