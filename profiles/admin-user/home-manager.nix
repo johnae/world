@@ -1,6 +1,5 @@
 {
   adminUser,
-  lib,
   pkgs,
   ...
 }: {
