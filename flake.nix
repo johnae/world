@@ -114,6 +114,7 @@
     rust-overlay.url = "github:oxalica/rust-overlay";
     swayfx.url = "github:WillPower3309/swayfx";
     swayfx.inputs.nixpkgs.follows = "nixpkgs";
+    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
     systems.url = "github:nix-systems/default";
     victorialogs.flake = false;
     victorialogs.url = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/download/v1.8.0-victorialogs/victoria-logs-linux-amd64-v1.8.0-victorialogs.tar.gz"; # gh-release-update

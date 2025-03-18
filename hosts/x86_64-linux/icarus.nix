@@ -40,6 +40,19 @@
   virtualisation.podman.enable = true;
   virtualisation.podman.dockerCompat = true;
 
+  mailserver = {
+    enable = true;
+    fqdn = "mail.9000.dev";
+    domains = ["9000.dev"];
+    certificateScheme = "acme";
+    loginAccounts = {
+      "john@9000.dev" = {
+        hashedPasswordFile = config.age.secrets.john-9000-dev-mail.path;
+        aliases = ["postmaster@9000.dev"];
+      };
+    };
+  };
+
   system.autoUpgrade = {
     enable = true;
     flake = "github:johnae/world";
@@ -290,6 +303,7 @@
       file = ../../secrets/conduwuit-registration-token.age;
       mode = "777";
     };
+    john-9000-dev-mail.file = ../../secrets/john-9000-dev-mail.age;
     minio-root-credentials-env.file = ../../secrets/minio-root-credentials-env.age;
     vaultwarden-env.file = ../../secrets/vaultwarden-env.age;
     syncthing-cert = {
@@ -478,6 +492,10 @@
     "/var/lib/private/open-webui"
     "/var/lib/private/victoriametrics"
     "/var/lib/private/victorialogs"
+    "/var/sieve"
+    "/var/vmail"
+    "/var/dkim"
+    "/var/lib/dovecot"
   ];
 
   age.secrets = {
