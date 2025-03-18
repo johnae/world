@@ -137,7 +137,7 @@
     args.advertise-tags = ["tag:server"];
     args.ssh = true;
     args.accept-routes = false;
-    args.accept-dns = false;
+    args.accept-dns = true;
     args.advertise-exit-node = true;
     args.auth-key = config.age.secrets.ts-google-9k.path;
   };
