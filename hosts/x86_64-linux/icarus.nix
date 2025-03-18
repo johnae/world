@@ -741,9 +741,39 @@
     };
   };
 
+  ## proton-bridge
+  systemd.services.tailscale-serve-1143-tcp = {
+    after = ["network-online.service" "tailscaled.service" "tailscale-auth.service"];
+    serviceConfig.ExecStart = "${pkgs.tailscale}/bin/tailscale serve --tls-terminated-tcp 1143 127.0.0.1:1143";
+  };
+
+  ## proton-bridge
+  systemd.services.tailscale-serve-1025-tcp = {
+    after = ["network-online.service" "tailscaled.service" "tailscale-auth.service"];
+    serviceConfig.ExecStart = "${pkgs.tailscale}/bin/tailscale serve --tls-terminated-tcp 1025 127.0.0.1:1025";
+  };
+
   home-manager = {
     users.${adminUser.name} = {
       imports = [../../users/profiles/headless.nix];
+      home.packages = with pkgs; [
+        protonmail-bridge
+        gnupg
+        just
+        pass
+      ];
+      systemd.user.services.proton-bridge = {
+        Unit.Description = "Run the proton-bridge";
+        Service.ExecStart = "${pkgs.protonmail-bridge}/protonmail-bridge -n";
+        Service.Environment = [
+          "PATH=${pkgs.gnupg}/bin:${pkgs.pass}/bin:${pkgs.protonmail-bridge}/bin"
+          "GNUPGHOME=/home/${adminUser.name}/Mail/protonmail-bridge/gnupg"
+          "XDG_CACHE_HOME=/home/${adminUser.name}/Mail/protonmail-bridge/cache"
+          "XDG_DATA_HOME=/home/${adminUser.name}/Mail/protonmail-bridge/data"
+          "XDG_CONFIG_HOME=/home/${adminUser.name}/Mail/protonmail-bridge/config"
+          "PASSWORD_STORE_DIR=/home/${adminUser.name}/Mail/protonmail-bridge/password-store"
+        ];
+      };
     };
   };
 }
