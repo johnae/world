@@ -6,7 +6,7 @@
   cfg = config.services.forgejo;
   srv = cfg.settings.server;
 in {
-  services.forgejo.enable = true;
+  services.forgejo.enable = false;
   services.forgejo.settings = {
     server = {
       DOMAIN = "git.9000.dev";
