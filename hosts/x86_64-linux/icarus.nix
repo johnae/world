@@ -683,6 +683,20 @@
           "/var/lib/acme"
         ];
       };
+      local = {
+        backupPrepareCommand = "${pkgs.restic}/bin/restic unlock";
+        pruneOpts = [
+          "--keep-daily 10"
+          "--keep-weekly 7"
+          "--keep-monthly 12"
+          "--keep-yearly 75"
+        ];
+        paths = [
+          "/var/lib/vw-backup"
+          "/var/lib/matrix-conduit/backups"
+          "/var/lib/acme"
+        ];
+      };
     };
   };
 
