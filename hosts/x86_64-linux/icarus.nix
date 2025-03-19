@@ -764,7 +764,7 @@
       ];
       systemd.user.services.proton-bridge = {
         Unit.Description = "Run the proton-bridge";
-        Service.ExecStart = "${pkgs.protonmail-bridge}/protonmail-bridge -n";
+        Service.ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge -n";
         Service.Environment = [
           "PATH=${pkgs.gnupg}/bin:${pkgs.pass}/bin:${pkgs.protonmail-bridge}/bin"
           "GNUPGHOME=/home/${adminUser.name}/Mail/protonmail-bridge/gnupg"
