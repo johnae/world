@@ -699,6 +699,10 @@
           "/var/lib/vw-backup"
           "/var/lib/matrix-conduit/backups"
           "/var/lib/acme"
+          "/var/sieve"
+          "/var/vmail"
+          "/var/dkim"
+          "/var/lib/dovecot"
         ];
       };
       local = {
@@ -713,6 +717,10 @@
           "/var/lib/vw-backup"
           "/var/lib/matrix-conduit/backups"
           "/var/lib/acme"
+          "/var/sieve"
+          "/var/vmail"
+          "/var/dkim"
+          "/var/lib/dovecot"
         ];
       };
     };
