@@ -795,8 +795,8 @@
           "PATH=${pkgs.gnupg}/bin:${pkgs.pass}/bin:${pkgs.protonmail-bridge}/bin"
           "GNUPGHOME=/home/${adminUser.name}/Mail/protonmail-bridge/gnupg"
           "XDG_CACHE_HOME=/home/${adminUser.name}/Mail/protonmail-bridge/cache"
-          "XDG_DATA_HOME=/home/${adminUser.name}/Mail/protonmail-bridge/data"
-          "XDG_CONFIG_HOME=/home/${adminUser.name}/Mail/protonmail-bridge/config"
+          "XDG_DATA_HOME=/home/${adminUser.name}/Mail/protonmail-bridge/local/data"
+          "XDG_CONFIG_HOME=/home/${adminUser.name}/Mail/protonmail-bridge/local/config"
           "PASSWORD_STORE_DIR=/home/${adminUser.name}/Mail/protonmail-bridge/password-store"
         ];
       };
