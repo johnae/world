@@ -1,10 +1,14 @@
 {
   hostName,
   inputs,
+  config,
+  tailnet,
+  adminUser,
   pkgs,
   ...
 }: {
-  home-manager.extraSpecialArgs = {inherit hostName inputs;};
+  home-manager.extraSpecialArgs = {inherit hostName inputs tailnet adminUser;} // {mainConfig = config;};
+
   home-manager.sharedModules =
     [
       ../users/modules/chromiums.nix

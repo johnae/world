@@ -1,8 +1,10 @@
 {
   adminUser,
   config,
-  pkgs,
   hostName,
+  pkgs,
+  lib,
+  tailnet,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHaa82NwBC+ty4Wyeuf5kdava7huSYF6k0NYF2ahwayW";
@@ -322,6 +324,10 @@
       file = ../../secrets/ssh_host_microvm_ed25519_key.age;
       path = "/var/lib/microvm-secrets/ssh_host_ed25519_key";
       symlink = false;
+    };
+    email-account-pass = {
+      file = ../../secrets/email-account-pass.age;
+      owner = "${toString adminUser.uid}";
     };
     groq-api-key = {
       file = ../../secrets/groq-api-key.age;
@@ -779,27 +785,10 @@
     serviceConfig.ExecStart = "${pkgs.tailscale}/bin/tailscale serve --tls-terminated-tcp 1025 127.0.0.1:1025";
   };
 
-  home-manager = {
-    users.${adminUser.name} = {
-      imports = [../../users/profiles/headless.nix];
-      home.packages = with pkgs; [
-        protonmail-bridge
-        gnupg
-        just
-        pass
-      ];
-      systemd.user.services.proton-bridge = {
-        Unit.Description = "Run the proton-bridge";
-        Service.ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge -n";
-        Service.Environment = [
-          "PATH=${pkgs.gnupg}/bin:${pkgs.pass}/bin:${pkgs.protonmail-bridge}/bin"
-          "GNUPGHOME=/home/${adminUser.name}/Mail/protonmail-bridge/gnupg"
-          "XDG_CACHE_HOME=/home/${adminUser.name}/Mail/protonmail-bridge/cache"
-          "XDG_DATA_HOME=/home/${adminUser.name}/Mail/protonmail-bridge/local/data"
-          "XDG_CONFIG_HOME=/home/${adminUser.name}/Mail/protonmail-bridge/local/config"
-          "PASSWORD_STORE_DIR=/home/${adminUser.name}/Mail/protonmail-bridge/password-store"
-        ];
-      };
-    };
+  home-manager.users.${adminUser.name} = {
+    imports = [
+      ../../users/profiles/headless.nix
+      ../../users/profiles/mailmaster.nix
+    ];
   };
 }
