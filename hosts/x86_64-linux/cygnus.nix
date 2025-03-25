@@ -2,6 +2,7 @@
   adminUser,
   hostName,
   config,
+  pkgs,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHJycc3NgaX+coWkJIQEmHS3HBF99o3SkZ7sIm83eiiW";
@@ -88,6 +89,10 @@
       owner = "0";
       path = "/root/.ssh/id_ed25519";
     };
+    email-account-pass = {
+      file = ../../secrets/email-account-pass.age;
+      owner = "${toString adminUser.uid}";
+    };
     syncthing-cert = {
       file = ../../secrets/${hostName}/syncthing-cert.age;
       owner = "${toString adminUser.uid}";
@@ -166,7 +171,10 @@
 
   home-manager = {
     users.${adminUser.name} = {
-      imports = [../../users/profiles/workstation.nix];
+      imports = [
+        ../../users/profiles/workstation.nix
+        ../../users/profiles/mail.nix
+      ];
       programs.git.extraConfig.user.signingKey = config.age.secrets.id_ed25519_alt.path;
       programs.jujutsu.settings.signing = {
         behavior = "own";

@@ -6,6 +6,7 @@
   inherit (config.home) username;
 in {
   imports = [
+    ./accounts.nix
     ./aichat.nix
     ./bat.nix
     ./git.nix
