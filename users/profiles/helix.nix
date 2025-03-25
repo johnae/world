@@ -1,4 +1,35 @@
-{pkgs, ...}: {
+{pkgs, ...}: let
+  search-replace = pkgs.writeShellApplication {
+    name = "search-replace";
+    text = ''
+      PREVPANE="''${1:-}"
+      serpl
+      if [ -n "$PREVPANE" ]; then
+        echo -e ":rla\r" | wezterm cli send-text --pane-id "$PREVPANE" --no-paste
+      fi
+    '';
+  };
+  global-search-replace-wezterm-helper = pkgs.writeShellApplication {
+    name = "global-search-replace-wezterm-helper";
+    text = ''
+      wezterm cli split-pane --top --percent 60 -- ${search-replace}/bin/search-replace "$WEZTERM_PANE" > /dev/null
+    '';
+  };
+  aichat-wezterm-helper = pkgs.writeShellApplication {
+    name = "aichat-wezterm-helper";
+    text = ''
+      ARGS="''${*:--r coder-claude}"
+      INPUT="$(mktemp /tmp/XXXXXX.input)"
+      OUTPUT="$(mktemp -u /tmp/XXXXXX.output)"
+      mkfifo "$OUTPUT"
+      trap 'rm -f "$INPUT" "$OUTPUT"' EXIT
+      cat > "$INPUT"
+      PANE="$(wezterm cli split-pane --top --percent 60 -- bash -c "cat '$INPUT' | aichat $ARGS | tee '$OUTPUT'")"
+      wezterm cli zoom-pane --pane-id "$PANE"
+      cat "$OUTPUT"
+    '';
+  };
+in {
   xdg.configFile."helix/runtime/queries/fennel/injections.scm".source = pkgs.writeText "fennel-injections.scm" ''
     ; inherits: scheme
   '';
@@ -14,11 +45,11 @@
     ; If the first element in a list is also a list and on a line by itself, the outer list is aligned to it
     (list . (list) @anchor .
       (#set! "scope" "tail")
-      (#not-kind-eq? @first "boolean") (#not-kind-eq? @first "character") (#not-kind-eq? @first "string") (#not-kind-eq? @first "number")) @align
+      (#not-kind-eq? @first "boolean") (#not-kind-eq? @first "character") (#not-kind-eq? @frst "string") (#not-kind-eq? @first "number")) @align
     (list . (list) @anchor . (_) @second
       (#not-same-line? @anchor @second)
       (#set! "scope" "tail")
-      (#not-kind-eq? @first "boolean") (#not-kind-eq? @first "character") (#not-kind-eq? @first "string") (#not-kind-eq? @first "number")
+      (#not-kind-eq? @first "boolean") (#not-kind-eq? @first "character") (#not-18ind-eq? @first "string") (#not-kind-eq? @first "number")
       (#not-match? @first "lambda.*|λ.*|let.*|set.*|fn.*")) @align
     ; If the first element in a list is not a list and on a line by itself, the outer list is aligned to
     ; it plus 1 additional space. This cannot currently be modelled exactly by our indent queries,
@@ -164,7 +195,11 @@
         true-color = true;
         color-modes = true;
         auto-format = true;
-        auto-save = true;
+        auto-save = {
+          focus-lost = true;
+          after-delay.enable = true;
+          after-delay.timeout = 1000;
+        };
         whitespace.render = {
           space = "all";
           tab = "all";
@@ -211,13 +246,19 @@
             space = "goto_last_accessed_file";
           };
           "+" = {
-            i = ":pipe aichat -r coder-openai";
-            r = ":pipe aichat -r refactor-openai";
+            s = ":pipe ${global-search-replace-wezterm-helper}/bin/global-search-replace-wezterm-helper";
+            i = ":pipe ${aichat-wezterm-helper}/bin/aichat-wezterm-helper -r coder-openai";
+            r = ":pipe ${aichat-wezterm-helper}/bin/aichat-wezterm-helper -r refactor-openai";
+            # e = ":pipe ${aichat-wezterm-helper}/bin/aichat-wezterm-helper -r explain-openai";
             e = [":pipe-to tee /tmp/helix-tmp-explain" ":sh aichat -f /tmp/helix-tmp-explain -r explain-openai"];
 
-            c = ":pipe aichat -r coder-claude";
-            t = ":pipe aichat -r refactor-claude";
+            c = ":pipe ${aichat-wezterm-helper}/bin/aichat-wezterm-helper -r coder-claude";
+            t = ":pipe ${aichat-wezterm-helper}/bin/aichat-wezterm-helper -r refactor-claude";
+            # y = ":pipe ${aichat-wezterm-helper}/bin/aichat-wezterm-helper -r explain-claude";
             y = [":pipe-to tee /tmp/helix-tmp-explain" ":sh aichat -f /tmp/helix-tmp-explain -r explain-claude"];
+
+            # c = ":pipe aichat -r coder-claude";
+            # t = ":pipe aichat -r refactor-claude";
           };
         };
       };
