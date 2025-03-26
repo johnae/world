@@ -45,6 +45,7 @@
     runtimeInputs = [
       aichat
       pkgs.coreutils-full
+      pkgs.gawk
       pkgs.gnugrep
       pkgs.html2text
       pkgs.jq
