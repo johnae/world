@@ -6,7 +6,7 @@
 }: let
   aichat = pkgs.writeShellApplication {
     name = "aichat";
-    runtimeInputs = [pkgs.aichat];
+    runtimeInputs = [pkgs.aichat pkgs.coreutils-full];
     text = ''
       OPENAI_API_KEY="$(cat /run/agenix/openai-api-key)";
       CLAUDE_API_KEY="$(cat /run/agenix/anthropic-api-key)";
@@ -44,12 +44,13 @@
     name = "invoice-extraction";
     runtimeInputs = [
       aichat
-      pkgs.jq
-      pkgs.notmuch
+      pkgs.coreutils-full
       pkgs.gnugrep
       pkgs.html2text
-      pkgs.ripmime
+      pkgs.jq
+      pkgs.notmuch
       pkgs.poppler_utils
+      pkgs.ripmime
     ];
     text = ''
       # shellcheck disable=SC1091
@@ -122,6 +123,7 @@
     name = "tag-message";
     runtimeInputs = [
       aichat
+      pkgs.coreutils-full
       pkgs.gnugrep
       pkgs.html2text
       pkgs.jq
