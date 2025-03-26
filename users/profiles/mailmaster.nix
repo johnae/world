@@ -4,6 +4,17 @@
   adminUser,
   ...
 }: let
+  aichat = pkgs.writeShellApplication {
+    name = "aichat";
+    runtimeInputs = [pkgs.aichat];
+    text = ''
+      OPENAI_API_KEY="$(cat /run/agenix/openai-api-key)";
+      CLAUDE_API_KEY="$(cat /run/agenix/anthropic-api-key)";
+      ANTHROPIC_API_KEY="$(cat /run/agenix/anthropic-api-key)";
+      export OPENAI_API_KEY CLAUDE_API_KEY ANTHROPIC_API_KEY
+      exec aichat "$@"
+    '';
+  };
   common = pkgs.writeShellScript "common" ''
     DRYRUN="''${DRYRUN:-}"
     DEBUG="''${DEBUG:-}"
@@ -31,7 +42,15 @@
   '';
   invoiceExtraction = pkgs.writeShellApplication {
     name = "invoice-extraction";
-    runtimeInputs = with pkgs; [html2text ripmime poppler_utils];
+    runtimeInputs = [
+      aichat
+      pkgs.jq
+      pkgs.notmuch
+      pkgs.gnugrep
+      pkgs.html2text
+      pkgs.ripmime
+      pkgs.poppler_utils
+    ];
     text = ''
       # shellcheck disable=SC1091
       source ${common}
@@ -101,7 +120,17 @@
   };
   tagMessage = pkgs.writeShellApplication {
     name = "tag-message";
-    runtimeInputs = with pkgs; [procmail pandoc jq];
+    runtimeInputs = [
+      aichat
+      pkgs.gnugrep
+      pkgs.html2text
+      pkgs.jq
+      pkgs.notmuch
+      pkgs.pandoc
+      pkgs.poppler_utils
+      pkgs.procmail
+      pkgs.ripmime
+    ];
     text = ''
       # shellcheck disable=SC1091
       source ${common}
