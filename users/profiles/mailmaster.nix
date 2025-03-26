@@ -69,10 +69,10 @@
       if notmuch show --format json --include-html --entire-thread=false "$MSGID AND NOT attachment:pdf" | jq -e '. | length > 0' >/dev/null; then
         notmuch show --entire-thread=false --include-html --format=json "$MSGID AND NOT attachment.pdf" | \
                   jq -r '.. | objects | select(."content-type"=="text/html") | .content' | \
-                  html2text -nobs | tee -a /dev/stderr | \
+                  html2text -nobs | tee -a /proc/self/fd/2 | \
                   grep -oE '[^[:space:]]+' | grep -oE '[[:alnum:]]+' | tr '[:space:]' ' ' | tr -s ' ' | \
                   grep -oP '^.{0,1200}' | \
-                  aichat -r invoice-summer | tee -a /dev/stderr > "$WORKDIR/invoice-sum-html.json"
+                  aichat -r invoice-summer | tee -a /proc/self/fd/2 > "$WORKDIR/invoice-sum-html.json"
         if jq -e '. |
           select(
             (.amount? | type == "number") and
@@ -89,8 +89,8 @@
         else
           notmuch show --entire-thread=false --include-html --format=json "$MSGID AND NOT attachment.pdf" | \
                     jq -r '.. | objects | select(."content-type"=="text/html") | .content' | \
-                    html2text -nobs | tee -a /dev/stderr | \
-                    aichat -r invoice-summer | tee -a /dev/stderr
+                    html2text -nobs | tee -a /proc/self/fd/2 | \
+                    aichat -r invoice-summer | tee -a /proc/self/fd/2
         fi
       else
         echo "Show pdf" 1>&2
@@ -99,7 +99,7 @@
         notmuch show --format=raw "$MSGID" | ripmime --no-nameless --overwrite -i - -d "$WORKDIR"
         PAGES="$(pdfinfo "$WORKDIR"/"$PDFNAME" | grep ^Pages: | awk '{print $2}')"
         for i in $(seq 1 "$PAGES"); do
-          pdftotext -layout -f "$i" -l "$i" "$WORKDIR"/"$PDFNAME" - | aichat -r invoice-summer | tee -a /dev/stderr > "$WORKDIR/invoice-sum-$i.json"
+          pdftotext -layout -f "$i" -l "$i" "$WORKDIR"/"$PDFNAME" - | aichat -r invoice-summer | tee -a /proc/self/fd/2 > "$WORKDIR/invoice-sum-$i.json"
           if jq -e '. |
             select(
               (.amount? | type == "number") and
@@ -171,7 +171,7 @@
                 jq -r "$JQFLATTEN.body[0].content" | \
                 grep -oE '[^[:space:]]+' | grep -oE '[[:alnum:]]+' | tr '[:space:]' ' ' | tr -s ' ' | \
                 grep -oP '^.{0,1200}') | \
-               aichat -r email-tagger | tee /dev/stderr)"
+               aichat -r email-tagger | tee /proc/self/fd/2)"
       else
         OUTPUT="$( (
                echo "SUBJECT: $SUBJECT"
@@ -181,7 +181,7 @@
                jq -r "$JQFLATTEN.body[0].content" | pandoc -f html -t plain - | \
                grep -oE '[^[:space:]]+' | grep -oE '[[:alnum:]]+' | tr '[:space:]' ' ' | tr -s ' ' | \
                grep -oP '^.{0,1200}') | \
-              aichat -r email-tagger | tee /dev/stderr)"
+              aichat -r email-tagger | tee /proc/self/fd/2)"
       fi
       TAG="$(echo "$OUTPUT" | jq -r '.tag')"
       UNTAG="$(echo "$OUTPUT" | jq -r '[.untag[] | "-\(.)"] | join(" ")')"
@@ -216,7 +216,7 @@
           exit
         fi
         echo "since this is a(n) $TAG, I will try to extract more information"
-        JSON="$(${invoiceExtraction}/bin/invoice-extraction "$MSGID" | tee /dev/stderr)"
+        JSON="$(${invoiceExtraction}/bin/invoice-extraction "$MSGID" | tee /proc/self/fd/2)"
         if ! echo "$JSON" | jq -e . >/dev/null 2>&1; then
           echo "Could not extract invoice information, skip"
           echo "Untagging this with invoice, tagging with +TagFail +InvoiceFail"
