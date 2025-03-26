@@ -97,6 +97,15 @@
         echo "Show pdf" 1>&2
         PDFNAME="$(notmuch show --entire-thread=false --format=json "$MSGID AND attachment:pdf" | jq -r '.. | objects | select(."content-type"=="application/pdf") | .filename' | head -1)"
         echo "PDFNAME: $WORKDIR/$PDFNAME" 1>&2
+        if [ -z "$PDFNAME" ]; then
+          echo "No pdf with content-type application/pdf, checking image/pdf" 2>&1
+          PDFNAME="$(notmuch show --entire-thread=false --format=json "$MSGID AND attachment:pdf" | jq -r '.. | objects | select(."content-type"=="image/pdf") | .filename' | head -1)"
+          echo "PDFNAME: $WORKDIR/$PDFNAME" 1>&2
+        fi
+        if [ -z "$PDFNAME" ]; then
+          echo "Failed to extract pdf from message '$MSGID'" 1>&2
+          exit
+        fi
         notmuch show --format=raw "$MSGID" | ripmime --no-nameless --overwrite -i - -d "$WORKDIR"
         PAGES="$(pdfinfo "$WORKDIR"/"$PDFNAME" | grep ^Pages: | awk '{print $2}')"
         for i in $(seq 1 "$PAGES"); do
