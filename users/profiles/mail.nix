@@ -14,7 +14,9 @@
     upload = false;
     remote.host = "icarus";
     remote.importNew = false;
+    remote.checkForModifiedFiles = true;
     local.importNew = false;
+    local.checkForModifiedFiles = true;
   };
 
   systemd.user.services.muchsync-icarus = with lib; let
