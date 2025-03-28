@@ -345,6 +345,14 @@
       file = ../../secrets/openai-api-key.age;
       owner = "${toString adminUser.uid}";
     };
+    invoice-forwarding-destination = {
+      file = ../../secrets/invoice-forwarding-destination.age;
+      owner = "${toString adminUser.uid}";
+    };
+    selfinvoice-forwarding-destination = {
+      file = ../../secrets/selfinvoice-forwarding-destination.age;
+      owner = "${toString adminUser.uid}";
+    };
   };
 
   security.acme.certs = {

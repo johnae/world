@@ -2,6 +2,7 @@
   pkgs,
   lib,
   adminUser,
+  mainConfig,
   ...
 }: let
   aichat = pkgs.writeShellApplication {
@@ -276,6 +277,69 @@
       run "notmuch tag -new -- tag:new"
     '';
   };
+  forwardMessage = pkgs.writeShellApplication {
+    name = "forward-message";
+    runtimeInputs = [
+      pkgs.notmuch
+      pkgs.gnugrep
+      pkgs.gawk
+      pkgs.gnused
+    ];
+    text = ''
+      MSGID="''${1:-}"
+      TO="''${2:-}"
+
+      if [ -z "$MSGID" ]; then
+        echo Please give me the message id as the first argument
+        exit 1
+      fi
+
+      if [ -z "$TO" ]; then
+        echo Please give me the recipient as the second argument
+        exit 1
+      fi
+
+      set +o pipefail
+      notmuch show --format raw "$MSGID" 2>/dev/null | awk '/^$/{exit}1;' | \
+        grep -E '^(Content-.*:|Subject:|Mime-Version:|Message-Id:|X-Attached:| boundary=).*$' | \
+        sed 's|Message-Id:|In-Reply-To:|g'
+      cat<<EOF
+      To: <$TO>
+      From: <john@9000.dev>
+
+      EOF
+      set -o pipefail
+      notmuch show --format raw "$MSGID" | awk 'f;/^$/{f=1}'
+    '';
+  };
+  generalInvoiceSearchTerms = "to:john@9000.dev and not tag:Forwarded and not InvoiceAmount:0 and not from:john@9000.dev and not from:john@insane.se";
+  invoiceSearchTerms = "tag:Invoice and ${generalInvoiceSearchTerms}";
+  selfinvoiceSearchTerms = "tag:Selfinvoice and ${generalInvoiceSearchTerms}";
+  createForwardMessagesFn = searchTerms:
+    pkgs.writeShellApplication {
+      name = "forward-messages";
+      runtimeInputs = [
+        forwardMessage
+        pkgs.notmuch
+        pkgs.msmtp
+      ];
+      text = ''
+        TO="''${1:-}"
+
+        if [ -z "$TO" ]; then
+          echo Please supply who to forward to as the first argument
+          exit 1
+        fi
+
+        for MSGID in $(notmuch search --output=messages "${searchTerms}"); do
+            echo "Forwarding message $MSGID to $TO"
+            forward-message "$MSGID" "$TO" | msmtp -a 9000 --read-envelope-from --read-recipients
+            notmuch tag +Forwarded "$MSGID"
+        done
+      '';
+    };
+  forwardInvoices = createForwardMessagesFn invoiceSearchTerms;
+  forwardSelfinvoices = createForwardMessagesFn selfinvoiceSearchTerms;
   tags = ["Important" "Invoice" "Selfinvoice" "Jobs" "Social" "Newsletter" "Promotional" "Mailinglist" "General"];
   model = "ollama:mistral-small:24b";
   temperature = "0.05";
@@ -516,9 +580,48 @@ in {
     '';
   };
 
+  systemd.user.timers.invoice-forwarding = {
+    Unit.Description = "Auto forward invoices";
+    Timer = {
+      OnCalendar = "*:0/15";
+      Unit = "invoice-forwarding.service";
+    };
+    Install.WantedBy = ["timers.target"];
+  };
+
+  systemd.user.services.invoice-forwarding = {
+    Unit.Description = "Auto forward invoices";
+    Service.Environment = [
+      "PATH=${pkgs.msmtp}/bin:${pkgs.coreutils-full}/bin:${pkgs.gnused}/bin:${pkgs.gawk}/bin"
+    ];
+    Service.ExecStart = pkgs.writeShellScript "invoice-forwarding" ''
+      ${forwardInvoices}/bin/forward-messages "$(cat ${mainConfig.age.secrets.invoice-forwarding-destination.path})"
+    '';
+  };
+
+  systemd.user.timers.selfinvoice-forwarding = {
+    Unit.Description = "Auto forward selfinvoices";
+    Timer = {
+      OnCalendar = "*:0/15";
+      Unit = "selfinvoice-forwarding.service";
+    };
+    Install.WantedBy = ["timers.target"];
+  };
+
+  systemd.user.services.selfinvoice-forwarding = {
+    Unit.Description = "Auto forward selfinvoices";
+    Service.Environment = [
+      "PATH=${pkgs.msmtp}/bin:${pkgs.coreutils-full}/bin:${pkgs.gnused}/bin:${pkgs.gawk}/bin"
+    ];
+    Service.ExecStart = pkgs.writeShellScript "selfinvoice-forwarding" ''
+      ${forwardSelfinvoices}/bin/forward-messages "$(cat ${mainConfig.age.secrets.selfinvoice-forwarding-destination.path})"
+    '';
+  };
+
   systemd.user.services.proton-bridge = {
     Unit.Description = "Run the proton-bridge";
     Service.ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge -n";
+    Install.WantedBy = ["default.target"];
     Service.Environment = [
       "PATH=${pkgs.gnupg}/bin:${pkgs.pass}/bin:${pkgs.protonmail-bridge}/bin"
       "GNUPGHOME=/home/${adminUser.name}/Mail/protonmail-bridge/gnupg"
