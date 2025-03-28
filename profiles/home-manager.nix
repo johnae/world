@@ -20,6 +20,8 @@
     ++ (
       if pkgs.stdenv.isDarwin
       then [inputs.mac-app-util.homeManagerModules.default]
-      else []
+      else [
+        inputs.niri.homeModules.niri
+      ]
     );
 }

@@ -71,7 +71,7 @@ in {
     position = "top";
     spacing = 8;
     margin-top = 0;
-    modules-left = ["custom/logo" "river/tags" "sway/workspaces" "hyprland/workspaces" "sway/mode" "river/mode" "hyprland/submap" "custom/media"];
+    modules-left = ["custom/logo" "niri/workspaces" "river/tags" "sway/workspaces" "hyprland/workspaces" "sway/mode" "river/mode" "hyprland/submap" "custom/media"];
     modules-right = ["custom/pomodoro" "network" "network#wifi" "idle_inhibitor" "pulseaudio" "cpu" "temperature" "backlight" "battery" "clock" "tray"];
     modules-center = ["hyprland/window" "river/window"];
     "custom/media" = {
@@ -85,6 +85,15 @@ in {
       exec = "playerctl -a metadata --format '{\"text\": \"{{playerName}}: {{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F";
       on-click = "playerctl play-pause";
     };
+
+    "niri/workspaces" = {
+      format = "{value}";
+      format-icons = {
+        active = "";
+        default = "";
+      };
+    };
+
     "hyprland/workspaces" = {
       format = "{name}";
       format-icons = {

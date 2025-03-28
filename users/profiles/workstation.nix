@@ -17,6 +17,7 @@ in {
       ./hyprland.nix
       ./kanshi.nix
       ./mako.nix
+      ./niri.nix
       ./obs.nix
       ./rio.nix
       ./river-luatile/default.nix
@@ -47,13 +48,17 @@ in {
     xdg-utils
   ];
 
-  xdg.configFile."wpaperd/wallpaper.toml".source = pkgs.writeText "wallpaper.toml" ''
-    [default]
-    path = "~/Sync/wallpapers"
-    duration = "30m"
-    sorting = "random"
-    apply-shadow = false
-  '';
+  services.wpaperd = {
+    enable = true;
+    settings = {
+      default = {
+        path = "~/Sync/wallpapers";
+        duration = "30m";
+        sorting = "random";
+        apply-shadow = false;
+      };
+    };
+  };
 
   ## because https://github.com/nix-community/home-manager/issues/1213
   xdg.configFile."mimeapps.list".force = true;

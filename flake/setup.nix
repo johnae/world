@@ -16,6 +16,7 @@
       overlays = [
         inputs.agenix.overlays.default
         inputs.emacs-overlay.overlays.default
+        inputs.niri.overlays.niri
         inputs.nur.overlays.default
         (_final: _prev: (filterAttrs (name: _: ((match "nu-.*" name == null) && (match "nu_.*" name == null))) config.packages))
         (_final: prev: {
