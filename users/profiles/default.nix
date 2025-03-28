@@ -9,6 +9,7 @@ in {
     ./accounts.nix
     ./aichat.nix
     ./bat.nix
+    ./bower.nix
     ./git.nix
     ./gitui.nix
     ./emacs/default.nix

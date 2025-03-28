@@ -9,4 +9,5 @@ in {
   home.packages = [
     notmuch
   ];
+  programs.msmtp.enable = true;
 }
