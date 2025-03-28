@@ -12,7 +12,7 @@
   global-search-replace-wezterm-helper = pkgs.writeShellApplication {
     name = "global-search-replace-wezterm-helper";
     text = ''
-      wezterm cli split-pane --top --percent 60 -- ${search-replace}/bin/search-replace "$WEZTERM_PANE" > /dev/null
+      wezterm cli split-pane --top --percent 80 -- ${search-replace}/bin/search-replace "$WEZTERM_PANE" > /dev/null
     '';
   };
   aichat-wezterm-helper = pkgs.writeShellApplication {
@@ -24,7 +24,7 @@
       mkfifo "$OUTPUT"
       trap 'rm -f "$INPUT" "$OUTPUT"' EXIT
       cat > "$INPUT"
-      PANE="$(wezterm cli split-pane --top --percent 60 -- bash -c "cat '$INPUT' | aichat $ARGS | tee '$OUTPUT'")"
+      PANE="$(wezterm cli split-pane --top --percent 80 -- bash -c "cat '$INPUT' | aichat $ARGS | tee '$OUTPUT'")"
       wezterm cli zoom-pane --pane-id "$PANE"
       cat "$OUTPUT"
     '';
