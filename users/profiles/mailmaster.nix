@@ -375,8 +375,9 @@ in {
     When something is from Fieldglass, please mark it as Important.
     When something is about a direct message from someone on LinkedIn, mark it as Important.
     When something is about a failure to run a script or some process failed, it should be marked as Important.
+    When something seems to be an Invoice but only contains the amount to be charged and very little other information, it should be tagged Important instead of Invoice.
 
-    When something seems to be an Invoice, but mentions "Self-billing" or "Självfaktura", it's a Selfinvoice. These come from emagine or Red Road AB.
+    When something seems to be an Invoice, but mentions "Self-billing" or "Självfaktura", it's a Selfinvoice. These may come from emagine or Red Road AB for example.
     Please note that "elfaktura" means electricity bill. Those are NOT selfinvoices.
 
     DO NOT wrap the output in ```json markdown formatting. Output raw JSON only, like in this example:
