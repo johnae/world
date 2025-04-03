@@ -503,13 +503,14 @@
   };
 
   environment.persistence."/keep".directories = [
-    "/var/lib/private/open-webui"
-    "/var/lib/private/victoriametrics"
-    "/var/lib/private/victorialogs"
-    "/var/sieve"
-    "/var/vmail"
     "/var/dkim"
     "/var/lib/dovecot"
+    "/var/lib/grafana"
+    "/var/lib/private/open-webui"
+    "/var/lib/private/victorialogs"
+    "/var/lib/private/victoriametrics"
+    "/var/sieve"
+    "/var/vmail"
   ];
 
   age.secrets = {
