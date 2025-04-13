@@ -123,6 +123,8 @@
     };
   };
 
+  nix.settings.build-dir = "/keep/nixtmp";
+
   services.buildkite-nix-builder = {
     enable = true;
     runtimePackages = [
