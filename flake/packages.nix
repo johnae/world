@@ -146,7 +146,9 @@
               buildInputs = oa.buildInputs ++ [pkgs.openssl];
             });
 
-        swayfx-latest = inputs.swayfx.packages.${system}.default;
+        swayfx-latest = inputs.swayfx.packages.${system}.default.overrideAttrs (oa: {
+          buildInputs = oa.buildInputs ++ [pkgs.libgbm];
+        });
 
         victoriametrics-metrics-datasource-plugin = pkgs.stdenvNoCC.mkDerivation {
           pname = "victoriametrics-metrics-datasource-plugin";
