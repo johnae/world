@@ -112,8 +112,6 @@
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
-    swayfx.url = "github:WillPower3309/swayfx";
-    swayfx.inputs.nixpkgs.follows = "nixpkgs";
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
     systems.url = "github:nix-systems/default";
     victorialogs.flake = false;
