@@ -147,9 +147,9 @@
             });
 
         swayfx-latest = inputs.swayfx.packages.${system}.default.overrideAttrs (oa: {
-          buildInputs = oa.buildInputs ++ [inputs.scenefx.packages.${system}.default.overrideAttrs(sfxoa: {
+          buildInputs = oa.buildInputs ++ [(inputs.scenefx.packages.${system}.default.overrideAttrs(sfxoa: {
             buildInputs = sfxoa.buildInputes ++ [pkgs.libgbm];
-          })];
+          }))];
         });
 
         victoriametrics-metrics-datasource-plugin = pkgs.stdenvNoCC.mkDerivation {
