@@ -147,7 +147,7 @@ in {
   wayland.windowManager.sway = {
     enable = true;
     systemd.enable = true;
-    package = pkgs.swayfx-latest;
+    package = pkgs.swayfx;
     checkConfig = false;
     extraConfigEarly = ''
       blur enable
