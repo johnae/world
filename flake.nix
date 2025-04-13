@@ -112,6 +112,8 @@
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
+    scenefx.url = "github:wlrfx/scenefx";
+    scenefx.inputs.nixpkgs.follows = "nixpkgs";
     swayfx.url = "github:WillPower3309/swayfx";
     swayfx.inputs.nixpkgs.follows = "nixpkgs";
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
