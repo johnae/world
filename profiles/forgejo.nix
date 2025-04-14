@@ -22,9 +22,7 @@ in {
     serviceConfig = {
       RestartSec = 10;
       Restart = "on-failure";
-      ExecStart = pkgs.writeShellScript "tailscale-serve-ssh" ''
-        ${pkgs.tailscale}/bin/tailscale serve --tcp 2222 tcp://localhost:22
-      '';
+      ExecStart = "${pkgs.tailscale}/bin/tailscale serve --tcp 2222 tcp://localhost:22";
     };
   };
   environment.persistence."/keep".directories = [
