@@ -786,14 +786,24 @@
 
   ## proton-bridge
   systemd.services.tailscale-serve-1143-tcp = {
-    after = ["network-online.service" "tailscaled.service" "tailscale-auth.service"];
-    serviceConfig.ExecStart = "${pkgs.tailscale}/bin/tailscale serve --tls-terminated-tcp 1143 127.0.0.1:1143";
+    after = ["tailscaled.service"];
+    wantedBy = ["tailscaled.service"];
+    serviceConfig = {
+      RestartSec = 10;
+      Restart = "on-failure";
+      ExecStart = "${pkgs.tailscale}/bin/tailscale serve --tls-terminated-tcp 1143 127.0.0.1:1143";
+    };
   };
 
   ## proton-bridge
   systemd.services.tailscale-serve-1025-tcp = {
-    after = ["network-online.service" "tailscaled.service" "tailscale-auth.service"];
-    serviceConfig.ExecStart = "${pkgs.tailscale}/bin/tailscale serve --tls-terminated-tcp 1025 127.0.0.1:1025";
+    after = ["tailscaled.service"];
+    wantedBy = ["tailscaled.service"];
+    serviceConfig = {
+      RestartSec = 10;
+      Restart = "on-failure";
+      ExecStart = "${pkgs.tailscale}/bin/tailscale serve --tls-terminated-tcp 1025 127.0.0.1:1025";
+    };
   };
 
   home-manager.users.${adminUser.name} = {
