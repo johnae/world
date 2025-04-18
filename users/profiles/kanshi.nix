@@ -67,8 +67,8 @@
       profile.name = "framework-13-3";
       profile.outputs = [
         {
-          criteria = "LG Electronics LG HDR 4K 0x0007A976";
-          mode = "3840x2160@59.997Hz";
+          criteria = "Dell Inc. DELL U3225QE 8278C34";
+          mode = "3840x2160@120Hz";
           position = "0,0";
           scale = 1.0;
         }
@@ -83,7 +83,7 @@
         {
           criteria = "BOE NE135A1M-NY1 Unknown";
           mode = "2880x1920@120.000Hz";
-          position = "7680,0";
+          position = "2905,2160";
           scale = 1.0;
         }
       ];
@@ -93,8 +93,8 @@
       profile.name = "framework-13-4-lid-closed";
       profile.outputs = [
         {
-          criteria = "LG Electronics LG HDR 4K 0x0007A976";
-          mode = "3840x2160@59.997Hz";
+          criteria = "Dell Inc. DELL U3225QE 8278C34";
+          mode = "3840x2160@120Hz";
           position = "0,0";
           scale = 1.0;
         }
