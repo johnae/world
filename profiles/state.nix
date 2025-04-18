@@ -46,6 +46,7 @@
         ".cache/rbw"
         ".cache/zellij"
         ".cargo"
+        ".aws"
         ".config/audacity"
         ".config/chromium"
         ".config/chromium-alt"
