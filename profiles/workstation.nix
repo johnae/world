@@ -39,6 +39,8 @@
   security.pam.services.hyprlock = {};
 
   security.polkit.enable = true;
+  services.gnome.gnome-keyring.enable = true;
+
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
     description = "polkit-gnome-authentication-agent-1";
     wantedBy = ["graphical-session.target"];
@@ -98,7 +100,7 @@
   };
   xdg.portal.enable = true;
   xdg.portal.wlr.enable = true;
-  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
+  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gnome];
   xdg.portal.config = let
     wlrConf = {
       default = ["wlr" "gtk"];

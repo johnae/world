@@ -113,6 +113,10 @@
       name = "bash.desktop";
       path = desktopSession "bash" "${pkgs.bashInteractive}/bin/bash";
     }
+    {
+      name = "niri.desktop";
+      path = desktopSession "niri" "${pkgs.niri-unstable}/bin/niri-session";
+    }
   ];
 
   createGreeter = default: sessions: let
@@ -156,7 +160,7 @@ in {
     enable = true;
     restart = true;
     settings = {
-      default_session.command = "${createGreeter "${runSway}/bin/sway" sessions}/bin/greeter";
+      default_session.command = "${createGreeter "${pkgs.niri-unstable}/bin/niri-session" sessions}/bin/greeter";
     };
   };
   ## prevents systemd spewing the console with log messages when greeter is active
