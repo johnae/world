@@ -14,14 +14,14 @@
       name: _: (pkgs.callPackage (../packages + "/${name}") {inherit inputs;})
     ) (filterAttrs (_filename: type: type == "directory") (readDir ../packages));
 
-    tofuProvider = provider:
-      provider.override (oldArgs: {
-        provider-source-address =
-          lib.replaceStrings
-          ["https://registry.terraform.io/providers"]
-          ["registry.opentofu.org"]
-          oldArgs.homepage;
-      });
+    # tofuProvider = provider:
+    #   provider.override (oldArgs: {
+    #     provider-source-address =
+    #       lib.replaceStrings
+    #       ["https://registry.terraform.io/providers"]
+    #       ["registry.opentofu.org"]
+    #       oldArgs.homepage;
+    #   });
     kexec-installer = nixpkgs: modules: (nixpkgs.legacyPackages.${system}.nixos (modules ++ [inputs.nixos-images.nixosModules.kexec-installer])).config.system.build.kexecTarball;
   in {
     packages =
@@ -54,10 +54,10 @@
             rbw unlocked || rbw unlock
           '';
         };
-        tofuWithPlugins = pkgs.opentofu.withPlugins (
-          p:
-            map tofuProvider [p.null p.external p.hcloud p.cloudflare p.random p.tailscale]
-        );
+        # tofuWithPlugins = pkgs.opentofu.withPlugins (
+        #   p:
+        #     map tofuProvider [p.null p.external p.hcloud p.cloudflare p.random p.tailscale]
+        #);
         kexec-installer-nixos-unstable-noninteractive = kexec-installer inputs.nixpkgs [
           ({
             lib,

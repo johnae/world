@@ -57,7 +57,7 @@ in {
     rage
     statix
     stylua
-    tofuWithPlugins
+    # tofuWithPlugins # broken
     watchexec
     world
     yj
