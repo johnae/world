@@ -55,6 +55,8 @@
     };
   };
 
+  users.users.${adminUser.name}.linger = true; ## start user systemd units on boot
+
   system.autoUpgrade = {
     enable = true;
     flake = "github:johnae/world";
