@@ -8,6 +8,7 @@ in {
   imports = [
     ./accounts.nix
     ./aichat.nix
+    ./aider.nix
     ./bat.nix
     ./bower.nix
     ./git.nix
