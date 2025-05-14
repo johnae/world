@@ -12,6 +12,7 @@
 in {
   imports = [
     ./aichat.nix
+    ./aider.nix
     ./bat.nix
     ./git.nix
     ./gitui.nix
