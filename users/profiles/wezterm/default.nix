@@ -17,7 +17,7 @@ in {
         split_from: 1
       - size: 0.30
         name: aichat
-        command: direnv exec . aichat
+        command: direnv exec . aider --model o4-mini --yes-always --watch-files
         direction: Right
   '';
   xdg.configFile."wezterm/wezterm.fnl.lua".source =

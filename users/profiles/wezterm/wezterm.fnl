@@ -424,6 +424,7 @@
                     pane-info (pane-information-for pane)
                     zoomed (or (?. pane-info :is_zoomed) false)
                     overrides (or (window:get_config_overrides) {})
+                    key-table (or (window:active_key_table) "")
                     cwd-uri (pane:get_current_working_dir)
                     (_ hostname _) (run-child-process window pane [:hostname])
                     ws (window:active_workspace)]
@@ -442,6 +443,7 @@
                       cells [""
                              (.. domain "/" hostname)
                              ws
+                             key-table
                              (or (pane-name-for-id window (pane:pane_id))
                                  (.. :pane- (tostring (pane:pane_id))))
                              (if zoomed " 👁 " "  ")]
@@ -489,57 +491,53 @@
 (wezterm.add_to_config_reload_watch_list (.. wezterm.home_dir
                                              :/.config/wezterm/wezterm.fnl.lua))
 
-(set config.leader {:key :Space :mods :CTRL})
+; (set config.leader {:key :w :mods :CTRL})
+(set config.key_tables
+     {:control_mode [{:key :Escape :action act.PopKeyTable}
+                     {:key :g
+                      :mods :CTRL
+                      :action (act.EmitEvent :ActivateGitui)}
+                     {:key :j
+                      :mods :CTRL
+                      :action (act.EmitEvent :ActivateLazyjj)}
+                     {:key :s
+                      :mods :CTRL
+                      :action (act.EmitEvent :ActivateSerpl)}
+                     {:key :t :action (act.EmitEvent :ToggleMaximizeTerminal)}
+                     {:key :e :action (act.EmitEvent :ToggleMaximizeEditor)}
+                     {:key :a :action (act.EmitEvent :ToggleMaximizeAI)}
+                     {:key :n :action (act.EmitEvent :NewProjectWindow)}
+                     {:key :t
+                      :mods :CTRL
+                      :action (act.EmitEvent :NewProjectTab)}
+                     {:key :r :action (act.EmitEvent :ReloadFixup)}
+                     {:key :w :action (act.EmitEvent :ReloadWorkspace)}
+                     {:key :q :action (act.CloseCurrentPane {:confirm true})}
+                     {:key :z :action act.TogglePaneZoomState}
+                     {:key :RightArrow
+                      :action (act.SplitPane {:direction :Right
+                                              :size {:Percent 50}})}
+                     {:key :LeftArrow
+                      :action (act.SplitPane {:direction :Left
+                                              :size {:Percent 50}})}
+                     {:key :DownArrow
+                      :action (act.SplitPane {:direction :Down
+                                              :size {:Percent 50}})}
+                     {:key :UpArrow
+                      :action (act.SplitPane {:direction :Up
+                                              :size {:Percent 50}})}
+                     {:key :q
+                      :mods :CTRL
+                      :action (act.CloseCurrentTab {:confirm true})}
+                     {:key :q :action (act.CloseCurrentPane {:confirm false})}
+                     {:key :p :action (act.EmitEvent :FindProject)}
+                     {:key :f
+                      :action (act.ShowLauncherArgs {:flags :FUZZY|WORKSPACES})}]})
+
 (set config.keys
      [{:key :Space
-       :mods :LEADER|CTRL
-       :action (act.SendKey {:key :Space :mods :CTRL})}
-      {:key :g :mods :LEADER :action (act.EmitEvent :ActivateGitui)}
-      {:key :j :mods :LEADER :action (act.EmitEvent :ActivateLazyjj)}
-      {:key :s :mods :LEADER :action (act.EmitEvent :ActivateSerpl)}
-      {:key :t :mods :LEADER :action (act.EmitEvent :ToggleMaximizeTerminal)}
-      {:key :e :mods :LEADER :action (act.EmitEvent :ToggleMaximizeEditor)}
-      {:key :a :mods :LEADER :action (act.EmitEvent :ToggleMaximizeAI)}
-      {:key :n :mods :LEADER|CTRL :action (act.EmitEvent :NewProjectWindow)}
-      {:key :t :mods :LEADER|CTRL :action (act.EmitEvent :NewProjectTab)}
-      {:key :r :mods :LEADER :action (act.EmitEvent :ReloadFixup)}
-      {:key :w :mods :LEADER :action (act.EmitEvent :ReloadWorkspace)}
-      {:key :q :mods :LEADER :action (act.CloseCurrentPane {:confirm true})}
-      {:key :z :mods :LEADER :action act.TogglePaneZoomState}
-      {:key :RightArrow
-       :mods :LEADER|CTRL
-       :action (act.SplitPane {:direction :Right :size {:Percent 50}})}
-      {:key :LeftArrow
-       :mods :LEADER|CTRL
-       :action (act.SplitPane {:direction :Left :size {:Percent 50}})}
-      {:key :DownArrow
-       :mods :LEADER|CTRL
-       :action (act.SplitPane {:direction :Down :size {:Percent 50}})}
-      {:key :UpArrow
-       :mods :LEADER|CTRL
-       :action (act.SplitPane {:direction :Up :size {:Percent 50}})}
-      {:key :LeftArrow :mods :LEADER :action (act.ActivatePaneDirection :Left)}
-      {:key :RightArrow
-       :mods :LEADER
-       :action (act.ActivatePaneDirection :Right)}
-      {:key :UpArrow :mods :LEADER :action (act.ActivatePaneDirection :Up)}
-      {:key :DownArrow :mods :LEADER :action (act.ActivatePaneDirection :Down)}
-      {:key :q
-       :mods :LEADER|SHIFT
-       :action (act.CloseCurrentTab {:confirm true})}
-      {:key :r :mods :LEADER|CTRL :action (act.RotatePanes :CounterClockwise)}
-      {:key :r :mods :LEADER|CTRL|SHIFT :action (act.RotatePanes :Clockwise)}
-      {:key :p :mods :LEADER :action (act.PaneSelect {:mode :SwapWithActive})}
-      {:key :a :mods :LEADER|CTRL :action (act.EmitEvent :FindProject)}
-      {:key :f
-       :mods :LEADER|CTRL
-       :action (act.ShowLauncherArgs {:flags :FUZZY|WORKSPACES})}])
-
-(for [i 1 9]
-  (table.insert config.keys
-                {:key (tostring i)
-                 :mods :LEADER
-                 :action (act.ActivateTab (- i 1))}))
+       :mods :CTRL
+       :action (act.ActivateKeyTable {:name :control_mode :one_shot true})}])
 
 (set config.unix_domains [{:name :local-dev}])
 (set config.ssh_domains [{:name :remote-dev
