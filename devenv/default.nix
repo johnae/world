@@ -60,6 +60,7 @@ in {
     # tofuWithPlugins # broken
     watchexec
     world
+    zellij
     yj
   ];
 
