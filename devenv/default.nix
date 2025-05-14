@@ -11,6 +11,13 @@
     '';
   };
 
+  wezterm-test = pkgs.writeShellApplication {
+    name = "wezterm-test";
+    text = ''
+      WEZTERM_FNL="./users/profiles/wezterm/wezterm.fnl" wezterm start --always-new-process
+    '';
+  };
+
   jjpr = pkgs.writeShellApplication {
     name = "jjpr";
     text = ''
@@ -59,6 +66,7 @@ in {
     stylua
     # tofuWithPlugins # broken
     watchexec
+    wezterm-test
     world
     yj
   ];
