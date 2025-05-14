@@ -20,8 +20,6 @@
     ../../profiles/home-manager.nix
   ];
 
-  services.nix-daemon.enable = true;
-
   homebrew.enable = true;
   homebrew.taps = [
     {
@@ -44,7 +42,7 @@
 
   #services.karabiner-elements.enable = true; ## doesn't work atm
   system.defaults.dock.autohide = true;
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
   system.defaults.trackpad.Clicking = true;
   system.defaults.NSGlobalDomain.AppleInterfaceStyle = "Dark";
   system.defaults.NSGlobalDomain."com.apple.trackpad.scaling" = 3.0;
@@ -68,24 +66,7 @@
     window_gap = 10;
   };
 
-  nix = {
-    settings.trusted-users = ["root" adminUser.name];
-    extraOptions = ''
-      experimental-features = nix-command flakes
-      keep-outputs = true
-      keep-derivations = true
-      tarball-ttl = 900
-    '';
-    gc = {
-      automatic = true;
-      interval = {
-        Weekday = 0;
-        Hour = 0;
-        Minute = 0;
-      };
-      options = "--delete-older-than 30d";
-    };
-  };
+  nix.enable = false;
 
   users = {
     users.${adminUser.name} = {
