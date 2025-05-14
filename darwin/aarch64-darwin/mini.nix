@@ -104,23 +104,7 @@
     };
   };
 
-  nix = {
-    extraOptions = ''
-      experimental-features = nix-command flakes
-      keep-outputs = true
-      keep-derivations = true
-      tarball-ttl = 900
-    '';
-    gc = {
-      automatic = true;
-      interval = {
-        Weekday = 0;
-        Hour = 0;
-        Minute = 0;
-      };
-      options = "--delete-older-than 30d";
-    };
-  };
+  nix.enable = false;
 
   users = {
     users.${adminUser.name} = {

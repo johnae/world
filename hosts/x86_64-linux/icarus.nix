@@ -3,8 +3,6 @@
   config,
   hostName,
   pkgs,
-  lib,
-  tailnet,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHaa82NwBC+ty4Wyeuf5kdava7huSYF6k0NYF2ahwayW";
