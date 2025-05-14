@@ -374,48 +374,71 @@
                     tab-bg config.colors.tab_bar.background
                     active-bg-color "#51576d"
                     inactive-bg-color "#0b0022"
-                    active-fg-color "#a9a6ac"
-                    inactive-fg-color "#66646c"]
+                    active-fg-color "#f9f6fc"
+                    inactive-fg-color "#a6a4ac"]
                 (if tab.is_active
                     (if first
                         [{:Background {:Color active-bg-color}}
                          {:Foreground {:Color active-bg-color}}
+                         {:Attribute {:Intensity :Bold}}
                          {:Text " "}
                          {:Background {:Color active-bg-color}}
                          {:Foreground {:Color active-fg-color}}
+                         {:Attribute {:Intensity :Bold}}
                          {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
                                     " ")}
                          {:Background {:Color (if last tab-bg inactive-bg-color)}}
                          {:Foreground {:Color active-bg-color}}
+                         {:Attribute {:Intensity :Bold}}
                          {:Text solid-right-arrow}]
                         [{:Background {:Color active-bg-color}}
                          {:Foreground {:Color inactive-bg-color}}
+                         {:Attribute {:Intensity :Bold}}
                          {:Text solid-right-arrow}
                          {:Background {:Color active-bg-color}}
                          {:Foreground {:Color active-fg-color}}
+                         {:Attribute {:Intensity :Bold}}
                          {:Text (.. " " (tostring (+ tab.tab_index 1)) ": "
                                     title " ")}
                          {:Background {:Color (if last tab-bg inactive-bg-color)}}
                          {:Foreground {:Color active-bg-color}}
+                         {:Attribute {:Intensity :Bold}}
                          {:Text solid-right-arrow}])
                     (if first
                         [{:Background {:Color inactive-bg-color}}
                          {:Foreground {:Color inactive-bg-color}}
+                         {:Attribute {:Intensity :Bold}}
                          {:Text " "}
                          {:Background {:Color inactive-bg-color}}
                          {:Foreground {:Color inactive-fg-color}}
+                         {:Attribute {:Intensity :Bold}}
                          {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
                                     " ")}]
                         [{:Background {:Color inactive-bg-color}}
                          {:Foreground {:Color inactive-bg-color}}
+                         {:Attribute {:Intensity :Bold}}
                          {:Text " "}
                          {:Background {:Color inactive-bg-color}}
                          {:Foreground {:Color inactive-fg-color}}
+                         {:Attribute {:Intensity :Bold}}
                          {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
                                     " ")}
                          {:Background {:Color (if last tab-bg inactive-bg-color)}}
                          {:Foreground {:Color inactive-bg-color}}
+                         {:Attribute {:Intensity :Bold}}
                          {:Text solid-right-arrow}])))))
+
+(lambda insert-bar-item [items text fg-color bg-color ?last]
+  (do
+    (when (not ?last)
+      (do
+        (table.insert items {:Foreground {:Color bg-color}})
+        (table.insert items {:Text solid-left-arrow}))))
+  (table.insert items {:Foreground {:Color fg-color}})
+  (table.insert items {:Background {:Color bg-color}})
+  (table.insert items {:Attribute {:Intensity :Bold}})
+  (table.insert items {:Text (.. " " text " ")})
+  items)
 
 (wezterm.on :update-status
             (lambda [window pane]
@@ -424,7 +447,9 @@
                     pane-info (pane-information-for pane)
                     zoomed (or (?. pane-info :is_zoomed) false)
                     overrides (or (window:get_config_overrides) {})
-                    key-table (or (window:active_key_table) "")
+                    key-table (string.upper (string.gsub (or (window:active_key_table)
+                                                             "")
+                                                         :_mode$ ""))
                     cwd-uri (pane:get_current_working_dir)
                     (_ hostname _) (run-child-process window pane [:hostname])
                     ws (window:active_workspace)]
@@ -433,38 +458,21 @@
                   :local-dev (set tab-bg local-dev-color))
                 (set overrides.colors {:tab_bar {:background tab-bg}})
                 (window:set_config_overrides overrides)
-                (let [colors [tab-bg
-                              "#51576d"
-                              "#838ba7"
-                              "#7287fd"
-                              "#04a5e5"
-                              "#04a5e5"
-                              "#7287fd"]
-                      cells [""
-                             (.. domain "/" hostname)
-                             ws
-                             key-table
-                             (or (pane-name-for-id window (pane:pane_id))
-                                 (.. :pane- (tostring (pane:pane_id))))
-                             (if zoomed " 👁 " "  ")]
-                      elements (accumulate [elements [] i cell (reverse-ipairs cells)]
-                                 (do
-                                   (table.insert elements
-                                                 {:Foreground {:Color text-fg}})
-                                   (table.insert elements
-                                                 {:Background {:Color (. colors
-                                                                         i)}})
-                                   (table.insert elements
-                                                 {:Text (.. " " cell " ")})
-                                   (when (not= i (length cells))
-                                     (do
-                                       (table.insert elements
-                                                     {:Foreground {:Color (. colors
-                                                                             (+ i
-                                                                                1))}})
-                                       (table.insert elements
-                                                     {:Text solid-left-arrow})))
-                                   elements))]
+                (let [elements []]
+                  (do
+                    (insert-bar-item elements "" "#000000" tab-bg)
+                    (insert-bar-item elements (if zoomed " 👁 " "  ")
+                                     "#000000" tab-bg true)
+                    (when (not= key-table "")
+                      (insert-bar-item elements key-table "#FFFFFF" "#51576d"))
+                    (insert-bar-item elements
+                                     (or (pane-name-for-id window
+                                                           (pane:pane_id))
+                                         (.. :pane- (tostring (pane:pane_id))))
+                                     "#000000" "#89b4fa")
+                    (insert-bar-item elements ws "#000000" "#a6e3a1")
+                    (insert-bar-item elements (.. domain "/" hostname)
+                                     "#000000" "#f38ba8"))
                   (window:set_right_status (wezterm.format elements))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;|\
@@ -491,7 +499,6 @@
 (wezterm.add_to_config_reload_watch_list (.. wezterm.home_dir
                                              :/.config/wezterm/wezterm.fnl.lua))
 
-; (set config.leader {:key :w :mods :CTRL})
 (set config.key_tables
      {:control_mode [{:key :Escape :action act.PopKeyTable}
                      {:key :g :action (act.EmitEvent :ActivateGitui)}
@@ -523,6 +530,10 @@
                      {:key :p :action (act.EmitEvent :FindProject)}
                      {:key :f
                       :action (act.ShowLauncherArgs {:flags :FUZZY|WORKSPACES})}]})
+
+(for [i 1 9]
+  (table.insert config.key_tables.control_mode
+                {:key (tostring i) :action (act.ActivateTab (- i 1))}))
 
 (set config.keys
      [{:key :Space
