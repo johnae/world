@@ -494,22 +494,14 @@
 ; (set config.leader {:key :w :mods :CTRL})
 (set config.key_tables
      {:control_mode [{:key :Escape :action act.PopKeyTable}
-                     {:key :g
-                      :mods :CTRL
-                      :action (act.EmitEvent :ActivateGitui)}
-                     {:key :j
-                      :mods :CTRL
-                      :action (act.EmitEvent :ActivateLazyjj)}
-                     {:key :s
-                      :mods :CTRL
-                      :action (act.EmitEvent :ActivateSerpl)}
+                     {:key :g :action (act.EmitEvent :ActivateGitui)}
+                     {:key :j :action (act.EmitEvent :ActivateLazyjj)}
+                     {:key :s :action (act.EmitEvent :ActivateSerpl)}
                      {:key :t :action (act.EmitEvent :ToggleMaximizeTerminal)}
                      {:key :e :action (act.EmitEvent :ToggleMaximizeEditor)}
                      {:key :a :action (act.EmitEvent :ToggleMaximizeAI)}
                      {:key :n :action (act.EmitEvent :NewProjectWindow)}
-                     {:key :t
-                      :mods :CTRL
-                      :action (act.EmitEvent :NewProjectTab)}
+                     {:key :t :action (act.EmitEvent :NewProjectTab)}
                      {:key :r :action (act.EmitEvent :ReloadFixup)}
                      {:key :w :action (act.EmitEvent :ReloadWorkspace)}
                      {:key :q :action (act.CloseCurrentPane {:confirm true})}
@@ -526,10 +518,8 @@
                      {:key :UpArrow
                       :action (act.SplitPane {:direction :Up
                                               :size {:Percent 50}})}
-                     {:key :q
-                      :mods :CTRL
-                      :action (act.CloseCurrentTab {:confirm true})}
-                     {:key :q :action (act.CloseCurrentPane {:confirm false})}
+                     {:key :q :action (act.CloseCurrentTab {:confirm true})}
+                     {:key :x :action (act.CloseCurrentPane {:confirm false})}
                      {:key :p :action (act.EmitEvent :FindProject)}
                      {:key :f
                       :action (act.ShowLauncherArgs {:flags :FUZZY|WORKSPACES})}]})
