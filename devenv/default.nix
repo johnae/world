@@ -68,6 +68,7 @@ in {
     watchexec
     wezterm-test
     world
+    zellij
     yj
   ];
 
