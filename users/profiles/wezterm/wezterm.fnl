@@ -241,7 +241,7 @@
     (do
       (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
         (window:perform_action (act.CloseCurrentTab {:confirm false})
-                               (window:active_pane))) ; (window:perform_action (act.CloseCurrentTab {:confirm false}) pane)
+                               (window:active_pane)))
       (let [window (. (wezterm.gui.gui_windows) 1)
             pane (window:active_pane)]
         (setup-project-workspace window pane name directory.file_path)))))
@@ -483,6 +483,8 @@
 (set config.enable_tab_bar true)
 (set config.use_fancy_tab_bar false)
 (set config.tab_max_width 64)
+; no effect on wayland
+(set config.max_fps 120)
 (set config.show_tabs_in_tab_bar true)
 (set config.show_new_tab_button_in_tab_bar false)
 (set config.tab_bar_at_bottom true)
@@ -508,7 +510,9 @@
                      {:key :e :action (act.EmitEvent :ToggleMaximizeEditor)}
                      {:key :a :action (act.EmitEvent :ToggleMaximizeAI)}
                      {:key :n :action (act.EmitEvent :NewProjectWindow)}
-                     {:key :t :action (act.EmitEvent :NewProjectTab)}
+                     {:key :t
+                      :mods :CTRL
+                      :action (act.EmitEvent :NewProjectTab)}
                      {:key :r :action (act.EmitEvent :ReloadFixup)}
                      {:key :w :action (act.EmitEvent :ReloadWorkspace)}
                      {:key :q :action (act.CloseCurrentPane {:confirm true})}

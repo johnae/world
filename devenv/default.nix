@@ -14,7 +14,7 @@
   wezterm-test = pkgs.writeShellApplication {
     name = "wezterm-test";
     text = ''
-      WEZTERM_FNL="./users/profiles/wezterm/wezterm.fnl" wezterm start --always-new-process
+      WEZTERM_FNL="./users/profiles/wezterm/wezterm.fnl" wezterm start --always-new-process "$@"
     '';
   };
 
