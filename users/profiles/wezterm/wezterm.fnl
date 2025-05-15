@@ -142,9 +142,10 @@
 (lambda command-for [window-or-pane]
   (local pane-name (or window-or-pane.name :unknown))
   (var args [])
-  (var pane-name-bash-cmd
-       (.. "printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
-           pane-name " | base64`; "))
+  (var pane-name-bash-cmd (.. "printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
+                              pane-name
+                              " | base64`; printf \"\\033]1;%s\\007\" "
+                              pane-name "; "))
   (var cmd "")
   (if window-or-pane.command
       (do
