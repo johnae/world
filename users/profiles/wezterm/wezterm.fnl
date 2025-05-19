@@ -462,7 +462,7 @@
                   (do
                     (insert-bar-item elements "" "#000000" tab-bg)
                     (insert-bar-item elements (if zoomed " 👁 " "  ")
-                                     "#000000" tab-bg true)
+                                     "#FFFFFF" tab-bg true)
                     (when (not= key-table "")
                       (insert-bar-item elements key-table "#FFFFFF" "#51576d"))
                     (insert-bar-item elements

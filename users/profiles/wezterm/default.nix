@@ -28,6 +28,7 @@ in {
       fennel --compile ${./wezterm.fnl} > $out
     '';
   xdg.configFile."wezterm/wezterm.lua".source = pkgs.writeText "wezterm.lua" ''
+    local wezterm = require 'wezterm'
     _G.wezterm = wezterm
     _G.dev_remote = "${config.userinfo.devRemote}"
     -- fake
