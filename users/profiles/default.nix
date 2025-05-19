@@ -66,7 +66,6 @@ in {
 
   programs.lsd = {
     enable = true;
-    enableAliases = true;
   };
 
   programs.direnv = {
