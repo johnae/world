@@ -1,67 +1,172 @@
-# 🚀 Declarative Today. Utopia Tomorrow.  
+# 🚀 Declarative Today. Utopia Tomorrow.
 
-This is my [NixOS](https://nixos.org) configuration repository, managing all my machines and custom packages (i.e., not yet in [nixpkgs](https://github.com/nixos/nixpkgs)). In a way, this repo is my world—hence the name. 🌍  
+This is my [NixOS](https://nixos.org) configuration repository, managing all my machines and custom packages. In a way, this repo is my world—hence the name. 🌍
 
-It's built on [Nix flakes](https://nixos.wiki/wiki/Flakes), providing a declarative and reproducible way to manage systems—kind of like `Cargo.toml` (Rust), `go.mod` (Go), or `package.json` (Node.js), but **language-agnostic** and handling any package or file. This setup ensures **deterministic** builds for both hosts and software.  
+It's built on [Nix flakes](https://nixos.wiki/wiki/Flakes), providing a declarative and reproducible way to manage systems—kind of like `Cargo.toml` (Rust), `go.mod` (Go), or `package.json` (Node.js), but **language-agnostic** and handling any package or file. This setup ensures **deterministic** builds for both hosts and software.
 
-For modularity, [flake-parts](https://flake.parts) is used to keep [flake.nix](./flake.nix) clean and structured. 🛠️  
+For modularity, [flake-parts](https://flake.parts) is used to keep [flake.nix](./flake.nix) clean and structured. 🛠️
 
-## 🖥️ Bootstrapping a New Machine  
+## ✨ Key Features
 
-To add a new machine, create a file in the relevant architecture folder under [hosts/](hosts/), copy an existing configuration if needed, and adjust as necessary. Then commit and push your changes. ✅  
+- **Multi-platform**: Manages both NixOS (Linux) and nix-darwin (macOS) systems
+- **Stateless by default**: Ephemeral root filesystems with persistent data management
+- **Automated updates**: CI-driven updates with smart reboot coordination
+- **Encrypted secrets**: Age-encrypted secrets with automatic deployment
+- **Remote unlock**: SSH-based LUKS unlock for headless encrypted servers
+- **Modular design**: Reusable profiles for different machine roles
+- **Comprehensive backups**: Automated Restic backups to multiple destinations
 
-### 🔧 Installing NixOS  
+## 📁 Repository Structure
 
-1. Download a recent [NixOS installer](https://nixos.org/download.html#nixos-iso) and boot into it.  
-2. Enable flakes:  
+```
+world/
+├── hosts/          # Machine-specific configurations
+├── profiles/       # Reusable system profiles (server, desktop, laptop)
+├── modules/        # Custom NixOS/nix-darwin modules
+├── users/          # User configurations (home-manager)
+├── packages/       # Custom packages not in nixpkgs
+├── secrets/        # Encrypted configuration (agenix)
+├── flake/          # Flake components (organized with flake-parts)
+└── flake.nix       # Main flake definition
+```
 
-   ```sh
-   mkdir -p /etc/nix
-   echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
-   ```
+For detailed development guidelines, see [DEVELOPMENT.md](./DEVELOPMENT.md).
 
-3. Clone this repository:  
+## 🚀 Quick Start
 
-   ```sh
-   cd /tmp
-   git clone https://github.com/johnae/world
-   cd world
-   ```
+### Prerequisites
 
-4. Install the system:  
+Enable Nix flakes:
+```bash
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+```
 
-   ```sh
-   host=eris
-   nix build .#"$host"-diskformat
-   ./result/bin/diskformat
-   nixos-install --flake .#"$host" --no-root-passwd
-   chown -R 1337:100 /mnt/keep/home/<your-user>
-   ```
+### Common Operations
 
-   Hosts are defined in [hosts/](hosts/).  
+This repo includes a `world` CLI for common tasks:
 
-   _This setup is highly customized to my workflow. Feel free to use it, but you’ll likely want to tweak it for your needs._  
+```bash
+# Search for packages
+world search <package>
 
-## 🔄 Updating an Existing Machine  
+# Open shell with packages
+world shell <packages>
 
-Updates follow a standard commit/push/pull request workflow. To update a machine:  
+# Update system
+world upgrade
 
-```sh
+# Build without switching
+world build
+
+# Garbage collect
+world gc
+
+# Run linters
+world lint
+
+# Check flake
+world check
+```
+
+## 💻 System Management
+
+### Update Existing System
+
+From GitHub using world cli:
+```bash
+world upgrade
+```
+
+From local clone using world cli:
+```bash
+world upgrade .
+```
+
+From GitHub using nix cli:
+```bash
 nixos-rebuild switch --flake github:johnae/world --use-remote-sudo
 ```
 
-Or from a local clone:  
-
-```sh
-git clone git@github.com:johnae/world
-cd world
+From local clone using nix cli:
+```bash
 nixos-rebuild switch --flake . --use-remote-sudo
 ```
 
-## 🤖 Automated Updates  
+### Install New System
 
-OS and package updates are automated via CI (buildkite). Updates create pull requests where all custom packages and machine configurations are built and tested before merging, helping catch issues before deployment.  
+1. Create host configuration in `hosts/<arch>/<hostname>.nix`
+2. Boot NixOS installer and enable flakes
+3. Clone this repository
+4. Install:
 
-## 📜 License  
+```bash
+host=yourhostname
+nix build .#"$host"-diskformat
+./result/bin/diskformat
+nixos-install --flake .#"$host" --no-root-passwd
+```
 
-[MIT](https://choosealicense.com/licenses/mit)  
+## 🏗️ Architecture
+
+The configuration follows a layered approach:
+
+1. **Base**: Core packages and settings (`profiles/defaults.nix`)
+2. **Profile**: Role-specific configs (server, desktop, workstation)
+3. **Host**: Machine-specific settings and hardware
+4. **User**: Personal configurations via home-manager
+
+### Key Design Choices
+
+- **Impermanence**: Root filesystem is tmpfs, only declared paths persist
+- **Declarative storage**: Disk formatting is part of the configuration
+- **Profile inheritance**: Hosts compose functionality from profiles
+- **Unified tooling**: Same commands work across NixOS and macOS
+
+## 🛠️ Customization
+
+To adapt this configuration:
+
+1. **Start small**: Pick one host configuration as a template
+2. **Use profiles**: Leverage existing profiles rather than host-specific configs
+3. **Keep secrets out**: Use agenix for sensitive data
+4. **Test locally**: Use `world build` before switching
+
+### Common Modifications
+
+- **New machine**: Copy similar host file, adjust hardware config
+- **New service**: Add to appropriate profile or create new module
+- **User settings**: Modify configurations under `users/profiles/`
+
+## 🔒 Security Features
+
+- **Encrypted disks**: LUKS encryption with remote unlock capability
+- **Secrets management**: Age-encrypted secrets, SSH key based
+- **Secure boot**: Where supported by hardware
+- **Firewall**: Enabled by default with explicit port management
+
+## 🤖 Automation
+
+- **CI/CD**: Buildkite pipeline tests all configurations
+- **Dependency updates**: Automated flake input updates
+- **Smart reboots**: Coordinated reboots for kernel updates
+- **Backup verification**: Automated backup integrity checks
+
+## 🧪 Experimental Features
+
+This repo includes some experimental work like MicroVM configurations for container workloads, but these aren't actively used and may not be fully functional.
+
+## 📚 Resources
+
+- [NixOS Manual](https://nixos.org/manual/nixos/stable/)
+- [Nix Pills](https://nixos.org/guides/nix-pills/)
+- [Home Manager](https://github.com/nix-community/home-manager)
+- [Agenix](https://github.com/ryantm/agenix)
+
+## 📜 License
+
+[MIT](LICENSE)
+
+---
+
+*Note: This is a personal configuration that's highly customized to my workflow. Feel free to browse and borrow ideas, but you'll want to adapt it significantly for your own use.*
