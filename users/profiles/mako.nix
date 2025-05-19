@@ -1,16 +1,16 @@
 {pkgs, ...}: {
-  services.mako = {
+  services.mako.settings = {
     enable = true;
     font = "Roboto";
-    backgroundColor = "#000021DD";
-    textColor = "#FFFFFFFF";
-    borderSize = 0;
-    borderRadius = 15;
+    background-color = "#000021DD";
+    text-color = "#FFFFFFFF";
+    border-size = 0;
+    border-radius = 15;
     icons = true;
-    iconPath = "${pkgs.moka-icon-theme}/share/icons/Moka";
+    icon-path = "${pkgs.moka-icon-theme}/share/icons/Moka";
     markup = true;
     actions = true;
-    defaultTimeout = 3000;
+    default-timeout = 3000;
     padding = "20";
     height = 200;
     width = 500;
