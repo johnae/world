@@ -70,8 +70,13 @@
 
       if notmuch show --format json --include-html --entire-thread=false "$MSGID AND NOT attachment:pdf" | jq -e '. | length > 0' >/dev/null; then
         notmuch show --entire-thread=false --include-html --format=json "$MSGID AND NOT attachment.pdf" | \
-                  jq -r '.. | objects | select(."content-type"=="text/html") | .content' | \
+                  jq -e -r '.. | objects | select(."content-type"=="text/html") | .content' | \
                   html2text -nobs | tee >(cat >&2) | \
+                  grep -oE '[^[:space:]]+' | grep -oE '[[:alnum:]]+' | tr '[:space:]' ' ' | tr -s ' ' | \
+                  grep -oP '^.{0,1200}' | \
+                  aichat -r invoice-summer | tee >(cat >&2) > "$WORKDIR/invoice-sum-html.json" || \
+        notmuch show --entire-thread=false --include-html --format=json "$MSGID AND NOT attachment.pdf" | \
+                  jq -e -r '.. | objects | select(."content-type"=="text/plain") | .content' | \
                   grep -oE '[^[:space:]]+' | grep -oE '[[:alnum:]]+' | tr '[:space:]' ' ' | tr -s ' ' | \
                   grep -oP '^.{0,1200}' | \
                   aichat -r invoice-summer | tee >(cat >&2) > "$WORKDIR/invoice-sum-html.json"
