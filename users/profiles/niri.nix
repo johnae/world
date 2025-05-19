@@ -49,7 +49,7 @@
     '';
   };
 in {
-  # programs.niri.package = pkgs.niri-stable;
+  programs.niri.package = pkgs.niri-unstable;
   programs.niri.enable = true;
   home.packages = with pkgs; [
     fuzzel
