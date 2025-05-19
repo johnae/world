@@ -13,12 +13,12 @@ in {
       panes:
       - size: 0.30
         name: aichat
-        command: direnv exec . aider --model o4-mini --yes-always --watch-files
+        command: direnv exec . claude
         direction: Right
-      - size: 0.20
+      - size: 0.25
         name: term
-        direction: Bottom
         split_from: 1
+        direction: Bottom
   '';
   xdg.configFile."wezterm/wezterm.fnl.lua".source =
     pkgs.runCommand "wezterm.fnl.lua" {

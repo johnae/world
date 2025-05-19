@@ -14,6 +14,7 @@ in {
     ./aichat.nix
     ./aider.nix
     ./bat.nix
+    ./claude.nix
     ./git.nix
     ./gitui.nix
     # ./emacs/default.nix
