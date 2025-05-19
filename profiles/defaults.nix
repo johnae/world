@@ -41,6 +41,7 @@ in {
     pkgs.bottom
     pkgs.bridge-utils
     pkgs.cacert
+    pkgs.claude-code
     pkgs.curl
     pkgs.fd
     pkgs.file
