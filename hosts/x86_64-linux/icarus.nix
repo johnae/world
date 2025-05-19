@@ -40,19 +40,6 @@
   virtualisation.podman.enable = true;
   virtualisation.podman.dockerCompat = true;
 
-  mailserver = {
-    enable = true;
-    fqdn = "mail.9000.dev";
-    domains = ["9000.dev"];
-    certificateScheme = "acme";
-    loginAccounts = {
-      "john@9000.dev" = {
-        hashedPasswordFile = config.age.secrets.john-9000-dev-mail.path;
-        aliases = ["postmaster@9000.dev"];
-      };
-    };
-  };
-
   users.users.${adminUser.name}.linger = true; ## start user systemd units on boot
 
   system.autoUpgrade = {
