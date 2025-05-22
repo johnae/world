@@ -41,6 +41,7 @@
   ];
 
   #services.karabiner-elements.enable = true; ## doesn't work atm
+  system.primaryUser = adminUser.name;
   system.defaults.dock.autohide = true;
   security.pam.services.sudo_local.touchIdAuth = true;
   system.defaults.trackpad.Clicking = true;
