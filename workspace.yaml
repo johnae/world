@@ -11,8 +11,7 @@ windows:
     direction: Right
   - size: 0.80
     name: aichat
-    # command: direnv exec . aider --model o3 --architect --yes-always --watch-files
-    command: direnv exec . aider --model o4-mini --yes-always --watch-files
+    command: direnv exec . claude
     direction: Bottom
   - size: 0.25
     name: term
