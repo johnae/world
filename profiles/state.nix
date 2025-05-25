@@ -62,6 +62,7 @@
         ".config/Slack"
         ".config/teams-for-linux"
         ".emacs.d"
+        ".claude"
         ".gnupg"
         ".local/share/atuin"
         ".local/share/containers"
@@ -84,6 +85,7 @@
         ".config/tenacity.cfg"
         ".kube/config"
         ".spotify_token_cache.json"
+        ".claude.json"
         ".ssh/known_hosts"
       ];
     };
