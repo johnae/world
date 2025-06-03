@@ -82,7 +82,6 @@
     inputs.impermanence.nixosModules.impermanence
     inputs.microvm.nixosModules.host
     inputs.nixpkgs.nixosModules.notDetected
-    inputs.simple-nixos-mailserver.nixosModule
     ../modules/default.nix
   ];
 

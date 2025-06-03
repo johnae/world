@@ -67,9 +67,7 @@
     gitignore.inputs.nixpkgs.follows = "nixpkgs";
     helix-editor.url = "github:helix-editor/helix";
     helix-editor.inputs.nixpkgs.follows = "nixpkgs";
-    helix-editor.inputs.flake-utils.follows = "flake-utils";
     helix-editor.inputs.rust-overlay.follows = "rust-overlay";
-    helix-editor.inputs.crane.follows = "crane";
     hetzner-csi-driver.flake = false;
     hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.10.1/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -113,7 +111,6 @@
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
-    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
     systems.url = "github:nix-systems/default";
     victorialogs.flake = false;
     victorialogs.url = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/download/v1.8.0-victorialogs/victoria-logs-linux-amd64-v1.8.0-victorialogs.tar.gz"; # gh-release-update
