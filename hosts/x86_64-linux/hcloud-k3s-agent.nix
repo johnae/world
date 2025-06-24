@@ -1,5 +1,5 @@
 {...}: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN3wV0xe1C2JtwQHwHNL3yYnGsXPfnQAvElF37ux7qkc";
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ7m3AH34sXUa8UQIeDEyL2lpUwSbsrGjzPrjYauntOH";
 
   imports = [
     ../../profiles/hcloud.nix
@@ -22,7 +22,6 @@
   services.k3s.settings.server = "https://\"$INITIAL_MASTER\":6443";
 
   age.secrets = {
-    ts-google-9k-hcloud.file = ../../secrets/ts-google-9k-hcloud.age;
     k3s-token.file = ../../secrets/k3s/token.age;
   };
 
@@ -34,7 +33,7 @@
     args.accept-routes = false;
     args.accept-dns = true;
     args.advertise-exit-node = true;
-    args.auth-key = "file:/var/run/agenix/ts-google-9k-hcloud";
+    args.auth-key = "\"$TS_AUTH_KEY\"";
     args.hostname = "\"$NODENAME\"";
   };
 
