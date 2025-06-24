@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   inputs,
   ...
 }: {
@@ -65,6 +66,7 @@
   virtualisation.podman.dockerCompat = true;
 
   programs.ssh.startAgent = true;
+  services.gnome.gcr-ssh-agent.enable = lib.mkForce false;
 
   services.pcscd.enable = true;
 
