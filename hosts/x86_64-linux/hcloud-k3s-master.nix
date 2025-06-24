@@ -22,7 +22,6 @@
   services.k3s.settings.server = "https://\"$INITIAL_MASTER\":6443";
 
   age.secrets = {
-    ts-google-9k-hcloud.file = ../../secrets/ts-google-9k-hcloud.age;
     k3s-token.file = ../../secrets/k3s/token.age;
     tailscale-oauth-secret = {
       file = ../../secrets/k3s/tailscale-oauth-secret.yaml.age;
@@ -50,7 +49,7 @@
     args.accept-routes = false;
     args.accept-dns = true;
     args.advertise-exit-node = true;
-    args.auth-key = "file:/var/run/agenix/ts-google-9k-hcloud";
+    args.auth-key = "\"$TS_AUTH_KEY\"";
     args.hostname = "\"$NODENAME\"";
   };
 
