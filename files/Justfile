@@ -38,7 +38,7 @@ cachix +args:
 [macos]
 upgrade flake="github:johnae/world":
   @rm -rf ~/.cache/nix/fetcher-cache-v1.sqlite*
-  @darwin-rebuild switch --flake '{{flake}}'
+  @sudo darwin-rebuild switch --flake '{{flake}}'
 
 # upgrade the system using given flake ref
 [linux]
