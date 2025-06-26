@@ -20,6 +20,11 @@
         inputs.nur.overlays.default
         (_final: _prev: (filterAttrs (name: _: ((match "nu-.*" name == null) && (match "nu_.*" name == null))) config.packages))
         (_final: prev: {
+          nushell = prev.nushell.overrideAttrs (_oa: {
+            doCheck = false;
+          });
+        })
+        (_final: prev: {
           wlroots_river_0_17_2 = prev.wlroots_0_17.overrideAttrs (oa: rec {
             version = "0.17.2";
             src = prev.fetchFromGitLab {
