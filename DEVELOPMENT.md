@@ -112,6 +112,13 @@ To add a new machine:
 - **Follow patterns**: When adding new components, examine existing ones for patterns and conventions
 - **Test changes**: Use the built-in `world` commands to verify changes before committing
 - **Documentation**: Only create documentation when it adds significant value to the project
+- **Formatting**: Use Alejandra for Nix files, fnlfmt for Fennel files, stylua for Lua files
+- **Naming**: Follow existing patterns in similar files/directories
+- **Imports**: Group imports logically by functionality
+- **Error Handling**: Use appropriate Nix error handling patterns
+- **Commits**: Follow conventional commit format ("feat:", "fix:", "chore:", etc.)
+
+Always run linting etc before committing: `world lint && world dead && world dscheck`
 
 ### Development Tips
 
