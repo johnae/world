@@ -7,16 +7,14 @@
 (local project-dir (.. wezterm.home_dir :/Development))
 (local project-dirname (string.gsub project-dir "(.*/)(.*)" "%2"))
 (local project-dir-find-cmd [:fd
-                             "'(\\.git|\\.jj)$'"
+                             "'(\\.git|\\.jj|BUILD\\.bazel)$'"
                              project-dir
                              :-d
-                             :3
+                             :8
                              :-H
-                             :-t
-                             :d
-                             :-x
+                             :-X
                              :echo
-                             "{//}"])
+                             "\"{//}\n\""])
 
 (lambda table-concat [t1 t2]
   "Concatenate two tables"
