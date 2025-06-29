@@ -15,7 +15,7 @@ in {
   boot.kernel.sysctl = {
     "fs.inotify.max_queued_events" = lib.mkDefault 32768;
     "fs.inotify.max_user_instances" = lib.mkForce 524288;
-    "fs.inotify.max_user_watches" = lib.mkDefault 524288;
+    "fs.inotify.max_user_watches" = lib.mkForce 524288;
     "net.core.rmem_max" = lib.mkDefault 2500000; ## https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
   };
 
