@@ -2,6 +2,7 @@
   adminUser,
   hostName,
   config,
+  lib,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHJycc3NgaX+coWkJIQEmHS3HBF99o3SkZ7sIm83eiiW";
@@ -38,6 +39,22 @@
   };
 
   networking.useDHCP = false;
+
+  networking.nameservers = lib.mkForce [];
+  services.resolved = {
+    enable = true;
+    ## have fallbacks in case something is wrong
+    fallbackDns = ["1.0.0.1" "1.1.1.1" "2606:4700:4700::1111" "2606:4700:4700::1001"];
+    ## for some reason, systemd-resolved thinks upstream doesn't respond sometimes
+    ## so we need to disable caching negative responses (plus some other stuff)
+    ## again - this is about using tailscale dns only
+    extraConfig = ''
+      DNSSEC=no
+      DNSOverTLS=no
+      Cache=no-negative
+    '';
+  };
+
   systemd.network = {
     enable = true;
     wait-online.anyInterface = true;
@@ -48,13 +65,8 @@
         networkConfig.IgnoreCarrierLoss = "3s";
         networkConfig.IPv6PrivacyExtensions = "yes";
         networkConfig.IPv6AcceptRA = "yes";
-        # networkConfig.LinkLocalAddressing = "ipv6";
-        # dhcpV4Config = {
-        #   RouteMetric = 100;
-        # };
-        # IPv6AcceptRA = {
-        #   RouteMetric = 100;
-        # };
+        ## don't use this by default (rely on tailscale dns only)
+        networkConfig.DNSDefaultRoute = false;
       };
     };
   };
