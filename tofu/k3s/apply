@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [ "$(ssh-add -L | wc -l)" = "0" ]; then
+  echo "Hey - you need to add your ssh key to the agent"
+  exit 1
+fi
+
 tofu apply -auto-approve
 sleep 10
 

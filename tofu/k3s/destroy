@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+CLUSTER_ID="$(tofu output --json | jq -r .k8s_api.value | awk -F'-' '{print $3}')"
+
+if [ ${#CLUSTER_ID} -le 5 ]; then
+  echo no cluster id or bad cluster id: "[$CLUSTER_ID]"
+  exit 1
+fi
+
+tofu destroy -auto-approve
+
+echo cleaning up tailscale devices
+
+TS_TOKEN="$(curl -X POST https://api.tailscale.com/api/v2/oauth/token \
+  -d "grant_type=client_credentials" \
+  -d "client_id=$TAILSCALE_OAUTH_CLIENT_ID" \
+  -d "client_secret=$TAILSCALE_OAUTH_CLIENT_SECRET" \
+  -d "scope=devices:write" | jq -r .access_token)"
+
+curl -H "Authorization: Bearer $TS_TOKEN" https://api.tailscale.com/api/v2/tailnet/9000.dev/devices | jq -r '.devices[] | select(.hostname | contains("'"$CLUSTER_ID"'")) | "\(.id) \(.name)"' |
+  while read -r id name; do
+    echo "$name $id includes $CLUSTER_ID in its name - removing this device"
+    curl -s -H "Authorization: Bearer $TS_TOKEN" -X DELETE "https://api.tailscale.com/api/v2/device/$id"
+  done
+
+echo cleaning up kubernetes config
+
+kubectl config get-contexts | grep "$CLUSTER_ID" |
+  while read -r ctx _ _; do
+    echo deleting context "$ctx"
+    kubectl config delete-context "$ctx"
+  done
+
+
+kubectl config get-clusters | grep "$CLUSTER_ID" |
+  while read -r cluster; do
+    echo deleting context "$cluster"
+    kubectl config delete-cluster "$cluster"
+  done
+
+echo removing terraform state
+
+rm -rf terraform.tfstate*
