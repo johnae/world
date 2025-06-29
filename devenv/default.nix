@@ -64,6 +64,7 @@ in {
     rage
     statix
     stylua
+    opentofu
     # tofuWithPlugins # broken
     watchexec
     wezterm-test

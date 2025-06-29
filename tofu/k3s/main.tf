@@ -12,6 +12,9 @@ terraform {
     random = {
       source = "hashicorp/random"
     }
+    tailscale = {
+      source = "tailscale/tailscale"
+    }
   }
 }
 
@@ -29,6 +32,8 @@ locals {
   }
 }
 
+provider "tailscale" {}
+
 resource "hcloud_placement_group" "default" {
   name = "default"
   type = "spread"
@@ -43,6 +48,16 @@ resource "random_string" "cluster" {
   min_numeric = 2
 }
 
+resource "tailscale_tailnet_key" "master_key" {
+  for_each    = toset([for i in range(0, local.masters): tostring(i)])
+  reusable      = false
+  ephemeral     = true
+  preauthorized = true
+  expiry        = 3600
+  description   = "K3S Node Master TS Key"
+  tags = ["tag:server", "tag:hcloud"]
+}
+
 resource "random_string" "master_id" {
   for_each    = toset([for i in range(0, local.masters): tostring(i)])
   length = 4
@@ -50,6 +65,16 @@ resource "random_string" "master_id" {
   special = false
   min_lower = 2
   min_numeric = 2
+}
+
+resource "tailscale_tailnet_key" "agent_key" {
+  for_each    = toset([for i in range(0, local.agents): tostring(i)])
+  reusable      = false
+  ephemeral     = true
+  preauthorized = true
+  expiry        = 3600
+  description   = "K3S Node Agent TS Key"
+  tags = ["tag:server", "tag:hcloud"]
 }
 
 resource "random_string" "agent_id" {
@@ -81,6 +106,7 @@ resource "hcloud_server" "master" {
   CLUSTER_ID=${random_string.cluster.id}
   NODE_ID=${random_string.master_id[each.key].id}
   NODENAME=master-${random_string.cluster.id}-${random_string.master_id[each.key].id}
+  TS_AUTH_KEY=${tailscale_tailnet_key.master_key[each.key].key}
   REGION=${local.region}
   ZONE=${local.zone}
   INITIAL_MASTER=master-${random_string.cluster.id}-${random_string.master_id["0"].id}
@@ -103,6 +129,7 @@ resource "hcloud_server" "agent" {
   CLUSTER_ID=${random_string.cluster.id}
   NODE_ID=${random_string.agent_id[each.key].id}
   NODENAME=agent-${random_string.cluster.id}-${random_string.agent_id[each.key].id}
+  TS_AUTH_KEY=${tailscale_tailnet_key.agent_key[each.key].key}
   REGION=${local.region}
   ZONE=${local.zone}
   INITIAL_MASTER=master-${random_string.cluster.id}-${random_string.master_id["0"].id}
