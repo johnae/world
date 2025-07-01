@@ -33,6 +33,8 @@
       flake-compat.follows = "flake-compat";
       nixpkgs.follows = "nixpkgs";
     };
+    cilium-chart.url = "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.17.5.tgz";
+    cilium-chart.flake = false;
     cloud-native-pg.flake = false;
     cloud-native-pg.url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.1/cnpg-1.24.1.yaml"; # gh-release-update
     copilot-vim.flake = false;
