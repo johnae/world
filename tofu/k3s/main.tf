@@ -55,7 +55,7 @@ resource "tailscale_tailnet_key" "master_key" {
   preauthorized = true
   expiry        = 3600
   description   = "K3S Node Master TS Key"
-  tags = ["tag:server", "tag:hcloud"]
+  tags = ["tag:server", "tag:hcloud", "tag:k8s"]
 }
 
 resource "random_string" "master_id" {
@@ -74,7 +74,7 @@ resource "tailscale_tailnet_key" "agent_key" {
   preauthorized = true
   expiry        = 3600
   description   = "K3S Node Agent TS Key"
-  tags = ["tag:server", "tag:hcloud"]
+  tags = ["tag:server", "tag:hcloud", "tag:k8s"]
 }
 
 resource "random_string" "agent_id" {

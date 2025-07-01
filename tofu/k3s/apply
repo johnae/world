@@ -33,3 +33,18 @@ if [[ ${unlocked_all} -eq 0 ]]; then
   sleep 10
   unlock
 fi
+
+CLUSTER_ID="$(tofu output --json | jq -r .k8s_api.value)"
+
+echo configuring kubectl for "$CLUSTER_ID"
+retries=10
+while ! tailscale configure kubeconfig "$CLUSTER_ID"; do
+  sleep 10
+  retries=$((retries - 1))
+  if [ "$retries" -le 0 ]; then
+    echo giving up trying to configure kubectl
+    exit 1
+  fi
+done
+
+kubectl get pods --all-namespaces
