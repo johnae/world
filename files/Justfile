@@ -62,6 +62,62 @@ build-installer flake="github:johnae/world":
   @nix build '{{flake}}#nixosConfigurations.installer.config.system.build.isoImage'
 
 [private]
+remote-install flake-config ip:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  temp="$(mktemp -d)"
+  disktmp="$(mktemp -d)"
+  cleanup() {
+    echo cleaning up tmp files in "$temp" and "$disktmp"
+    rm -rf "$temp" "$disktmp"
+  }
+  trap cleanup EXIT
+
+  install -d -m755 "$temp/etc/ssh"
+
+  TS_TOKEN="$(curl -s \
+    -d "client_id=$(rbw get tailscale --full tskey-oauth-full-access | grep client_id: | awk -F': ' '{print $2}')" \
+    -d "client_secret=$(rbw get tailscale tskey-oauth-full-access)" \
+    "https://api.tailscale.com/api/v2/oauth/token" | jq -r .access_token)"
+
+  curl "https://api.tailscale.com/api/v2/tailnet/9000.dev/keys?all=true" \
+    -X POST \
+    -H "Authorization: Bearer $TS_TOKEN" \
+    -H 'Content-Type: application/json' \
+    --data '{
+     "keyType": "",
+     "description": "tmp",
+     "capabilities": {
+       "devices": {
+         "create": {
+           "reusable": false,
+           "ephemeral": false,
+           "preauthorized": true,
+           "tags": [
+             "tag:server"
+           ]
+         }
+       }
+     },
+     "expirySeconds": 3600,
+     "scopes": [
+       "all:read"
+     ],
+     "tags": [
+       "tag:server"
+     ]
+    }' | jq -r .key > "$temp/etc/tailscale-auth-key"
+
+  chmod 0600 "$temp/etc/tailscale-auth-key"
+  
+  rbw get hetzner cloud_ssh_host_key | base64 -d > "$temp/etc/ssh/ssh_host_ed25519_key"
+  rbw get hetzner cloud_ssh_initrd_key | base64 -d > "$temp/etc/ssh/initrd_ed25519_key"
+  rbw get hetzner disk_password > "$disktmp/disk.key"
+  chmod 0600 "$temp/etc/ssh/ssh_host_ed25519_key"
+  chmod 0600 "$temp/etc/ssh/initrd_ed25519_key"
+  nix run github:nix-community/nixos-anywhere -- --disk-encryption-keys /tmp/disk.key "$disktmp/disk.key" --extra-files "$temp" --flake '{{flake-config}}' --target-host root@{{ip}}
+
+[private]
 rekey:
   #!/usr/bin/env bash
   set -euo pipefail
