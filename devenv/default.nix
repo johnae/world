@@ -51,6 +51,7 @@ in {
     age-plugin-yubikey
     alejandra
     bash-language-server
+    deadnix
     fennel
     fennel-ls
     fnlfmt
