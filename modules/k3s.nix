@@ -39,6 +39,14 @@
       ip -o -4 -family inet -json addr show scope global dev "$IFACE" | jq -r '.[0].addr_info[0].local'
     '';
   };
+  getDefaultRouteIp = pkgs.writeShellApplication {
+    name = "get-default-route-ip";
+    runtimeInputs = with pkgs; [jq iproute2];
+    text = ''
+      IFACE="$(ip -json route get 8.8.8.8 | jq -r .[].dev)"
+      ${getIfaceIp}/bin/get-iface-ip "$IFACE"
+    '';
+  };
   getIfaceWithMac = pkgs.writeShellApplication {
     name = "get-iface-with-mac";
     runtimeInputs = with pkgs; [jq iproute2];
@@ -81,6 +89,19 @@
   in
     flatten (mapAttrsToList fieldToCli s);
 in {
+  options.services.k3s.allowedReplacementVars = mkOption {
+    type = types.listOf types.str;
+    default = [
+      "$CLUSTER_ID"
+      "$NODE_ID"
+      "$NODENAME"
+      "$TS_AUTH_KEY"
+      "$REGION"
+      "$ZONE"
+      "$INITIAL_MASTER"
+    ];
+    apply = concatStringsSep " ";
+  };
   options.services.k3s.autoDeploy = mkOption {
     type = types.attrsOf (
       types.either
@@ -120,7 +141,7 @@ in {
     systemd.services.k3s = let
       k3s = pkgs.writeShellApplication {
         name = "k3s";
-        runtimeInputs = with pkgs; [getIfaceIp getIfaceWithMac gawk envsubst];
+        runtimeInputs = with pkgs; [getIfaceIp getDefaultRouteIp getIfaceWithMac gawk gettext];
         text =
           concatStringsSep " "
           ([
@@ -144,7 +165,7 @@ in {
             mkdir -p ${k3sManifestsDir}
             ${
               concatStringsSep "\n" (mapAttrsToList (
-                  name: path: "${pkgs.envsubst}/bin/envsubst < ${path} > ${k3sManifestsDir}/${name}.yaml"
+                  name: path: "${pkgs.gettext}/bin/envsubst '${cfg.allowedReplacementVars}' < ${path} > ${k3sManifestsDir}/${name}.yaml"
                 )
                 cfg.autoDeploy)
             }
