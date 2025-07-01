@@ -100,7 +100,8 @@
         listing []]
     (do
       (each [line (out:gmatch "[^\n]+")]
-        (table.insert listing line))
+        (let [line (line:gsub "^%s*(.-)%s*$" "%1")]
+          (table.insert listing line)))
       (unique listing))))
 
 (local default-project-workspace-yaml-path
