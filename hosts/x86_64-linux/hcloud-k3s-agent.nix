@@ -28,7 +28,7 @@
   services.tailscale.auth = {
     enable = true;
     after = ["metadata.service"];
-    args.advertise-tags = ["tag:server" "tag:hcloud"];
+    args.advertise-tags = ["tag:server" "tag:hcloud" "tag:k8s"];
     args.ssh = true;
     args.accept-routes = false;
     args.accept-dns = true;
