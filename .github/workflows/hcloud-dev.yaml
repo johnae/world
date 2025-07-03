@@ -47,7 +47,7 @@ jobs:
           accept-flake-config = true
 
     - name: Run the Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v9
+      uses: DeterminateSystems/magic-nix-cache-action@v12
 
     - name: Tofu Apply
       id: tofu
