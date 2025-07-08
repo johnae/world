@@ -183,6 +183,19 @@
         "type": "github"
       }
     },
+    "cilium-chart": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1750357019,
+        "narHash": "sha256-94xCDaau6blpHx+GmlCmR4QmNfV2b27lMM9hYuDd0do=",
+        "type": "tarball",
+        "url": "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.17.5.tgz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.17.5.tgz"
+      }
+    },
     "cl-nix-lite": {
       "locked": {
         "lastModified": 1728174978,
@@ -2312,6 +2325,7 @@
         "age-plugin-yubikey": "age-plugin-yubikey",
         "agenix": "agenix",
         "cachix": "cachix",
+        "cilium-chart": "cilium-chart",
         "cloud-native-pg": "cloud-native-pg",
         "conduwuit": "conduwuit",
         "copilot-vim": "copilot-vim",
