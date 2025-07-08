@@ -62,7 +62,7 @@ build-installer flake="github:johnae/world":
   @nix build '{{flake}}#nixosConfigurations.installer.config.system.build.isoImage'
 
 [private]
-remote-install flake-config ip:
+remote-install flake-config ssh-host encrypt-disk="yes" precmd="":
   #!/usr/bin/env bash
   set -euo pipefail
   temp="$(mktemp -d)"
@@ -112,13 +112,23 @@ remote-install flake-config ip:
   
   rbw get hetzner cloud_ssh_host_key | base64 -d > "$temp/etc/ssh/ssh_host_ed25519_key"
   rbw get hetzner cloud_ssh_initrd_key | base64 -d > "$temp/etc/ssh/initrd_ed25519_key"
-  rbw get hetzner disk_password > "$disktmp/disk.key"
+  if [ "{{encrypt-disk}}" = "yes" ]; then
+    rbw get hetzner disk_password > "$disktmp/disk.key"
+  fi
   chmod 0600 "$temp/etc/ssh/ssh_host_ed25519_key"
   chmod 0600 "$temp/etc/ssh/initrd_ed25519_key"
-  echo wipe filesystems
-  ssh root@{{ip}} "wipefs -fa /dev/nvme0n1; wipefs -fa /dev/nvme1n1"
+  if [ -n "{{precmd}}" ]; then
+    echo "run: {{precmd}}"
+    ssh {{ssh-host}} "{{precmd}}"
+  fi
   echo start installation
-  nix run github:nix-community/nixos-anywhere -- --disk-encryption-keys /tmp/disk.key "$disktmp/disk.key" --extra-files "$temp" --flake '{{flake-config}}' --target-host root@{{ip}}
+  if [ "{{encrypt-disk}}" = "yes" ]; then
+    echo "starting remote install WITH encrypted disks"
+    nix run github:nix-community/nixos-anywhere -- --disk-encryption-keys /tmp/disk.key "$disktmp/disk.key" --extra-files "$temp" --flake '{{flake-config}}' --target-host {{ssh-host}}
+  else
+    echo "starting remote install NO encrypted disks"
+    nix run github:nix-community/nixos-anywhere -- --extra-files "$temp" --flake '{{flake-config}}' --target-host {{ssh-host}}
+  fi
 
 [private]
 rekey:
