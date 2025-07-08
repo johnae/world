@@ -27,6 +27,7 @@ in {
   ];
 
   home.sessionVariables = {
+    NB_DIR = "/home/${username}/Sync/pkm";
     EDITOR = "hx";
     VISUAL = "hx";
     KUBECONFIG = "/home/${username}/.kube/config";
