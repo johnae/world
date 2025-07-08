@@ -15,6 +15,7 @@
       rbw
       rofi-wayland
       skim
+      tailscale
       wpa_supplicant
       ;
 
@@ -118,6 +119,18 @@
       '';
     };
 
+    fuzzel-wezterm-domain = writeShellApplication {
+      name = "fuzzel-wezterm";
+      runtimeInputs = [fuzzel tailscale];
+      text = ''
+        tailscale status | \
+          grep linux | \
+          awk '{print $2}' | \
+          xargs -r -I{} echo -e '- name: {}\n  username: john\n  remote_address: {}' > "$HOME"/.config/wezterm/ssh_domains.yaml
+        grep ' name: ' < "$HOME"/.config/wezterm/ssh_domains.yaml | awk '{print $3}' | fuzzel -d
+      '';
+    };
+
     fuzzel-rbw = writeShellApplication {
       name = "fuzzel-rbw";
       runtimeInputs = [fuzzel rbw dotool];
@@ -205,6 +218,7 @@
           rbw-git-creds
           rofi-rbw
           fuzzel-rbw
+          fuzzel-wezterm-domain
           update-wifi-networks
           update-wireguard-keys
         ];
