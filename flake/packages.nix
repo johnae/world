@@ -41,7 +41,11 @@
           name = "world";
           runtimeInputs = with pkgs; [just nushell statix deadnix cachix];
           text = ''
-            just -f ${../files/Justfile} -d "$(pwd)" "$@"
+            if [ -e files/Justfile ] && [ -e flake.nix ]; then
+              just -f ./files/Justfile -d "$(pwd)" "$@"
+            else
+              just -f ${../files/Justfile} -d "$(pwd)" "$@"
+            fi
           '';
         };
         rbw-atomic-unlock = pkgs.writeShellApplication {
