@@ -38,6 +38,22 @@
     '';
   };
 
+  openWeztermDomain = pkgs.writeShellApplication {
+    name = "open-wezterm-domain";
+    runtimeInputs = [pkgs.scripts pkgs.niri pkgs.jq];
+    text = ''
+      DOMAIN="$(fuzzel-wezterm)"
+      if [ -n "$DOMAIN" ]; then
+        WINDOW_ID="$(niri msg -j windows | jq -r '.[] | select(.app_id == "'"wez-remote-$DOMAIN"'").id')"
+        if [ -n "$WINDOW_ID" ]; then
+          niri msg action focus-window --id "$WINDOW_ID"
+        else
+          niri msg action spawn -- wezterm start --domain "$DOMAIN" --attach --always-new-process --class "wez-remote-$DOMAIN"
+        fi
+      fi
+    '';
+  };
+
   swayidleCommand = pkgs.writeShellApplication {
     name = "swayidle";
     runtimeInputs = [pkgs.sway pkgs.bash swaylockEffects pkgs.swayidle];
@@ -347,6 +363,7 @@ in {
       # "Mod+V".action = toggle-window-floating;
       # "Mod+Shift+V".action = switch-focus-between-floating-and-tiling;
 
+      "Mod+Shift+w".action.spawn = ["sh" "-c" "${openWeztermDomain}/bin/open-wezterm-domain"];
       "Mod+Minus".action.spawn = ["sh" "-c" "${pkgs.scripts}/bin/rofi-rbw"];
       "Mod+Shift+Minus".action.spawn = ["sh" "-c" "passonly=y ${pkgs.scripts}/bin/rofi-rbw"];
       "Mod+Shift+Equal".action.spawn = ["sh" "-c" "codeonly=y ${pkgs.scripts}/bin/rofi-rbw"];
