@@ -190,7 +190,7 @@
           '';
         });
 
-        conduwuit-latest = inputs.conduwuit.packages.${system}.default;
+        tuwunel-latest = inputs.tuwunel.packages.${system}.default;
 
         inherit
           (inputs.hyprland.packages.${system})
