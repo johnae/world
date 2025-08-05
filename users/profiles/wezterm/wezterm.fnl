@@ -115,6 +115,14 @@
 
 (wezterm.log_info "default-project-workspace: " (default-project-workspace))
 
+(local default-ssh-domains-yaml-path (.. wezterm.config_dir :/ssh_domains.yaml))
+
+(lambda load-ssh-domains []
+  (let [(sshloaded err) (pcall #(with-open [sshyaml (io.open default-ssh-domains-yaml-path
+                                                             :rb)]
+                                  (wezterm.serde.yaml_decode (sshyaml:read :*a))))]
+    (if sshloaded err [])))
+
 (lambda project-workspace-config [window pane dir]
   "Reads and returns the effective workspace config for a project"
   (wezterm.log_info "default-project-workspace " (default-project-workspace))
@@ -166,74 +174,67 @@
   (wezterm.log_info "command-for: " args)
   args)
 
+(lambda build-workspace-layout [window pane domain directory panes-config]
+  (wezterm.log_info "build-workspace-layout: " panes-config)
+  (wezterm.log_info "window: " window)
+  (wezterm.log_info "pane: " pane)
+  (let [active_tab (window:active_tab)
+        first_pane (window:active_pane)]
+    (wezterm.log_info "set tab title: main")
+    (run-child-process window pane [:wezterm
+                                    :cli
+                                    :set-tab-title
+                                    :--tab-id
+                                    (active_tab:tab_id)
+                                    :main])
+    (var panes [first_pane])
+    (when panes-config
+      (wezterm.log_info "panes: " panes-config)
+      (each [id pane-conf (ipairs panes-config)]
+        (let [args (command-for pane-conf)
+              direction (or pane-conf.direction :Right)
+              size (or pane-conf.size 0.5)]
+          (do
+            (wezterm.log_info "pane-conf: " pane-conf)
+            (wezterm.log_info "args: " args " direction: " direction " size: "
+                              size)
+            (wezterm.time.call_after (* 0.2 id)
+                                     (fn []
+                                       (let [from-pane (. panes
+                                                          (or pane-conf.split_from
+                                                              (length panes)))
+                                             new-pane (from-pane:split {:cwd directory
+                                                                        :domain {:DomainName domain}
+                                                                        : direction
+                                                                        : size
+                                                                        : args})]
+                                         (table.insert panes new-pane))))))))))
+
 (lambda setup-project-workspace [window pane name directory]
   (let [domain (pane:get_domain_name)]
-    (if (not (has-workspace name))
-        (do
-          (let [workspace-config (project-workspace-config window pane
-                                                           directory)]
-            (each [_ window-conf (reverse-ipairs workspace-config.windows)]
-              (let [args (command-for window-conf)
-                    (tab pane window) (mux.spawn_window {:domain {:DomainName domain}
-                                                         :workspace name
-                                                         :cwd directory
-                                                         : args})
-                    (tab2 pane2 window2) (-> (tab:window)
-                                             (: :spawn_tab
-                                                {:domain {:DomainName domain}
-                                                 :cwd directory
-                                                 :args (command-for {:name :term})}))]
-                (do
-                  ; (tab:set_title :main) ; (tab2:set_title :tools) ; workaround for https://github.com/wez/wezterm/issues/5849
-                  (run-child-process window pane
-                                     [:wezterm
-                                      :cli
-                                      :set-tab-title
-                                      :--tab-id
-                                      (tab:tab_id)
-                                      :main])
-                  (run-child-process window pane
-                                     [:wezterm
-                                      :cli
-                                      :set-tab-title
-                                      :--tab-id
-                                      (tab2:tab_id)
-                                      :tools])
-                  (wezterm.time.call_after 0.5
-                                           (fn []
-                                             (print "args: " args)
-                                             (print "panes: " window-conf.panes)
-                                             (var panes [pane])
-                                             (when window-conf.panes
-                                               (print "panes: "
-                                                      window-conf.panes)
-                                               (each [_ pane-conf (ipairs window-conf.panes)]
-                                                 (let [args (command-for pane-conf)
-                                                       direction (or pane-conf.direction
-                                                                     :Right)
-                                                       size (or pane-conf.size
-                                                                0.5)]
-                                                   (do
-                                                     (print "pane-conf: "
-                                                            pane-conf)
-                                                     (print "args: " args
-                                                            " direction: "
-                                                            direction " size: "
-                                                            size)
-                                                     (let [from-pane (. panes
-                                                                        (or pane-conf.split_from
-                                                                            (length panes)))
-                                                           new-pane (from-pane:split {:cwd directory
-                                                                                      :domain {:DomainName domain}
-                                                                                      :workspace name
-                                                                                      : direction
-                                                                                      : size
-                                                                                      : args})]
-                                                       (table.insert panes
-                                                                     new-pane))))))
-                                             (-> (. panes 1) (: :activate)))))))))))
-  (wezterm.log_info "set active ws: " name)
-  (mux.set_active_workspace name))
+    (window:perform_action (wezterm.action_callback (fn [window pane]
+                                                      (if (has-workspace name)
+                                                          (window:perform_action (act.SwitchToWorkspace {: name})
+                                                                                 pane)
+                                                          (do
+                                                            (let [workspace-config (project-workspace-config window
+                                                                                                             pane
+                                                                                                             directory)]
+                                                              (each [_ window-conf (reverse-ipairs workspace-config.windows)]
+                                                                (let [args (command-for window-conf)]
+                                                                  (window:perform_action (act.SwitchToWorkspace {: name
+                                                                                                                 :spawn {:domain {:DomainName domain}
+                                                                                                                         :cwd directory
+                                                                                                                         : args}})
+                                                                                         pane)
+                                                                  (wezterm.time.call_after 0.5
+                                                                                           (fn []
+                                                                                             (build-workspace-layout window
+                                                                                                                     pane
+                                                                                                                     domain
+                                                                                                                     directory
+                                                                                                                     window-conf.panes))))))))))
+                           pane)))
 
 (lambda reload-workspace-action [window pane]
   (let [name (window:active_workspace)
@@ -281,8 +282,7 @@
                                   (: :spawn_tab
                                      {:cwd cwd.file_path
                                       :domain {:DomainName domain}
-                                      : args}))]
-        (tab:set_title name))))
+                                      : args}))])))
 
 (lambda pane-with-id [window pane-id]
   (var pane nil)
@@ -545,8 +545,6 @@
        :action (act.ActivateKeyTable {:name :control_mode :one_shot true})}])
 
 (set config.unix_domains [{:name :local-dev}])
-(set config.ssh_domains [{:name :remote-dev
-                          :remote_address dev-remote
-                          :username :john}])
+(set config.ssh_domains (load-ssh-domains))
 
 config
