@@ -277,12 +277,12 @@
             (open-named-tab-action window pane :main)
             (open-named-tab-action window pane name)))
       (let [domain (pane:get_domain_name)
-            cwd (pane:get_current_working_dir)
-            (tab pane window) (-> (window:mux_window)
-                                  (: :spawn_tab
-                                     {:cwd cwd.file_path
-                                      :domain {:DomainName domain}
-                                      : args}))])))
+            cwd (pane:get_current_working_dir)]
+        (tab pane window)
+        (-> (window:mux_window)
+            (: :spawn_tab {:cwd cwd.file_path
+                           :domain {:DomainName domain}
+                           : args})))))
 
 (lambda pane-with-id [window pane-id]
   (var pane nil)
