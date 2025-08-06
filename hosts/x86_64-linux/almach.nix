@@ -31,14 +31,14 @@
   };
 
   boot.kernelParams = lib.mkForce [
-    "ip=95.217.109.215::95.217.109.193:255.255.255.192:${hostName}::none"
+    "ip=95.217.109.212::95.217.109.193:255.255.255.192:${hostName}::none"
   ];
 
   disko.devices.disk.disk1.device = "/dev/nvme0n1";
 
   systemd.services.metadata = let
     CLUSTER_ID = "5df5";
-    NODE_ID = "c8c1";
+    NODE_ID = "f278";
     INITIAL_MASTER = "192.168.123.100";
     initScript = pkgs.writeShellScript "metadata-init" ''
       mkdir -p /run/nixos
@@ -72,12 +72,11 @@
   };
 
   networking.firewall.trustedInterfaces = ["enp195s0.4000"];
-
-  # services.k3s.settings.server = "https://\"$INITIAL_MASTER\":6443";
+  services.k3s.settings.server = "https://\"$INITIAL_MASTER\":6443";
   services.k3s.settings = {
     cluster-init = true;
-    node-ip = lib.mkForce "192.168.123.101";
-    node-external-ip = lib.mkForce "95.217.109.215";
+    node-ip = lib.mkForce "192.168.123.102";
+    node-external-ip = lib.mkForce "95.217.109.212";
     advertise-address = lib.mkForce "192.168.123.100";
   };
 
@@ -136,8 +135,8 @@
         ## https://www.freedesktop.org/software/systemd/man/latest/systemd.net-naming-scheme.html
         matchConfig.Name = [iface];
         address = [
-          "95.217.109.215/26"
-          "2a01:4f9:4a:2b5c::2/64"
+          "95.217.109.212/26"
+          "2a01:4f9:4a:2b5e::2/64"
         ];
         vlan = [vlanIface];
         routes = [
@@ -149,7 +148,7 @@
       "11-lan" = {
         matchConfig.Name = ["${vlanIface}"];
         address = [
-          "192.168.123.101/24"
+          "192.168.123.102/24"
         ];
         linkConfig.RequiredForOnline = "routable";
       };
@@ -175,14 +174,14 @@
   services.remote-unlock = [
     {
       enable = true;
-      host = "65.21.128.113";
+      host = "95.217.109.215";
       port = 2222;
       identityFile = config.age.secrets.id-ed25519-remote-unlock-key.path;
       passwordFile = config.age.secrets.remote-disk-password.path;
     }
     {
       enable = true;
-      host = "95.217.109.212";
+      host = "65.21.128.113";
       port = 2222;
       identityFile = config.age.secrets.id-ed25519-remote-unlock-key.path;
       passwordFile = config.age.secrets.remote-disk-password.path;
