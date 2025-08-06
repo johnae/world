@@ -115,6 +115,9 @@ remote-install flake-config ip:
   rbw get hetzner disk_password > "$disktmp/disk.key"
   chmod 0600 "$temp/etc/ssh/ssh_host_ed25519_key"
   chmod 0600 "$temp/etc/ssh/initrd_ed25519_key"
+  echo wipe filesystems
+  ssh root@{{ip}} "wipefs -fa /dev/nvme0n1; wipefs -fa /dev/nvme1n1"
+  echo start installation
   nix run github:nix-community/nixos-anywhere -- --disk-encryption-keys /tmp/disk.key "$disktmp/disk.key" --extra-files "$temp" --flake '{{flake-config}}' --target-host root@{{ip}}
 
 [private]
