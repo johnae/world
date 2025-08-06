@@ -57,6 +57,7 @@ in {
     pkgs.lsof
     pkgs.man-pages
     pkgs.mkpasswd
+    pkgs.nb
     pkgs.nmap
     pkgs.openssl
     pkgs.pavucontrol

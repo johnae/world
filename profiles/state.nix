@@ -77,6 +77,7 @@
         ".local/share/vulkan"
         ".mail"
         ".mozilla/firefox/default"
+        ".nb"
         ".steam"
         ".terraform.d"
       ];
