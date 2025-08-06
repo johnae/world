@@ -596,7 +596,6 @@
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     recommendedBrotliSettings = true;
-    recommendedZstdSettings = true;
     commonHttpConfig = ''
       ignore_invalid_headers off;
       map $auth_user $auth_email {
