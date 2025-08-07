@@ -45,14 +45,6 @@
               ];
           });
         })
-
-        (_final: prev: {
-          inherit inputs;
-          google-cloud-sdk-gke = prev.google-cloud-sdk.withExtraComponents [
-            prev.google-cloud-sdk.components.gke-gcloud-auth-plugin
-            prev.google-cloud-sdk.components.config-connector
-          ];
-        })
       ];
     };
   };

@@ -47,7 +47,10 @@ in {
     fzf # # for certain utilities that depend on it
     gh
     git-crypt
-    google-cloud-sdk-gke
+    (google-cloud-sdk.withExtraComponents [
+      prev.google-cloud-sdk.components.gke-gcloud-auth-plugin
+      prev.google-cloud-sdk.components.config-connector
+    ])
     jwt-cli
     kubectl
     kubectx
