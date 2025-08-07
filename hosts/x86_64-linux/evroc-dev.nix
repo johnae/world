@@ -1,4 +1,8 @@
-{lib, ...}: {
+{
+  adminUser,
+  lib,
+  ...
+}: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDErC2NyMr7hmuNA9gnuLveTxPjYVqkmpLL9j6kzf2a5";
 
   imports = [
@@ -31,6 +35,12 @@
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIzm5RyD+1nfy1LquvkEog4SZtPgdhzjr49jSC8PAinp"
   ];
+
+  home-manager = {
+    users.${adminUser.name} = {
+      imports = [../../users/profiles/headless.nix];
+    };
+  };
 
   disko.devices = {
     disk.disk1 = {
