@@ -37,6 +37,8 @@
   ];
 
   home-manager = {
+    useUserPackages = true;
+    useGlobalPkgs = true;
     users.${adminUser.name} = {
       imports = [../../users/profiles/headless.nix];
     };
