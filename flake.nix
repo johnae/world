@@ -39,14 +39,14 @@
     cloud-native-pg.url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.1/cnpg-1.24.1.yaml"; # gh-release-update
     copilot-vim.flake = false;
     copilot-vim.url = "github:github/copilot.vim";
-    conduwuit.inputs = {
+    tuwunel.inputs = {
       flake-utils.follows = "flake-utils";
       fenix.follows = "fenix";
       crane.follows = "crane";
       flake-compat.follows = "flake-compat";
       nixpkgs.follows = "nixpkgs";
     };
-    conduwuit.url = "github:girlbossceo/conduwuit";
+    tuwunel.url = "github:matrix-construct/tuwunel";
     crane.url = "github:ipetkov/crane";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
     devenv.inputs.flake-compat.follows = "flake-compat";

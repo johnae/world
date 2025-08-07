@@ -39,7 +39,7 @@ in
       ];
       services.matrix-conduit.enable = true;
 
-      systemd.services.conduit.serviceConfig.ExecStart = lib.mkForce "${cfg.package}/bin/conduwuit";
+      systemd.services.conduit.serviceConfig.ExecStart = lib.mkForce "${cfg.package}/bin/tuwunel";
 
       services.matrix-conduit.settings = {
         global = {
@@ -57,7 +57,7 @@ in
           database_backend = "rocksdb";
         };
       };
-      services.matrix-conduit.package = pkgs.conduwuit-latest;
+      services.matrix-conduit.package = pkgs.tuwunel-latest;
       services.nginx.virtualHosts = {
         "matrix.${cfg.settings.global.server_name}" = {
           locations."/_matrix" = {
