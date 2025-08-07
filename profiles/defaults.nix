@@ -132,9 +132,7 @@ in {
   services.sshguard.enable = true;
   services.fstrim.enable = true;
 
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=90
-  '';
+  systemd.settings.Manager.DefaultTimeoutStopSec = "90s";
 
   ## only allow declarative user management
   users.mutableUsers = false;
