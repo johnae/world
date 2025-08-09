@@ -3,11 +3,10 @@
 (local mux wezterm.mux)
 (local config (wezterm.config_builder))
 
-(local dev-remote _G.dev_remote)
 (local project-dir (.. wezterm.home_dir :/Development))
 (local project-dirname (string.gsub project-dir "(.*/)(.*)" "%2"))
 (local project-dir-find-cmd [:fd
-                             "'(\\.git|\\.jj|BUILD\\.bazel)$'"
+                             "'(\\.git|\\.jj|BUILD\\.bazel|workspace\\.yaml)$'"
                              project-dir
                              :-d
                              :8
@@ -18,9 +17,9 @@
 
 (lambda table-concat [t1 t2]
   "Concatenate two tables"
-  (var tc [])
-  (each [i n (ipairs t1)] (table.insert tc n))
-  (each [i n (ipairs t2)] (table.insert tc n))
+  (local tc [])
+  (each [_ n (ipairs t1)] (table.insert tc n))
+  (each [_ n (ipairs t2)] (table.insert tc n))
   tc)
 
 (lambda has-prefix [str prefix]
@@ -58,7 +57,7 @@
         (if (not= dirname project-dirname) (.. dirname "/" name) name))
       path))
 
-(lambda run-child-process [window pane args]
+(lambda run-child-process [_window pane args]
   "Runs a child process in the given context (i.e ssh if an ssh domain)"
   (let [domain (pane:get_domain_name)
         args (accumulate [a args _ d (pairs config.ssh_domains)
@@ -71,7 +70,7 @@
         (status out err) (wezterm.run_child_process args)]
     (values status out err)))
 
-(lambda spawn-project-window [window pane]
+(lambda spawn-project-window [_window pane]
   "Spawn a new window in the current project/workspace and domain"
   (let [domain (pane:get_domain_name)
         cwd (pane:get_current_working_dir)]
@@ -86,23 +85,21 @@
 
 (lambda unique [list]
   (let [unique-items {}]
-    (do
-      (each [_ item (ipairs list)]
-        (set (. unique-items item) true))
-      (accumulate [list [] item _ (pairs unique-items)]
-        (do
-          (table.insert list item)
-          list)))))
+    (each [_ item (ipairs list)]
+      (set (. unique-items item) true))
+    (accumulate [list [] item _ (pairs unique-items)]
+      (do
+        (table.insert list item)
+        list))))
 
 (lambda project-directory-list [window pane]
   "Returns a list of paths to projects"
-  (let [(status out err) (run-child-process window pane project-dir-find-cmd)
+  (let [(_status out _err) (run-child-process window pane project-dir-find-cmd)
         listing []]
-    (do
-      (each [line (out:gmatch "[^\n]+")]
-        (let [line (line:gsub "^%s*(.-)%s*$" "%1")]
-          (table.insert listing line)))
-      (unique listing))))
+    (each [line (out:gmatch "[^\n]+")]
+      (let [line (line:gsub "^%s*(.-)%s*$" "%1")]
+        (table.insert listing line)))
+    (unique listing)))
 
 (local default-project-workspace-yaml-path
        (.. wezterm.config_dir :/workspace.yaml))
@@ -126,8 +123,8 @@
 (lambda project-workspace-config [window pane dir]
   "Reads and returns the effective workspace config for a project"
   (wezterm.log_info "default-project-workspace " (default-project-workspace))
-  (let [(status out err) (run-child-process window pane
-                                            [:cat (.. dir :/workspace.yaml)])]
+  (let [(status out _err) (run-child-process window pane
+                                             [:cat (.. dir :/workspace.yaml)])]
     (if status (wezterm.serde.yaml_decode out) (default-project-workspace))))
 
 (lambda project-jump-list [window pane]
@@ -148,11 +145,11 @@
 
 (lambda command-for [window-or-pane]
   (local pane-name (or window-or-pane.name :unknown))
-  (var args [])
-  (var pane-name-bash-cmd (.. "printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
-                              pane-name
-                              " | base64`; printf \"\\033]1;%s\\007\" "
-                              pane-name "; "))
+  (local args [])
+  (local pane-name-bash-cmd (.. "printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
+                                pane-name
+                                " | base64`; printf \"\\033]1;%s\\007\" "
+                                pane-name "; "))
   (var cmd "")
   (if window-or-pane.command
       (do
@@ -174,6 +171,19 @@
   (wezterm.log_info "command-for: " args)
   args)
 
+(fn call-with-delay [items delay-seconds func]
+  (when (and items (> (length items) 0))
+    (fn process-item [index]
+      (when (<= index (length items))
+        ;; Call the function with the current item
+        (func (. items index) index)
+        ;; Schedule the next item
+        (when (< index (length items))
+          (wezterm.time.call_after delay-seconds #(process-item (+ index 1))))))
+
+    ;; Start with delay before first item
+    (wezterm.time.call_after delay-seconds #(process-item 1))))
+
 (lambda build-workspace-layout [window pane domain directory panes-config]
   (wezterm.log_info "build-workspace-layout: " panes-config)
   (wezterm.log_info "window: " window)
@@ -187,28 +197,26 @@
                                     :--tab-id
                                     (active_tab:tab_id)
                                     :main])
-    (var panes [first_pane])
+    (local panes [first_pane])
     (when panes-config
       (wezterm.log_info "panes: " panes-config)
-      (each [id pane-conf (ipairs panes-config)]
-        (let [args (command-for pane-conf)
-              direction (or pane-conf.direction :Right)
-              size (or pane-conf.size 0.5)]
-          (do
-            (wezterm.log_info "pane-conf: " pane-conf)
-            (wezterm.log_info "args: " args " direction: " direction " size: "
-                              size)
-            (wezterm.time.call_after (* 0.2 id)
-                                     (fn []
-                                       (let [from-pane (. panes
-                                                          (or pane-conf.split_from
-                                                              (length panes)))
-                                             new-pane (from-pane:split {:cwd directory
-                                                                        :domain {:DomainName domain}
-                                                                        : direction
-                                                                        : size
-                                                                        : args})]
-                                         (table.insert panes new-pane))))))))))
+      (call-with-delay panes-config 0.1
+                       (fn [pane-conf _id]
+                         (let [args (command-for pane-conf)
+                               direction (or pane-conf.direction :Right)
+                               size (or pane-conf.size 0.5)
+                               from-pane (. panes
+                                            (or pane-conf.split_from
+                                                (length panes)))
+                               new-pane (from-pane:split {:cwd directory
+                                                          :domain {:DomainName domain}
+                                                          : direction
+                                                          : size
+                                                          : args})]
+                           (wezterm.log_info "pane-conf: " pane-conf)
+                           (wezterm.log_info "args: " args " direction: "
+                                             direction " size: " size)
+                           (table.insert panes new-pane)))))))
 
 (lambda setup-project-workspace [window pane name directory]
   (let [domain (pane:get_domain_name)]
@@ -216,36 +224,34 @@
                                                       (if (has-workspace name)
                                                           (window:perform_action (act.SwitchToWorkspace {: name})
                                                                                  pane)
-                                                          (do
-                                                            (let [workspace-config (project-workspace-config window
-                                                                                                             pane
-                                                                                                             directory)]
-                                                              (each [_ window-conf (reverse-ipairs workspace-config.windows)]
-                                                                (let [args (command-for window-conf)]
-                                                                  (window:perform_action (act.SwitchToWorkspace {: name
-                                                                                                                 :spawn {:domain {:DomainName domain}
-                                                                                                                         :cwd directory
-                                                                                                                         : args}})
-                                                                                         pane)
-                                                                  (wezterm.time.call_after 0.5
-                                                                                           (fn []
-                                                                                             (build-workspace-layout window
-                                                                                                                     pane
-                                                                                                                     domain
-                                                                                                                     directory
-                                                                                                                     window-conf.panes))))))))))
+                                                          (let [workspace-config (project-workspace-config window
+                                                                                                           pane
+                                                                                                           directory)]
+                                                            (each [_ window-conf (reverse-ipairs workspace-config.windows)]
+                                                              (let [args (command-for window-conf)]
+                                                                (window:perform_action (act.SwitchToWorkspace {: name
+                                                                                                               :spawn {:domain {:DomainName domain}
+                                                                                                                       :cwd directory
+                                                                                                                       : args}})
+                                                                                       pane)
+                                                                (wezterm.time.call_after 0.5
+                                                                                         (fn []
+                                                                                           (build-workspace-layout window
+                                                                                                                   pane
+                                                                                                                   domain
+                                                                                                                   directory
+                                                                                                                   window-conf.panes)))))))))
                            pane)))
 
 (lambda reload-workspace-action [window pane]
   (let [name (window:active_workspace)
         directory (pane:get_current_working_dir)]
-    (do
-      (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
-        (window:perform_action (act.CloseCurrentTab {:confirm false})
-                               (window:active_pane)))
-      (let [window (. (wezterm.gui.gui_windows) 1)
-            pane (window:active_pane)]
-        (setup-project-workspace window pane name directory.file_path)))))
+    (each [_ _muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
+      (window:perform_action (act.CloseCurrentTab {:confirm false})
+                             (window:active_pane)))
+    (let [window (. (wezterm.gui.gui_windows) 1)
+          pane (window:active_pane)]
+      (setup-project-workspace window pane name directory.file_path))))
 
 (lambda select-project-action-callback [window pane ?name ?directory]
   (if (not (and ?name ?directory))
@@ -262,7 +268,7 @@
                                                :fuzzy true})
                            pane)))
 
-(lambda open-named-tab-action [window pane name]
+(lambda open-named-tab-action [window _pane name]
   (each [_ muxtab (ipairs (-> (window:mux_window) (: :tabs)))]
     (when (= (muxtab:get_title) name)
       (muxtab:activate))))
@@ -272,17 +278,14 @@
   (if (table-contains (-> (window:mux_window) (: :tabs))
                       (fn [tab] (print "tabname: " (tab:get_title))
                         (= (tab:get_title) name)))
-      (do
-        (if (= (-> (window:active_tab) (: :get_title)) name)
-            (open-named-tab-action window pane :main)
-            (open-named-tab-action window pane name)))
-      (let [domain (pane:get_domain_name)
-            cwd (pane:get_current_working_dir)]
-        (tab pane window)
-        (-> (window:mux_window)
-            (: :spawn_tab {:cwd cwd.file_path
-                           :domain {:DomainName domain}
-                           : args})))))
+      (if (= (-> (window:active_tab) (: :get_title)) name)
+          (open-named-tab-action window pane :main)
+          (open-named-tab-action window pane name)))
+  (let [domain (pane:get_domain_name)
+        cwd (pane:get_current_working_dir)]
+    (pane window)
+    (-> (window:mux_window)
+        (: :spawn_tab {:cwd cwd.file_path :domain {:DomainName domain} : args}))))
 
 (lambda pane-with-id [window pane-id]
   (var pane nil)
@@ -318,12 +321,11 @@
           pane-info (or (pane-information-for (pane-with-name window pane-name))
                         {})
           zoomed (or (?. pane-info :is_zoomed) false)]
-      (do
-        (wezterm.log_info "ws: " ws " tab: " tab " pane-id: " pane-id
-                          " zoomed: " zoomed)
-        (each [_ p (ipairs (tab:panes))]
-          (when (= (p:pane_id) pane-id) (p:activate)
-            (tab:set_zoomed (not zoomed))))))))
+      (wezterm.log_info "ws: " ws " tab: " tab " pane-id: " pane-id " zoomed: "
+                        zoomed)
+      (each [_ p (ipairs (tab:panes))]
+        (when (= (p:pane_id) pane-id) (p:activate)
+          (tab:set_zoomed (not zoomed)))))))
 
 (wezterm.on :ReloadWorkspace reload-workspace-action)
 (wezterm.on :ActivateGitui
@@ -360,14 +362,14 @@
 ; The filled in variant of the > symbol
 (local solid-right-arrow wezterm.nerdfonts.pl_left_hard_divider)
 
-(local remote-dev-color "#1e1e2e")
-(local local-dev-color "#ae4d1a")
-(local local-term-color "#22336e")
+(local remote-dev-color "#bf616a")
+(local local-dev-color "#5e81ac")
+(local local-term-color "#4f8c82")
 
-(local text-fg "#c0c0c0")
+; (local text-fg "#c0c0c0")
 
 (wezterm.on :format-tab-title
-            (lambda [tab tabs panes config hover max_width]
+            (lambda [tab tabs _panes config _hover _max_width]
               (let [title (or tab.tab_title tab.active_pane.title)
                     first (= tab.tab_index 0)
                     last (= tab.tab_index (- (length tabs) 1))
@@ -429,11 +431,10 @@
                          {:Text solid-right-arrow}])))))
 
 (lambda insert-bar-item [items text fg-color bg-color ?last]
-  (do
-    (when (not ?last)
-      (do
-        (table.insert items {:Foreground {:Color bg-color}})
-        (table.insert items {:Text solid-left-arrow}))))
+  (when (not ?last)
+    (do
+      (table.insert items {:Foreground {:Color bg-color}})
+      (table.insert items {:Text solid-left-arrow})))
   (table.insert items {:Foreground {:Color fg-color}})
   (table.insert items {:Background {:Color bg-color}})
   (table.insert items {:Attribute {:Intensity :Bold}})
@@ -442,19 +443,18 @@
 
 (wezterm.on :update-status
             (lambda [window pane]
-              (var tab-bg local-term-color)
+              (var tab-bg remote-dev-color)
               (let [domain (pane:get_domain_name)
                     pane-info (pane-information-for pane)
                     zoomed (or (?. pane-info :is_zoomed) false)
                     overrides (or (window:get_config_overrides) {})
                     key-table (string.upper (string.gsub (or (window:active_key_table)
-                                                             "")
+                                                             :normal)
                                                          :_mode$ ""))
-                    cwd-uri (pane:get_current_working_dir)
                     (_ hostname _) (run-child-process window pane [:hostname])
                     ws (window:active_workspace)]
                 (case domain
-                  :remote-dev (set tab-bg remote-dev-color)
+                  :local (set tab-bg local-term-color)
                   :local-dev (set tab-bg local-dev-color))
                 (set overrides.colors {:tab_bar {:background tab-bg}})
                 (window:set_config_overrides overrides)
@@ -463,17 +463,35 @@
                     (insert-bar-item elements "" "#000000" tab-bg)
                     (insert-bar-item elements (if zoomed " 👁 " "  ")
                                      "#FFFFFF" tab-bg true)
-                    (when (not= key-table "")
-                      (insert-bar-item elements key-table "#FFFFFF" "#51576d"))
-                    (insert-bar-item elements
-                                     (or (pane-name-for-id window
-                                                           (pane:pane_id))
-                                         (.. :pane- (tostring (pane:pane_id))))
-                                     "#000000" "#89b4fa")
+                    (insert-bar-item elements key-table "#FFFFFF" "#51576d")
                     (insert-bar-item elements ws "#000000" "#a6e3a1")
                     (insert-bar-item elements (.. domain "/" hostname)
                                      "#000000" "#f38ba8"))
                   (window:set_right_status (wezterm.format elements))))))
+
+; (wezterm.on :gui-attached
+;             (lambda [_domain]
+;               (wezterm.log_info :gui-attached)
+;               (let [ws (mux.get_active_workspace)]
+;                 (wezterm.log_info "ws: " ws)
+;                 (wezterm.log_info "windows: " (mux.all_windows))
+;                 (wezterm.time.call_after 2
+;                                          (fn []
+;                                            (each [_ window (ipairs (mux.all_windows))]
+;                                              (when (= (window:workspace) ws)
+;                                                (let [w (window:gui_window)]
+;                                                  (wezterm.emit :FindProject w
+;                                                                (w:active_pane))))))))))
+
+; wezterm.on('gui-attached', function(domain)
+;   -- maximize all displayed windows on startup
+;   local workspace = mux.get_active_workspace()
+;   for _, window in ipairs(mux.all_windows()) do
+;     if window:get_workspace() == workspace then
+;       window:gui_window():maximize()
+;     end
+;   end
+; end)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;|\
 (set config.check_for_updates false)
@@ -501,48 +519,66 @@
 (wezterm.add_to_config_reload_watch_list (.. wezterm.home_dir
                                              :/.config/wezterm/wezterm.fnl.lua))
 
+(set config.leader {:key :Space :mods :CTRL})
 (set config.key_tables
-     {:control_mode [{:key :Escape :action act.PopKeyTable}
+     {:pane_mode [{:key :Escape :action act.PopKeyTable}
+                  {:key :RightArrow
+                   :action (act.SplitPane {:direction :Right
+                                           :size {:Percent 50}})}
+                  {:key :LeftArrow
+                   :action (act.SplitPane {:direction :Left
+                                           :size {:Percent 50}})}
+                  {:key :DownArrow
+                   :action (act.SplitPane {:direction :Down
+                                           :size {:Percent 50}})}
+                  {:key :UpArrow
+                   :action (act.SplitPane {:direction :Up :size {:Percent 50}})}
+                  {:key :p :action act.PaneSelect}
+                  {:key :z :action act.TogglePaneZoomState}
+                  {:key :q :action (act.CloseCurrentPane {:confirm false})}
+                  {:key :Escape :action act.PopKeyTable}]
+      :tab_mode [{:key :Escape :action act.PopKeyTable}
+                 {:key :t :action (act.EmitEvent :NewProjectTab)}
+                 {:key :q :action (act.CloseCurrentTab {:confirm false})}]
+      :workspace_mode [{:key :Escape :action act.PopKeyTable}
+                       {:key :r :action (act.EmitEvent :ReloadWorkspace)}
+                       {:key :w :action (act.EmitEvent :FindProject)}
+                       {:key :x :action (act.EmitEvent :ReloadFixup)}]
+      :control_mode [{:key :Escape :action act.PopKeyTable}
                      {:key :g :action (act.EmitEvent :ActivateGitui)}
                      {:key :j :action (act.EmitEvent :ActivateLazyjj)}
                      {:key :s :action (act.EmitEvent :ActivateSerpl)}
-                     {:key :t :action (act.EmitEvent :ToggleMaximizeTerminal)}
-                     {:key :e :action (act.EmitEvent :ToggleMaximizeEditor)}
-                     {:key :a :action (act.EmitEvent :ToggleMaximizeAI)}
-                     {:key :n :action (act.EmitEvent :NewProjectWindow)}
-                     {:key :t
-                      :mods :CTRL
-                      :action (act.EmitEvent :NewProjectTab)}
-                     {:key :r :action (act.EmitEvent :ReloadFixup)}
-                     {:key :w :action (act.EmitEvent :ReloadWorkspace)}
-                     {:key :q :action (act.CloseCurrentPane {:confirm true})}
-                     {:key :z :action act.TogglePaneZoomState}
-                     {:key :RightArrow
-                      :action (act.SplitPane {:direction :Right
-                                              :size {:Percent 50}})}
-                     {:key :LeftArrow
-                      :action (act.SplitPane {:direction :Left
-                                              :size {:Percent 50}})}
-                     {:key :DownArrow
-                      :action (act.SplitPane {:direction :Down
-                                              :size {:Percent 50}})}
-                     {:key :UpArrow
-                      :action (act.SplitPane {:direction :Up
-                                              :size {:Percent 50}})}
-                     {:key :q :action (act.CloseCurrentTab {:confirm true})}
-                     {:key :x :action (act.CloseCurrentPane {:confirm false})}
-                     {:key :p :action (act.EmitEvent :FindProject)}
-                     {:key :f
-                      :action (act.ShowLauncherArgs {:flags :FUZZY|WORKSPACES})}]})
+                     {:key :n :action (act.EmitEvent :NewProjectWindow)}]})
 
 (for [i 1 9]
-  (table.insert config.key_tables.control_mode
+  (table.insert config.key_tables.tab_mode
                 {:key (tostring i) :action (act.ActivateTab (- i 1))}))
 
 (set config.keys
-     [{:key :Space
-       :mods :CTRL
-       :action (act.ActivateKeyTable {:name :control_mode :one_shot true})}])
+     [{:key :c
+       :mods :LEADER
+       :action (act.ActivateKeyTable {:name :control_mode
+                                      :one_shot false
+                                      :until_unknown true
+                                      :replace_current true})}
+      {:key :p
+       :mods :LEADER
+       :action (act.ActivateKeyTable {:name :pane_mode
+                                      :one_shot false
+                                      :until_unknown true
+                                      :replace_current true})}
+      {:key :w
+       :mods :LEADER
+       :action (act.ActivateKeyTable {:name :workspace_mode
+                                      :one_shot false
+                                      :until_unknown true
+                                      :replace_current true})}
+      {:key :t
+       :mods :LEADER
+       :action (act.ActivateKeyTable {:name :tab_mode
+                                      :one_shot false
+                                      :until_unknown true
+                                      :replace_current true})}])
 
 (set config.unix_domains [{:name :local-dev}])
 (set config.ssh_domains (load-ssh-domains))
