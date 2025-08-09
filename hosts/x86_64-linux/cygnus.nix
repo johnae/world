@@ -100,6 +100,11 @@
       owner = "0";
       path = "/root/.ssh/id_ed25519";
     };
+    age_key_ev = {
+      file = ../../secrets/age-key-ev.age;
+      owner = "${toString adminUser.uid}";
+      path = "/home/${adminUser.name}/.age/key.txt";
+    };
     email-account-pass = {
       file = ../../secrets/email-account-pass.age;
       owner = "${toString adminUser.uid}";
