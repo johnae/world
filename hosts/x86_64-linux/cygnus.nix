@@ -90,6 +90,11 @@
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_ed25519_bbph";
     };
+    id_ed25519_ev = {
+      file = ../../secrets/id_ed25519_ev.age;
+      owner = "${toString adminUser.uid}";
+      path = "/home/${adminUser.name}/.ssh/id_ed25519_ev";
+    };
     id_rsa_alt = {
       file = ../../secrets/id_rsa_alt.age;
       owner = "${toString adminUser.uid}";
