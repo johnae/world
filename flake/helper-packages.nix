@@ -127,7 +127,7 @@
           grep linux | \
           awk '{print $2}' | \
           xargs -r -I{} echo -e '- name: {}\n  username: john\n  remote_address: {}' > "$HOME"/.config/wezterm/ssh_domains.yaml
-        grep ' name: ' < "$HOME"/.config/wezterm/ssh_domains.yaml | awk '{print $3}' | fuzzel -d
+        (grep ' name: ' < "$HOME"/.config/wezterm/ssh_domains.yaml | awk '{print $3}'; echo local-dev) | fuzzel -d
       '';
     };
 
