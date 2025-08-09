@@ -55,6 +55,7 @@
         ".config/Element"
         ".config/gcloud"
         ".config/github-copilot"
+        ".config/Mattermost"
         ".config/Microsoft"
         ".config/obs-studio"
         ".config/qutebrowser"
@@ -80,6 +81,7 @@
         ".nb"
         ".steam"
         ".terraform.d"
+        ".ssh/config.d"
       ];
       files = [
         ".config/nushell/history.txt"
