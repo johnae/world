@@ -64,14 +64,17 @@
 (lambda project-dir [window pane]
   (if (= _project-dir nil)
       (let [(_status home _err) (run-child-process window pane
-                                                   [:env
+                                                   [:/usr/bin/env
                                                     "|"
                                                     :grep
                                                     :^HOME=
                                                     "|"
                                                     "awk -F'=' '{print $2}'"])
             home (home:gsub "^%s*(.-)%s*$" "%1")]
-        (set _project-dir (.. home "/" project-dirname))))
+        (if (or (= home nil) (= home ""))
+            (set _project-dir (.. wezterm.home_dir "/" project-dirname))
+            (set _project-dir (.. home "/" project-dirname))))
+      (wezterm.log_info "project-dir set to: " _project-dir))
   _project-dir)
 
 (lambda project-dir-find-cmd [window pane]
@@ -163,7 +166,7 @@
 (lambda command-for [window-or-pane]
   (local pane-name (or window-or-pane.name :unknown))
   (local args [])
-  (local pane-name-bash-cmd (.. "export PATH=$PATH:/run/current-system/sw/bin:/bin:/usr/bin:/sbin:/usr/sbin; export TERM=xterm-256color; export USER=\"$(id -un)\"; export HOME=\"$(getent passwd \"$USER\" | cut -d: -f6)\"; export SHELL=\"$(getent passwd \"$USER\" | cut -d: -f7)\"; source /etc/profile; env; printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
+  (local pane-name-bash-cmd (.. "export PATH=$PATH:/run/current-system/sw/bin:/bin:/usr/bin:/sbin:/usr/sbin; export TERM=xterm-256color; export USER=\"$(id -un)\"; export HOME=\"$(getent passwd \"$USER\" | cut -d: -f6)\"; export SHELL=\"$(getent passwd \"$USER\" | cut -d: -f7)\"; source /etc/profile; printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
                                 pane-name
                                 " | base64`; printf \"\\033]1;%s\\007\" "
                                 pane-name "; "))
