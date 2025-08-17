@@ -1,10 +1,15 @@
-{
+{config, ...}: let
+  inherit (config.home) homeDirectory;
+in {
   programs.ssh = {
     enable = true;
     forwardAgent = true;
     serverAliveInterval = 60;
     controlMaster = "auto";
     controlPersist = "30m";
+    extraConfig = ''
+      Include ${homeDirectory}/.ssh/config.d/*.conf
+    '';
     matchBlocks = {
       "git git.9000.dev" = {
         hostname = "gitssh.9000.dev";
