@@ -19,6 +19,7 @@ in {
         name: term
         split_from: 1
         direction: Bottom
+        command: nu
   '';
   xdg.configFile."wezterm/wezterm.fnl.lua".source =
     pkgs.runCommand "wezterm.fnl.lua" {
