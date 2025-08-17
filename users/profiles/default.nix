@@ -55,6 +55,7 @@ in {
     kubelogin-oidc
     kustomize
     lm_sensors
+    mattermost-desktop
     nil
     nixd
     nix-index
