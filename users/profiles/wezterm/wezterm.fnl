@@ -2,18 +2,8 @@
 (local act wezterm.action)
 (local mux wezterm.mux)
 (local config (wezterm.config_builder))
-
-(local project-dir (.. wezterm.home_dir :/Development))
-(local project-dirname (string.gsub project-dir "(.*/)(.*)" "%2"))
-(local project-dir-find-cmd [:fd
-                             "'(\\.git|\\.jj|BUILD\\.bazel|workspace\\.yaml)$'"
-                             project-dir
-                             :-d
-                             :8
-                             :-H
-                             :-X
-                             :echo
-                             "\"{//}\n\""])
+(local project-dirname :Development)
+(var _project-dir nil)
 
 (lambda table-concat [t1 t2]
   "Concatenate two tables"
@@ -68,7 +58,32 @@
         args (if (= (. args 1) :ssh) args
                  (icollect [_ a (ipairs args)] (. (wezterm.shell_split a) 1)))
         (status out err) (wezterm.run_child_process args)]
+    (wezterm.log_info "run-child-process: " args)
     (values status out err)))
+
+(lambda project-dir [window pane]
+  (if (= _project-dir nil)
+      (let [(_status home _err) (run-child-process window pane
+                                                   [:env
+                                                    "|"
+                                                    :grep
+                                                    :^HOME=
+                                                    "|"
+                                                    "awk -F'=' '{print $2}'"])
+            home (home:gsub "^%s*(.-)%s*$" "%1")]
+        (set _project-dir (.. home "/" project-dirname))))
+  _project-dir)
+
+(lambda project-dir-find-cmd [window pane]
+  [:fd
+   "'(\\.git|\\.jj|workspace\\.yaml)$'"
+   (project-dir window pane)
+   :-d
+   :8
+   :-H
+   :-X
+   :echo
+   "\"{//}\n\""])
 
 (lambda spawn-project-window [_window pane]
   "Spawn a new window in the current project/workspace and domain"
@@ -94,8 +109,10 @@
 
 (lambda project-directory-list [window pane]
   "Returns a list of paths to projects"
-  (let [(_status out _err) (run-child-process window pane project-dir-find-cmd)
+  (let [(_status out _err) (run-child-process window pane
+                                              (project-dir-find-cmd window pane))
         listing []]
+    (wezterm.log_info "project-directory-list: ")
     (each [line (out:gmatch "[^\n]+")]
       (let [line (line:gsub "^%s*(.-)%s*$" "%1")]
         (table.insert listing line)))
@@ -146,13 +163,15 @@
 (lambda command-for [window-or-pane]
   (local pane-name (or window-or-pane.name :unknown))
   (local args [])
-  (local pane-name-bash-cmd (.. "printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
+  (local pane-name-bash-cmd (.. "export PATH=$PATH:/run/current-system/sw/bin:/bin:/usr/bin:/sbin:/usr/sbin; export TERM=xterm-256color; export USER=\"$(id -un)\"; export HOME=\"$(getent passwd \"$USER\" | cut -d: -f6)\"; export SHELL=\"$(getent passwdm\"$USER\" | cut -d: -f7)\"; source /etc/profile; env; printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
                                 pane-name
                                 " | base64`; printf \"\\033]1;%s\\007\" "
                                 pane-name "; "))
   (var cmd "")
   (if window-or-pane.command
       (do
+        (table.insert args :env)
+        (table.insert args :-i)
         (table.insert args :bash)
         (table.insert args :-c)
         (set cmd (.. cmd pane-name-bash-cmd))
@@ -165,6 +184,8 @@
             (set cmd (.. cmd window-or-pane.command)))
         (table.insert args cmd))
       (do
+        (table.insert args :env)
+        (table.insert args :-i)
         (table.insert args :bash)
         (table.insert args :-c)
         (table.insert args (.. pane-name-bash-cmd "exec $SHELL"))))
@@ -495,7 +516,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;|\
 (set config.check_for_updates false)
-(set config.mux_env_remove {})
+(set config.mux_env_remove [])
 (set config.adjust_window_size_when_changing_font_size false)
 (set config.enable_wayland true)
 (set config.enable_tab_bar true)
@@ -513,7 +534,7 @@
 (set config.window_background_opacity 0.91)
 ; (set config.pane_focus_follows_mouse true)
 (set config.switch_to_last_active_tab_when_closing_tab true)
-(wezterm.add_to_config_reload_watch_list (.. project-dir
+(wezterm.add_to_config_reload_watch_list (.. wezterm.home_dir :/Development
                                              :/world/users/profiles/wezterm/wezterm.fnl))
 
 (wezterm.add_to_config_reload_watch_list (.. wezterm.home_dir
