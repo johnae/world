@@ -29,6 +29,8 @@ in {
     #    ./zellij.nix
   ];
 
+  home.homeDirectory = "/Users/${username}";
+
   home.sessionVariables = {
     EDITOR = "hx";
     VISUAL = "hx";
