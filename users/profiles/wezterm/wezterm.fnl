@@ -170,7 +170,7 @@
   (var cmd "")
   (if window-or-pane.command
       (do
-        (table.insert args :env)
+        (table.insert args :/usr/bin/env)
         (table.insert args :-i)
         (table.insert args :bash)
         (table.insert args :-c)
@@ -184,7 +184,7 @@
             (set cmd (.. cmd window-or-pane.command)))
         (table.insert args cmd))
       (do
-        (table.insert args :env)
+        (table.insert args :/usr/bin/env)
         (table.insert args :-i)
         (table.insert args :bash)
         (table.insert args :-c)
