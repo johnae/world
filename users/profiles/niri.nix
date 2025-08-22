@@ -91,6 +91,7 @@ in {
         natural-scroll = true;
       };
       focus-follows-mouse.enable = true;
+      focus-follows-mouse.max-scroll-amount = "0%";
       workspace-auto-back-and-forth = true;
     };
 
