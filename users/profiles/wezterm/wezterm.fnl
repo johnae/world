@@ -163,37 +163,44 @@
                   (fn [item]
                     (= name item))))
 
-(lambda command-for [window-or-pane]
-  (local pane-name (or window-or-pane.name :unknown))
-  (local args [])
-  (local pane-name-bash-cmd (.. "export PATH=$PATH:/run/current-system/sw/bin:/bin:/usr/bin:/sbin:/usr/sbin; export TERM=xterm-256color; export USER=\"$(id -un)\"; export HOME=\"$(getent passwd \"$USER\" | cut -d: -f6)\"; export SHELL=\"$(getent passwd \"$USER\" | cut -d: -f7)\"; source /etc/profile; printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
-                                pane-name
-                                " | base64`; printf \"\\033]1;%s\\007\" "
-                                pane-name "; "))
-  (var cmd "")
-  (if window-or-pane.command
-      (do
-        (table.insert args :/usr/bin/env)
-        (table.insert args :-i)
-        (table.insert args :bash)
-        (table.insert args :-c)
-        (set cmd (.. cmd pane-name-bash-cmd))
-        (when (or (= window-or-pane.exit_to_shell nil)
-                  (= window-or-pane.exit_to_shell true))
-          (set cmd (.. cmd "trap \"exec $SHELL\" SIGINT; ")))
-        (if window-or-pane.restart
-            (set cmd (.. cmd "while true; do " window-or-pane.command
-                         "; sleep 1; done"))
-            (set cmd (.. cmd window-or-pane.command)))
-        (table.insert args cmd))
-      (do
-        (table.insert args :/usr/bin/env)
-        (table.insert args :-i)
-        (table.insert args :bash)
-        (table.insert args :-c)
-        (table.insert args (.. pane-name-bash-cmd "exec $SHELL"))))
-  (wezterm.log_info "command-for: " args)
-  args)
+(lambda command-for [window-or-pane pane]
+  (let [remote (table-contains config.ssh_domains
+                               (fn [host]
+                                 (= (pane:get_domain_name) host.name)))
+        pane-name (or window-or-pane.name :unknown)]
+    (local args [])
+    (local pane-name-bash-cmd (.. "export PATH=$PATH:/run/current-system/sw/bin:/bin:/usr/bin:/sbin:/usr/sbin; export TERM=xterm-256color; export USER=\"$(id -un)\"; export HOME=\"$(getent passwd \"$USER\" | cut -d: -f6)\"; export SHELL=\"$(getent passwd \"$USER\" | cut -d: -f7)\"; source /etc/profile; printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
+                                  pane-name
+                                  " | base64`; printf \"\\033]1;%s\\007\" "
+                                  pane-name "; "))
+    (var cmd "")
+    (if window-or-pane.command
+        (do
+          (if remote
+              (do
+                (table.insert args :/usr/bin/env)
+                (table.insert args :-i)))
+          (table.insert args :bash)
+          (table.insert args :-c)
+          (set cmd (.. cmd pane-name-bash-cmd))
+          (when (or (= window-or-pane.exit_to_shell nil)
+                    (= window-or-pane.exit_to_shell true))
+            (set cmd (.. cmd "trap \"exec $SHELL\" SIGINT; ")))
+          (if window-or-pane.restart
+              (set cmd (.. cmd "while true; do " window-or-pane.command
+                           "; sleep 1; done"))
+              (set cmd (.. cmd window-or-pane.command)))
+          (table.insert args cmd))
+        (do
+          (if remote
+              (do
+                (table.insert args :/usr/bin/env)
+                (table.insert args :-i)))
+          (table.insert args :bash)
+          (table.insert args :-c)
+          (table.insert args (.. pane-name-bash-cmd "exec $SHELL"))))
+    (wezterm.log_info "command-for: " args)
+    args))
 
 (fn call-with-delay [items delay-seconds func]
   (when (and items (> (length items) 0))
@@ -226,7 +233,7 @@
       (wezterm.log_info "panes: " panes-config)
       (call-with-delay panes-config 0.1
                        (fn [pane-conf _id]
-                         (let [args (command-for pane-conf)
+                         (let [args (command-for pane-conf pane)
                                direction (or pane-conf.direction :Right)
                                size (or pane-conf.size 0.5)
                                from-pane (. panes
@@ -252,7 +259,8 @@
                                                                                                            pane
                                                                                                            directory)]
                                                             (each [_ window-conf (reverse-ipairs workspace-config.windows)]
-                                                              (let [args (command-for window-conf)]
+                                                              (let [args (command-for window-conf
+                                                                                      pane)]
                                                                 (window:perform_action (act.SwitchToWorkspace {: name
                                                                                                                :spawn {:domain {:DomainName domain}
                                                                                                                        :cwd directory
@@ -543,24 +551,28 @@
 (wezterm.add_to_config_reload_watch_list (.. wezterm.home_dir
                                              :/.config/wezterm/wezterm.fnl.lua))
 
+(lambda exit-mode-after [key-action]
+  (act.Multiple [key-action act.PopKeyTable]))
+
 (set config.leader {:key :Space :mods :CTRL})
 (set config.key_tables
      {:pane_mode [{:key :Escape :action act.PopKeyTable}
                   {:key :RightArrow
-                   :action (act.SplitPane {:direction :Right
-                                           :size {:Percent 50}})}
+                   :action (exit-mode-after (act.SplitPane {:direction :Right
+                                                            :size {:Percent 50}}))}
                   {:key :LeftArrow
-                   :action (act.SplitPane {:direction :Left
-                                           :size {:Percent 50}})}
+                   :action (exit-mode-after (act.SplitPane {:direction :Left
+                                                            :size {:Percent 50}}))}
                   {:key :DownArrow
-                   :action (act.SplitPane {:direction :Down
-                                           :size {:Percent 50}})}
+                   :action (exit-mode-after (act.SplitPane {:direction :Down
+                                                            :size {:Percent 50}}))}
                   {:key :UpArrow
-                   :action (act.SplitPane {:direction :Up :size {:Percent 50}})}
+                   :action (exit-mode-after (act.SplitPane {:direction :Up
+                                                            :size {:Percent 50}}))}
                   {:key :p :action act.PaneSelect}
-                  {:key :z :action act.TogglePaneZoomState}
-                  {:key :q :action (act.CloseCurrentPane {:confirm false})}
-                  {:key :Escape :action act.PopKeyTable}]
+                  {:key :z :action (exit-mode-after act.TogglePaneZoomState)}
+                  {:key :q
+                   :action (exit-mode-after (act.CloseCurrentPane {:confirm false}))}]
       :tab_mode [{:key :Escape :action act.PopKeyTable}
                  {:key :t :action (act.EmitEvent :NewProjectTab)}
                  {:key :q :action (act.CloseCurrentTab {:confirm false})}]
@@ -582,7 +594,7 @@
      [{:key :c
        :mods :LEADER
        :action (act.ActivateKeyTable {:name :control_mode
-                                      :one_shot false
+                                      :one_shot true
                                       :until_unknown true
                                       :replace_current true})}
       {:key :p
@@ -594,13 +606,13 @@
       {:key :w
        :mods :LEADER
        :action (act.ActivateKeyTable {:name :workspace_mode
-                                      :one_shot false
+                                      :one_shot true
                                       :until_unknown true
                                       :replace_current true})}
       {:key :t
        :mods :LEADER
        :action (act.ActivateKeyTable {:name :tab_mode
-                                      :one_shot false
+                                      :one_shot true
                                       :until_unknown true
                                       :replace_current true})}])
 
