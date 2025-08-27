@@ -38,6 +38,28 @@
     '';
   };
 
+  systemMenu = pkgs.writeShellApplication {
+    name = "niri-system-menu";
+    runtimeInputs = [pkgs.niri pkgs.fuzzel];
+    text = ''
+      ACTION="$(cat<<EOF | fuzzel -d
+      poweroff
+      reboot
+      suspend
+      exit
+      EOF
+      )"
+      if [ -z "$ACTION" ]; then
+        exit
+      fi
+      if [ "$ACTION" = "exit" ]; then
+        niri msg action "$ACTION"
+        exit
+      fi
+      systemctl "$ACTION"
+    '';
+  };
+
   openWeztermDomain = pkgs.writeShellApplication {
     name = "open-wezterm-domain";
     runtimeInputs = [pkgs.scripts pkgs.niri pkgs.jq];
@@ -379,6 +401,8 @@ in {
         allow-inhibiting = false;
         action = toggle-keyboard-shortcuts-inhibit;
       };
+
+      "Mod+p".action.spawn = ["sh" "-c" "${systemMenu}/bin/niri-system-menu"];
 
       "Ctrl+Alt+Delete".action = quit;
 
