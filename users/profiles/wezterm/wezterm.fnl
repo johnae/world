@@ -169,7 +169,9 @@
                                  (= (pane:get_domain_name) host.name)))
         pane-name (or window-or-pane.name :unknown)]
     (local args [])
-    (local pane-name-bash-cmd (.. "export PATH=$PATH:/run/current-system/sw/bin:/bin:/usr/bin:/sbin:/usr/sbin; export TERM=xterm-256color; export USER=\"$(id -un)\"; export HOME=\"$(getent passwd \"$USER\" | cut -d: -f6)\"; export SHELL=\"$(getent passwd \"$USER\" | cut -d: -f7)\"; source /etc/profile; printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
+    (local pane-name-bash-cmd (.. "export PATH=$PATH:/run/current-system/sw/bin:/bin:/usr/bin:/sbin:/usr/sbin; export WEZTERM_PANE="
+                                  (tostring (pane:pane_id))
+                                  "; export TERM=xterm-256color; export USER=\"$(id -un)\"; export HOME=\"$(getent passwd \"$USER\" | cut -d: -f6)\"; export SHELL=\"$(getent passwd \"$USER\" | cut -d: -f7)\"; source /etc/profile; printf \"\\033];1337;SetUserVar=%s=%s\\007\" pane_name `echo -n "
                                   pane-name
                                   " | base64`; printf \"\\033]1;%s\\007\" "
                                   pane-name "; "))
@@ -570,6 +572,10 @@
                    :action (exit-mode-after (act.SplitPane {:direction :Up
                                                             :size {:Percent 50}}))}
                   {:key :p :action act.PaneSelect}
+                  {:key :t
+                   :action (exit-mode-after (wezterm.action_callback (fn [_win
+                                                                          pane]
+                                                                       (pane:move_to_new_tab))))}
                   {:key :z :action (exit-mode-after act.TogglePaneZoomState)}
                   {:key :q
                    :action (exit-mode-after (act.CloseCurrentPane {:confirm false}))}]
@@ -585,10 +591,6 @@
                      {:key :j :action (act.EmitEvent :ActivateLazyjj)}
                      {:key :s :action (act.EmitEvent :ActivateSerpl)}
                      {:key :n :action (act.EmitEvent :NewProjectWindow)}]})
-
-(for [i 1 9]
-  (table.insert config.key_tables.tab_mode
-                {:key (tostring i) :action (act.ActivateTab (- i 1))}))
 
 (set config.keys
      [{:key :c
@@ -615,6 +617,12 @@
                                       :one_shot true
                                       :until_unknown true
                                       :replace_current true})}])
+
+(for [i 1 9]
+  (table.insert config.keys
+                {:key (tostring i)
+                 :mods :CTRL
+                 :action (act.ActivateTab (- i 1))}))
 
 (set config.unix_domains [{:name :local-dev}])
 (set config.ssh_domains (load-ssh-domains))
