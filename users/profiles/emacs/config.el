@@ -173,9 +173,10 @@
 (setopt display-time-interval 1)
 (display-time-mode)
 
-(use-package emacs
-  :config
-  (load-theme 'modus-vivendi))          ; for light theme, use modus-operandi
+;; Theme loading is handled by extras/catppuccin.el
+;; (use-package emacs
+;;   :config
+;;   (load-theme 'modus-vivendi))          ; for light theme, use modus-operandi
 
 @extras@
 
