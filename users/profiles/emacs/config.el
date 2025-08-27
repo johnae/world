@@ -123,6 +123,17 @@
 (setq display-line-numbers-type 'relative) 
 (global-display-line-numbers-mode)
 
+;; Disable them in certain major modes
+(dolist (mode '(org-mode
+                eshell-mode
+                term-mode
+                shell-mode
+                vterm-mode
+                help-mode
+                compilation-mode))
+  (add-hook (intern (concat (symbol-name mode) "-hook"))
+            (lambda () (display-line-numbers-mode 0))))
+
 ;; We won't set these, but they're good to know about
 ;;
 ;; (setopt indent-tabs-mode nil)
