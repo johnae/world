@@ -68,7 +68,8 @@
 (use-package embark
   :ensure t
   :defer t  ; Load on first use
-  :bind (("C-c a" . embark-act))        ; bind this to an easy key to hit
+  :bind (("C-c a" . embark-act)         ; bind this to an easy key to hit
+         ("C-c e" . embark-export))
   :config
   ;; Add the option to run embark when using avy
   (defun bedrock/avy-action-embark (pt)
@@ -181,9 +182,30 @@
 ;; Modify search results en masse
 (use-package wgrep
   :ensure t
-  :defer t
+  :commands (wgrep-setup wgrep-change-to-wgrep-mode)
+  :init
+  ;; Set the key before wgrep loads
+  (setq wgrep-enable-key "C-c C-p")
+  (with-eval-after-load 'grep
+    (define-key grep-mode-map (kbd "C-c C-p") 'wgrep-change-to-wgrep-mode))
   :config
-  (setq wgrep-auto-save-buffer t))
+  (setq wgrep-auto-save-buffer t)
+  (setq wgrep-change-readonly-file nil)
+  
+  ;; Helix-style keybindings in wgrep mode
+  (define-key wgrep-mode-map (kbd "C-c C-c") 'wgrep-finish-edit)
+  (define-key wgrep-mode-map (kbd "C-c C-k") 'wgrep-abort-changes)
+  (define-key wgrep-mode-map (kbd "C-x C-s") 'wgrep-finish-edit))
+
+;; Setup wgrep for consult-grep/ripgrep results
+(use-package grep
+  :ensure nil  ; built-in
+  :config
+  (require 'wgrep nil t)
+  :hook ((grep-mode . wgrep-setup)
+         (ripgrep-search-mode . wgrep-setup)))
+
+;; Make consult-ripgrep results editable via embark and wgrep
 
 
 (use-package websocket
