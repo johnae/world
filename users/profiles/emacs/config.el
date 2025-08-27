@@ -67,6 +67,10 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file t t)
 
+(setq find-program "@find-program@")
+(setq shell-file-name "@shell-file-name@")
+(setq explicit-shell-file-name shell-file-name)
+
 ;; Enable winner mode after init
 (add-hook 'after-init-hook #'winner-mode)
 

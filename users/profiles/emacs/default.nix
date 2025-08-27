@@ -5,6 +5,8 @@
   ...
 }: let
   emacsInit = pkgs.replaceVars ./config.el {
+    find-program = "${pkgs.findutils}/bin/find";
+    shell-file-name = "${pkgs.bashInteractive}/bin/bash";
     extras = lib.concatStringsSep "\n" (map (n: builtins.readFile ./extras/${n}) (
       lib.mapAttrsToList (name: _: name) (lib.filterAttrs (_: type: type == "regular") (builtins.readDir ./extras))
     ));
@@ -19,34 +21,34 @@ in {
     ;; MASSIVE startup optimizations
     (setq gc-cons-threshold most-positive-fixnum
           gc-cons-percentage 0.6)
-    
+
     ;; Prevent package.el loading packages prior to init.el
     (setq package-enable-at-startup nil)
-    
+
     ;; Inhibit resizing frame
     (setq frame-inhibit-implied-resize t)
-    
+
     ;; Disable file handler checking during startup
     (defvar default-file-name-handler-alist file-name-handler-alist)
     (setq file-name-handler-alist nil)
-    
+
     ;; Prevent unwanted runtime compilation for native-comp
     (setq native-comp-deferred-compilation nil
           native-comp-async-report-warnings-errors 'silent)
-    
+
     ;; Silence warnings
     (setq byte-compile-warnings '(not obsolete))
     (setq warning-suppress-log-types '((comp) (bytecomp)))
-    
+
     ;; UI optimizations
     (push '(menu-bar-lines . 0) default-frame-alist)
     (push '(tool-bar-lines . 0) default-frame-alist)
     (push '(vertical-scroll-bars) default-frame-alist)
     (setq frame-resize-pixelwise t)
-    
+
     ;; Silence startup message
     (setq inhibit-startup-echo-area-message (user-login-name))
-    
+
     ;; Default frame configuration
     (setq default-frame-alist '((fullscreen . maximized)
                                 (ns-appearance . dark)
