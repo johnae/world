@@ -95,6 +95,19 @@
       (forward-char 1)
       (delete-region (region-beginning) (region-end)))))
 
+(defun meow-helix-toggle-comment ()
+  "Toggle comment on current line or region, like Helix's C-c."
+  (interactive)
+  (if (region-active-p)
+      ;; Comment/uncomment region
+      (comment-or-uncomment-region (region-beginning) (region-end))
+    ;; Comment/uncomment current line
+    (save-excursion
+      (beginning-of-line)
+      (set-mark (point))
+      (end-of-line)
+      (comment-or-uncomment-region (region-beginning) (region-end)))))
+
 (defvar meow-helix-ex-commands
   '(("w" . save-buffer)
     ("write" . save-buffer)
@@ -405,6 +418,7 @@
     (define-key map "B" 'ibuffer)
     (define-key map "s" 'save-buffer)
     (define-key map "S" 'save-some-buffers)
+    (define-key map "c" 'meow-helix-toggle-comment)  ;; Comment toggle
     (define-key map "q" 'save-buffers-kill-emacs)
     (define-key map "Q" 'kill-emacs)
     (define-key map "w" 'meow-helix-window-mode)  ;; Changed to enter window mode
@@ -1173,6 +1187,7 @@ Returns (START-OPEN . END-CLOSE) positions or nil."
    
    '("c" . meow-change)
    ;; '("C" . meow-helix-duplicate)  ; Replaced with cursor-below
+   '("M-c" . meow-helix-toggle-comment)  ; Comment toggle (Alt-c, since C-c conflicts)
    '("d" . meow-helix-delete)  ; Simple delete without extending selection
    '("D" . meow-kill-whole-line)
    
