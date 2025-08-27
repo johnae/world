@@ -1244,7 +1244,7 @@ Returns (START-OPEN . END-CLOSE) positions or nil."
    '("C-a" . meow-helix-select-all)
    '("C-b" . meow-helix-page-up)
    '("C-f" . meow-helix-page-down)
-   '("C-u" . meow-helix-half-page-up)
+   ;; '("C-u" . meow-helix-half-page-up)  ; Commented out to restore C-u as universal argument
    '("C-d" . meow-helix-half-page-down)
    '("C-w" . meow-helix-window-mode)
    
