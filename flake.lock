@@ -211,6 +211,22 @@
         "type": "github"
       }
     },
+    "claude-code-el": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1756294830,
+        "narHash": "sha256-neRNHOI+4mRG04DcY1l9SS8kJGf9Zjb+RmaBWtx21/o=",
+        "owner": "stevemolitor",
+        "repo": "claude-code.el",
+        "rev": "41423459aa929460770c93e5ab6082439921f1d4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stevemolitor",
+        "repo": "claude-code.el",
+        "type": "github"
+      }
+    },
     "cloud-native-pg": {
       "flake": false,
       "locked": {
@@ -1493,6 +1509,22 @@
         "type": "github"
       }
     },
+    "monet-el": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1756297611,
+        "narHash": "sha256-o6cKwqd/e4ISwRrlqYo0K9QdtNb+B25qiu4tjyuivkU=",
+        "owner": "stevemolitor",
+        "repo": "monet",
+        "rev": "7fc893ec347f31b2c3144d28f82a8325d78883bf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stevemolitor",
+        "repo": "monet",
+        "type": "github"
+      }
+    },
     "niri": {
       "inputs": {
         "niri-stable": "niri-stable",
@@ -2277,6 +2309,7 @@
         "agenix": "agenix",
         "cachix": "cachix",
         "cilium-chart": "cilium-chart",
+        "claude-code-el": "claude-code-el",
         "cloud-native-pg": "cloud-native-pg",
         "copilot-vim": "copilot-vim",
         "crane": "crane",
@@ -2300,6 +2333,7 @@
         "mac-app-util": "mac-app-util",
         "microvm": "microvm",
         "mk-shell-bin": "mk-shell-bin",
+        "monet-el": "monet-el",
         "niri": "niri",
         "nix-darwin": "nix-darwin",
         "nix2container": "nix2container",

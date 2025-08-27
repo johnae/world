@@ -14,7 +14,7 @@ in {
     ./claude.nix
     ./git.nix
     ./gitui.nix
-    # ./emacs/default.nix
+    ./emacs/default.nix
     ./helix.nix
     ./jujutsu.nix
     ./kubie.nix

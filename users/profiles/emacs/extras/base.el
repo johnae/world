@@ -30,7 +30,7 @@
 
 (use-package avy
   :ensure t
-  :demand t
+  :defer t  ; Load only when needed
   :bind (("C-c j" . avy-goto-line)
          ("s-j"   . avy-goto-char-timer)))
 
@@ -43,6 +43,7 @@
 ;; Consult: Misc. enhanced commands
 (use-package consult
   :ensure t
+  :defer t
   :bind (
          ;; Drop-in replacements
          ("C-x b" . consult-buffer)     ; orig. switch-to-buffer
@@ -66,10 +67,9 @@
 
 (use-package embark
   :ensure t
-  :demand t
-  :after avy
+  :defer t  ; Load on first use
   :bind (("C-c a" . embark-act))        ; bind this to an easy key to hit
-  :init
+  :config
   ;; Add the option to run embark when using avy
   (defun bedrock/avy-action-embark (pt)
     (unwind-protect
@@ -82,10 +82,12 @@
 
   ;; After invoking avy-goto-char-timer, hit "." to run embark at the next
   ;; candidate you select
-  (setf (alist-get ?. avy-dispatch-alist) 'bedrock/avy-action-embark))
+  (with-eval-after-load 'avy
+    (setf (alist-get ?. avy-dispatch-alist) 'bedrock/avy-action-embark)))
 
 (use-package embark-consult
-  :ensure t)
+  :ensure t
+  :after (embark consult))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
@@ -96,9 +98,7 @@
 ;; Vertico: better vertical completion for minibuffer commands
 (use-package vertico
   :ensure t
-  :init
-  ;; You'll want to make sure that e.g. fido-mode isn't enabled
-  (vertico-mode))
+  :hook (after-init . vertico-mode))
 
 (use-package vertico-directory
   :after vertico
@@ -108,14 +108,13 @@
 ;; Marginalia: annotations for minibuffer
 (use-package marginalia
   :ensure t
-  :config
-  (marginalia-mode))
+  :hook (after-init . marginalia-mode))
 
 ;; Popup completion-at-point
 (use-package corfu
   :ensure t
-  :init
-  (global-corfu-mode)
+  :hook ((prog-mode . corfu-mode)
+         (after-init . global-corfu-mode))
   :bind
   (:map corfu-map
         ("SPC" . corfu-insert-separator)
@@ -136,6 +135,7 @@
 (use-package corfu-terminal
   :if (not (display-graphic-p))
   :ensure t
+  :after corfu
   :config
   (corfu-terminal-mode))
 
@@ -143,9 +143,10 @@
 ;; configure here; dive in when you're comfortable!
 (use-package cape
   :ensure t
+  :defer t
   :init
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file))
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file))
 
 ;; Pretty icons for corfu
 (use-package kind-icon
@@ -166,8 +167,10 @@
 ;; Orderless: powerful completion style
 (use-package orderless
   :ensure t
+  :defer 0.1
   :config
-  (setq completion-styles '(orderless)))
+  (setq completion-styles '(orderless basic))
+  (setq completion-category-overrides '((file (styles partial-completion)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
@@ -178,5 +181,11 @@
 ;; Modify search results en masse
 (use-package wgrep
   :ensure t
+  :defer t
   :config
   (setq wgrep-auto-save-buffer t))
+
+
+(use-package websocket
+  :ensure t
+  :defer t)

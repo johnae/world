@@ -1,137 +1,104 @@
-;;; Emacs Bedrock
-;;;
-;;; Extra config: Development tools
+;;; dev-ts.el --- Emacs config (Tree-sitter first)  -*- lexical-binding: t; -*-
 
-;;; Usage: Append or require this file from init.el for some software
-;;; development-focused packages.
-;;;
-;;; It is **STRONGLY** recommended that you use the base.el config if you want to
-;;; use Eglot. Lots of completion things will work better.
-;;;
-;;; This will try to use tree-sitter modes for many languages. Please run
-;;;
-;;;   M-x treesit-install-language-grammar
-;;;
-;;; Before trying to use a treesit mode.
+;;; Commentary:
+;; Prefer built-in Tree-sitter modes where available. Fall back to classic modes
+;; only when needed (e.g., markdown-mode; yaml-mode as a fallback). Keep startup
+;; fast by autoloading via :mode/:hook/:commands and avoid eager requires.
 
-;;; Contents:
-;;;
-;;;  - Built-in config for developers
-;;;  - Version Control
-;;;  - Common file types
-;;;  - Eglot, the built-in LSP client for Emacs
+;;; Code:
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;
-;;;   Built-in config for developers
-;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; --- Tree-sitter preferences -------------------------------------------------
 
-(use-package emacs
-  :config
-  ;; Treesitter config
+;; Crisper highlighting; higher values can cost a little CPU on large files.
+(setq treesit-font-lock-level 4)
 
-  ;; Tell Emacs to prefer the treesitter mode
-  ;; You'll want to run the command `M-x treesit-install-language-grammar' before editing.
-  (setq major-mode-remap-alist
-        '((yaml-mode . yaml-ts-mode)
-          (bash-mode . bash-ts-mode)
-          (js2-mode . js-ts-mode)
-          (nix-mode . nix-ts-mode)
-          (typescript-mode . typescript-ts-mode)
-          (json-mode . json-ts-mode)
-          (css-mode . css-ts-mode)
-          (python-mode . python-ts-mode)))
-  :hook
-  ;; Auto parenthesis matching
-  ((prog-mode . electric-pair-mode)))
+(defun my/ts-remap (from to)
+  "Safely remap FROM major mode to tree-sitter TO if TO exists."
+  (when (fboundp to)
+    (add-to-list 'major-mode-remap-alist (cons from to))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;
-;;;   Version Control
-;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Prefer TS modes; only remap if target mode is defined on this Emacs.
+(mapc (lambda (x) (apply #'my/ts-remap x))
+      '((c-mode           c-ts-mode)
+        (c++-mode         c++-ts-mode)
+        (cmake-mode       cmake-ts-mode)
+        (bash-mode        bash-ts-mode)
+        (sh-mode          bash-ts-mode)      ; drop if you edit strict POSIX sh
+        (javascript-mode  js-ts-mode)
+        (js2-mode         js-ts-mode)
+        (typescript-mode  typescript-ts-mode)
+        (css-mode         css-ts-mode)
+        (json-mode        json-ts-mode)
+        (conf-toml-mode   toml-ts-mode)
+        (go-mode          go-ts-mode)
+        (nix-mode         nix-ts-mode)
+        (python-mode      python-ts-mode)
+        (ruby-mode        ruby-ts-mode)
+        (java-mode        java-ts-mode)
+        (rust-mode        rust-ts-mode)
+        (yaml-mode        yaml-ts-mode)))
 
-;; Magit: best Git client to ever exist
-(use-package magit
-  :ensure t
-  :bind (("C-x g" . magit-status)))
+;; Auto pairing in programming buffers.
+(add-hook 'prog-mode-hook #'electric-pair-mode)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;
-;;;   Common file types
-;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;; --- Markdown (no first-class built-in TS yet) -------------------------------
+;; Keep markdown-mode for full features.
 (use-package markdown-mode
   :ensure t
-  :hook ((markdown-mode . visual-line-mode)))
+  :mode ("\\.md\\'" . gfm-mode)
+  :hook (markdown-mode . visual-line-mode))
 
+;; --- YAML: try TS first; keep yaml-mode only as fallback ---------------------
 (use-package yaml-mode
-  :ensure t)
-
-(use-package json-mode
-  :ensure t)
-
-(use-package just-mode
   :ensure t
-  :mode "\\[Jj]ustfile.*\\'")
+  :unless (fboundp 'yaml-ts-mode)
+  :mode "\\.ya?ml\\'")
 
-(use-package rust-mode
-  :ensure t
-  :hook ((rust-mode . eglot-ensure))
-  :init
-  (setq rust-mode-treesitter-derive t))
-
+;; --- Nix TS (external package) -----------------------------------------------
 (use-package nix-ts-mode
   :ensure t
   :mode "\\.nix\\'")
 
-(use-package java-ts-mode)
-
-(use-package java-ts-mode)
-
-(use-package lsp-java
-  :ensure t)
-
-(use-package apheleia
+;; --- Justfile ----------------------------------------------------------------
+(use-package just-mode
   :ensure t
-  :config
-  (push '(alejandra . ("alejandra" "-")) apheleia-formatters)
-  (add-to-list 'apheleia-mode-alist '(nix-mode . alejandra))
-  (add-to-list 'apheleia-mode-alist '(nix-ts-mode . alejandra))
-  (apheleia-global-mode t)
-  )
+  :mode (("\\`[Jj]ustfile\\'" . just-mode)
+         ("\\.just\\'"        . just-mode)))
 
-
-;; Emacs ships with a lot of popular programming language modes. If it's not
-;; built in, you're almost certain to find a mode for the language you're
-;; looking for with a quick Internet search.
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;
-;;;   Eglot, the built-in LSP client for Emacs
-;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Helpful resources:
-;;
-;;  - https://www.masteringemacs.org/article/seamlessly-merge-multiple-documentation-sources-eldoc
-
+;; --- Eglot (built-in LSP client) ---------------------------------------------
 (use-package eglot
-  ;; no :ensure t here because it's built-in
-
-  ;; Configure hooks to automatically turn-on eglot for selected modes
-					; :hook
-					; (((python-mode ruby-mode elixir-mode) . eglot))
-
+  :defer t
   :custom
   (eglot-send-changes-idle-time 0.1)
-  (eglot-extend-to-xref t)              ; activate Eglot in referenced non-project files
-
+  (eglot-extend-to-xref t)
   :config
-  (fset #'jsonrpc--log-event #'ignore)  ; massive perf boost---don't log every event
-  ;; Sometimes you need to tell Eglot where to find the language server
-					; (add-to-list 'eglot-server-programs
-					;              '(haskell-mode . ("haskell-language-server-wrapper" "--lsp")))
-  )
+  ;; Reduce event-buffer overhead (Emacs 29+). Older: silence jsonrpc logs.
+  (if (boundp 'eglot-events-buffer-size)
+      (setq eglot-events-buffer-size 0)
+    (fset #'jsonrpc--log-event #'ignore))
+  ;; Example: use jdtls for Java without lsp-java.
+  (add-to-list 'eglot-server-programs '(java-mode . ("jdtls")))
+  ;; Increase I/O throughput for LSP servers.
+  (setq read-process-output-max (* 3 1024 1024))
+  :hook ((rust-mode rust-ts-mode
+          java-mode java-ts-mode
+          nix-mode  nix-ts-mode
+          json-mode json-ts-mode
+          yaml-mode yaml-ts-mode
+          python-mode python-ts-mode
+          typescript-mode typescript-ts-mode
+          js-mode js-ts-mode
+          go-mode go-ts-mode)
+         . eglot-ensure))
+
+;; --- Apheleia (format on save, but enabled after startup) --------------------
+(use-package apheleia
+  :ensure t
+  :commands (apheleia-global-mode)
+  :init
+  (add-hook 'after-init-hook #'apheleia-global-mode)
+  :config
+  ;; Nix formatter
+  (push '(alejandra . ("alejandra" "-")) apheleia-formatters)
+  (setf (alist-get 'nix-mode apheleia-mode-alist) 'alejandra)
+  (setf (alist-get 'nix-ts-mode apheleia-mode-alist) 'alejandra))
