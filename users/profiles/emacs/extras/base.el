@@ -207,6 +207,27 @@
 
 ;; Make consult-ripgrep results editable via embark and wgrep
 
+;; Deadgrep - better project search interface
+(use-package deadgrep
+  :ensure t
+  :defer t
+  :commands (deadgrep)
+  :config
+  ;; Use project root by default
+  (setq deadgrep-project-root-function
+        (lambda () (project-root (project-current)))))
+
+;; wgrep support for deadgrep buffers (faster than deadgrep-edit-mode)
+(use-package wgrep-deadgrep
+  :ensure t
+  :after wgrep
+  :config
+  ;; Setup wgrep for deadgrep buffers
+  (add-hook 'deadgrep-finished-hook 'wgrep-deadgrep-setup))
+
+;; Add keybinding for entering wgrep mode in deadgrep buffers
+(with-eval-after-load 'deadgrep
+  (define-key deadgrep-mode-map (kbd "C-c C-p") 'wgrep-change-to-wgrep-mode))
 
 (use-package websocket
   :ensure t

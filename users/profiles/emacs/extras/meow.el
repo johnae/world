@@ -427,7 +427,6 @@
     (define-key map "h" 'split-window-below)
     (define-key map "o" 'other-window)
     (define-key map "/" 'meow-helix-project-search)  ;; Project-wide search
-    (define-key map "r" 'meow-helix-project-replace) ;; Project search and replace
     (define-key map "k" 'kill-current-buffer)
     (define-key map "K" 'kill-buffer)
     (define-key map "g" 'magit-status)
@@ -446,39 +445,29 @@
 
 ;; Project-wide search and replace functions
 (defun meow-helix-project-search ()
-  "Search across the project using consult-ripgrep.
-To edit results: Press `C-c e' to export to grep buffer, then `C-c C-p' for wgrep."
+  "Search across the project using deadgrep.
+Press C-c C-p to enter edit mode, C-c C-c to save changes."
   (interactive)
-  (if (fboundp 'consult-ripgrep)
-      (progn
-        (consult-ripgrep)
-        (message "Press C-c e to export results, then C-c C-p to edit"))
-    (call-interactively 'project-find-regexp)))
-
-(defun meow-helix-project-replace ()
-  "Search and replace across the project.
-If region is active, search for the selected text.
-Otherwise, search for the word at point or prompt."
-  (interactive)
-  (let* ((selected-text (when (use-region-p)
-                          (buffer-substring-no-properties 
-                           (region-beginning) (region-end))))
-         (word-at-point (thing-at-point 'symbol t))
-         (initial-input (or selected-text word-at-point)))
+  (if (fboundp 'deadgrep)
+      (call-interactively 'deadgrep)
+    ;; Fallback to consult-ripgrep if available
     (if (fboundp 'consult-ripgrep)
         (progn
-          (consult-ripgrep nil initial-input)
-          (message "Press C-c e to export, then C-c C-p to enter wgrep mode"))
-      (project-query-replace-regexp))))
+          (consult-ripgrep)
+          (message "Press C-c e to export, then C-c C-p to edit"))
+      (call-interactively 'project-find-regexp))))
+
 
 (defun meow-helix-search-word-at-point ()
   "Search for the word at point across the project."
   (interactive)
   (let ((word (thing-at-point 'symbol t)))
     (if word
-        (if (fboundp 'consult-ripgrep)
-            (consult-ripgrep nil word)
-          (project-find-regexp word))
+        (if (fboundp 'deadgrep)
+            (deadgrep word)
+          (if (fboundp 'consult-ripgrep)
+              (consult-ripgrep nil word)
+            (project-find-regexp word)))
       (message "No word at point"))))
 
 (defun meow-helix-search-symbol-at-point ()
