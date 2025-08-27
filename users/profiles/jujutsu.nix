@@ -13,7 +13,7 @@ in {
       ui = {
         editor = "hx";
         pager = "delta";
-        diff.format = "git";
+        diff-formatter = ["difft" "--color=always" "$left" "$right"];
       };
     };
   };
