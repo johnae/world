@@ -18,6 +18,9 @@
 (setopt initial-major-mode 'fundamental-mode)  ; default mode for the *scratch* buffer
 (setopt display-time-default-load-average nil) ; this information is useless for most
 
+;; Allows us to call git commit / jj commit / split etc from a vterm inside emacs
+(setq server-window 'switch-to-buffer)
+
 ;; Automatically reread from disk if the underlying file changes
 (setopt auto-revert-avoid-polling t)
 ;; Some systems don't do file notifications well; see
