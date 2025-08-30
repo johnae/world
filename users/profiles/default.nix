@@ -18,6 +18,7 @@ in {
     ./helix.nix
     ./jujutsu.nix
     ./kubie.nix
+    ./mergiraf.nix
     ./nushell/default.nix
     ./rbw.nix
     ./ssh.nix
@@ -45,6 +46,7 @@ in {
     carapace
     devenv
     fzf # # for certain utilities that depend on it
+    difftastic
     gh
     git-crypt
     google-cloud-sdk-gke
