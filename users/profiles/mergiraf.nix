@@ -1,0 +1,3 @@
+{
+  programs.mergiraf.enable = true;
+}
