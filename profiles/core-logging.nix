@@ -1,4 +1,7 @@
 {pkgs, ...}: {
+  systemd.services.opentelemetry-collector.serviceConfig = {
+    TimeoutStopSec = "10s";
+  };
   services.opentelemetry-collector = {
     enable = true;
     package = pkgs.opentelemetry-collector-contrib;
