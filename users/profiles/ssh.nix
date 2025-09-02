@@ -3,14 +3,22 @@
 in {
   programs.ssh = {
     enable = true;
-    forwardAgent = true;
-    serverAliveInterval = 60;
-    controlMaster = "auto";
-    controlPersist = "30m";
+    enableDefaultConfig = false;
     extraConfig = ''
       Include ${homeDirectory}/.ssh/config.d/*.conf
     '';
     matchBlocks = {
+      "*" = {
+        controlPersist = "30m";
+        controlMaster = "auto";
+        controlPath = "~/.ssh/master-%r@%n:%p";
+        serverAliveInterval = 60;
+        serverAliveCountMax = 3;
+        hashKnownHosts = false;
+        forwardAgent = true;
+        addKeysToAgent = "no";
+        compression = false;
+      };
       "git git.9000.dev" = {
         hostname = "gitssh.9000.dev";
         user = "forgejo";
