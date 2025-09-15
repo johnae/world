@@ -90,6 +90,25 @@
     }
 
     {
+      profile.name = "framework-13-4";
+      profile.outputs = [
+        {
+          criteria = "Dell Inc. DELL U3225QE 8278C34";
+          mode = "3840x2160@119.880Hz";
+          position = "0,0";
+          scale = 1.0;
+        }
+
+        {
+          criteria = "BOE NE135A1M-NY1 Unknown";
+          mode = "2880x1920@120.000Hz";
+          position = "2905,2160";
+          scale = 1.0;
+        }
+      ];
+    }
+
+    {
       profile.name = "framework-13-4-lid-closed";
       profile.outputs = [
         {
