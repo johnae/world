@@ -22,6 +22,10 @@
   (beginning-of-line-text)
   (meow-insert))
 
+(defun my/meow-save ()
+  (interactive)
+  (save-excursion (meow-save)))
+
 (defun paste-below ()
   "Paste copied text below."
   (interactive)
@@ -29,7 +33,7 @@
   (meow-yank)
   (previous-line))
 
-;(keymap-global-set "C-t" 'project-eshell)
+					;(keymap-global-set "C-t" 'project-eshell)
 
 (global-set-key (kbd "M-<down>") 'scroll-up)
 (global-set-key (kbd "M-<up>") 'scroll-down)
@@ -130,7 +134,7 @@
    '("u" . undo)
    '("U" . undo-redo)
    ;; Copy/yank
-   '("y" . meow-save)
+   '("y" . my/meow-save)
    '("Y" . kill-ring-save)
    '("p" . paste-below)
    ;; Additional motions and selections
@@ -146,6 +150,7 @@
 
 (use-package meow
   :ensure t
-  :config
-  (meow-setup-helix-style)
-  (meow-global-mode 1))
+  :hook (after-init . (lambda ()
+                        (require 'meow)
+                        (meow-setup-helix-style)
+                        (meow-global-mode 1))))

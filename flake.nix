@@ -35,6 +35,8 @@
     };
     cilium-chart.url = "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.17.5.tgz";
     cilium-chart.flake = false;
+    claude-code-el.flake = false;
+    claude-code-el.url = "github:stevemolitor/claude-code.el";
     cloud-native-pg.flake = false;
     cloud-native-pg.url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.1/cnpg-1.24.1.yaml"; # gh-release-update
     copilot-vim.flake = false;
@@ -85,6 +87,8 @@
     microvm.inputs.flake-utils.follows = "flake-utils";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
+    monet-el.flake = false;
+    monet-el.url = "github:stevemolitor/monet";
     niri.url = "github:sodiboo/niri-flake";
     nix2container.inputs.nixpkgs.follows = "nixpkgs";
     nix2container.url = "github:nlewo/nix2container";

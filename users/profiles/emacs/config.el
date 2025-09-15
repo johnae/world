@@ -1,3 +1,10 @@
+;; Startup time measurement
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "Emacs loaded in %s with %d garbage collections."
+                     (emacs-init-time)
+                     gcs-done)))
+
 (with-eval-after-load 'package
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
 
@@ -57,13 +64,14 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file t t)
 
-;; Enable winner mode
-(winner-mode)
+;; Enable winner mode after init
+(add-hook 'after-init-hook #'winner-mode)
 
 ;; which-key: shows a popup of available keybindings when typing a long key
 ;; sequence (e.g. C-x ...)
 (use-package which-key
   :ensure t
+  :defer 2  ; Load after 2 seconds - not needed immediately
   :config
   (which-key-mode))
 
@@ -81,7 +89,7 @@
 (setopt completions-format 'one-column)
 (setopt completions-group t)
 (setopt completion-auto-select 'second-tab)            ; Much more eager
-;(setopt completion-auto-select t)                     ; See `C-h v completion-auto-select' for more possible values
+					;(setopt completion-auto-select t)                     ; See `C-h v completion-auto-select' for more possible values
 
 (keymap-set minibuffer-mode-map "TAB" 'minibuffer-complete) ; TAB acts more like how it does in the shell
 
@@ -169,6 +177,7 @@
 ; (load-file (expand-file-name "extras/font.el" user-emacs-directory))
 ; (load-file (expand-file-name "extras/meow.el" user-emacs-directory))
 ; (load-file (expand-file-name "extras/eshell.el" user-emacs-directory))
+; (load-file (expand-file-name "extras/claude.el" user-emacs-directory))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
