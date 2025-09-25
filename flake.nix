@@ -82,6 +82,8 @@
     juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.25.2/deploy/k8s.yaml"; # gh-release-update
     kured.flake = false;
     kured.url = "github:kubereboot/kured";
+    # lanzaboote.url = "github:nix-community/lanzaboote/v0.4.1";
+    # lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
     mac-app-util.url = "github:hraban/mac-app-util";
     microvm.url = "github:astro/microvm.nix";
     microvm.inputs.flake-utils.follows = "flake-utils";

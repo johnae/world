@@ -81,6 +81,7 @@
     inputs.home-manager.nixosModules.home-manager
     inputs.impermanence.nixosModules.impermanence
     inputs.microvm.nixosModules.host
+    inputs.lanzaboote.nixosModules.lanzaboote
     inputs.nixpkgs.nixosModules.notDetected
     ../modules/default.nix
   ];
