@@ -24,7 +24,7 @@ jobs:
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
 
-    - uses: DeterminateSystems/nix-installer-action@v17
+    - uses: DeterminateSystems/nix-installer-action@v20
       with:
         extra-conf: |
           accept-flake-config = true
