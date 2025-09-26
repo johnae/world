@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  inherit (config.home) homeDirectory;
+  inherit (config.home) homeDirectory username;
   nushim = pkgs.writeShellScriptBin "nushim" ''
     source /etc/bashrc
     export SHELL=nu

@@ -14,7 +14,7 @@ in {
     ./claude.nix
     ./git.nix
     ./gitui.nix
-    ./emacs/default.nix
+    # ./emacs/default.nix
     ./helix.nix
     ./jujutsu.nix
     ./kubie.nix
@@ -45,8 +45,9 @@ in {
     cachix
     carapace
     devenv
-    fzf # # for certain utilities that depend on it
     difftastic
+    fd
+    fzf # # for certain utilities that depend on it
     gh
     git-crypt
     google-cloud-sdk-gke
@@ -61,6 +62,7 @@ in {
     nil
     nixd
     nix-index
+    ripgrep
     scripts
     tdf
   ];
