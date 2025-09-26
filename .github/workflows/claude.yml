@@ -30,6 +30,14 @@ jobs:
         with:
           fetch-depth: 1
 
+      - uses: DeterminateSystems/nix-installer-action@v17
+        with:
+          extra-conf: |
+            accept-flake-config = true
+            
+      - name: Run the Magic Nix Cache
+        uses: DeterminateSystems/magic-nix-cache-action@v9
+    
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@beta
@@ -50,7 +58,7 @@ jobs:
           # assignee_trigger: "claude-bot"
           
           # Optional: Allow Claude to run specific commands
-          allowed_tools: "Bash(nix flake:*),Bash(find:*),Bash(grep:*),Bash(curl:*)"
+          allowed_tools: "Bash(nix flake:*),Bash(find:*),Bash(grep:*),Bash(curl:*),Bash(gh:*)"
           
           # Optional: Add custom instructions for Claude to customize its behavior for your project
           # custom_instructions: |
