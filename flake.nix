@@ -148,10 +148,10 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         ./flake/buildkite-pipeline.nix
+        ./flake/configurations.nix
         ./flake/devenv.nix
         ./flake/github-actions.nix
         ./flake/helper-packages.nix
-        ./flake/hosts.nix
         ./flake/kubernetes.nix
         ./flake/packages.nix
         ./flake/setup.nix
