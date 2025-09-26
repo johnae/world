@@ -10,7 +10,7 @@ jobs:
   nix_lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4      
+    - uses: actions/checkout@v5      
     - uses: DeterminateSystems/nix-installer-action@v17
       with:
         extra-conf: |
@@ -23,7 +23,7 @@ jobs:
   nix_check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: DeterminateSystems/nix-installer-action@v17
       with:
         extra-conf: |
@@ -38,7 +38,7 @@ jobs:
     outputs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: DeterminateSystems/nix-installer-action@v17
       with:
         extra-conf: |
@@ -54,7 +54,7 @@ jobs:
     outputs:
       matrix: ${{ steps.job-matrix.outputs.matrix }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: DeterminateSystems/nix-installer-action@v17
       with:
         extra-conf: |
@@ -71,7 +71,7 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.pkgs_x86_64_linux.outputs.matrix) }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: DeterminateSystems/nix-installer-action@v17
       with:
         extra-conf: |
