@@ -123,7 +123,7 @@
 in {
   home.packages = with pkgs; [
     kile-wl
-    rofi-wayland
+    rofi
     fuzzel
     light
     pamixer
@@ -311,7 +311,7 @@ in {
         "${modifier}+Shift+i" = ''exec ${pkgs.sway}/bin/swaymsg inhibit_idle none'';
 
         "${modifier}+Return" = ''exec ${terminal-bin}'';
-        "${modifier}+d" = ''exec ${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes "drun,run"'';
+        "${modifier}+d" = ''exec ${pkgs.rofi}/bin/rofi -show combi -modes combi -combi-modes "drun,run"'';
 
         "${modifier}+minus" = ''exec ${pkgs.scripts}/bin/rofi-rbw'';
         "${modifier}+Shift+minus" = ''exec passonly=y ${pkgs.scripts}/bin/rofi-rbw'';

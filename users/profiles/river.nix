@@ -133,7 +133,7 @@
 in {
   home.packages = with pkgs; [
     kile-wl
-    rofi-wayland
+    rofi
     fuzzel
     light
     pamixer

@@ -81,7 +81,7 @@
       XDG_SESSION_DESKTOP = "river";
     };
     name = "river";
-    cmd = "${pkgs.river}/bin/river";
+    cmd = "${pkgs.river-classic}/bin/river";
   };
 
   desktopSession = name: command:

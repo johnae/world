@@ -31,9 +31,9 @@
           for ws in "$@"; do
               tags=$((1 << (ws - 1)))
               if [ "$ws" = "$active" ]; then
-                printf "(button :onclick \"${pkgs.river}/bin/riverctl set-focused-tags %s\" :class \"wsbutton wsactive\" \"$ws\")" "$tags"
+                printf "(button :onclick \"${pkgs.river-classic}/bin/riverctl set-focused-tags %s\" :class \"wsbutton wsactive\" \"$ws\")" "$tags"
               else
-                printf "(button :onclick \"${pkgs.river}/bin/riverctl set-focused-tags %s\" :class \"wsbutton\" \"$ws\")" "$tags"
+                printf "(button :onclick \"${pkgs.river-classic}/bin/riverctl set-focused-tags %s\" :class \"wsbutton\" \"$ws\")" "$tags"
               fi
           done
           printf ")\n"

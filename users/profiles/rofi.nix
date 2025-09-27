@@ -5,7 +5,7 @@
 }: {
   programs.rofi = {
     enable = true;
-    package = pkgs.rofi-wayland;
+    package = pkgs.rofi;
     font = "Roboto Medium 14";
     theme = let
       inherit (config.lib.formats.rasi) mkLiteral;
