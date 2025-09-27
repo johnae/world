@@ -13,7 +13,7 @@
       hostname
       pass
       rbw
-      rofi-wayland
+      rofi
       skim
       tailscale
       wpa_supplicant
@@ -96,7 +96,7 @@
 
     rofi-rbw = writeShellApplication {
       name = "rofi-rbw";
-      runtimeInputs = [rofi-wayland rbw dotool];
+      runtimeInputs = [rofi rbw dotool];
       text = ''
         passonly=''${passonly:-}
         codeonly=''${codeonly:-}

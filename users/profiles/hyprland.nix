@@ -182,7 +182,7 @@ in {
       [
         "$mod, Return, exec, ${terminal-bin}"
         "$mod SHIFT, q, killactive"
-        "$mod, d, exec, ${pkgs.rofi-wayland}/bin/rofi -show combi -modes combi -combi-modes \"drun,run\""
+        "$mod, d, exec, ${pkgs.rofi}/bin/rofi -show combi -modes combi -combi-modes \"drun,run\""
         "$mod SHIFT, e, exec, ${local-dev}/bin/local-dev"
         "$mod SHIFT, r, exec, ${remote-dev}/bin/remote-dev"
         "$mod SHIFT, s, exec, ${screenshot}/bin/screenshot"
