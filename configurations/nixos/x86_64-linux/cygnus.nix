@@ -12,7 +12,7 @@
     ../../../profiles/admin-user/home-manager.nix
     ../../../profiles/admin-user/u2fmappings.nix
     ../../../profiles/admin-user/user.nix
-    ../../../profiles/disk/bcachefs-on-luks.nix
+    ../../../profiles/disk/disko-btrfs.nix
     ../../../profiles/core-metrics.nix
     ../../../profiles/core-logging.nix
     ../../../profiles/greetd.nix
@@ -28,8 +28,10 @@
     ../../../profiles/zram.nix
   ];
 
-  bcachefs.disks = ["/dev/nvme0n1"];
-  bcachefs.devices = ["/dev/mapper/encrypted_root"];
+  disko.devices.disk.disk1 = {
+    device = "/dev/disk/by-path/pci-0000:02:00.0-nvme-1";
+    content.partitions.luks.content.passwordFile = null;
+  };
 
   boot.initrd = {
     systemd.enable = true;
