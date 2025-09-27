@@ -30,16 +30,26 @@
     efiInstallAsRemovable = false;
   };
 
+  boot.kernel.sysctl = {
+    "net.ipv4.conf.all.rp_filter" = 2;
+    "net.ipv4.conf.default.rp_filter" = 2;
+  };
+
   boot.kernelParams = lib.mkForce [
-    "ip=95.217.109.212::95.217.109.193:255.255.255.192:${hostName}::none"
+    "ip=95.217.109.212::95.217.109.193:255.255.255.255:${hostName}::none"
   ];
 
-  disko.devices.disk.disk1.device = "/dev/nvme0n1";
+  boot.kernelModules = [
+    "rbd"
+    "libceph" # RBD depends on this, so include it
+  ];
+
+  disko.devices.disk.disk1.device = "/dev/disk/by-path/pci-0000:41:00.0-nvme-1";
 
   systemd.services.metadata = let
     CLUSTER_ID = "5df5";
     NODE_ID = "f278";
-    INITIAL_MASTER = "192.168.123.100";
+    INITIAL_MASTER = "192.168.123.101";
     initScript = pkgs.writeShellScript "metadata-init" ''
       mkdir -p /run/nixos
       cat<<META>/run/nixos/metadata
@@ -63,7 +73,7 @@
   };
 
   system.autoUpgrade = {
-    enable = true;
+    enable = false;
     flake = "github:johnae/world";
     allowReboot = true;
     dates = "06:00";
@@ -77,7 +87,7 @@
     cluster-init = true;
     node-ip = lib.mkForce "192.168.123.102";
     node-external-ip = lib.mkForce "95.217.109.212";
-    advertise-address = lib.mkForce "192.168.123.100";
+    advertise-address = lib.mkForce "192.168.123.102";
   };
 
   age.secrets = {
@@ -125,7 +135,7 @@
       netdevConfig = {
         Kind = "vlan";
         Name = "${vlanIface}";
-        MTUBytes = 1400;
+        # MTUBytes = 1400;
       };
       vlanConfig.Id = 4000;
     };
@@ -135,13 +145,19 @@
         ## https://www.freedesktop.org/software/systemd/man/latest/systemd.net-naming-scheme.html
         matchConfig.Name = [iface];
         address = [
-          "95.217.109.212/26"
+          "95.217.109.212/32"
           "2a01:4f9:4a:2b5e::2/64"
         ];
         vlan = [vlanIface];
         routes = [
-          {Gateway = "95.217.109.193";}
-          {Gateway = "fe80::1";}
+          {
+            Gateway = "95.217.109.193";
+            GatewayOnLink = true;
+          }
+          {
+            Gateway = "fe80::1";
+            GatewayOnLink = true;
+          }
         ];
         linkConfig.RequiredForOnline = "routable";
       };

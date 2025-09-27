@@ -1,5 +1,6 @@
 {
   pkgs,
+  inputs,
   config,
   tailnet,
   ...
@@ -81,17 +82,29 @@ in {
         ${pkgs.kubernetes-helm}/bin/helm template cilium ${pkgs.inputs.cilium-chart} \
           --namespace kube-system \
           --set kubeProxyReplacement=true \
-          --set k8sServiceHost=${settings.advertise-address} \
+          --set k8sServiceHost=192.168.123.101 \
           --set k8sServicePort=6443 \
           --set enableExternalIPs=true \
           --set enableHostPort=true \
           --set enableNodePort=true \
           --set ipam.operator.clusterPoolIPv4PodCIDRList=${settings.cluster-cidr} \
-          --set encryption.enabled=true \
+          --set ipv4NativeRoutingCIDR=${settings.cluster-cidr} \
+          --set routingMode=native \
+          --set autoDirectNodeRoutes=true \
+          --set devices='{enp195s0.4000,enp195s0}' \
+          --set excludeDevices='{tailscale0}' \
+          --set bpf.masquerade=true \
+          --set endpointRoutes.enabled=true \
+          --set autoDirectNodeRoute=true \
+          --set encryption.enabled=true\
           --set encryption.type=wireguard \
           --set encryption.nodeEncryption=true > "$out"/cilium.yaml
       '';
     in {
+      kubevirt-operator = "${pkgs.kubevirt-operator}/kubevirt-operator.yaml";
+      kubevirt-cr = "${pkgs.kubevirt-cr}/kubevirt-cr.yaml";
+      kubevirt-cdi-cr = "${pkgs.kubevirt-cdi-cr}/kubevirt-cdi-cr.yaml";
+      kubevirt-cdi-operator = "${pkgs.kubevirt-cdi-operator}/kubevirt-cdi-operator.yaml";
       kured = "${pkgs.kured-yaml}/kured.yaml";
       flux = "${pkgs.fluxcd-yaml}/flux.yaml";
       cilium = "${cilium}/cilium.yaml";
@@ -106,6 +119,72 @@ in {
         data = {
           tailnet = "${tailnet}";
           cluster_id = "\${CLUSTER_ID}"; ## comes from /run/nixos/metadata - see tofu/main.tf
+        };
+      };
+      rook-helm-repo = {
+        apiVersion = "source.toolkit.fluxcd.io/v1beta2";
+        kind = "HelmRepository";
+        metadata = {
+          name = "rook";
+          namespace = "flux-system";
+        };
+        spec = {
+          interval = "5m";
+          url = "https://charts.rook.io/release";
+        };
+      };
+      rook-ceph-operator = {
+        apiVersion = "helm.toolkit.fluxcd.io/v2beta2";
+        kind = "HelmRelease";
+        metadata = {
+          name = "rook-ceph-operator";
+          namespace = "flux-system";
+        };
+        spec = {
+          chart.spec = {
+            chart = "rook-ceph";
+            interval = "5m";
+            sourceRef = {
+              kind = "HelmRepository";
+              name = "rook";
+            };
+          };
+          install.createNamespace = true;
+          releaseName = "rook-ceph";
+          targetNamespace = "rook-ceph";
+          interval = "10m";
+          timeout = "5m";
+        };
+      };
+      rook-ceph-cluster = {
+        apiVersion = "helm.toolkit.fluxcd.io/v2beta2";
+        kind = "HelmRelease";
+        metadata = {
+          name = "rook-ceph-cluster";
+          namespace = "flux-system";
+        };
+        spec = {
+          dependsOn = [
+            {
+              name = "rook-ceph-operator";
+            }
+          ];
+          chart.spec = {
+            chart = "rook-ceph-cluster";
+            interval = "5m";
+            sourceRef = {
+              kind = "HelmRepository";
+              name = "rook";
+            };
+          };
+          install.createNamespace = true;
+          releaseName = "rook-ceph-cluster";
+          targetNamespace = "rook-ceph";
+          interval = "10m";
+          timeout = "5m";
+          values = {
+            cephClusterSpec.storage.deviceFilter = "^nvme[0-9]+n[0-9]+$";
+          };
         };
       };
       # encrypted-storage-class = {

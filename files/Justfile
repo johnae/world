@@ -6,6 +6,7 @@ set shell := ["nu", "-c"]
 alias help := default
 
 import? '~/.just/world.extras.just'
+import? '/home/john/Development/world/.just/world.extras.just'
 
 default:
   #!/usr/bin/env nu
@@ -84,16 +85,101 @@ build-installer flake="github:johnae/world":
   @nix build '{{flake}}#nixosConfigurations.installer.config.system.build.isoImage'
 
 [private]
+remote-reset-all:
+  #!/usr/bin/env bash
+  CURLCREDS="$(rbw get hetzner --full webservice-password | grep user: | awk '{print $2}'):$(rbw get hetzner webservice-password)"
+  CURLEP=https://robot-ws.your-server.de
+  FINGERPRINT="$(ssh-keygen -E md5 -lf ~/.ssh/id_ed25519_alt | awk '{print $2}' | sed 's|MD5:||g')"
+  function hetzner() {
+    local path="$1"
+    shift
+    curl -u "$CURLCREDS" "$@" "$CURLEP/$path"
+  }
+  for server_number in $(hetzner /server | jq -r .[].server.server_number); do
+    hetzner "/boot/$server_number/rescue" -d "os=linux&authorized_key[]=$FINGERPRINT"
+    hetzner "/reset/$server_number" -d "type=hw"
+  done
+
+[private]
+remote-reset name:
+  #!/usr/bin/env bash
+  CURLCREDS="$(rbw get hetzner --full webservice-password | grep user: | awk '{print $2}'):$(rbw get hetzner webservice-password)"
+  CURLEP=https://robot-ws.your-server.de
+  FINGERPRINT="$(ssh-keygen -E md5 -lf ~/.ssh/id_ed25519_alt | awk '{print $2}' | sed 's|MD5:||g')"
+  function hetzner() {
+    local path="$1"
+    shift
+    curl -u "$CURLCREDS" "$@" "$CURLEP/$path"
+  }
+  server_number=$(hetzner /server | jq -r '.[] | select(.server.server_name == "{{name}}").server.server_number')
+  echo "reset to rescue system {{name}}, server_number: $server_number"
+  hetzner "/boot/$server_number/rescue" -d "os=linux&authorized_key[]=$FINGERPRINT"
+  hetzner "/reset/$server_number" -d "type=hw"
+
+[private]
+remote-reboot name:
+  #!/usr/bin/env bash
+  CURLCREDS="$(rbw get hetzner --full webservice-password | grep user: | awk '{print $2}'):$(rbw get hetzner webservice-password)"
+  CURLEP=https://robot-ws.your-server.de
+  FINGERPRINT="$(ssh-keygen -E md5 -lf ~/.ssh/id_ed25519_alt | awk '{print $2}' | sed 's|MD5:||g')"
+  function hetzner() {
+    local path="$1"
+    shift
+    curl -u "$CURLCREDS" "$@" "$CURLEP/$path"
+  }
+  server_number=$(hetzner /server | jq -r '.[] | select(.server.server_name == "{{name}}").server.server_number')
+  echo "rebooting {{name}}, server_number: $server_number"
+  hetzner "/reset/$server_number" -d "type=hw"
+
+[private]
+remote-upgrade flake-config ssh-host:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  nixos-rebuild switch --flake '{{flake-config}}' --target-host {{ssh-host}} --sudo
+
+[private]
 remote-install flake-config ssh-host encrypt-disk="yes" precmd="":
   #!/usr/bin/env bash
   set -euo pipefail
   temp="$(mktemp -d)"
   disktmp="$(mktemp -d)"
+  hostname="$(echo '{{flake-config}}' | awk -F'#' '{print $2}')"
   cleanup() {
     echo cleaning up tmp files in "$temp" and "$disktmp"
     rm -rf "$temp" "$disktmp"
   }
   trap cleanup EXIT
+
+  function port-open() {
+    local retries=20
+    local ip="$(echo "{{ssh-host}}" | sed 's|.*@||g')"
+    local port="$1"
+    while true; do
+      if [ ${retries} -le 0 ]; then
+        echo "Failed to unlock host"
+        return 1
+      fi
+      retries=$((retries - 1))
+      echo "Probing host ${ip} on port ${port}"
+      if timeout 5 bash -c "</dev/tcp/${ip}/${port}"; then
+        echo "Host ${ip} is up"
+        return 0
+      fi
+      echo "Host ${ip} on port ${port} is not responding... retrying"
+      sleep 10
+    done
+  }
+
+  function unlock() {
+    local ip="$(echo "{{ssh-host}}" | sed 's|.*@||g')"
+    local port="2222"
+    if port-open "$port"; then
+      echo "Host ${ip}:${port} is open, unlocking"
+      rbw get hetzner -- disk_password | ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i /home/john/.ssh/id_ed25519_alt -p "${port}" "{{ssh-host}}" || true
+      return 0
+    fi
+    return 1
+  }
 
   install -d -m755 "$temp/etc/ssh"
 
@@ -101,6 +187,23 @@ remote-install flake-config ssh-host encrypt-disk="yes" precmd="":
     -d "client_id=$(rbw get tailscale --full tskey-oauth-full-access | grep client_id: | awk -F': ' '{print $2}')" \
     -d "client_secret=$(rbw get tailscale tskey-oauth-full-access)" \
     "https://api.tailscale.com/api/v2/oauth/token" | jq -r .access_token)"
+
+  OLD_DEVICE_ID="$(curl "https://api.tailscale.com/api/v2/tailnet/9000.dev/devices" --header "Authorization: Bearer $TS_TOKEN" | jq -r ".devices[] | select(.hostname == \"$hostname\").id")"
+  K8S_DEVICE_ID="$(curl "https://api.tailscale.com/api/v2/tailnet/9000.dev/devices" --header "Authorization: Bearer $TS_TOKEN" | jq -r ".devices[] | select(.hostname == \"k8s-api-5df5\").id")"
+
+  if [[ ${#OLD_DEVICE_ID} -gt 10 ]]; then
+    echo "deleting old tailscale device host: $hostname id: $OLD_DEVICE_ID"
+    curl "https://api.tailscale.com/api/v2/device/$OLD_DEVICE_ID" \
+      --request DELETE \
+      --header "Authorization: Bearer $TS_TOKEN"
+  fi
+
+  # if [[ ${#K8S_DEVICE_ID} -gt 10 ]]; then
+  #   echo "deleting old tailscale device host: $hostname id: $K8S_DEVICE_ID"
+  #   curl "https://api.tailscale.com/api/v2/device/$K8S_DEVICE_ID" \
+  #     --request DELETE \
+  #     --header "Authorization: Bearer $TS_TOKEN"
+  # fi
 
   curl "https://api.tailscale.com/api/v2/tailnet/9000.dev/keys?all=true" \
     -X POST \
@@ -139,10 +242,17 @@ remote-install flake-config ssh-host encrypt-disk="yes" precmd="":
   fi
   chmod 0600 "$temp/etc/ssh/ssh_host_ed25519_key"
   chmod 0600 "$temp/etc/ssh/initrd_ed25519_key"
+
+  if ! port-open 22; then
+    echo "port 22 on ${ip} didn't open, even after waiting a while"
+    exit 1
+  fi
+
   if [ -n "{{precmd}}" ]; then
     echo "run: {{precmd}}"
-    ssh {{ssh-host}} "{{precmd}}"
+    ssh -o UserKnownHostsFile=/dev/null -o strictHostKeyChecking=no {{ssh-host}} "echo lsblk before; lsblk; {{precmd}}; echo lsblk after; lsblk; ls /dev"
   fi
+
   echo start installation
   if [ "{{encrypt-disk}}" = "yes" ]; then
     echo "starting remote install WITH encrypted disks"
@@ -151,6 +261,8 @@ remote-install flake-config ssh-host encrypt-disk="yes" precmd="":
     echo "starting remote install NO encrypted disks"
     nix run github:nix-community/nixos-anywhere -- --extra-files "$temp" --flake '{{flake-config}}' --target-host {{ssh-host}}
   fi
+
+  unlock
 
 [private]
 rekey:
