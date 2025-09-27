@@ -86,8 +86,9 @@
                   stateVersion = "25.05"; # set and bump intentionally
                 };
                 programs.home-manager.enable = true;
-                # if you prefer HM to manage packages:
-                # home.packages = with (mkPkgs system); [ ];
+                home.packages = [
+                  pkgs.world
+                ];
               }
               ../users/modules/chromiums.nix
               ../users/modules/git-auto-sync.nix
