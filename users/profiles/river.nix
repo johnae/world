@@ -9,49 +9,6 @@
     listToAttrs
     ;
 
-  swaylockTimeout = "300";
-  swaylockSleepTimeout = "310";
-
-  swaylockEffects = pkgs.writeShellApplication {
-    name = "swaylock-effects";
-    runtimeInputs = [pkgs.swaylock-effects];
-    text = ''
-      exec swaylock \
-       --screenshots \
-       --indicator-radius 100 \
-       --indicator-thickness 7 \
-       --effect-blur 15x3 \
-       --effect-greyscale \
-       --ring-color ffffff \
-       --ring-clear-color baffba \
-       --ring-ver-color bababa \
-       --ring-wrong-color ffbaba \
-       --key-hl-color bababa \
-       --line-color ffffffaa \
-       --inside-color ffffffaa \
-       --inside-ver-color bababaaa \
-       --line-ver-color bababaaa \
-       --inside-clear-color baffbaaa \
-       --line-clear-color baffbaaa \
-       --inside-wrong-color ffbabaaa \
-       --line-wrong-color ffbabaaa \
-       --separator-color 00000000 \
-       --grace 2 \
-       --fade-in 0.2
-    '';
-  };
-
-  swayidleCommand = pkgs.writeShellApplication {
-    name = "swayidle";
-    runtimeInputs = [pkgs.bash swaylockEffects pkgs.swayidle];
-    text = ''
-      exec swayidle -d -w timeout ${swaylockTimeout} swaylock-effects \
-                     timeout ${swaylockSleepTimeout} '${pkgs.wlopm}/bin/wlopm --off *' \
-                     resume '${pkgs.wlopm}/bin/wlopm --on *' \
-                     before-sleep swaylock-effects
-    '';
-  };
-
   screenshot = pkgs.writeShellApplication {
     name = "screenshot";
     runtimeInputs = [pkgs.slurp pkgs.grim];
@@ -176,7 +133,7 @@ in {
 
     keyboard-layout = "-model pc105 -variant '' -options ctrl:nocaps,grp:switch,compose:rctrl us,se";
 
-    map.normal."Super+Control L" = "spawn '${swaylockEffects}/bin/swaylock-effects'";
+    map.normal."Super+Control L" = "spawn 'loginctl lock-sessions'";
     map.normal."Super+Control Space" = "toggle-float";
 
     map.normal."Super+Control J" = "spawn 'riverctl focus-view next; riverctl swap next; riverctl zoom'";
@@ -262,7 +219,6 @@ in {
     default-layout = "luatile";
     spawn =
       [
-        "${swayidleCommand}/bin/swayidle"
         "${pkgs.kanshi}/bin/kanshi"
         "${pkgs.wpaperd}/bin/wpaperd"
       ]
