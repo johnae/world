@@ -4,64 +4,6 @@
   lib,
   ...
 }: let
-  swayservice = Description: ExecStart: {
-    Unit = {
-      inherit Description;
-      After = "sway-session.target";
-      BindsTo = "sway-session.target";
-    };
-
-    Service = {
-      Type = "simple";
-      inherit ExecStart;
-    };
-
-    Install.WantedBy = ["sway-session.target"];
-  };
-
-  swaylockTimeout = "300";
-  swaylockSleepTimeout = "310";
-
-  swaylockEffects = pkgs.writeShellApplication {
-    name = "swaylock-effects";
-    runtimeInputs = [pkgs.swaylock-effects];
-    text = ''
-      exec swaylock \
-       --screenshots \
-       --indicator-radius 100 \
-       --indicator-thickness 7 \
-       --effect-blur 15x3 \
-       --effect-greyscale \
-       --ring-color ffffff \
-       --ring-clear-color baffba \
-       --ring-ver-color bababa \
-       --ring-wrong-color ffbaba \
-       --key-hl-color bababa \
-       --line-color ffffffaa \
-       --inside-color ffffffaa \
-       --inside-ver-color bababaaa \
-       --line-ver-color bababaaa \
-       --inside-clear-color baffbaaa \
-       --line-clear-color baffbaaa \
-       --inside-wrong-color ffbabaaa \
-       --line-wrong-color ffbabaaa \
-       --separator-color 00000000 \
-       --grace 2 \
-       --fade-in 0.2
-    '';
-  };
-
-  swayidleCommand = pkgs.writeShellApplication {
-    name = "swayidle";
-    runtimeInputs = [pkgs.sway pkgs.bash swaylockEffects pkgs.swayidle];
-    text = ''
-      swayidle -d -w timeout ${swaylockTimeout} swaylock-effects \
-                     timeout ${swaylockSleepTimeout} 'swaymsg "output * dpms off"' \
-                     resume 'swaymsg "output * dpms on"' \
-                     before-sleep swaylock-effects
-    '';
-  };
-
   screenshot = pkgs.writeShellApplication {
     name = "screenshot";
     runtimeInputs = [pkgs.slurp pkgs.grim];
@@ -364,11 +306,5 @@ in {
       bindswitch --reload --locked lid:off output eDP-1 enable
       titlebar_border_thickness 0
     '';
-  };
-
-  systemd.user.services = {
-    # persway = swayservice "Small Sway IPC Deamon" "${pkgs.persway}/bin/persway daemon -w -e '[tiling] opacity 1' -f '[tiling] opacity 0.95; opacity 1' -l 'mark --add _prev' -d stack_main";
-    # rotating-background = swayservice "Rotating background service for Sway" "${rotatingBackground}/bin/rotating-background art,abstract,space";
-    swayidle = swayservice "Sway Idle Service - lock screen etc" "${swayidleCommand}/bin/swayidle";
   };
 }

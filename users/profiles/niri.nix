@@ -5,38 +5,7 @@
   ...
 }: let
   xcursor_theme = config.gtk.cursorTheme.name;
-
-  swaylockTimeout = "300";
-  swaylockSleepTimeout = "310";
-
-  swaylockEffects = pkgs.writeShellApplication {
-    name = "swaylock-effects";
-    runtimeInputs = [pkgs.swaylock-effects];
-    text = ''
-      exec swaylock \
-       --screenshots \
-       --indicator-radius 100 \
-       --indicator-thickness 7 \
-       --effect-blur 15x3 \
-       --effect-greyscale \
-       --ring-color ffffff \
-       --ring-clear-color baffba \
-       --ring-ver-color bababa \
-       --ring-wrong-color ffbaba \
-       --key-hl-color bababa \
-       --line-color ffffffaa \
-       --inside-color ffffffaa \
-       --inside-ver-color bababaaa \
-       --line-ver-color bababaaa \
-       --inside-clear-color baffbaaa \
-       --line-clear-color baffbaaa \
-       --inside-wrong-color ffbabaaa \
-       --line-wrong-color ffbabaaa \
-       --separator-color 00000000 \
-       --grace 2 \
-       --fade-in 0.2
-    '';
-  };
+  swayidleConf = config.services.swayidle;
 
   systemMenu = pkgs.writeShellApplication {
     name = "niri-system-menu";
@@ -75,18 +44,21 @@
       fi
     '';
   };
-
-  swayidleCommand = pkgs.writeShellApplication {
-    name = "swayidle";
-    runtimeInputs = [pkgs.sway pkgs.bash swaylockEffects pkgs.swayidle];
-    text = ''
-      swayidle -d -w timeout ${swaylockTimeout} swaylock-effects \
-                     timeout ${swaylockSleepTimeout} 'swaymsg "output * dpms off"' \
-                     resume 'swaymsg "output * dpms on"' \
-                     before-sleep swaylock-effects
-    '';
-  };
 in {
+  services.swayidle = {
+    timeouts = [
+      {
+        timeout = (builtins.head swayidleConf.timeouts) + 90;
+        command = "${pkgs.niri-unstable}/bin/niri msg action power-off-monitors";
+      }
+    ];
+    events = [
+      {
+        event = "after-resume";
+        command = "${pkgs.niri-unstable}/bin/niri msg action power-on-monitors";
+      }
+    ];
+  };
   programs.niri.package = pkgs.niri-unstable;
   programs.niri.enable = true;
   home.packages = with pkgs; [
@@ -94,7 +66,6 @@ in {
     light
     pamixer
     scripts
-    swaylockEffects
   ];
   programs.niri.settings = with config.lib.niri.actions; {
     input = {
@@ -195,15 +166,6 @@ in {
         clip-to-geometry = true;
       }
 
-      # {
-      #   matches = [
-      #     {
-      #       app-id = "^org\.wezfurlong\.wezterm$";
-      #     }
-      #   ];
-
-      #   default-column-width = {};
-      # }
       {
         matches = [
           {
@@ -219,7 +181,7 @@ in {
       "Mod+Shift+Slash".action = show-hotkey-overlay;
       "Super+Return".action.spawn = ["wezterm" "start" "--always-new-process"];
       "Mod+D".action.spawn = "fuzzel";
-      "Super+Alt+L".action.spawn = "swaylock-effects";
+      "Super+Alt+L".action.spawn = "loginctl lock-sessions";
       "XF86AudioRaiseVolume" = {
         action.spawn = ["wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"];
         allow-when-locked = true;
@@ -377,15 +339,6 @@ in {
 
       "Mod+C".action = center-column;
 
-      # "Mod+Minus".action = set-column-width "-10%";
-      # "Mod+Equal".action = set-column-width "+10%";
-
-      # "Mod+Shift+Minus".action = set-window-height "-10%";
-      # "Mod+Shift+Equal".action = set-window-height "+10%";
-
-      # "Mod+V".action = toggle-window-floating;
-      # "Mod+Shift+V".action = switch-focus-between-floating-and-tiling;
-
       "Mod+Shift+w".action.spawn = ["sh" "-c" "${openWeztermDomain}/bin/open-wezterm-domain"];
       "Mod+Minus".action.spawn = ["sh" "-c" "${pkgs.scripts}/bin/rofi-rbw"];
       "Mod+Shift+Minus".action.spawn = ["sh" "-c" "passonly=y ${pkgs.scripts}/bin/rofi-rbw"];
@@ -407,21 +360,6 @@ in {
       "Ctrl+Alt+Delete".action = quit;
 
       "Mod+Shift+P".action = power-off-monitors;
-    };
-  };
-
-  systemd.user.services = {
-    swayidle-niri = {
-      Unit = {
-        Description = "When idle - do something :-)";
-        After = "graphical-session.target";
-        BindsTo = "graphical-session.target";
-      };
-      Service = {
-        Type = "simple";
-        ExecStart = "${swayidleCommand}/bin/swayidle";
-      };
-      Install.WantedBy = ["graphicalsession.target"];
     };
   };
 }
