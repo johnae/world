@@ -186,14 +186,14 @@
     "cilium-chart": {
       "flake": false,
       "locked": {
-        "lastModified": 1750357019,
-        "narHash": "sha256-94xCDaau6blpHx+GmlCmR4QmNfV2b27lMM9hYuDd0do=",
+        "lastModified": 1758125163,
+        "narHash": "sha256-V6v+786h++de7dLTZfP7EmTD6MMkUlZTNEAiOX8x8us=",
         "type": "tarball",
-        "url": "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.17.5.tgz"
+        "url": "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.18.2.tgz"
       },
       "original": {
         "type": "tarball",
-        "url": "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.17.5.tgz"
+        "url": "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.18.2.tgz"
       }
     },
     "cl-nix-lite": {
@@ -1381,6 +1381,54 @@
         "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.25.2/deploy/k8s.yaml"
       }
     },
+    "kubevirt-cdi-cr": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-68BXR8eAhIRx+wuP+x9J87k6JffxHDSg+t/ZwuzoxPU=",
+        "type": "file",
+        "url": "https://github.com/kubevirt/containerized-data-importer/releases/download/v1.63.1/cdi-cr.yaml"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/kubevirt/containerized-data-importer/releases/download/v1.63.1/cdi-cr.yaml"
+      }
+    },
+    "kubevirt-cdi-operator": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-ManyXb3G2dn1hMqd8IKUoDwbhu4LNhW60Snht96G+RQ=",
+        "type": "file",
+        "url": "https://github.com/kubevirt/containerized-data-importer/releases/download/v1.63.1/cdi-operator.yaml"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/kubevirt/containerized-data-importer/releases/download/v1.63.1/cdi-operator.yaml"
+      }
+    },
+    "kubevirt-cr": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-8wkUxxXbiqGKkWv5+09LxU2MDbPkCHn1jECexCtlgY4=",
+        "type": "file",
+        "url": "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-operator.yaml"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-operator.yaml"
+      }
+    },
+    "kubevirt-operator": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-8wkUxxXbiqGKkWv5+09LxU2MDbPkCHn1jECexCtlgY4=",
+        "type": "file",
+        "url": "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-operator.yaml"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-operator.yaml"
+      }
+    },
     "kured": {
       "flake": false,
       "locked": {
@@ -2332,6 +2380,10 @@
         "hyprland": "hyprland",
         "impermanence": "impermanence",
         "juicefs-csi-driver": "juicefs-csi-driver",
+        "kubevirt-cdi-cr": "kubevirt-cdi-cr",
+        "kubevirt-cdi-operator": "kubevirt-cdi-operator",
+        "kubevirt-cr": "kubevirt-cr",
+        "kubevirt-operator": "kubevirt-operator",
         "kured": "kured",
         "mac-app-util": "mac-app-util",
         "microvm": "microvm",

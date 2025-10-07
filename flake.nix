@@ -33,7 +33,7 @@
       flake-compat.follows = "flake-compat";
       nixpkgs.follows = "nixpkgs";
     };
-    cilium-chart.url = "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.17.5.tgz";
+    cilium-chart.url = "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.18.2.tgz";
     cilium-chart.flake = false;
     claude-code-el.flake = false;
     claude-code-el.url = "github:stevemolitor/claude-code.el";
@@ -80,6 +80,14 @@
     impermanence.url = "github:nix-community/impermanence";
     juicefs-csi-driver.flake = false;
     juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.25.2/deploy/k8s.yaml"; # gh-release-update
+    kubevirt-operator.flake = false;
+    kubevirt-operator.url = "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-operator.yaml";
+    kubevirt-cr.flake = false;
+    kubevirt-cr.url = "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-operator.yaml";
+    kubevirt-cdi-cr.flake = false;
+    kubevirt-cdi-cr.url = "https://github.com/kubevirt/containerized-data-importer/releases/download/v1.63.1/cdi-cr.yaml";
+    kubevirt-cdi-operator.flake = false;
+    kubevirt-cdi-operator.url = "https://github.com/kubevirt/containerized-data-importer/releases/download/v1.63.1/cdi-operator.yaml";
     kured.flake = false;
     kured.url = "github:kubereboot/kured";
     mac-app-util.url = "github:hraban/mac-app-util";
