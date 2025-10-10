@@ -147,7 +147,7 @@
         matchConfig.Name = [iface];
         address = [
           "95.217.109.215/32"
-          "2a01:4f9:4a:2b5c::2/64"
+          "2a01:4f9:4a:2b5c::2/128" # have a /64
         ];
         vlan = [vlanIface];
         routes = [
