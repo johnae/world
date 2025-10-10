@@ -22,11 +22,17 @@
               mountpoint = "/boot";
             };
           };
-          encryptedSwap = {
+          swap = {
             size = "64G";
             content = {
-              type = "swap";
-              randomEncryption = true;
+              type = "luks";
+              name = "encrypted-swap";
+              settings.allowDiscards = true;
+              passwordFile = "/tmp/disk.key";
+              content = {
+                type = "swap";
+                resumeDevice = true;
+              };
             };
           };
           luks = {
@@ -40,10 +46,6 @@
                 type = "btrfs";
                 extraArgs = ["-f"];
                 subvolumes = {
-                  "/root" = {
-                    mountOptions = ["compress=zstd" "noatime"];
-                    mountpoint = "/";
-                  };
                   "/nix" = {
                     mountOptions = ["compress=zstd" "noatime"];
                     mountpoint = "/nix";
@@ -59,14 +61,14 @@
         };
       };
     };
-    #   nodev."/" = {
-    #     fsType = "tmpfs";
-    #     mountOptions = [
-    #       "size=16G"
-    #       "defaults"
-    #       "mode=755"
-    #     ];
-    #   };
+    nodev."/" = {
+      fsType = "tmpfs";
+      mountOptions = [
+        "size=16G"
+        "defaults"
+        "mode=755"
+      ];
+    };
   };
   # fileSystems."/boot".neededForBoot = true;
   fileSystems."/keep".neededForBoot = true;

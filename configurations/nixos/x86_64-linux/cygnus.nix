@@ -12,7 +12,7 @@
     ../../../profiles/admin-user/home-manager.nix
     ../../../profiles/admin-user/u2fmappings.nix
     ../../../profiles/admin-user/user.nix
-    ../../../profiles/disk/disko-btrfs.nix
+    ../../../profiles/disk/disko-btrfs-workstation.nix
     ../../../profiles/core-metrics.nix
     ../../../profiles/core-logging.nix
     ../../../profiles/greetd.nix
@@ -30,14 +30,13 @@
 
   disko.devices.disk.disk1 = {
     device = "/dev/disk/by-path/pci-0000:02:00.0-nvme-1";
-    content.partitions.luks.content.passwordFile = null;
   };
 
   boot.initrd = {
     systemd.enable = true;
     systemd.emergencyAccess = config.users.users.${adminUser.name}.hashedPassword;
-    systemd.tpm2.enable = true;
-    #luks.devices.cryptkey.crypttabExtraOpts = ["fido2-device=auto"];
+    luks.devices.encrypted.crypttabExtraOpts = ["tmp2-device=auto" "fido2-device=auto"];
+    luks.devices.encrypted-swap.crypttabExtraOpts = ["tpm2-device=auto" "fido2-device=auto"];
   };
 
   networking.useDHCP = false;
