@@ -1,0 +1,57 @@
+From 3f062e0aa1924dc5666a57b0e7d065cc26a3b29b Mon Sep 17 00:00:00 2001
+From: XeroOl <xerool@protonmail.com>
+Date: Tue, 17 Jun 2025 13:47:11 -0500
+Subject: [PATCH] fix: save the wayland selection offer to every CopyAndPaste
+
+In Wayland, when something is copied to the clipboard, an "offer"
+is given to every "device". WezTerm holds these offers in a
+"CopyAndPaste" struct, and reads from the offer when the user presses
+paste. WezTerm has one CopyAndPaste for each window.
+
+When WezTerm receives a data offer, it previously only saved it to
+one CopyAndPaste based on the active surface id.
+
+After this change, it writes it to every CopyAndPaste.
+
+fixes #6685
+---
+ window/src/os/wayland/copy_and_paste.rs | 9 ---------
+ window/src/os/wayland/data_device.rs    | 5 +++--
+ 2 files changed, 3 insertions(+), 11 deletions(-)
+
+diff --git a/window/src/os/wayland/copy_and_paste.rs b/window/src/os/wayland/copy_and_paste.rs
+index ce309fbd3cb..70bb855afbe 100644
+--- a/window/src/os/wayland/copy_and_paste.rs
++++ b/window/src/os/wayland/copy_and_paste.rs
+@@ -99,15 +99,6 @@ impl CopyAndPaste {
+     }
+ }
+ 
+-impl WaylandState {
+-    pub(super) fn resolve_copy_and_paste(&mut self) -> Option<Arc<Mutex<CopyAndPaste>>> {
+-        let active_surface_id = self.active_surface_id.borrow();
+-        let active_surface_id = active_surface_id.as_ref()?;
+-        let pending = self.surface_to_pending.get(&active_surface_id)?;
+-        Some(Arc::clone(&pending.lock().unwrap().copy_and_paste))
+-    }
+-}
+-
+ pub(super) fn write_selection_to_pipe(fd: WritePipe, text: &str) {
+     if let Err(e) = write_pipe_with_timeout(fd, text.as_bytes()) {
+         log::error!("while sending primary selection to pipe: {}", e);
+diff --git a/window/src/os/wayland/data_device.rs b/window/src/os/wayland/data_device.rs
+index 338280e0234..1cb3ac10b64 100644
+--- a/window/src/os/wayland/data_device.rs
++++ b/window/src/os/wayland/data_device.rs
+@@ -112,8 +112,9 @@ impl DataDeviceHandler for WaylandState {
+                 return;
+             }
+ 
+-            if let Some(copy_and_paste) = self.resolve_copy_and_paste() {
+-                copy_and_paste.lock().unwrap().confirm_selection(offer);
++            for pending_mouse in self.surface_to_pending.values() {
++                let copy_and_paste = &pending_mouse.lock().unwrap().copy_and_paste;
++                copy_and_paste.lock().unwrap().confirm_selection(offer.clone());
+             }
+         }
+     }
