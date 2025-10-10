@@ -72,19 +72,6 @@ in {
     scripts
     persway
   ];
-  home.sessionVariables = {
-    GDK_BACKEND = "wayland";
-    CLUTTER_BACKEND = "wayland";
-    QT_QPA_PLATFORM = "";
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    QT_WAYLAND_FORCE_DPI = "physical";
-    SDL_VIDEODRIVER = "wayland";
-    MOZ_ENABLE_WAYLAND = "1";
-    MOZ_USE_XINPUT2 = "1";
-    XCURSOR_THEME = xcursor_theme;
-    QT_STYLE_OVERRIDE = lib.mkForce "gtk";
-    _JAVA_AWT_WM_NONREPARENTING = "1";
-  };
 
   wayland.windowManager.sway = {
     enable = true;
@@ -245,7 +232,7 @@ in {
 
         "${modifier}+Shift+k" = ''exec systemctl --user restart kanshi'';
 
-        "${modifier}+Control+l" = ''exec ${swaylockEffects}/bin/swaylock-effects'';
+        "${modifier}+Control+l" = ''exec loginctl lock-session'';
 
         "${modifier}+Control+Shift+l" = ''exec ${pkgs.psmisc}/bin/killall -USR1 swayidle'';
 

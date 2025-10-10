@@ -196,6 +196,7 @@
                 nixpkgs.pkgs = pkgs;
                 environment.systemPackages = [
                   pkgs.world
+                  inputs.noctalia.packages.${system}.default
                 ];
               }
             ]

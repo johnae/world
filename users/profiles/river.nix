@@ -96,19 +96,6 @@ in {
     pamixer
     scripts
   ];
-  home.sessionVariables = {
-    GDK_BACKEND = "wayland";
-    CLUTTER_BACKEND = "wayland";
-    QT_QPA_PLATFORM = "";
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    MOZ_ENABLE_WAYLAND = "1";
-    MOZ_USE_XINPUT2 = "1";
-    QT_WAYLAND_FORCE_DPI = "physical";
-    SDL_VIDEODRIVER = "wayland";
-    XCURSOR_THEME = xcursor_theme;
-    QT_STYLE_OVERRIDE = lib.mkForce "gtk";
-    _JAVA_AWT_WM_NONREPARENTING = "1";
-  };
 
   wayland.windowManager.river.enable = true;
   wayland.windowManager.river.settings = {

@@ -108,6 +108,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    noctalia.url = "github:noctalia-dev/noctalia-shell";
+    noctalia.inputs.nixpkgs.follows = "nixpkgs";
+    noctalia-greet.url = "github:noctalia-dev/noctalia-greet";
+    noctalia-greet.flake = false;
     nur.url = "github:nix-community/NUR";
     persway.url = "github:johnae/persway";
     persway.inputs.crane.follows = "crane";

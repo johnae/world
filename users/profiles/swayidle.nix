@@ -35,11 +35,6 @@ in {
         timeout = 180;
         command = "${swaylockEffects}/bin/swaylock-effects";
       }
-      # {
-      #   timeout = 300;
-      #   command = "${pkgs.niri}/bin/niri"
-      # }
-      #
     ];
     events = [
       {

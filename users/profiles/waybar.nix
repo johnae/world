@@ -63,7 +63,7 @@
   };
 in {
   home.packages = [pomodoro];
-  programs.waybar.enable = true;
+  programs.waybar.enable = false;
   programs.waybar.settings.mainBar = {
     bar_id = "main";
     layer = "top";
