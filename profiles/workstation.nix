@@ -26,9 +26,16 @@
     pkgs.amdvlk
   ];
 
+  services.logind.settings.Login = {
+    IdleAction = "suspend-then-hibernate";
+    IdleActionSec = "30min";
+  };
+
   security.rtkit.enable = true;
   hardware.bluetooth.enable = true;
   networking.wireless.iwd.enable = true;
+  networking.networkmanager.enable = true;
+  networking.networkmanager.wifi.backend = "iwd";
 
   environment.pathsToLink = ["/etc/gconf"];
 

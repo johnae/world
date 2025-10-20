@@ -22,6 +22,7 @@
       then [inputs.mac-app-util.homeManagerModules.default]
       else [
         inputs.niri.homeModules.niri
+        inputs.noctalia.homeModules.default
       ]
     );
 }

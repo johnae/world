@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   config,
   ...
@@ -16,8 +17,9 @@ in {
       ./fuzzel.nix
       ./hyprland.nix
       ./kanshi.nix
-      ./mako.nix
+      # ./mako.nix
       ./niri.nix
+      ./noctalia.nix
       ./obs.nix
       ./rio.nix
       ./river-luatile/default.nix
@@ -33,15 +35,16 @@ in {
   home.packages = with pkgs; [
     # element-desktop-wayland
     gimp
-    nautilus
     kanshi
     lswt
     mako
+    nautilus
     nordic
     playerctl
     river-luatile
     shotcut
     slack
+    spotify
     tenacity
     wl-clipboard
     wl-clipboard-x11
@@ -49,7 +52,7 @@ in {
   ];
 
   services.wpaperd = {
-    enable = true;
+    enable = false;
     settings = {
       default = {
         path = "~/Sync/wallpapers";
@@ -104,7 +107,21 @@ in {
     style.package = pkgs.adwaita-qt;
   };
 
-  home.sessionVariables.XCURSOR_THEME = gtk.cursorTheme.name;
+  home.sessionVariables = {
+    XCURSOR_THEME = gtk.cursorTheme.name;
+    QT_STYLE_OVERRIDE = lib.mkForce "gtk";
+    # Wayland environment variables for all WMs
+    GDK_BACKEND = "wayland";
+    CLUTTER_BACKEND = "wayland";
+    QT_QPA_PLATFORM = "";
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+    QT_WAYLAND_FORCE_DPI = "physical";
+    SDL_VIDEODRIVER = "wayland";
+    MOZ_ENABLE_WAYLAND = "1";
+    MOZ_USE_XINPUT2 = "1";
+    NIXOS_OZONE_WL = "1";
+    _JAVA_AWT_WM_NONREPARENTING = "1";
+  };
 
   gtk = {
     enable = true;

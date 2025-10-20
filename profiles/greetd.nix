@@ -84,6 +84,16 @@
     cmd = "${pkgs.river-classic}/bin/river";
   };
 
+  runNiri = runViaShell {
+    env = {
+      XDG_SESSION_TYPE = "wayland";
+      XDG_CURRENT_DESKTOP = "niri";
+      XDG_SESSION_DESKTOP = "niri";
+    };
+    name = "niri";
+    cmd = "${pkgs.niri-unstable}/bin/niri-session";
+  };
+
   desktopSession = name: command:
     pkgs.writeText "${name}.desktop" ''
       [Desktop Entry]
@@ -115,7 +125,7 @@
     }
     {
       name = "niri.desktop";
-      path = desktopSession "niri" "${pkgs.niri-unstable}/bin/niri-session";
+      path = desktopSession "niri" "${runNiri}/bin/niri";
     }
   ];
 
@@ -160,7 +170,7 @@ in {
     enable = true;
     restart = true;
     settings = {
-      default_session.command = "${createGreeter "${pkgs.niri-unstable}/bin/niri-session" sessions}/bin/greeter";
+      default_session.command = "${createGreeter "${runNiri}/bin/niri" sessions}/bin/greeter";
     };
   };
   ## prevents systemd spewing the console with log messages when greeter is active

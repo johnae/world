@@ -2228,6 +2228,44 @@
         "type": "github"
       }
     },
+    "noctalia": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "quickshell": "quickshell",
+        "systems": "systems_3"
+      },
+      "locked": {
+        "lastModified": 1760068558,
+        "narHash": "sha256-CWjgg9/J0VPBdZWwMtDgHjOzD85SYAFVsVsd5Lq48n4=",
+        "owner": "noctalia-dev",
+        "repo": "noctalia-shell",
+        "rev": "8c5968c721709c233095c2f9d84f803b2db58be1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "noctalia-dev",
+        "repo": "noctalia-shell",
+        "type": "github"
+      }
+    },
+    "noctalia-greet": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1758482470,
+        "narHash": "sha256-1x42bZu1j7UMgmy3FkEzZnA/O/gyDd83bjZU19hm8hQ=",
+        "owner": "noctalia-dev",
+        "repo": "noctalia-greet",
+        "rev": "0d1d1b900459bb5615000059de5892545b40994f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "noctalia-dev",
+        "repo": "noctalia-greet",
+        "type": "github"
+      }
+    },
     "nur": {
       "inputs": {
         "flake-parts": "flake-parts_4",
@@ -2337,6 +2375,27 @@
         "type": "github"
       }
     },
+    "quickshell": {
+      "inputs": {
+        "nixpkgs": [
+          "noctalia",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1753595452,
+        "narHash": "sha256-vqkSDvh7hWhPvNjMjEDV4KbSCv2jyl2Arh73ZXe274k=",
+        "ref": "refs/heads/master",
+        "rev": "a5431dd02dc23d9ef1680e67777fed00fe5f7cda",
+        "revCount": 665,
+        "type": "git",
+        "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
+      }
+    },
     "rocksdb": {
       "flake": false,
       "locked": {
@@ -2397,11 +2456,13 @@
         "nixos-images": "nixos-images",
         "nixpkgs": "nixpkgs_8",
         "nixpkgs-stable-darwin": "nixpkgs-stable-darwin",
+        "noctalia": "noctalia",
+        "noctalia-greet": "noctalia-greet",
         "nur": "nur",
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks_2",
         "rust-overlay": "rust-overlay",
-        "systems": "systems_3",
+        "systems": "systems_4",
         "tuwunel": "tuwunel",
         "victorialogs": "victorialogs",
         "victoriametrics-logs-datasource-plugin": "victoriametrics-logs-datasource-plugin",
@@ -2495,6 +2556,21 @@
       }
     },
     "systems_3": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_4": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",

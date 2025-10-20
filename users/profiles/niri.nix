@@ -1,31 +1,45 @@
 {
-  lib,
   config,
+  inputs,
+  lib,
   pkgs,
   ...
 }: let
   xcursor_theme = config.gtk.cursorTheme.name;
-  swayidleConf = config.services.swayidle;
+  noctalia = inputs.noctalia.packages.${pkgs.system}.default;
+  noctaliaIPC = "${noctalia}/bin/noctalia-shell ipc call";
+  # systemMenu = pkgs.writeShellApplication {
+  #   name = "niri-system-menu";
+  #   runtimeInputs = [pkgs.niri pkgs.fuzzel];
+  #   text = ''
+  #     ACTION="$(cat<<EOF | fuzzel -d
+  #     poweroff
+  #     reboot
+  #     suspend
+  #     exit
+  #     EOF
+  #     )"
+  #     if [ -z "$ACTION" ]; then
+  #       exit
+  #     fi
+  #     if [ "$ACTION" = "exit" ]; then
+  #       niri msg action "$ACTION"
+  #       exit
+  #     fi
+  #     systemctl "$ACTION"
+  #   '';
+  # };
 
-  systemMenu = pkgs.writeShellApplication {
-    name = "niri-system-menu";
-    runtimeInputs = [pkgs.niri pkgs.fuzzel];
+  noctaliaInit = pkgs.writeShellApplication {
+    name = "noctalia-init";
     text = ''
-      ACTION="$(cat<<EOF | fuzzel -d
-      poweroff
-      reboot
-      suspend
-      exit
-      EOF
-      )"
-      if [ -z "$ACTION" ]; then
-        exit
-      fi
-      if [ "$ACTION" = "exit" ]; then
-        niri msg action "$ACTION"
-        exit
-      fi
-      systemctl "$ACTION"
+      PID="$(systemctl show --user noctalia --property=MainPID --value)"
+      while ! [ -S "/var/run/user/1337/quickshell/by-pid/$PID/ipc.sock" ]; do
+        sleep 0.1
+      done
+      ${noctaliaIPC} wallpaper random
+      sleep 0.1
+      ${noctaliaIPC} lockScreen toggle
     '';
   };
 
@@ -46,19 +60,33 @@
   };
 in {
   services.swayidle = {
+    enable = true;
     timeouts = [
       {
-        timeout = (builtins.head swayidleConf.timeouts) + 90;
+        timeout = 180;
+        command = "${noctaliaIPC} lockScreen toggle";
+      }
+      {
+        timeout = 180 * 3;
         command = "${pkgs.niri-unstable}/bin/niri msg action power-off-monitors";
       }
     ];
     events = [
+      {
+        event = "before-sleep";
+        command = "${noctaliaIPC} lockScreen toggle";
+      }
+      {
+        event = "after-resume";
+        command = "${noctaliaIPC} lockScreen toggle";
+      }
       {
         event = "after-resume";
         command = "${pkgs.niri-unstable}/bin/niri msg action power-on-monitors";
       }
     ];
   };
+
   programs.niri.package = pkgs.niri-unstable;
   programs.niri.enable = true;
   home.packages = with pkgs; [
@@ -67,6 +95,7 @@ in {
     pamixer
     scripts
   ];
+
   programs.niri.settings = with config.lib.niri.actions; {
     input = {
       keyboard = {
@@ -88,20 +117,13 @@ in {
       workspace-auto-back-and-forth = true;
     };
 
-    environment = {
-      GDK_BACKEND = "wayland";
-      CLUTTER_BACKEND = "wayland";
-      QT_QPA_PLATFORM = "";
-      QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-      QT_WAYLAND_FORCE_DPI = "physical";
-      SDL_VIDEODRIVER = "wayland";
-      MOZ_ENABLE_WAYLAND = "1";
-      MOZ_USE_XINPUT2 = "1";
-      NIXOS_OZONE_WL = "1";
-      XCURSOR_THEME = xcursor_theme;
-      QT_STYLE_OVERRIDE = lib.mkForce "gtk";
-      _JAVA_AWT_WM_NONREPARENTING = "1";
-    };
+    spawn-at-startup = [
+      # {
+      #   sh = "${noctalia}/bin/noctalia-shell";
+      # }
+      {sh = "${noctaliaInit}/bin/noctalia-init";}
+      {sh = "systemctl restart --user kanshi.service";}
+    ];
 
     hotkey-overlay.skip-at-startup = true;
 
@@ -118,6 +140,14 @@ in {
         {proportion = 2.0 / 3.0;}
       ];
       default-column-width = {proportion = 0.5;};
+
+      tab-indicator = {
+        gap = 8;
+        gaps-between-tabs = 4;
+        corner-radius = 8;
+        width = 10;
+        position = "top";
+      };
 
       focus-ring = {
         width = 4;
@@ -180,8 +210,9 @@ in {
     binds = {
       "Mod+Shift+Slash".action = show-hotkey-overlay;
       "Super+Return".action.spawn = ["wezterm" "start" "--always-new-process"];
-      "Mod+D".action.spawn = "fuzzel";
-      "Super+Alt+L".action.spawn = "loginctl lock-sessions";
+      # "Mod+D".action.spawn = "fuzzel";
+      "Mod+D".action.spawn-sh = "${noctaliaIPC} launcher toggle";
+      "Super+Alt+L".action.spawn-sh = "${noctaliaIPC} lockScreen toggle";
       "XF86AudioRaiseVolume" = {
         action.spawn = ["wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"];
         allow-when-locked = true;
@@ -204,8 +235,8 @@ in {
       "Mod+Q".action = close-window;
 
       "Mod+Left".action = focus-column-left;
-      "Mod+Down".action = focus-window-down;
-      "Mod+Up".action = focus-window-up;
+      "Mod+Down".action = focus-window-or-workspace-down;
+      "Mod+Up".action = focus-window-or-workspace-up;
       "Mod+Right".action = focus-column-right;
       "Mod+H".action = focus-column-left;
       "Mod+J".action = focus-window-down;
@@ -355,7 +386,8 @@ in {
         action = toggle-keyboard-shortcuts-inhibit;
       };
 
-      "Mod+p".action.spawn = ["sh" "-c" "${systemMenu}/bin/niri-system-menu"];
+      # "Mod+p".action.spawn = ["sh" "-c" "${systemMenu}/bin/niri-system-menu"];
+      "Mod+p".action.spawn-sh = "${noctaliaIPC} sessionMenu toggle";
 
       "Ctrl+Alt+Delete".action = quit;
 
