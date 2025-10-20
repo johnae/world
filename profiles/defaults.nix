@@ -13,7 +13,6 @@
   hasSecrets = config.age.secrets != {};
 in {
   nix = {
-    settings.trusted-users = ["root"];
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs = true
@@ -30,6 +29,24 @@ in {
     };
 
     package = pkgs.nix;
+
+    settings = {
+      trusted-users = ["root"];
+      substituters = [
+        "https://cache.nixos.org"
+        "https://cachix.cachix.org"
+        "https://hyprland.cachix.org"
+        "https://insane.cachix.org"
+        "https://nix-community.cachix.org"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM="
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+        "insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+    };
   };
 
   environment.systemPackages = [
