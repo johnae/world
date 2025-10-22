@@ -11,12 +11,13 @@
   imports = [
     ../../../profiles/admin-user/home-manager.nix
     ../../../profiles/admin-user/user.nix
+    ../../../profiles/disk/disko-btrfs.nix
     ../../../profiles/hardware/ax101.nix
     ../../../profiles/home-manager.nix
-    ../../../profiles/disk/disko-btrfs.nix
-    ../../../profiles/k3s-master.nix
     ../../../profiles/h-remote-unlock.nix
+    ../../../profiles/k3s-master.nix
     ../../../profiles/server.nix
+    ../../../profiles/state.nix
     ../../../profiles/tailscale.nix
     ../../../profiles/zram.nix
   ];

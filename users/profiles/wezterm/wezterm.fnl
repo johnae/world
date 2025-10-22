@@ -402,67 +402,67 @@
 
 ; (local text-fg "#c0c0c0")
 
-(wezterm.on :format-tab-title
-            (lambda [tab tabs _panes config _hover _max_width]
-              (let [title (or tab.tab_title tab.active_pane.title)
-                    first (= tab.tab_index 0)
-                    last (= tab.tab_index (- (length tabs) 1))
-                    tab-bg config.colors.tab_bar.background
-                    active-bg-color "#51576d"
-                    inactive-bg-color "#0b0022"
-                    active-fg-color "#f9f6fc"
-                    inactive-fg-color "#a6a4ac"]
-                (if tab.is_active
-                    (if first
-                        [{:Background {:Color active-bg-color}}
-                         {:Foreground {:Color active-bg-color}}
-                         {:Attribute {:Intensity :Bold}}
-                         {:Text " "}
-                         {:Background {:Color active-bg-color}}
-                         {:Foreground {:Color active-fg-color}}
-                         {:Attribute {:Intensity :Bold}}
-                         {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
-                                    " ")}
-                         {:Background {:Color (if last tab-bg inactive-bg-color)}}
-                         {:Foreground {:Color active-bg-color}}
-                         {:Attribute {:Intensity :Bold}}
-                         {:Text solid-right-arrow}]
-                        [{:Background {:Color active-bg-color}}
-                         {:Foreground {:Color inactive-bg-color}}
-                         {:Attribute {:Intensity :Bold}}
-                         {:Text solid-right-arrow}
-                         {:Background {:Color active-bg-color}}
-                         {:Foreground {:Color active-fg-color}}
-                         {:Attribute {:Intensity :Bold}}
-                         {:Text (.. " " (tostring (+ tab.tab_index 1)) ": "
-                                    title " ")}
-                         {:Background {:Color (if last tab-bg inactive-bg-color)}}
-                         {:Foreground {:Color active-bg-color}}
-                         {:Attribute {:Intensity :Bold}}
-                         {:Text solid-right-arrow}])
-                    (if first
-                        [{:Background {:Color inactive-bg-color}}
-                         {:Foreground {:Color inactive-bg-color}}
-                         {:Attribute {:Intensity :Bold}}
-                         {:Text " "}
-                         {:Background {:Color inactive-bg-color}}
-                         {:Foreground {:Color inactive-fg-color}}
-                         {:Attribute {:Intensity :Bold}}
-                         {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
-                                    " ")}]
-                        [{:Background {:Color inactive-bg-color}}
-                         {:Foreground {:Color inactive-bg-color}}
-                         {:Attribute {:Intensity :Bold}}
-                         {:Text " "}
-                         {:Background {:Color inactive-bg-color}}
-                         {:Foreground {:Color inactive-fg-color}}
-                         {:Attribute {:Intensity :Bold}}
-                         {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
-                                    " ")}
-                         {:Background {:Color (if last tab-bg inactive-bg-color)}}
-                         {:Foreground {:Color inactive-bg-color}}
-                         {:Attribute {:Intensity :Bold}}
-                         {:Text solid-right-arrow}])))))
+; (wezterm.on :format-tab-title
+;             (lambda [tab tabs _panes config _hover _max_width]
+;               (let [title (or tab.tab_title tab.active_pane.title)
+;                     first (= tab.tab_index 0)
+;                     last (= tab.tab_index (- (length tabs) 1))
+;                     tab-bg config.colors.tab_bar.background
+;                     active-bg-color "#51576d"
+;                     inactive-bg-color "#0b0022"
+;                     active-fg-color "#f9f6fc"
+;                     inactive-fg-color "#a6a4ac"]
+;                 (if tab.is_active
+;                     (if first
+;                         [{:Background {:Color active-bg-color}}
+;                          {:Foreground {:Color active-bg-color}}
+;                          {:Attribute {:Intensity :Bold}}
+;                          {:Text " "}
+;                          {:Background {:Color active-bg-color}}
+;                          {:Foreground {:Color active-fg-color}}
+;                          {:Attribute {:Intensity :Bold}}
+;                          {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
+;                                     " ")}
+;                          {:Background {:Color (if last tab-bg inactive-bg-color)}}
+;                          {:Foreground {:Color active-bg-color}}
+;                          {:Attribute {:Intensity :Bold}}
+;                          {:Text solid-right-arrow}]
+;                         [{:Background {:Color active-bg-color}}
+;                          {:Foreground {:Color inactive-bg-color}}
+;                          {:Attribute {:Intensity :Bold}}
+;                          {:Text solid-right-arrow}
+;                          {:Background {:Color active-bg-color}}
+;                          {:Foreground {:Color active-fg-color}}
+;                          {:Attribute {:Intensity :Bold}}
+;                          {:Text (.. " " (tostring (+ tab.tab_index 1)) ": "
+;                                     title " ")}
+;                          {:Background {:Color (if last tab-bg inactive-bg-color)}}
+;                          {:Foreground {:Color active-bg-color}}
+;                          {:Attribute {:Intensity :Bold}}
+;                          {:Text solid-right-arrow}])
+;                     (if first
+;                         [{:Background {:Color inactive-bg-color}}
+;                          {:Foreground {:Color inactive-bg-color}}
+;                          {:Attribute {:Intensity :Bold}}
+;                          {:Text " "}
+;                          {:Background {:Color inactive-bg-color}}
+;                          {:Foreground {:Color inactive-fg-color}}
+;                          {:Attribute {:Intensity :Bold}}
+;                          {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
+;                                     " ")}]
+;                         [{:Background {:Color inactive-bg-color}}
+;                          {:Foreground {:Color inactive-bg-color}}
+;                          {:Attribute {:Intensity :Bold}}
+;                          {:Text " "}
+;                          {:Background {:Color inactive-bg-color}}
+;                          {:Foreground {:Color inactive-fg-color}}
+;                          {:Attribute {:Intensity :Bold}}
+;                          {:Text (.. (tostring (+ tab.tab_index 1)) ": " title
+;                                     " ")}
+;                          {:Background {:Color (if last tab-bg inactive-bg-color)}}
+;                          {:Foreground {:Color inactive-bg-color}}
+;                          {:Attribute {:Intensity :Bold}}
+;                          {:Text solid-right-arrow}])))))
 
 (lambda insert-bar-item [items text fg-color bg-color ?last]
   (when (not ?last)
@@ -532,7 +532,7 @@
 (set config.mux_env_remove [])
 (set config.adjust_window_size_when_changing_font_size false)
 (set config.enable_wayland true)
-(set config.enable_tab_bar true)
+(set config.enable_tab_bar false)
 (set config.use_fancy_tab_bar false)
 (set config.tab_max_width 64)
 ; no effect on wayland
