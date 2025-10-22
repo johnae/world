@@ -26,48 +26,41 @@
           children
           pane size=1 borderless=true {
               plugin location="file:${pkgs.zjstatus}/bin/zjstatus.wasm" {
-                // hide_frame_for_single_pane "true"
-                format_left   "{mode} {tabs}"
+                format_left   "{mode}#[bg=#203040] {tabs}"
                 format_center ""
-                format_right  "{pipe_zjstatus_hints}{datetime}#[bg=#b4befe,fg=#1e1e2e,bold] {session} "
-                format_space  ""
+                format_right  "{pipe_zjstatus_hints}#[bg=#203040,fg=#b4befe]#[bg=#b4befe,fg=#1e1e2e,bold]{session}#[bg=#203040,fg=#b4befe]"
+                format_space  "#[bg=#203040]"
+                format_hide_on_overlength "true"
+                format_precedence "crl"
 
                 pipe_zjstatus_hints_format "{output}"
 
                 border_enabled  "false"
                 border_char     "─"
-                border_format   "#[fg=#585b70]{char}"
+                border_format   "#[fg=#6C7086]{char}"
                 border_position "top"
 
-                hide_frame_for_single_pane "false"
+                mode_normal      "#[bg=#a6d39f,fg=#203040,bold] 💠 NORMAL#[bg=#203040,fg=#a6d39f]"
+                mode_locked      "#[bg=#6e738d,fg=#203040,bold] 🔒 LOCKED#[bg=#203040,fg=#6e738d]"
+                mode_resize      "#[bg=#8aadf4,fg=#203040,bold] 📏 RESIZE#[bg=#203040,fg=#8aadf4]"
+                mode_pane        "#[bg=#a6e3a1,fg=#203040,bold] 🪟 PANE#[bg=#203040,fg=#a6e3a1]"
+                mode_move        "#[bg=#f9e2af,fg=#203040,bold] ✋ MOVE#[bg=#203040,fg=#f9e2af]"
+                mode_tab         "#[bg=#89b4fa,fg=#203040,bold] 📑 TAB#[bg=#203040,fg=#89b4fa]"
+                mode_scroll      "#[bg=#cba6f7,fg=#203040,bold] 🌀 SCROLL#[bg=#203040,fg=#cba6f7]"
+                mode_search      "#[bg=#f9e2af,fg=#203040,bold] 🔍 SEARCH#[bg=#203040,fg=#f9e2af]"
+                mode_entersearch "#[bg=#f9e2af,fg=#203040,bold] 🧭 ENTER SEARCH#[bg=#203040,fg=#f9e2af]"
+                mode_renametab   "#[bg=#89b4fa,fg=#203040,bold] ✎ RENAME TAB#[bg=#203040,fg=#89b4fa]"
+                mode_renamepane  "#[bg=#a6e3a1,fg=#203040,bold] ✎ RENAME PANE#[bg=#203040,fg=#a6e3a1]"
+                mode_session     "#[bg=#f38ba8,fg=#203040,bold] 💻 SESSION#[bg=#203040,fg=#f38ba8]"
+                mode_tmux        "#[bg=#cba6f7,fg=#203040,bold] 🧩 TMUX#[bg=#203040,fg=#cba6f7]"
 
-                mode_locked      "#[bg=#a6adc8,fg=#1e1e2e,bold] 🔒 LOCKED "
-                mode_normal      "#[bg=#89b4fa,fg=#1e1e2e,bold] 💠 NORMAL "
-                mode_resize      "#[bg=#f9e2af,fg=#1e1e2e,bold] 📏 RESIZE "
-                mode_pane        "#[bg=#a6e3a1,fg=#1e1e2e,bold] 🪟 PANE "
-                mode_move        "#[bg=#fab387,fg=#1e1e2e,bold] ✋ MOVE "
-                mode_tab         "#[bg=#89b4fa,fg=#1e1e2e,bold] 📑 TAB "
-                mode_scroll      "#[bg=#cba6f7,fg=#1e1e2e,bold] 🌀 SCROLL "
-                mode_search      "#[bg=#f9e2af,fg=#1e1e2e,bold] 🔍 SEARCH "
-                mode_entersearch "#[bg=#f9e2af,fg=#1e1e2e,bold] 🧭 ENTER SEARCH "
-                mode_renametab   "#[bg=#89b4fa,fg=#1e1e2e,bold] ✎ RENAME TAB "
-                mode_renamepane  "#[bg=#a6e3a1,fg=#1e1e2e,bold] ✎ RENAME PANE "
-                mode_session     "#[bg=#f38ba8,fg=#1e1e2e,bold] 💻 SESSION "
-                mode_tmux        "#[bg=#cba6f7,fg=#1e1e2e,bold] 🧩 TMUX "
+                tab_normal              "#[bg=#203040,fg=#8bd5ca]#[bg=#8bd5ca,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#8bd5ca,bold] {name}{floating_indicator}#[bg=#203040,fg=#363a4f,bold]"
+                tab_normal_fullscreen   "#[bg=#203040,fg=#8bd5ca]#[bg=#8bd5ca,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#8bd5ca,bold] {name}{fullscreen_indicator}#[bg=#203040,fg=#363a4f,bold]"
+                tab_normal_sync         "#[bg=#203040,fg=#8bd5ca]#[bg=#8bd5ca,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#8bd5ca,bold] {name}{sync_indicator}#[bg=#203040,fg=#363a4f,bold]"
 
-                tab_active              "#[bg=#cba6f7,fg=#1e1e2e,bold] {index} {name} "
-                tab_active_fullscreen   "#[bg=#b4befe,fg=#1e1e2e,bold] {fullscreen_indicator} {index} {name} "
-                tab_active_sync         "#[bg=#b4befe,fg=#1e1e2e,bold] {sync_indicator} {index} {name} "
-
-                tab_normal              "#[fg=#7f849c,bold] {index} {name} "
-                tab_normal_fullscreen   "#[fg=#7f849c,bold] {fullscreen_indicator} {index} {name} "
-                tab_normal_sync         "#[fg=#7f849c,bold] {sync_indicator} {index} {name} "
-
-                tab_separator " "
-
-                tab_sync_indicator       "⟳"
-                tab_fullscreen_indicator "◉"
-                tab_floating_indicator   "▣"
+                tab_active              "#[bg=#203040,fg=#eed49f]#[bg=#eed49f,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#eed49f,bold] {name}{floating_indicator}#[bg=#203040,fg=#363a4f,bold]"
+                tab_active_fullscreen   "#[bg=#203040,fg=#eed49f]#[bg=#eed49f,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#eed49f,bold] {name}{fullscreen_indicator}#[bg=#203040,fg=#363a4f,bold]"
+                tab_active_sync         "#[bg=#203040,fg=#eed49f]#[bg=#eed49f,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#eed49f,bold] {name}{sync_indicator}#[bg=#203040,fg=#363a4f,bold]"
 
                 tab_rename              "#[bg=#89b4fa,fg=#1e1e2e,bold] {index} {name} {floating_indicator} "
 
@@ -75,9 +68,11 @@
                 tab_truncate_start_format "#[fg=#f9e2af] <U+F0D9> +{count} <U+EA7C> "
                 tab_truncate_end_format   "#[fg=#f9e2af] <U+EA7C>  +{count} <U+F0DA>"
 
-                datetime        "#[fg=#7f849c,bold] {format} "
-                datetime_format "%H:%M:%S"
-                datetime_timezone "Europe/Stockholm"
+                tab_separator "#[bg=#203040,fg=#203040] "
+
+                tab_sync_indicator       " ⟳"
+                tab_fullscreen_indicator " ◉"
+                tab_floating_indicator   " ▣"
               }
           }
       }
@@ -290,7 +285,7 @@
         about location="zellij:about"
         zjstatus-hints location="file:${pkgs.zjstatus-hints}/bin/zjstatus-hints.wasm" {
             // Maximum number of characters to display
-            max_length 0 // 0 = unlimited
+            max_length 140 // 0 = unlimited
             // String to append when truncated
             overflow_str "..." // default
             // Name of the pipe for zjstatus integration
@@ -394,7 +389,7 @@
     // Choose the theme that is specified in the themes section.
     // Default: default
     //
-    // theme "default"
+    theme "nord"
 
     // The name of the default layout to load on startup
     // Default: "default"
@@ -508,7 +503,7 @@
     // - false
     // Default: false
     //
-    // web_server true
+    web_server true
 
     // Whether to allow sessions started in the terminal to be shared through a local web server, assuming one is
     // running (see the `web_server` option for more details).
@@ -580,11 +575,8 @@
     //
     // post_command_discovery_hook "echo $RESURRECT_COMMAND | sed <your_regex_here>"
 
-    theme "nord"
-    pane_frames false
     show_startup_tips false
     show_release_notes false
-    web_server true
     web_client {
         font "JetBrainsMono Nerd Font"
     }
