@@ -4,15 +4,82 @@
   pkgs,
   ...
 }: {
+  xdg.cacheFile."zellij/permissions.kdl".force = true;
+  xdg.cacheFile."zellij/permissions.kdl".text = ''
+    "${pkgs.zjstatus}/bin/zjstatus.wasm" {
+          RunCommands
+          ChangeApplicationState
+          ReadApplicationState
+      }
+      "${pkgs.zjstatus-hints}/bin/zjstatus-hints.wasm" {
+          ReadApplicationState
+          MessageAndLaunchOtherPlugins
+      }
+      "${pkgs.zwift}/bin/zwift.wasm" {
+          ReadApplicationState
+          ChangeApplicationState
+      }
+  '';
   xdg.configFile."zellij/layouts/default.kdl".text = ''
     layout {
-      pane split_direction="horizontal" {
-        pane
-      }
-      pane size=1 borderless=true {
-        plugin location="compact-bar" {
-            tooltip "F1"
-        }
+      default_tab_template {
+          children
+          pane size=1 borderless=true {
+              plugin location="file:${pkgs.zjstatus}/bin/zjstatus.wasm" {
+                // hide_frame_for_single_pane "true"
+                format_left   "{mode} {tabs}"
+                format_center ""
+                format_right  "{pipe_zjstatus_hints}{datetime}#[bg=#b4befe,fg=#1e1e2e,bold] {session} "
+                format_space  ""
+
+                pipe_zjstatus_hints_format "{output}"
+
+                border_enabled  "false"
+                border_char     "─"
+                border_format   "#[fg=#585b70]{char}"
+                border_position "top"
+
+                hide_frame_for_single_pane "false"
+
+                mode_locked      "#[bg=#a6adc8,fg=#1e1e2e,bold] 🔒 LOCKED "
+                mode_normal      "#[bg=#89b4fa,fg=#1e1e2e,bold] 💠 NORMAL "
+                mode_resize      "#[bg=#f9e2af,fg=#1e1e2e,bold] 📏 RESIZE "
+                mode_pane        "#[bg=#a6e3a1,fg=#1e1e2e,bold] 🪟 PANE "
+                mode_move        "#[bg=#fab387,fg=#1e1e2e,bold] ✋ MOVE "
+                mode_tab         "#[bg=#89b4fa,fg=#1e1e2e,bold] 📑 TAB "
+                mode_scroll      "#[bg=#cba6f7,fg=#1e1e2e,bold] 🌀 SCROLL "
+                mode_search      "#[bg=#f9e2af,fg=#1e1e2e,bold] 🔍 SEARCH "
+                mode_entersearch "#[bg=#f9e2af,fg=#1e1e2e,bold] 🧭 ENTER SEARCH "
+                mode_renametab   "#[bg=#89b4fa,fg=#1e1e2e,bold] ✎ RENAME TAB "
+                mode_renamepane  "#[bg=#a6e3a1,fg=#1e1e2e,bold] ✎ RENAME PANE "
+                mode_session     "#[bg=#f38ba8,fg=#1e1e2e,bold] 💻 SESSION "
+                mode_tmux        "#[bg=#cba6f7,fg=#1e1e2e,bold] 🧩 TMUX "
+
+                tab_active              "#[bg=#cba6f7,fg=#1e1e2e,bold] {index} {name} "
+                tab_active_fullscreen   "#[bg=#b4befe,fg=#1e1e2e,bold] {fullscreen_indicator} {index} {name} "
+                tab_active_sync         "#[bg=#b4befe,fg=#1e1e2e,bold] {sync_indicator} {index} {name} "
+
+                tab_normal              "#[fg=#7f849c,bold] {index} {name} "
+                tab_normal_fullscreen   "#[fg=#7f849c,bold] {fullscreen_indicator} {index} {name} "
+                tab_normal_sync         "#[fg=#7f849c,bold] {sync_indicator} {index} {name} "
+
+                tab_separator " "
+
+                tab_sync_indicator       "⟳"
+                tab_fullscreen_indicator "◉"
+                tab_floating_indicator   "▣"
+
+                tab_rename              "#[bg=#89b4fa,fg=#1e1e2e,bold] {index} {name} {floating_indicator} "
+
+                tab_display_count         "9"
+                tab_truncate_start_format "#[fg=#f9e2af] <U+F0D9> +{count} <U+EA7C> "
+                tab_truncate_end_format   "#[fg=#f9e2af] <U+EA7C>  +{count} <U+F0DA>"
+
+                datetime        "#[fg=#7f849c,bold] {format} "
+                datetime_format "%H:%M:%S"
+                datetime_timezone "Europe/Stockholm"
+              }
+          }
       }
     }
   '';
@@ -221,10 +288,23 @@
         configuration location="zellij:configuration"
         plugin-manager location="zellij:plugin-manager"
         about location="zellij:about"
+        zjstatus-hints location="file:${pkgs.zjstatus-hints}/bin/zjstatus-hints.wasm" {
+            // Maximum number of characters to display
+            max_length 0 // 0 = unlimited
+            // String to append when truncated
+            overflow_str "..." // default
+            // Name of the pipe for zjstatus integration
+            pipe_name "zjstatus_hints" // default
+            // Hide hints in base mode (a.k.a. default mode)
+            // E.g. if you have set default_mode to "locked", then
+            // you can hide hints in the locked mode by setting this to true
+            hide_in_base_mode true // default
+        }
     }
 
     // Plugins to load in the background when a new session starts
     load_plugins {
+        zjstatus-hints
       // "file:/path/to/my-plugin.wasm"
       // "https://example.com/my-plugin.wasm"
     }
