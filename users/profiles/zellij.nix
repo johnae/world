@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   xdg.cacheFile."zellij/permissions.kdl".force = true;
   xdg.cacheFile."zellij/permissions.kdl".text = ''
     "${pkgs.zjstatus}/bin/zjstatus.wasm" {
@@ -26,10 +21,10 @@
           children
           pane size=1 borderless=true {
               plugin location="file:${pkgs.zjstatus}/bin/zjstatus.wasm" {
-                format_left   "{mode}#[bg=#203040] {tabs}"
+                format_left   "{mode} {tabs}"
                 format_center ""
-                format_right  "{pipe_zjstatus_hints}#[bg=#203040,fg=#b4befe]#[bg=#b4befe,fg=#1e1e2e,bold]{session}#[bg=#203040,fg=#b4befe]"
-                format_space  "#[bg=#203040]"
+                format_right  "{pipe_zjstatus_hints}#[fg=#8bd5ca]#[bg=#8bd5ca,fg=#1e2030,bold]{command_hostname}#[bg=#89b4fa,fg=#203040,bold] {session}#[fg=#89b4fa]"
+                format_space  " "
                 format_hide_on_overlength "true"
                 format_precedence "crl"
 
@@ -40,39 +35,45 @@
                 border_format   "#[fg=#6C7086]{char}"
                 border_position "top"
 
-                mode_normal      "#[bg=#a6d39f,fg=#203040,bold] 💠 NORMAL#[bg=#203040,fg=#a6d39f]"
-                mode_locked      "#[bg=#6e738d,fg=#203040,bold] 🔒 LOCKED#[bg=#203040,fg=#6e738d]"
-                mode_resize      "#[bg=#8aadf4,fg=#203040,bold] 📏 RESIZE#[bg=#203040,fg=#8aadf4]"
-                mode_pane        "#[bg=#a6e3a1,fg=#203040,bold] 🪟 PANE#[bg=#203040,fg=#a6e3a1]"
-                mode_move        "#[bg=#f9e2af,fg=#203040,bold] ✋ MOVE#[bg=#203040,fg=#f9e2af]"
-                mode_tab         "#[bg=#89b4fa,fg=#203040,bold] 📑 TAB#[bg=#203040,fg=#89b4fa]"
-                mode_scroll      "#[bg=#cba6f7,fg=#203040,bold] 🌀 SCROLL#[bg=#203040,fg=#cba6f7]"
-                mode_search      "#[bg=#f9e2af,fg=#203040,bold] 🔍 SEARCH#[bg=#203040,fg=#f9e2af]"
-                mode_entersearch "#[bg=#f9e2af,fg=#203040,bold] 🧭 ENTER SEARCH#[bg=#203040,fg=#f9e2af]"
-                mode_renametab   "#[bg=#89b4fa,fg=#203040,bold] ✎ RENAME TAB#[bg=#203040,fg=#89b4fa]"
-                mode_renamepane  "#[bg=#a6e3a1,fg=#203040,bold] ✎ RENAME PANE#[bg=#203040,fg=#a6e3a1]"
-                mode_session     "#[bg=#f38ba8,fg=#203040,bold] 💻 SESSION#[bg=#203040,fg=#f38ba8]"
-                mode_tmux        "#[bg=#cba6f7,fg=#203040,bold] 🧩 TMUX#[bg=#203040,fg=#cba6f7]"
+                mode_normal      "#[fg=#a6d39f]#[bg=#a6d39f,fg=#203040,bold] 💠 NORMAL#[fg=#a6d39f]"
+                mode_locked      "#[fg=#6e738d]#[bg=#6e738d,fg=#203040,bold] 🔒 LOCKED#[fg=#6e738d]"
+                mode_resize      "#[fg=#8aadf4]#[bg=#8aadf4,fg=#203040,bold] 📏 RESIZE#[fg=#8aadf4]"
+                mode_pane        "#[fg=#a6e3a1]#[bg=#a6e3a1,fg=#203040,bold] 🪟 PANE#[fg=#a6e3a1]"
+                mode_move        "#[fg=#f9e2af]#[bg=#f9e2af,fg=#203040,bold] ✋ MOVE#[fg=#f9e2af]"
+                mode_tab         "#[fg=#89b4fa]#[bg=#89b4fa,fg=#203040,bold] 📑 TAB#[fg=#89b4fa]"
+                mode_scroll      "#[fg=#cba6f7]#[bg=#cba6f7,fg=#203040,bold] 🌀 SCROLL#[fg=#cba6f7]"
+                mode_search      "#[fg=#f9e2af]#[bg=#f9e2af,fg=#203040,bold] 🔍 SEARCH#[fg=#f9e2af]"
+                mode_entersearch "#[fg=#f9e2af]#[bg=#f9e2af,fg=#203040,bold] 🧭 ENTER SEARCH#[fg=#f9e2af]"
+                mode_renametab   "#[fg=#89b4fa]#[bg=#89b4fa,fg=#203040,bold] ✎ RENAME TAB#[fg=#89b4fa]"
+                mode_renamepane  "#[fg=#a6e3a1]#[bg=#a6e3a1,fg=#203040,bold] ✎ RENAME PANE#[fg=#a6e3a1]"
+                mode_session     "#[fg=#f38ba8]#[bg=#f38ba8,fg=#203040,bold] 💻 SESSION#[fg=#f38ba8]"
+                mode_tmux        "#[fg=#cba6f7]#[bg=#cba6f7,fg=#203040,bold] 🧩 TMUX#[fg=#cba6f7]"
 
-                tab_normal              "#[bg=#203040,fg=#8bd5ca]#[bg=#8bd5ca,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#8bd5ca,bold] {name}{floating_indicator}#[bg=#203040,fg=#363a4f,bold]"
-                tab_normal_fullscreen   "#[bg=#203040,fg=#8bd5ca]#[bg=#8bd5ca,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#8bd5ca,bold] {name}{fullscreen_indicator}#[bg=#203040,fg=#363a4f,bold]"
-                tab_normal_sync         "#[bg=#203040,fg=#8bd5ca]#[bg=#8bd5ca,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#8bd5ca,bold] {name}{sync_indicator}#[bg=#203040,fg=#363a4f,bold]"
 
-                tab_active              "#[bg=#203040,fg=#eed49f]#[bg=#eed49f,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#eed49f,bold] {name}{floating_indicator}#[bg=#203040,fg=#363a4f,bold]"
-                tab_active_fullscreen   "#[bg=#203040,fg=#eed49f]#[bg=#eed49f,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#eed49f,bold] {name}{fullscreen_indicator}#[bg=#203040,fg=#363a4f,bold]"
-                tab_active_sync         "#[bg=#203040,fg=#eed49f]#[bg=#eed49f,fg=#1e2030,bold]{index} #[bg=#363a4f,fg=#eed49f,bold] {name}{sync_indicator}#[bg=#203040,fg=#363a4f,bold]"
+                tab_normal              "#[fg=#8bd5ca]#[bg=#8bd5ca,fg=#1e2030,bold]{index} #[bg=#89b4fa,fg=#203040,bold] {name}{floating_indicator}#[fg=#89b4fa]"
+                tab_normal_fullscreen   "#[fg=#8bd5ca]#[bg=#8bd5ca,fg=#1e2030,bold]{index} #[bg=#89b4fa,fg=#203040,bold] {name}{fullscreen_indicator}#[fg=#89b4fa]"
+                tab_normal_sync         "#[fg=#8bd5ca]#[bg=#8bd5ca,fg=#1e2030,bold]{index} #[bg=#89b4fa,fg=#203040,bold] {name}{sync_indicator}#[fg=#89b4fa]"
 
-                tab_rename              "#[bg=#89b4fa,fg=#1e1e2e,bold] {index} {name} {floating_indicator} "
+                tab_active              "#[fg=#eed49f]#[bg=#eed49f,fg=#1e2030,bold]{index} #[bg=#89b4fa,fg=#203040,bold] {name}{floating_indicator}#[fg=#89b4fa]"
+                tab_active_fullscreen   "#[fg=#eed49f]#[bg=#eed49f,fg=#1e2030,bold]{index} #[bg=#89b4fa,fg=#203040,bold] {name}{fullscreen_indicator}#[fg=#89b4fa]"
+                tab_active_sync         "#[fg=#eed49f]#[bg=#eed49f,fg=#1e2030,bold]{index} #[bg=#89b4fa,fg=#203040,bold] {name}{sync_indicator}#[fg=#89b4fa]"
+
+                tab_rename              "#[fg=#eed49f]#[bg=#eed49f,fg=#1e2030,bold]{index} #[bg=#89b4fa,fg=#203040,bold] {name}{floating_indicator}#[fg=#89b4fa]"
 
                 tab_display_count         "9"
                 tab_truncate_start_format "#[fg=#f9e2af] <U+F0D9> +{count} <U+EA7C> "
                 tab_truncate_end_format   "#[fg=#f9e2af] <U+EA7C>  +{count} <U+F0DA>"
 
-                tab_separator "#[bg=#203040,fg=#203040] "
+                tab_separator " "
 
                 tab_sync_indicator       " ⟳"
                 tab_fullscreen_indicator " ◉"
                 tab_floating_indicator   " ▣"
+
+                command_hostname_command     "hostname"
+                command_hostname_format      "#[bg=#8bd5ca,fg=#1e2030,bold]{stdout} "
+                command_hostname_interval    "0"
+                command_hostname_rendermode  "static"
               }
           }
       }
