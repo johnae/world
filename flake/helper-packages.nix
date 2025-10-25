@@ -119,6 +119,42 @@
       '';
     };
 
+    list-projects = writeShellApplication {
+      name = "list-projects";
+      runtimeInputs = [pkgs.fd pkgs.openssh];
+      text = ''
+        LOCATION="''${1:-}"
+
+        if [ -z "$LOCATION" ]; then
+          echo "you must provide the location to search as the first argument"
+          echo "either /path/to/dir or user@host:/path/to/dir works"
+          exit 1
+        fi
+
+        # Detect if this is a remote SSH location or local path
+        if [[ "$LOCATION" == *:* ]] && [[ "$LOCATION" != /* ]]; then
+          # Remote SSH location (format: [user@]host:path)
+          HOST="''${LOCATION%%:*}"
+          REMOTE_PATH="''${LOCATION#*:}"
+
+          # Check if ssh is available
+          if ! command -v ssh &> /dev/null; then
+            echo "Error: 'ssh' command not found but remote location specified"
+            exit 1
+          fi
+
+          # Execute fd on remote host, explicitly using bash to avoid shell compatibility issues
+          # shellcheck disable=SC2087
+          ssh "$HOST" bash <<EOF
+        fd '(\.git|\.jj|workspace\.yaml)\$' $REMOTE_PATH -d 8 -H -X echo '{//}' | tr ' ' '\n' | sort -u
+        EOF
+        else
+          # Local location
+          fd '(\.git|\.jj|workspace\.yaml)$' "$LOCATION" -d 8 -H -X echo "{//}" | tr ' ' '\n' | sort -u
+        fi
+      '';
+    };
+
     fuzzel-wezterm-domain = writeShellApplication {
       name = "fuzzel-wezterm";
       runtimeInputs = [fuzzel tailscale];
@@ -216,12 +252,13 @@
         name = "scripts";
         paths = [
           add-wifi-network
+          fuzzel-rbw
+          fuzzel-wezterm-domain
           launch
+          list-projects
           project-select
           rbw-git-creds
           rofi-rbw
-          fuzzel-rbw
-          fuzzel-wezterm-domain
           update-wifi-networks
           update-wireguard-keys
         ];
