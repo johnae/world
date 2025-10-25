@@ -179,7 +179,7 @@
     args.advertise-tags = ["tag:server"];
     args.ssh = true;
     args.accept-routes = false;
-    args.accept-dns = true;
+    args.accept-dns = false;
     args.advertise-exit-node = true;
     args.auth-key = "file:/etc/tailscale-auth-key";
     # args.hostname = "\"$NODENAME\"";
