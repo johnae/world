@@ -140,6 +140,8 @@ in {
       };
     };
 
+    ## enable jool nat64
+    services.jool.enable = true;
     ## enable ipv6 on local network
     services.corerad = {
       enable = true;
@@ -149,6 +151,15 @@ in {
           prometheus = true;
         };
         interfaces = [
+          {
+            name = "pref64";
+            advertise = true;
+            prefix = [
+              {
+                prefix = "64:ff9b::/96";
+              }
+            ];
+          }
           {
             name = cfg.internalInterface;
             advertise = true;
