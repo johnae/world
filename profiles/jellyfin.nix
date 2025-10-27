@@ -14,7 +14,6 @@
       pkgs.libvdpau-va-gl
       pkgs.rocm-opencl-icd
       pkgs.rocm-opencl-runtime
-      pkgs.amdvlk
     ];
   };
   systemd.services.jellyfin.serviceConfig.PrivateDevices = lib.mkForce false;
