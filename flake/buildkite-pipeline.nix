@@ -29,8 +29,6 @@
     "hcloud-k3s-master-init-diskformat"
     "hetzner-csi-driver-yaml"
     "hyperion-diskformat"
-    "hyprland"
-    "hyprland-unwrapped"
     "icarus-diskformat"
     "installer-diskformat"
     "juicefs-csi-driver-yaml"
@@ -51,7 +49,6 @@
     "victoriametrics-logs-datasource-plugin"
     "victoriametrics-logs-datasource-plugin"
     "victoriametrics-metrics-datasource-plugin"
-    "xdg-desktop-portal-hyprland"
   ];
   pkgs.x86_64-linux = withSystem "x86_64-linux" (
     ctx @ {pkgs, ...}: let

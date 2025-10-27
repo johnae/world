@@ -43,7 +43,6 @@
       auth include login
     '';
   };
-  security.pam.services.hyprlock = {};
 
   security.polkit.enable = true;
   services.gnome.gnome-keyring.enable = true;
@@ -127,11 +126,6 @@
     };
     river = wlrConf;
     sway = wlrConf;
-    # Hyprland = {
-    #   default = ["hyprland" "gtk"];
-    #   "org.freedesktop.impl.portal.Secret" = ["gnome-keyring"];
-    # };
-  };
 
   fonts.packages = with pkgs; [
     emacs-all-the-icons-fonts

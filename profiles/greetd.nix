@@ -54,16 +54,6 @@
       '';
     };
 
-  runHyprland = runViaShell {
-    env = {
-      XDG_SESSION_TYPE = "wayland";
-      XDG_CURRENT_DESKTOP = "Hyprland";
-      XDG_SESSION_DESKTOP = "Hyprland";
-    };
-    name = "hyprland";
-    cmd = "${pkgs.hyprland}/bin/Hyprland";
-  };
-
   runSway = runViaShell {
     env = {
       XDG_SESSION_TYPE = "wayland";
@@ -112,10 +102,6 @@
       path = desktopSession "river" "${runRiver}/bin/river";
     }
     {
-      name = "hyprland.desktop";
-      path = desktopSession "Hyprland" "${runHyprland}/bin/hyprland";
-    }
-    {
       name = "nushell.desktop";
       path = desktopSession "nushell" "${pkgs.nushell}/bin/nu";
     }
@@ -136,7 +122,7 @@
   in
     pkgs.writeShellApplication {
       name = "greeter";
-      runtimeInputs = [runSway runRiver runHyprland pkgs.bashInteractive pkgs.nushell pkgs.systemd pkgs.tuigreet];
+      runtimeInputs = [runSway runRiver pkgs.bashInteractive pkgs.nushell pkgs.systemd pkgs.tuigreet];
       text = ''
         tuigreet --sessions ${sessionDir} --time -r --remember-session --power-shutdown 'systemctl poweroff' --power-reboot 'systemctl reboot' --cmd ${default}
       '';
