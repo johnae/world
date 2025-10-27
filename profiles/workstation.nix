@@ -23,7 +23,6 @@
     pkgs.libvdpau-va-gl
     pkgs.rocmPackages.clr
     pkgs.rocmPackages.clr.icd
-    pkgs.amdvlk
   ];
 
   services.logind.settings.Login = {
