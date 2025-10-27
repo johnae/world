@@ -126,6 +126,7 @@
     };
     river = wlrConf;
     sway = wlrConf;
+  };
 
   fonts.packages = with pkgs; [
     emacs-all-the-icons-fonts
