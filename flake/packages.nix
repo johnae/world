@@ -194,13 +194,6 @@
 
         tuwunel-latest = inputs.tuwunel.packages.${system}.default;
 
-        inherit
-          (inputs.hyprland.packages.${system})
-          hyprland
-          hyprland-unwrapped
-          xdg-desktop-portal-hyprland
-          ;
-
         unlockremote = pkgs.writeShellApplication {
           name = "unlockremote";
           runtimeInputs = with pkgs; [coreutils openssh];
