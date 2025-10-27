@@ -8,27 +8,6 @@
   xcursor_theme = config.gtk.cursorTheme.name;
   noctalia = inputs.noctalia.packages.${pkgs.system}.default;
   noctaliaIPC = "${noctalia}/bin/noctalia-shell ipc call";
-  # systemMenu = pkgs.writeShellApplication {
-  #   name = "niri-system-menu";
-  #   runtimeInputs = [pkgs.niri pkgs.fuzzel];
-  #   text = ''
-  #     ACTION="$(cat<<EOF | fuzzel -d
-  #     poweroff
-  #     reboot
-  #     suspend
-  #     exit
-  #     EOF
-  #     )"
-  #     if [ -z "$ACTION" ]; then
-  #       exit
-  #     fi
-  #     if [ "$ACTION" = "exit" ]; then
-  #       niri msg action "$ACTION"
-  #       exit
-  #     fi
-  #     systemctl "$ACTION"
-  #   '';
-  # };
 
   noctaliaInit = pkgs.writeShellApplication {
     name = "noctalia-init";
@@ -43,17 +22,65 @@
     '';
   };
 
-  openWeztermDomain = pkgs.writeShellApplication {
-    name = "open-wezterm-domain";
+  openZellijSession = pkgs.writeShellApplication {
+    name = "open-zellij-session";
     runtimeInputs = [pkgs.scripts pkgs.niri pkgs.jq];
     text = ''
+      # Get window ID for a given title prefix
+      # shellcheck disable=SC2088
+      get_window_id() {
+        local title_prefix="$1"
+        niri msg -j windows | jq -r '.[] | select(.app_id == "wezterm_zellij_'"$title_prefix"'") | .id' | head -n1
+      }
       DOMAIN="$(fuzzel-wezterm)"
       if [ -n "$DOMAIN" ]; then
-        WINDOW_ID="$(niri msg -j windows | jq -r '.[] | select(.app_id == "'"wez-remote-$DOMAIN"'").id')"
-        if [ -n "$WINDOW_ID" ]; then
-          niri msg action focus-window --id "$WINDOW_ID"
+        if [[ "$DOMAIN" == local* ]]; then
+          PROJECT_PATH="$(list-projects ~/Development | fuzzel -d)"
         else
-          niri msg action spawn -- wezterm start --domain "$DOMAIN" --attach --always-new-process --class "wez-remote-$DOMAIN"
+          PROJECT_PATH="$(list-projects "$DOMAIN:~/Development" | fuzzel -d)"
+        fi
+        PROJECT_NAME="$(basename "$PROJECT_PATH")"
+        MAIN="''${PROJECT_NAME}_main"
+        AUX="''${PROJECT_NAME}_aux"
+
+        # Check if windows already exist and focus them if they do
+        MAIN_WINDOW_ID=$(get_window_id "$MAIN")
+        AUX_WINDOW_ID=$(get_window_id "$AUX")
+
+        if [ -n "$MAIN_WINDOW_ID" ] && [ -n "$AUX_WINDOW_ID" ]; then
+          niri msg action focus-window --id "$MAIN_WINDOW_ID"
+          exit 0
+        elif [ -n "$MAIN_WINDOW_ID" ]; then
+          niri msg action focus-window --id "$MAIN_WINDOW_ID"
+        elif [ -n "$AUX_WINDOW_ID" ]; then
+          niri msg action focus-window --id "$AUX_WINDOW_ID"
+        fi
+
+
+        # Create zellij sessions in the appropriate context (remote or local)
+        if [[ "$DOMAIN" == local* ]]; then
+          # Create zellij sessions locally
+          zellij attach -b "$AUX" options --default-cwd "$PROJECT_PATH" || true
+          zellij attach -b "$MAIN" options --default-cwd "$PROJECT_PATH" || true
+
+          # Open wezterm windows locally (only if they don't exist)
+          if [ -z "''${MAIN_WINDOW_ID:-}" ]; then
+            niri msg action spawn-sh -- "wezterm start --class 'wezterm_zellij_$MAIN' -- zellij attach '$MAIN'"
+          fi
+          if [ -z "''${AUX_WINDOW_ID:-}" ]; then
+            niri msg action spawn-sh -- "wezterm start --class 'wezterm_zellij_$AUX' -- zellij attach '$AUX'"
+          fi
+        else
+          # Create zellij sessions on remote host
+          # shellcheck disable=SC2029
+          echo "zellij attach -b '$AUX' options --default-cwd '$PROJECT_PATH' || true; zellij attach -b '$MAIN' options --default-cwd '$PROJECT_PATH' || true" | ssh "$DOMAIN" bash
+          # Open wezterm windows via SSH (only if they don't exist)
+          if [ -z "''${MAIN_WINDOW_ID:-}" ]; then
+            niri msg action spawn-sh -- "wezterm ssh --class 'wezterm_zellij_$MAIN' '$DOMAIN' -- zellij attach '$MAIN'"
+          fi
+          if [ -z "''${AUX_WINDOW_ID:-}" ]; then
+            niri msg action spawn-sh -- "wezterm ssh --class 'wezterm_zellij_$AUX' '$DOMAIN' -- zellij attach '$AUX'"
+          fi
         fi
       fi
     '';
@@ -370,7 +397,7 @@ in {
 
       "Mod+C".action = center-column;
 
-      "Mod+Shift+w".action.spawn = ["sh" "-c" "${openWeztermDomain}/bin/open-wezterm-domain"];
+      "Mod+Shift+w".action.spawn = ["sh" "-c" "${openZellijSession}/bin/open-zellij-session"];
       "Mod+Minus".action.spawn = ["sh" "-c" "${pkgs.scripts}/bin/rofi-rbw"];
       "Mod+Shift+Minus".action.spawn = ["sh" "-c" "passonly=y ${pkgs.scripts}/bin/rofi-rbw"];
       "Mod+Shift+Equal".action.spawn = ["sh" "-c" "codeonly=y ${pkgs.scripts}/bin/rofi-rbw"];
