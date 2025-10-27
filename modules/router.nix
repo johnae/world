@@ -141,7 +141,7 @@ in {
     };
 
     ## enable jool nat64
-    services.jool.enable = true;
+    networking.jool.enable = true;
     ## enable ipv6 on local network
     services.corerad = {
       enable = true;
