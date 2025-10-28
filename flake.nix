@@ -90,6 +90,7 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     noctalia.url = "github:noctalia-dev/noctalia-shell";
     noctalia.inputs.nixpkgs.follows = "nixpkgs";
+    noctalia.inputs.quickshell.follows = "quickshell";
     noctalia-greet.url = "github:noctalia-dev/noctalia-greet";
     noctalia-greet.flake = false;
     nur.url = "github:nix-community/NUR";
@@ -106,6 +107,8 @@
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.inputs.gitignore.follows = "gitignore";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    quickshell.url = "git+https://git.outfoxxed.me/quickshell/quickshell";
+    quickshell.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
     systems.url = "github:nix-systems/default";
