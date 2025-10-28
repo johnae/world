@@ -134,7 +134,6 @@ This is highly specific to my setup, but if you want to adapt parts:
 - Start with a single host as a reference
 - Most reusable logic is in profiles/
 - Secrets use agenix (you'll need your own keys)
-- Test builds with `world build` before switching
 
 ### Common Modifications
 
@@ -153,7 +152,7 @@ This is highly specific to my setup, but if you want to adapt parts:
 
 - CI/CD: Buildkite pipeline tests all configurations
 - Dependency updates: Automated flake input updates
-- Smart reboots: Coordinated reboots for kernel updates
+- Smart reboots: Coordinated reboots for kernel updates (in k8s clusters)
 - Backup verification: Automated backup integrity checks
 
 ## Experimental Features
