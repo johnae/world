@@ -18,7 +18,7 @@
       done
       ${noctaliaIPC} wallpaper random
       sleep 0.1
-      ${noctaliaIPC} lockScreen toggle
+      ${noctaliaIPC} lockScreen lock
     '';
   };
 
@@ -91,7 +91,7 @@ in {
     timeouts = [
       {
         timeout = 180;
-        command = "${noctaliaIPC} lockScreen toggle";
+        command = "${noctaliaIPC} lockScreen lock";
       }
       {
         timeout = 180 * 3;
@@ -101,11 +101,11 @@ in {
     events = [
       {
         event = "before-sleep";
-        command = "${noctaliaIPC} lockScreen toggle";
+        command = "${noctaliaIPC} lockScreen lock";
       }
       {
         event = "after-resume";
-        command = "${noctaliaIPC} lockScreen toggle";
+        command = "${noctaliaIPC} lockScreen lock";
       }
       {
         event = "after-resume";
@@ -239,7 +239,7 @@ in {
       "Super+Return".action.spawn = ["wezterm" "start" "--always-new-process"];
       # "Mod+D".action.spawn = "fuzzel";
       "Mod+D".action.spawn-sh = "${noctaliaIPC} launcher toggle";
-      "Super+Alt+L".action.spawn-sh = "${noctaliaIPC} lockScreen toggle";
+      "Super+Alt+L".action.spawn-sh = "${noctaliaIPC} lockScreen lock";
       "XF86AudioRaiseVolume" = {
         action.spawn = ["wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"];
         allow-when-locked = true;
