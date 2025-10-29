@@ -42,7 +42,7 @@
               hostconf = dir + "/${system}/${filename}";
             };
           }
-        ) (builtins.readDir "${dir}/${system}"))
+        ) (builtins.readDir (dir + "/${system}")))
     ) {};
 
   mapOutputs = dir: mapConfigurations dir (mapSystems dir);
