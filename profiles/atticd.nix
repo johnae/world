@@ -12,7 +12,9 @@
       jwt = {};
       storage = {
         type = "s3";
-        endpoint = "https://storage.9000.dev/cache";
+        bucket = "cache";
+        region = "us-east-1";
+        endpoint = "https://storage.9000.dev";
       };
       chunking = {
         nar-size-threshold = 64 * 1024; # 64 KiB
