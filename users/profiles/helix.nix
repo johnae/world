@@ -15,20 +15,6 @@
       wezterm cli split-pane --top --percent 80 -- ${search-replace}/bin/search-replace "$WEZTERM_PANE" > /dev/null
     '';
   };
-  aichat-wezterm-helper = pkgs.writeShellApplication {
-    name = "aichat-wezterm-helper";
-    text = ''
-      ARGS="''${*:--r coder-claude}"
-      INPUT="$(mktemp /tmp/XXXXXX.input)"
-      OUTPUT="$(mktemp -u /tmp/XXXXXX.output)"
-      mkfifo "$OUTPUT"
-      trap 'rm -f "$INPUT" "$OUTPUT"' EXIT
-      cat > "$INPUT"
-      PANE="$(wezterm cli split-pane --top --percent 80 -- bash -c "cat '$INPUT' | aichat $ARGS | tee '$OUTPUT'")"
-      wezterm cli zoom-pane --pane-id "$PANE"
-      cat "$OUTPUT"
-    '';
-  };
 in {
   xdg.configFile."helix/runtime/queries/fennel/injections.scm".source = pkgs.writeText "fennel-injections.scm" ''
     ; inherits: scheme
@@ -245,20 +231,9 @@ in {
             q = ":quit";
             space = "goto_last_accessed_file";
           };
-          "+" = {
-            s = ":pipe ${global-search-replace-wezterm-helper}/bin/global-search-replace-wezterm-helper";
-            i = ":pipe ${aichat-wezterm-helper}/bin/aichat-wezterm-helper -r coder-openai";
-            r = ":pipe ${aichat-wezterm-helper}/bin/aichat-wezterm-helper -r refactor-openai";
-            # e = ":pipe ${aichat-wezterm-helper}/bin/aichat-wezterm-helper -r explain-openai";
-            e = [":pipe-to tee /tmp/helix-tmp-explain" ":sh aichat -f /tmp/helix-tmp-explain -r explain-openai"];
-
-            c = ":pipe ${aichat-wezterm-helper}/bin/aichat-wezterm-helper -r coder-claude";
-            t = ":pipe ${aichat-wezterm-helper}/bin/aichat-wezterm-helper -r refactor-claude";
-            # y = ":pipe ${aichat-wezterm-helper}/bin/aichat-wezterm-helper -r explain-claude";
-            y = [":pipe-to tee /tmp/helix-tmp-explain" ":sh aichat -f /tmp/helix-tmp-explain -r explain-claude"];
-
-            # c = ":pipe aichat -r coder-claude";
-            # t = ":pipe aichat -r refactor-claude";
+          backspace = {
+            j = ":sh zellij run -fc --width 80%% --height 60%%-- lazyjj";
+            s = ":sh zellij run -fc --width 80%% --height 60%%-- serpl";
           };
         };
       };
