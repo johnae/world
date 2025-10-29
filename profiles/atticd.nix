@@ -13,7 +13,7 @@
       storage = {
         type = "s3";
         bucket = "cache";
-        region = "us-east-1";
+        region = "eu-north-1";
         endpoint = "https://storage.9000.dev";
       };
       chunking = {
