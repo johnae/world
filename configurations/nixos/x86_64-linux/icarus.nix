@@ -21,6 +21,7 @@
     ../../../profiles/admin-user/user.nix
     ../../../profiles/disk/bcachefs-on-luks.nix
     ../../../profiles/hardware/b550.nix
+    ../../../profiles/atticd.nix
     ../../../profiles/core-metrics.nix
     ../../../profiles/core-logging.nix
     ../../../profiles/forgejo.nix
@@ -372,6 +373,9 @@
     "storage-admin.9000.dev" = {
       group = "nginx";
     };
+    "cache.9000.dev" = {
+      group = "nginx";
+    };
   };
 
   services.my-cloudflared = {
@@ -445,6 +449,12 @@
   };
 
   services.cloudflare-tailscale-dns.storage-admin = {
+    enable = true;
+    zone = "9000.dev";
+    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+  };
+
+  services.cloudflare-tailscale-dns.cache = {
     enable = true;
     zone = "9000.dev";
     cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
@@ -650,6 +660,13 @@
       "ha.9000.dev" = {
         useACMEHost = "ha.9000.dev";
         locations."/".proxyPass = "http://localhost:8123";
+        locations."/".proxyWebsockets = true;
+        forceSSL = true;
+      };
+
+      "cache.9000.dev" = {
+        useACMEHost = "cache.9000.dev";
+        locations."/".proxyPass = "http://localhost:8080";
         locations."/".proxyWebsockets = true;
         forceSSL = true;
       };
