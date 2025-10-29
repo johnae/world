@@ -666,8 +666,16 @@
 
       "cache.9000.dev" = {
         useACMEHost = "cache.9000.dev";
-        locations."/".proxyPass = "http://localhost:8080";
-        locations."/".proxyWebsockets = true;
+        locations."/" = {
+          proxyPass = "http://localhost:8080";
+          proxyWebsockets = true;
+          extraConfig = ''
+            chunked_transfer_encoding off;
+            client_max_body_size 0;
+            proxy_buffering off;
+            proxy_request_buffering off;
+          '';
+        };
         forceSSL = true;
       };
 
