@@ -33,7 +33,10 @@ let
 
   hasAttrsFilter = attrsList: filter (attr: all (key: hasAttr key attr) attrsList);
 
-  hostConfigsList = (map (host: host.config) (attrValues flake.nixosConfigurations)) ++ (map (host: host.config) (attrValues flake.darwinConfigurations));
+  hostConfigsList =
+    (map (host: host.config) (attrValues flake.nixosConfigurations))
+    ++ (map (host: host.config) (attrValues flake.darwinConfigurations))
+    ++ (map (host: host.config) (attrValues flake.homeConfigurations));
 
   hostsWithSecrets = hasAttrsFilter ["publicKey" "age"] hostConfigsList;
 
