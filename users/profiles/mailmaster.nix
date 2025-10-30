@@ -51,7 +51,7 @@
       pkgs.html2text
       pkgs.jq
       pkgs.notmuch
-      pkgs.poppler_utils
+      pkgs.poppler-utils
       pkgs.ripmime
     ];
     text = ''
@@ -145,7 +145,7 @@
       pkgs.jq
       pkgs.notmuch
       pkgs.pandoc
-      pkgs.poppler_utils
+      pkgs.poppler-utils
       pkgs.procmail
       pkgs.ripmime
     ];

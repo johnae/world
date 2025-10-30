@@ -52,7 +52,7 @@ in {
     alejandra
     bash-language-server
     deadnix
-    fennel
+    luaPackages.fennel
     fennel-ls
     fnlfmt
     hcloud

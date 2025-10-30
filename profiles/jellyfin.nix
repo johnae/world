@@ -9,8 +9,8 @@
     enable = true;
     extraPackages = [
       pkgs.intel-media-driver
-      pkgs.vaapiIntel
-      pkgs.vaapiVdpau
+      pkgs.intel-vaapi-driver
+      pkgs.libva-vdpau-driver
       pkgs.libvdpau-va-gl
       pkgs.rocm-opencl-icd
       pkgs.rocm-opencl-runtime

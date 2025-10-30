@@ -18,8 +18,8 @@
 
   hardware.graphics.extraPackages = [
     pkgs.intel-media-driver
-    pkgs.vaapiIntel
-    pkgs.vaapiVdpau
+    pkgs.intel-vaapi-driver
+    pkgs.libva-vdpau-driver
     pkgs.libvdpau-va-gl
     pkgs.rocmPackages.clr
     pkgs.rocmPackages.clr.icd

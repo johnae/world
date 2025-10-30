@@ -13,16 +13,6 @@
     locallyDefinedPackages = mapAttrs (
       name: _: (pkgs.callPackage (../packages + "/${name}") {inherit inputs;})
     ) (filterAttrs (_filename: type: type == "directory") (readDir ../packages));
-
-    # tofuProvider = provider:
-    #   provider.override (oldArgs: {
-    #     provider-source-address =
-    #       lib.replaceStrings
-    #       ["https://registry.terraform.io/providers"]
-    #       ["registry.opentofu.org"]
-    #       oldArgs.homepage;
-    #   });
-    kexec-installer = nixpkgs: modules: (nixpkgs.legacyPackages.${system}.nixos (modules ++ [inputs.nixos-images.nixosModules.kexec-installer])).config.system.build.kexecTarball;
   in {
     packages =
       (
@@ -58,77 +48,6 @@
             rbw unlocked || rbw unlock
           '';
         };
-        # tofuWithPlugins = pkgs.opentofu.withPlugins (
-        #   p:
-        #     map tofuProvider [p.null p.external p.hcloud p.cloudflare p.random p.tailscale]
-        #);
-        kexec-installer-nixos-unstable-noninteractive = kexec-installer inputs.nixpkgs [
-          ({
-            lib,
-            pkgs,
-            modulesPath,
-            ...
-          }: {
-            disabledModules = [
-              # This module adds values to multiple lists (systemPackages, supportedFilesystems)
-              # which are impossible/unpractical to remove, so we disable the entire module.
-              "profiles/base.nix"
-            ];
-
-            imports = [
-              # reduce closure size by removing perl
-              "${modulesPath}/profiles/perlless.nix"
-              # FIXME: we still are left with nixos-generate-config due to nixos-install-tools
-              {system.forbiddenDependenciesRegexes = lib.mkForce [];}
-            ];
-
-            # among others, this prevents carrying a stdenv with gcc in the image
-            system.extraDependencies = lib.mkForce [];
-
-            # prevents shipping nixpkgs, unnecessary if system is evaluated externally
-            nix.registry = lib.mkForce {};
-
-            # would pull in nano
-            programs.nano.enable = false;
-
-            # prevents strace
-            environment.defaultPackages = lib.mkForce [pkgs.rsync pkgs.parted pkgs.gptfdisk];
-
-            # normal users are not allowed with sys-users
-            # see https://github.com/NixOS/nixpkgs/pull/328926
-            users.users.nixos = {
-              isSystemUser = true;
-              isNormalUser = lib.mkForce false;
-              group = "nixos";
-            };
-            users.groups.nixos = {};
-
-            # we are missing this from base.nix
-            boot.supportedFilesystems = [
-              "btrfs"
-              # probably not needed but does not seem to increase closure size
-              "cifs"
-              "f2fs"
-              ## anyone still using this over ext4?
-              #"jfs"
-              "ntfs"
-              ## no longer seems to be maintained, anyone still using it?
-              #"reiserfs"
-              "vfat"
-              "xfs"
-            ];
-            boot.kernelModules = [
-              # we have to explicitly enable this, otherwise it is not loaded even when creating a raid:
-              # https://github.com/nix-community/nixos-anywhere/issues/249
-              "dm-raid"
-            ];
-          })
-          {
-            system.kexec-installer.name = "nixos-kexec-installer-noninteractive";
-            system.stateVersion = lib.mkForce "25.05";
-            boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-          }
-        ];
         helix-latest = inputs.helix-editor.packages.${system}.default;
         zjstatus = inputs.zjstatus.packages.${system}.default;
         zjstatus-hints = inputs.zjstatus-hints.packages.${system}.default;

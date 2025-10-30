@@ -4,7 +4,7 @@
     runtimeInputs = with pkgs; [
       pandoc
       w3m
-      poppler_utils
+      poppler-utils
     ];
     text = ''
       ${pkgs.notmuch-bower}/bin/bower "$*"
