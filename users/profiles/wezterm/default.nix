@@ -23,7 +23,7 @@ in {
   '';
   xdg.configFile."wezterm/wezterm.fnl.lua".source =
     pkgs.runCommand "wezterm.fnl.lua" {
-      nativeBuildInputs = [pkgs.fennel];
+      nativeBuildInputs = [pkgs.luaPackages.fennel];
     }
     ''
       fennel --compile ${./wezterm.fnl} > $out

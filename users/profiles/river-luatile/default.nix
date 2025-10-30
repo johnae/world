@@ -7,7 +7,7 @@
 in {
   xdg.configFile."river-luatile/layout.fnl.lua".source =
     pkgs.runCommand "layout.fnl.lua" {
-      nativeBuildInputs = [pkgs.fennel];
+      nativeBuildInputs = [pkgs.luaPackages.fennel];
     }
     ''
       fennel --compile ${./layout.fnl} > $out
