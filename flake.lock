@@ -2062,8 +2062,8 @@
         "victoriametrics-logs-datasource-plugin": "victoriametrics-logs-datasource-plugin",
         "victoriametrics-metrics-datasource-plugin": "victoriametrics-metrics-datasource-plugin",
         "wezterm": "wezterm",
+        "zj-which-key": "zj-which-key",
         "zjstatus": "zjstatus",
-        "zjstatus-hints": "zjstatus-hints",
         "zwift": "zwift"
       }
     },
@@ -2325,6 +2325,29 @@
         "type": "github"
       }
     },
+    "zj-which-key": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": [
+          "rust-overlay"
+        ]
+      },
+      "locked": {
+        "lastModified": 1762781110,
+        "narHash": "sha256-WKJLhH0aDDI6EhtIGyPRu5sjvWpx6getw3sFHnvXJDU=",
+        "owner": "johnae",
+        "repo": "zj-which-key",
+        "rev": "7ad9b92c028abfb0266b0d7839b904c60e57ed39",
+        "type": "github"
+      },
+      "original": {
+        "owner": "johnae",
+        "repo": "zj-which-key",
+        "type": "github"
+      }
+    },
     "zjstatus": {
       "inputs": {
         "crane": [
@@ -2351,35 +2374,6 @@
       "original": {
         "owner": "dj95",
         "repo": "zjstatus",
-        "type": "github"
-      }
-    },
-    "zjstatus-hints": {
-      "inputs": {
-        "crane": [
-          "crane"
-        ],
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-overlay": [
-          "rust-overlay"
-        ]
-      },
-      "locked": {
-        "lastModified": 1760737531,
-        "narHash": "sha256-AbWr98fn2sGqJEwlARDUzjAF2JQrwd2pdIyOxvb0388=",
-        "owner": "b0o",
-        "repo": "zjstatus-hints",
-        "rev": "5707bf64ad9f9e9260d8786b1bee65020413ae54",
-        "type": "github"
-      },
-      "original": {
-        "owner": "b0o",
-        "repo": "zjstatus-hints",
         "type": "github"
       }
     },

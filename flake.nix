@@ -127,13 +127,9 @@
     zjstatus.inputs.nixpkgs.follows = "nixpkgs";
     zjstatus.inputs.rust-overlay.follows = "rust-overlay";
     zjstatus.url = "github:dj95/zjstatus";
-
-    zjstatus-hints.inputs.crane.follows = "crane";
-    zjstatus-hints.inputs.flake-utils.follows = "flake-utils";
-    zjstatus-hints.inputs.nixpkgs.follows = "nixpkgs";
-    zjstatus-hints.inputs.rust-overlay.follows = "rust-overlay";
-    zjstatus-hints.url = "github:b0o/zjstatus-hints";
-
+    zj-which-key.inputs.rust-overlay.follows = "rust-overlay";
+    zj-which-key.inputs.nixpkgs.follows = "nixpkgs";
+    zj-which-key.url = "github:johnae/zj-which-key";
     zwift.url = "github:johnae/zwift";
     zwift.inputs.crane.follows = "crane";
     zwift.inputs.devenv.follows = "devenv";
