@@ -42,17 +42,14 @@
 in {
   options.services.jae.router = with lib.types; {
     enable = mkEnableOption "Whether to enable the router";
-    #disableDns = mkEnableOption "Whether to disable dns server";
-    useNextDns = mkEnableOption "Whether to use nextdns DoH for name resolution";
-    nextDnsEnvFile = mkOption {
-      type = nullOr str;
-      example = "/path/to/envfile";
-      default = null;
-    };
     upstreamDnsServers = mkOption {
       type = listOf str;
       description = "List of upstream dns server addresses.";
     };
+    # disableIPv4 = mkOption {
+    #   type = bool;
+    #   description = "If ipv4 should be disabled on the local network.";
+    # };
     restrictedMacs = mkOption {
       type = listOf str;
       description = "List of mac addresses.";
@@ -115,33 +112,17 @@ in {
           internalInterfaces);
     };
 
-    networking.nat = {
-      enable = true;
-      inherit (cfg) externalInterface;
-      internalInterfaces = internalInterfaceNames;
-    };
+    # networking.nat = {
+    #   enable = !cfg.disableIPv4;
+    #   inherit (cfg) externalInterface;
+    #   internalInterfaces = internalInterfaceNames;
+    # };
 
     environment.persistence."/keep".directories = ["/var/lib/dnsmasq"];
 
-    systemd.timers.kill-nextdns = {
-      description = "Kill nextdns 5 minutes after boot. What a hack.";
-      wantedBy = ["timers.target"];
-      timerConfig.OnBootSec = "5m";
-    };
-    systemd.services.kill-nextdns = {
-      description = "Kill nextdns 5 minutes after boot. What a hack.";
-      after = ["network-online.target"];
-      wants = ["network-online.target"];
-      wantedBy = ["multi-user.target"];
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStartPre = "/run/current-system/sw/bin/pkill -9 nextdns";
-        ExecStart = "/run/current-system/sw/bin/systemctl restart nextdns";
-      };
-    };
+    ## NAT64 (Jool) should be configured per-host in the host configuration
+    ## See configurations/nixos/x86_64-linux/sagittarius.nix for example
 
-    ## enable jool nat64
-    networking.jool.enable = true;
     ## enable ipv6 on local network
     services.corerad = {
       enable = true;
@@ -151,15 +132,6 @@ in {
           prometheus = true;
         };
         interfaces = [
-          {
-            name = "pref64";
-            advertise = true;
-            prefix = [
-              {
-                prefix = "64:ff9b::/96";
-              }
-            ];
-          }
           {
             name = cfg.internalInterface;
             advertise = true;
@@ -179,38 +151,62 @@ in {
       };
     };
 
-    services.dnsmasq.enable = true;
-    services.dnsmasq.resolveLocalQueries = true;
-    services.dnsmasq.settings =
-      {
-        dhcp-range = mapAttrsToList (tag: net: "${tag},${net.base}.10,${net.base}.128,255.255.255.0,24h") internalInterfaces;
-        dhcp-option = (mapAttrsToList (tag: net: "${tag},option:router,${net.address}") internalInterfaces) ++ ["option:dns-server,${cfg.internalInterfaceIP}"];
-        interface = internalInterfaceNames;
-      }
-      // {
-        server = mkIf (!cfg.useNextDns) cfg.upstreamDnsServers;
-        # server = mkMerge [
-        #   (mkIf (!cfg.useNextDns) cfg.upstreamDnsServers)
-        #   (mkIf cfg.useNextDns ["127.0.0.1#5555"])
-        # ];
-        dhcp-authoritative = true;
-        dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
-        add-mac = "text";
-        add-subnet = "32,128";
-        port =
-          if cfg.useNextDns
-          then 5342
-          else 53;
-      }
-      // cfg.dnsMasqSettings;
+    #     . {
+    #     bind ::
+    #     dns64 64:ff9b::/96
+    #     forward . tls://2606:4700:4700::1111 {
+    #         tls_servername 1dot1dot1dot1.cloudflare-dns.com
+    #     }
+    #     cache 30
+    #     log
+    #     errors
+    # }
+
+    services.coredns = {
+      enable = true;
+      config = ''
+        . {
+            bind ::
+            dns64 64:ff9b::/96
+            forward . tls://2606:4700:4700::1111 {
+                tls_servername 1dot1dot1dot1.cloudflare-dns.com
+            }
+            cache 300
+            log
+        }
+      '';
+    };
+
+    # services.dnsmasq.enable = true;
+    # services.dnsmasq.resolveLocalQueries = true;
+    # services.dnsmasq.settings =
+    #   {
+    #     dhcp-range = lib.mkIf (!cfg.disableIPv4) mapAttrsToList (tag: net: "${tag},${net.base}.10,${net.base}.128,255.255.255.0,24h") internalInterfaces;
+    #     dhcp-option = lib.mkIf (!cfg.disableIPv4) (mapAttrsToList (tag: net: "${tag},option:router,${net.address}") internalInterfaces) ++ ["option:dns-server,${cfg.internalInterfaceIP}"];
+    #     interface = internalInterfaceNames;
+    #     except-interface = cfg.externalInterface;
+    #   }
+    #   // {
+    #     server = mkIf (!cfg.useNextDns) cfg.upstreamDnsServers;
+    #     # server = mkMerge [
+    #     #   (mkIf (!cfg.useNextDns) cfg.upstreamDnsServers)
+    #     #   (mkIf cfg.useNextDns ["127.0.0.1#5555"])
+    #     # ];
+    #     dhcp-authoritative = true;
+    #     dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
+    #     add-mac = "text";
+    #     add-subnet = "32,128";
+    #     port = 5342;
+    #   }
+    #   // cfg.dnsMasqSettings;
 
     services.resolved.enable = false;
-    services.nextdns.enable = cfg.useNextDns;
-    services.nextdns.arguments = (flatten (map (mac: ["-profile" "${mac}=\${KIDSDNS_ID}"]) cfg.restrictedMacs)) ++ ["-profile" "${cfg.internalInterfaceIP}/24=\${NEXTDNS_ID}" "-cache-size" "10MB" "-discovery-dns" "127.0.0.1:5342" "-report-client-info" "-listen" "${cfg.internalInterfaceIP}:53" "-listen" "127.0.0.1:53"];
-    systemd.services.nextdns = mkIf cfg.useNextDns {
-      serviceConfig.EnvironmentFile = cfg.nextDnsEnvFile;
-      after = ["systemd-networkd-wait-online.service"];
-    };
+    # services.nextdns.enable = cfg.useNextDns;
+    # services.nextdns.arguments = (flatten (map (mac: ["-profile" "${mac}=\${KIDSDNS_ID}"]) cfg.restrictedMacs)) ++ ["-profile" "${cfg.internalInterfaceIP}/24=\${NEXTDNS_ID}" "-cache-size" "10MB" "-discovery-dns" "127.0.0.1:5342" "-report-client-info" "-listen" "${cfg.internalInterfaceIP}:53" "-listen" "127.0.0.1:53"];
+    # systemd.services.nextdns = mkIf cfg.useNextDns {
+    #   serviceConfig.EnvironmentFile = cfg.nextDnsEnvFile;
+    #   after = ["systemd-networkd-wait-online.service"];
+    # };
 
     boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = true;
     boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
