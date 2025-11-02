@@ -13,6 +13,7 @@
     devices = ["/dev/mapper/encrypted_root"];
   };
 
+  ephemeralRoot = true;
   imports = [
     ../../../profiles/admin-user/home-manager.nix
     ../../../profiles/admin-user/user.nix
@@ -82,31 +83,21 @@
 
   services.jae.router = {
     enable = true;
-    useNextDns = false;
-    nextDnsEnvFile = "/var/run/agenix/nextdns";
-    restrictedMacs = [
-      "5c:e0:c5:8a:24:6a"
-      "b4:18:d1:ab:4e:5a"
-    ];
-    upstreamDnsServers = [
-      "2a07:a8c1::"
-      "45.90.30.0"
-      "2a07:a8c0::"
-      "45.90.28.0"
-    ];
     externalInterface = "enp1s0f0";
     internalInterface = "enp2s0";
-    internalInterfaceIP = "192.168.20.1";
-    dnsMasqSettings.no-resolv = true;
-    dnsMasqSettings.bogus-priv = true;
-    dnsMasqSettings.strict-order = true;
-  };
+    enableNat64 = true; # Enable NAT64 for IPv4 access from IPv6-only clients
 
-  services.prometheus.exporters = {
-    dnsmasq = {
-      enable = true;
-      dnsmasqListenAddress = "localhost:5342";
-    };
+    # Optional: Add DNS filtering with Blocky
+    # blockySettings = {
+    #   blocking = {
+    #     denylists = {
+    #       ads = ["https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"];
+    #     };
+    #     clientGroupsBlock = {
+    #       default = ["ads"];
+    #     };
+    #   };
+    # };
   };
 
   services.vmagent = {
@@ -121,10 +112,10 @@
     in {
       scrape_configs = [
         {
-          job_name = "dnsmasq";
+          job_name = "blocky";
           scrape_interval = "10s";
           static_configs = [
-            {targets = ["127.0.0.1:9153"];}
+            {targets = ["127.0.0.1:4000"];}
           ];
           inherit relabel_configs;
         }
@@ -144,9 +135,6 @@
     ts-google-9k = {
       file = ../../../secrets/ts-google-9k.age;
       owner = "1337";
-    };
-    nextdns = {
-      file = ../../../secrets/nextdns.age;
     };
   };
 

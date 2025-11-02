@@ -67,8 +67,6 @@
         networkConfig.IgnoreCarrierLoss = "3s";
         networkConfig.IPv6PrivacyExtensions = "yes";
         networkConfig.IPv6AcceptRA = "yes";
-        ## don't use this by default (rely on tailscale dns only)
-        networkConfig.DNSDefaultRoute = false;
       };
     };
   };
