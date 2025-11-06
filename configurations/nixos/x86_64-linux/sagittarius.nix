@@ -7,25 +7,9 @@
   ...
 }:
 let
-  # Detect public IPv4 from the WAN interface
-  getPublicIpv4 = pkgs.writeShellScript "get-public-ipv4" ''
-    ${pkgs.iproute2}/bin/ip -4 -json addr show dev enp1s0f0 scope global | \
-      ${pkgs.jq}/bin/jq -r '.[0].addr_info[0].local // empty'
-  '';
-
-  # Generate Jool NAT64 config with detected IP
-  generateJoolConfig = pkgs.writeShellScript "generate-jool-config" ''
-    PUBLIC_IP=$(${getPublicIpv4})
-
-    if [ -z "$PUBLIC_IP" ]; then
-      echo "ERROR: Could not detect public IPv4 address on enp1s0f0" >&2
-      exit 1
-    fi
-
-    echo "Configuring Jool NAT64 with public IP: $PUBLIC_IP" >&2
-
-    # Generate the JSON config with the detected IP
-    cat > /run/jool-nat64-default.conf <<EOF
+  # Jool NAT64 config - uses veth IP, not public IP
+  # Main namespace will MASQUERADE to public IP via conntrack
+  joolConfig = pkgs.writeText "jool-nat64-default.conf" ''
     {
       "instance": "default",
       "framework": "netfilter",
@@ -36,22 +20,21 @@ let
       "pool4": [
         {
           "protocol": "TCP",
-          "prefix": "$PUBLIC_IP/32",
+          "prefix": "198.51.100.2/32",
           "port range": "10000-65535"
         },
         {
           "protocol": "UDP",
-          "prefix": "$PUBLIC_IP/32",
+          "prefix": "198.51.100.2/32",
           "port range": "10000-65535"
         },
         {
           "protocol": "ICMP",
-          "prefix": "$PUBLIC_IP/32",
+          "prefix": "198.51.100.2/32",
           "port range": "10000-65535"
         }
       ]
     }
-    EOF
   '';
 in
 {
@@ -150,14 +133,38 @@ in
   };
 
   ## NAT64 configuration for IPv6-only clients to access IPv4 services
-  ## The public IPv4 address is automatically detected from enp1s0f0 at service start.
   ##
   ## Architecture:
   ##   - Jool runs in a separate network namespace called "nat64"
   ##   - A veth pair connects the main namespace to the nat64 namespace
-  ##   - Traffic to 64:ff9b::/96 is routed through the namespace
+  ##   - Jool uses the veth IP (198.51.100.2) in pool4
+  ##   - Main namespace MASQUERADEs traffic from namespace to public IP
+  ##   - Conntrack handles return traffic routing back to namespace
   ##   - Both LAN clients AND the router itself can access IPv4 via NAT64
+  ##
+  ## Traffic flow:
+  ##   IPv6 → Namespace → Jool (to IPv4 with src=198.51.100.2) →
+  ##   Main NS (MASQUERADE to public IP) → Internet →
+  ##   Main NS (conntrack reverse NAT to 198.51.100.2) → Namespace →
+  ##   Jool (to IPv6) → Destination
   networking.jool.enable = true;
+
+  ## MASQUERADE traffic from NAT64 namespace to appear from public IP
+  networking.firewall.extraCommands = ''
+    # Allow forwarding from NAT64 namespace
+    iptables -A FORWARD -i veth-nat64 -o enp1s0f0 -j ACCEPT
+    iptables -A FORWARD -i enp1s0f0 -o veth-nat64 -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+    # MASQUERADE traffic from namespace (198.51.100.0/30) to public IP
+    iptables -t nat -A POSTROUTING -s 198.51.100.0/30 -o enp1s0f0 -j MASQUERADE
+  '';
+
+  networking.firewall.extraStopCommands = ''
+    # Cleanup rules
+    iptables -D FORWARD -i veth-nat64 -o enp1s0f0 -j ACCEPT 2>/dev/null || true
+    iptables -D FORWARD -i enp1s0f0 -o veth-nat64 -m state --state RELATED,ESTABLISHED -j ACCEPT 2>/dev/null || true
+    iptables -t nat -D POSTROUTING -s 198.51.100.0/30 -o enp1s0f0 -j MASQUERADE 2>/dev/null || true
+  '';
 
   ## Setup script for the NAT64 namespace and veth pair
   environment.systemPackages = [
@@ -242,11 +249,9 @@ in
       ExecStartPre = [
         # Module needs to be loaded in main namespace first (+ prefix runs in main namespace)
         "+${pkgs.kmod}/bin/modprobe jool"
-        # Generate config (+ prefix runs in main namespace to access enp1s0f0)
-        "+${generateJoolConfig}"
       ];
 
-      ExecStart = lib.mkForce "${pkgs.jool-cli}/bin/jool file handle /run/jool-nat64-default.conf";
+      ExecStart = lib.mkForce "${pkgs.jool-cli}/bin/jool file handle ${joolConfig}";
       ExecStop = lib.mkForce "${pkgs.jool-cli}/bin/jool instance remove default";
     };
   };
