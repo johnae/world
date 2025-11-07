@@ -146,6 +146,8 @@ in {
                 lifetime = "auto";
               }
             ];
+            # Set "Other" flag to indicate DHCPv6 available for additional config
+            other_config = true;
           }
         ];
       };
@@ -177,28 +179,32 @@ in {
       '';
     };
 
-    # services.dnsmasq.enable = true;
-    # services.dnsmasq.resolveLocalQueries = true;
-    # services.dnsmasq.settings =
-    #   {
-    #     dhcp-range = lib.mkIf (!cfg.disableIPv4) mapAttrsToList (tag: net: "${tag},${net.base}.10,${net.base}.128,255.255.255.0,24h") internalInterfaces;
-    #     dhcp-option = lib.mkIf (!cfg.disableIPv4) (mapAttrsToList (tag: net: "${tag},option:router,${net.address}") internalInterfaces) ++ ["option:dns-server,${cfg.internalInterfaceIP}"];
-    #     interface = internalInterfaceNames;
-    #     except-interface = cfg.externalInterface;
-    #   }
-    #   // {
-    #     server = mkIf (!cfg.useNextDns) cfg.upstreamDnsServers;
-    #     # server = mkMerge [
-    #     #   (mkIf (!cfg.useNextDns) cfg.upstreamDnsServers)
-    #     #   (mkIf cfg.useNextDns ["127.0.0.1#5555"])
-    #     # ];
-    #     dhcp-authoritative = true;
-    #     dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
-    #     add-mac = "text";
-    #     add-subnet = "32,128";
-    #     port = 5342;
-    #   }
-    #   // cfg.dnsMasqSettings;
+    ## DHCPv6 for devices that need it (stateless mode - SLAAC handles addressing)
+    ## corerad sends RA with O-flag, clients use SLAAC for addresses + DHCPv6 for DNS
+    services.dnsmasq.enable = true;
+    services.dnsmasq.resolveLocalQueries = false;  # CoreDNS handles DNS
+    services.dnsmasq.settings = {
+      # Disable DNS server functionality (port 0 = DNS disabled, DHCPv6 only)
+      port = 0;
+
+      # DHCPv6 configuration - provide DNS info only, no RA (corerad handles that)
+      # Clients get addresses from SLAAC (corerad), DNS from DHCPv6 (dnsmasq)
+      dhcp-range = mapAttrsToList (tag: net: "tag:${tag},::,constructor:${tag},64,12h") internalInterfaces;
+
+      # Provide DNS server via DHCPv6 option (:: means this server's link-local address)
+      dhcp-option = ["option6:dns-server,[::]"];
+
+      # Interface configuration
+      interface = internalInterfaceNames;
+      except-interface = cfg.externalInterface;
+
+      # DHCPv6 settings
+      dhcp-authoritative = true;
+      dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
+
+      # Logging for DHCPv6
+      log-dhcp = true;
+    } // cfg.dnsMasqSettings;
 
     services.resolved.enable = false;
     # services.nextdns.enable = cfg.useNextDns;
