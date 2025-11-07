@@ -146,8 +146,9 @@ in {
                 lifetime = "auto";
               }
             ];
-            # Set "Other" flag to indicate DHCPv6 available for additional config
-            other_config = true;
+            # Set "Managed" flag to indicate DHCPv6 handles address assignment
+            # Devices can still use SLAAC if they prefer (dual mode)
+            managed = true;
           }
         ];
       };
@@ -179,17 +180,20 @@ in {
       '';
     };
 
-    ## DHCPv6 for devices that need it (stateless mode - SLAAC handles addressing)
-    ## corerad sends RA with O-flag, clients use SLAAC for addresses + DHCPv6 for DNS
+    ## DHCPv6 for devices that need address assignment (stateful mode)
+    ## corerad sends RA with M-flag, supporting both:
+    ##   - SLAAC devices (can still autoconfigure)
+    ##   - DHCPv6-only devices (get addresses from dnsmasq)
     services.dnsmasq.enable = true;
     services.dnsmasq.resolveLocalQueries = false;  # CoreDNS handles DNS
     services.dnsmasq.settings = {
       # Disable DNS server functionality (port 0 = DNS disabled, DHCPv6 only)
       port = 0;
 
-      # DHCPv6 configuration - provide DNS info only, no RA (corerad handles that)
-      # Clients get addresses from SLAAC (corerad), DNS from DHCPv6 (dnsmasq)
-      dhcp-range = mapAttrsToList (tag: net: "tag:${tag},::,constructor:${tag},64,12h") internalInterfaces;
+      # Stateful DHCPv6 - assign addresses from ::1000 to ::1fff range
+      # SLAAC devices can still use ::2000+ or EUI-64 addresses
+      # The "constructor:" prefix uses the actual IPv6 prefix on the interface
+      dhcp-range = mapAttrsToList (tag: net: "tag:${tag},::1000,::1fff,constructor:${tag},64,12h") internalInterfaces;
 
       # Provide DNS server via DHCPv6 option (:: means this server's link-local address)
       dhcp-option = ["option6:dns-server,[::]"];
