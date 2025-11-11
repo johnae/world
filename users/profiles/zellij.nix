@@ -6,9 +6,11 @@
           ChangeApplicationState
           ReadApplicationState
       }
-      "${pkgs.zjstatus-hints}/bin/zjstatus-hints.wasm" {
-          ReadApplicationState
+      "${pkgs.zj-which-key}/share/zellij/plugins/zj_which_key.wasm" {
+          ChangeApplicationState
           MessageAndLaunchOtherPlugins
+          ReadApplicationState
+
       }
       "${pkgs.zwift}/bin/zwift.wasm" {
           ReadApplicationState
@@ -27,8 +29,6 @@
                 format_space  " "
                 format_hide_on_overlength "true"
                 format_precedence "crl"
-
-                pipe_zjstatus_hints_format "{output}"
 
                 border_enabled  "false"
                 border_char     "─"
@@ -284,23 +284,16 @@
         configuration location="zellij:configuration"
         plugin-manager location="zellij:plugin-manager"
         about location="zellij:about"
-        zjstatus-hints location="file:${pkgs.zjstatus-hints}/bin/zjstatus-hints.wasm" {
-            // Maximum number of characters to display
-            max_length 140 // 0 = unlimited
-            // String to append when truncated
-            overflow_str "..." // default
-            // Name of the pipe for zjstatus integration
-            pipe_name "zjstatus_hints" // default
-            // Hide hints in base mode (a.k.a. default mode)
-            // E.g. if you have set default_mode to "locked", then
-            // you can hide hints in the locked mode by setting this to true
-            hide_in_base_mode true // default
+        zj-which-key location="file:${pkgs.zj-which-key}/share/zellij/plugins/zj_which_key.wasm" {
+            auto_show_on_mode_change "true"
+            hide_in_base_mode "true"
+            max_lines "20"
         }
     }
 
     // Plugins to load in the background when a new session starts
     load_plugins {
-        zjstatus-hints
+        zj-which-key
       // "file:/path/to/my-plugin.wasm"
       // "https://example.com/my-plugin.wasm"
     }
