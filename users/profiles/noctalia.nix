@@ -141,6 +141,7 @@ in {
         position = "close_to_bar_button";
       };
       dock = {
+        enabled = false;
         displayMode = "always_visible";
         backgroundOpacity = 1;
         floatingRatio = 1;
