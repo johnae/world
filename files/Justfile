@@ -137,10 +137,91 @@ remote-upgrade flake-config ssh-host:
   set -euo pipefail
   nixos-rebuild switch --flake '{{flake-config}}' --target-host {{ssh-host}} --sudo
 
+# Generic remote NixOS installation using nixos-anywhere
+# Configurable via environment variables for flexibility across different setups
+#
+# Required environment variables (when encrypt-disk=yes):
+#   SSH_HOST_KEY_CMD       - Command to retrieve SSH host key
+#   SSH_INITRD_KEY_CMD     - Command to retrieve initrd SSH key
+#   DISK_PASSWORD_CMD      - Command to retrieve disk encryption password
+#
+# Optional environment variables:
+#   SSH_HOST_KEY_PATH              - Destination path for SSH host key (relative, no leading slash)
+#                                    (default: etc/ssh/ssh_host_ed25519_key → /etc/ssh/ssh_host_ed25519_key)
+#   SSH_INITRD_KEY_PATH            - Destination path for initrd SSH key (relative, no leading slash)
+#                                    (default: etc/ssh/initrd_ed25519_key → /etc/ssh/initrd_ed25519_key)
+#   SSH_IDENTITY_FILE              - SSH key for connecting to target (e.g., ~/.ssh/id_ed25519)
+#   TAILSCALE_OAUTH_CLIENT_ID      - Tailscale OAuth client ID (enables Tailscale integration)
+#   TAILSCALE_OAUTH_CLIENT_SECRET  - Tailscale OAuth client secret (enables Tailscale integration)
+#   TAILSCALE_TAILNET              - Tailscale tailnet name (default: 9000.dev)
+#   TAILSCALE_DEVICE_TAG           - Tailscale device tag (default: tag:server)
+#   PRECMD_K8S_CLEANUP             - Set to "yes" to enable k8s device cleanup (requires K8S_API_HOSTNAME)
+#   K8S_API_HOSTNAME               - Kubernetes API hostname for device cleanup
+#
+# Example: Using age-encrypted files (like icarus pattern)
+#   export SSH_IDENTITY_FILE="$HOME/.ssh/id_ed25519"
+#   export SSH_HOST_KEY_CMD="rage -d -i identity.txt secrets/icarus/id_ed25519_host_key.age"
+#   export SSH_INITRD_KEY_CMD="rage -d -i identity.txt secrets/icarus/id_ed25519_initrd_key.age"
+#   export SSH_INITRD_KEY_PATH="keep/secrets/initrd_ed25519_key"  # icarus uses /keep/secrets
+#   export DISK_PASSWORD_CMD="rage -d -i identity.txt secrets/icarus/disk_password.age"
+#   just remote-install .#icarus root@192.168.1.100
+#
+# Example: Using plain files (less secure, but simple)
+#   export SSH_HOST_KEY_CMD="cat /secure/keys/ssh_host_ed25519_key"
+#   export SSH_INITRD_KEY_CMD="cat /secure/keys/initrd_ed25519_key"
+#   export DISK_PASSWORD_CMD="cat /secure/keys/disk_password.txt"
+#   just remote-install .#myhost root@192.168.1.100
+#
+# Example: No disk encryption
+#   just remote-install .#myhost root@192.168.1.100 no
+#
+# Example: With Tailscale but no k8s cleanup
+#   export SSH_HOST_KEY_CMD="rbw get myproject ssh_host_key"
+#   export SSH_INITRD_KEY_CMD="rbw get myproject ssh_initrd_key"
+#   export DISK_PASSWORD_CMD="rbw get myproject disk_password"
+#   export TAILSCALE_OAUTH_CLIENT_ID="$(rbw get tailscale client_id)"
+#   export TAILSCALE_OAUTH_CLIENT_SECRET="$(rbw get tailscale client_secret)"
+#   export TAILSCALE_TAILNET="example.com"
+#   just remote-install .#myhost root@192.168.1.100
+# 
+#
 [private]
 remote-install flake-config ssh-host encrypt-disk="yes" precmd="":
   #!/usr/bin/env bash
+  set -x
   set -euo pipefail
+
+  # Validate required environment variables
+  if [ "{{encrypt-disk}}" = "yes" ]; then
+    if [ -z "${SSH_HOST_KEY_CMD:-}" ]; then
+      echo "ERROR: SSH_HOST_KEY_CMD environment variable is required when encrypt-disk=yes"
+      echo ""
+      echo "Examples:"
+      echo "  export SSH_HOST_KEY_CMD='rbw get hetzner cloud_ssh_host_key | base64 -d'"
+      echo "  export SSH_HOST_KEY_CMD='rage -d secrets/host_key.age'"
+      echo "  export SSH_HOST_KEY_CMD='cat /path/to/ssh_host_ed25519_key'"
+      exit 1
+    fi
+    if [ -z "${SSH_INITRD_KEY_CMD:-}" ]; then
+      echo "ERROR: SSH_INITRD_KEY_CMD environment variable is required when encrypt-disk=yes"
+      echo ""
+      echo "Examples:"
+      echo "  export SSH_INITRD_KEY_CMD='rbw get hetzner cloud_ssh_initrd_key | base64 -d'"
+      echo "  export SSH_INITRD_KEY_CMD='rage -d secrets/initrd_key.age'"
+      echo "  export SSH_INITRD_KEY_CMD='cat /path/to/initrd_ed25519_key'"
+      exit 1
+    fi
+    if [ -z "${DISK_PASSWORD_CMD:-}" ]; then
+      echo "ERROR: DISK_PASSWORD_CMD environment variable is required when encrypt-disk=yes"
+      echo ""
+      echo "Examples:"
+      echo "  export DISK_PASSWORD_CMD='rbw get hetzner disk_password'"
+      echo "  export DISK_PASSWORD_CMD='rage -d secrets/disk_password.age'"
+      echo "  export DISK_PASSWORD_CMD='cat /path/to/disk_password.txt'"
+      exit 1
+    fi
+  fi
+
   temp="$(mktemp -d)"
   disktmp="$(mktemp -d)"
   hostname="$(echo '{{flake-config}}' | awk -F'#' '{print $2}')"
@@ -173,75 +254,100 @@ remote-install flake-config ssh-host encrypt-disk="yes" precmd="":
   function unlock() {
     local ip="$(echo "{{ssh-host}}" | sed 's|.*@||g')"
     local port="2222"
+    local ssh_key_arg=""
+    if [ -n "${SSH_IDENTITY_FILE:-}" ]; then
+      ssh_key_arg="-i ${SSH_IDENTITY_FILE}"
+    fi
     if port-open "$port"; then
       echo "Host ${ip}:${port} is open, unlocking"
-      rbw get hetzner -- disk_password | ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -i /home/john/.ssh/id_ed25519_alt -p "${port}" "{{ssh-host}}" || true
+      eval "$DISK_PASSWORD_CMD" | ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null ${ssh_key_arg} -p "${port}" "{{ssh-host}}" || true
       return 0
     fi
     return 1
   }
 
-  install -d -m755 "$temp/etc/ssh"
+  # Set default key paths (can be overridden via env vars)
+  SSH_HOST_KEY_PATH="${SSH_HOST_KEY_PATH:-etc/ssh/ssh_host_ed25519_key}"
+  SSH_INITRD_KEY_PATH="${SSH_INITRD_KEY_PATH:-etc/ssh/initrd_ed25519_key}"
+  TAILSCALE_AUTH_KEY_PATH="${TAILSCALE_AUTH_KEY_PATH:-etc/tailscale-auth-key}"
 
-  TS_TOKEN="$(curl -s \
-    -d "client_id=$(rbw get tailscale --full tskey-oauth-full-access | grep client_id: | awk -F': ' '{print $2}')" \
-    -d "client_secret=$(rbw get tailscale tskey-oauth-full-access)" \
-    "https://api.tailscale.com/api/v2/oauth/token" | jq -r .access_token)"
+  # Create necessary directories for key paths
+  install -d -m755 "$temp/$(dirname "$SSH_HOST_KEY_PATH")"
+  install -d -m755 "$temp/$(dirname "$SSH_INITRD_KEY_PATH")"
+  install -d -m755 "$temp/$(dirname "$TAILSCALE_AUTH_KEY_PATH")"
 
-  OLD_DEVICE_ID="$(curl "https://api.tailscale.com/api/v2/tailnet/9000.dev/devices" --header "Authorization: Bearer $TS_TOKEN" | jq -r ".devices[] | select(.hostname == \"$hostname\").id")"
-  K8S_DEVICE_ID="$(curl "https://api.tailscale.com/api/v2/tailnet/9000.dev/devices" --header "Authorization: Bearer $TS_TOKEN" | jq -r ".devices[] | select(.hostname == \"k8s-api-5df5\").id")"
+  # Optional Tailscale integration (auto-detect based on env var presence)
+  if [ -n "${TAILSCALE_OAUTH_CLIENT_ID:-}" ] && [ -n "${TAILSCALE_OAUTH_CLIENT_SECRET:-}" ]; then
+    echo "Tailscale credentials detected, setting up Tailscale integration"
+    TAILSCALE_TAILNET="${TAILSCALE_TAILNET:-9000.dev}"
+    TAILSCALE_DEVICE_TAG="${TAILSCALE_DEVICE_TAG:-tag:server}"
 
-  if [[ ${#OLD_DEVICE_ID} -gt 10 ]]; then
-    echo "deleting old tailscale device host: $hostname id: $OLD_DEVICE_ID"
-    curl "https://api.tailscale.com/api/v2/device/$OLD_DEVICE_ID" \
-      --request DELETE \
-      --header "Authorization: Bearer $TS_TOKEN"
-  fi
+    TS_TOKEN="$(curl -s \
+      -d "client_id=${TAILSCALE_OAUTH_CLIENT_ID}" \
+      -d "client_secret=${TAILSCALE_OAUTH_CLIENT_SECRET}" \
+      "https://api.tailscale.com/api/v2/oauth/token" | jq -r .access_token)"
 
-  # if [[ ${#K8S_DEVICE_ID} -gt 10 ]]; then
-  #   echo "deleting old tailscale device host: $hostname id: $K8S_DEVICE_ID"
-  #   curl "https://api.tailscale.com/api/v2/device/$K8S_DEVICE_ID" \
-  #     --request DELETE \
-  #     --header "Authorization: Bearer $TS_TOKEN"
-  # fi
+    OLD_DEVICE_ID="$(curl "https://api.tailscale.com/api/v2/tailnet/${TAILSCALE_TAILNET}/devices" --header "Authorization: Bearer $TS_TOKEN" | jq -r ".devices[] | select(.hostname == \"$hostname\").id")"
 
-  curl "https://api.tailscale.com/api/v2/tailnet/9000.dev/keys?all=true" \
-    -X POST \
-    -H "Authorization: Bearer $TS_TOKEN" \
-    -H 'Content-Type: application/json' \
-    --data '{
-     "keyType": "",
-     "description": "tmp",
-     "capabilities": {
-       "devices": {
-         "create": {
-           "reusable": false,
-           "ephemeral": false,
-           "preauthorized": true,
-           "tags": [
-             "tag:server"
-           ]
+    if [[ ${#OLD_DEVICE_ID} -gt 10 ]]; then
+      echo "deleting old tailscale device host: $hostname id: $OLD_DEVICE_ID"
+      curl "https://api.tailscale.com/api/v2/device/$OLD_DEVICE_ID" \
+        --request DELETE \
+        --header "Authorization: Bearer $TS_TOKEN"
+    fi
+
+    # Optional k8s-specific device cleanup
+    if [ "${PRECMD_K8S_CLEANUP:-no}" = "yes" ] && [ -n "${K8S_API_HOSTNAME:-}" ]; then
+      K8S_DEVICE_ID="$(curl "https://api.tailscale.com/api/v2/tailnet/${TAILSCALE_TAILNET}/devices" --header "Authorization: Bearer $TS_TOKEN" | jq -r ".devices[] | select(.hostname == \"${K8S_API_HOSTNAME}\").id")"
+      if [[ ${#K8S_DEVICE_ID} -gt 10 ]]; then
+        echo "deleting old tailscale k8s device host: ${K8S_API_HOSTNAME} id: $K8S_DEVICE_ID"
+        curl "https://api.tailscale.com/api/v2/device/$K8S_DEVICE_ID" \
+          --request DELETE \
+          --header "Authorization: Bearer $TS_TOKEN"
+      fi
+    fi
+
+    curl "https://api.tailscale.com/api/v2/tailnet/${TAILSCALE_TAILNET}/keys?all=true" \
+      -X POST \
+      -H "Authorization: Bearer $TS_TOKEN" \
+      -H 'Content-Type: application/json' \
+      --data "{
+       \"keyType\": \"\",
+       \"description\": \"tmp\",
+       \"capabilities\": {
+         \"devices\": {
+           \"create\": {
+             \"reusable\": false,
+             \"ephemeral\": false,
+             \"preauthorized\": true,
+             \"tags\": [
+               \"${TAILSCALE_DEVICE_TAG}\"
+             ]
+           }
          }
-       }
-     },
-     "expirySeconds": 3600,
-     "scopes": [
-       "all:read"
-     ],
-     "tags": [
-       "tag:server"
-     ]
-    }' | jq -r .key > "$temp/etc/tailscale-auth-key"
+       },
+       \"expirySeconds\": 3600,
+       \"scopes\": [
+         \"all:read\"
+       ],
+       \"tags\": [
+         \"${TAILSCALE_DEVICE_TAG}\"
+       ]
+      }" | jq -r .key > "$temp/$TAILSCALE_AUTH_KEY_PATH"
 
-  chmod 0600 "$temp/etc/tailscale-auth-key"
-  
-  rbw get hetzner cloud_ssh_host_key | base64 -d > "$temp/etc/ssh/ssh_host_ed25519_key"
-  rbw get hetzner cloud_ssh_initrd_key | base64 -d > "$temp/etc/ssh/initrd_ed25519_key"
-  if [ "{{encrypt-disk}}" = "yes" ]; then
-    rbw get hetzner disk_password > "$disktmp/disk.key"
+    chmod 0600 "$temp/$TAILSCALE_AUTH_KEY_PATH"
+  else
+    echo "Tailscale credentials not provided, skipping Tailscale integration"
   fi
-  chmod 0600 "$temp/etc/ssh/ssh_host_ed25519_key"
-  chmod 0600 "$temp/etc/ssh/initrd_ed25519_key"
+
+  # Retrieve SSH keys using configured commands
+  if [ "{{encrypt-disk}}" = "yes" ]; then
+    eval "$SSH_HOST_KEY_CMD" > "$temp/$SSH_HOST_KEY_PATH"
+    eval "$SSH_INITRD_KEY_CMD" > "$temp/$SSH_INITRD_KEY_PATH"
+    eval "$DISK_PASSWORD_CMD" > "$disktmp/disk.key"
+    chmod 0600 "$temp/$SSH_HOST_KEY_PATH"
+    chmod 0600 "$temp/$SSH_INITRD_KEY_PATH"
+  fi
 
   if ! port-open 22; then
     echo "port 22 on ${ip} didn't open, even after waiting a while"
@@ -263,6 +369,26 @@ remote-install flake-config ssh-host encrypt-disk="yes" precmd="":
   fi
 
   unlock
+
+[private]
+remote-install-hetzner flake-config ssh-host encrypt-disk="yes" precmd="":
+  #!/usr/bin/env bash
+  # Wrapper that preserves the old Hetzner-specific behavior
+  # Sets up all the Hetzner-specific environment variables and calls remote-install
+  export SSH_IDENTITY_FILE="/home/john/.ssh/id_ed25519_alt"
+  export SSH_HOST_KEY_CMD="rbw get hetzner cloud_ssh_host_key | base64 -d"
+  export SSH_HOST_KEY_PATH="etc/ssh/ssh_host_ed25519_key"
+  export SSH_INITRD_KEY_CMD="rbw get hetzner cloud_ssh_initrd_key | base64 -d"
+  export SSH_INITRD_KEY_PATH="etc/ssh/initrd_ed25519_key"
+  export DISK_PASSWORD_CMD="rbw get hetzner disk_password"
+  export TAILSCALE_TAILNET="9000.dev"
+  export TAILSCALE_OAUTH_CLIENT_ID="$(rbw get tailscale --full tskey-oauth-full-access | grep 'client_id:' | awk '{print $2}')"
+  export TAILSCALE_OAUTH_CLIENT_SECRET="$(rbw get tailscale tskey-oauth-full-access)"
+  export TAILSCALE_DEVICE_TAG="tag:server"
+  export PRECMD_K8S_CLEANUP="no"
+  export K8S_API_HOSTNAME="k8s-api-5df5"
+
+  just -f {{justfile()}} -d {{invocation_directory()}} remote-install "{{flake-config}}" "{{ssh-host}}" "{{encrypt-disk}}" "{{precmd}}"
 
 [private]
 rekey:
