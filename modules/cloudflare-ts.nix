@@ -12,10 +12,6 @@ in {
     type = types.attrsOf (types.submodule ({name, ...}: {
       options = {
         enable = lib.mkEnableOption "Enable this cloudflare dns tailscale mapping";
-        delete = lib.mkOption {
-          type = types.bool;
-          default = false;
-        };
         name = lib.mkOption {
           type = types.str;
           default = name;
@@ -52,22 +48,18 @@ in {
           ${
             if value.host == null
             then ''
-              TS_IP="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Self.TailscaleIPs[0]')"
+              for IP in $(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Self.TailscaleIPs[]'); do
             ''
             else ''
-              TS_IP="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Peer[] | select(.DNSName | startswith("${value.host}.")) | .TailscaleIPs[0]')"
+              for IP in $(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Peer[] | select(.DNSName | startswith("${value.host}.")) | .TailscaleIPs[]'); do
             ''
           }
-          ${
-            if value.delete
-            then ''
-              RECORD_ID="$(${pkgs.flarectl}/bin/flarectl --json dns list --zone 9000.dev | ${pkgs.jq}/bin/jq -r '.[] | select(.Name == "${value.name}.${value.zone}") | .ID')"
-              ${pkgs.flarectl}/bin/flarectl dns delete --zone ${value.zone} --id "$RECORD_ID"
-            ''
-            else ''
-              ${pkgs.flarectl}/bin/flarectl dns create-or-update --zone ${value.zone} --name "${value.name}" --type A --ttl 60 --content "$TS_IP"
-            ''
-          }
+            if echo "$IP" | grep -q '^f'; then
+              ${pkgs.flarectl}/bin/flarectl dns create-or-update --zone ${value.zone} --name "${value.name}" --type AAAA --ttl 60 --content "$IP"
+            else
+              ${pkgs.flarectl}/bin/flarectl dns create-or-update --zone ${value.zone} --name "${value.name}" --type A --ttl 60 --content "$IP"
+            fi
+          done
         '';
         after = ["network-online.target" "tailscale-auth.service"];
         requires = ["network-online.target" "tailscale-auth.service"];
