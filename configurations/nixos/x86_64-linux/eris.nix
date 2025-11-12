@@ -7,6 +7,7 @@
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIInNFRkSTXPiS0TiQOBS+AT/N2l5HS5/cnCfbWN1sSik";
   syncthingDeviceID = "ZL2OU7Q-IRYWF7H-VNX6A65-RHWQXIF-AK2G22Y-KB43E2U-DAMNCFP-66IWKQX";
 
+  ephemeralRoot = true;
   imports = [
     ../../../profiles/hardware/usbcore.nix
     ../../../profiles/hardware/x570.nix

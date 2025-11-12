@@ -1,4 +1,8 @@
-{lib, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
   disko.devices = {
     disk.disk1 = {
       device = lib.mkDefault "/dev/sda";
@@ -46,6 +50,10 @@
                 type = "btrfs";
                 extraArgs = ["-f"];
                 subvolumes = {
+                  "/root" = lib.mkIf (!config.ephemeralRoot) {
+                    mountOptions = ["compress=zstd" "noatime"];
+                    mountpoint = "/";
+                  };
                   "/nix" = {
                     mountOptions = ["compress=zstd" "noatime"];
                     mountpoint = "/nix";
@@ -61,7 +69,7 @@
         };
       };
     };
-    nodev."/" = {
+    nodev."/" = lib.mkIf config.ephemeralRoot {
       fsType = "tmpfs";
       mountOptions = [
         "size=16G"
@@ -70,6 +78,5 @@
       ];
     };
   };
-  # fileSystems."/boot".neededForBoot = true;
   fileSystems."/keep".neededForBoot = true;
 }
