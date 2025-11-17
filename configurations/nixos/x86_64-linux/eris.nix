@@ -1,7 +1,8 @@
 {
   adminUser,
-  hostName,
   config,
+  hostName,
+  lib,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIInNFRkSTXPiS0TiQOBS+AT/N2l5HS5/cnCfbWN1sSik";
@@ -26,6 +27,11 @@
     ../../../profiles/tailscale.nix
     ../../../profiles/zram.nix
   ];
+
+  ## disable this for now on this machine
+  services.logind.settings.Login = {
+    IdleAction = lib.mkForce "ignore";
+  };
 
   services.ollama.enable = true;
   services.ollama.rocmOverrideGfx = "11.0.0"; ## rdna 3 11.0.0
