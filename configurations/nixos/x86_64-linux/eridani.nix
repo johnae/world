@@ -182,7 +182,6 @@
     args.accept-dns = false;
     args.advertise-exit-node = true;
     args.auth-key = "file:/etc/tailscale-auth-key";
-    # args.hostname = "\"$NODENAME\"";
   };
 
   users.users.root.openssh.authorizedKeys.keys = [
