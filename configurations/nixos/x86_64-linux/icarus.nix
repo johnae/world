@@ -5,21 +5,15 @@
   pkgs,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHaa82NwBC+ty4Wyeuf5kdava7huSYF6k0NYF2ahwayW";
+  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK68zoSchQLwjelUZLaY9FGfEQe3mu26BmC51Q21/SOa";
   syncthingDeviceID = "HBL5ZRB-R2STGW5-LMAYYHX-KOFTP3X-VO4IV6E-PEDKZ3N-WCRR7BY-F5C7AAP";
 
-  bcachefs = {
-    disks = ["/dev/nvme0n1" "/dev/nvme1n1"];
-    devices = ["/dev/mapper/encrypted_root" "/dev/mapper/encrypted_root1"];
-  };
-
-  boot.initrd.luks.devices.cryptkey.keyFile = "/dev/disk/by-partlabel/alt_cryptkey";
-
+  ephemeralRoot = true;
   imports = [
     ../../../profiles/acme.nix
     ../../../profiles/admin-user/home-manager.nix
     ../../../profiles/admin-user/user.nix
-    ../../../profiles/disk/bcachefs-on-luks.nix
+    ../../../profiles/disk/disko-btrfs-raid.nix
     ../../../profiles/hardware/b550.nix
     ../../../profiles/atticd.nix
     ../../../profiles/core-metrics.nix
@@ -36,6 +30,9 @@
     ../../../profiles/vaultwarden.nix
     ../../../profiles/zram.nix
   ];
+
+  disko.devices.disk.disk1.device = "/dev/nvme0n1";
+  disko.devices.disk.disk2.device = "/dev/nvme1n1";
 
   virtualisation.docker.enable = false;
   virtualisation.podman.enable = true;
@@ -144,7 +141,7 @@
     args.accept-routes = false;
     args.accept-dns = false;
     args.advertise-exit-node = true;
-    args.auth-key = config.age.secrets.ts-google-9k.path;
+    args.auth-key = "file:/keep/etc/tailscale-auth-key";
   };
 
   # microvm.autostart = [
@@ -314,6 +311,12 @@
       file = ../../../secrets/ssh_host_microvm_ed25519_key.age;
       path = "/var/lib/microvm-secrets/ssh_host_ed25519_key";
       symlink = false;
+    };
+    ssh_host_icarus_ed25519_key = {
+      file = ../../../secrets/icarus/id_ed25519_host_key.age;
+    };
+    ssh_initrd_icarus_ed25519_key = {
+      file = ../../../secrets/icarus/id_ed25519_initrd_key.age;
     };
     email-account-pass = {
       file = ../../../secrets/email-account-pass.age;
