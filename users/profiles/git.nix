@@ -5,22 +5,17 @@
 }: let
   inherit (config) userinfo;
 in {
-  programs.git = {
-    userName = lib.mkDefault userinfo.fullName;
-    userEmail = lib.mkDefault userinfo.email;
+  programs.delta = {
     enable = true;
-    lfs.enable = true;
-    delta = {
-      enable = true;
-      options.features = "decorations side-by-side line-numbers";
-    };
-    ignores = [
-      "*~"
-      ".direnv*"
-      ".devenv*"
-    ];
-    signing.format = "ssh";
-    extraConfig = {
+    enableGitIntegration = true;
+    options.features = "decorations side-by-side line-numbers";
+  };
+  programs.git = {
+    settings = {
+      user = {
+        name = lib.mkDefault userinfo.fullName;
+        email = lib.mkDefault userinfo.email;
+      };
       github.user = lib.mkDefault userinfo.githubUser;
       gitlab.user = lib.mkDefault userinfo.gitlabUser;
       core.editor = "hx";
@@ -40,5 +35,13 @@ in {
         pager = true;
       };
     };
+    enable = true;
+    lfs.enable = true;
+    ignores = [
+      "*~"
+      ".direnv*"
+      ".devenv*"
+    ];
+    signing.format = "ssh";
   };
 }
