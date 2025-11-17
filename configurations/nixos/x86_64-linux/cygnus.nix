@@ -8,6 +8,7 @@
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHJycc3NgaX+coWkJIQEmHS3HBF99o3SkZ7sIm83eiiW";
   syncthingDeviceID = "7HYSCXB-KGNIK4Y-24SOMMD-CYKJLYR-GLK7D3R-NWJFSYM-ZCBRNF2-KQJ7ZQW";
 
+  ephemeralRoot = true;
   imports = [
     ../../../profiles/admin-user/home-manager.nix
     ../../../profiles/admin-user/u2fmappings.nix

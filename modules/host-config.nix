@@ -31,6 +31,10 @@ in {
       type = bool;
       default = false;
     };
+    ephemeralRoot = mkOption {
+      type = bool;
+      default = false;
+    };
     btrfs.format.extraParams = mkOption {
       type = str;
       default = "";
