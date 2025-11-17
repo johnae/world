@@ -23,6 +23,7 @@
       else [
         inputs.niri.homeModules.niri
         inputs.noctalia.homeModules.default
+        inputs.zen-browser.homeModules.default
       ]
     );
 }

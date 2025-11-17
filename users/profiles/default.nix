@@ -25,6 +25,7 @@ in {
     ./starship.nix
     ./wezterm/default.nix
     ./zellij.nix
+    ./zen.nix
   ];
 
   home.sessionVariables = {
