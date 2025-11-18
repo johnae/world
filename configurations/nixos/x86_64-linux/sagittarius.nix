@@ -5,39 +5,7 @@
   pkgs,
   lib,
   ...
-}:
-let
-  # Jool NAT64 config - uses veth IP, not public IP
-  # Main namespace will MASQUERADE to public IP via conntrack
-  joolConfig = pkgs.writeText "jool-nat64-default.conf" ''
-    {
-      "instance": "default",
-      "framework": "netfilter",
-      "global": {
-        "pool6": "64:ff9b::/96",
-        "manually-enabled": true
-      },
-      "pool4": [
-        {
-          "protocol": "TCP",
-          "prefix": "198.51.100.2/32",
-          "port range": "10000-65535"
-        },
-        {
-          "protocol": "UDP",
-          "prefix": "198.51.100.2/32",
-          "port range": "10000-65535"
-        },
-        {
-          "protocol": "ICMP",
-          "prefix": "198.51.100.2/32",
-          "port range": "10000-65535"
-        }
-      ]
-    }
-  '';
-in
-{
+}: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINssAv/UibH5i9JxHFFWNNodKzmjYvPxx4mhTys3S1ZX";
 
   bcachefs = {
@@ -116,6 +84,7 @@ in
     enable = true;
     externalInterface = "enp1s0f0";
     internalInterface = "enp2s0";
+    enableNat64 = true; # Enable NAT64 for IPv4 access from IPv6-only clients
 
     # Optional: Add DNS filtering with Blocky
     # blockySettings = {
@@ -129,137 +98,6 @@ in
     #   };
     # };
   };
-
-  ## NAT64 configuration for IPv6-only clients to access IPv4 services
-  ##
-  ## Architecture:
-  ##   - Jool runs in a separate network namespace called "nat64"
-  ##   - A veth pair connects the main namespace to the nat64 namespace
-  ##   - Jool uses the veth IP (198.51.100.2) in pool4
-  ##   - Main namespace MASQUERADEs traffic from namespace to public IP
-  ##   - Conntrack handles return traffic routing back to namespace
-  ##   - Both LAN clients AND the router itself can access IPv4 via NAT64
-  ##
-  ## Traffic flow:
-  ##   IPv6 → Namespace → Jool (to IPv4 with src=198.51.100.2) →
-  ##   Main NS (MASQUERADE to public IP) → Internet →
-  ##   Main NS (conntrack reverse NAT to 198.51.100.2) → Namespace →
-  ##   Jool (to IPv6) → Destination
-  networking.jool.enable = true;
-
-  ## MASQUERADE traffic from NAT64 namespace to appear from public IP
-  networking.firewall.extraCommands = ''
-    # Allow forwarding from NAT64 namespace
-    iptables -A FORWARD -i veth-nat64 -o enp1s0f0 -j ACCEPT
-    iptables -A FORWARD -i enp1s0f0 -o veth-nat64 -m state --state RELATED,ESTABLISHED -j ACCEPT
-
-    # MASQUERADE traffic from namespace (198.51.100.0/30) to public IP
-    iptables -t nat -A POSTROUTING -s 198.51.100.0/30 -o enp1s0f0 -j MASQUERADE
-  '';
-
-  networking.firewall.extraStopCommands = ''
-    # Cleanup rules
-    iptables -D FORWARD -i veth-nat64 -o enp1s0f0 -j ACCEPT 2>/dev/null || true
-    iptables -D FORWARD -i enp1s0f0 -o veth-nat64 -m state --state RELATED,ESTABLISHED -j ACCEPT 2>/dev/null || true
-    iptables -t nat -D POSTROUTING -s 198.51.100.0/30 -o enp1s0f0 -j MASQUERADE 2>/dev/null || true
-  '';
-
-  ## Setup script for the NAT64 namespace and veth pair
-  environment.systemPackages = [
-    pkgs.iproute2
-  ];
-
-  ## Service to setup the NAT64 network namespace
-  systemd.services.nat64-namespace-setup = {
-    description = "Setup NAT64 network namespace";
-    wantedBy = ["multi-user.target"];
-    before = ["jool-nat64-default.service"];
-    after = ["network-online.target" "systemd-networkd.service"];
-    wants = ["network-online.target"];
-
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-
-      ExecStart = pkgs.writeShellScript "setup-nat64-namespace" ''
-        set -euo pipefail
-
-        # Create namespace if it doesn't exist
-        ${pkgs.iproute2}/bin/ip netns add nat64 2>/dev/null || true
-
-        # Create veth pair if it doesn't exist
-        if ! ${pkgs.iproute2}/bin/ip link show veth-nat64 >/dev/null 2>&1; then
-          ${pkgs.iproute2}/bin/ip link add veth-nat64 type veth peer name veth-nat64-ns
-          ${pkgs.iproute2}/bin/ip link set veth-nat64-ns netns nat64
-        fi
-
-        # Configure main namespace side (both IPv6 and IPv4)
-        ${pkgs.iproute2}/bin/ip addr flush dev veth-nat64 || true
-        ${pkgs.iproute2}/bin/ip addr add 2001:db8:64::1/64 dev veth-nat64
-        ${pkgs.iproute2}/bin/ip addr add 198.51.100.1/30 dev veth-nat64
-        ${pkgs.iproute2}/bin/ip link set veth-nat64 up
-
-        # Configure namespace side (both IPv6 and IPv4)
-        ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip addr flush dev veth-nat64-ns || true
-        ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip addr add 2001:db8:64::2/64 dev veth-nat64-ns
-        ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip addr add 198.51.100.2/30 dev veth-nat64-ns
-        ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip link set veth-nat64-ns up
-        ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip link set lo up
-
-        # Add route in main namespace to send NAT64 traffic to the namespace
-        ${pkgs.iproute2}/bin/ip route replace 64:ff9b::/96 via 2001:db8:64::2 dev veth-nat64
-
-        # Add default IPv4 route in namespace to send translated packets back to main
-        ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip route replace default via 198.51.100.1 dev veth-nat64-ns
-
-        # Enable IPv4 and IPv6 forwarding in the namespace
-        ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.procps}/bin/sysctl -q -w net.ipv4.ip_forward=1
-        ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.procps}/bin/sysctl -q -w net.ipv6.conf.all.forwarding=1
-
-        echo "NAT64 namespace setup complete"
-      '';
-
-      ExecStop = pkgs.writeShellScript "cleanup-nat64-namespace" ''
-        # Remove route
-        ${pkgs.iproute2}/bin/ip route del 64:ff9b::/96 via 2001:db8:64::2 dev veth-nat64 2>/dev/null || true
-
-        # Delete veth pair (automatically removes from namespace too)
-        ${pkgs.iproute2}/bin/ip link del veth-nat64 2>/dev/null || true
-
-        # Delete namespace
-        ${pkgs.iproute2}/bin/ip netns del nat64 2>/dev/null || true
-
-        echo "NAT64 namespace cleanup complete"
-      '';
-    };
-  };
-
-  ## Modified Jool service to run in the namespace
-  systemd.services.jool-nat64-default = {
-    after = ["nat64-namespace-setup.service"];
-    requires = ["nat64-namespace-setup.service"];
-    wants = ["network-online.target"];
-
-    serviceConfig = {
-      # Run in the NAT64 namespace - systemd handles the namespace isolation
-      NetworkNamespacePath = "/var/run/netns/nat64";
-
-      ExecStartPre = [
-        # Module needs to be loaded in main namespace first (+ prefix runs in main namespace)
-        "+${pkgs.kmod}/bin/modprobe jool"
-      ];
-
-      ExecStart = lib.mkForce "${pkgs.jool-cli}/bin/jool file handle ${joolConfig}";
-      ExecStop = lib.mkForce "${pkgs.jool-cli}/bin/jool instance remove default";
-    };
-  };
-
-  # services.prometheus.exporters = {
-  #   dnsmasq = {
-  #     enable = true;
-  #     dnsmasqListenAddress = "localhost:5342";
-  #   };
-  # };
 
   services.vmagent = {
     prometheusConfig = let
