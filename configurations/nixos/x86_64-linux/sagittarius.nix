@@ -82,7 +82,7 @@
 
   services.jae.router = {
     enable = true;
-    useNextDns = true;
+    useNextDns = false;
     nextDnsEnvFile = "/var/run/agenix/nextdns";
     restrictedMacs = [
       "5c:e0:c5:8a:24:6a"
