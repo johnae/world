@@ -238,17 +238,17 @@ in {
         pool4 = [
           {
             protocol = "TCP";
-            prefix = "10.64.64.2/32";
+            prefix = "192.168.64.2/32";
             "port range" = "10000-65535";
           }
           {
             protocol = "UDP";
-            prefix = "10.64.64.2/32";
+            prefix = "192.168.64.2/32";
             "port range" = "10000-65535";
           }
           {
             protocol = "ICMP";
-            prefix = "10.64.64.2/32";
+            prefix = "192.168.64.2/32";
             "port range" = "10000-65535";
           }
         ];
@@ -261,15 +261,15 @@ in {
       iptables -A FORWARD -i veth-nat64 -o ${cfg.externalInterface} -j ACCEPT
       iptables -A FORWARD -i ${cfg.externalInterface} -o veth-nat64 -m state --state RELATED,ESTABLISHED -j ACCEPT
 
-      # MASQUERADE traffic from namespace (10.64.64.0/30 private range) to public IP
-      iptables -t nat -A POSTROUTING -s 10.64.64.0/30 -o ${cfg.externalInterface} -j MASQUERADE
+      # MASQUERADE traffic from namespace (192.168.64.0/30 private range) to public IP
+      iptables -t nat -A POSTROUTING -s 192.168.64.0/30 -o ${cfg.externalInterface} -j MASQUERADE
     '';
 
     networking.firewall.extraStopCommands = mkIf cfg.enableNat64 ''
       # Cleanup rules
       iptables -D FORWARD -i veth-nat64 -o ${cfg.externalInterface} -j ACCEPT 2>/dev/null || true
       iptables -D FORWARD -i ${cfg.externalInterface} -o veth-nat64 -m state --state RELATED,ESTABLISHED -j ACCEPT 2>/dev/null || true
-      iptables -t nat -D POSTROUTING -s 10.64.64.0/30 -o ${cfg.externalInterface} -j MASQUERADE 2>/dev/null || true
+      iptables -t nat -D POSTROUTING -s 192.168.64.0/30 -o ${cfg.externalInterface} -j MASQUERADE 2>/dev/null || true
     '';
 
     ## Service to setup the NAT64 network namespace
@@ -298,16 +298,16 @@ in {
 
           # Configure main namespace side (both IPv6 and IPv4)
           # IPv6: ULA (Unique Local Address) - fd00::/8 prefix
-          # IPv4: RFC 1918 private address (10.0.0.0/8) - internal use only
+          # IPv4: RFC 1918 private address (192.168.0.0/16) - home network range
           ${pkgs.iproute2}/bin/ip addr flush dev veth-nat64 || true
           ${pkgs.iproute2}/bin/ip addr add fd00:64::1/64 dev veth-nat64
-          ${pkgs.iproute2}/bin/ip addr add 10.64.64.1/30 dev veth-nat64
+          ${pkgs.iproute2}/bin/ip addr add 192.168.64.1/30 dev veth-nat64
           ${pkgs.iproute2}/bin/ip link set veth-nat64 up
 
           # Configure namespace side (both IPv6 and IPv4)
           ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip addr flush dev veth-nat64-ns || true
           ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip addr add fd00:64::2/64 dev veth-nat64-ns
-          ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip addr add 10.64.64.2/30 dev veth-nat64-ns
+          ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip addr add 192.168.64.2/30 dev veth-nat64-ns
           ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip link set veth-nat64-ns up
           ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip link set lo up
 
@@ -315,7 +315,7 @@ in {
           ${pkgs.iproute2}/bin/ip route replace 64:ff9b::/96 via fd00:64::2 dev veth-nat64
 
           # Add default IPv4 route in namespace to send translated packets back to main
-          ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip route replace default via 10.64.64.1 dev veth-nat64-ns
+          ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.iproute2}/bin/ip route replace default via 192.168.64.1 dev veth-nat64-ns
 
           # Enable IPv4 and IPv6 forwarding in the namespace
           ${pkgs.iproute2}/bin/ip netns exec nat64 ${pkgs.procps}/bin/sysctl -q -w net.ipv4.ip_forward=1
