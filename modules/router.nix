@@ -197,7 +197,10 @@ in {
         dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
         add-mac = "text";
         add-subnet = "32,128";
-        port = 5342;
+        port =
+          if cfg.useNextDns
+          then 5342
+          else 53;
       }
       // cfg.dnsMasqSettings;
 
