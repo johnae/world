@@ -13,6 +13,7 @@
     devices = ["/dev/mapper/encrypted_root"];
   };
 
+  ephemeralRoot = true;
   imports = [
     ../../../profiles/admin-user/home-manager.nix
     ../../../profiles/admin-user/user.nix
