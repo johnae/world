@@ -170,6 +170,7 @@ in {
         blocking = {
           denylists = {
             ads = [
+              "https://raw.githubusercontent.com/nextdns/cname-cloaking-blocklist/master/domains"
               "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro.plus.txt"
               "https://raw.githubusercontent.com/lassekongo83/Frellwits-filter-lists/master/Frellwits-Swedish-Hosts-File.txt"
               "https://pgl.yoyo.org/adservers/serverlist.php?showintro=0;hostformat=hosts"
