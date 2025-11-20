@@ -4,6 +4,16 @@
   lib,
   ...
 }: {
+  system.activationScripts."createPersistentStorageDirs".deps = ["var-lib-private-permissions" "users" "groups"];
+  system.activationScripts = {
+    "var-lib-private-permissions" = {
+      deps = ["specialfs"];
+      text = ''
+        mkdir -p /keep/var/lib/private
+        chmod 0700 /keep/var/lib/private
+      '';
+    };
+  };
   environment.persistence."/keep" = lib.mkIf config.ephemeralRoot {
     hideMounts = true;
     directories = [
