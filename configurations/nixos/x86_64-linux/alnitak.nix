@@ -45,17 +45,11 @@
 
   services.jae.router = {
     enable = true;
-    useNextDns = true;
-    nextDnsEnvFile = "/var/run/agenix/nextdns";
-    restrictedMacs = [
-      "5c:e0:c5:8a:24:6a"
-      "b4:18:d1:ab:4e:5a"
-    ];
     upstreamDnsServers = [
-      "2a07:a8c1::"
-      "45.90.30.0"
-      "2a07:a8c0::"
-      "45.90.28.0"
+      "2620:fe::fe"
+      "9.9.9.9"
+      "2620:fe::9"
+      "149.112.112.112"
     ];
     externalInterface = "enp1s0";
     internalInterface = "enp2s0";
@@ -69,9 +63,6 @@
     ts-google-9k = {
       file = ../../../secrets/ts-google-9k.age;
       owner = "1337";
-    };
-    nextdns = {
-      file = ../../../secrets/nextdns.age;
     };
   };
 

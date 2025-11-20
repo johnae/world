@@ -46,7 +46,7 @@
   services.resolved = {
     enable = true;
     ## have fallbacks in case something is wrong
-    fallbackDns = ["1.0.0.1" "1.1.1.1" "2606:4700:4700::1111" "2606:4700:4700::1001"];
+    fallbackDns = ["9.9.9.9" "149.112.112.112" "2620:fe::fe" "2620:fe::9"];
     ## for some reason, systemd-resolved thinks upstream doesn't respond sometimes
     ## so we need to disable caching negative responses (plus some other stuff)
     ## again - this is about using tailscale dns only
