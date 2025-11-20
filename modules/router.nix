@@ -5,7 +5,6 @@
 }: let
   inherit
     (lib)
-    flatten
     mapAttrsToList
     mkEnableOption
     mkIf
@@ -15,18 +14,12 @@
   inherit
     (builtins)
     attrNames
-    head
-    tail
     ;
 
   cfg = config.services.jae.router;
 
-  ipBase = ip: let
-    s = splitString "." ip;
-    a = head s;
-    b = head (tail s);
-    c = head (tail (tail s));
-  in "${a}.${b}.${c}";
+  # Extract first three octets from IP (e.g., "192.168.1.1" -> "192.168.1")
+  ipBase = ip: lib.concatStringsSep "." (lib.take 3 (splitString "." ip));
 
   internalInterfaces = {
     ${cfg.internalInterface} = rec {
@@ -42,25 +35,15 @@
 in {
   options.services.jae.router = with lib.types; {
     enable = mkEnableOption "Whether to enable the router";
-    #disableDns = mkEnableOption "Whether to disable dns server";
-    useNextDns = mkEnableOption "Whether to use nextdns DoH for name resolution";
-    nextDnsEnvFile = mkOption {
-      type = nullOr str;
-      example = "/path/to/envfile";
-      default = null;
-    };
     upstreamDnsServers = mkOption {
       type = listOf str;
       description = "List of upstream dns server addresses.";
-    };
-    restrictedMacs = mkOption {
-      type = listOf str;
-      description = "List of mac addresses.";
-      default = [];
+      default = ["2620:fe::fe" "9.9.9.9" "2620:fe::9" "149.112.112.112"];
     };
     dnsMasqSettings = mkOption {
       type = attrsOf anything;
       description = "Extra dnsmasq settings";
+      default = {};
     };
     externalInterface = mkOption {
       type = str;
@@ -124,7 +107,7 @@ in {
     environment.persistence."/keep".directories = ["/var/lib/dnsmasq"];
 
     ## enable jool nat64
-    networking.jool.enable = true;
+    # networking.jool.enable = true;
     ## enable ipv6 on local network
     services.corerad = {
       enable = true;
@@ -162,38 +145,45 @@ in {
       };
     };
 
+    # dnsmasq for DHCP only
     services.dnsmasq.enable = true;
-    services.dnsmasq.resolveLocalQueries = true;
+    services.dnsmasq.resolveLocalQueries = false;
     services.dnsmasq.settings =
       {
         dhcp-range = mapAttrsToList (tag: net: "${tag},${net.base}.10,${net.base}.128,255.255.255.0,24h") internalInterfaces;
         dhcp-option = (mapAttrsToList (tag: net: "${tag},option:router,${net.address}") internalInterfaces) ++ ["option:dns-server,${cfg.internalInterfaceIP}"];
         interface = internalInterfaceNames;
-      }
-      // {
-        server = mkIf (!cfg.useNextDns) cfg.upstreamDnsServers;
-        # server = mkMerge [
-        #   (mkIf (!cfg.useNextDns) cfg.upstreamDnsServers)
-        #   (mkIf cfg.useNextDns ["127.0.0.1#5555"])
-        # ];
         dhcp-authoritative = true;
         dhcp-leasefile = "/var/lib/dnsmasq/dnsmasq.leases";
         add-mac = "text";
         add-subnet = "32,128";
-        port =
-          if cfg.useNextDns
-          then 5342
-          else 53;
+        port = 0; # Disable DNS, DHCP only
       }
       // cfg.dnsMasqSettings;
 
-    services.resolved.enable = false;
-    services.nextdns.enable = cfg.useNextDns;
-    services.nextdns.arguments = (flatten (map (mac: ["-profile" "${mac}=\${KIDSDNS_ID}"]) cfg.restrictedMacs)) ++ ["-profile" "${cfg.internalInterfaceIP}/24=\${NEXTDNS_ID}" "-cache-size" "10MB" "-discovery-dns" "127.0.0.1:5342" "-report-client-info" "-listen" "${cfg.internalInterfaceIP}:53" "-listen" "127.0.0.1:53"];
-    systemd.services.nextdns = mkIf cfg.useNextDns {
-      serviceConfig.EnvironmentFile = cfg.nextDnsEnvFile;
-      after = ["systemd-networkd-wait-online.service"];
+    # Blocky for DNS filtering
+    services.blocky = {
+      enable = true;
+      settings = {
+        ports.dns = 53;
+        upstreams.groups.default = cfg.upstreamDnsServers;
+        blocking = {
+          denylists = {
+            ads = ["https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/pro.txt"];
+          };
+          clientGroupsBlock = {
+            default = ["ads"];
+          };
+        };
+        caching = {
+          minTime = "5m";
+          maxTime = "30m";
+          prefetching = true;
+        };
+      };
     };
+
+    services.resolved.enable = false;
 
     boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = true;
     boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
