@@ -169,7 +169,7 @@ in {
         upstreams.groups.default = cfg.upstreamDnsServers;
         blocking = {
           denylists = {
-            ads = ["https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/hosts/pro.txt"];
+            ads = ["https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro.plus.txt"];
           };
           clientGroupsBlock = {
             default = ["ads"];
