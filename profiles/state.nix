@@ -4,13 +4,23 @@
   lib,
   ...
 }: {
-  system.activationScripts."createPersistentStorageDirs".deps = ["var-lib-private-permissions" "users" "groups"];
+  system.activationScripts."createPersistentStorageDirs".deps = ["var-lib-private-permissions" "home-user-permissions" "users" "groups"];
   system.activationScripts = {
     "var-lib-private-permissions" = {
       deps = ["specialfs"];
       text = ''
         mkdir -p /keep/var/lib/private
         chmod 0700 /keep/var/lib/private
+      '';
+    };
+  };
+  system.activationScripts = {
+    "home-user-permissions" = {
+      deps = ["specialfs"];
+      text = ''
+        mkdir -p /keep/home/${adminUser.name}
+        chown -R ${adminUser.uid}:${adminUser.gid} /keep/home/${adminUser.name}
+        chmod 0700 /keep/home/${adminUser.name}
       '';
     };
   };
