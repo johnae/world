@@ -4,8 +4,8 @@
   lib,
   ...
 }: {
-  system.activationScripts."createPersistentStorageDirs".deps = ["var-lib-private-permissions" "home-user-permissions" "users" "groups"];
-  system.activationScripts = {
+  system.activationScripts = lib.mkIf (config.ephemeralRoot) {
+    "createPersistentStorageDirs".deps = ["var-lib-private-permissions" "home-user-permissions" "users" "groups"];
     "var-lib-private-permissions" = {
       deps = ["specialfs"];
       text = ''
@@ -13,8 +13,6 @@
         chmod 0700 /keep/var/lib/private
       '';
     };
-  };
-  system.activationScripts = {
     "home-user-permissions" = {
       deps = ["specialfs"];
       text = ''
