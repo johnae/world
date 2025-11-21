@@ -1889,22 +1889,6 @@
         "type": "github"
       }
     },
-    "noctalia-greet": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1758482470,
-        "narHash": "sha256-1x42bZu1j7UMgmy3FkEzZnA/O/gyDd83bjZU19hm8hQ=",
-        "owner": "noctalia-dev",
-        "repo": "noctalia-greet",
-        "rev": "0d1d1b900459bb5615000059de5892545b40994f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "noctalia-dev",
-        "repo": "noctalia-greet",
-        "type": "github"
-      }
-    },
     "nur": {
       "inputs": {
         "flake-parts": "flake-parts_4",
@@ -2071,7 +2055,6 @@
         "nixpkgs": "nixpkgs_7",
         "nixpkgs-stable-darwin": "nixpkgs-stable-darwin",
         "noctalia": "noctalia",
-        "noctalia-greet": "noctalia-greet",
         "nur": "nur",
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks",
