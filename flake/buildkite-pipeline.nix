@@ -40,7 +40,6 @@
     "orion-diskformat"
     "persway"
     "playground-diskformat"
-    "quickshell"
     "rbw-atomic-unlock"
     "scripts"
     "sirius-diskformat"

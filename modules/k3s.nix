@@ -125,11 +125,6 @@ in {
     default = [];
   };
 
-  options.services.k3s.disable = mkOption {
-    type = types.listOf (types.enum ["coredns" "servicelb" "traefik" "local-storage" "metrics-server" "runtimes"]);
-    default = [];
-  };
-
   options.services.k3s.settings = mkOption {
     type = types.attrsOf types.anything;
     default = {};
