@@ -4,7 +4,7 @@
   lib,
   ...
 }: {
-  system.activationScripts = lib.mkIf (config.ephemeralRoot) {
+  system.activationScripts = lib.mkIf config.ephemeralRoot {
     "createPersistentStorageDirs".deps = ["var-lib-private-permissions" "home-user-permissions" "users" "groups"];
     "var-lib-private-permissions" = {
       deps = ["specialfs"];
