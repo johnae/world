@@ -1967,26 +1967,6 @@
         "type": "github"
       }
     },
-    "quickshell": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1763629934,
-        "narHash": "sha256-jWz10RbNAyylJbH4cUTLS/CsDjkd8gxfT8OsIgQIgEg=",
-        "ref": "refs/heads/master",
-        "rev": "ed036d514b0fdbce03158a0b331305be166f4555",
-        "revCount": 708,
-        "type": "git",
-        "url": "https://git.outfoxxed.me/quickshell/quickshell"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://git.outfoxxed.me/quickshell/quickshell"
-      }
-    },
     "rocksdb": {
       "flake": false,
       "locked": {
@@ -2050,7 +2030,6 @@
         "nur": "nur",
         "persway": "persway",
         "pre-commit-hooks": "pre-commit-hooks",
-        "quickshell": "quickshell",
         "rust-overlay": "rust-overlay",
         "systems": "systems_2",
         "tuwunel": "tuwunel",
