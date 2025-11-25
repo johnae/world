@@ -51,7 +51,6 @@
         helix-latest = inputs.helix-editor.packages.${system}.default;
         zjstatus = inputs.zjstatus.packages.${system}.default;
         zj-which-key = inputs.zj-which-key.packages.${system}.default;
-        quickshell = inputs.quickshell.packages.${system}.default;
         noctalia = inputs.noctalia.packages.${system}.default;
         ## fix this one on darwin
         zwift =

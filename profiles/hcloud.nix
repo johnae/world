@@ -85,7 +85,7 @@ in {
 
   networking.hostName = hostName;
 
-  system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState) {deps = ["persist-files"];};
+  system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState && config.ephemeralRoot) {deps = ["persist-files"];};
 
   ## networking must be up before we can run the cloud-init script
   systemd.services.metadata = let

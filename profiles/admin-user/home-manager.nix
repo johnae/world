@@ -10,7 +10,7 @@
       programs = {
         git = {
           signing.format = "ssh";
-          extraConfig = {
+          settings = {
             commit.gpgSign = true;
             tag.forceSignAnnotated = true;
           };

@@ -155,7 +155,7 @@ in {
   system.stateVersion = "25.05";
 
   ##
-  system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState) {deps = ["persist-files"];};
+  system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState && config.ephemeralRoot) {deps = ["persist-files"];};
 
   services.nix-dirs.enable = true;
 }

@@ -7,6 +7,7 @@
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJgkTCs3JTN934N8RkPhuDwijFgFOEXt734tB7aQz57Z";
   syncthingDeviceID = "CI5DK5E-JLWEOXB-6TUV244-SV6MLGO-R6AY7XQ-ZOFCIQW-G3U2DAS-BK5EXAL";
 
+  ephemeralRoot = true;
   imports = [
     ../../../profiles/admin-user/home-manager.nix
     ../../../profiles/admin-user/u2fmappings.nix
@@ -142,7 +143,7 @@
   home-manager = {
     users.${adminUser.name} = {
       imports = [../../../users/profiles/workstation.nix];
-      programs.git.extraConfig.user.signingKey = config.age.secrets.id_ed25519_alt.path;
+      programs.git.settings.user.signingKey = config.age.secrets.id_ed25519_alt.path;
     };
   };
 }

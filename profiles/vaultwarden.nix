@@ -2,6 +2,7 @@
   lib,
   config,
   pkgs,
+  stdenv,
   adminUser,
   ...
 }: let

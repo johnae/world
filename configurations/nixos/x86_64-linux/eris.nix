@@ -217,7 +217,7 @@
   home-manager = {
     users.${adminUser.name} = {
       imports = [../../../users/profiles/workstation.nix];
-      programs.git.extraConfig.user.signingKey = config.age.secrets.id_ed25519_alt.path;
+      programs.git.settings.user.signingKey = config.age.secrets.id_ed25519_alt.path;
       programs.jujutsu.settings.signing = {
         behavior = "own";
         backend = "ssh";

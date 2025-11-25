@@ -7,7 +7,6 @@
 in {
   programs.ssh = {
     enable = true;
-    package = pkgs.openssh_10_2;
     enableDefaultConfig = false;
     extraConfig = ''
       Include ${homeDirectory}/.ssh/config.d/*.conf

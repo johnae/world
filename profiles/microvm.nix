@@ -82,7 +82,7 @@ in {
     settings.PermitRootLogin = "yes";
   };
 
-  system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState) {deps = ["persist-files"];};
+  system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState && config.ephemeralRoot) {deps = ["persist-files"];};
 
   system.stateVersion = "25.05";
 
