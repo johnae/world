@@ -58,6 +58,9 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     impermanence.url = "github:nix-community/impermanence";
+    jovian.inputs.nix-github-actions.follows = "nix-github-actions";
+    jovian.inputs.nixpkgs.follows = "nixpkgs";
+    jovian.url = "github:Jovian-Experiments/Jovian-NixOS";
     juicefs-csi-driver.flake = false;
     juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.25.2/deploy/k8s.yaml"; # gh-release-update
     kubevirt-operator.flake = false;
@@ -80,6 +83,8 @@
     niri.url = "github:sodiboo/niri-flake";
     nix2container.inputs.nixpkgs.follows = "nixpkgs";
     nix2container.url = "github:nlewo/nix2container";
+    nix-github-actions.inputs.nixpkgs.follows = "nixpkgs";
+    nix-github-actions.url = "github:zhaofengli/nix-github-actions/matrix-name";
     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
     nixos-generators.url = "github:nix-community/nixos-generators";
     nixos-hardware.url = "github:nixos/nixos-hardware";
