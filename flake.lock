@@ -48,7 +48,7 @@
         "crane": "crane_2",
         "flake-compat": "flake-compat_4",
         "flake-parts": "flake-parts_5",
-        "nix-github-actions": "nix-github-actions",
+        "nix-github-actions": "nix-github-actions_2",
         "nixpkgs": "nixpkgs_9",
         "nixpkgs-stable": "nixpkgs-stable_3"
       },
@@ -1055,6 +1055,29 @@
         "type": "github"
       }
     },
+    "jovian": {
+      "inputs": {
+        "nix-github-actions": [
+          "nix-github-actions"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1764746434,
+        "narHash": "sha256-6ymFuw+Z1C90ezf8H0BP3c2JFZhJYwMq31px2StwWHU=",
+        "owner": "Jovian-Experiments",
+        "repo": "Jovian-NixOS",
+        "rev": "b4c0b604148adacf119b89824ed26df8926ce42c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Jovian-Experiments",
+        "repo": "Jovian-NixOS",
+        "type": "github"
+      }
+    },
     "juicefs-csi-driver": {
       "flake": false,
       "locked": {
@@ -1357,6 +1380,27 @@
       }
     },
     "nix-github-actions": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1729697500,
+        "narHash": "sha256-VFTWrbzDlZyFHHb1AlKRiD/qqCJIripXKiCSFS8fAOY=",
+        "owner": "zhaofengli",
+        "repo": "nix-github-actions",
+        "rev": "e418aeb728b6aa5ca8c5c71974e7159c2df1d8cf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zhaofengli",
+        "ref": "matrix-name",
+        "repo": "nix-github-actions",
+        "type": "github"
+      }
+    },
+    "nix-github-actions_2": {
       "inputs": {
         "nixpkgs": [
           "tuwunel",
@@ -2008,6 +2052,7 @@
         "hetzner-csi-driver": "hetzner-csi-driver",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
+        "jovian": "jovian",
         "juicefs-csi-driver": "juicefs-csi-driver",
         "kubevirt-cdi-cr": "kubevirt-cdi-cr",
         "kubevirt-cdi-operator": "kubevirt-cdi-operator",
@@ -2020,6 +2065,7 @@
         "monet-el": "monet-el",
         "niri": "niri",
         "nix-darwin": "nix-darwin",
+        "nix-github-actions": "nix-github-actions",
         "nix2container": "nix2container",
         "nixos-generators": "nixos-generators",
         "nixos-hardware": "nixos-hardware",
