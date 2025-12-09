@@ -51,6 +51,8 @@
     nixSettings
     inputs.agenix.nixosModules.age
     inputs.disko.nixosModules.disko
+    inputs.disko.nixosModules.disko
+    inputs.jovian.nixosModules.jovian
     inputs.home-manager.nixosModules.home-manager
     inputs.impermanence.nixosModules.impermanence
     inputs.microvm.nixosModules.host

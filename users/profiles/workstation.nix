@@ -29,6 +29,7 @@ in {
       ./waybar.nix
       ./wezterm/default.nix
       ./wlsunset.nix
+      ./zen.nix
     ];
 
   home.packages = with pkgs; [
