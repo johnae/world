@@ -160,13 +160,14 @@
       folders."/home/${adminUser.name}/Sync" = {
         id = "sync";
         devices = [
+          "cygnus"
           "eris"
-          "icarus"
-          "sirius"
-          "orion"
-          "titan"
           "hyperion"
+          "icarus"
+          "orion"
           "s8plus"
+          "sirius"
+          "titan"
           "z6fold"
         ];
       };
@@ -181,6 +182,7 @@
       folders."/home/${adminUser.name}/Photos" = {
         id = "photos";
         devices = [
+          "cygnus"
           "eris"
           "icarus"
           "orion"
