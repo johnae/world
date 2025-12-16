@@ -156,12 +156,13 @@
         id = "sync";
         devices = [
           "eris"
-          "icarus"
-          "sirius"
-          "orion"
-          "titan"
           "hyperion"
+          "icarus"
+          "neptune"
+          "orion"
           "s8plus"
+          "sirius"
+          "titan"
           "z6fold"
         ];
       };
@@ -178,6 +179,7 @@
         devices = [
           "eris"
           "icarus"
+          "neptune"
           "orion"
           "sirius"
           "z6fold"

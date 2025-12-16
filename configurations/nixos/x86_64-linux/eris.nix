@@ -174,13 +174,14 @@
         id = "sync";
         devices = [
           "antares"
-          "icarus"
           "cygnus"
-          "sirius"
-          "orion"
-          "titan"
           "hyperion"
+          "icarus"
+          "neptune"
+          "orion"
           "s8plus"
+          "sirius"
+          "titan"
           "z6fold"
         ];
       };
@@ -189,6 +190,7 @@
         devices = [
           "antares"
           "cygnus"
+          "neptune"
           "orion"
           "sirius"
         ];
@@ -197,8 +199,9 @@
         id = "photos";
         devices = [
           "antares"
-          "icarus"
           "cygnus"
+          "icarus"
+          "neptune"
           "orion"
           "sirius"
           "z6fold"
