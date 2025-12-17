@@ -59,7 +59,7 @@ in {
       ]
 
       $env.config.hooks.pre_prompt = (
-        $env.config.hooks.pre_prompt | append (source ${nu-scripts}/nu-hooks/nu-hooks/direnv/config.nu)
+        $env.config.hooks.pre_prompt | append (source ${nu-scripts}/nu-hooks/nu-hooks/direnv/direnv.nu)
       )
 
       ${
