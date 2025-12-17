@@ -1,4 +1,21 @@
 # Nushell Config File
+use std/config *
+
+# Initialize the pre_prompt hook as an empty list if it doesn't exist
+$env.config.hooks.pre_prompt = $env.config.hooks.pre_prompt? | default []
+
+$env.config.hooks.pre_prompt ++= [{||
+  if (which direnv | is-empty) {
+    return
+  }
+
+  direnv export json | from json | default {} | load-env
+
+  # Only convert PATH if direnv changed it to a string
+  if ($env.PATH | describe) == "string" {
+    $env.PATH = $env.PATH | split row (char esep)
+  }
+}]
 
 # for more information on themes see
 # https://www.nushell.sh/book/coloring_and_theming.html
