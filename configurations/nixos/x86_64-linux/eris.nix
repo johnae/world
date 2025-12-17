@@ -3,6 +3,7 @@
   config,
   hostName,
   lib,
+  pkgs,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIInNFRkSTXPiS0TiQOBS+AT/N2l5HS5/cnCfbWN1sSik";
@@ -35,8 +36,8 @@
 
   services.ollama.enable = true;
   services.ollama.rocmOverrideGfx = "11.0.0"; ## rdna 3 11.0.0
-  services.ollama.acceleration = "rocm";
   services.ollama.host = "0.0.0.0";
+  services.ollama.package = pkgs.ollama-rocm;
 
   boot.loader.systemd-boot.memtest86.enable = true;
 

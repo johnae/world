@@ -3,6 +3,7 @@
   hostName,
   config,
   lib,
+  pkgs,
   ...
 }: {
   publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMwjseLt2hx6kxZUpC/kh0Iy3E0gH5bSFdoy8awcbTei";
@@ -31,6 +32,11 @@
 
   disko.devices.disk.disk1.device = "/dev/disk/by-path/pci-0000:c1:00.0-nvme-1";
   disko.devices.disk.disk2.device = "/dev/disk/by-path/pci-0000:c2:00.0-nvme-1";
+
+  services.ollama.enable = true;
+  # services.ollama.rocmOverrideGfx = "11.0.0"; ## rdna 3 11.0.0
+  services.ollama.package = pkgs.ollama-rocm;
+  services.ollama.host = "0.0.0.0";
 
   boot.initrd = {
     systemd.enable = true;
