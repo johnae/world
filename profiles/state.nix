@@ -89,6 +89,7 @@
         ".emacs.d"
         ".claude"
         ".gnupg"
+        ".lmstudio"
         ".local/share/atuin"
         ".local/share/containers"
         ".local/share/direnv"

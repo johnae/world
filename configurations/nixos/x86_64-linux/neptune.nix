@@ -34,7 +34,7 @@
   disko.devices.disk.disk2.device = "/dev/disk/by-path/pci-0000:c2:00.0-nvme-1";
 
   services.ollama.enable = true;
-  # services.ollama.rocmOverrideGfx = "11.0.0"; ## rdna 3 11.0.0
+  services.ollama.rocmOverrideGfx = "11.0.0"; ## rdna 3 11.0.0
   services.ollama.package = pkgs.ollama-rocm;
   services.ollama.host = "0.0.0.0";
 

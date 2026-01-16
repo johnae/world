@@ -43,7 +43,7 @@ in {
         else ""
       }
 
-      $env.config.hooks.pre_prompt = [
+      $env.config.hooks.pre_prompt ++= [
        {
         code: "
           if ('ZELLIJ' in $env) {
@@ -57,10 +57,6 @@ in {
         "
        }
       ]
-
-      $env.config.hooks.pre_prompt = (
-        $env.config.hooks.pre_prompt | append (source ${nu-scripts}/nu-hooks/nu-hooks/direnv/direnv.nu)
-      )
 
       ${
         lib.concatStringsSep "\n"
