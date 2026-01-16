@@ -45,6 +45,11 @@
   };
 
   security.polkit.enable = true;
+
+  # Allow sudo credential caching across TTYs (useful for Zellij panes, etc.)
+  security.sudo.extraConfig = ''
+    Defaults !tty_tickets
+  '';
   services.gnome.gnome-keyring.enable = true;
 
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
