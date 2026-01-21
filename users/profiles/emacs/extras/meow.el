@@ -95,6 +95,19 @@
       (forward-char 1)
       (delete-region (region-beginning) (region-end)))))
 
+(defun meow-helix-toggle-comment ()
+  "Toggle comment on current line or region, like Helix's C-c."
+  (interactive)
+  (if (region-active-p)
+      ;; Comment/uncomment region
+      (comment-or-uncomment-region (region-beginning) (region-end))
+    ;; Comment/uncomment current line
+    (save-excursion
+      (beginning-of-line)
+      (set-mark (point))
+      (end-of-line)
+      (comment-or-uncomment-region (region-beginning) (region-end)))))
+
 (defvar meow-helix-ex-commands
   '(("w" . save-buffer)
     ("write" . save-buffer)
@@ -405,6 +418,7 @@
     (define-key map "B" 'ibuffer)
     (define-key map "s" 'save-buffer)
     (define-key map "S" 'save-some-buffers)
+    (define-key map "c" 'meow-helix-toggle-comment)  ;; Comment toggle
     (define-key map "q" 'save-buffers-kill-emacs)
     (define-key map "Q" 'kill-emacs)
     (define-key map "w" 'meow-helix-window-mode)  ;; Changed to enter window mode
@@ -412,10 +426,9 @@
     (define-key map "v" 'split-window-right)
     (define-key map "h" 'split-window-below)
     (define-key map "o" 'other-window)
+    (define-key map "/" 'meow-helix-project-search)  ;; Project-wide search
     (define-key map "k" 'kill-current-buffer)
     (define-key map "K" 'kill-buffer)
-    (define-key map "r" 'query-replace)
-    (define-key map "R" 'query-replace-regexp)
     (define-key map "g" 'magit-status)
     (define-key map "p" 'project-switch-project)
     (define-key map "e" 'eval-expression)
@@ -429,6 +442,41 @@
   "Enter Helix-style space mode (space leader key)."
   (interactive)
   (set-transient-map meow-helix-space-mode-map))
+
+;; Project-wide search and replace functions
+(defun meow-helix-project-search ()
+  "Search across the project using deadgrep.
+Press C-c C-p to enter edit mode, C-c C-c to save changes."
+  (interactive)
+  (if (fboundp 'deadgrep)
+      (call-interactively 'deadgrep)
+    ;; Fallback to consult-ripgrep if available
+    (if (fboundp 'consult-ripgrep)
+        (progn
+          (consult-ripgrep)
+          (message "Press C-c e to export, then C-c C-p to edit"))
+      (call-interactively 'project-find-regexp))))
+
+
+(defun meow-helix-search-word-at-point ()
+  "Search for the word at point across the project."
+  (interactive)
+  (let ((word (thing-at-point 'symbol t)))
+    (if word
+        (if (fboundp 'deadgrep)
+            (deadgrep word)
+          (if (fboundp 'consult-ripgrep)
+              (consult-ripgrep nil word)
+            (project-find-regexp word)))
+      (message "No word at point"))))
+
+(defun meow-helix-search-symbol-at-point ()
+  "Search for symbol at point in current buffer.
+With prefix arg, search across the project."
+  (interactive)
+  (if current-prefix-arg
+      (meow-helix-search-word-at-point)
+    (isearch-forward-symbol-at-point)))
 
 (defvar meow-helix-window-mode-map
   (let ((map (make-sparse-keymap)))
@@ -1163,7 +1211,7 @@ Returns (START-OPEN . END-CLOSE) positions or nil."
    '("?" . isearch-backward)
    '("n" . meow-helix-search-next)
    '("N" . meow-helix-search-prev)
-   '("*" . isearch-forward-symbol-at-point)
+   '("*" . meow-helix-search-symbol-at-point)
    
    '("m" . meow-helix-match-mode)
    '("%" . meow-helix-select-whole-file)  ; Select whole file like Helix
@@ -1173,6 +1221,7 @@ Returns (START-OPEN . END-CLOSE) positions or nil."
    
    '("c" . meow-change)
    ;; '("C" . meow-helix-duplicate)  ; Replaced with cursor-below
+   '("M-c" . meow-helix-toggle-comment)  ; Comment toggle (Alt-c, since C-c conflicts)
    '("d" . meow-helix-delete)  ; Simple delete without extending selection
    '("D" . meow-kill-whole-line)
    
@@ -1229,7 +1278,7 @@ Returns (START-OPEN . END-CLOSE) positions or nil."
    '("C-a" . meow-helix-select-all)
    '("C-b" . meow-helix-page-up)
    '("C-f" . meow-helix-page-down)
-   '("C-u" . meow-helix-half-page-up)
+   ;; '("C-u" . meow-helix-half-page-up)  ; Commented out to restore C-u as universal argument
    '("C-d" . meow-helix-half-page-down)
    '("C-w" . meow-helix-window-mode)
    
