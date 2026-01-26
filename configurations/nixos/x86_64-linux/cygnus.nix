@@ -50,11 +50,9 @@
     ## for some reason, systemd-resolved thinks upstream doesn't respond sometimes
     ## so we need to disable caching negative responses (plus some other stuff)
     ## again - this is about using tailscale dns only
-    extraConfig = ''
-      DNSSEC=no
-      DNSOverTLS=no
-      Cache=no-negative
-    '';
+    settings.Resolve.DNSSEC = false;
+    settings.Resolve.DNSOverTLS = false;
+    settings.Resolve.Cache = "no-negative";
   };
 
   systemd.network = {
