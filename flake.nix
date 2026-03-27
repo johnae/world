@@ -20,6 +20,7 @@
     cilium-chart.flake = false;
     claude-code-el.flake = false;
     claude-code-el.url = "github:stevemolitor/claude-code.el";
+    claude-code.url = "github:sadjow/claude-code-nix";
     cloud-native-pg.flake = false;
     cloud-native-pg.url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.1/cnpg-1.24.1.yaml"; # gh-release-update
     copilot-vim.flake = false;
