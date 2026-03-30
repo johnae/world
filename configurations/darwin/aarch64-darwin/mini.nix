@@ -1,29 +1,34 @@
 {
   adminUser,
   config,
+  hostName,
   pkgs,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL54GmqIwTv5EZ2t944ZQus3x3jXyVPu6//a89Kd/nIE";
+  age.rekey = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL54GmqIwTv5EZ2t944ZQus3x3jXyVPu6//a89Kd/nIE";
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
   age.secrets = {
     ts-google-9k = {
-      file = ../../../secrets/ts-google-9k.age;
+      rekeyFile = ../../../secrets/ts-google-9k.age;
       owner = "${toString adminUser.uid}";
     };
     buildkite-agent-nix-build-token = {
-      file = ../../../secrets/buildkite-token.age;
+      rekeyFile = ../../../secrets/buildkite-token.age;
       owner = "${toString adminUser.uid}";
     };
     buildkite-agent-nix-build-ssh-key = {
-      file = ../../../secrets/buildkite-ssh-key.age;
+      rekeyFile = ../../../secrets/buildkite-ssh-key.age;
       owner = "${toString adminUser.uid}";
     };
     buildkite-agent-nix-build-cachix-signing-key = {
-      file = ../../../secrets/cachix-signing-key.age;
+      rekeyFile = ../../../secrets/cachix-signing-key.age;
       owner = "${toString adminUser.uid}";
     };
     buildkite-agent-nix-build-github-app-auth-key = {
-      file = ../../../secrets/github-app-bk-auth.age;
+      rekeyFile = ../../../secrets/github-app-bk-auth.age;
       owner = "${toString adminUser.uid}";
     };
   };

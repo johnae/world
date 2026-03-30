@@ -5,6 +5,7 @@
   perSystem = {
     pkgs,
     lib,
+    system,
     ...
   }: let
     inherit (builtins // lib) foldl' genList replaceStrings attrNames attrValues;
@@ -22,10 +23,12 @@
       replaceStrings
       (map (key: "{${key}}") (attrNames ansiTable))
       (attrValues ansiTable);
+
+    agenix-rekey-cli = inputs.agenix-rekey.packages.${system}.default;
   in {
     devenv.shells = lib.mapAttrs' (file: _: {
       name = builtins.replaceStrings [".nix"] [""] file;
-      value = import "${../devenv}/${file}" {inherit pkgs lib ansiEscape;};
+      value = import "${../devenv}/${file}" {inherit pkgs lib ansiEscape agenix-rekey-cli;};
     }) (builtins.readDir ../devenv);
   };
 }

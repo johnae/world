@@ -1,6 +1,7 @@
 {
   pkgs,
   ansiEscape,
+  agenix-rekey-cli,
   ...
 }: let
   project-build = pkgs.writeShellApplication {
@@ -46,8 +47,9 @@ in {
     };
   };
 
-  packages = with pkgs; [
-    agenix
+  packages = [
+    agenix-rekey-cli
+  ] ++ (with pkgs; [
     age-plugin-yubikey
     alejandra
     bash-language-server
@@ -72,7 +74,7 @@ in {
     world
     zellij
     yj
-  ];
+  ]);
 
   enterShell = ansiEscape ''
      echo -e "

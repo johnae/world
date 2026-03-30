@@ -1,5 +1,9 @@
-{...}: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ7m3AH34sXUa8UQIeDEyL2lpUwSbsrGjzPrjYauntOH";
+{hostName, ...}: {
+  age.rekey = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ7m3AH34sXUa8UQIeDEyL2lpUwSbsrGjzPrjYauntOH";
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
 
   imports = [
     ../../../profiles/hcloud.nix
@@ -22,7 +26,7 @@
   services.k3s.settings.server = "https://\"$INITIAL_MASTER\":6443";
 
   age.secrets = {
-    k3s-token.file = ../../../secrets/k3s/token.age;
+    k3s-token.rekeyFile = ../../../secrets/k3s/token.age;
   };
 
   services.tailscale.auth = {

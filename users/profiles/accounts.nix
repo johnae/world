@@ -1,15 +1,17 @@
 {
-  mainConfig,
+  config,
   pkgs,
   tailnet,
   ...
 }: {
+  age.secrets.email-account-pass.rekeyFile = ../../secrets/email-account-pass.age;
+
   accounts.email = {
     maildirBasePath = "Mail";
     accounts."insane" = {
       address = "john@9000.dev";
       userName = "john@9000.dev";
-      passwordCommand = "${pkgs.coreutils}/bin/cat ${mainConfig.age.secrets.email-account-pass.path}";
+      passwordCommand = "${pkgs.coreutils}/bin/cat ${config.age.secrets.email-account-pass.path}";
       smtp.host = "icarus.${tailnet}.ts.net";
       smtp.port = 1025;
       realName = "John Axel Eriksson";
@@ -19,7 +21,7 @@
     accounts."9000" = {
       address = "john@9000.dev";
       userName = "john@9000.dev";
-      passwordCommand = "${pkgs.coreutils}/bin/cat ${mainConfig.age.secrets.email-account-pass.path}";
+      passwordCommand = "${pkgs.coreutils}/bin/cat ${config.age.secrets.email-account-pass.path}";
       smtp.host = "icarus.${tailnet}.ts.net";
       smtp.port = 1025;
       imap.host = "icarus.${tailnet}.ts.net";

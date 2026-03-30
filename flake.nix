@@ -6,6 +6,8 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.systems.follows = "systems";
     agenix.url = "github:ryantm/agenix";
+    agenix-rekey.url = "github:oddlama/agenix-rekey";
+    agenix-rekey.inputs.nixpkgs.follows = "nixpkgs";
     age-plugin-yubikey.flake = false;
     age-plugin-yubikey.url = "github:str4d/age-plugin-yubikey";
     cachix.url = "github:cachix/cachix";
@@ -147,6 +149,8 @@
   outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
+        inputs.agenix-rekey.flakeModule
+        ./flake/agenix-rekey.nix
         ./flake/buildkite-pipeline.nix
         ./flake/configurations.nix
         ./flake/devenv.nix

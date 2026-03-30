@@ -1,9 +1,14 @@
 {
   adminUser,
   lib,
+  hostName,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDErC2NyMr7hmuNA9gnuLveTxPjYVqkmpLL9j6kzf2a5";
+  age.rekey = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDErC2NyMr7hmuNA9gnuLveTxPjYVqkmpLL9j6kzf2a5";
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
 
   imports = [
     ../../../profiles/admin-user/home-manager.nix

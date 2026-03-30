@@ -1,5 +1,6 @@
 {
   hostName,
+  config,
   pkgs,
   ...
 }: let
@@ -8,13 +9,15 @@
     runtimeInputs = with pkgs; [coreutils spotnix];
     text = ''
       RUST_LOG=info \
-      CLIENT_ID="$(head -1 /run/agenix/spotnix)" \
-      CLIENT_SECRET="$(tail -1 /run/agenix/spotnix)" \
+      CLIENT_ID="$(head -1 ${config.age.secrets.spotnix.path})" \
+      CLIENT_SECRET="$(tail -1 ${config.age.secrets.spotnix.path})" \
       REDIRECT_URI="http://localhost:8182/spotnix" \
       exec spotnix -d ${hostName} -s "$XDG_RUNTIME_DIR"/spotnix_status -i "$XDG_RUNTIME_DIR"/spotnix_input -o "$XDG_RUNTIME_DIR"/spotnix_output -r 10
     '';
   };
 in {
+  age.secrets.spotnix.rekeyFile = ../../secrets/spotnix.age;
+
   systemd.user.services.spotnix = {
     Unit = {
       Description = "Spotify for UNIX";

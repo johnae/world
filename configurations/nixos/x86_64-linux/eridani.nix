@@ -6,7 +6,11 @@
   hostName,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ7m3AH34sXUa8UQIeDEyL2lpUwSbsrGjzPrjYauntOH";
+  age.rekey = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ7m3AH34sXUa8UQIeDEyL2lpUwSbsrGjzPrjYauntOH";
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
 
   imports = [
     ../../../profiles/admin-user/home-manager.nix
@@ -93,20 +97,20 @@
   };
 
   age.secrets = {
-    k3s-token.file = ../../../secrets/k3s/token.age;
+    k3s-token.rekeyFile = ../../../secrets/k3s/token.age;
     cluster-secrets = {
-      file = ../../../secrets/k3s/cluster-secrets.yaml.age;
+      rekeyFile = ../../../secrets/k3s/cluster-secrets.yaml.age;
       path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml";
     };
     tailscale-oauth-secret = {
-      file = ../../../secrets/k3s/tailscale-oauth-secret.yaml.age;
+      rekeyFile = ../../../secrets/k3s/tailscale-oauth-secret.yaml.age;
       path = "/var/lib/rancher/k3s/server/manifests/tailscale-oauth-secret.yaml";
     };
     id-ed25519-remote-unlock-key = {
-      file = ../../../secrets/h_id_ed25519_remote_unlock.age;
+      rekeyFile = ../../../secrets/h_id_ed25519_remote_unlock.age;
     };
     remote-disk-password = {
-      file = ../../../secrets/h_remote_unlock_password.age;
+      rekeyFile = ../../../secrets/h_remote_unlock_password.age;
     };
   };
 
