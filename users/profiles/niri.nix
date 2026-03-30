@@ -395,6 +395,10 @@ in {
       "Ctrl+Print".action.screenshot-screen = [];
       "Alt+Print".action.screenshot-window = [];
 
+      "F11".action.screenshot = [];
+      "Ctrl+F11".action.screenshot-screen = [];
+      "Alt+F11".action.screenshot-window = [];
+
       "Mod+Escape" = {
         allow-inhibiting = false;
         action.toggle-keyboard-shortcuts-inhibit = [];
