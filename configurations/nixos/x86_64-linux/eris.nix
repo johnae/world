@@ -208,7 +208,10 @@
 
   home-manager = {
     users.${adminUser.name} = {
-      imports = [../../../users/profiles/workstation.nix];
+      imports = [
+        ../../../users/profiles/workstation.nix
+        ../../../users/profiles/9k.nix
+      ];
       programs.git.settings.user.signingKey = config.age.secrets.id_ed25519_alt.path;
       programs.jujutsu.settings.signing = {
         behavior = "own";

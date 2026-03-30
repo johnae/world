@@ -198,6 +198,7 @@
       imports = [
         ../../../users/profiles/workstation.nix
         ../../../users/profiles/mail.nix
+        ../../../users/profiles/9k.nix
       ];
       programs.git.settings.user.signingKey = config.age.secrets.id_ed25519_alt.path;
       programs.jujutsu.settings.signing = {

@@ -15,6 +15,7 @@
       config.allowUnfree = true;
       overlays = [
         inputs.agenix.overlays.default
+        inputs.claude-code.overlays.default
         inputs.emacs-overlay.overlays.default
         inputs.niri.overlays.niri
         inputs.nur.overlays.default
