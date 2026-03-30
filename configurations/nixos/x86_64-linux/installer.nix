@@ -2,8 +2,14 @@
   pkgs,
   modulesPath,
   lib,
+  hostName,
   ...
 }: {
+  age.rekey = {
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
+
   imports = [
     "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"
   ];

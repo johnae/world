@@ -7,15 +7,22 @@
   pkgs,
   ...
 }: {
-  home-manager.extraSpecialArgs = {inherit hostName inputs tailnet adminUser;} // {mainConfig = config;};
+  home-manager.extraSpecialArgs = {inherit hostName inputs tailnet adminUser;};
 
   home-manager.sharedModules =
     [
-      ../users/modules/chromiums.nix
-      ../users/modules/git-auto-sync.nix
-      ../users/modules/kubie.nix
-      ../users/modules/theme.nix
-      ../users/modules/userinfo.nix
+      inputs.agenix.homeManagerModules.age
+      inputs.agenix-rekey.homeManagerModules.default
+      {
+        age.identityPaths = ["/etc/ssh/ssh_host_ed25519_key"];
+        age.rekey = {
+          hostPubkey = config.age.rekey.hostPubkey;
+          masterIdentities = config.age.rekey.masterIdentities;
+          storageMode = "local";
+          localStorageDir = config.age.rekey.localStorageDir + "-hm";
+        };
+      }
+      ../users/modules/default.nix
     ]
     ++ (
       if pkgs.stdenv.isDarwin

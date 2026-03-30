@@ -7,11 +7,13 @@
 }: let
   inherit (config) home;
 in {
+  age.secrets.spotifyd.rekeyFile = ../../secrets/spotifyd.age;
+
   services.spotifyd = {
     enable = true;
     settings.global = {
       username = "binx";
-      password_cmd = "${pkgs.coreutils}/bin/cat /run/agenix/spotifyd";
+      password_cmd = "${pkgs.coreutils}/bin/cat ${config.age.secrets.spotifyd.path}";
       backend = "pulseaudio";
       mixer = "PCM";
       volume-control = "alsa";

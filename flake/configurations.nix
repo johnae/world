@@ -22,9 +22,20 @@
 
   inherit (inputs.nix-darwin.lib) darwinSystem;
 
+  adminUsers = import ../users/admin-users.nix;
+
   nixSettings = {
     nix.registry.nixpkgs = {flake = inputs.nixpkgs;};
     nix.registry.world = {flake = inputs.self;};
+  };
+
+  rekeyConfig = {
+    age.rekey.masterIdentities = [
+      ../secrets/yubikey-identity-1.pub
+    ];
+    age.rekey.extraEncryptionPubkeys = [
+      "age1yubikey1qt7cjux5unxcsrw9dnkq8qsh0jgnwwvxzxm2jn2pxetjchtclmlk6xvpckq"
+    ];
   };
   mapSystems = dir: mapAttrsToList (name: _: name) (filterAttrs (_: type: type == "directory") (readDir dir));
 
@@ -49,8 +60,9 @@
 
   defaultModules = [
     nixSettings
+    rekeyConfig
     inputs.agenix.nixosModules.age
-    inputs.disko.nixosModules.disko
+    inputs.agenix-rekey.nixosModules.default
     inputs.disko.nixosModules.disko
     inputs.jovian.nixosModules.jovian
     inputs.home-manager.nixosModules.home-manager
@@ -62,7 +74,9 @@
 
   darwinDefaultModules = [
     nixSettings
+    rekeyConfig
     inputs.agenix.darwinModules.age
+    inputs.agenix-rekey.darwinModules.default
     inputs.home-manager.darwinModules.home-manager
     inputs.mac-app-util.darwinModules.default
     ../modules/default-darwin.nix
@@ -82,6 +96,16 @@
           extraSpecialArgs = {inherit inputs username hostName system;};
           modules =
             [
+              inputs.agenix.homeManagerModules.age
+              inputs.agenix-rekey.homeManagerModules.default
+              rekeyConfig
+              {
+                age.identityPaths = ["/home/${username}/.ssh/id_ed25519"];
+                age.rekey = {
+                  storageMode = "local";
+                  localStorageDir = ../secrets/rekeyed + "/${username}-${hostName}";
+                };
+              }
               {
                 home = {
                   inherit username;
@@ -92,11 +116,7 @@
                   pkgs.world
                 ];
               }
-              ../users/modules/chromiums.nix
-              ../users/modules/git-auto-sync.nix
-              ../users/modules/kubie.nix
-              ../users/modules/theme.nix
-              ../users/modules/userinfo.nix
+              ../users/modules/default.nix
             ]
             ++ [
               hostconf
@@ -108,19 +128,7 @@
   darwinConfigurations = mapAttrs' (
     name: conf: let
       inherit (conf) system hostconf;
-      adminUser = {
-        name = "johnaxele";
-        uid = 501;
-        gid = 20;
-        userinfo = {
-          email = "john@insane.se";
-          altEmail = "johnxele@spotify.com";
-          fullName = "John Axel Eriksson";
-          githubUser = "johnae";
-          gitlabUser = "johnae";
-          devRemote = "icarus";
-        };
-      };
+      adminUser = adminUsers.darwin;
     in {
       inherit name;
       value = withSystem system ({pkgs, ...}:
@@ -156,19 +164,7 @@
   nixosConfigurations = mapAttrs' (
     name: conf: let
       inherit (conf) system hostconf;
-      adminUser = {
-        name = "john";
-        uid = 1337;
-        gid = 1337;
-        userinfo = {
-          email = "john@insane.se";
-          altEmail = "john@9000.dev";
-          fullName = "John Axel Eriksson";
-          githubUser = "johnae";
-          gitlabUser = "johnae";
-          devRemote = "icarus";
-        };
-      };
+      adminUser = adminUsers.nixos;
     in {
       inherit name;
       value = withSystem system ({pkgs, ...}:

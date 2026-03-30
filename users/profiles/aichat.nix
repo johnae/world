@@ -11,14 +11,17 @@
     name = "aichat";
     runtimeInputs = [pkgs.aichat];
     text = ''
-      OPENAI_API_KEY="$(cat /run/agenix/openai-api-key)";
-      CLAUDE_API_KEY="$(cat /run/agenix/anthropic-api-key)";
-      ANTHROPIC_API_KEY="$(cat /run/agenix/anthropic-api-key)";
+      OPENAI_API_KEY="$(cat ${config.age.secrets.openai-api-key.path})";
+      CLAUDE_API_KEY="$(cat ${config.age.secrets.anthropic-api-key.path})";
+      ANTHROPIC_API_KEY="$(cat ${config.age.secrets.anthropic-api-key.path})";
       export OPENAI_API_KEY CLAUDE_API_KEY ANTHROPIC_API_KEY
       exec aichat "$@"
     '';
   };
 in {
+  age.secrets.openai-api-key.rekeyFile = ../../secrets/openai-api-key.age;
+  age.secrets.anthropic-api-key.rekeyFile = ../../secrets/anthropic-api-key.age;
+
   home.packages = [aichat];
   home.file."${configDir}/roles/coder-openai.md".text = ''
     ---

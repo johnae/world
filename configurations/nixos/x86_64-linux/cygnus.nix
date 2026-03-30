@@ -5,7 +5,11 @@
   lib,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHJycc3NgaX+coWkJIQEmHS3HBF99o3SkZ7sIm83eiiW";
+  age.rekey = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHJycc3NgaX+coWkJIQEmHS3HBF99o3SkZ7sIm83eiiW";
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
   syncthingDeviceID = "7HYSCXB-KGNIK4Y-24SOMMD-CYKJLYR-GLK7D3R-NWJFSYM-ZCBRNF2-KQJ7ZQW";
 
   ephemeralRoot = true;
@@ -71,69 +75,57 @@
 
   age.secrets = {
     wifi-networks = {
-      file = ../../../secrets/wifi-networks.age;
+      rekeyFile = ../../../secrets/wifi-networks.age;
     };
     copilot-token = {
-      file = ../../../secrets/gh_copilot.age;
+      rekeyFile = ../../../secrets/gh_copilot.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.config/github-copilot/hosts.json";
     };
     id_ed25519_alt = {
-      file = ../../../secrets/id_ed25519_alt.age;
+      rekeyFile = ../../../secrets/id_ed25519_alt.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_ed25519_alt";
     };
     id_ed25519_bbph = {
-      file = ../../../secrets/id_ed25519_bbph.age;
+      rekeyFile = ../../../secrets/id_ed25519_bbph.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_ed25519_bbph";
     };
     id_ed25519_ev = {
-      file = ../../../secrets/id_ed25519_ev.age;
+      rekeyFile = ../../../secrets/id_ed25519_ev.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_ed25519_ev";
     };
     id_rsa_alt = {
-      file = ../../../secrets/id_rsa_alt.age;
+      rekeyFile = ../../../secrets/id_rsa_alt.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_rsa_alt";
     };
     id_ed25519_alt_root = {
-      file = ../../../secrets/id_ed25519_alt.age;
+      rekeyFile = ../../../secrets/id_ed25519_alt.age;
       owner = "0";
       path = "/root/.ssh/id_ed25519";
     };
     age_key_ev = {
-      file = ../../../secrets/age-key-ev.age;
+      rekeyFile = ../../../secrets/age-key-ev.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.age/key.txt";
     };
-    email-account-pass = {
-      file = ../../../secrets/email-account-pass.age;
-      owner = "${toString adminUser.uid}";
-    };
     syncthing-cert = {
-      file = ../../../secrets/${hostName}/syncthing-cert.age;
+      rekeyFile = ../../../secrets/${hostName}/syncthing-cert.age;
       owner = "${toString adminUser.uid}";
     };
     syncthing-key = {
-      file = ../../../secrets/${hostName}/syncthing-key.age;
+      rekeyFile = ../../../secrets/${hostName}/syncthing-key.age;
       owner = "${toString adminUser.uid}";
     };
     groq-api-key = {
-      file = ../../../secrets/groq-api-key.age;
-      owner = "${toString adminUser.uid}";
-    };
-    anthropic-api-key = {
-      file = ../../../secrets/anthropic-api-key.age;
+      rekeyFile = ../../../secrets/groq-api-key.age;
       owner = "${toString adminUser.uid}";
     };
     openrouter-api-key = {
-      file = ../../../secrets/openrouter-api-key.age;
-      owner = "${toString adminUser.uid}";
-    };
-    openai-api-key = {
-      file = ../../../secrets/openai-api-key.age;
+      rekeyFile = ../../../secrets/openrouter-api-key.age;
       owner = "${toString adminUser.uid}";
     };
   };

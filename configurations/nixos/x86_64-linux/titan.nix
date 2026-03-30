@@ -4,7 +4,11 @@
   config,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOteEiVr+H3Q1tSw1bGQfjbVWuPggc/+w1vVXSFde0Rt";
+  age.rekey = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOteEiVr+H3Q1tSw1bGQfjbVWuPggc/+w1vVXSFde0Rt";
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
   syncthingDeviceID = "53R5CPY-RVICTGR-AEXNKZU-RMCKC32-JNON7PH-4VEFCRB-KRPLP3M-AIEQPA6";
 
   imports = [
@@ -61,23 +65,23 @@
   };
 
   age.secrets = {
-    remote-disk-password.file = ../../../secrets/remote-disk-password.age;
-    remote-cloud-disk-password.file = ../../../secrets/remote-cloud-disk-password.age;
-    id_ed25519_remote_unlock.file = ../../../secrets/${hostName}/id_ed25519_remote_unlock.age;
+    remote-disk-password.rekeyFile = ../../../secrets/remote-disk-password.age;
+    remote-cloud-disk-password.rekeyFile = ../../../secrets/remote-cloud-disk-password.age;
+    id_ed25519_remote_unlock.rekeyFile = ../../../secrets/${hostName}/id_ed25519_remote_unlock.age;
     syncthing-cert = {
-      file = ../../../secrets/${hostName}/syncthing-cert.age;
+      rekeyFile = ../../../secrets/${hostName}/syncthing-cert.age;
       owner = "${toString adminUser.uid}";
     };
     syncthing-key = {
-      file = ../../../secrets/${hostName}/syncthing-key.age;
+      rekeyFile = ../../../secrets/${hostName}/syncthing-key.age;
       owner = "${toString adminUser.uid}";
     };
     ts-google-9k = {
-      file = ../../../secrets/ts-google-9k.age;
+      rekeyFile = ../../../secrets/ts-google-9k.age;
       owner = "${toString adminUser.uid}";
     };
     hcloud-token = {
-      file = ../../../secrets/hcloud-token.age;
+      rekeyFile = ../../../secrets/hcloud-token.age;
       owner = "${toString adminUser.uid}";
     };
   };

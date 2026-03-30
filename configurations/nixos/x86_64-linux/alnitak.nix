@@ -2,9 +2,14 @@
   adminUser,
   pkgs,
   lib,
+  hostName,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJnEDS9ziXY31y2uyMBzSFSjyY5KqYnJgR4Tkb8nx/Dn";
+  age.rekey = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJnEDS9ziXY31y2uyMBzSFSjyY5KqYnJgR4Tkb8nx/Dn";
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
 
   imports = [
     ../../../profiles/admin-user/home-manager.nix
@@ -61,7 +66,7 @@
 
   age.secrets = {
     ts-google-9k = {
-      file = ../../../secrets/ts-google-9k.age;
+      rekeyFile = ../../../secrets/ts-google-9k.age;
       owner = "1337";
     };
   };

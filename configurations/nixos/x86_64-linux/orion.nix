@@ -5,7 +5,11 @@
   config,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEEPD945cTDxeNhGljSKqQfRCUeXcwIDKOBD847OECQs";
+  age.rekey = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEEPD945cTDxeNhGljSKqQfRCUeXcwIDKOBD847OECQs";
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
   syncthingDeviceID = "XOPUBYF-LTOERSA-NGLA6ZJ-BU455JS-JOTCFQP-JGZP6WC-VRUTNOX-5YEUVQD";
 
   bcachefs = {
@@ -210,53 +214,53 @@
 
   age.secrets = {
     initrd-key = {
-      file = ../../../secrets/${hostName}/initrd_ed25519_key.age;
+      rekeyFile = ../../../secrets/${hostName}/initrd_ed25519_key.age;
       owner = "${toString adminUser.uid}";
     };
     copilot-token = {
-      file = ../../../secrets/gh_copilot.age;
+      rekeyFile = ../../../secrets/gh_copilot.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.config/github-copilot/hosts.json";
     };
     id_ed25519_bbph = {
-      file = ../../../secrets/id_ed25519_bbph.age;
+      rekeyFile = ../../../secrets/id_ed25519_bbph.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_ed25519_bbph";
     };
     id_ed25519_alt = {
-      file = ../../../secrets/id_ed25519_alt.age;
+      rekeyFile = ../../../secrets/id_ed25519_alt.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_ed25519_alt";
     };
     id_rsa_alt = {
-      file = ../../../secrets/id_rsa_alt.age;
+      rekeyFile = ../../../secrets/id_rsa_alt.age;
       owner = "${toString adminUser.uid}";
       path = "/home/${adminUser.name}/.ssh/id_rsa_alt";
     };
     ssh_host_microvm_ed25519_key = {
-      file = ../../../secrets/ssh_host_microvm_ed25519_key.age;
+      rekeyFile = ../../../secrets/ssh_host_microvm_ed25519_key.age;
     };
     syncthing-cert = {
-      file = ../../../secrets/${hostName}/syncthing-cert.age;
+      rekeyFile = ../../../secrets/${hostName}/syncthing-cert.age;
       owner = "${toString adminUser.uid}";
     };
     syncthing-key = {
-      file = ../../../secrets/${hostName}/syncthing-key.age;
+      rekeyFile = ../../../secrets/${hostName}/syncthing-key.age;
       owner = "${toString adminUser.uid}";
     };
 
     ts-google-9k = {
-      file = ../../../secrets/ts-google-9k.age;
+      rekeyFile = ../../../secrets/ts-google-9k.age;
       owner = "${toString adminUser.uid}";
     };
 
     cloudflare-tunnel-9k = {
-      file = ../../../secrets/cloudflare-tunnel-9k.age;
+      rekeyFile = ../../../secrets/cloudflare-tunnel-9k.age;
       # owner = "cloudflared";
     };
 
-    cloudflare-env.file = ../../../secrets/cloudflare-env.age;
-    vaultwarden-env.file = ../../../secrets/vaultwarden-env.age;
+    cloudflare-env.rekeyFile = ../../../secrets/cloudflare-env.age;
+    vaultwarden-env.rekeyFile = ../../../secrets/vaultwarden-env.age;
   };
 
   services.syncthing = {

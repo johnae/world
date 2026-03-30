@@ -5,7 +5,11 @@
   pkgs,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK68zoSchQLwjelUZLaY9FGfEQe3mu26BmC51Q21/SOa";
+  age.rekey = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK68zoSchQLwjelUZLaY9FGfEQe3mu26BmC51Q21/SOa";
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
   syncthingDeviceID = "HBL5ZRB-R2STGW5-LMAYYHX-KOFTP3X-VO4IV6E-PEDKZ3N-WCRR7BY-F5C7AAP";
 
   ephemeralRoot = true;
@@ -266,71 +270,51 @@
   };
 
   age.secrets = {
-    cloudflare-env.file = ../../../secrets/cloudflare-env.age;
+    cloudflare-env.rekeyFile = ../../../secrets/cloudflare-env.age;
     cloudflare-tunnel-9k = {
-      file = ../../../secrets/cloudflare-tunnel-9k.age;
+      rekeyFile = ../../../secrets/cloudflare-tunnel-9k.age;
       owner = "cloudflared";
     };
     cloudflare-tunnel-cert-9k = {
-      file = ../../../secrets/cloudflare-tunnel-cert-9k.age;
+      rekeyFile = ../../../secrets/cloudflare-tunnel-cert-9k.age;
       owner = "cloudflared";
     };
     conduwuit-registration-token = {
-      file = ../../../secrets/conduwuit-registration-token.age;
+      rekeyFile = ../../../secrets/conduwuit-registration-token.age;
       mode = "777";
     };
-    john-9000-dev-mail.file = ../../../secrets/john-9000-dev-mail.age;
-    minio-root-credentials-env.file = ../../../secrets/minio-root-credentials-env.age;
-    vaultwarden-env.file = ../../../secrets/vaultwarden-env.age;
+    john-9000-dev-mail.rekeyFile = ../../../secrets/john-9000-dev-mail.age;
+    minio-root-credentials-env.rekeyFile = ../../../secrets/minio-root-credentials-env.age;
+    vaultwarden-env.rekeyFile = ../../../secrets/vaultwarden-env.age;
     syncthing-cert = {
-      file = ../../../secrets/${hostName}/syncthing-cert.age;
+      rekeyFile = ../../../secrets/${hostName}/syncthing-cert.age;
       owner = "${toString adminUser.uid}";
     };
     syncthing-key = {
-      file = ../../../secrets/${hostName}/syncthing-key.age;
+      rekeyFile = ../../../secrets/${hostName}/syncthing-key.age;
       owner = "${toString adminUser.uid}";
     };
     ts-google-9k = {
-      file = ../../../secrets/ts-google-9k.age;
+      rekeyFile = ../../../secrets/ts-google-9k.age;
       owner = "${toString adminUser.uid}";
     };
     ssh_host_microvm_ed25519_key = {
-      file = ../../../secrets/ssh_host_microvm_ed25519_key.age;
+      rekeyFile = ../../../secrets/ssh_host_microvm_ed25519_key.age;
       path = "/var/lib/microvm-secrets/ssh_host_ed25519_key";
       symlink = false;
     };
     ssh_host_icarus_ed25519_key = {
-      file = ../../../secrets/icarus/id_ed25519_host_key.age;
+      rekeyFile = ../../../secrets/icarus/id_ed25519_host_key.age;
     };
     ssh_initrd_icarus_ed25519_key = {
-      file = ../../../secrets/icarus/id_ed25519_initrd_key.age;
-    };
-    email-account-pass = {
-      file = ../../../secrets/email-account-pass.age;
-      owner = "${toString adminUser.uid}";
+      rekeyFile = ../../../secrets/icarus/id_ed25519_initrd_key.age;
     };
     groq-api-key = {
-      file = ../../../secrets/groq-api-key.age;
-      owner = "${toString adminUser.uid}";
-    };
-    anthropic-api-key = {
-      file = ../../../secrets/anthropic-api-key.age;
+      rekeyFile = ../../../secrets/groq-api-key.age;
       owner = "${toString adminUser.uid}";
     };
     openrouter-api-key = {
-      file = ../../../secrets/openrouter-api-key.age;
-      owner = "${toString adminUser.uid}";
-    };
-    openai-api-key = {
-      file = ../../../secrets/openai-api-key.age;
-      owner = "${toString adminUser.uid}";
-    };
-    invoice-forwarding-destination = {
-      file = ../../../secrets/invoice-forwarding-destination.age;
-      owner = "${toString adminUser.uid}";
-    };
-    selfinvoice-forwarding-destination = {
-      file = ../../../secrets/selfinvoice-forwarding-destination.age;
+      rekeyFile = ../../../secrets/openrouter-api-key.age;
       owner = "${toString adminUser.uid}";
     };
   };
@@ -504,7 +488,7 @@
 
   age.secrets = {
     "buildkite-agent-exporter-token" = {
-      file = ../../../secrets/buildkite-token.age;
+      rekeyFile = ../../../secrets/buildkite-token.age;
       owner = config.services.prometheus.exporters.buildkite-agent.user;
     };
   };

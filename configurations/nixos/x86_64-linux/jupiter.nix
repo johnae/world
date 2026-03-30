@@ -5,7 +5,11 @@
   pkgs,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC4ZLSIZTXhSoaKyXhZ3/hBKDXdJx/Yx0lCAhMyyDhRR";
+  age.rekey = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC4ZLSIZTXhSoaKyXhZ3/hBKDXdJx/Yx0lCAhMyyDhRR";
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
 
   jovian.steam.enable = true;
   jovian.steam.autoStart = true;
@@ -55,13 +59,13 @@
 
   age.secrets = {
     ssh_host_jupiter_ed25519_key = {
-      file = ../../../secrets/jupiter/id_ed25519_host_key.age;
+      rekeyFile = ../../../secrets/jupiter/id_ed25519_host_key.age;
     };
     ssh_initrd_jupiter_ed25519_key = {
-      file = ../../../secrets/jupiter/id_ed25519_initrd_key.age;
+      rekeyFile = ../../../secrets/jupiter/id_ed25519_initrd_key.age;
     };
     wifi-networks = {
-      file = ../../../secrets/wifi-networks.age;
+      rekeyFile = ../../../secrets/wifi-networks.age;
     };
   };
 

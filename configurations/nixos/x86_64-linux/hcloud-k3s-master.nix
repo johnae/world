@@ -1,5 +1,9 @@
-{
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ7m3AH34sXUa8UQIeDEyL2lpUwSbsrGjzPrjYauntOH";
+{hostName, ...}: {
+  age.rekey = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ7m3AH34sXUa8UQIeDEyL2lpUwSbsrGjzPrjYauntOH";
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
 
   imports = [
     ../../../profiles/hcloud.nix
@@ -22,21 +26,21 @@
   services.k3s.settings.server = "https://\"$INITIAL_MASTER\":6443";
 
   age.secrets = {
-    k3s-token.file = ../../../secrets/k3s/token.age;
+    k3s-token.rekeyFile = ../../../secrets/k3s/token.age;
     tailscale-oauth-secret = {
-      file = ../../../secrets/k3s/tailscale-oauth-secret.yaml.age;
+      rekeyFile = ../../../secrets/k3s/tailscale-oauth-secret.yaml.age;
       path = "/var/lib/rancher/k3s/server/manifests/tailscale-oauth-secret.yaml";
     };
     cluster-secrets = {
-      file = ../../../secrets/k3s/cluster-secrets.yaml.age;
+      rekeyFile = ../../../secrets/k3s/cluster-secrets.yaml.age;
       path = "/var/lib/rancher/k3s/server/manifests/cluster-secrets.yaml";
     };
     hetzner-csi-encryption-secret = {
-      file = ../../../secrets/k3s/hetzner-csi-encryption-secret.yaml.age;
+      rekeyFile = ../../../secrets/k3s/hetzner-csi-encryption-secret.yaml.age;
       path = "/var/lib/rancher/k3s/server/manifests/hetzner-csi-encryption-secret.yaml";
     };
     hetzner-api-secret = {
-      file = ../../../secrets/k3s/hetzner-api-secret.yaml.age;
+      rekeyFile = ../../../secrets/k3s/hetzner-api-secret.yaml.age;
       path = "/var/lib/rancher/k3s/server/manifests/hetzner-api-secret.yaml";
     };
   };

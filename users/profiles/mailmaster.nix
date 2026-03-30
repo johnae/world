@@ -1,17 +1,17 @@
 {
+  config,
   pkgs,
   lib,
   adminUser,
-  mainConfig,
   ...
 }: let
   aichat = pkgs.writeShellApplication {
     name = "aichat";
     runtimeInputs = [pkgs.aichat pkgs.coreutils-full];
     text = ''
-      OPENAI_API_KEY="$(cat /run/agenix/openai-api-key)";
-      CLAUDE_API_KEY="$(cat /run/agenix/anthropic-api-key)";
-      ANTHROPIC_API_KEY="$(cat /run/agenix/anthropic-api-key)";
+      OPENAI_API_KEY="$(cat ${config.age.secrets.openai-api-key.path})";
+      CLAUDE_API_KEY="$(cat ${config.age.secrets.anthropic-api-key.path})";
+      ANTHROPIC_API_KEY="$(cat ${config.age.secrets.anthropic-api-key.path})";
       export OPENAI_API_KEY CLAUDE_API_KEY ANTHROPIC_API_KEY
       exec aichat "$@"
     '';
@@ -349,6 +349,11 @@
   model = "ollama:mistral-small:24b";
   temperature = "0.05";
 in {
+  age.secrets.openai-api-key.rekeyFile = ../../secrets/openai-api-key.age;
+  age.secrets.anthropic-api-key.rekeyFile = ../../secrets/anthropic-api-key.age;
+  age.secrets.invoice-forwarding-destination.rekeyFile = ../../secrets/invoice-forwarding-destination.age;
+  age.secrets.selfinvoice-forwarding-destination.rekeyFile = ../../secrets/selfinvoice-forwarding-destination.age;
+
   home.packages = with pkgs; [
     protonmail-bridge
     gnupg
@@ -601,7 +606,7 @@ in {
       "PATH=${pkgs.msmtp}/bin:${pkgs.coreutils-full}/bin:${pkgs.gnused}/bin:${pkgs.gawk}/bin"
     ];
     Service.ExecStart = pkgs.writeShellScript "invoice-forwarding" ''
-      ${forwardInvoices}/bin/forward-messages "$(cat ${mainConfig.age.secrets.invoice-forwarding-destination.path})"
+      ${forwardInvoices}/bin/forward-messages "$(cat ${config.age.secrets.invoice-forwarding-destination.path})"
     '';
   };
 
@@ -620,7 +625,7 @@ in {
       "PATH=${pkgs.msmtp}/bin:${pkgs.coreutils-full}/bin:${pkgs.gnused}/bin:${pkgs.gawk}/bin"
     ];
     Service.ExecStart = pkgs.writeShellScript "selfinvoice-forwarding" ''
-      ${forwardSelfinvoices}/bin/forward-messages "$(cat ${mainConfig.age.secrets.selfinvoice-forwarding-destination.path})"
+      ${forwardSelfinvoices}/bin/forward-messages "$(cat ${config.age.secrets.selfinvoice-forwarding-destination.path})"
     '';
   };
 

@@ -6,7 +6,11 @@
   lib,
   ...
 }: {
-  publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINssAv/UibH5i9JxHFFWNNodKzmjYvPxx4mhTys3S1ZX";
+  age.rekey = {
+    hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINssAv/UibH5i9JxHFFWNNodKzmjYvPxx4mhTys3S1ZX";
+    storageMode = "local";
+    localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
+  };
 
   bcachefs = {
     disks = ["/dev/nvme0n1"];
@@ -122,7 +126,7 @@
 
   age.secrets = {
     ts-google-9k = {
-      file = ../../../secrets/ts-google-9k.age;
+      rekeyFile = ../../../secrets/ts-google-9k.age;
       owner = "1337";
     };
   };
