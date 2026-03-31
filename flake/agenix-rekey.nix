@@ -5,9 +5,7 @@
     ...
   }: {
     agenix-rekey = {
-      nixosConfigurations = self.nixosConfigurations;
-      darwinConfigurations = self.darwinConfigurations;
-      homeConfigurations = self.homeConfigurations;
+      inherit (self) nixosConfigurations darwinConfigurations homeConfigurations;
       collectHomeManagerConfigurations = true;
     };
   };

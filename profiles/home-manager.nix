@@ -21,8 +21,7 @@
       {
         age.identityPaths = ["/etc/ssh/ssh_host_ed25519_key"];
         age.rekey = {
-          hostPubkey = config.age.rekey.hostPubkey;
-          masterIdentities = config.age.rekey.masterIdentities;
+          inherit (config.age.rekey) hostPubkey masterIdentities;
           storageMode = "local";
           localStorageDir = config.age.rekey.localStorageDir + "-hm";
         };
