@@ -1,13 +1,21 @@
-{lib, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [
     ./workstation.nix
+  ];
+
+  environment.systemPackages = [
+    pkgs.brightnessctl
   ];
 
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend-then-hibernate";
   };
   services.disable-usb-wakeup.enable = true;
-  programs.light.enable = true;
+  hardware.acpilight.enable = true;
   services.upower.enable = true;
   services.tlp.enable = true;
   services.tlp.settings = {
