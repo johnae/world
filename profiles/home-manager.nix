@@ -7,11 +7,6 @@
   pkgs,
   ...
 }: {
-  # Grant admin user read access to SSH host key for HM agenix decryption
-  systemd.tmpfiles.rules = [
-    "a+ /etc/ssh/ssh_host_ed25519_key - - - - u:${adminUser.name}:r"
-  ];
-
   home-manager.extraSpecialArgs = {inherit hostName inputs tailnet adminUser;};
 
   home-manager.sharedModules =

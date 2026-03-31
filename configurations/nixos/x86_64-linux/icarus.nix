@@ -317,6 +317,10 @@
       rekeyFile = ../../../secrets/openrouter-api-key.age;
       owner = "${toString adminUser.uid}";
     };
+    grafana-secret-key = {
+      rekeyFile = ../../../secrets/grafana-secret-key.age;
+      owner = "grafana";
+    };
   };
 
   security.acme.certs = {
@@ -555,6 +559,7 @@
       http_port = 3000;
       http_addr = "127.0.0.1";
     };
+    security.secret_key = "$__file{${config.age.secrets.grafana-secret-key.path}}";
     "auth.proxy" = {
       enabled = true;
       header_name = "X-WebAuth-Email";

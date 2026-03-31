@@ -11,8 +11,6 @@
   '';
 in {
   imports = [
-    ./aichat.nix
-    ./aider.nix
     ./bat.nix
     ./claude.nix
     ./git.nix
