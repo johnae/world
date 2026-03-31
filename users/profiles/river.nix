@@ -92,7 +92,7 @@ in {
     kile-wl
     rofi
     fuzzel
-    light
+    brightnessctl
     pamixer
     scripts
   ];
@@ -170,8 +170,8 @@ in {
     map.normal."None XF86AudioPlay" = "spawn 'playerctl play-pause'";
     map.normal."None XF86AudioPrev" = "spawn 'playerctl previous'";
     map.normal."None XF86AudioNext" = "spawn 'playerctl next'";
-    map.normal."None XF86MonBrightnessUp" = "spawn 'light -A 5'";
-    map.normal."None XF86MonBrightnessDown" = "spawn 'light -U 5'";
+    map.normal."None XF86MonBrightnessUp" = "spawn 'brightnessctl set +5%'";
+    map.normal."None XF86MonBrightnessDown" = "spawn 'brightnessctl set 5%-'";
 
     map.locked."None XF86Eject" = "spawn 'eject -T'";
     map.locked."None XF86AudioRaiseVolume" = "spawn 'pamixer -i 5'";
@@ -181,8 +181,8 @@ in {
     map.locked."None XF86AudioPlay" = "spawn 'playerctl play-pause'";
     map.locked."None XF86AudioPrev" = "spawn 'playerctl previous'";
     map.locked."None XF86AudioNext" = "spawn 'playerctl next'";
-    map.locked."None XF86MonBrightnessUp" = "spawn 'light -A 5'";
-    map.locked."None XF86MonBrightnessDown" = "spawn 'light -U 5'";
+    map.locked."None XF86MonBrightnessUp" = "spawn 'brightnessctl set +5%'";
+    map.locked."None XF86MonBrightnessDown" = "spawn 'brightnessctl set 5%-'";
 
     background-color = "0x002b36";
     border-color-focused = "0x93a1a1";
