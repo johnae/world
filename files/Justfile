@@ -6,7 +6,6 @@ set shell := ["nu", "-c"]
 alias help := default
 
 import? '~/.just/world.extras.just'
-import? '/home/john/Development/world/.just/world.extras.just'
 
 default:
   #!/usr/bin/env nu
