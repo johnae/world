@@ -118,7 +118,7 @@ in {
   programs.niri.enable = true;
   home.packages = with pkgs; [
     fuzzel
-    light
+    brightnessctl
     pamixer
     scripts
   ];

@@ -67,7 +67,7 @@ in {
     kile-wl
     rofi
     fuzzel
-    light
+    brightnessctl
     pamixer
     scripts
     persway
@@ -253,8 +253,8 @@ in {
         "${modifier}+m" = ''move workspace to output right'';
         "${modifier}+Shift+q" = ''kill'';
 
-        XF86MonBrightnessUp = ''exec light -A 5'';
-        XF86MonBrightnessDown = ''exec light -U 5'';
+        XF86MonBrightnessUp = ''exec brightnessctl set +5%'';
+        XF86MonBrightnessDown = ''exec brightnessctl set 5%-'';
 
         "${modifier}+q" = ''layout stacking'';
         "${modifier}+o" = ''move absolute position center'';
