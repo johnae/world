@@ -74,6 +74,7 @@ in {
     world
     zellij
     yj
+    skopeo
   ]);
 
   enterShell = ansiEscape ''

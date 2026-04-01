@@ -16,16 +16,17 @@
           qcow2 = import "${inputs.nixpkgs}/nixos/lib/make-disk-image.nix" {
             inherit pkgs lib config;
             format = "qcow2";
-            partitionTableType = "efi";
+            partitionTableType = "legacy+gpt";
             diskSize = "auto";
             additionalSpace = "4096M";
+            memSize = 2048;
           };
           containerDisk = pkgs.dockerTools.buildImage {
             name = "${name}-containerdisk";
             tag = "latest";
             copyToRoot = pkgs.runCommand "containerdisk-root" {} ''
               mkdir -p $out/disk
-              ln -s ${qcow2}/nixos.qcow2 $out/disk/disk.qcow2
+              cp ${qcow2}/nixos.qcow2 $out/disk/disk.qcow2
             '';
           };
         in {

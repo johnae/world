@@ -9,13 +9,14 @@
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
 
+  boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.grub = {
-    efiSupport = true;
-    efiInstallAsRemovable = true;
-    device = "nodev";
+    enable = lib.mkForce true;
+    device = "/dev/vda";
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelParams = ["console=ttyS0"];
+  boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
 
   boot.initrd.availableKernelModules = [
     "virtio_pci"
@@ -33,22 +34,33 @@
     fsType = "ext4";
   };
 
-  fileSystems."/boot" = {
-    device = "/dev/vda1";
-    fsType = "vfat";
-  };
-
   fileSystems."/home" = {
     device = "/dev/vdb";
     fsType = "ext4";
     autoFormat = true;
-    neededForBoot = true;
   };
 
-  # KubeVirt secret volumes appear as small FAT filesystems
+  # Ensure home directories exist after /home is mounted (PVC may be fresh)
+  systemd.tmpfiles.rules = [
+    "d /home/john 0700 1337 100 -"
+  ];
+
+  # home-manager must run after /home is mounted and user dir exists
+  systemd.services."home-manager-john" = {
+    after = ["home.mount"];
+    requires = ["home.mount"];
+  };
+
+  # KubeVirt secret volumes are mounted as ISO9660 filesystems
   fileSystems."/mnt/kubevirt-secrets" = {
     device = "/dev/vdc";
-    fsType = "vfat";
+    fsType = "iso9660";
+    options = ["ro" "nofail"];
+  };
+
+  fileSystems."/mnt/kubevirt-ts-auth" = {
+    device = "/dev/vdd";
+    fsType = "iso9660";
     options = ["ro" "nofail"];
   };
 

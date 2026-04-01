@@ -35,6 +35,7 @@
     ];
     age.rekey.extraEncryptionPubkeys = [
       "age1yubikey1qt7cjux5unxcsrw9dnkq8qsh0jgnwwvxzxm2jn2pxetjchtclmlk6xvpckq"
+      "age14v5luk6ulvq8memqrmh5sw2pmp37cwzpra8sv5fzwt2zpu6hqyqsusvdgn"
     ];
   };
   mapSystems = dir: mapAttrsToList (name: _: name) (filterAttrs (_: type: type == "directory") (readDir dir));
