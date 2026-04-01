@@ -294,10 +294,6 @@
       rekeyFile = ../../../secrets/${hostName}/syncthing-key.age;
       owner = "${toString adminUser.uid}";
     };
-    ts-google-9k = {
-      rekeyFile = ../../../secrets/ts-google-9k.age;
-      owner = "${toString adminUser.uid}";
-    };
     ssh_host_microvm_ed25519_key = {
       rekeyFile = ../../../secrets/ssh_host_microvm_ed25519_key.age;
       path = "/var/lib/microvm-secrets/ssh_host_ed25519_key";
