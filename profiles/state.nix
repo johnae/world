@@ -22,6 +22,11 @@
       '';
     };
   };
+  age.identityPaths = lib.mkIf config.ephemeralRoot [
+    "/keep/etc/ssh/ssh_host_ed25519_key"
+    "/keep/etc/ssh/ssh_host_rsa_key"
+  ];
+
   environment.persistence."/keep" = {
     enable = config.ephemeralRoot;
     hideMounts = true;
