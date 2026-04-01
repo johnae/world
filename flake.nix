@@ -157,6 +157,7 @@
         ./flake/devenv.nix
         ./flake/github-actions.nix
         ./flake/helper-packages.nix
+        ./flake/kubevirt-images.nix
         ./flake/kubernetes.nix
         ./flake/packages.nix
         ./flake/setup.nix
