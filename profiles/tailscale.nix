@@ -1,10 +1,11 @@
-{
+{config, lib, ...}: {
   services.tailscale = {
     enable = true;
-    #useRoutingFeatures = true;
     interfaceName = "tailscale0";
+  };
+  systemd.services.tailscaled.unitConfig = lib.mkIf config.ephemeralRoot {
+    RequiresMountsFor = "/var/lib/tailscale";
   };
   networking.firewall.trustedInterfaces = ["tailscale0"];
   networking.firewall.checkReversePath = "loose";
-  ## the servers will need auth keys
 }
