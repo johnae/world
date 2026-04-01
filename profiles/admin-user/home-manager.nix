@@ -1,12 +1,18 @@
 {
   adminUser,
+  config,
+  lib,
   pkgs,
   ...
 }: {
   # Grant admin user read access to SSH host key for HM agenix decryption
-  systemd.tmpfiles.rules = [
-    "a+ /etc/ssh/ssh_host_ed25519_key - - - - u:${adminUser.name}:r"
-  ];
+  systemd.tmpfiles.rules =
+    [
+      "a+ /etc/ssh/ssh_host_ed25519_key - - - - u:${adminUser.name}:r"
+    ]
+    ++ lib.optionals config.ephemeralRoot [
+      "a+ /keep/etc/ssh/ssh_host_ed25519_key - - - - u:${adminUser.name}:r"
+    ];
 
   home-manager = {
     users.${adminUser.name} = {

@@ -14,7 +14,13 @@
       inputs.agenix.homeManagerModules.age
       inputs.agenix-rekey.homeManagerModules.default
       {
-        age.identityPaths = ["/etc/ssh/ssh_host_ed25519_key"];
+        age.identityPaths = [
+          (
+            if config.ephemeralRoot
+            then "/keep/etc/ssh/ssh_host_ed25519_key"
+            else "/etc/ssh/ssh_host_ed25519_key"
+          )
+        ];
         age.rekey = {
           inherit (config.age.rekey) hostPubkey masterIdentities;
           storageMode = "local";
