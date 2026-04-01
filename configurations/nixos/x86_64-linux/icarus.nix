@@ -799,7 +799,6 @@
   home-manager.users.${adminUser.name} = {
     imports = [
       ../../../users/profiles/headless.nix
-      ../../../users/profiles/mailmaster.nix
     ];
   };
 }
