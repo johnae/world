@@ -18,7 +18,7 @@
             format = "qcow2";
             partitionTableType = "legacy+gpt";
             diskSize = "auto";
-            additionalSpace = "4096M";
+            additionalSpace = "1024M";
             memSize = 2048;
           };
           containerDisk = pkgs.dockerTools.buildImage {
