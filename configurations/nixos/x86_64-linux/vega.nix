@@ -37,19 +37,17 @@
     args.advertise-tags = ["tag:server"];
   };
 
-  programs.ssh.startAgent = true;
-
-  age.secrets.id_ed25519_alt = {
-    rekeyFile = ../../../secrets/id_ed25519_alt.age;
-    owner = "${toString adminUser.uid}";
-    path = "/home/${adminUser.name}/.ssh/id_ed25519_alt";
-  };
-
   home-manager.users.${adminUser.name} = {
     imports = [
       ../../../users/profiles/headless.nix
       ../../../users/profiles/9k.nix
     ];
+    services.ssh-agent.enable = true;
+    age.identityPaths = ["/mnt/kubevirt-secrets/ssh_host_ed25519_key"];
+    age.secrets.id_ed25519_alt = {
+      rekeyFile = ../../../secrets/id_ed25519_alt.age;
+      path = "/home/${adminUser.name}/.ssh/id_ed25519_alt";
+    };
   };
 
   users.users.root.openssh.authorizedKeys.keys = [
