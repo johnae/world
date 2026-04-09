@@ -27,7 +27,7 @@
     ../../../profiles/home-manager.nix
     ../../../profiles/interception-tools.nix
     ../../../profiles/laptop.nix
-    ../../../profiles/restic-backup.nix
+    # ../../../profiles/restic-backup.nix # disabled: restic-env/restic-pw not rekeyed for neptune
     ../../../profiles/state.nix
     ../../../profiles/syncthing.nix
     ../../../profiles/tailscale.nix
@@ -41,6 +41,13 @@
   services.ollama.rocmOverrideGfx = "11.0.0"; ## rdna 3 11.0.0
   services.ollama.package = pkgs.ollama-rocm;
   services.ollama.host = "0.0.0.0";
+
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    capSysAdmin = false;
+    openFirewall = true;
+  };
 
   boot.initrd = {
     systemd.enable = true;
@@ -192,6 +199,8 @@
       };
     };
   };
+
+  users.users.${adminUser.name}.extraGroups = ["render" "video" "uinput"];
 
   home-manager = {
     users.${adminUser.name} = {
