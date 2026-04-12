@@ -1,4 +1,5 @@
 {
+  adminUser,
   pkgs,
   lib,
   ...
@@ -157,6 +158,10 @@ in {
     restart = true;
     settings = {
       default_session.command = "${createGreeter "${runNiri}/bin/niri" sessions}/bin/greeter";
+      initial_session = {
+        command = "${runNiri}/bin/niri";
+        user = adminUser.name;
+      };
     };
   };
   ## prevents systemd spewing the console with log messages when greeter is active
