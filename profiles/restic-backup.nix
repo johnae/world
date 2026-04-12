@@ -5,20 +5,20 @@
 }: {
   age.secrets = {
     restic-env = {
-      file = ../secrets/restic.age;
-      owner = "1337";
+      rekeyFile = ../secrets/restic.age;
+      owner = "${toString adminUser.uid}";
     };
     restic-pw = {
-      file = ../secrets/restic-pw.age;
-      owner = "1337";
+      rekeyFile = ../secrets/restic-pw.age;
+      owner = "${toString adminUser.uid}";
     };
     restic-local-env = {
-      file = ../secrets/restic-local.age;
-      owner = "1337";
+      rekeyFile = ../secrets/restic-local.age;
+      owner = "${toString adminUser.uid}";
     };
     restic-local-pw = {
-      file = ../secrets/restic-local-pw.age;
-      owner = "1337";
+      rekeyFile = ../secrets/restic-local-pw.age;
+      owner = "${toString adminUser.uid}";
     };
   };
 
