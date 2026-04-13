@@ -14,8 +14,10 @@
   # Work-only MCP servers (merge with common servers from mcp.nix)
   programs.mcp.servers = {
     gitlab = {
-      command = "${pkgs.nodejs}/bin/npx";
-      args = ["-y" "@zereight/mcp-gitlab"];
+      command = "${pkgs.lib.getExe (pkgs.writeShellScriptBin "npx-mcp-gitlab" ''
+        export PATH="${pkgs.nodejs}/bin:$PATH"
+        exec npx -y @zereight/mcp-gitlab "$@"
+      '')}";
       env = {
         GITLAB_READ_ONLY_MODE = "false";
         USE_GITLAB_WIKI = "true";
