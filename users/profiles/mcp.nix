@@ -19,8 +19,10 @@
         };
       };
       playwright = {
-        command = "${pkgs.nodejs}/bin/npx";
-        args = ["@playwright/mcp@latest" "--browser" "chromium" "--executable-path" "${pkgs.chromium}/bin/chromium"];
+        command = "${pkgs.lib.getExe (pkgs.writeShellScriptBin "npx-mcp-playwright" ''
+          export PATH="${pkgs.nodejs}/bin:$PATH"
+          exec npx @playwright/mcp@latest --browser chromium --executable-path ${pkgs.chromium}/bin/chromium "$@"
+        '')}";
       };
     };
   };
