@@ -27,7 +27,7 @@
     ../../../profiles/home-manager.nix
     ../../../profiles/interception-tools.nix
     ../../../profiles/laptop.nix
-    # ../../../profiles/restic-backup.nix # disabled: restic-env/restic-pw not rekeyed for neptune
+    ../../../profiles/restic-backup.nix
     ../../../profiles/state.nix
     ../../../profiles/syncthing.nix
     ../../../profiles/tailscale.nix
