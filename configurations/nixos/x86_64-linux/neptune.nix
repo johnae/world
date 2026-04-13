@@ -42,6 +42,13 @@
   services.ollama.package = pkgs.ollama-rocm;
   services.ollama.host = "0.0.0.0";
 
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    capSysAdmin = false;
+    openFirewall = true;
+  };
+
   boot.initrd = {
     systemd.enable = true;
     systemd.emergencyAccess = config.users.users.${adminUser.name}.hashedPassword;
@@ -192,6 +199,8 @@
       };
     };
   };
+
+  users.users.${adminUser.name}.extraGroups = ["render" "video" "uinput"];
 
   home-manager = {
     users.${adminUser.name} = {
