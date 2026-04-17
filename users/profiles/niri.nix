@@ -5,6 +5,21 @@
   pkgs,
   ...
 }: let
+  call = pkgs.lib.flip import {
+    inherit
+      inputs
+      kdl
+      docs
+      binds
+      settings
+      ;
+    inherit (pkgs) lib;
+  };
+  kdl = call "${inputs.niri}/kdl.nix";
+  binds = call "${inputs.niri}/binds.nix";
+  docs = call "${inputs.niri}/docs.nix";
+  settings = call "${inputs.niri}/settings.nix";
+
   xcursor_theme = config.gtk.cursorTheme.name;
   noctalia = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
   noctaliaIPC = "${noctalia}/bin/noctalia-shell ipc call";
@@ -85,6 +100,32 @@
       fi
     '';
   };
+  extraConfig = pkgs.writeText "extra-niri-config" ''
+    blur {
+      passes 2
+      offset 4
+      noise 0.0015
+      saturation 1.1
+    }
+
+    window-rule {
+      background-effect {
+          blur true
+          xray true
+      }
+      popups {
+          background-effect {
+              blur true
+              xray true
+          }
+      }
+    }
+
+    window-rule {
+      match is-active=false
+      opacity 0.89
+    }
+  '';
 in {
   services.swayidle = {
     enable = true;
@@ -113,6 +154,13 @@ in {
     scripts
   ];
 
+  programs.niri.config =
+    kdl.serialize.nodes (settings.render config.programs.niri.settings)
+    + ''
+
+
+      include "${extraConfig}"
+    '';
   programs.niri.settings = {
     input = {
       keyboard = {
