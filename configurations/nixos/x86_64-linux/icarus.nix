@@ -135,46 +135,11 @@
     args.auth-key = "file:/keep/etc/tailscale-auth-key";
   };
 
-  # microvm.autostart = [
-  #   "agent-8be5-ac2e"
-  #   "agent-8be5-9792"
-  #   "agent-8be5-c91d"
-  #   "master-8be5-f2ba"
-  # ];
-
-  # microvm = let
-  #   vms = [
-  #     "playground"
-  #   ];
-  # in {
-  #   vms = builtins.listToAttrs (map (name: {
-  #       inherit name;
-  #       value = {
-  #         flake = self;
-  #         updateFlake = "github:johnae/world";
-  #       };
-  #     })
-  #     vms);
-  #   autostart = vms;
-  # };
-
   networking.useDHCP = false;
-  # networking.nat = {
-  #   enable = true;
-  #   enableIPv6 = true;
-  #   internalInterfaces = ["microvm"];
-  # };
-  # networking.firewall.trustedInterfaces = ["tailscale0" "microvm"];
   networking.firewall.trustedInterfaces = ["tailscale0"];
 
   systemd.network = {
     enable = true;
-    # netdevs = {
-    #   "10-microvm".netdevConfig = {
-    #     Kind = "bridge";
-    #     Name = "microvm";
-    #   };
-    # };
     networks = {
       "10-wan" = {
         ## udevadm test-builtin net_id /sys/class/net/eth0
@@ -188,22 +153,6 @@
         ];
         linkConfig.RequiredForOnline = "routable";
       };
-      # "10-microvm" = {
-      #   matchConfig.Name = "microvm";
-      #   networkConfig = {
-      #     DHCPServer = true;
-      #     IPv6SendRA = true;
-      #   };
-      #   addresses = [
-      #     {
-      #       Address = "10.100.1.1/24";
-      #     }
-      #   ];
-      # };
-      # "11-microvm" = {
-      #   matchConfig.Name = "vm-*";
-      #   networkConfig.Bridge = "microvm";
-      # };
     };
   };
 
@@ -293,11 +242,6 @@
     syncthing-key = {
       rekeyFile = ../../../secrets/${hostName}/syncthing-key.age;
       owner = "${toString adminUser.uid}";
-    };
-    ssh_host_microvm_ed25519_key = {
-      rekeyFile = ../../../secrets/ssh_host_microvm_ed25519_key.age;
-      path = "/var/lib/microvm-secrets/ssh_host_ed25519_key";
-      symlink = false;
     };
     ssh_host_icarus_ed25519_key = {
       rekeyFile = ../../../secrets/icarus/id_ed25519_host_key.age;
@@ -746,10 +690,7 @@
         devices = [
           "antares"
           "eris"
-          "hyperion"
-          "sirius"
           "s8plus"
-          "titan"
           "cygnus"
           "z6fold"
         ];
@@ -760,7 +701,6 @@
           "antares"
           "eris"
           "cygnus"
-          "sirius"
         ];
         versioning.type = "staggered";
         versioning.params.cleanInterval = "3600";

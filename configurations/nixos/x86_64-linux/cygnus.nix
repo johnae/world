@@ -50,7 +50,7 @@
   services.resolved = {
     enable = true;
     ## have fallbacks in case something is wrong
-    fallbackDns = ["9.9.9.9" "149.112.112.112" "2620:fe::fe" "2620:fe::9"];
+    settings.Resolve.FallbackDNS = ["9.9.9.9" "149.112.112.112" "2620:fe::fe" "2620:fe::9"];
     ## for some reason, systemd-resolved thinks upstream doesn't respond sometimes
     ## so we need to disable caching negative responses (plus some other stuff)
     ## again - this is about using tailscale dns only
@@ -146,13 +146,9 @@
         id = "sync";
         devices = [
           "eris"
-          "hyperion"
           "icarus"
           "neptune"
-          "orion"
           "s8plus"
-          "sirius"
-          "titan"
           "z6fold"
         ];
       };
@@ -160,8 +156,6 @@
         id = "pictures";
         devices = [
           "eris"
-          "orion"
-          "sirius"
         ];
       };
       folders."/home/${adminUser.name}/Photos" = {
@@ -170,8 +164,6 @@
           "eris"
           "icarus"
           "neptune"
-          "orion"
-          "sirius"
           "z6fold"
         ];
         versioning.type = "staggered";

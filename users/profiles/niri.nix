@@ -6,7 +6,7 @@
   ...
 }: let
   xcursor_theme = config.gtk.cursorTheme.name;
-  noctalia = inputs.noctalia.packages.${pkgs.system}.default;
+  noctalia = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
   noctaliaIPC = "${noctalia}/bin/noctalia-shell ipc call";
 
   noctaliaInit = pkgs.writeShellApplication {
@@ -98,20 +98,10 @@ in {
         command = "${pkgs.niri-unstable}/bin/niri msg action power-off-monitors";
       }
     ];
-    events = [
-      {
-        event = "before-sleep";
-        command = "${noctaliaIPC} lockScreen lock";
-      }
-      {
-        event = "after-resume";
-        command = "${noctaliaIPC} lockScreen lock";
-      }
-      {
-        event = "after-resume";
-        command = "${pkgs.niri-unstable}/bin/niri msg action power-on-monitors";
-      }
-    ];
+    events = {
+      before-sleep = "${noctaliaIPC} lockScreen lock";
+      after-resume = "${noctaliaIPC} lockScreen lock && ${pkgs.niri-unstable}/bin/niri msg action power-on-monitors";
+    };
   };
 
   programs.niri.package = pkgs.niri-unstable;

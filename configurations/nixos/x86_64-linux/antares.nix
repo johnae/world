@@ -100,11 +100,7 @@
         devices = [
           "eris"
           "icarus"
-          "sirius"
-          "orion"
           "cygnus"
-          "titan"
-          "hyperion"
           "s8plus"
           "z6fold"
         ];
@@ -113,8 +109,6 @@
         id = "pictures";
         devices = [
           "eris"
-          "orion"
-          "sirius"
           "cygnus"
         ];
       };
@@ -123,8 +117,6 @@
         devices = [
           "eris"
           "icarus"
-          "orion"
-          "sirius"
           "cygnus"
           "z6fold"
         ];

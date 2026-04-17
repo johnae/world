@@ -77,9 +77,6 @@
     kured.flake = false;
     kured.url = "github:kubereboot/kured";
     mac-app-util.url = "github:hraban/mac-app-util";
-    microvm.url = "github:astro/microvm.nix";
-    microvm.inputs.flake-utils.follows = "flake-utils";
-    microvm.inputs.nixpkgs.follows = "nixpkgs";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
     monet-el.flake = false;
     monet-el.url = "github:stevemolitor/monet";

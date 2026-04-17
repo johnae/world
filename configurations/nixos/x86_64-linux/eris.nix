@@ -55,40 +55,13 @@
   };
 
   networking.useDHCP = false;
-  networking.nat = {
-    enable = true;
-    enableIPv6 = true;
-    internalInterfaces = ["microvm"];
-  };
   systemd.network = {
     enable = true;
     wait-online.anyInterface = true;
-    netdevs = {
-      "10-microvm".netdevConfig = {
-        Kind = "bridge";
-        Name = "microvm";
-      };
-    };
     networks = {
       "10-lan" = {
         matchConfig.Name = ["enp*" "wlan*" "wlp*"];
         networkConfig.DHCP = "ipv4";
-      };
-      "10-microvm" = {
-        matchConfig.Name = "microvm";
-        networkConfig = {
-          DHCPServer = true;
-          IPv6SendRA = true;
-        };
-        addresses = [
-          {
-            Address = "10.100.100.1/24";
-          }
-        ];
-      };
-      "11-microvm" = {
-        matchConfig.Name = "vm-*";
-        networkConfig.Bridge = "microvm";
       };
     };
   };
@@ -164,13 +137,9 @@
         devices = [
           "antares"
           "cygnus"
-          "hyperion"
           "icarus"
           "neptune"
-          "orion"
           "s8plus"
-          "sirius"
-          "titan"
           "z6fold"
         ];
       };
@@ -180,8 +149,6 @@
           "antares"
           "cygnus"
           "neptune"
-          "orion"
-          "sirius"
         ];
       };
       folders."/home/${adminUser.name}/Photos" = {
@@ -191,8 +158,6 @@
           "cygnus"
           "icarus"
           "neptune"
-          "orion"
-          "sirius"
           "z6fold"
         ];
 

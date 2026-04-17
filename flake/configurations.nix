@@ -69,7 +69,6 @@
     inputs.jovian.nixosModules.jovian
     inputs.home-manager.nixosModules.home-manager
     inputs.impermanence.nixosModules.impermanence
-    inputs.microvm.nixosModules.host
     inputs.nixpkgs.nixosModules.notDetected
     ../modules/default.nix
   ];
@@ -135,7 +134,6 @@
       inherit name;
       value = withSystem system ({pkgs, ...}:
         makeOverridable darwinSystem {
-          inherit system;
           specialArgs = {
             hostName = name;
             tailnet = "tail68e9c";
@@ -171,7 +169,6 @@
       inherit name;
       value = withSystem system ({pkgs, ...}:
         makeOverridable nixosSystem {
-          inherit system;
           specialArgs = {
             hostName = name;
             tailnet = "tail68e9c";
@@ -194,6 +191,7 @@
                 system.configurationRevision = mkIf (self ? rev) self.rev;
                 system.nixos.versionSuffix = mkForce "git.${substring 0 11 inputs.nixpkgs.rev}";
                 nixpkgs.pkgs = pkgs;
+                nixpkgs.hostPlatform = system;
                 environment.systemPackages = [
                   pkgs.world
                   inputs.noctalia.packages.${system}.default

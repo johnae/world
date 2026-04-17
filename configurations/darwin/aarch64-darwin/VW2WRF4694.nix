@@ -89,7 +89,7 @@
 
   fonts.packages = with pkgs; [
     emacs-all-the-icons-fonts
-    etBook
+    et-book
     font-awesome_5
     google-fonts
     powerline-fonts

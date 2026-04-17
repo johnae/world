@@ -36,12 +36,12 @@ in {
 
     github-actions-host-matrix-x86-64-linux = {
       os = ["ubuntu-latest"];
-      host = mapAttrsToList (name: _: name) (filterAttrs (_: config: config.pkgs.system == "x86_64-linux") self.nixosConfigurations);
+      host = mapAttrsToList (name: _: name) (filterAttrs (_: config: config.pkgs.stdenv.hostPlatform.system == "x86_64-linux") self.nixosConfigurations);
     };
 
     github-actions-host-matrix-aarch64-linux = {
       os = ["ubuntu-latest"];
-      host = mapAttrsToList (name: _: name) (filterAttrs (_: config: config.pkgs.system == "aarch64-linux") self.nixosConfigurations);
+      host = mapAttrsToList (name: _: name) (filterAttrs (_: config: config.pkgs.stdenv.hostPlatform.system == "aarch64-linux") self.nixosConfigurations);
     };
   };
 }

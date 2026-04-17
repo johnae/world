@@ -36,15 +36,9 @@ in {
         command = "${swaylockEffects}/bin/swaylock-effects";
       }
     ];
-    events = [
-      {
-        event = "before-sleep";
-        command = "${swaylockEffects}/bin/swaylock-effects";
-      }
-      {
-        event = "lock";
-        command = "${swaylockEffects}/bin/swaylock-effects";
-      }
-    ];
+    events = {
+      before-sleep = "${swaylockEffects}/bin/swaylock-effects";
+      lock = "${swaylockEffects}/bin/swaylock-effects";
+    };
   };
 }

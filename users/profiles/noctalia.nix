@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (config.home) homeDirectory;
-  noctalia = "${inputs.noctalia.packages.${pkgs.system}.default}/bin/noctalia-shell";
+  noctalia = "${inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/noctalia-shell";
 in {
   home.packages = [
     pkgs.matugen

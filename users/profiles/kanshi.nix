@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  noctalia = inputs.noctalia.packages.${pkgs.system}.default;
+  noctalia = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
   setWallpaper = pkgs.writeShellApplication {
     name = "set-wallpaper";
     text = ''
