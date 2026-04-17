@@ -84,6 +84,7 @@
         ".config/gcloud"
         ".config/github-copilot"
         ".config/Mattermost"
+        ".config/Moonlight Game Streaming Project"
         ".config/Microsoft"
         ".config/obs-studio"
         ".config/qutebrowser"

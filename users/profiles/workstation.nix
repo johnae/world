@@ -38,6 +38,7 @@ in {
     kanshi
     lswt
     mako
+    moonlight-qt
     nautilus
     nordic
     playerctl
