@@ -32,6 +32,7 @@
   rekeyConfig = {
     age.rekey.masterIdentities = [
       ../secrets/yubikey-identity-1.pub
+      ../secrets/yubikey-identity-2.pub
     ];
     age.rekey.extraEncryptionPubkeys = [
       "age1yubikey1qt7cjux5unxcsrw9dnkq8qsh0jgnwwvxzxm2jn2pxetjchtclmlk6xvpckq"
