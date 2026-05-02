@@ -14,6 +14,7 @@
   jovian.steam.enable = true;
   jovian.steam.autoStart = true;
   jovian.steam.user = adminUser.name;
+  jovian.steam.desktopSession = "gamescope-wayland";
   jovian.hardware.has.amd.gpu = true;
 
   ephemeralRoot = true;
