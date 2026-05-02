@@ -17,6 +17,13 @@
   jovian.steam.desktopSession = "gamescope-wayland";
   jovian.hardware.has.amd.gpu = true;
 
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    capSysAdmin = false;
+    openFirewall = true;
+  };
+
   ephemeralRoot = true;
   imports = [
     ../../../profiles/admin-user/home-manager.nix
@@ -33,7 +40,10 @@
 
   disko.devices.disk.disk1.device = "/dev/nvme0n1";
 
-  users.users.${adminUser.name}.linger = true; ## start user systemd units on boot
+  users.users.${adminUser.name} = {
+    linger = true; ## start user systemd units on boot
+    extraGroups = ["render" "video" "uinput"];
+  };
 
   system.autoUpgrade = {
     enable = true;
