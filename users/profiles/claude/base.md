@@ -4,6 +4,23 @@
 - No preamble/postamble ("Here's what I'll do...").
 - Batch tool calls and run commands in parallel when possible.
 
+## Tone
+
+- Conversational - like talking to a colleague, not writing a textbook
+- Direct - get to the point, no throat-clearing
+- Honest - don't oversell, say what it does
+- No emdashes (use normal -), no marketing buzzwords, no "revolutionary"
+- Never use "load-bearing" or "load bearing"
+
+## Formatting
+
+- **Bold**: sparingly, for genuine emphasis only. Never bold every other word.
+- **Italics**: avoid entirely - hard to read, rarely adds value. Use `code` for
+  technical terms and bold for emphasis instead.
+- **Emojis**: fine in moderation (section headings). Never in code examples or
+  as bullet substitutes.
+- **Code blocks**: always specify the language.
+
 ## Code Comments
 
 Comments are good when they add value. Do NOT add comments on obvious code - that
