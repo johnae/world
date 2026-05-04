@@ -1,21 +1,11 @@
 These rules apply to all written content: READMEs, docs, walkthroughs, blog posts.
 
-## Tone
-
-- Conversational - like talking to a colleague, not writing a textbook
-- Direct - get to the point, no throat-clearing
-- Honest - don't oversell, say what it does
-- No emdashes (use normal -), no marketing buzzwords, no "revolutionary"
+General tone and formatting rules live in `base.md` and apply universally; this
+file covers prose-specific concerns.
 
 ## Formatting
 
-- **Bold**: sparingly, for genuine emphasis only. Never bold every other word.
-- **Italics**: avoid entirely - hard to read, rarely adds value. Use `code` for
-  technical terms and bold for emphasis instead.
-- **Emojis**: fine in moderation (section headings). Never in code examples or
-  as bullet substitutes.
 - **Line length**: 80-100 chars (except URLs and code blocks).
-- **Code blocks**: always specify the language.
 
 ## READMEs
 
