@@ -49,6 +49,7 @@
   # Allow sudo credential caching across TTYs (useful for Zellij panes, etc.)
   security.sudo.extraConfig = ''
     Defaults !tty_tickets
+    Defaults timestamp_timeout=20
   '';
   services.gnome.gnome-keyring.enable = true;
 
