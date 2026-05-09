@@ -90,6 +90,7 @@
         ".config/qutebrowser"
         ".config/shotwell"
         ".config/Slack"
+        ".config/sunshine"
         ".config/teams-for-linux"
         ".emacs.d"
         ".claude"
