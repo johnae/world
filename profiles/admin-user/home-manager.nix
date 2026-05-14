@@ -5,12 +5,16 @@
   pkgs,
   ...
 }: {
-  # Grant admin user read access to SSH host key for HM agenix decryption
+  # Grant admin user read access to SSH host key for HM agenix decryption.
+  # The `x` ACL on the dir is needed for path traversal; without it the file
+  # ACL is unreachable. Some hosts ship /etc/ssh as 0700.
   systemd.tmpfiles.rules =
     [
+      "a+ /etc/ssh - - - - u:${adminUser.name}:x"
       "a+ /etc/ssh/ssh_host_ed25519_key - - - - u:${adminUser.name}:r"
     ]
     ++ lib.optionals config.ephemeralRoot [
+      "a+ /keep/etc/ssh - - - - u:${adminUser.name}:x"
       "a+ /keep/etc/ssh/ssh_host_ed25519_key - - - - u:${adminUser.name}:r"
     ];
 
