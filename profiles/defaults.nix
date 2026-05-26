@@ -133,8 +133,6 @@ in {
 
   programs.fish.enable = true;
 
-  programs.command-not-found.dbPath = "${./..}/programs.sqlite";
-
   security.sudo.extraConfig = ''
     Defaults  lecture="never"
   '';

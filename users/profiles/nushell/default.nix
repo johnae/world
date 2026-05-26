@@ -79,9 +79,6 @@ in {
               "zellij"
             ]
           )
-          ++ [
-            "use ${nu-scripts}/custom-completions/yarn/yarn-v4-completions.nu"
-          ]
           ++ (
             map (module_path: "source ${nu-scripts}/modules/${module_path}") [
               #              "argx/mod.nu"
@@ -92,8 +89,6 @@ in {
           )
         )
       }
-
-      use ${nu-scripts}/custom-completions/yarn/yarn-v4-completions.nu
     '';
   };
   home.file."${configDir}/starship.nu".source = ./starship.nu;
