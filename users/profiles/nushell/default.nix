@@ -6,6 +6,9 @@
 }: let
   inherit (config) home;
   nu-scripts = "${pkgs.nu_scripts}/share/nu_scripts";
+  devenvHook = pkgs.runCommand "devenv-hook.nu" {} ''
+    ${pkgs.devenv}/bin/devenv hook nu > $out
+  '';
   configDir =
     if pkgs.stdenv.isDarwin && !config.xdg.enable
     then "Library/Application Support/nushell"
@@ -17,6 +20,7 @@
 in {
   home.packages = [
     pkgs.jwt-cli ## see env.nu for impl
+    pkgs.devenv ## devenv hook (sourced below) shells out to `devenv` at runtime
   ];
   programs.atuin.enable = false; ## disable for now
   programs.atuin.settings = {
@@ -42,6 +46,8 @@ in {
         ''
         else ""
       }
+
+      source ${devenvHook}
 
       $env.config.hooks.pre_prompt ++= [
        {
