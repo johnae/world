@@ -243,6 +243,12 @@
             bind "Alt ]" { NextSwapLayout; }
             bind "Alt p" { TogglePaneInGroup; }
             bind "Alt Shift p" { ToggleGroupMarking; }
+            bind "Ctrl y" {
+                LaunchOrFocusPlugin "file:${pkgs.zj-which-key}/share/zellij/plugins/zj_which_key.wasm" {
+                    floating true
+                    role "browser"
+                }
+            }
         }
         shared_except "normal" "locked" {
             bind "Enter" "Esc" { SwitchToMode "Normal"; }
@@ -285,9 +291,10 @@
         plugin-manager location="zellij:plugin-manager"
         about location="zellij:about"
         zj-which-key location="file:${pkgs.zj-which-key}/share/zellij/plugins/zj_which_key.wasm" {
-            auto_show_on_mode_change "true"
-            hide_in_base_mode "true"
-            max_lines "20"
+            auto_show "true"
+            delay_secs "0.4"
+            position "bottom-right"
+            max_height_pct "40"
         }
     }
 
