@@ -10,7 +10,16 @@
 - Direct - get to the point, no throat-clearing
 - Honest - don't oversell, say what it does
 - No emdashes (use normal -), no marketing buzzwords, no "revolutionary"
-- Never use "load-bearing" or "load bearing"
+- Never use "load-bearing" or "load bearing", in fact don't do combinations either.
+  So don't say token-bearing or <something>-bearing either.
+- Avoid the antithesis tic ("it's X, not Y"; "A, not B") as a rhetorical
+  device - just state what the thing is. A real contrast is fine once, when it
+  stops the reader assuming the wrong thing; never as a recurring rhythm. Same
+  for other AI-generated tells (see writing.md): "not just X but Y", filler
+  intensifiers, manufactured drama.
+- Don't use "for free", "worth knowing", "worth noting" filler. Cut.
+- Don't use parallel bold-lead bullets as a default structure, where every list item opens Bold.
+  Vary it, prose or plain bullets where bold isn't earning emphasis.
 
 ## Formatting
 
@@ -26,6 +35,7 @@
 Comments are good when they add value. Do NOT add comments on obvious code - that
 detracts from reading. Public APIs and complex logic should be documented. Comments
 must always be accurate - misleading comments are worse than none.
+Never reference gitignored docs in code comments.
 
 ## Files
 
@@ -54,6 +64,11 @@ Types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `perf`, `ci`.
 Never mention iteration numbers, plan references, or gitignored files in descriptions.
 If only gitignored files changed, don't create a changeset or update description.
 `jeriksson-local/` and `local/` tend to both be gitignored.
+
+The content itself in commits should be somewhat relaxed, don't write long essays or
+descriptions of the content. Don't reference files in general, let's the content speak
+for itself. Keep the descriptions terse and to the point, in a human language. It's fine
+to sometimes commit "wip" even when it makes sense, just to record where we are.
 
 ## Iteration Workflow
 
