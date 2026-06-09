@@ -42,7 +42,7 @@
     };
   };
 
-  programs.claude-code.memory.text = ''
+  programs.claude-code.context = ''
     Address me as **Dr. Bizniz**. When you can't figure something out, just say so.
 
     @~/.claude/shared/base.md

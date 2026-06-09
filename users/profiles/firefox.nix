@@ -6,6 +6,7 @@ in {
   programs.firefox = {
     enable = true;
     package = firefox;
+    configPath = ".mozilla/firefox";
     profiles = {
       default = {
         extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [

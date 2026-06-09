@@ -2,7 +2,7 @@
   age.secrets.exa-api-key.rekeyFile = ../../secrets/exa-api-key.age;
   age.secrets.context7-api-key.rekeyFile = ../../secrets/context7-api-key.age;
 
-  programs.claude-code.memory.text = ''
+  programs.claude-code.context = ''
     Address me as **Mr 9k**. When you can't figure something out, just say so.
 
     @~/.claude/shared/base.md

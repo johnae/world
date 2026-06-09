@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{config, ...}: let
   inherit (config.home) homeDirectory;
 in {
   programs.ssh = {
@@ -11,34 +7,30 @@ in {
     extraConfig = ''
       Include ${homeDirectory}/.ssh/config.d/*.conf
     '';
-    matchBlocks = {
+    settings = {
       "*" = {
-        controlPersist = "30m";
-        controlMaster = "auto";
-        controlPath = "~/.ssh/master-%r@%n:%p";
-        serverAliveInterval = 60;
-        serverAliveCountMax = 3;
-        hashKnownHosts = false;
-        forwardAgent = true;
-        addKeysToAgent = "no";
-        compression = false;
+        ControlPersist = "30m";
+        ControlMaster = "auto";
+        ControlPath = "~/.ssh/master-%r@%n:%p";
+        ServerAliveInterval = 60;
+        ServerAliveCountMax = 3;
+        HashKnownHosts = false;
+        ForwardAgent = true;
+        AddKeysToAgent = "no";
+        Compression = false;
       };
       "*.compute.amazonaws.com" = {
-        forwardAgent = false;
-        extraOptions = {
-          strictHostKeyChecking = "no";
-          userKnownHostsFile = "/dev/null";
-        };
+        ForwardAgent = false;
+        StrictHostKeyChecking = "no";
+        UserKnownHostsFile = "/dev/null";
       };
       "github github.com" = {
-        hostname = "github.com";
-        user = "git";
-        forwardAgent = false;
-        extraOptions = {
-          preferredAuthentications = "publickey";
-          controlMaster = "no";
-          controlPath = "none";
-        };
+        HostName = "github.com";
+        User = "git";
+        ForwardAgent = false;
+        PreferredAuthentications = "publickey";
+        ControlMaster = "no";
+        ControlPath = "none";
       };
     };
   };
