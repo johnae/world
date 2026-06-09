@@ -5,221 +5,81 @@
   ...
 }: let
   inherit (config.home) homeDirectory;
-  noctalia = "${inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/noctalia-shell";
+  wallpaper = "${homeDirectory}/Sync/wallpapers/wallpapersden.com_76694-7680x4320.jpg";
 in {
-  home.packages = [
-    pkgs.matugen
-  ];
-  systemd.user.services.noctalia = {
-    Unit.Description = "Noctalia Wayland Shell";
-    Unit.PartOf = "graphical-session.target";
-    Unit.After = "graphical-session.target";
-    Unit.ConditionEnvironment = "WAYLAND_DISPLAY";
-    Install.WantedBy = ["graphical-session.target"];
-    Service.ExecStart = noctalia;
-  };
+  # noctalia's screen recorder invokes this from PATH
+  home.packages = [pkgs.gpu-screen-recorder];
 
-  programs.noctalia-shell = {
+  programs.noctalia = {
     enable = true;
+    package = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    systemd.enable = true;
     settings = {
-      settingsVersion = 15;
-      bar = {
-        position = "top";
-        backgroundOpacity = 0.9;
-        monitors = [];
-        density = "comfortable";
-        showCapsule = true;
-        floating = false;
-        marginVertical = 0.25;
-        marginHorizontal = 0.25;
-        widgets = {
-          left = [
-            {
-              id = "SystemMonitor";
-            }
-            {
-              id = "ActiveWindow";
-            }
-            {
-              id = "MediaMini";
-            }
-          ];
-          center = [
-            {
-              id = "Workspace";
-            }
-          ];
-          right = [
-            {
-              id = "KeepAwake";
-            }
-            {
-              id = "ScreenRecorder";
-            }
-            {
-              id = "Tray";
-            }
-            {
-              id = "NotificationHistory";
-            }
-            {
-              id = "WiFi";
-            }
-            {
-              id = "Bluetooth";
-            }
-            {
-              id = "Battery";
-            }
-            {
-              id = "Volume";
-            }
-            {
-              id = "Brightness";
-            }
-            {
-              id = "Clock";
-            }
-            {
-              id = "ControlCenter";
-            }
-          ];
+      bar.default = {
+        background_opacity = 0.65;
+        font_weight = 400;
+        margin_edge = 0;
+        margin_ends = 0;
+        radius = 0;
+        thickness = 28;
+        end = [
+          "caffeine"
+          "media"
+          "tray"
+          "notifications"
+          "clipboard"
+          "network"
+          "bluetooth"
+          "volume"
+          "brightness"
+          "battery"
+          "control-center"
+          "session"
+        ];
+      };
+      location.auto_locate = true;
+      lockscreen_widgets = {
+        enabled = false;
+        schema_version = 2;
+        widget_order = ["lockscreen-login-box@DP-1"];
+        grid = {
+          cell_size = 16;
+          major_interval = 4;
+          visible = true;
+        };
+        widget."lockscreen-login-box@DP-1" = {
+          box_height = 0.0;
+          box_width = 0.0;
+          cx = 1536.0;
+          cy = 1605.0;
+          output = "DP-1";
+          rotation = 0.0;
+          type = "login_box";
         };
       };
-      general = {
-        avatarImage = "/home/john/Sync/28332.jpeg";
-        dimDesktop = true;
-        showScreenCorners = true;
-        forceBlackScreenCorners = false;
-        radiusRatio = 1;
-        screenRadiusRatio = 1;
-        animationSpeed = 1.1;
-        animationDisabled = false;
+      nightlight.enabled = true;
+      shell = {
+        avatar_path = "${homeDirectory}/Sync/Bilder-9000/mattiashamren_9000-ab-john-eriksson_2024-01-08_0952/9000 AB, John Eriksson/Web - JPEG small sRGB/John-Eriksson-cropped.jpg";
+        niri_overview_type_to_launch_enabled = true;
+        panel.transparency_mode = "glass";
+        screen_corners = {
+          enabled = true;
+          size = 16;
+        };
+        shadow.direction = "down_right";
       };
-      location = {
-        name = "Stockholm";
-        useFahrenheit = false;
-        use12hourFormat = false;
-        showWeekNumberInCalendar = true;
-      };
-      screenRecorder = {
-        directory = "/home/john/Videos";
-        frameRate = 60;
-        audioCodec = "opus";
-        videoCodec = "h264";
-        quality = "very_high";
-        colorRange = "limited";
-        showCursor = true;
-        audioSource = "default_output";
-        videoSource = "portal";
+      theme = {
+        builtin = "Nord";
+        community_palette = "Miasma";
+        templates = {
+          enable_builtin_templates = false;
+          enable_community_templates = false;
+        };
       };
       wallpaper = {
-        enabled = true;
-        directory = "${homeDirectory}/Sync/wallpapers";
-        enableMultiMonitorDirectories = false;
-        setWallpaperOnAllMonitors = true;
-        defaultWallpaper = "";
-        fillMode = "crop";
-        fillColor = "#000000";
-        randomEnabled = true;
-        randomIntervalSec = 300;
-        transitionDuration = 1500;
-        transitionType = "random";
-        transitionEdgeSmoothness = 0.05;
-        monitors = [];
-      };
-      appLauncher = {
-        enableClipboardHistory = true;
-        position = "center";
-        backgroundOpacity = 1;
-        pinnedExecs = [];
-        useApp2Unit = false;
-        sortByMostUsed = true;
-        terminalCommand = "wezterm start --always-new-process";
-      };
-      controlCenter = {
-        position = "close_to_bar_button";
-      };
-      dock = {
-        enabled = false;
-        displayMode = "always_visible";
-        backgroundOpacity = 1;
-        floatingRatio = 1;
-        onlySameOutput = true;
-        monitors = [];
-        pinnedApps = [];
-      };
-      network = {
-        wifiEnabled = true;
-      };
-      notifications = {
-        doNotDisturb = false;
-        monitors = [];
-        location = "top_right";
-        alwaysOnTop = true;
-        lastSeenTs = 0;
-        respectExpireTimeout = false;
-        lowUrgencyDuration = 3;
-        normalUrgencyDuration = 8;
-        criticalUrgencyDuration = 15;
-      };
-      osd = {
-        enabled = true;
-        location = "top_right";
-        monitors = [];
-        autoHideMs = 2000;
-      };
-      audio = {
-        volumeStep = 5;
-        volumeOverdrive = false;
-        cavaFrameRate = 60;
-        visualizerType = "linear";
-        mprisBlacklist = [];
-        preferredPlayer = "";
-      };
-      ui = {
-        fontDefault = "Roboto";
-        fontFixed = "DejaVu Sans Mono";
-        fontDefaultScale = 1;
-        fontFixedScale = 1;
-        monitorsScaling = [];
-        idleInhibitorEnabled = false;
-        tooltipsEnabled = true;
-      };
-      brightness = {
-        brightnessStep = 5;
-      };
-      colorSchemes = {
-        useWallpaperColors = true;
-        predefinedScheme = "Noctalia (default)";
-        darkMode = true;
-        matugenSchemeType = "scheme-expressive";
-        generateTemplatesForPredefined = true;
-      };
-      templates = {
-        gtk = false;
-        qt = false;
-        kitty = false;
-        ghostty = false;
-        foot = false;
-        fuzzel = false;
-        vesktop = false;
-        pywalfox = false;
-        enableUserTemplates = false;
-      };
-      nightLight = {
-        enabled = true;
-        forced = false;
-        autoSchedule = true;
-        nightTemp = "4000";
-        dayTemp = "6500";
-        manualSunrise = "06:30";
-        manualSunset = "18:30";
-      };
-      hooks = {
-        enabled = false;
-        wallpaperChange = "";
-        darkModeChange = "";
+        default.path = wallpaper;
+        last.path = wallpaper;
+        monitors.DP-1.path = wallpaper;
       };
     };
   };

@@ -8,7 +8,7 @@
     name = "set-wallpaper";
     text = ''
       sleep 4
-      ${noctalia}/bin/noctalia-shell ipc call wallpaper random
+      ${noctalia}/bin/noctalia msg wallpaper-random
     '';
   };
   exec = "${setWallpaper}/bin/set-wallpaper";
@@ -156,6 +156,21 @@ in {
             criteria = "BOE NE135A1M-NY1 Unknown";
             mode = "2880x1920@120.000Hz";
             position = "219,2160";
+            scale = 1.0;
+          }
+        ];
+      };
+    }
+
+    {
+      profile = {
+        inherit exec;
+        name = "odyssey";
+        outputs = [
+          {
+            criteria = "Samsung Electric Company Odyssey G80SD H1AK500000";
+            mode = "3840x2160@119.880Hz";
+            position = "0,0";
             scale = 1.0;
           }
         ];
