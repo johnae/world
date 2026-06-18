@@ -63,10 +63,7 @@
           else pkgs.hello;
         wezterm =
           if pkgs.stdenv.isLinux
-          then
-            inputs.wezterm.packages.${system}.default.overrideAttrs (oa: {
-              patches = [../files/7034-wezterm.patch];
-            })
+          then inputs.wezterm.packages.${system}.default
           else
             inputs.wezterm.packages.${system}.default.overrideAttrs (oa: {
               buildInputs = oa.buildInputs ++ [pkgs.openssl];

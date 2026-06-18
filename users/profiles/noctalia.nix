@@ -22,6 +22,16 @@ in {
         margin_ends = 0;
         radius = 0;
         thickness = 28;
+        start = [
+          "launcher"
+          "wallpaper"
+          "workspaces"
+          "spacer_2"
+          "network_rx"
+          "network_tx"
+          "spacer_3"
+          "sysmon"
+        ];
         end = [
           "caffeine"
           "media"
@@ -41,7 +51,10 @@ in {
       lockscreen_widgets = {
         enabled = false;
         schema_version = 2;
-        widget_order = ["lockscreen-login-box@DP-1"];
+        widget_order = [
+          "lockscreen-login-box@eDP-1"
+          "lockscreen-login-box@DP-1"
+        ];
         grid = {
           cell_size = 16;
           major_interval = 4;
@@ -53,6 +66,15 @@ in {
           cx = 1536.0;
           cy = 1605.0;
           output = "DP-1";
+          rotation = 0.0;
+          type = "login_box";
+        };
+        widget."lockscreen-login-box@eDP-1" = {
+          box_height = 0.0;
+          box_width = 0.0;
+          cx = 1440.0;
+          cy = 1797.0;
+          output = "eDP-1";
           rotation = 0.0;
           type = "login_box";
         };
@@ -77,9 +99,23 @@ in {
         };
       };
       wallpaper = {
+        directory = "${homeDirectory}/Sync/wallpapers";
+        # Seed shown at startup before automation picks one. Also the fallback
+        # for any monitor without its own entry (covers eDP-1 and ad-hoc displays).
         default.path = wallpaper;
-        last.path = wallpaper;
-        monitors.DP-1.path = wallpaper;
+        automation = {
+          enabled = true;
+          order = "random";
+          interval_seconds = 1800;
+        };
+      };
+      widget = {
+        bongocat = {
+          script = "scripts/bongocat.lua";
+          type = "scripted";
+        };
+        spacer_2.type = "spacer";
+        spacer_3.type = "spacer";
       };
     };
   };
