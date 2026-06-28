@@ -277,6 +277,10 @@ in {
       # "Mod+D".action.spawn = "fuzzel";
       "Mod+D".action.spawn-sh = "${noctaliaIPC} panel-toggle launcher";
       "Super+Alt+L".action.spawn-sh = "${noctaliaIPC} session lock";
+      # Lock and immediately blank the screen; monitors wake on any input,
+      # landing on the lock screen. The short sleep lets the lock surface draw
+      # before powering off so the wake shows the lock screen cleanly.
+      "Super+Alt+P".action.spawn-sh = "${noctaliaIPC} session lock && sleep 0.3 && ${pkgs.niri-unstable}/bin/niri msg action power-off-monitors";
       "XF86AudioRaiseVolume" = {
         action.spawn = ["wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"];
         allow-when-locked = true;
