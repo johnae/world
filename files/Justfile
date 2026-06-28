@@ -391,7 +391,18 @@ remote-install-hetzner flake-config ssh-host encrypt-disk="yes" precmd="":
 
 [private]
 rekey:
-  agenix rekey -a
+  #!/usr/bin/env nu
+  # Decrypt with only the YubiKey that's currently connected, so rekey doesn't
+  # block waiting for an absent master key (age tries master identities in order
+  # and age-plugin-yubikey hangs on the first one's serial if it's not present).
+  let connected = (^age-plugin-yubikey --list | lines | where ($it | str starts-with "age1yubikey"))
+  if ($connected | is-empty) {
+    agenix rekey -a
+  } else {
+    with-env {AGENIX_REKEY_PRIMARY_IDENTITY: ($connected | first), AGENIX_REKEY_PRIMARY_IDENTITY_ONLY: "true"} {
+      agenix rekey -a
+    }
+  }
 
 [private]
 echo +args:
