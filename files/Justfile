@@ -32,7 +32,7 @@ gc:
   @nix-collect-garbage -d
 
 cachix +args:
-  with-env [CACHIX_SIGNING_KEY (rbw get cachix)] { cachix push insane {{args}} }
+  with-env {CACHIX_SIGNING_KEY: (rbw get cachix)} { cachix push insane {{args}} }
 
 # upgrade the system using given flake ref
 [macos]
