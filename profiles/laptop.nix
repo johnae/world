@@ -14,6 +14,18 @@
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend-then-hibernate";
   };
+
+  # Lock graphical sessions before sleeping so a lid-close/suspend resumes to the
+  # lock screen. The locker (noctalia) locks on logind's session Lock signal.
+  systemd.services.lock-before-sleep = {
+    description = "Lock sessions before sleep";
+    before = ["sleep.target"];
+    wantedBy = ["sleep.target"];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.systemd}/bin/loginctl lock-sessions";
+    };
+  };
   services.disable-usb-wakeup.enable = true;
   hardware.acpilight.enable = true;
   services.upower.enable = true;

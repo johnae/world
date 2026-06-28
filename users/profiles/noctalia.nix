@@ -48,6 +48,24 @@ in {
         ];
       };
       location.auto_locate = true;
+      # noctalia's own idle daemon (replaces swayidle). Lock on idle, then blank
+      # the displays a few minutes later; any input runs dpms-on and the
+      # compositor wakes the monitors onto the lock screen. screen-off is an
+      # absolute idle timeout, so a manual lock (Super+P -> Lock) blanks ~5 min
+      # later since locking is your last input.
+      idle.behavior = {
+        lock = {
+          enabled = true;
+          timeout = 180;
+          command = "noctalia:session lock";
+        };
+        "screen-off" = {
+          enabled = true;
+          timeout = 300;
+          command = "noctalia:dpms-off";
+          resume_command = "noctalia:dpms-on";
+        };
+      };
       lockscreen_widgets = {
         enabled = false;
         schema_version = 2;

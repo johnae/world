@@ -126,24 +126,6 @@
     }
   '';
 in {
-  services.swayidle = {
-    enable = true;
-    timeouts = [
-      {
-        timeout = 180;
-        command = "${noctaliaIPC} session lock";
-      }
-      {
-        timeout = 180 * 3;
-        command = "${pkgs.niri-unstable}/bin/niri msg action power-off-monitors";
-      }
-    ];
-    events = {
-      before-sleep = "${noctaliaIPC} session lock";
-      after-resume = "${noctaliaIPC} session lock && ${pkgs.niri-unstable}/bin/niri msg action power-on-monitors";
-    };
-  };
-
   programs.niri.package = pkgs.niri-unstable;
   programs.niri.enable = true;
   home.packages = with pkgs; [
