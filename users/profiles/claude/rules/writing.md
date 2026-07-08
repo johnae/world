@@ -25,6 +25,9 @@ These patterns read as machine-generated. Cut them or rewrite plainly.
 - **Over-hedging then over-asserting** ("It's important to note that X is
   actually quite Y"). State X.
 - Don't over use appeal-to-familiarity "the same A that X/Y/Z uses", "the same shape as A and B".
+- **Pet metaphors on repeat**: "rides the socket", "rides the message", "rides
+  on top of". Never use "rides"; pick a plain verb (uses, goes over, is carried
+  in) and vary it.
 - Don't write long essays over-explaining the "why" in prose. Tigthen it to what a reader needs.
 
 When you catch yourself reaching for emphasis, prefer a concrete example or a

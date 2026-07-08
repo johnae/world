@@ -12,6 +12,9 @@
 - No emdashes (use normal -), no marketing buzzwords, no "revolutionary"
 - Never use "load-bearing" or "load bearing", in fact don't do combinations either.
   So don't say token-bearing or <something>-bearing either.
+- Never say something "rides" something else ("rides the socket", "rides the
+  message", "rides on top of"). Use plain verbs and vary them: uses, goes over,
+  is carried in, piggybacks on, travels via - whatever fits.
 - Avoid the antithesis tic ("it's X, not Y"; "A, not B") as a rhetorical
   device - just state what the thing is. A real contrast is fine once, when it
   stops the reader assuming the wrong thing; never as a recurring rhythm. Same
