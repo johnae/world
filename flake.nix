@@ -51,8 +51,6 @@
     flake-utils.inputs.systems.follows = "systems";
     fluxcd-install.flake = false;
     fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v2.4.0/install.yaml"; # gh-release-update
-    gitignore.url = "github:hercules-ci/gitignore.nix";
-    gitignore.inputs.nixpkgs.follows = "nixpkgs";
     helix-editor.url = "github:helix-editor/helix";
     helix-editor.inputs.nixpkgs.follows = "nixpkgs";
     helix-editor.inputs.rust-overlay.follows = "rust-overlay";
@@ -107,7 +105,6 @@
     persway.inputs.flake-utils.follows = "flake-utils";
     pre-commit-hooks.inputs.flake-compat.follows = "flake-compat";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
-    pre-commit-hooks.inputs.gitignore.follows = "gitignore";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
@@ -147,6 +144,7 @@
   outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
+        flake-parts.flakeModules.touchup
         inputs.agenix-rekey.flakeModule
         ./flake/agenix-rekey.nix
         ./flake/buildkite-pipeline.nix
@@ -160,5 +158,7 @@
         ./flake/setup.nix
       ];
       systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin"];
+      # no formatter is defined; drop the placeholder attr so `nix flake check` passes
+      touchup.attr.formatter.enable = false;
     };
 }

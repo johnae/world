@@ -128,7 +128,7 @@
     home.username = "${adminUser.name}";
     home.homeDirectory = "/Users/${adminUser.name}";
     home.packages = [
-      pkgs.jetbrains.idea-ultimate
+      pkgs.jetbrains.idea
       pkgs.grpcurl
     ];
     imports = [../../../users/profiles/mac.nix];

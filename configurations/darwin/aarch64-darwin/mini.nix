@@ -37,7 +37,6 @@
     ../../../profiles/home-manager.nix
   ];
 
-  services.nix-daemon.enable = true;
 
   homebrew.enable = true;
   homebrew.casks = [
@@ -48,7 +47,7 @@
   #services.karabiner-elements.enable = true; ## doesn't work atm
   system.primaryUser = adminUser.name;
   system.defaults.dock.autohide = true;
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
   system.defaults.trackpad.Clicking = true;
   system.defaults.NSGlobalDomain.AppleInterfaceStyle = "Dark";
   system.defaults.NSGlobalDomain."com.apple.trackpad.scaling" = 3.0;
@@ -175,7 +174,7 @@
     home.username = "${adminUser.name}";
     home.homeDirectory = "/Users/${adminUser.name}";
     home.packages = [
-      pkgs.jetbrains.idea-ultimate
+      pkgs.jetbrains.idea
       pkgs.grpcurl
     ];
     imports = [../../../users/profiles/mac.nix];

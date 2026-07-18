@@ -22,6 +22,7 @@ in {
 
   fileSystems."/nix" = {
     device = "/keep/nix";
+    fsType = "none";
     options = ["bind"];
   };
 

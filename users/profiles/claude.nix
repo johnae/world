@@ -1,14 +1,18 @@
 {pkgs, ...}: let
-  claude-code = pkgs.writeShellApplication {
-    name = "claude";
-    text = ''
-      if [ -e "$HOME/.claude/secrets.sh" ]; then
-        # shellcheck disable=SC1091
-        source "$HOME/.claude/secrets.sh"
-      fi
-      exec ${pkgs.claude-code}/bin/claude "$@"
-    '';
-  };
+  claude-code =
+    pkgs.writeShellApplication {
+      name = "claude";
+      text = ''
+        if [ -e "$HOME/.claude/secrets.sh" ]; then
+          # shellcheck disable=SC1091
+          source "$HOME/.claude/secrets.sh"
+        fi
+        exec ${pkgs.claude-code}/bin/claude "$@"
+      '';
+    }
+    # expose the wrapped package's version so the home-manager module
+    # uses personal plugins instead of the legacy --plugin-dir wrapper
+    // {inherit (pkgs.claude-code) version;};
 in {
   home.file.".claude/shared/base.md".source = ./claude/base.md;
   home.file.".claude/env.sh" = {
