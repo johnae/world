@@ -19,13 +19,11 @@
     ../../../profiles/admin-user/user.nix
     ../../../profiles/disk/disko-btrfs-raid.nix
     ../../../profiles/hardware/b550.nix
-    ../../../profiles/atticd.nix
     ../../../profiles/core-metrics.nix
     ../../../profiles/core-logging.nix
     ../../../profiles/forgejo.nix
     ../../../profiles/home-assistant.nix
     ../../../profiles/home-manager.nix
-    ../../../profiles/minio.nix
     ../../../profiles/restic-backup.nix
     ../../../profiles/server.nix
     ../../../profiles/state.nix
@@ -233,7 +231,6 @@
       mode = "777";
     };
     john-9000-dev-mail.rekeyFile = ../../../secrets/john-9000-dev-mail.age;
-    minio-root-credentials-env.rekeyFile = ../../../secrets/minio-root-credentials-env.age;
     vaultwarden-env.rekeyFile = ../../../secrets/vaultwarden-env.age;
     syncthing-cert = {
       rekeyFile = ../../../secrets/${hostName}/syncthing-cert.age;
@@ -283,15 +280,6 @@
       group = "nginx";
     };
     "ha.9000.dev" = {
-      group = "nginx";
-    };
-    "storage.9000.dev" = {
-      group = "nginx";
-    };
-    "storage-admin.9000.dev" = {
-      group = "nginx";
-    };
-    "cache.9000.dev" = {
       group = "nginx";
     };
   };
@@ -355,24 +343,6 @@
   };
 
   services.cloudflare-tailscale-dns.ha = {
-    enable = true;
-    zone = "9000.dev";
-    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
-  };
-
-  services.cloudflare-tailscale-dns.storage = {
-    enable = true;
-    zone = "9000.dev";
-    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
-  };
-
-  services.cloudflare-tailscale-dns.storage-admin = {
-    enable = true;
-    zone = "9000.dev";
-    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
-  };
-
-  services.cloudflare-tailscale-dns.cache = {
     enable = true;
     zone = "9000.dev";
     cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
@@ -582,77 +552,12 @@
         locations."/".proxyWebsockets = true;
         forceSSL = true;
       };
-
-      "cache.9000.dev" = {
-        useACMEHost = "cache.9000.dev";
-        locations."/" = {
-          proxyPass = "http://localhost:8080";
-          proxyWebsockets = true;
-          extraConfig = ''
-            chunked_transfer_encoding off;
-            client_max_body_size 0;
-            proxy_buffering off;
-            proxy_request_buffering off;
-          '';
-        };
-        forceSSL = true;
-      };
-
-      "storage.9000.dev" = {
-        useACMEHost = "storage.9000.dev";
-        locations."/" = {
-          proxyPass = "http://localhost:9000";
-          proxyWebsockets = true;
-          extraConfig = ''
-            chunked_transfer_encoding off;
-            client_max_body_size 0;
-            proxy_buffering off;
-            proxy_request_buffering off;
-          '';
-        };
-        forceSSL = true;
-      };
-
-      "storage-admin.9000.dev" = {
-        useACMEHost = "storage-admin.9000.dev";
-        locations."/" = {
-          proxyPass = "http://localhost:9001";
-          proxyWebsockets = true;
-          extraConfig = ''
-            chunked_transfer_encoding off;
-            proxy_set_header X-NginX-Proxy true;
-            real_ip_header X-Real-IP;
-            client_max_body_size 0;
-            proxy_buffering off;
-            proxy_request_buffering off;
-          '';
-        };
-        forceSSL = true;
-      };
     };
   };
 
   services.restic = {
     backups = {
       remote = {
-        backupPrepareCommand = "${pkgs.restic}/bin/restic unlock";
-        pruneOpts = [
-          "--keep-daily 10"
-          "--keep-weekly 7"
-          "--keep-monthly 12"
-          "--keep-yearly 75"
-        ];
-        paths = [
-          "/var/lib/vw-backup"
-          "/var/lib/matrix-conduit/backups"
-          "/var/lib/acme"
-          "/var/sieve"
-          "/var/vmail"
-          "/var/dkim"
-          "/var/lib/dovecot"
-        ];
-      };
-      local = {
         backupPrepareCommand = "${pkgs.restic}/bin/restic unlock";
         pruneOpts = [
           "--keep-daily 10"
