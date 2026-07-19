@@ -32,14 +32,19 @@
     ../../../profiles/zram.nix
   ];
 
+  ## paused until the bcachefs root is migrated - upgrades pull in 7.x kernels
+  ## which this machine can't boot
   system.autoUpgrade = {
-    enable = true;
+    enable = false;
     flake = "github:johnae/world";
     allowReboot = true;
     dates = "06:00";
     randomizedDelaySec = "5min";
     enableSentinel = false; ## not running kubernetes here
   };
+
+  ## the bcachefs root won't boot on 7.x kernels, stay on a 6.x LTS
+  boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_18;
 
   boot.kernel = {
     ## for tailscale exit node functionality
