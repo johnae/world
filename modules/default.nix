@@ -6,7 +6,6 @@
     ./home.nix
     ./host-config.nix
     ./innernet.nix
-    ./k3s.nix
     ./my-cloudflared.nix
     ./my-matrix.nix
     ./router.nix
