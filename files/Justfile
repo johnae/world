@@ -53,7 +53,17 @@ upgrade flake="github:johnae/world":
     | first
     | if $in == "nixos" {
       nixos-rebuild boot --flake '{{flake}}' --sudo -L
-      if (echo initrd kernel kernel-modules | all { |it| (readlink $"/run/booted-system/($it)") != (readlink $"/nix/var/nix/profiles/system/($it)") }) { echo "The system must be rebooted for the changes to take effect" } else { nixos-rebuild switch --flake '{{flake}}' --sudo -L }
+      if (echo initrd kernel kernel-modules | all { |it| (readlink $"/run/booted-system/($it)") != (readlink $"/nix/var/nix/profiles/system/($it)") }) {
+        # Kernel/initrd changed: don't switch onto a kernel we aren't running yet.
+        # Still activate Home Manager now so dotfiles and user services update, and
+        # any activation failure surfaces here instead of silently at the next boot
+        # (which is how a failed activation left the desktop bare after a reboot).
+        let hm = (nix build --no-link --print-out-paths $"{{flake}}#nixosConfigurations.(hostname | str trim).config.home-manager.users.($env.USER).home.activationPackage")
+        ^$"($hm)/activate"
+        print "Home Manager activated. The system must be rebooted for the new kernel to take effect."
+      } else {
+        nixos-rebuild switch --flake '{{flake}}' --sudo -L
+      }
     } else {
       home-manager switch --flake '{{flake}}' --impure
     }
