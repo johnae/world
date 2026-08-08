@@ -28,7 +28,7 @@
   in {
     devenv.shells = lib.mapAttrs' (file: _: {
       name = builtins.replaceStrings [".nix"] [""] file;
-      value = import "${../devenv}/${file}" {inherit pkgs lib ansiEscape agenix-rekey-cli;};
+      value = import (../devenv + "/${file}") {inherit pkgs lib ansiEscape agenix-rekey-cli;};
     }) (builtins.readDir ../devenv);
   };
 }
