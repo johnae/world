@@ -8,8 +8,6 @@
     agenix.url = "github:ryantm/agenix";
     agenix-rekey.url = "github:oddlama/agenix-rekey";
     agenix-rekey.inputs.nixpkgs.follows = "nixpkgs";
-    age-plugin-yubikey.flake = false;
-    age-plugin-yubikey.url = "github:str4d/age-plugin-yubikey";
     cachix.url = "github:cachix/cachix";
     cachix.inputs = {
       devenv.follows = "devenv";
@@ -19,8 +17,6 @@
     claude-code-el.flake = false;
     claude-code-el.url = "github:stevemolitor/claude-code.el";
     claude-code.url = "github:sadjow/claude-code-nix";
-    copilot-vim.flake = false;
-    copilot-vim.url = "github:github/copilot.vim";
     tuwunel.inputs = {
       flake-utils.follows = "flake-utils";
       fenix.follows = "fenix";
@@ -30,7 +26,6 @@
     };
     tuwunel.url = "github:matrix-construct/tuwunel";
     crane.url = "github:ipetkov/crane";
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
     devenv.inputs.flake-compat.follows = "flake-compat";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
     devenv.inputs.cachix.follows = "cachix";
@@ -71,11 +66,7 @@
     nix2container.url = "github:nlewo/nix2container";
     nix-github-actions.inputs.nixpkgs.follows = "nixpkgs";
     nix-github-actions.url = "github:zhaofengli/nix-github-actions/matrix-name";
-    nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
-    nixos-generators.url = "github:nix-community/nixos-generators";
     nixos-hardware.url = "github:nixos/nixos-hardware";
-    nixos-images.url = "github:nix-community/nixos-images";
-    nixpkgs-stable-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -91,9 +82,6 @@
     persway.inputs.nix2container.follows = "nix2container";
     persway.inputs.nixpkgs.follows = "nixpkgs";
     persway.inputs.flake-utils.follows = "flake-utils";
-    pre-commit-hooks.inputs.flake-compat.follows = "flake-compat";
-    pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
-    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
     systems.url = "github:nix-systems/default";
