@@ -104,7 +104,7 @@
 
         buildkite-agent-patched = pkgs.buildkite-agent.overrideAttrs (oa: {
           postPatch = ''
-            ${oa.postPatch}
+            ${oa.postPatch or ""}
             substituteInPlace version/version.go --replace 'buildNumber = "x"' 'buildNumber = "123"'
           '';
         });
@@ -116,7 +116,7 @@
           runtimeInputs = with pkgs; [coreutils openssh];
           text = ''
             check_required_vars() {
-                for var in CLOUD_DISK_PASSWORD IP SSH_KEY; do
+                for var in CLOUD_DISK_PASSWORD REMOTE_IP SSH_KEY; do
                     if [ -z "''${!var}" ]; then
                         echo "Missing environment variable $var"
                         exit 1
