@@ -16,13 +16,9 @@
       flake-compat.follows = "flake-compat";
       nixpkgs.follows = "nixpkgs";
     };
-    cilium-chart.url = "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.18.2.tgz";
-    cilium-chart.flake = false;
     claude-code-el.flake = false;
     claude-code-el.url = "github:stevemolitor/claude-code.el";
     claude-code.url = "github:sadjow/claude-code-nix";
-    cloud-native-pg.flake = false;
-    cloud-native-pg.url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.1/cnpg-1.24.1.yaml"; # gh-release-update
     copilot-vim.flake = false;
     copilot-vim.url = "github:github/copilot.vim";
     tuwunel.inputs = {
@@ -49,21 +45,15 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-utils.url = "github:numtide/flake-utils";
     flake-utils.inputs.systems.follows = "systems";
-    fluxcd-install.flake = false;
-    fluxcd-install.url = "https://github.com/fluxcd/flux2/releases/download/v2.4.0/install.yaml"; # gh-release-update
     helix-editor.url = "github:helix-editor/helix";
     helix-editor.inputs.nixpkgs.follows = "nixpkgs";
     helix-editor.inputs.rust-overlay.follows = "rust-overlay";
-    hetzner-csi-driver.flake = false;
-    hetzner-csi-driver.url = "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.10.1/deploy/kubernetes/hcloud-csi.yml"; # gh-release-update
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     impermanence.url = "github:nix-community/impermanence";
     jovian.inputs.nix-github-actions.follows = "nix-github-actions";
     jovian.inputs.nixpkgs.follows = "nixpkgs";
     jovian.url = "github:Jovian-Experiments/Jovian-NixOS";
-    juicefs-csi-driver.flake = false;
-    juicefs-csi-driver.url = "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.25.2/deploy/k8s.yaml"; # gh-release-update
     kubevirt-operator.flake = false;
     kubevirt-operator.url = "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-operator.yaml";
     kubevirt-cr.flake = false;
@@ -72,8 +62,6 @@
     kubevirt-cdi-cr.url = "https://github.com/kubevirt/containerized-data-importer/releases/download/v1.63.1/cdi-cr.yaml";
     kubevirt-cdi-operator.flake = false;
     kubevirt-cdi-operator.url = "https://github.com/kubevirt/containerized-data-importer/releases/download/v1.63.1/cdi-operator.yaml";
-    kured.flake = false;
-    kured.url = "github:kubereboot/kured";
     mac-app-util.url = "github:hraban/mac-app-util";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
     monet-el.flake = false;

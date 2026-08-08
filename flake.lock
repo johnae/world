@@ -181,19 +181,6 @@
         "type": "github"
       }
     },
-    "cilium-chart": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1758125163,
-        "narHash": "sha256-V6v+786h++de7dLTZfP7EmTD6MMkUlZTNEAiOX8x8us=",
-        "type": "tarball",
-        "url": "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.18.2.tgz"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://github.com/cilium/charts/raw/refs/heads/master/cilium-1.18.2.tgz"
-      }
-    },
     "cl-nix-lite": {
       "inputs": {
         "flake-parts": "flake-parts_5",
@@ -248,18 +235,6 @@
         "owner": "stevemolitor",
         "repo": "claude-code.el",
         "type": "github"
-      }
-    },
-    "cloud-native-pg": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-DkcHRlvPZrLvaIt9SRNID07/IPyKb9rUTGNLaNC9LB8=",
-        "type": "file",
-        "url": "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.1/cnpg-1.24.1.yaml"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.1/cnpg-1.24.1.yaml"
       }
     },
     "complement": {
@@ -906,18 +881,6 @@
         "type": "indirect"
       }
     },
-    "fluxcd-install": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-3sncFiHhFXwP7FiK6eEgXhnl3Ltd7LPOWwzfJtzCpUQ=",
-        "type": "file",
-        "url": "https://github.com/fluxcd/flux2/releases/download/v2.4.0/install.yaml"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/fluxcd/flux2/releases/download/v2.4.0/install.yaml"
-      }
-    },
     "freetype2": {
       "flake": false,
       "locked": {
@@ -1136,18 +1099,6 @@
         "type": "github"
       }
     },
-    "hetzner-csi-driver": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-GQfvNA+zn3xSRiQL0UQEr9gGbrD+/cJmI0xfXTBjsFE=",
-        "type": "file",
-        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.10.1/deploy/kubernetes/hcloud-csi.yml"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://raw.githubusercontent.com/hetznercloud/csi-driver/v2.10.1/deploy/kubernetes/hcloud-csi.yml"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -1252,18 +1203,6 @@
         "type": "github"
       }
     },
-    "juicefs-csi-driver": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-bvsNuMQ75NeZzk3HtIqz4ktuRH7HhukRU7WddCpId/E=",
-        "type": "file",
-        "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.25.2/deploy/k8s.yaml"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://raw.githubusercontent.com/juicedata/juicefs-csi-driver/v0.25.2/deploy/k8s.yaml"
-      }
-    },
     "kubevirt-cdi-cr": {
       "flake": false,
       "locked": {
@@ -1310,22 +1249,6 @@
       "original": {
         "type": "file",
         "url": "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-operator.yaml"
-      }
-    },
-    "kured": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1785307657,
-        "narHash": "sha256-mUZsLdHLR0Q004xUrQ5wWLwS8iCqcjAmXbt5E4Y5axA=",
-        "owner": "kubereboot",
-        "repo": "kured",
-        "rev": "1f7f15f25e1789cb9f1cf99c5157cb68d9458b45",
-        "type": "github"
-      },
-      "original": {
-        "owner": "kubereboot",
-        "repo": "kured",
-        "type": "github"
       }
     },
     "libpng": {
@@ -2356,10 +2279,8 @@
         "agenix": "agenix",
         "agenix-rekey": "agenix-rekey",
         "cachix": "cachix",
-        "cilium-chart": "cilium-chart",
         "claude-code": "claude-code",
         "claude-code-el": "claude-code-el",
-        "cloud-native-pg": "cloud-native-pg",
         "copilot-vim": "copilot-vim",
         "crane": "crane",
         "determinate": "determinate",
@@ -2370,18 +2291,14 @@
         "flake-compat": "flake-compat_3",
         "flake-parts": "flake-parts_4",
         "flake-utils": "flake-utils_2",
-        "fluxcd-install": "fluxcd-install",
         "helix-editor": "helix-editor",
-        "hetzner-csi-driver": "hetzner-csi-driver",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "jovian": "jovian",
-        "juicefs-csi-driver": "juicefs-csi-driver",
         "kubevirt-cdi-cr": "kubevirt-cdi-cr",
         "kubevirt-cdi-operator": "kubevirt-cdi-operator",
         "kubevirt-cr": "kubevirt-cr",
         "kubevirt-operator": "kubevirt-operator",
-        "kured": "kured",
         "mac-app-util": "mac-app-util",
         "mk-shell-bin": "mk-shell-bin",
         "monet-el": "monet-el",
