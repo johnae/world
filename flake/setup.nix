@@ -17,6 +17,12 @@
         inputs.agenix.overlays.default
         inputs.claude-code.overlays.default
         inputs.emacs-overlay.overlays.default
+        # niri-flake hard-asserts libdisplay-info 0.2.0, but nixpkgs removed the
+        # libdisplay-info_0_2 alias (deemed unused upstream). Source it from
+        # niri-flake's own pinned nixpkgs, which still ships 0.2.0.
+        (_final: _prev: {
+          inherit (inputs.niri.inputs.nixpkgs.legacyPackages.${system}) libdisplay-info_0_2;
+        })
         inputs.niri.overlays.niri
         inputs.nur.overlays.default
         (_final: _prev: (filterAttrs (name: _: ((match "nu-.*" name == null) && (match "nu_.*" name == null))) config.packages))

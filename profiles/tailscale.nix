@@ -9,7 +9,9 @@
   # PMTUD to shrink the segment. RFC 4821 packetization-layer PMTUD probes
   # the working size from the TCP layer instead of trusting ICMP, which
   # gets long-lived flows (kubectl, SSH) through the blackhole.
-  boot.kernel.sysctl."net.ipv4.tcp_mtu_probing" = 1;
+  # mkDefault so hosts pulling this in alongside a module that also sets it
+  # (e.g. Jovian's Steam module) don't hit a conflict; the value is the same.
+  boot.kernel.sysctl."net.ipv4.tcp_mtu_probing" = lib.mkDefault 1;
   systemd.services.tailscaled.unitConfig = lib.mkIf config.ephemeralRoot {
     RequiresMountsFor = "/var/lib/tailscale";
   };

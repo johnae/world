@@ -129,11 +129,11 @@
       '';
     };
 in {
-  programs.regreet.enable = true;
+  services.displayManager.regreet.enable = true;
 
   environment.systemPackages = [pkgs.nordic pkgs.nordzy-cursor-theme pkgs.arc-icon-theme];
 
-  programs.regreet.settings = {
+  services.displayManager.regreet.settings = {
     background = {
       path = ../files/background.jpg;
       fit = "Cover";
