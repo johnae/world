@@ -27,11 +27,6 @@
         inputs.nur.overlays.default
         (_final: _prev: (filterAttrs (name: _: ((match "nu-.*" name == null) && (match "nu_.*" name == null))) config.packages))
         (_final: prev: {
-          nushell = prev.nushell.overrideAttrs (_oa: {
-            doCheck = false;
-          });
-        })
-        (_final: prev: {
           # afdko 5.x regressed variable-font autohinting, which breaks
           # cantarell-fonts' build (NixOS/nixpkgs#535887). Skip the VF autohint
           # step until afdko 5 support lands upstream; the font still builds and
