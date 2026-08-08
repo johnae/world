@@ -93,6 +93,28 @@ build flake="github:johnae/world":
 build-installer flake="github:johnae/world":
   @nix build '{{flake}}#nixosConfigurations.installer.config.system.build.isoImage'
 
+# preview what an upgrade would change vs the running system (closure diff)
+# defaults to the local tree so it reflects uncommitted work; pass a flake ref to compare against another
+[linux]
+diff flake=".":
+  #!/usr/bin/env nu
+  let host = (hostname | str trim)
+  let out = (nix build --no-link --print-out-paths --impure $"{{flake}}#nixosConfigurations.($host).config.system.build.toplevel")
+  nix store diff-closures /run/current-system $out
+
+# roll the system back to the previous generation
+[linux]
+rollback:
+  @nixos-rebuild switch --rollback --sudo -L
+
+# build a single host's system closure (fast, host-scoped); defaults to the local tree
+build-host host flake=".":
+  @nix build --impure '{{flake}}#nixosConfigurations.{{host}}.config.system.build.toplevel' -L
+
+# evaluate a single host's config without building it (fastest check); defaults to the local tree
+check-host host flake=".":
+  @nix eval --raw --impure '{{flake}}#nixosConfigurations.{{host}}.config.system.build.toplevel.drvPath'
+
 [private]
 remote-reset-all:
   #!/usr/bin/env bash
