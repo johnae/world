@@ -7,10 +7,6 @@ in {
       type = str;
       default = "xxxx";
     };
-    syncthingDeviceID = mkOption {
-      type = nullOr str;
-      default = null;
-    };
     u2fMappings = mkOption {
       type = attrsOf (listOf str);
       default = {};

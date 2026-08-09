@@ -10,7 +10,6 @@
     storageMode = "local";
     localStorageDir = ../../../secrets/rekeyed + "/${hostName}";
   };
-  syncthingDeviceID = "HBL5ZRB-R2STGW5-LMAYYHX-KOFTP3X-VO4IV6E-PEDKZ3N-WCRR7BY-F5C7AAP";
 
   ephemeralRoot = true;
   imports = [

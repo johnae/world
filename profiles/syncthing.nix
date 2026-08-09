@@ -1,15 +1,14 @@
 {
   lib,
-  hostConfigurations,
   hostName,
   ...
 }: let
-  inherit (builtins) mapAttrs;
-  inherit (lib) filterAttrs;
-
-  syncthingDevices =
-    mapAttrs (_: value: {id = value.syncthingDeviceID;})
-    (filterAttrs (name: value: value.services.syncthing.enable && value.syncthingDeviceID != null && name != hostName) hostConfigurations);
+  inherit (lib) filterAttrs mapAttrs;
+  # Single source of truth for the mesh. Reading this static registry avoids
+  # evaluating every peer host's full config just to collect their device IDs.
+  devices = import ./syncthing-devices.nix;
 in {
-  services.syncthing.settings.devices = syncthingDevices;
+  services.syncthing.settings.devices =
+    mapAttrs (_: id: {inherit id;})
+    (filterAttrs (name: _: name != hostName) devices);
 }
