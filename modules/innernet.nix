@@ -4,9 +4,9 @@
   pkgs,
   ...
 }:
-with lib; let
+let
   inherit (builtins) concatStringsSep length filter getAttr listToAttrs;
-  inherit (lib) mapAttrsToList;
+  inherit (lib) mapAttrsToList mkEnableOption mkIf mkOption;
 
   innernet-server-db-path = "/var/lib/innernet-server";
   innernet-server-etc-path = "/etc/innernet-server";

@@ -4,7 +4,8 @@
   pkgs,
   ...
 }:
-with lib; let
+let
+  inherit (lib) concatStringsSep literalExpression listToAttrs mkIf mkMerge mkOption types;
   chromiumModule = types.submodule ({name, ...}: {
     options = {
       enable = mkOption {
@@ -32,15 +33,15 @@ with lib; let
         example = ["--enable-logging=stderr" "--ignore-gpu-blocklist"];
         description = ''
           List of command-line arguments to be passed to ${name}.
-          </para><para>
+
           Note this option does not have any effect when using a
-          custom package for <option>programs.${name}.package</option>.
-          </para><para>
+          custom package for `programs.${name}.package`.
+
           For a list of common switches, see
-          <link xlink:href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/chrome/common/chrome_switches.cc">Chrome switches</link>.
-          </para><para>
+          [Chrome switches](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/chrome/common/chrome_switches.cc).
+
           To search switches for other components, see
-          <link xlink:href="https://source.chromium.org/search?q=file:switches.cc&amp;ss=chromium%2Fchromium%2Fsrc">Chromium codesearch</link>.
+          [Chromium codesearch](https://source.chromium.org/search?q=file:switches.cc&ss=chromium%2Fchromium%2Fsrc).
         '';
       };
 
@@ -101,13 +102,13 @@ with lib; let
         description = ''
           List of chromium extensions to install.
           To find the extension ID, check its URL on the
-          <link xlink:href="https://chrome.google.com/webstore/category/extensions">Chrome Web Store</link>.
-          </para><para>
+          [Chrome Web Store](https://chrome.google.com/webstore/category/extensions).
+
           To install extensions outside of the Chrome Web Store set
-          <literal>updateUrl</literal> or <literal>crxPath</literal> and
-          <literal>version</literal> as explained in the
-          <link xlink:href="https://developer.chrome.com/docs/extensions/mv2/external_extensions">Chrome
-          documentation</link>.
+          `updateUrl` or `crxPath` and
+          `version` as explained in the
+          [Chrome
+          documentation](https://developer.chrome.com/docs/extensions/mv2/external_extensions).
         '';
       };
     };
@@ -133,8 +134,9 @@ with lib; let
     configDir = "${config.xdg.configHome}/" + cfg.name;
 
     extensionJson = ext:
-      assert ext.crxPath != null -> ext.version != null;
-      with builtins; {
+      assert ext.crxPath != null -> ext.version != null; let
+        inherit (builtins) toJSON;
+      in {
         name = "${configDir}/External Extensions/${ext.id}.json";
         value.text = toJSON (
           if ext.crxPath != null

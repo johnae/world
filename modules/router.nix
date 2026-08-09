@@ -22,8 +22,10 @@
   ipBase = ip: lib.concatStringsSep "." (lib.take 3 (splitString "." ip));
 
   internalInterfaces = {
-    ${cfg.internalInterface} = rec {
+    ${cfg.internalInterface} = let
       base = ipBase cfg.internalInterfaceIP;
+    in {
+      inherit base;
       address = "${base}.1";
       network = "${base}.0";
       prefixLength = 24;

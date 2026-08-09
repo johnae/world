@@ -3,7 +3,8 @@
   lib,
   ...
 }:
-with lib; let
+let
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.services.disable-usb-wakeup;
 in {
   options.services.disable-usb-wakeup = {
@@ -11,7 +12,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.services.disable-usb-wakeup = rec {
+    systemd.services.disable-usb-wakeup = {
       description = "Disable USB wakeup";
       enable = true;
       serviceConfig = {

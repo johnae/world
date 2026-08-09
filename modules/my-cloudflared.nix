@@ -4,7 +4,8 @@
   pkgs,
   ...
 }:
-with lib; let
+let
+  inherit (lib) attrNames filterAttrs getAttr maintainers mapAttrs' mkEnableOption mkIf mkOption nameValuePair types;
   cfg = config.services.my-cloudflared;
 
   originRequest = {

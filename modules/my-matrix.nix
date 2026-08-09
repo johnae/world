@@ -4,6 +4,7 @@
   pkgs,
   ...
 }: let
+  inherit (lib) mkEnableOption mkIf mkOption types;
   cfg = config.services.matrix-conduit;
   well_known_server = pkgs.writeText "well-known-matrix-server" ''
     {
@@ -18,7 +19,7 @@
     }
   '';
 in
-  with lib; {
+  {
     options.services.my-matrix = {
       enable =
         mkEnableOption

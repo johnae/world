@@ -4,7 +4,8 @@
   pkgs,
   ...
 }:
-with lib; let
+let
+  inherit (lib) mkOption optional types;
   cfg = config.system.autoUpgrade;
 in {
   options = {
@@ -14,10 +15,10 @@ in {
         default = false;
         description = ''
           Whether to enable a sentinel file signaling when a reboot is needed.
-          If enabled, instead of rebooting a file is created in <literal>/var/run/reboot-required</literal>
+          If enabled, instead of rebooting a file is created in `/var/run/reboot-required`
           which can be used by external tooling to reboot the machine at a proper
           time.
-          Must be used together with setting the option <option>system.autoUpgrade.allowReboot</option>
+          Must be used together with setting the option `system.autoUpgrade.allowReboot`
           to true.
         '';
       };

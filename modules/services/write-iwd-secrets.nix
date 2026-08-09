@@ -4,7 +4,8 @@
   pkgs,
   ...
 }:
-with lib; let
+let
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.services.write-iwd-secrets;
 in {
   options.services.write-iwd-secrets = {
