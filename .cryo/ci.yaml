@@ -25,6 +25,9 @@ env:
   # `cryo submit` carries no input, and the clone stays on the default
   # branch - so this must tolerate a missing field rather than error.
   SHA: "${{ input == null ? '' : (has(input.sha) ? input.sha : '') }}"
+  # `refs/heads/main` for a main push; a PR passes its head branch, which
+  # is how the publish step below tells the two apart.
+  REF: "${{ input == null ? '' : (has(input.ref) ? input.ref : '') }}"
   REPO: https://github.com/johnae/world
   # Jobs run in a scrubbed environment and the agent's nix is not on the
   # default PATH.
@@ -173,3 +176,37 @@ jobs:
           else
             echo "CACHIX_SIGNING_KEY unset; not pushing to the cache" >&2
           fi
+
+      - name: publish-containerdisk
+        run: |
+          set -euo pipefail
+          # main publishes; a PR proves the image builds without shipping
+          # it. The image is deliberately kept out of the nix cache (too
+          # big), so the registry is the only place a built one survives.
+          if [ "$REF" != "refs/heads/main" ]; then
+            echo "ref=${REF:-<none>}; not publishing" >&2
+            exit 0
+          fi
+          cd "$WORKDIR"
+          img="$(nix build --no-link --print-out-paths .#packages.x86_64-linux.vega-containerdisk)"
+
+          # Tag by the store hash so it moves only when the image does.
+          # A node caches a containerDisk by tag, so a mutable tag like
+          # `latest` gives it no reason to pull a rebuilt image.
+          tag="$(basename "$img" | cut -d- -f1)"
+          dest="registry.9000.dev/vega-containerdisk"
+          echo "publishing $img"
+          echo "  as $dest:$tag"
+
+          nix shell nixpkgs#skopeo -c sh -c '
+            set -eu
+            if skopeo inspect --creds "${REGISTRY_USER:?}:${REGISTRY_PASS:?}" \
+                 "docker://'"$dest:$tag"'" >/dev/null 2>&1; then
+              echo "  already published; nothing to do"
+            else
+              skopeo copy --dest-creds "${REGISTRY_USER:?}:${REGISTRY_PASS:?}" \
+                "docker-archive:'"$img"'" "docker://'"$dest:$tag"'"
+              echo "  pushed"
+            fi
+          '
+          echo "deploy with: $dest:$tag"

@@ -37,13 +37,20 @@ by hand and only change when this file says so.
 # push events).
 cryo event-hook set world --manifest github --key "$(openssl rand -hex 20)"
 
-# Route a push to the pipeline. The guard skips pushes that only touch
-# markdown.
+# Route main pushes and pull requests to the pipeline. Pushing to a PR
+# branch emits both a push and a synchronize; admitting pushes only for
+# main means each build has exactly one trigger. The second clause skips
+# changes that are only markdown (a PR carries no `commits`, so it
+# passes).
 cryo handler set world-ci .cryo/router.sh --as script \
-  --on world.push \
-  --when '!has(event.payload.body.commits) || size(event.payload.body.commits) == 0 || event.payload.body.commits.exists(c, (c.added + c.modified + c.removed).exists(p, !p.endsWith(".md")))' \
+  --on world.push,world.pull_request.opened,world.pull_request.synchronize,world.pull_request.reopened \
+  --when '(has(event.payload.body.pull_request) || event.payload.body.ref == "refs/heads/main") && (!has(event.payload.body.commits) || size(event.payload.body.commits) == 0 || event.payload.body.commits.exists(c, (c.added + c.modified + c.removed).exists(p, !p.endsWith(".md"))))' \
   --credential GITHUB_STATUS_TOKEN=github-status
 ```
+
+The webhook must send both `push` and `pull_request`. Pull requests from
+forks are rejected at ingest: the `github` manifest only trusts one whose
+author is an OWNER, MEMBER or COLLABORATOR and whose head is not a fork.
 
 Check the pipeline before pushing it:
 
