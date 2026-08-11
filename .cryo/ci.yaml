@@ -1,0 +1,175 @@
+# world CI, run on cryosleep. The router (.cryo/router.sh) fetches this
+# file at the pushed commit and spawns it, so a push builds the pipeline
+# it shipped with.
+#
+# Three jobs mirroring the GitHub Actions workflow: lint, check, and the
+# whole x86_64-linux package set. Each job is claimed independently and
+# may land on a different builder, so each clones its own workdir -
+# never rely on another job's checkout being on the same machine.
+#
+# Avoid `${{ }}` inside step scripts: it is the pipeline's interpolation
+# sigil, and a ref or commit message spliced into shell text lands
+# unescaped. Values reach the scripts as env vars instead, rendered once
+# in the top-level `env:` below and read as plain `$VAR`.
+name: world-ci
+tags: [world]
+
+# One build per ref, newest wins: pushing again cancels the run for the
+# previous commit rather than queueing behind the two builders it lost.
+concurrency:
+  group: "world-ci-${{ input == null ? 'manual' : (has(input.ref) ? input.ref : 'manual') }}"
+  policy: cancel-running
+
+env:
+  # The router passes the pushed commit as `input.sha`. A manual
+  # `cryo submit` carries no input, and the clone stays on the default
+  # branch - so this must tolerate a missing field rather than error.
+  SHA: "${{ input == null ? '' : (has(input.sha) ? input.sha : '') }}"
+  REPO: https://github.com/johnae/world
+  # Jobs run in a scrubbed environment and the agent's nix is not on the
+  # default PATH.
+  PATH: "/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+  NIX_CONFIG: |
+    accept-flake-config = true
+    extra-substituters = https://insane.cachix.org
+    extra-trusted-public-keys = insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o=
+
+jobs:
+  lint:
+    requires: [build]
+    timeout: 20m
+    env:
+      WORKDIR: /tmp/world-lint
+    steps:
+      - name: checkout
+        run: |
+          set -euo pipefail
+          rm -rf "$WORKDIR"
+          git clone --depth 1 --quiet "$REPO" "$WORKDIR"
+          if [ -n "$SHA" ]; then
+            git -C "$WORKDIR" fetch --depth 1 --quiet origin "$SHA"
+            git -C "$WORKDIR" checkout --quiet "$SHA"
+          fi
+          git -C "$WORKDIR" --no-pager log -1 --format='building %H %s'
+      - name: lint
+        run: |
+          set -euo pipefail
+          cd "$WORKDIR"
+          nix run .#world -- lint
+
+  check:
+    requires: [build]
+    timeout: 60m
+    env:
+      WORKDIR: /tmp/world-check
+    steps:
+      - name: checkout
+        run: |
+          set -euo pipefail
+          rm -rf "$WORKDIR"
+          git clone --depth 1 --quiet "$REPO" "$WORKDIR"
+          if [ -n "$SHA" ]; then
+            git -C "$WORKDIR" fetch --depth 1 --quiet origin "$SHA"
+            git -C "$WORKDIR" checkout --quiet "$SHA"
+          fi
+          git -C "$WORKDIR" --no-pager log -1 --format='building %H %s'
+      - name: check
+        run: |
+          set -euo pipefail
+          cd "$WORKDIR"
+          nix run .#world -- check
+
+  packages:
+    requires: [build]
+    timeout: 180m
+    env:
+      WORKDIR: /tmp/world-pkgs
+    steps:
+      - name: checkout
+        run: |
+          set -euo pipefail
+          rm -rf "$WORKDIR"
+          git clone --depth 1 --quiet "$REPO" "$WORKDIR"
+          if [ -n "$SHA" ]; then
+            git -C "$WORKDIR" fetch --depth 1 --quiet origin "$SHA"
+            git -C "$WORKDIR" checkout --quiet "$SHA"
+          fi
+          git -C "$WORKDIR" --no-pager log -1 --format='building %H %s'
+      - name: build
+        run: |
+          set -euo pipefail
+          cd "$WORKDIR"
+
+          # The package set comes from evaluating the flake, so the list
+          # is not known until this runs.
+          mapfile -t pkgs < <(nix eval .#github-actions-package-matrix-x86-64-linux --json | jq -r '.pkg[]')
+          echo "building ${#pkgs[@]} packages"
+          attrs=()
+          for p in "${pkgs[@]}"; do attrs+=(".#packages.x86_64-linux.$p"); done
+
+          # One invocation, so nix schedules the whole set across cores
+          # itself instead of one package at a time. --print-build-logs
+          # stays: without it a 50-minute build emits a few hundred bytes
+          # and is indistinguishable from a hang. Build logs go to stderr,
+          # so stdout is just the output paths.
+          #
+          # raw-with-logs drops the progress bar and keeps the build
+          # logs. The bar redraws constantly under a PTY and was most of
+          # what the run page had to parse; without it the same two
+          # opening steps went from 7.8 MB of buffer to 16 KB.
+          #
+          # It must be raw-WITH-LOGS. Plain `raw` swallows build output
+          # even with --print-build-logs, which turns a long build silent
+          # and indistinguishable from a hang - measured, not assumed.
+          nix build --no-link --log-format raw-with-logs \
+            --print-build-logs --print-out-paths "${attrs[@]}" \
+            > /tmp/world-outs
+          echo "built $(wc -l < /tmp/world-outs) output paths"
+
+          # Push what the commit produces, named explicitly. Two reasons
+          # this is not a store-watching push:
+          #
+          # The builders keep a persistent nix store, so a warm one
+          # builds nothing - and a push covering only newly-added paths
+          # would publish nothing, leaving the cache empty precisely
+          # because the builder was well warmed.
+          #
+          # These agents are shared with other projects' pipelines, which
+          # add their own toolchain paths to the same store. Watching the
+          # store would upload whatever a concurrent job happened to
+          # fetch; naming the outputs means only world's packages and
+          # their dependencies go to world's cache.
+          #
+          # cachix queries the cache first and skips paths already there,
+          # so re-pushing a known closure is cheap.
+          #
+          # The multi-gigabyte image outputs are left out. On the first
+          # fill they were 36 GiB of a 46 GiB upload - four disk and
+          # container images, 6 to 10 GiB each - and they change on every
+          # input bump, so a nightly flake update would re-upload all of
+          # it. They are still BUILT above, so CI still proves they
+          # build; they just do not go to the cache. Sized rather than
+          # named, so a new image package is covered without editing
+          # this, and every exclusion is logged rather than silent.
+          if [ -n "${CACHIX_SIGNING_KEY:-}" ]; then
+            max=$((2 * 1024 * 1024 * 1024))
+            nix path-info --json $(cat /tmp/world-outs) > /tmp/world-info.json
+
+            # jq handles both shapes: nix used to emit an array, and now
+            # emits an object keyed by store path.
+            norm='(if type == "array" then . else to_entries | map(.value + {path: .key}) end)'
+
+            jq -r --argjson max "$max" \
+              "$norm"' | .[] | select(.narSize > $max)
+               | "not caching \(.path) (\((.narSize / 1073741824 * 100 | round) / 100) GiB)"' \
+              /tmp/world-info.json >&2
+
+            jq -r --argjson max "$max" \
+              "$norm"' | .[] | select(.narSize <= $max) | .path' \
+              /tmp/world-info.json > /tmp/world-push
+
+            echo "pushing $(wc -l < /tmp/world-push) of $(wc -l < /tmp/world-outs) outputs"
+            xargs -r nix run nixpkgs#cachix -- push insane < /tmp/world-push
+          else
+            echo "CACHIX_SIGNING_KEY unset; not pushing to the cache" >&2
+          fi
