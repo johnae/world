@@ -107,8 +107,22 @@ jobs:
           # is not known until this runs.
           mapfile -t pkgs < <(nix eval .#github-actions-package-matrix-x86-64-linux --json | jq -r '.pkg[]')
           echo "building ${#pkgs[@]} packages"
-          attrs=()
-          for p in "${pkgs[@]}"; do attrs+=(".#packages.x86_64-linux.$p"); done
+          # Everything is built; only the non-image set is cached. Sorting
+          # by name rather than by output size is deliberate: with
+          # streamLayeredImage the containerdisk output is a small script
+          # whose CLOSURE holds the ~10G qcow2, so a size check on the
+          # output would wave it straight through and push the image
+          # anyway.
+          attrs=(); cache_attrs=()
+          for p in "${pkgs[@]}"; do
+            attrs+=(".#packages.x86_64-linux.$p")
+            case "$p" in
+              *-qcow2|*-containerdisk|*-diskformat)
+                echo "not caching $p (image artifact)" >&2 ;;
+              *)
+                cache_attrs+=(".#packages.x86_64-linux.$p") ;;
+            esac
+          done
 
           # One invocation, so nix schedules the whole set across cores
           # itself instead of one package at a time. --print-build-logs
@@ -146,32 +160,15 @@ jobs:
           # cachix queries the cache first and skips paths already there,
           # so re-pushing a known closure is cheap.
           #
-          # The multi-gigabyte image outputs are left out. On the first
-          # fill they were 36 GiB of a 46 GiB upload - four disk and
-          # container images, 6 to 10 GiB each - and they change on every
-          # input bump, so a nightly flake update would re-upload all of
-          # it. They are still BUILT above, so CI still proves they
-          # build; they just do not go to the cache. Sized rather than
-          # named, so a new image package is covered without editing
-          # this, and every exclusion is logged rather than silent.
+          # The image artifacts are left out (see the case above). On the
+          # first fill they were 36 GiB of a 46 GiB upload and they change
+          # on every input bump, so a nightly flake update would re-upload
+          # all of it. They are still BUILT, so CI still proves they
+          # build; the registry, not the cache, is where a built one is
+          # kept.
           if [ -n "${CACHIX_SIGNING_KEY:-}" ]; then
-            max=$((2 * 1024 * 1024 * 1024))
-            nix path-info --json $(cat /tmp/world-outs) > /tmp/world-info.json
-
-            # jq handles both shapes: nix used to emit an array, and now
-            # emits an object keyed by store path.
-            norm='(if type == "array" then . else to_entries | map(.value + {path: .key}) end)'
-
-            jq -r --argjson max "$max" \
-              "$norm"' | .[] | select(.narSize > $max)
-               | "not caching \(.path) (\((.narSize / 1073741824 * 100 | round) / 100) GiB)"' \
-              /tmp/world-info.json >&2
-
-            jq -r --argjson max "$max" \
-              "$norm"' | .[] | select(.narSize <= $max) | .path' \
-              /tmp/world-info.json > /tmp/world-push
-
-            echo "pushing $(wc -l < /tmp/world-push) of $(wc -l < /tmp/world-outs) outputs"
+            nix path-info "${cache_attrs[@]}" > /tmp/world-push
+            echo "caching $(wc -l < /tmp/world-push) of ${#pkgs[@]} packages"
             xargs -r nix run nixpkgs#cachix -- push insane < /tmp/world-push
           else
             echo "CACHIX_SIGNING_KEY unset; not pushing to the cache" >&2
@@ -188,14 +185,16 @@ jobs:
             exit 0
           fi
           cd "$WORKDIR"
-          img="$(nix build --no-link --print-out-paths .#packages.x86_64-linux.vega-containerdisk)"
+          # streamLayeredImage yields a script, not an archive: running it
+          # writes the docker-archive to stdout.
+          stream="$(nix build --no-link --print-out-paths .#packages.x86_64-linux.vega-containerdisk)"
 
           # Tag by the store hash so it moves only when the image does.
           # A node caches a containerDisk by tag, so a mutable tag like
           # `latest` gives it no reason to pull a rebuilt image.
-          tag="$(basename "$img" | cut -d- -f1)"
+          tag="$(basename "$stream" | cut -d- -f1)"
           dest="registry.9000.dev/vega-containerdisk"
-          echo "publishing $img"
+          echo "publishing $stream"
           echo "  as $dest:$tag"
 
           nix shell nixpkgs#skopeo -c sh -c '
@@ -203,10 +202,15 @@ jobs:
             if skopeo inspect --creds "${REGISTRY_USER:?}:${REGISTRY_PASS:?}" \
                  "docker://'"$dest:$tag"'" >/dev/null 2>&1; then
               echo "  already published; nothing to do"
-            else
-              skopeo copy --dest-creds "${REGISTRY_USER:?}:${REGISTRY_PASS:?}" \
-                "docker-archive:'"$img"'" "docker://'"$dest:$tag"'"
-              echo "  pushed"
+              exit 0
             fi
+            # skopeo has to seek within the archive, so the stream is
+            # materialised once here rather than three times in the store.
+            # /tmp is the same filesystem, so this costs one ~10G write.
+            trap "rm -f /tmp/vega-cd.tar" EXIT
+            '"$stream"' > /tmp/vega-cd.tar
+            skopeo copy --dest-creds "${REGISTRY_USER:?}:${REGISTRY_PASS:?}" \
+              docker-archive:/tmp/vega-cd.tar "docker://'"$dest:$tag"'"
+            echo "  pushed"
           '
           echo "deploy with: $dest:$tag"

@@ -21,10 +21,16 @@
             additionalSpace = "1024M";
             memSize = 2048;
           };
-          containerDisk = pkgs.dockerTools.buildImage {
+          # streamLayeredImage, not buildImage: buildImage materialises the
+          # layer and the image tarball in the store, so a ~10G disk ends
+          # up written three times (root, layer, tar.gz). The builders do
+          # durable writes at ~48 MB/s, which made that the single biggest
+          # cost of a CI run. This produces a script that writes the
+          # archive to stdout instead, so only the qcow2 is stored.
+          containerDisk = pkgs.dockerTools.streamLayeredImage {
             name = "${name}-containerdisk";
             tag = "latest";
-            copyToRoot = pkgs.runCommand "containerdisk-root" {} ''
+            contents = pkgs.runCommand "containerdisk-root" {} ''
               mkdir -p $out/disk
               cp ${qcow2}/nixos.qcow2 $out/disk/disk.qcow2
             '';
