@@ -41,6 +41,11 @@ jobs:
   lint:
     requires: [build]
     timeout: 20m
+    # A corrupted NAR from a substituter killed a full build once;
+    # nix keeps whatever it already fetched, so a retry is cheap.
+    retry:
+      attempts: 2
+      backoff: 30s
     env:
       WORKDIR: /tmp/world-lint
     steps:
@@ -63,6 +68,11 @@ jobs:
   check:
     requires: [build]
     timeout: 60m
+    # A corrupted NAR from a substituter killed a full build once;
+    # nix keeps whatever it already fetched, so a retry is cheap.
+    retry:
+      attempts: 2
+      backoff: 30s
     env:
       WORKDIR: /tmp/world-check
     steps:
@@ -85,6 +95,11 @@ jobs:
   packages:
     requires: [build]
     timeout: 180m
+    # A corrupted NAR from a substituter killed a full build once;
+    # nix keeps whatever it already fetched, so a retry is cheap.
+    retry:
+      attempts: 2
+      backoff: 30s
     env:
       WORKDIR: /tmp/world-pkgs
     steps:
@@ -196,6 +211,11 @@ jobs:
           dest="registry.9000.dev/vega-containerdisk"
           echo "publishing $stream"
           echo "  as $dest:$tag"
+
+          # nixpkgs skopeo ships no default trust policy, and the builders
+          # no longer carry apt's podman that used to leave one behind.
+          install -d -m755 /etc/containers
+          printf '{"default":[{"type":"insecureAcceptAnything"}]}\n' > /etc/containers/policy.json
 
           nix shell nixpkgs#skopeo -c sh -c '
             set -eu
