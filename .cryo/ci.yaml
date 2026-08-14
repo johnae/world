@@ -34,8 +34,8 @@ env:
   PATH: "/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
   NIX_CONFIG: |
     accept-flake-config = true
-    extra-substituters = https://insane.cachix.org
-    extra-trusted-public-keys = insane.cachix.org-1:cLCCoYQKkmEb/M88UIssfg2FiSDUL4PUjYj9tdo4P8o=
+    extra-substituters = https://nixcache.9000.dev
+    extra-trusted-public-keys = nixcache.9000.dev:MNr2kidQv9GfkQKUarqdpaufX7JMMSixX/cdlS5i5i0=
 
 jobs:
   lint:
@@ -172,21 +172,29 @@ jobs:
           # fetch; naming the outputs means only world's packages and
           # their dependencies go to world's cache.
           #
-          # cachix queries the cache first and skips paths already there,
-          # so re-pushing a known closure is cheap.
+          # The target is our own ncps, not cachix: cachix's free tier is
+          # 5G against a ~10G closure, so it evicted nearly everything on
+          # the way in and every run paid the upload for a cache that
+          # could not hold the result.
           #
-          # The image artifacts are left out (see the case above). On the
-          # first fill they were 36 GiB of a 46 GiB upload and they change
-          # on every input bump, so a nightly flake update would re-upload
-          # all of it. They are still BUILT, so CI still proves they
-          # build; the registry, not the cache, is where a built one is
-          # kept.
-          if [ -n "${CACHIX_SIGNING_KEY:-}" ]; then
+          # The image artifacts are left out (see the case above). They
+          # change on every input bump, and the registry - not the cache -
+          # is where a built one is kept.
+          #
+          # Uploads are authorised by signature: `secret-key` signs each
+          # narinfo, and ncps verifies it against the matching public key.
+          # Nothing here needs a client certificate.
+          if [ -n "${NCPS_UPLOAD_KEY:-}" ]; then
+            key=$(mktemp); trap 'rm -f "$key"' EXIT
+            printf '%s' "$NCPS_UPLOAD_KEY" > "$key"; chmod 600 "$key"
             nix path-info "${cache_attrs[@]}" > /tmp/world-push
             echo "caching $(wc -l < /tmp/world-push) of ${#pkgs[@]} packages"
-            xargs -r nix run nixpkgs#cachix -- push insane < /tmp/world-push
+            # The upload routes sit under /upload; nix uses the store URL
+            # as the base for the paths it PUTs.
+            xargs -r nix copy --to \
+              "https://nixcache.9000.dev/upload?secret-key=$key" < /tmp/world-push
           else
-            echo "CACHIX_SIGNING_KEY unset; not pushing to the cache" >&2
+            echo "NCPS_UPLOAD_KEY unset; not pushing to the cache" >&2
           fi
 
       - name: publish-containerdisk
