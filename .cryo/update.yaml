@@ -84,6 +84,15 @@ jobs:
 
           git checkout --no-track -B "$BRANCH" origin/main
 
+          # Both of the next two talk to the GitHub API and both get
+          # rate-limited to uselessness without a token: gh-release-update
+          # reads GH_TOKEN directly, and nix needs access-tokens to
+          # resolve github: inputs. Unauthenticated, this fails as
+          # "API rate limit exceeded" from the builder's shared egress IP.
+          export GH_TOKEN="$(cat /tmp/gh-token)"
+          export NIX_CONFIG="$NIX_CONFIG
+          access-tokens = github.com=$GH_TOKEN"
+
           # A failure here is not fatal: the update tooling is itself
           # subject to bit-rot (a nushell release renumbered `split
           # column` and silently broke gh-release-update), and the
@@ -116,6 +125,11 @@ jobs:
       - name: repair
         run: |
           set -euo pipefail
+          export GH_TOKEN="$(cat /tmp/gh-token)"
+          export NIX_CONFIG="$NIX_CONFIG
+          access-tokens = github.com=$GH_TOKEN"
+          # claude-code is unfree; nix refuses it otherwise.
+          export NIXPKGS_ALLOW_UNFREE=1
           state=$(cat /tmp/update-state 2>/dev/null || echo skip)
           [ "$state" = "update" ] || [ "$state" = "broken" ] || { echo "nothing updated; skipping"; exit 0; }
           cd "$WORKDIR"
