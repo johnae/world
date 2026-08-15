@@ -30,7 +30,7 @@ in {
     inherit (userinfo) email;
     lock_timeout = 3600 * 10;
     pinentry =
-      if pkgs.stdenv.isLinux
+      if pkgs.stdenv.hostPlatform.isLinux
       then pinentry-auto
       else pkgs.pinentry_mac;
     base_url = "https://bw.9000.dev";

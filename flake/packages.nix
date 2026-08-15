@@ -54,15 +54,15 @@
         noctalia = inputs.noctalia.packages.${system}.default;
         ## fix this one on darwin
         zwift =
-          if pkgs.stdenv.isLinux
+          if pkgs.stdenv.hostPlatform.isLinux
           then inputs.zwift.packages.${system}.default
           else pkgs.hello;
         persway =
-          if pkgs.stdenv.isLinux
+          if pkgs.stdenv.hostPlatform.isLinux
           then inputs.persway.packages.${system}.default
           else pkgs.hello;
         wezterm =
-          if pkgs.stdenv.isLinux
+          if pkgs.stdenv.hostPlatform.isLinux
           then inputs.wezterm.packages.${system}.default
           else
             inputs.wezterm.packages.${system}.default.overrideAttrs (oa: {

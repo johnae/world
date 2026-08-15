@@ -10,7 +10,7 @@
     ${pkgs.devenv}/bin/devenv hook nu > $out
   '';
   configDir =
-    if pkgs.stdenv.isDarwin && !config.xdg.enable
+    if pkgs.stdenv.hostPlatform.isDarwin && !config.xdg.enable
     then "Library/Application Support/nushell"
     else "${config.xdg.configHome}/nushell";
   configPath = path:
@@ -40,7 +40,7 @@ in {
       source "${configPath configDir}/home.nu"
       source "${configPath configDir}/starship.nu"
       ${
-        if pkgs.stdenv.isDarwin
+        if pkgs.stdenv.hostPlatform.isDarwin
         then ''
           $env.PATH = ($env.PATH | split row (char esep) | prepend '/opt/homebrew/bin')
         ''

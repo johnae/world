@@ -133,6 +133,6 @@
     ];
     imports = [../../../users/profiles/mac.nix];
     inherit (adminUser) userinfo;
-    programs.git.userEmail = "johnaxele@spotify.com";
+    programs.git.settings.user.email = "johnaxele@spotify.com";
   };
 }

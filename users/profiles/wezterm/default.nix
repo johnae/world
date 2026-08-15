@@ -46,7 +46,7 @@ in {
       config = dofile("${home.homeDirectory}/${xdg.configFile."wezterm/wezterm.fnl.lua".target}")
     end
     ${
-      if pkgs.stdenv.isDarwin
+      if pkgs.stdenv.hostPlatform.isDarwin
       then ''
         config.front_end = "WebGpu"
         config.macos_window_background_blur = 20
