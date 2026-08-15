@@ -128,7 +128,9 @@ jobs:
           export GH_TOKEN="$(cat /tmp/gh-token)"
           export NIX_CONFIG="$NIX_CONFIG
           access-tokens = github.com=$GH_TOKEN"
-          # claude-code is unfree; nix refuses it otherwise.
+          # claude-code is unfree. The env var alone is not enough with a
+          # flake - nix only reads it under --impure, which the run below
+          # passes.
           export NIXPKGS_ALLOW_UNFREE=1
           state=$(cat /tmp/update-state 2>/dev/null || echo skip)
           [ "$state" = "update" ] || [ "$state" = "broken" ] || { echo "nothing updated; skipping"; exit 0; }
@@ -171,7 +173,7 @@ jobs:
           # The prompt lives in .cryo/repair-prompt.md so it is
           # reviewable and diffable on its own; a model instruction that
           # decides what may change is worth reading in a PR.
-          nix run nixpkgs#claude-code -- \
+          nix run --impure nixpkgs#claude-code -- \
             -p "$(cat .cryo/repair-prompt.md)" \
             --permission-mode acceptEdits 2>&1 | tail -30
 
