@@ -1,0 +1,164 @@
+# Nightly flake updater. Runs on a cryosleep schedule; see .cryo/README.md.
+#
+# Updates the flake inputs on a branch, lets a model repair whatever the
+# update broke, opens a PR, and turns on GitHub's auto-merge. The PR is
+# then built by .cryo/ci.yaml like any other, and auto-merge waits for
+# the required `cryosleep` check - so this never merges anything the
+# normal build has not passed. That separation is the whole safety
+# story: this job proposes, the build decides.
+#
+# Authentication is the GitHub App (Void Commander Brain Freeze). Its
+# installation token lasts an hour, which is the right shape for CI but
+# has to be minted per run: there is no App credential kind yet, so the
+# JWT exchange is done here in bash.
+name: world-update
+tags: [world, updater]
+
+# A tick while the previous one is still going means the previous one is
+# stuck or the repo is busy; the newer inputs are the ones we want.
+concurrency:
+  group: world-update
+  policy: cancel-running
+
+env:
+  PATH: "/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+  NIX_CONFIG: |
+    accept-flake-config = true
+    extra-substituters = https://nixcache.9000.dev
+    extra-trusted-public-keys = nixcache.9000.dev:MNr2kidQv9GfkQKUarqdpaufX7JMMSixX/cdlS5i5i0=
+  APP_ID: "1073609"
+  INSTALLATION_ID: "57780546"
+  BRANCH: automatic-updates
+  WORKDIR: /tmp/world-update
+
+# Declared rather than taken from the ambient project secrets, so this
+# job says what it can reach. The App key stays a project secret for now
+# because it is consumed as a file and the file form is not built yet.
+credentials:
+  ANTHROPIC_API_KEY: anthropic
+
+jobs:
+  update:
+    requires: [build]
+    timeout: 120m
+    retry:
+      attempts: 2
+      backoff: 60s
+    steps:
+      - name: mint-token
+        run: |
+          set -euo pipefail
+          umask 077
+          printf '%s' "${GITHUB_APP_KEY:?}" > /tmp/app.pem
+
+          # RS256 JWT, url-safe base64 with the padding stripped. Good for
+          # ten minutes; only ever exchanged for the installation token.
+          b64() { openssl base64 -A | tr '+/' '-_' | tr -d '='; }
+          now=$(date +%s)
+          hdr=$(printf '%s' '{"alg":"RS256","typ":"JWT"}' | b64)
+          pay=$(printf '{"iat":%d,"exp":%d,"iss":"%s"}' "$((now - 60))" "$((now + 540))" "$APP_ID" | b64)
+          sig=$(printf '%s.%s' "$hdr" "$pay" | openssl dgst -sha256 -sign /tmp/app.pem -binary | b64)
+          rm -f /tmp/app.pem
+
+          curl -sS --retry 3 --retry-delay 3 -X POST \
+            -H "Authorization: Bearer ${hdr}.${pay}.${sig}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/app/installations/${INSTALLATION_ID}/access_tokens" \
+            | jq -r '.token' > /tmp/gh-token
+          [ -s /tmp/gh-token ] && [ "$(cat /tmp/gh-token)" != "null" ] \
+            || { echo "could not mint an installation token" >&2; exit 1; }
+          echo "minted an installation token for app ${APP_ID}"
+
+      - name: update-inputs
+        run: |
+          set -euo pipefail
+          rm -rf "$WORKDIR"
+          git clone --quiet https://github.com/johnae/world "$WORKDIR"
+          cd "$WORKDIR"
+
+          # Keep the token out of the remote URL so it cannot end up in a
+          # log line or in .git/config.
+          git config credential.helper '!f() { echo username=x-access-token; echo "password=$(cat /tmp/gh-token)"; }; f'
+          git config user.name "void-commander-brain-freeze[bot]"
+          git config user.email "void-commander-brain-freeze[bot]@users.noreply.github.com"
+
+          git checkout --no-track -B "$BRANCH" origin/main
+          nix run .#world -- gh-release-update
+          nix flake update
+
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "inputs already current; nothing to propose"
+            echo skip > /tmp/update-state
+            exit 0
+          fi
+          git commit -qam "chore(auto): update flake inputs"
+          echo update > /tmp/update-state
+          git --no-pager log -1 --format='proposing %h %s'
+
+      - name: repair
+        run: |
+          set -euo pipefail
+          [ "$(cat /tmp/update-state 2>/dev/null)" = "update" ] || { echo "nothing updated; skipping"; exit 0; }
+          cd "$WORKDIR"
+
+          # Only spend a model call when the update actually broke
+          # something or surfaced a deprecation. A clean update is the
+          # common case and should cost nothing.
+          if nix run .#world -- check > /tmp/check.log 2>&1; then
+            if ! grep -qiE "deprecat|will be removed" /tmp/check.log; then
+              echo "check is clean and quiet; no repair needed"
+              exit 0
+            fi
+            echo "check passes but reports deprecations"
+          else
+            echo "check fails after the update"
+          fi
+          tail -40 /tmp/check.log
+
+          if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+            echo "ANTHROPIC_API_KEY unset; opening the PR unrepaired" >&2
+            exit 0
+          fi
+
+          # The model proposes; the PR build disposes. Anything it gets
+          # wrong fails the required check and auto-merge never fires, so
+          # the instruction to stay small is about keeping the diff
+          # reviewable rather than about preventing breakage.
+          # The prompt lives in .cryo/repair-prompt.md so it is
+          # reviewable and diffable on its own; a model instruction that
+          # decides what may change is worth reading in a PR.
+          nix run nixpkgs#claude-code -- \
+            -p "$(cat .cryo/repair-prompt.md)" \
+            --permission-mode acceptEdits 2>&1 | tail -30
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -qam "fix(auto): repair what the input update broke"
+            echo "committed repairs"
+          else
+            echo "the model changed nothing"
+          fi
+
+      - name: open-pr
+        run: |
+          set -euo pipefail
+          [ "$(cat /tmp/update-state 2>/dev/null)" = "update" ] || { echo "nothing to open"; exit 0; }
+          cd "$WORKDIR"
+          export GH_TOKEN="$(cat /tmp/gh-token)"
+
+          git push -f origin "$BRANCH"
+
+          pr=$(nix run nixpkgs#gh -- pr list --head "$BRANCH" --json number --jq '.[0].number' 2>/dev/null || true)
+          if [ -z "$pr" ]; then
+            body=$(cat /tmp/repair-report.md 2>/dev/null || echo "Automated flake input update.")
+            pr=$(nix run nixpkgs#gh -- pr create -H "$BRANCH" -B main \
+                   -t "chore(auto): update flake inputs" -b "$body" \
+                 | grep -oE '[0-9]+$')
+            echo "opened PR #$pr"
+          else
+            echo "PR #$pr already open; force-pushed onto it"
+          fi
+
+          # GitHub merges it, and only once the required `cryosleep`
+          # check is green. Nothing here decides that.
+          nix run nixpkgs#gh -- pr merge --auto -d -s "$pr"
+          echo "auto-merge armed on #$pr"

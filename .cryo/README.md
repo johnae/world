@@ -67,3 +67,33 @@ cryo submit .cryo/ci.yaml --follow
 A manual submit carries no input, so the clone stays on the default
 branch. To build a specific commit, prepend an `input:` line the way the
 router does.
+
+## The nightly updater
+
+`update.yaml` bumps the flake inputs on the `automatic-updates` branch,
+has a model repair whatever the update broke, opens a PR, and arms
+GitHub's auto-merge. It does not merge anything itself: auto-merge waits
+for the required `cryosleep` check, which is `ci.yaml` building the PR
+like any other. The updater proposes; the build decides.
+
+`repair-prompt.md` is the instruction the model gets. It is a separate
+file so it shows up in review — an instruction that decides what may
+change in your system config is worth reading.
+
+Authentication is the GitHub App (app 1073609, installation 57780546).
+Its installation token lasts an hour, so the job mints one per run from
+the App private key in the `GITHUB_APP_KEY` project secret. There is no
+App credential kind in cryosleep yet, hence the JWT exchange in bash.
+
+Schedule it with:
+
+```sh
+cryo schedule create 24h .cryo/update.yaml --name world-update --requires build
+```
+
+Two secrets it reads, both project-scoped so a scheduled run gets them
+without a credential flag:
+
+- `GITHUB_APP_KEY` — the App's PEM. Required.
+- `ANTHROPIC_API_KEY` — optional. Without it the PR is opened
+  unrepaired rather than the run failing.
