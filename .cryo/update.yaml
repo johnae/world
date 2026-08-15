@@ -146,24 +146,25 @@ jobs:
               echo "ANTHROPIC_API_KEY unset; cannot repair the updater" >&2
               exit 1
             fi
-          # Only spend a model call when the update actually broke
-          # something or surfaced a deprecation. A clean update is the
-          # common case and should cost nothing.
-          if nix run .#world -- check > "$WORKDIR/.ci-check.log" 2>&1; then
-            if ! grep -qiE "deprecat|will be removed" "$WORKDIR/.ci-check.log"; then
-              echo "check is clean and quiet; no repair needed"
+          else
+            # Only spend a model call when the update actually broke
+            # something or surfaced a deprecation. A clean update is the
+            # common case and should cost nothing.
+            if nix run .#world -- check > "$WORKDIR/.ci-check.log" 2>&1; then
+              if ! grep -qiE "deprecat|will be removed" "$WORKDIR/.ci-check.log"; then
+                echo "check is clean and quiet; no repair needed"
+                exit 0
+              fi
+              echo "check passes but reports deprecations"
+            else
+              echo "check fails after the update"
+            fi
+            tail -40 "$WORKDIR/.ci-check.log"
+
+            if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+              echo "ANTHROPIC_API_KEY unset; opening the PR unrepaired" >&2
               exit 0
             fi
-            echo "check passes but reports deprecations"
-          else
-            echo "check fails after the update"
-          fi
-          tail -40 "$WORKDIR/.ci-check.log"
-
-          if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
-            echo "ANTHROPIC_API_KEY unset; opening the PR unrepaired" >&2
-            exit 0
-          fi
           fi
 
           # The model proposes; the PR build disposes. Anything it gets
