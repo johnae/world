@@ -10,7 +10,7 @@ def get-eligible-flake-inputs [] {
     filter { |line| $line | str contains "gh-release-update" } |
     split column -c --regex '\s+' |
     each { |row| 
-           $row.column3 | split column -c '"' | each {|row| $row.column1 }
+           $row.column2 | split column -c '"' | each {|row| $row.column0 }
          } |
     flatten
 }

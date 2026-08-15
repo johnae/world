@@ -83,9 +83,27 @@ jobs:
           git config user.email "void-commander-brain-freeze[bot]@users.noreply.github.com"
 
           git checkout --no-track -B "$BRANCH" origin/main
-          nix run .#world -- gh-release-update
-          nix flake update
 
+          # A failure here is not fatal: the update tooling is itself
+          # subject to bit-rot (a nushell release renumbered `split
+          # column` and silently broke gh-release-update), and the
+          # repair step exists to deal with exactly that. Record it and
+          # let the next step decide.
+          : > /tmp/update.log
+          if ! nix run .#world -- gh-release-update >> /tmp/update.log 2>&1; then
+            echo "gh-release-update failed" | tee -a /tmp/update.log
+            echo broken > /tmp/update-state
+          fi
+          if ! nix flake update >> /tmp/update.log 2>&1; then
+            echo "nix flake update failed" | tee -a /tmp/update.log
+            echo broken > /tmp/update-state
+          fi
+          tail -20 /tmp/update.log
+
+          if [ "$(cat /tmp/update-state 2>/dev/null)" = "broken" ]; then
+            echo "the update tooling itself failed; leaving it to the repair step"
+            exit 0
+          fi
           if [ -z "$(git status --porcelain)" ]; then
             echo "inputs already current; nothing to propose"
             echo skip > /tmp/update-state
@@ -98,9 +116,20 @@ jobs:
       - name: repair
         run: |
           set -euo pipefail
-          [ "$(cat /tmp/update-state 2>/dev/null)" = "update" ] || { echo "nothing updated; skipping"; exit 0; }
+          state=$(cat /tmp/update-state 2>/dev/null || echo skip)
+          [ "$state" = "update" ] || [ "$state" = "broken" ] || { echo "nothing updated; skipping"; exit 0; }
           cd "$WORKDIR"
 
+          # The update tooling failed rather than the update breaking
+          # something. Same repairer, different evidence.
+          if [ "$state" = "broken" ]; then
+            cp /tmp/update.log /tmp/check.log
+            echo "the update step itself failed; handing it to the repairer"
+            tail -20 /tmp/check.log
+            if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+              echo "ANTHROPIC_API_KEY unset; cannot repair the updater" >&2
+              exit 1
+            fi
           # Only spend a model call when the update actually broke
           # something or surfaced a deprecation. A clean update is the
           # common case and should cost nothing.
@@ -119,6 +148,7 @@ jobs:
             echo "ANTHROPIC_API_KEY unset; opening the PR unrepaired" >&2
             exit 0
           fi
+          fi
 
           # The model proposes; the PR build disposes. Anything it gets
           # wrong fails the required check and auto-merge never fires, so
@@ -134,6 +164,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git commit -qam "fix(auto): repair what the input update broke"
             echo "committed repairs"
+            echo update > /tmp/update-state
           else
             echo "the model changed nothing"
           fi

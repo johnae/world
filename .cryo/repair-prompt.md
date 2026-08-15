@@ -47,6 +47,13 @@ them.
 - Anything where the replacement option has different defaults from the
   one it replaces, even if the rename looks mechanical.
 - A change you would describe as "probably fine".
+- **The update tooling itself** — `misc/gh-release-update.*` and
+  anything else that decides *which* versions get pinned. You may be
+  shown a failure in it, and it may look mechanical. It is the one place
+  where a passing build proves nothing: that script chooses release
+  URLs, and a wrong choice still evaluates, still builds, still merges,
+  and pins the wrong version on every host. Report what is broken and
+  what you would have changed; do not change it.
 
 For each of these, leave it as it is and report it.
 
