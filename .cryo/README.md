@@ -1,8 +1,8 @@
 # world CI on cryosleep
 
-world builds on [cryosleep](https://cryosleep.io) alongside the GitHub
-Actions workflow in `.github/workflows/ci.yaml`. Both run; neither
-depends on the other.
+world builds on [cryosleep](https://cryosleep.io). It is the only CI
+that gates a merge: `cryosleep` is the required status check, so the
+build here is what auto-merge waits for.
 
 ```
 push  ->  webhook  ->  world.push  ->  router.sh  ->  world-ci run
@@ -22,9 +22,12 @@ push  ->  webhook  ->  world.push  ->  router.sh  ->  world-ci run
   tags off the run's lifecycle event.
 
 Builds need an agent advertising the `build` capability with nix
-installed. Package builds push to `insane.cachix.org` when the
-`CACHIX_SIGNING_KEY` project secret is set, and skip the push when it
-isn't.
+installed. Package builds push to `nixcache.9000.dev` when the
+`NCPS_UPLOAD_KEY` project secret is set, and skip the push when it
+isn't. Disk images (`*-qcow2`, `*-containerdisk`, `*-diskformat`) are
+built but never pushed: `nix copy` sends a path's whole closure, and
+with `streamLayeredImage` the containerdisk output is a small script
+whose closure holds the ~10G qcow2.
 
 ## Applying the wiring
 
@@ -85,11 +88,17 @@ Its installation token lasts an hour, so the job mints one per run from
 the App private key in the `GITHUB_APP_KEY` project secret. There is no
 App credential kind in cryosleep yet, hence the JWT exchange in bash.
 
-Schedule it with:
+It runs nightly at 00:00 UTC:
 
 ```sh
-cryo schedule create 24h .cryo/update.yaml --name world-update --requires build
+cryo schedule create --cron '0 0 0 * * *' --tz UTC .cryo/update.yaml --name world-update
 ```
+
+No `--requires` on the schedule: a YAML pipeline takes its capabilities
+per job, from `requires:` in the body, and passing the flag is a 400
+rather than a silent no-op. Cron rather than an interval so the run
+lands at a fixed hour instead of drifting by however long the previous
+one took.
 
 Two secrets it reads, both project-scoped so a scheduled run gets them
 without a credential flag:
