@@ -1,6 +1,6 @@
 This is the NixOS configuration repo `world`, on a branch where
 `nix flake update` has just bumped the flake inputs. The output of
-`nix run .#world -- check` is in `/tmp/check.log`.
+`nix run .#world -- check` is in `.ci-check.log` at the repo root.
 
 Fix what the update broke, and the deprecation warnings it surfaced.
 
@@ -64,7 +64,7 @@ system configuration.
 
 ## Report
 
-Write `/tmp/repair-report.md`, even if you changed nothing:
+Write `.ci-repair-report.md` at the repo root, even if you changed nothing:
 
 1. What you changed and why, one bullet each, naming the option and its
    replacement.

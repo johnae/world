@@ -12,3 +12,8 @@ tofu/*/.terraform.lock.hcl
 .aider*
 .DS_Store*
 **/.claude
+
+# CI scratch, written by .cryo/update.yaml for the repair step
+.ci-check.log
+.ci-update.log
+.ci-repair-report.md
