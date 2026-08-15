@@ -36,7 +36,7 @@
       ../users/modules/default.nix
     ]
     ++ (
-      if pkgs.stdenv.isDarwin
+      if pkgs.stdenv.hostPlatform.isDarwin
       then [inputs.mac-app-util.homeManagerModules.default]
       else [
         inputs.niri.homeModules.niri

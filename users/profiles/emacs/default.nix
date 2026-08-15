@@ -68,7 +68,7 @@ in {
       config = emacsInit;
       defaultInitFile = false;
       package =
-        if pkgs.stdenv.isDarwin
+        if pkgs.stdenv.hostPlatform.isDarwin
         then pkgs.emacs30
         else pkgs.emacs30-pgtk;
       extraEmacsPackages = epkgs:
