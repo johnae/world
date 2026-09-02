@@ -30,9 +30,18 @@
           containerDisk = pkgs.dockerTools.streamLayeredImage {
             name = "${name}-containerdisk";
             tag = "latest";
-            contents = pkgs.runCommand "containerdisk-root" {} ''
-              mkdir -p $out/disk
-              cp ${qcow2}/nixos.qcow2 $out/disk/disk.qcow2
+            # fakeRootCommands, not contents: copyToRoot/contents symlinks the
+            # store path into the image (/disk/disk.qcow2 -> /nix/store/...),
+            # and CDI's registry importer scans layer tars for a regular file
+            # under disk/ and does not follow symlinks - so an imported
+            # DataVolume never finds the disk. Without enableFakechroot the
+            # commands run in the build sandbox with host coreutils and the
+            # store path is not excluded from the layer, so this cp lands a
+            # real /disk/disk.qcow2 that CDI can read. Still boots fine as a
+            # plain containerDisk too.
+            fakeRootCommands = ''
+              mkdir -p disk
+              cp ${qcow2}/nixos.qcow2 disk/disk.qcow2
             '';
           };
         in {
