@@ -56,7 +56,7 @@ in {
       };
     }
     (
-      builtins.listToAttrs (lib.imap1 (idx: device: {
+      builtins.listToAttrs (lib.imap1 (idx: _: {
         name = "encrypted_root${toString idx}";
         value = {
           device = "/dev/disk/by-label/encrypted_root${toString idx}";

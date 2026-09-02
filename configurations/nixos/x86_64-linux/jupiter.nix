@@ -2,7 +2,6 @@
   adminUser,
   config,
   hostName,
-  pkgs,
   ...
 }: {
   age.rekey = {

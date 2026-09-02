@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   pkgs,
   ...
@@ -18,7 +17,6 @@
     '';
   };
 
-  xcursor_theme = config.gtk.cursorTheme.name;
   terminal-bin = "${pkgs.wezterm}/bin/wezterm start --always-new-process";
 
   _dev-env = {

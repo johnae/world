@@ -1,21 +1,4 @@
-{pkgs, ...}: let
-  search-replace = pkgs.writeShellApplication {
-    name = "search-replace";
-    text = ''
-      PREVPANE="''${1:-}"
-      serpl
-      if [ -n "$PREVPANE" ]; then
-        echo -e ":rla\r" | wezterm cli send-text --pane-id "$PREVPANE" --no-paste
-      fi
-    '';
-  };
-  global-search-replace-wezterm-helper = pkgs.writeShellApplication {
-    name = "global-search-replace-wezterm-helper";
-    text = ''
-      wezterm cli split-pane --top --percent 80 -- ${search-replace}/bin/search-replace "$WEZTERM_PANE" > /dev/null
-    '';
-  };
-in {
+{pkgs, ...}: {
   xdg.configFile."helix/runtime/queries/fennel/injections.scm".source = pkgs.writeText "fennel-injections.scm" ''
     ; inherits: scheme
   '';
