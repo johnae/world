@@ -132,6 +132,7 @@
         ./flake/kubernetes.nix
         ./flake/packages.nix
         ./flake/setup.nix
+        ./flake/tool-images.nix
       ];
       systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin"];
       # no formatter is defined; drop the placeholder attr so `nix flake check` passes
