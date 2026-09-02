@@ -75,9 +75,22 @@
   networking.useDHCP = false;
   networking.useNetworkd = true;
   systemd.network.enable = true;
+  # Drop the static resolvers from defaults.nix on a KubeVirt guest. The
+  # cluster is IPv6-only, so reaching IPv4-only hosts (github, most of the
+  # internet) needs DNS64, which only CoreDNS does, and passt hands CoreDNS
+  # to the guest over DHCPv6 - the same path cryo-builder uses. A hardcoded
+  # list here would shadow that lease.
+  networking.nameservers = lib.mkForce [];
   systemd.network.networks."eth0" = {
     matchConfig.Name = ["eth*" "enp*"];
-    networkConfig.DHCP = "ipv4";
+    # ipv6, not ipv4: the pod network has no v4, and it is the DHCPv6 lease
+    # that carries CoreDNS (DNS64). SLAAC from passt's RA already supplies
+    # the address and route; DHCP=ipv4 left the guest addressed but with no
+    # resolver that could reach anything IPv4-only.
+    networkConfig = {
+      DHCP = "ipv6";
+      IPv6AcceptRA = true;
+    };
   };
 
   services.openssh.enable = true;
