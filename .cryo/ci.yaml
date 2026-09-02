@@ -29,6 +29,14 @@ env:
   # is how the publish step below tells the two apart.
   REF: "${{ input == null ? '' : (has(input.ref) ? input.ref : '') }}"
   REPO: https://github.com/johnae/world
+  # The GitHub App (Void Commander Brain Freeze) - the same one the
+  # updater authenticates as. Its installation token clones and fetches
+  # at the authenticated rate limit; anonymous git from the builders'
+  # shared egress IP is throttled to 401s ("could not read Username"),
+  # which is what stalled checkout. GITHUB_APP_KEY is an ambient project
+  # secret.
+  APP_ID: "1073609"
+  INSTALLATION_ID: "57780546"
   # Jobs run in a scrubbed environment and the agent's nix is not on the
   # default PATH.
   PATH: "/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -49,9 +57,45 @@ jobs:
     env:
       WORKDIR: /tmp/world-lint
     steps:
-      - name: checkout
+      # Anchored and reused by check and packages: the checkout is
+      # identical across the three jobs, and WORKDIR (per-job) is the only
+      # thing that differs, resolved at run time.
+      - &checkout
+        name: checkout
         run: |
           set -euo pipefail
+
+          # Mint a GitHub App installation token (RS256 JWT -> installation
+          # token), so both the clone and nix's github: fetches below run
+          # authenticated. Unauthenticated, the builders' shared IP is rate
+          # limited and git prompts for a username it cannot read.
+          umask 077
+          printf '%s' "${GITHUB_APP_KEY:?}" > /tmp/app.pem
+          b64() { openssl base64 -A | tr '+/' '-_' | tr -d '='; }
+          now=$(date +%s)
+          hdr=$(printf '%s' '{"alg":"RS256","typ":"JWT"}' | b64)
+          pay=$(printf '{"iat":%d,"exp":%d,"iss":"%s"}' "$((now - 60))" "$((now + 540))" "$APP_ID" | b64)
+          sig=$(printf '%s.%s' "$hdr" "$pay" | openssl dgst -sha256 -sign /tmp/app.pem -binary | b64)
+          rm -f /tmp/app.pem
+          curl -sS --retry 3 --retry-delay 3 -X POST \
+            -H "Authorization: Bearer ${hdr}.${pay}.${sig}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/app/installations/${INSTALLATION_ID}/access_tokens" \
+            | jq -r '.token' > /tmp/gh-token
+          [ -s /tmp/gh-token ] && [ "$(cat /tmp/gh-token)" != "null" ] \
+            || { echo "could not mint an installation token" >&2; exit 1; }
+
+          # Credential helper rather than a token in the URL, so it cannot
+          # land in a log line or in .git/config. Global, so the clone
+          # itself is authenticated.
+          git config --global credential.helper \
+            '!f() { echo username=x-access-token; echo "password=$(cat /tmp/gh-token)"; }; f'
+          # nix resolves github: flake inputs against the API too, and is
+          # rate-limited to "API rate limit exceeded" without a token. This
+          # file is read by the build steps in this same job.
+          mkdir -p "$HOME/.config/nix"
+          echo "access-tokens = github.com=$(cat /tmp/gh-token)" >> "$HOME/.config/nix/nix.conf"
+
           rm -rf "$WORKDIR"
           git clone --depth 1 --quiet "$REPO" "$WORKDIR"
           if [ -n "$SHA" ]; then
@@ -76,16 +120,7 @@ jobs:
     env:
       WORKDIR: /tmp/world-check
     steps:
-      - name: checkout
-        run: |
-          set -euo pipefail
-          rm -rf "$WORKDIR"
-          git clone --depth 1 --quiet "$REPO" "$WORKDIR"
-          if [ -n "$SHA" ]; then
-            git -C "$WORKDIR" fetch --depth 1 --quiet origin "$SHA"
-            git -C "$WORKDIR" checkout --quiet "$SHA"
-          fi
-          git -C "$WORKDIR" --no-pager log -1 --format='building %H %s'
+      - *checkout
       - name: check
         run: |
           set -euo pipefail
@@ -103,16 +138,7 @@ jobs:
     env:
       WORKDIR: /tmp/world-pkgs
     steps:
-      - name: checkout
-        run: |
-          set -euo pipefail
-          rm -rf "$WORKDIR"
-          git clone --depth 1 --quiet "$REPO" "$WORKDIR"
-          if [ -n "$SHA" ]; then
-            git -C "$WORKDIR" fetch --depth 1 --quiet origin "$SHA"
-            git -C "$WORKDIR" checkout --quiet "$SHA"
-          fi
-          git -C "$WORKDIR" --no-pager log -1 --format='building %H %s'
+      - *checkout
       - name: build
         run: |
           set -euo pipefail
