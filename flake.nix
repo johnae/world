@@ -52,7 +52,7 @@
     kubevirt-operator.flake = false;
     kubevirt-operator.url = "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-operator.yaml";
     kubevirt-cr.flake = false;
-    kubevirt-cr.url = "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-operator.yaml";
+    kubevirt-cr.url = "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-cr.yaml";
     kubevirt-cdi-cr.flake = false;
     kubevirt-cdi-cr.url = "https://github.com/kubevirt/containerized-data-importer/releases/download/v1.63.1/cdi-cr.yaml";
     kubevirt-cdi-operator.flake = false;

@@ -1061,13 +1061,13 @@
     "kubevirt-cr": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-8wkUxxXbiqGKkWv5+09LxU2MDbPkCHn1jECexCtlgY4=",
+        "narHash": "sha256-YBxGcMvLQjTCCxfBoFJyPW5RIuU2GjmNSUJUSlmI3x4=",
         "type": "file",
-        "url": "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-operator.yaml"
+        "url": "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-cr.yaml"
       },
       "original": {
         "type": "file",
-        "url": "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-operator.yaml"
+        "url": "https://github.com/kubevirt/kubevirt/releases/download/v1.6.2/kubevirt-cr.yaml"
       }
     },
     "kubevirt-operator": {
