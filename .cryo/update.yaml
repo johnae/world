@@ -34,7 +34,10 @@ env:
 # Declared rather than taken from the ambient project secrets, so this
 # job says what it can reach. The App key stays a project secret for now
 # because it is consumed as a file and the file form is not built yet.
+# The repair step runs Claude Code on the subscription token first and
+# falls back to the API key, so both are declared.
 credentials:
+  CLAUDE_CODE_OAUTH_TOKEN: claude-code
   ANTHROPIC_API_KEY: anthropic
 
 jobs:
@@ -135,6 +138,7 @@ jobs:
           state=$(cat /tmp/update-state 2>/dev/null || echo skip)
           [ "$state" = "update" ] || [ "$state" = "broken" ] || { echo "nothing updated; skipping"; exit 0; }
           cd "$WORKDIR"
+          have_claude() { [ -n "${CLAUDE_CODE_OAUTH_TOKEN:-}" ] || [ -n "${ANTHROPIC_API_KEY:-}" ]; }
 
           # The update tooling failed rather than the update breaking
           # something. Same repairer, different evidence.
@@ -142,8 +146,8 @@ jobs:
             cp "$WORKDIR/.ci-update.log" "$WORKDIR/.ci-check.log"
             echo "the update step itself failed; handing it to the repairer"
             tail -20 "$WORKDIR/.ci-check.log"
-            if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
-              echo "ANTHROPIC_API_KEY unset; cannot repair the updater" >&2
+            if ! have_claude; then
+              echo "no Claude credential; cannot repair the updater" >&2
               exit 1
             fi
           else
@@ -161,8 +165,8 @@ jobs:
             fi
             tail -40 "$WORKDIR/.ci-check.log"
 
-            if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
-              echo "ANTHROPIC_API_KEY unset; opening the PR unrepaired" >&2
+            if ! have_claude; then
+              echo "no Claude credential; opening the PR unrepaired" >&2
               exit 0
             fi
           fi
@@ -174,11 +178,26 @@ jobs:
           # The prompt lives in .cryo/repair-prompt.md so it is
           # reviewable and diffable on its own; a model instruction that
           # decides what may change is worth reading in a PR.
-          nix run --impure nixpkgs#claude-code -- \
-            -p "$(cat .cryo/repair-prompt.md)" \
-            --permission-mode acceptEdits \
-            --allowedTools "Bash(nix:*),Bash(git diff:*),Read,Edit,Write,Grep,Glob" \
-            2>&1 | tail -30
+          repair() {
+            nix run --impure nixpkgs#claude-code -- \
+              -p "$(cat .cryo/repair-prompt.md)" \
+              --permission-mode acceptEdits \
+              --allowedTools "Bash(nix:*),Bash(git diff:*),Read,Edit,Write,Grep,Glob" \
+              2>&1 | tail -30
+          }
+          # The subscription token pays for the first attempt, with the
+          # API key hidden so Claude Code cannot prefer it. A failed
+          # attempt (a rate-limited window, most likely) retries once on
+          # the key when there is one.
+          if [ -n "${CLAUDE_CODE_OAUTH_TOKEN:-}" ]; then
+            if ! (unset ANTHROPIC_API_KEY; repair); then
+              [ -n "${ANTHROPIC_API_KEY:-}" ] || exit 1
+              echo "subscription attempt failed; retrying on the API key" >&2
+              (unset CLAUDE_CODE_OAUTH_TOKEN; repair)
+            fi
+          else
+            repair
+          fi
 
           # Re-check before believing the repair. If the update step
           # itself failed and still fails, the tree holds a broken

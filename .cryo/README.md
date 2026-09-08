@@ -100,9 +100,15 @@ rather than a silent no-op. Cron rather than an interval so the run
 lands at a fixed hour instead of drifting by however long the previous
 one took.
 
-Two secrets it reads, both project-scoped so a scheduled run gets them
-without a credential flag:
+What it reads, all project-scoped so a scheduled run gets them without
+a credential flag:
 
-- `GITHUB_APP_KEY` — the App's PEM. Required.
-- `ANTHROPIC_API_KEY` — optional. Without it the PR is opened
-  unrepaired rather than the run failing.
+- `GITHUB_APP_KEY` — the App's PEM, a project secret. Required.
+- `claude-code` — a Claude Code subscription token from
+  `claude setup-token`, declared on the pipeline as
+  `CLAUDE_CODE_OAUTH_TOKEN`. The repair step tries this first.
+- `anthropic` — the API key, declared as `ANTHROPIC_API_KEY`. The
+  fallback when the subscription attempt fails. Drop a credential by
+  removing its line from `credentials:`; a declared one that is missing
+  fails the job. With neither declared the PR is opened unrepaired
+  rather than the run failing.
