@@ -90,7 +90,7 @@
     victoriametrics-logs-datasource-plugin.flake = false;
     victoriametrics-logs-datasource-plugin.url = "https://github.com/VictoriaMetrics/victorialogs-datasource/releases/download/v0.32.0/victoriametrics-logs-datasource-v0.32.0.tar.gz"; # gh-release-update
     victoriametrics-metrics-datasource-plugin.flake = false;
-    victoriametrics-metrics-datasource-plugin.url = "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v0.25.2/victoriametrics-metrics-datasource-v0.25.2.tar.gz"; # gh-release-update
+    victoriametrics-metrics-datasource-plugin.url = "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v0.26.1/victoriametrics-metrics-datasource-v0.26.1.tar.gz"; # gh-release-update
     wezterm.inputs.flake-utils.follows = "flake-utils";
     wezterm.inputs.nixpkgs.follows = "nixpkgs";
     wezterm.inputs.rust-overlay.follows = "rust-overlay";
