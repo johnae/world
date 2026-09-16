@@ -11,7 +11,7 @@ in {
         name = userinfo.fullName;
       };
       ui = {
-        editor = "hx";
+        editor = "emacsclient -a ''";
         pager = "delta";
         diff-formatter = ["difft" "--color=always" "$left" "$right"];
       };
