@@ -59,7 +59,7 @@ For each of these, leave it as it is and report it.
 
 ## Do not touch
 
-`flake.lock` — the update already wrote it. `.cryo/` — CI wiring, not
+`flake.lock` — the update already wrote it. `.spool/` — CI wiring, not
 system configuration.
 
 ## Report

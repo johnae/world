@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # world CI router. Runs on a push to main and on pull requests (see
-# .cryo/README.md to apply).
+# .spool/README.md to apply).
 #
-# It posts the commit's `pending` status, fetches .cryo/ci.yaml at the
+# It posts the commit's `pending` status, fetches .spool/ci.yaml at the
 # commit being built, and spawns it. The final success/failure comes
 # from the shared `ci-status` handler, which watches the spawned run's
 # lifecycle event and reads the `repo:` + `sha:` tags set below - so a
@@ -22,13 +22,13 @@ export PATH="/opt/toolchain/bin:/nix/var/nix/profiles/default/bin:/root/.nix-pro
 
 # The run's canonical input, whole - a multi-commit push body is well
 # past anything an environment could hold.
-cp "${CRYO_INPUT_FILE:?}" /tmp/cryo-input.json
+cp "${SPOOL_INPUT_FILE:?}" /tmp/spool-input.json
 
 # Resolve a dotted key path against the input, or empty if absent.
 get() {
   python3 - "$1" <<'PY'
 import json, sys
-cur = json.load(open('/tmp/cryo-input.json'))
+cur = json.load(open('/tmp/spool-input.json'))
 for k in sys.argv[1].split('.'):
     cur = cur.get(k) if isinstance(cur, dict) else None
 print(cur if cur is not None else '')
@@ -57,14 +57,14 @@ echo "world-ci: repo=${repo_full} sha=${sha} ref=${ref}${pr:+ pr=#${pr}}"
 # run's page instead of being a dead end.
 post_status() {
   local state="$1" desc="$2" run="${3:-}" target=null
-  [ -n "$run" ] && target="\"https://app.cryosleep.io/runs/${run}\""
+  [ -n "$run" ] && target="\"https://app.hyperspool.io/runs/${run}\""
   curl -sS --retry 3 --retry-delay 3 -o /dev/null \
     -X POST \
     -H "Authorization: Bearer ${GITHUB_STATUS_TOKEN:?}" \
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     "https://api.github.com/repos/${repo_full}/statuses/${sha}" \
-    -d "{\"state\":\"${state}\",\"context\":\"cryosleep\",\"description\":\"${desc}\",\"target_url\":${target}}"
+    -d "{\"state\":\"${state}\",\"context\":\"hyperspool\",\"description\":\"${desc}\",\"target_url\":${target}}"
 }
 
 # Any failure before the build is dispatched shows red on the commit.
@@ -75,7 +75,7 @@ post_status pending "Build dispatched"
 # The pipeline as it existed at this commit, so a push builds the
 # definition it shipped with.
 curl -sS --retry 3 --retry-delay 3 -fL \
-  "https://raw.githubusercontent.com/${repo_full}/${sha}/.cryo/ci.yaml" \
+  "https://raw.githubusercontent.com/${repo_full}/${sha}/.spool/ci.yaml" \
   > /tmp/world-ci.yaml
 
 # Spawn carries no structured input, so pin a minimal shaped one into the
@@ -93,7 +93,7 @@ PY
 
 # The statuses API wants the full sha, so no truncation here: `ci-status`
 # reads these two tags straight off the run's lifecycle event.
-child="$(cryo spawn /tmp/world-run.yaml \
+child="$(spool spawn /tmp/world-run.yaml \
   --tag "sha:${sha}" --tag "repo:${repo_full}" --tag world \
   ${pr:+--tag "pr:${pr}"})"
 echo "spawned world-ci run: ${child}"

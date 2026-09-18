@@ -1,9 +1,9 @@
-# Nightly flake updater. Runs on a cryosleep schedule; see .cryo/README.md.
+# Nightly flake updater. Runs on a hyperspool schedule; see .spool/README.md.
 #
 # Updates the flake inputs on a branch, lets a model repair whatever the
 # update broke, opens a PR, and turns on GitHub's auto-merge. The PR is
-# then built by .cryo/ci.yaml like any other, and auto-merge waits for
-# the required `cryosleep` check - so this never merges anything the
+# then built by .spool/ci.yaml like any other, and auto-merge waits for
+# the required `hyperspool` check - so this never merges anything the
 # normal build has not passed. That separation is the whole safety
 # story: this job proposes, the build decides.
 #
@@ -175,12 +175,12 @@ jobs:
           # wrong fails the required check and auto-merge never fires, so
           # the instruction to stay small is about keeping the diff
           # reviewable rather than about preventing breakage.
-          # The prompt lives in .cryo/repair-prompt.md so it is
+          # The prompt lives in .spool/repair-prompt.md so it is
           # reviewable and diffable on its own; a model instruction that
           # decides what may change is worth reading in a PR.
           repair() {
             nix run --impure nixpkgs#claude-code -- \
-              -p "$(cat .cryo/repair-prompt.md)" \
+              -p "$(cat .spool/repair-prompt.md)" \
               --permission-mode acceptEdits \
               --allowedTools "Bash(nix:*),Bash(git diff:*),Read,Edit,Write,Grep,Glob" \
               2>&1 | tail -30
@@ -238,7 +238,7 @@ jobs:
             echo "PR #$pr already open; force-pushed onto it"
           fi
 
-          # GitHub merges it, and only once the required `cryosleep`
+          # GitHub merges it, and only once the required `hyperspool`
           # check is green. Nothing here decides that.
           nix run nixpkgs#gh -- pr merge --auto -d -s "$pr"
           echo "auto-merge armed on #$pr"

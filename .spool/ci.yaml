@@ -1,4 +1,4 @@
-# world CI, run on cryosleep. The router (.cryo/router.sh) fetches this
+# world CI, run on hyperspool. The router (.spool/router.sh) fetches this
 # file at the pushed commit and spawns it, so a push builds the pipeline
 # it shipped with.
 #
@@ -22,7 +22,7 @@ concurrency:
 
 env:
   # The router passes the pushed commit as `input.sha`. A manual
-  # `cryo submit` carries no input, and the clone stays on the default
+  # `spool submit` carries no input, and the clone stays on the default
   # branch - so this must tolerate a missing field rather than error.
   SHA: "${{ input == null ? '' : (has(input.sha) ? input.sha : '') }}"
   # `refs/heads/main` for a main push; a PR passes its head branch, which
