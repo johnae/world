@@ -22,7 +22,7 @@ jobs:
         create_credentials_file: 'true'
 
     - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
+      uses: google-github-actions/setup-gcloud@v3
 
     - uses: DeterminateSystems/nix-installer-action@v20
       with:
