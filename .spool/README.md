@@ -106,6 +106,17 @@ It runs nightly at 00:00 UTC:
 spool schedule create --cron '0 0 0 * * *' --tz UTC .spool/update.yaml --name world-update
 ```
 
+`update.yaml` is uploaded the same way `router.sh` is, so editing it here
+does nothing until the schedule is re-applied. Use `edit`, not a second
+`create`, so the id and its run history survive:
+
+```sh
+spool schedule edit "$(spool schedule list | awk '/world-update/{print $1}')" .spool/update.yaml
+```
+
+This bit us: after `.cryo/` became `.spool/`, the stored body still ran
+`cat .cryo/repair-prompt.md` and the nightly run failed for three nights.
+
 No `--requires` on the schedule: a YAML pipeline takes its capabilities
 per job, from `requires:` in the body, and passing the flag is a 400
 rather than a silent no-op. Cron rather than an interval so the run
