@@ -96,6 +96,12 @@ in {
     };
   };
 
+  ## default_config brings the bluetooth integration along, which talks to
+  ## bluetoothd over d-bus. Without bluez there is no such service, so the
+  ## adapter just sits there unused and HA logs a permissions error about it
+  ## on every start.
+  hardware.bluetooth.enable = true;
+
   ## 8123 on the LAN for satellites and bridge callbacks, mDNS and SSDP
   ## inbound so discovery finds Hue, the Samsung screens and the plugs.
   networking.firewall.allowedTCPPorts = [8123];
