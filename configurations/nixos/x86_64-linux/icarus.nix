@@ -98,30 +98,6 @@
 
   nix.settings.build-dir = "/keep/nixtmp";
 
-  services.buildkite-nix-builder = {
-    enable = true;
-    runtimePackages = [
-      pkgs.bash
-      pkgs.cachix
-      pkgs.coreutils
-      pkgs.curl
-      pkgs.git
-      pkgs.gnutar
-      pkgs.gzip
-      pkgs.jq
-      pkgs.nix
-      pkgs.openssl
-      pkgs.procps
-    ];
-    tags = {
-      nix = "true";
-      nixos = "true";
-      linux = "true";
-      arch = "x86_64-linux";
-      queue = "default-queue";
-    };
-  };
-
   services.tailscale.auth = {
     enable = true;
     args.advertise-tags = ["tag:server"];
@@ -398,43 +374,6 @@
     "/var/sieve"
     "/var/vmail"
   ];
-
-  age.secrets = {
-    "buildkite-agent-exporter-token" = {
-      rekeyFile = ../../../secrets/buildkite-token.age;
-      owner = config.services.prometheus.exporters.buildkite-agent.user;
-    };
-  };
-
-  services.prometheus.exporters = {
-    buildkite-agent = {
-      enable = true;
-      tokenPath = config.age.secrets.buildkite-agent-exporter-token.path;
-    };
-  };
-
-  services.vmagent = {
-    prometheusConfig = let
-      relabel_configs = [
-        {
-          action = "replace";
-          replacement = hostName;
-          target_label = "instance";
-        }
-      ];
-    in {
-      scrape_configs = [
-        {
-          job_name = "buildkite-agent";
-          scrape_interval = "10s";
-          static_configs = [
-            {targets = ["127.0.0.1:9876"];}
-          ];
-          inherit relabel_configs;
-        }
-      ];
-    };
-  };
 
   services.grafana.enable = true;
   services.grafana.declarativePlugins = [pkgs.victoriametrics-logs-datasource-plugin pkgs.victoriametrics-metrics-datasource-plugin];
