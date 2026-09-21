@@ -16,22 +16,10 @@ in {
     openFirewallForComponents = true;
 
     extraComponents = [
-      ## discovery and core plumbing
-      "zeroconf"
-      "ssdp"
-      "dhcp"
-      "usb"
-      "mobile_app"
-      "webhook"
-      "stream"
-      "media_source"
-      "history"
-      "logbook"
-      "energy"
-      "sun"
-      "met"
-      "my"
-      "isal"
+      ## Everything default_config already pulls in (discovery, mobile_app,
+      ## history, energy, the assist pipeline) is deliberately absent here -
+      ## listing a component only installs it, `config` below is what makes
+      ## Home Assistant actually set it up.
 
       ## bridges to the ecosystems we're migrating off
       "smartthings"
@@ -55,13 +43,10 @@ in {
       "thread"
 
       ## voice
-      "assist_pipeline"
-      "conversation"
-      "intent"
       "wyoming"
-      "tts"
-      "stt"
 
+      "met"
+      "isal"
       "prometheus"
     ];
 
@@ -74,6 +59,13 @@ in {
     ];
 
     config = {
+      ## Does real work despite looking like boilerplate: HA only sets up a
+      ## component that is a key here, is one of `defaultIntegrations`, or has
+      ## a config entry. Without this, discovery (zeroconf/ssdp/dhcp/usb),
+      ## mobile_app, history and the assist pipeline are installed but never
+      ## started, and the companion app reports the server has no mobile_app.
+      default_config = {};
+
       homeassistant = {
         name = "Home";
         unit_system = "metric";
