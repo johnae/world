@@ -145,7 +145,23 @@ in {
   networking.firewall.allowedTCPPorts = [8123 1883];
   networking.firewall.allowedUDPPorts = [5353 1900];
 
-  environment.persistence."/keep".directories = [cfg.configDir config.services.mosquitto.dataDir];
+  ## Ownership spelled out because impermanence creates these under /keep
+  ## before the service's own `createHome` would have chowned them, and a
+  ## root-owned bind mount leaves the daemon unable to write its own state.
+  environment.persistence."/keep".directories = [
+    {
+      directory = cfg.configDir;
+      user = "hass";
+      group = "hass";
+      mode = "0700";
+    }
+    {
+      directory = config.services.mosquitto.dataDir;
+      user = "mosquitto";
+      group = "mosquitto";
+      mode = "0700";
+    }
+  ];
 
   services.restic.backups.remote = {
     paths = [cfg.configDir];
