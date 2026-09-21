@@ -41,7 +41,9 @@ in {
       "ipp"
       "elgato"
 
-      ## energy
+      ## energy. No local counterpart: the Pulse P1 sold in Sweden talks only
+      ## to Tibber's cloud, and the LAN integrations all read a Pulse *Bridge*,
+      ## which the P1 doesn't have. Local per-phase current needs its own meter.
       "tibber"
 
       ## matter controller; thread runs on the S90D's border router
@@ -60,7 +62,6 @@ in {
 
     customComponents = [
       pkgs.home-assistant-custom-components.local_openai
-      pkgs.home-assistant-custom-components.tibber_local
       pkgs.home-assistant-custom-components.tuya_local
       pkgs.ha-easee
       pkgs.ha-kia-uvo
