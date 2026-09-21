@@ -22,6 +22,7 @@
     ../../../profiles/core-logging.nix
     ../../../profiles/forgejo.nix
     ../../../profiles/home-assistant.nix
+    ../../../profiles/home-assistant-voice.nix
     ../../../profiles/home-manager.nix
     ../../../profiles/restic-backup.nix
     ../../../profiles/server.nix
