@@ -83,11 +83,14 @@ in {
         internal_url = "http://${lanAddress}:8123";
         external_url = "https://ha.9000.dev";
       };
-      ## Without these HA rejects everything arriving through nginx.
-      http = {
-        use_x_forwarded_for = true;
-        trusted_proxies = ["127.0.0.1" "::1"];
-      };
+      ## No `http:` here on purpose. Since 2026.x HA migrates that block into
+      ## .storage once, then ignores the YAML forever and raises a repair issue
+      ## if it's still present (removed outright in 2027.2). Worse, the migrated
+      ## config lands as a *pending* trial that an admin has to promote within
+      ## five minutes or HA reverts and restarts - unpromotable on a fresh
+      ## instance, where no admin exists yet. So the reverse proxy settings
+      ## (use_x_forwarded_for, trusted_proxies 127.0.0.1 + ::1) are a one-time
+      ## UI step after onboarding, and live in .storage from then on.
       prometheus.namespace = "hass";
       recorder.purge_keep_days = 30;
     };
