@@ -35,6 +35,12 @@ in {
       "mqtt"
       "esphome"
 
+      ## turned up by discovery on the LAN once default_config was in place
+      "sonos"
+      "brother"
+      "ipp"
+      "elgato"
+
       ## energy
       "tibber"
 
@@ -42,8 +48,10 @@ in {
       "matter"
       "thread"
 
-      ## voice
+      ## voice; google_translate backs the TTS entry onboarding creates, until
+      ## piper takes over
       "wyoming"
+      "google_translate"
 
       "met"
       "isal"
