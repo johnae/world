@@ -44,21 +44,60 @@ in {
             value.cloudflareEnvFile
           ];
         };
-        script = ''
-          ${
+        script = let
+          fqdn = "${value.name}.${value.zone}";
+          api = "https://api.cloudflare.com/client/v4";
+          curl = "${pkgs.curl}/bin/curl";
+          jq = "${pkgs.jq}/bin/jq";
+          tailscale = "${pkgs.tailscale}/bin/tailscale";
+          ipFilter =
             if value.host == null
-            then ''
-              for IP in $(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Self.TailscaleIPs[]'); do
-            ''
-            else ''
-              for IP in $(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r '.Peer[] | select(.DNSName | startswith("${value.host}.")) | .TailscaleIPs[]'); do
-            ''
+            then ".Self.TailscaleIPs[]"
+            else ''.Peer[] | select(.DNSName | startswith("${value.host}.")) | .TailscaleIPs[]'';
+        in ''
+          set -euo pipefail
+
+          cf() {
+            local method="$1"
+            local path="$2"
+            shift 2
+            ${curl} -sS -X "$method" \
+              -H "Authorization: Bearer $CF_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              "${api}$path" "$@" \
+              | ${jq} -e 'if .success then . else (.errors | tojson | halt_error(1)) end'
           }
-            if echo "$IP" | grep -q '^f'; then
-              ${pkgs.flarectl}/bin/flarectl dns create-or-update --zone ${value.zone} --name "${value.name}" --type AAAA --ttl 60 --content "$IP"
+
+          zone_id=$(cf GET "/zones?name=${value.zone}" | ${jq} -er '.result[0].id')
+
+          ## Assigned first rather than inlined into the `for` list, where a
+          ## tailscale failure would leave the loop empty and the unit green.
+          ips=$(${tailscale} status --json | ${jq} -r '${ipFilter}')
+          if [ -z "$ips" ]; then
+            echo "no tailscale addresses found for ${fqdn}" >&2
+            exit 1
+          fi
+
+          for ip in $ips; do
+            case "$ip" in
+              *:*) type=AAAA ;;
+              *) type=A ;;
+            esac
+
+            ## Look up by name AND type. flarectl matched on name alone, so once
+            ## an A record existed it could never create the matching AAAA.
+            record_id=$(cf GET "/zones/$zone_id/dns_records?name=${fqdn}&type=$type" \
+              | ${jq} -r '.result[0].id // ""')
+
+            body=$(${jq} -nc --arg name "${fqdn}" --arg type "$type" --arg content "$ip" \
+              '{name: $name, type: $type, content: $content, ttl: 60, proxied: false}')
+
+            if [ -n "$record_id" ]; then
+              cf PATCH "/zones/$zone_id/dns_records/$record_id" --data "$body" >/dev/null
             else
-              ${pkgs.flarectl}/bin/flarectl dns create-or-update --zone ${value.zone} --name "${value.name}" --type A --ttl 60 --content "$IP"
+              cf POST "/zones/$zone_id/dns_records" --data "$body" >/dev/null
             fi
+            echo "$type ${fqdn} -> $ip"
           done
         '';
         after = ["network-online.target" "tailscale-auth.service"];
