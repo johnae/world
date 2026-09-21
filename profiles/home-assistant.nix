@@ -1,5 +1,6 @@
 {
   config,
+  hostName,
   lib,
   pkgs,
   ...
@@ -31,7 +32,6 @@ in {
       "samsungtv"
       "wake_on_lan"
       "dlna_dmr"
-      "nuki"
       "mqtt"
       "esphome"
 
@@ -102,12 +102,50 @@ in {
   ## on every start.
   hardware.bluetooth.enable = true;
 
-  ## 8123 on the LAN for satellites and bridge callbacks, mDNS and SSDP
-  ## inbound so discovery finds Hue, the Samsung screens and the plugs.
-  networking.firewall.allowedTCPPorts = [8123];
+  age.secrets = {
+    mosquitto-hass = {
+      rekeyFile = ../secrets/${hostName}/mosquitto-hass.age;
+      generator.script = "alnum";
+    };
+    mosquitto-nuki = {
+      rekeyFile = ../secrets/${hostName}/mosquitto-nuki.age;
+      generator.script = "alnum";
+    };
+  };
+
+  services.mosquitto = {
+    enable = true;
+    listeners = [
+      {
+        address = "0.0.0.0";
+        port = 1883;
+        users = {
+          hass = {
+            passwordFile = config.age.secrets.mosquitto-hass.path;
+            acl = ["readwrite #"];
+          };
+          nuki = {
+            passwordFile = config.age.secrets.mosquitto-nuki.path;
+            acl = [
+              "readwrite nuki/#"
+              ## The lock publishes its own discovery config here, and the
+              ## prefix is hardcoded in its firmware. Without write access it
+              ## connects happily and then never shows up in Home Assistant.
+              "readwrite homeassistant/#"
+            ];
+          };
+        };
+      }
+    ];
+  };
+
+  ## 8123 for voice satellites and webhook callbacks, 1883 for the Nuki, and
+  ## mDNS/SSDP inbound so discovery finds Hue, the Samsung screens and the
+  ## plugs.
+  networking.firewall.allowedTCPPorts = [8123 1883];
   networking.firewall.allowedUDPPorts = [5353 1900];
 
-  environment.persistence."/keep".directories = [cfg.configDir];
+  environment.persistence."/keep".directories = [cfg.configDir config.services.mosquitto.dataDir];
 
   services.restic.backups.remote = {
     paths = [cfg.configDir];
