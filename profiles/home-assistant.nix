@@ -102,6 +102,11 @@ in {
   ## on every start.
   hardware.bluetooth.enable = true;
 
+  ## The Nuki Ultra rejects long MQTT passwords with a bare "error code 89"
+  ## and no hint that length is the problem; the stock `alnum` generator's 48
+  ## characters trip it. 20 alphanumerics is still ~119 bits.
+  age.generators.alnum20 = {pkgs, ...}: "${pkgs.pwgen}/bin/pwgen -s 20 1";
+
   age.secrets = {
     mosquitto-hass = {
       rekeyFile = ../secrets/${hostName}/mosquitto-hass.age;
@@ -109,7 +114,7 @@ in {
     };
     mosquitto-nuki = {
       rekeyFile = ../secrets/${hostName}/mosquitto-nuki.age;
-      generator.script = "alnum";
+      generator.script = "alnum20";
     };
   };
 
