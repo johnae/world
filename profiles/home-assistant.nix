@@ -69,6 +69,8 @@ in {
       pkgs.home-assistant-custom-components.local_openai
       pkgs.home-assistant-custom-components.tibber_local
       pkgs.home-assistant-custom-components.tuya_local
+      pkgs.ha-easee
+      pkgs.ha-kia-uvo
     ];
 
     config = {
