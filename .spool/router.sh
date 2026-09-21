@@ -57,7 +57,7 @@ echo "world-ci: repo=${repo_full} sha=${sha} ref=${ref}${pr:+ pr=#${pr}}"
 # run's page instead of being a dead end.
 post_status() {
   local state="$1" desc="$2" run="${3:-}" target=null
-  [ -n "$run" ] && target="\"https://app.hyperspool.io/runs/${run}\""
+  [ -n "$run" ] && target="\"https://hyperspool.dev/workflows/runs/${run}\""
   curl -sS --retry 3 --retry-delay 3 -o /dev/null \
     -X POST \
     -H "Authorization: Bearer ${GITHUB_STATUS_TOKEN:?}" \

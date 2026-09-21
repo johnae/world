@@ -31,8 +31,20 @@ whose closure holds the ~10G qcow2.
 
 ## Applying the wiring
 
-The pipeline is versioned here; the two server-side pieces are applied
-by hand and only change when this file says so.
+The pipeline (`ci.yaml`) is read from the repo at the commit being built,
+so editing it here is enough. **`router.sh` is not.** `spool handler set`
+uploads the script's BODY, so the server keeps a copy taken when the
+command last ran: edit `router.sh`, commit it, and the server carries on
+running the old one until you re-run the `handler set` below.
+
+There is nothing that warns you. The router posts the commit's `pending`
+status as its first act, so an old copy that dies before that line leaves
+no status at all - the commit looks unbuilt rather than failed. That is
+exactly what happened when `.cryo/` became `.spool/`: the stored copy
+still read `$CRYO_INPUT_FILE`, every push and PR failed on an unset
+variable, and it went unnoticed for three days because nothing turned red.
+
+So: **any change to `router.sh` needs a re-run of `spool handler set`.**
 
 ```sh
 # The webhook endpoint. Prints the ingest URL and signing secret once -
