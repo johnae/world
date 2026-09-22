@@ -36,6 +36,13 @@
   disko.devices.disk.disk1.device = "/dev/disk/by-path/pci-0000:c1:00.0-nvme-1";
   disko.devices.disk.disk2.device = "/dev/disk/by-path/pci-0000:c2:00.0-nvme-1";
 
+  ## The 8060S is an iGPU, and ollama drops those unless told otherwise - it
+  ## logged "dropping integrated GPU" on every start and ran everything on the
+  ## CPU. Measured on a 24B Q4_K_M: 7.4 -> 14.4 tok/s generating, 77 -> 169
+  ## tok/s prefilling. With this it reports the 62.5 GiB of GTT as usable,
+  ## rather than the 512 MB carved out as dedicated VRAM.
+  systemd.services.ollama.environment.OLLAMA_IGPU_ENABLE = "1";
+
   services.ollama.enable = true;
   services.ollama.rocmOverrideGfx = "11.0.0"; ## rdna 3 11.0.0
   services.ollama.package = pkgs.ollama-rocm;
