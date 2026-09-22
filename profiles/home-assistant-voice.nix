@@ -91,6 +91,28 @@
       "300"
     ];
   };
+  ## A third engine for the same comparison. Parakeet TDT 0.6b v3 covers 25
+  ## European languages including Swedish and German, detects the language
+  ## itself rather than being told, and is a FastConformer-TDT rather than an
+  ## encoder-decoder - so it too decodes proportionally to the audio.
+  ##
+  ## The trade is biasing: --initial-prompt only reaches faster-whisper and
+  ## qwen3-asr, so this one never sees the Home Assistant names. It has to get
+  ## them right on its own.
+  services.wyoming.faster-whisper.servers.parakeet = {
+    enable = true;
+    uri = "tcp://127.0.0.1:10302";
+    language = "sv";
+    sttLibrary = "sherpa";
+    ## Resolves to sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8.
+    model = "auto";
+    extraArgs = [
+      "--cpu-threads"
+      "8"
+      "--vad-clip"
+      "sherpa"
+    ];
+  };
 
   ## A long-lived Home Assistant token, read-only in practice: the server only
   ## lists names and never calls a service.
