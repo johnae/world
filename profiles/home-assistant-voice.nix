@@ -57,6 +57,40 @@
       "300"
     ];
   };
+  ## A second speech-to-text server, running alongside the whisper one so the
+  ## two can be compared by switching engines in the Assist pipeline.
+  ##
+  ## Whisper transcribes into one language's orthography, and kb-whisper is
+  ## fine-tuned on Swedish alone, so a German or English name inside a Swedish
+  ## sentence comes out spelled Swedish ("Schrotthagen" -> "Skotthagen").
+  ## Qwen3-ASR is a speech LLM that handles Swedish, German and English in one
+  ## model, and takes its biasing context as a real system turn rather than
+  ## squeezing it into whisper's 223-token prompt.
+  ##
+  ## It also decodes in time proportional to the audio, where whisper pads
+  ## every utterance to 30s, so short commands should be cheaper.
+  services.wyoming.faster-whisper.servers.qwen = {
+    enable = true;
+    uri = "tcp://127.0.0.1:10301";
+    language = "sv";
+    sttLibrary = "qwen3-asr";
+    ## Resolves to rhasspy/qwen3-asr-0.6b-onnx-int4-merged. The merged decoder
+    ## caches the biasing prompt's KV across utterances; the split export
+    ## re-prefills it every time.
+    model = "auto";
+    extraArgs = [
+      "--cpu-threads"
+      "8"
+      ## Trimming silence is a real win here and a wash for whisper, which pads
+      ## to a fixed window either way.
+      "--vad-clip"
+      "qwen3-asr"
+      "--hass-api"
+      "http://127.0.0.1:8123/api"
+      "--hass-refresh-seconds"
+      "300"
+    ];
+  };
 
   ## A long-lived Home Assistant token, read-only in practice: the server only
   ## lists names and never calls a service.
@@ -65,9 +99,14 @@
   ## The token reaches the server through the file the variable names, so it
   ## stays out of both argv and the environment. LoadCredential because the
   ## unit runs under DynamicUser - there is no fixed uid to chown to.
-  systemd.services.wyoming-faster-whisper-sv = {
-    serviceConfig.LoadCredential = ["hass-token:${config.age.secrets.whisper-hass-token.path}"];
-    environment.WYO_WHISPER_HASS_TOKEN_FILE = "%d/hass-token";
+  systemd.services = let
+    hassToken = {
+      serviceConfig.LoadCredential = ["hass-token:${config.age.secrets.whisper-hass-token.path}"];
+      environment.WYO_WHISPER_HASS_TOKEN_FILE = "%d/hass-token";
+    };
+  in {
+    wyoming-faster-whisper-sv = hassToken;
+    wyoming-faster-whisper-qwen = hassToken;
   };
 
   services.wyoming.piper.servers.sv = {
