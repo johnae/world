@@ -16,7 +16,7 @@
   imports = [
     ../../../profiles/hardware/usbcore.nix
     ../../../profiles/hardware/x570.nix
-    ../../../profiles/disk/bcachefs-on-luks.nix
+    ../../../profiles/disk/disko-btrfs.nix
     ../../../profiles/admin-user/user.nix
     ../../../profiles/admin-user/u2fmappings.nix
     ../../../profiles/admin-user/home-manager.nix
@@ -44,13 +44,18 @@
 
   boot.loader.systemd-boot.memtest86.enable = true;
 
-  bcachefs.disks = ["/dev/nvme0n1"];
-  bcachefs.devices = ["/dev/mapper/encrypted_root"];
+  ## Single NVMe. disko partitions it as ESP + random-key swap + one luks
+  ## volume holding the btrfs subvolumes, same shape as icarus and neptune
+  ## minus the second disk.
+  disko.devices.disk.disk1.device = "/dev/nvme0n1";
 
   boot.initrd = {
     systemd.enable = true;
     systemd.emergencyAccess = config.users.users.${adminUser.name}.hashedPassword;
-    systemd.tpm2.enable = true;
+    ## Unlocks itself from the TPM, with a FIDO2 key as the other way in and
+    ## the passphrase always behind both. Neither is enrolled by installing -
+    ## that is a systemd-cryptenroll run once the machine is up.
+    luks.devices.encrypted.crypttabExtraOpts = ["tpm2-device=auto" "fido2-device=auto"];
   };
 
   networking.useDHCP = false;
