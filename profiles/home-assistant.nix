@@ -85,7 +85,97 @@ in {
       ## the UI lands on disk and silently never becomes an entity, which also
       ## means the conversation agent never gets it as a tool.
       automation = "!include automations.yaml";
-      script = "!include scripts.yaml";
+      ## Labelled domain keys: `cv.domain_key` splits a top-level key on its
+      ## first space, so both of these are the `script` domain and get merged.
+      ## Scripts that belong in version control live here; the ones built in
+      ## the UI keep their own file.
+      "script manual" = {
+        vaderprognos = {
+          alias = "Väderprognos kommande dagar";
+          description = "Väderprognos för de kommande dagarna. Anropa alltid detta när någon frågar om vädret framåt i tiden - om det kommer att regna, snöa, blåsa, bli varmare eller kallare någon av de närmaste dagarna. Svarar per dygn med datum, väderläge, högsta och lägsta temperatur samt nederbörd i millimeter. GetLiveContext ger bara vädret just nu och kan inte besvara frågor om framtiden.";
+          mode = "single";
+          sequence = [
+            {
+              action = "weather.get_forecasts";
+              target.entity_id = "weather.forecast_hem";
+              data.type = "daily";
+              response_variable = "prognos";
+            }
+            {
+              stop = "";
+              response_variable = "prognos";
+            }
+          ];
+        };
+
+        nyheter = {
+          alias = "Senaste nyheterna";
+          description = "De senaste nyheterna från Omni. Anropa detta när någon frågar vad som har hänt, vad som är på gång i världen eller vill veta dagens nyheter. Svarar med rubrik, ingress och tidpunkt för var och en.";
+          mode = "single";
+          fields.antal = {
+            description = "Hur många nyheter som ska hämtas.";
+            default = 5;
+            selector.number = {
+              min = 1;
+              max = 10;
+              mode = "box";
+            };
+          };
+          sequence = [
+            {
+              variables.svar.nyheter = ''
+                {% set items = (state_attr('sensor.omni', 'item') or [])[:antal | int(5)] %}
+                {% set ns = namespace(out = []) %}
+                {% for i in items %}
+                  {% set ns.out = ns.out + [{'rubrik': i.title, 'ingress': i.description, 'tid': i.pubDate}] %}
+                {% endfor %}
+                {{ ns.out }}
+              '';
+            }
+            {
+              stop = "";
+              response_variable = "svar";
+            }
+          ];
+        };
+
+        las_upp_nyheterna = {
+          alias = "Läs upp nyheterna";
+          description = "Läser upp de senaste nyhetsrubrikerna högt på en högtalare. Anropa detta när någon vill höra nyheterna uppspelade i ett rum i stället för att få dem som svar.";
+          mode = "single";
+          fields = {
+            hogtalare = {
+              description = "Entitets-id för högtalaren nyheterna ska läsas upp på, till exempel media_player.kok.";
+              required = true;
+              selector.entity.filter.domain = "media_player";
+            };
+            antal = {
+              description = "Hur många rubriker som ska läsas upp.";
+              default = 5;
+              selector.number = {
+                min = 1;
+                max = 10;
+                mode = "box";
+              };
+            };
+          };
+          sequence = [
+            {
+              action = "tts.speak";
+              target.entity_id = "tts.piper";
+              data = {
+                media_player_entity_id = "{{ hogtalare }}";
+                message = ''
+                  Senaste nytt från Omni.
+                  {{ (state_attr('sensor.omni', 'item') or [])[:antal | int(5)]
+                     | map(attribute='title') | join('. ') }}.
+                '';
+              };
+            }
+          ];
+        };
+      };
+      "script ui" = "!include scripts.yaml";
       scene = "!include scenes.yaml";
 
       homeassistant = {
@@ -105,8 +195,29 @@ in {
       ## instance, where no admin exists yet. So the reverse proxy settings
       ## (use_x_forwarded_for, trusted_proxies 127.0.0.1 + ::1) are a one-time
       ## UI step after onboarding, and live in .storage from then on.
+      ## Omni publishes no documented API, but rss.xml is live and carries the
+      ## full item list. The rest platform runs XML through xmltodict before
+      ## templating, so the feed arrives as plain nested data.
+      sensor = [
+        {
+          platform = "rest";
+          name = "Omni";
+          resource = "https://omni.se/rss.xml";
+          scan_interval = 900;
+          ## The state is capped at 255 characters, so it carries the count and
+          ## the articles themselves ride along as an attribute.
+          value_template = "{{ value_json.rss.channel.item | count }}";
+          json_attributes_path = "$.rss.channel";
+          json_attributes = ["item"];
+        }
+      ];
+
       prometheus.namespace = "hass";
-      recorder.purge_keep_days = 30;
+      recorder = {
+        purge_keep_days = 30;
+        ## ~200 kB of headlines every 15 minutes, none of it worth a history.
+        exclude.entities = ["sensor.omni"];
+      };
     };
   };
 
