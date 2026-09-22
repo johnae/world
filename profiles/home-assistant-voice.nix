@@ -16,6 +16,17 @@
     model = "turbo";
     device = "cpu";
     beamSize = 1;
+    ## Both of these are why the stock settings are slow. The published model
+    ## is float16, which CPUs can't do efficiently, so ctranslate2 silently
+    ## widens it to float32 - the slowest path there is. And the wrapper
+    ## defaults to 4 threads on a 16-thread part. Measured before: ~8s to
+    ## transcribe 3s of speech.
+    extraArgs = [
+      "--compute-type"
+      "int8"
+      "--cpu-threads"
+      "16"
+    ];
   };
 
   services.wyoming.piper.servers.sv = {
