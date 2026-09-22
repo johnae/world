@@ -97,7 +97,7 @@
   services.printing.drivers = [pkgs.gutenprint];
   services.ipp-usb.enable = true;
 
-  services.dbus.packages = with pkgs; [gcr dconf sushi];
+  services.dbus.packages = with pkgs; [gcr_3 dconf sushi];
   services.udev.packages = with pkgs; [gnome-settings-daemon];
 
   environment.etc."systemd/sleep.conf".text = "HibernateDelaySec=8h";

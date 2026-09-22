@@ -6,7 +6,6 @@
   programs.rofi = {
     enable = true;
     package = pkgs.rofi;
-    font = "Roboto Medium 14";
     theme = let
       inherit (config.lib.formats.rasi) mkLiteral;
     in {
@@ -123,7 +122,8 @@
         border-color = mkLiteral "@foreground";
       };
     };
-    extraConfig = {
+    settings = {
+      font = "Roboto Medium 14";
       modi = "run,ssh,drun";
       display-ssh = "";
       display-run = "";
