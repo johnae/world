@@ -16,6 +16,23 @@
     openFirewall = true;
   };
 
+  ## Music Assistant normally reads its shared Spotify credential from an
+  ## app_secrets.json injected at build time from a private repo, so the
+  ## nixpkgs build has no value for it and the setup flow hands Spotify an
+  ## authorize URL with no client_id. That first step is not skippable - the
+  ## "use your own developer key" option only appears *after* it succeeds -
+  ## so the way in is the documented single-value override, pointed at our
+  ## own registered app rather than the project's shared one.
+  ##
+  ## Not a secret: PKCE is precisely the flow for clients that cannot keep
+  ## one, and Spotify sees this id in the browser URL anyway.
+  ##
+  ## The app must have https://music-assistant.io/callback registered as its
+  ## redirect URI. That is a fixed page upstream which bounces back to this
+  ## host, with the real callback carried in the OAuth `state`, which is how
+  ## a tailnet-only instance can complete the flow at all.
+  systemd.services.music-assistant.environment.MASS_APP_VAR_SPOTIFY_CLIENT_ID = "055d895137e240a1afdcaacb390eef7c";
+
   ## DynamicUser with StateDirectory=music-assistant, so systemd owns the
   ## directory and chowns it on start - no explicit user/group needed here,
   ## unlike the mosquitto case.
