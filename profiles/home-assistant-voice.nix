@@ -1,4 +1,8 @@
 {
+  config,
+  hostName,
+  ...
+}: {
   ## Kept apart from home-assistant.nix because the voice stack stands on its
   ## own: these are two plain network services Home Assistant talks to over the
   ## wyoming protocol, and removing this import leaves the rest untouched.
@@ -38,7 +42,32 @@
       ## 1.55s. Past ~8 the thread-sync overhead outweighs the parallelism.
       "--cpu-threads"
       "8"
+      ## Biasing context: the server pulls the names of conversation-exposed
+      ## entities, areas and floors from Home Assistant and feeds them to
+      ## whisper as the prompt for the first window. Proper nouns are what a
+      ## tiny model gets wrong, and they are exactly what gets said here.
+      ##
+      ## Naming the API is also what installs the hass extra: the module adds
+      ## it when any extraArg starts with --hass.
+      "--hass-api"
+      "http://127.0.0.1:8123/api"
+      ## The default refreshes on every utterance, putting an HTTP round trip
+      ## in front of each transcription. Names here change a few times a year.
+      "--hass-refresh-seconds"
+      "300"
     ];
+  };
+
+  ## A long-lived Home Assistant token, read-only in practice: the server only
+  ## lists names and never calls a service.
+  age.secrets.whisper-hass-token.rekeyFile = ../secrets/${hostName}/whisper-hass-token.age;
+
+  ## The token reaches the server through the file the variable names, so it
+  ## stays out of both argv and the environment. LoadCredential because the
+  ## unit runs under DynamicUser - there is no fixed uid to chown to.
+  systemd.services.wyoming-faster-whisper-sv = {
+    serviceConfig.LoadCredential = ["hass-token:${config.age.secrets.whisper-hass-token.path}"];
+    environment.WYO_WHISPER_HASS_TOKEN_FILE = "%d/hass-token";
   };
 
   services.wyoming.piper.servers.sv = {
