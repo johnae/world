@@ -134,8 +134,11 @@
   services.wyoming.piper.servers.sv = {
     enable = true;
     uri = "tcp://127.0.0.1:10200";
-    ## The only Swedish piper voice worth using. Downloaded on first start.
-    voice = "sv_SE-nst-medium";
+    ## Only the fallback for a request that names no voice - Home Assistant
+    ## sends one per request, and the Assist pipeline picks its own. Kept the
+    ## same as the pipeline uses so a caller that forgets still sounds like
+    ## the house. Downloaded on first start.
+    voice = "sv_SE-alma-medium";
   };
 
   ## Both servers run DynamicUser with StateDirectory under here. The models

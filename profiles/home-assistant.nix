@@ -165,6 +165,10 @@ in {
               target.entity_id = "tts.piper";
               data = {
                 media_player_entity_id = "{{ hogtalare }}";
+                ## Named explicitly: the wyoming tts entity has no default
+                ## options, so leaving this out sends no voice at all and
+                ## piper answers in whatever its --voice flag happens to be.
+                options.voice = "sv_SE-alma-medium";
                 message = ''
                   Senaste nytt från Omni.
                   {{ (state_attr('sensor.omni', 'item') or [])[:antal | int(5)]
