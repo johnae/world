@@ -23,6 +23,7 @@
     ../../../profiles/forgejo.nix
     ../../../profiles/home-assistant.nix
     ../../../profiles/home-assistant-voice.nix
+    ../../../profiles/music-assistant.nix
     ../../../profiles/home-manager.nix
     ../../../profiles/restic-backup.nix
     ../../../profiles/server.nix
@@ -258,6 +259,9 @@
     "ha.9000.dev" = {
       group = "nginx";
     };
+    "ma.9000.dev" = {
+      group = "nginx";
+    };
   };
 
   services.my-cloudflared = {
@@ -319,6 +323,12 @@
   };
 
   services.cloudflare-tailscale-dns.ha = {
+    enable = true;
+    zone = "9000.dev";
+    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+  };
+
+  services.cloudflare-tailscale-dns.ma = {
     enable = true;
     zone = "9000.dev";
     cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
@@ -488,6 +498,12 @@
       "ha.9000.dev" = {
         useACMEHost = "ha.9000.dev";
         locations."/".proxyPass = "http://localhost:8123";
+        locations."/".proxyWebsockets = true;
+        forceSSL = true;
+      };
+      "ma.9000.dev" = {
+        useACMEHost = "ma.9000.dev";
+        locations."/".proxyPass = "http://localhost:8095";
         locations."/".proxyWebsockets = true;
         forceSSL = true;
       };
