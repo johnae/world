@@ -79,6 +79,15 @@ in {
       ## started, and the companion app reports the server has no mobile_app.
       default_config = {};
 
+      ## Home Assistant's own editors write these three files, and nothing
+      ## reads them unless configuration.yaml says so - default_config pulls in
+      ## neither automation, script nor scene. Without these a script built in
+      ## the UI lands on disk and silently never becomes an entity, which also
+      ## means the conversation agent never gets it as a tool.
+      automation = "!include automations.yaml";
+      script = "!include scripts.yaml";
+      scene = "!include scenes.yaml";
+
       homeassistant = {
         name = "Home";
         unit_system = "metric";
@@ -154,6 +163,24 @@ in {
   ## plugs.
   networking.firewall.allowedTCPPorts = [8123 1883];
   networking.firewall.allowedUDPPorts = [5353 1900];
+
+  ## `!include` of a file that isn't there stops Home Assistant from starting,
+  ## and the editors only create these the first time something is saved. Seed
+  ## them empty; tmpfiles leaves a file that already exists alone.
+  systemd.tmpfiles.settings."10-home-assistant" = let
+    seed = argument: {
+      f = {
+        inherit argument;
+        user = "hass";
+        group = "hass";
+        mode = "0644";
+      };
+    };
+  in {
+    "${cfg.configDir}/automations.yaml" = seed "[]";
+    "${cfg.configDir}/scripts.yaml" = seed "{}";
+    "${cfg.configDir}/scenes.yaml" = seed "[]";
+  };
 
   ## Ownership spelled out because impermanence creates these under /keep
   ## before the service's own `createHome` would have chowned them, and a
