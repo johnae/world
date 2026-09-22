@@ -15,11 +15,17 @@
     ## and short commands are entirely encoder-bound. large-v3-turbo only
     ## shrinks the *decoder*, which is the part a voice command barely uses, so
     ## it cost full large-encoder time for nothing. Measured on this host, 3s
-    ## of speech: turbo 8.44s, kb-whisper-medium 11.46s, this 1.88s.
+    ## of speech: turbo 8.44s, kb-whisper-medium 11.46s, kb-whisper-small
+    ## 2.1s, this 0.28s.
+    ##
+    ## tiny is a deliberate trade. The vocabulary here is a couple of dozen
+    ## house commands, and the model is fine-tuned for Swedish rather than
+    ## being generically multilingual, which buys back much of what the size
+    ## costs. Move to kb-whisper-small if recognition starts missing.
     ##
     ## CPU because the 5750G only has an iGPU, and ctranslate2 is CUDA-or-CPU
     ## with no rocm - a discrete AMD card elsewhere would not help either.
-    model = "KBLab/kb-whisper-small";
+    model = "KBLab/kb-whisper-tiny";
     device = "cpu";
     beamSize = 1;
     ## The published weights are float16, which CPUs can't do efficiently, so
