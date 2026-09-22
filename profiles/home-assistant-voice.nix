@@ -9,18 +9,22 @@
     enable = true;
     uri = "tcp://127.0.0.1:10300";
     language = "sv";
-    ## large-v3-turbo. Short commands are what this transcribes all day, and
-    ## on 16 threads plain large-v3 costs seconds for little gain on them.
-    ## CPU because the 5750G only has an iGPU and the module offers cuda, not
-    ## rocm.
-    model = "turbo";
+    ## Swedish-tuned, from the National Library of Sweden, and small enough to
+    ## be quick. Size is what matters here: whisper pads every utterance to a
+    ## 30s window, so the encoder does identical work for two words or twenty
+    ## and short commands are entirely encoder-bound. large-v3-turbo only
+    ## shrinks the *decoder*, which is the part a voice command barely uses, so
+    ## it cost full large-encoder time for nothing. Measured on this host, 3s
+    ## of speech: turbo 8.44s, kb-whisper-medium 11.46s, this 1.88s.
+    ##
+    ## CPU because the 5750G only has an iGPU, and ctranslate2 is CUDA-or-CPU
+    ## with no rocm - a discrete AMD card elsewhere would not help either.
+    model = "KBLab/kb-whisper-small";
     device = "cpu";
     beamSize = 1;
-    ## Both of these are why the stock settings are slow. The published model
-    ## is float16, which CPUs can't do efficiently, so ctranslate2 silently
-    ## widens it to float32 - the slowest path there is. And the wrapper
-    ## defaults to 4 threads on a 16-thread part. Measured before: ~8s to
-    ## transcribe 3s of speech.
+    ## The published weights are float16, which CPUs can't do efficiently, so
+    ## ctranslate2 silently widens them to float32 unless told otherwise. The
+    ## wrapper also defaults to 4 threads on a 16-thread part.
     extraArgs = [
       "--compute-type"
       "int8"
