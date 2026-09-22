@@ -25,6 +25,7 @@
     ../../../profiles/home-manager.nix
     ../../../profiles/interception-tools.nix
     ../../../profiles/pamu2f.nix
+    ../../../profiles/qwen-asr.nix
     ../../../profiles/restic-backup.nix
     ../../../profiles/state.nix
     ../../../profiles/syncthing.nix
@@ -35,6 +36,12 @@
   ## disable this for now on this machine
   services.logind.settings.Login = {
     IdleAction = lib.mkForce "ignore";
+  };
+
+  services.qwen-asr = {
+    enable = true;
+    ## Home Assistant reaches this over tailscale, which is already trusted.
+    openFirewall = false;
   };
 
   services.ollama.enable = true;
