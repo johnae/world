@@ -55,6 +55,10 @@ in {
       "wyoming"
       "google_translate"
 
+      ## the music-assistant server on this host. Installs its client library;
+      ## the server advertises _mass._tcp so discovery offers the config entry.
+      "music_assistant"
+
       "met"
       "isal"
       "prometheus"
