@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   ## Music Assistant sits between the streaming providers and the speakers, so
   ## "spela X i köket" resolves to a real queue on a real device. Home
   ## Assistant's own spotify integration can only hand a URI to a player;
@@ -14,6 +14,23 @@
     ## 8097 carries the audio itself: the Sonos speakers fetch the stream from
     ## this host, so it has to be reachable on the LAN rather than loopback.
     openFirewall = true;
+
+    ## nixpkgs deletes the vendored librespot binaries and carries a patch that
+    ## looks the binary up on PATH instead, where the module puts librespot-ma.
+    ## Only the import hunk of that patch applies to 2.10.3 - the hunk changing
+    ## the lookup itself silently does not - so the setup flow still searches
+    ## the deleted directory and dies with "Unable to locate Librespot for
+    ## linux/x86_64". Redo the intended substitution here.
+    ##
+    ## replace-fail, so this breaks loudly once nixpkgs repairs the patch.
+    package = pkgs.music-assistant.overrideAttrs (old: {
+      postPatch =
+        (old.postPatch or "")
+        + ''
+          substituteInPlace music_assistant/providers/spotify/helpers.py \
+            --replace-fail 'os.path.join(base_path, f"librespot-{system}-{architecture}")' 'which("librespot")'
+        '';
+    });
   };
 
   ## Music Assistant normally reads its shared Spotify credential from an
