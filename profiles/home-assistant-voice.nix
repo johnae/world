@@ -18,24 +18,26 @@
     ## of speech: turbo 8.44s, kb-whisper-medium 11.46s, kb-whisper-small
     ## 2.1s, this 0.28s.
     ##
-    ## tiny is a deliberate trade. The vocabulary here is a couple of dozen
-    ## house commands, and the model is fine-tuned for Swedish rather than
-    ## being generically multilingual, which buys back much of what the size
-    ## costs. Move to kb-whisper-small if recognition starts missing.
+    ## tiny is a deliberate trade, and the entity-name biasing below is what
+    ## pays for it: proper nouns like Värmdögatan are exactly what a small
+    ## model guesses wrong. Move to kb-whisper-small if recognition still
+    ## misses.
     ##
     ## CPU because the 5750G only has an iGPU, and ctranslate2 is CUDA-or-CPU
     ## with no rocm - a discrete AMD card elsewhere would not help either.
     model = "KBLab/kb-whisper-tiny";
     device = "cpu";
     beamSize = 1;
-    ## The published weights are float16, which CPUs can't do efficiently, so
-    ## ctranslate2 silently widens them to float32 unless told otherwise. The
-    ## wrapper also defaults to 4 threads on a 16-thread part.
     extraArgs = [
+      ## The published weights are float16, which CPUs can't do efficiently,
+      ## so ctranslate2 silently widens them to float32 unless told otherwise.
       "--compute-type"
       "int8"
+      ## Not 16, despite the 16 threads available. Measured on kb-whisper-small
+      ## here: 4 threads 1.73s, 8 threads 1.33s, 12 threads 1.39s, 16 threads
+      ## 1.55s. Past ~8 the thread-sync overhead outweighs the parallelism.
       "--cpu-threads"
-      "16"
+      "8"
     ];
   };
 
