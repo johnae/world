@@ -13,23 +13,24 @@
     enable = true;
     uri = "tcp://127.0.0.1:10300";
     language = "sv";
-    ## Swedish-tuned, from the National Library of Sweden, and small enough to
-    ## be quick. Size is what matters here: whisper pads every utterance to a
-    ## 30s window, so the encoder does identical work for two words or twenty
-    ## and short commands are entirely encoder-bound. large-v3-turbo only
-    ## shrinks the *decoder*, which is the part a voice command barely uses, so
-    ## it cost full large-encoder time for nothing. Measured on this host, 3s
-    ## of speech: turbo 8.44s, kb-whisper-medium 11.46s, kb-whisper-small
-    ## 2.1s, this 0.28s.
+    ## Swedish-tuned, from the National Library of Sweden. Size is what matters
+    ## here: whisper pads every utterance to a 30s window, so the encoder does
+    ## identical work for two words or twenty and short commands are entirely
+    ## encoder-bound. large-v3-turbo only shrinks the *decoder*, which is the
+    ## part a voice command barely uses, so it cost full large-encoder time for
+    ## nothing. Measured on this host, 3s of speech: kb-whisper-medium 11.46s,
+    ## turbo 8.44s, this 1.33s at 8 threads, tiny 0.28s.
     ##
-    ## tiny is a deliberate trade, and the entity-name biasing below is what
-    ## pays for it: proper nouns like Värmdögatan are exactly what a small
-    ## model guesses wrong. Move to kb-whisper-small if recognition still
-    ## misses.
+    ## tiny was the wrong trade. It mangles ordinary Swedish, not just proper
+    ## nouns - "Är dörren låst?" came back as "E dur and Lost". small gets the
+    ## same sentence right and costs about a second more, which is worth it
+    ## for a command that otherwise has to be repeated.
     ##
     ## CPU because the 5750G only has an iGPU, and ctranslate2 is CUDA-or-CPU
-    ## with no rocm - a discrete AMD card elsewhere would not help either.
-    model = "KBLab/kb-whisper-tiny";
+    ## with no rocm. The 7900 XTX in eris would not help either: a rocm torch
+    ## is not in any binary cache, so the transformers backend would mean
+    ## building torch from source.
+    model = "KBLab/kb-whisper-small";
     device = "cpu";
     beamSize = 1;
     extraArgs = [
