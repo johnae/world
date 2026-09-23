@@ -12,11 +12,11 @@ on:
 
 jobs:
   claude-review:
-    # Optional: Filter by PR author
-    # if: |
-    #   github.event.pull_request.user.login == 'external-contributor' ||
-    #   github.event.pull_request.user.login == 'new-developer' ||
-    #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
+    # The action rejects a run whose actor is a bot unless the bot is named in
+    # allowed_bots. The nightly flake-input PR and dependabot both trip that,
+    # and a review of a lockfile hash bump adds nothing the build does not
+    # already prove - so skip them rather than pay for the review.
+    if: github.event.pull_request.user.type != 'Bot'
     
     runs-on: ubuntu-latest
     permissions:
