@@ -75,8 +75,18 @@ in {
         RestartSec = 10;
         DynamicUser = true;
         StateDirectory = "qwen-asr";
-        ## llama-server caches the weights under HF's usual layout.
-        Environment = ["HF_HOME=/var/lib/qwen-asr"];
+        ## llama-server caches the weights under HF's usual layout. HOME is set
+        ## too, or the vulkan backend puts its shader cache in //.cache, fails
+        ## on the read-only root and recompiles shaders on every start.
+        Environment = [
+          "HF_HOME=/var/lib/qwen-asr"
+          "HOME=/var/lib/qwen-asr"
+        ];
+        ## StateDirectory alone does not order against the impermanence bind
+        ## mount, so the first start beat the mount and failed writing the
+        ## model cache. Restart=on-failure papered over it; this stops it
+        ## happening.
+        RequiresMountsFor = "/var/lib/private/qwen-asr";
         SupplementaryGroups = ["render" "video"];
       };
     };
