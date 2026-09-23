@@ -26,6 +26,7 @@
     ../../../profiles/interception-tools.nix
     ../../../profiles/pamu2f.nix
     ../../../profiles/qwen-asr.nix
+    ../../../profiles/supertonic-tts.nix
     ../../../profiles/restic-backup.nix
     ../../../profiles/state.nix
     ../../../profiles/syncthing.nix
@@ -42,6 +43,11 @@
     enable = true;
     ## Home Assistant reaches this over tailscale, which is already trusted.
     openFirewall = false;
+  };
+
+  services.supertonic-tts = {
+    enable = true;
+    voice = "F5";
   };
 
   services.ollama.enable = true;
