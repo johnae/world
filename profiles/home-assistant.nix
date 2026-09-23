@@ -216,6 +216,24 @@ in {
         }
       ];
 
+      ## Written by the music-assistant-spotify-session service, which reads a
+      ## state directory this process cannot. "missing" means Spotify fell back
+      ## to the shared key and its one-request-every-two-seconds throttle.
+      ## "absent" - no file yet, or Spotify never set up - matches neither
+      ## payload, so the sensor stays unknown instead of reporting healthy.
+      command_line = [
+        {
+          binary_sensor = {
+            name = "Music Assistant Spotify developer session";
+            command = "cat /run/music-assistant-spotify-session 2>/dev/null || echo absent";
+            payload_on = "missing";
+            payload_off = "ok";
+            device_class = "problem";
+            scan_interval = 900;
+          };
+        }
+      ];
+
       prometheus.namespace = "hass";
       recorder = {
         purge_keep_days = 30;

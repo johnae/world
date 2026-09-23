@@ -54,4 +54,48 @@
   ## directory and chowns it on start - no explicit user/group needed here,
   ## unlike the mosquitto case.
   environment.persistence."/keep".directories = ["/var/lib/private/music-assistant"];
+
+  ## The developer key lifts Spotify's request throttle from one call every two
+  ## seconds to forty-five per thirty. Two ordinary actions drop back to the
+  ## shared key without saying so: finishing the last page of the Spotify setup
+  ## flow with the opt-in box unticked clears client_id and refresh_token_dev,
+  ## and a refresh that comes back invalid_grant clears the same two fields and
+  ## carries on. Playback keeps working either way, so nothing surfaces until
+  ## searches start timing out. The state directory is DynamicUser-owned and
+  ## unreadable to Home Assistant, so a root timer reads settings.json and
+  ## writes the result to /run.
+  systemd.services.music-assistant-spotify-session = {
+    description = "Check that the Music Assistant Spotify developer session is configured";
+    path = [pkgs.jq];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      settings=/var/lib/private/music-assistant/settings.json
+      out=/run/music-assistant-spotify-session
+
+      if [ -r "$settings" ]; then
+        state=$(jq -r '
+          [.providers[]? | select(.domain == "spotify")][0] as $spotify
+          | if $spotify == null then "absent"
+            elif ($spotify.setup_data.client_id
+                  and $spotify.setup_data.refresh_token_dev) then "ok"
+            else "missing"
+            end' "$settings")
+      else
+        state=absent
+      fi
+
+      printf '%s\n' "$state" > "$out"
+      chmod 0644 "$out"
+    '';
+  };
+
+  systemd.timers.music-assistant-spotify-session = {
+    wantedBy = ["timers.target"];
+    timerConfig = {
+      ## Music Assistant writes settings on a debounce, so a check right at
+      ## boot can catch the file mid-rewrite.
+      OnBootSec = "5m";
+      OnUnitActiveSec = "15m";
+    };
+  };
 }
