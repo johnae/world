@@ -44,6 +44,16 @@ env:
     accept-flake-config = true
     extra-substituters = https://nixcache.9000.dev
     extra-trusted-public-keys = nixcache.9000.dev:MNr2kidQv9GfkQKUarqdpaufX7JMMSixX/cdlS5i5i0=
+  # The account the containerdisk is pushed as. Not a secret - zot pairs it
+  # with the password below, which is.
+  REGISTRY_USER: spool-ci
+
+# GITHUB_APP_KEY and NCPS_UPLOAD_KEY arrive by name; the registry password is
+# held under a different name, so it needs mapping the way update.yaml maps
+# its two. Without it the publish step aborts on `${REGISTRY_PASS:?}` after
+# the image has already been built.
+credentials:
+  REGISTRY_PASS: spool-ci
 
 jobs:
   lint:
