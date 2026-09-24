@@ -25,12 +25,12 @@
     ../../../profiles/home-manager.nix
     ../../../profiles/interception-tools.nix
     ../../../profiles/pamu2f.nix
-    ../../../profiles/qwen-asr.nix
     ../../../profiles/supertonic-tts.nix
     ../../../profiles/restic-backup.nix
     ../../../profiles/state.nix
     ../../../profiles/syncthing.nix
     ../../../profiles/tailscale.nix
+    ../../../profiles/whisper-cpp.nix
     ../../../profiles/zram.nix
   ];
 
@@ -39,11 +39,30 @@
     IdleAction = lib.mkForce "ignore";
   };
 
-  services.qwen-asr = {
+  services.whisper-cpp = {
     enable = true;
-    ## Home Assistant reaches this over tailscale, which is already trusted.
-    openFirewall = false;
+    hassApi = "http://icarus:8123/api";
+    hassTokenFile = config.age.secrets.whisper-hass-token.path;
+    ## Almost everything said here is Swedish and needs no help. What gets
+    ## misheard is foreign names asked for by voice, so these are the ones in
+    ## recent Spotify listening that whisper cannot know from English alone -
+    ## names like Queen or David Bowie it already spells. German album titles
+    ## are here for the same reason as the artists.
+    initialPrompt = lib.concatStringsSep " " [
+      "Spela Schrotthagen, Sturm und Drang, Schubkraft, Ballarak,"
+      "Rage Against the Machine, Deep Purple, The Frightnrs, Dolly Style,"
+      "Alina Pash, Culture Club, Neon Graveyard, Johannes Schuster,"
+      "Guns N' Roses, Led Zeppelin, Baha Men, Bruce Springsteen, Saint Germain,"
+      "Erik Satie, Miss Kittin och Blümchen."
+    ];
+    ## The artists take ~107 tokens and Home Assistant's names ~95, just over
+    ## the default 200. Whisper's hard limit is 223.
+    promptMaxTokens = 210;
   };
+
+  ## The same read-only token icarus's whisper servers use, so no second
+  ## token to issue or revoke.
+  age.secrets.whisper-hass-token.rekeyFile = ../../../secrets/icarus/whisper-hass-token.age;
 
   services.supertonic-tts = {
     enable = true;
@@ -54,6 +73,10 @@
   services.ollama.rocmOverrideGfx = "11.0.0"; ## rdna 3 11.0.0
   services.ollama.host = "0.0.0.0";
   services.ollama.package = pkgs.ollama-rocm;
+  ## Keep the model resident. Speech-to-text now shares the GPU, and both fit:
+  ## ~14 GiB for the model plus ~4 GiB for kb-whisper-large of the 24. A cold
+  ## load costs several seconds on the first question after an idle spell.
+  services.ollama.environmentVariables.OLLAMA_KEEP_ALIVE = "-1";
 
   boot.loader.systemd-boot.memtest86.enable = true;
 
