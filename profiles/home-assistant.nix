@@ -90,6 +90,54 @@ in {
       ## Scripts that belong in version control live here; the ones built in
       ## the UI keep their own file.
       "script manual" = {
+        ## Playing by voice goes through HassMediaSearchAndPlay, which starts the
+        ## top match straight away. A misheard name then plays the wrong artist
+        ## - "Saint Germain" came out as "San Shuman" and started Robert
+        ## Schumann. Looking it up first lets the model compare what was heard
+        ## with what was found, and ask before playing a name that only sounds
+        ## similar.
+        sok_musik = {
+          alias = "Sök musik";
+          description = "Söker efter en artist, ett album eller en låt utan att spela något. Anropa alltid detta innan musik spelas, och jämför namnen i svaret med det användaren bad om.";
+          mode = "parallel";
+          fields.fraga = {
+            description = "Artisten, albumet eller låten användaren bad om.";
+            required = true;
+            selector.text = {};
+          };
+          sequence = [
+            {
+              action = "music_assistant.search";
+              data = {
+                config_entry_id = "{{ config_entry_id(integration_entities('music_assistant') | first) }}";
+                name = "{{ fraga }}";
+              };
+              response_variable = "resultat";
+            }
+            {
+              ## Names only, three of each: enough to judge a match, and the full
+              ## result would flood the context with URIs and artwork.
+              variables.svar = ''
+                {% set ns = namespace(artister=[], album=[], latar=[]) %}
+                {% for a in (resultat.artists or [])[:3] %}
+                  {% set ns.artister = ns.artister + [a.name] %}
+                {% endfor %}
+                {% for a in (resultat.albums or [])[:3] %}
+                  {% set ns.album = ns.album + [a.name ~ ' av ' ~ ((a.artists or []) | map(attribute='name') | join(', '))] %}
+                {% endfor %}
+                {% for t in (resultat.tracks or [])[:3] %}
+                  {% set ns.latar = ns.latar + [t.name ~ ' av ' ~ ((t.artists or []) | map(attribute='name') | join(', '))] %}
+                {% endfor %}
+                {{ {'artister': ns.artister, 'album': ns.album, 'låtar': ns.latar} }}
+              '';
+            }
+            {
+              stop = "";
+              response_variable = "svar";
+            }
+          ];
+        };
+
         vaderprognos = {
           alias = "Väderprognos kommande dagar";
           description = "Väderprognos för de kommande dagarna. Anropa alltid detta när någon frågar om vädret framåt i tiden - om det kommer att regna, snöa, blåsa, bli varmare eller kallare någon av de närmaste dagarna. Svarar per dygn med datum, väderläge, högsta och lägsta temperatur samt nederbörd i millimeter. GetLiveContext ger bara vädret just nu och kan inte besvara frågor om framtiden.";
