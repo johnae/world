@@ -1,0 +1,24 @@
+--- a/music_assistant/providers/spotify/provider.py
++++ b/music_assistant/providers/spotify/provider.py
+@@ -810,11 +810,16 @@
+                 if (item and item["id"])
+             ]
+         except MediaNotFoundError:
+-            self.logger.warning(
+-                "Top tracks search for artist %s appears to have been removed by Spotify for this account.",
+-                prov_artist_id,
+-            )
+-            return []
++            # top-tracks is a catalog endpoint Spotify refuses apps in development
++            # mode. Search is not, and ranks an artist's tracks by relevance, which
++            # follows popularity closely - one call instead of one per album.
++            artist = await self.get_artist(prov_artist_id)
++            found = await self.search(f'artist:"{artist.name}"', [MediaType.TRACK], limit=10)
++            return [
++                track
++                for track in found.tracks
++                if any(a.item_id == prov_artist_id for a in track.artists)
++            ]
+ 
+     async def library_add(self, item: MediaItemType) -> bool:
+         """Add item to library."""

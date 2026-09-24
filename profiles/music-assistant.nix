@@ -24,11 +24,28 @@
     ##
     ## replace-fail, so this breaks loudly once nixpkgs repairs the patch.
     package = pkgs.music-assistant.overrideAttrs (old: {
+      ## Playing an artist asks Spotify for their top tracks, which it refuses
+      ## apps in development mode with a 403 - and MA then gives up with "no
+      ## playable items". This falls back to a single artist search, whose
+      ## ranking follows popularity, which is what "play X" means anyway.
+      patches = (old.patches or []) ++ [./music-assistant-spotify-toptracks.patch];
       postPatch =
         (old.postPatch or "")
         + ''
           substituteInPlace music_assistant/providers/spotify/helpers.py \
             --replace-fail 'os.path.join(base_path, f"librespot-{system}-{architecture}")' 'which("librespot")'
+
+          # Playing an artist fetches the tracks of every album they have, one
+          # Spotify call per album. A composer can have hundreds, and a misheard
+          # "play X" that matched Robert Schumann spent the whole rate limit on
+          # one request, then held the player's lock through the hour-long
+          # retry. Spotify returns an artist's own albums first, newest first -
+          # undocumented, but consistent - so
+          # ten of them still fill a queue.
+          substituteInPlace music_assistant/controllers/music/media/artists.py \
+            --replace-fail \
+              'for album in await self.get_provider_artist_albums(item_id, provider_instance_id_or_domain):' \
+              'for album in (await self.get_provider_artist_albums(item_id, provider_instance_id_or_domain))[:10]:'
         '';
     });
   };
