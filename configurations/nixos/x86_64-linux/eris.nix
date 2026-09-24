@@ -72,7 +72,14 @@
   services.ollama.enable = true;
   services.ollama.rocmOverrideGfx = "11.0.0"; ## rdna 3 11.0.0
   services.ollama.host = "0.0.0.0";
-  services.ollama.package = pkgs.ollama-rocm;
+  ## Gemma writes list arguments as ['sensor'], and ollama's repair for
+  ## single-quoted values only looks right after a colon, so the call fails
+  ## to parse and Home Assistant gets no reply at all. Rebuilding ollama means
+  ## compiling its ROCm kernels, so only for the 7900 XTX's architecture
+  ## rather than every AMD GPU nixpkgs targets.
+  services.ollama.package =
+    (pkgs.ollama-rocm.override {rocmGpuTargets = ["gfx1100"];}).overrideAttrs
+    (old: {patches = (old.patches or []) ++ [../../../profiles/ollama-gemma4-single-quoted-lists.patch];});
   ## Keep the model resident. Speech-to-text now shares the GPU, and both fit:
   ## ~14 GiB for the model plus ~4 GiB for kb-whisper-large of the 24. A cold
   ## load costs several seconds on the first question after an idle spell.

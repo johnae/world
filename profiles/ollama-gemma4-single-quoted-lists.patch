@@ -1,0 +1,53 @@
+--- a/model/parsers/gemma4.go
++++ b/model/parsers/gemma4.go
+@@ -617,7 +617,11 @@
+ 			}
+ 		}
+ 
+-		if s[i] != ':' {
++		// A value follows a key's colon, or opens or continues a list:
++		// {domain:['sensor']} and {domain:['light', 'switch']} are both seen
++		// in practice. After a comma outside a list a bare key follows, which
++		// never starts with a quote, so it passes through untouched.
++		if s[i] != ':' && s[i] != '[' && s[i] != ',' {
+ 			sb.WriteByte(s[i])
+ 			i++
+ 			continue
+--- a/model/parsers/gemma4_test.go
++++ b/model/parsers/gemma4_test.go
+@@ -1071,6 +1071,16 @@
+ 			input:    `{pattern:'abc}`,
+ 			expected: `{pattern:'abc}`,
+ 		},
++		{
++			name:     "converts_single_quoted_list_element",
++			input:    `{domain:['sensor']}`,
++			expected: `{domain:[<|"|>sensor<|"|>]}`,
++		},
++		{
++			name:     "converts_every_single_quoted_list_element",
++			input:    `{domain:['light', 'switch']}`,
++			expected: `{domain:[<|"|>light<|"|>, <|"|>switch<|"|>]}`,
++		},
+ 	}
+ 
+ 	for _, tt := range tests {
+@@ -1501,3 +1511,18 @@
+ 		t.Fatalf("tool call mismatch (-want +got):\n%s", diff)
+ 	}
+ }
++
++func TestRepairGemma4ToolCallArgsSingleQuotedList(t *testing.T) {
++	args, err := repairGemma4ToolCallArgs(`{domain:['sensor']}`, "GetLiveContext", nil)
++	if err != nil {
++		t.Fatalf("repairGemma4ToolCallArgs returned error: %v", err)
++	}
++	domain, ok := args.Get("domain")
++	if !ok {
++		t.Fatalf("domain missing from repaired args: %v", args)
++	}
++	list, ok := domain.([]any)
++	if !ok || len(list) != 1 || list[0] != "sensor" {
++		t.Fatalf("domain = %#v, want [sensor]", domain)
++	}
++}
