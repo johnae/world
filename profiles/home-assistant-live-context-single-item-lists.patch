@@ -1,0 +1,21 @@
+--- a/homeassistant/components/homeassistant/llm.py
++++ b/homeassistant/components/homeassistant/llm.py
+@@ -249,7 +249,17 @@
+         llm_context: LLMContext,
+     ) -> JsonObjectType:
+         """Get the current state of exposed entities."""
+-        args = self.parameters(tool_input.tool_args)
++        # Models copy domain's list form onto name and area ("name":
++        # ["Ytterdörren"]) and retry the same call until they give up, so a
++        # single-item list is taken as its item.
++        args = self.parameters(
++            {
++                key: value[0]
++                if key in ("name", "area") and isinstance(value, list) and len(value) == 1
++                else value
++                for key, value in tool_input.tool_args.items()
++            }
++        )
+         exposed_entities = async_get_exposed_entities(hass, llm_context.assistant)
+ 
+         if not exposed_entities:

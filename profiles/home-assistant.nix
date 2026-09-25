@@ -32,6 +32,12 @@ in {
     enable = true;
     configDir = "/var/lib/hass";
     openFirewallForComponents = true;
+    ## Gemma writes GetLiveContext's name as ["Ytterdörren"], copying the list
+    ## form domain accepts. The call fails validation and the model repeats it
+    ## until it gives up with no answer; a prompt rule against it did not help.
+    package = pkgs.home-assistant.overrideAttrs (old: {
+      patches = (old.patches or []) ++ [./home-assistant-live-context-single-item-lists.patch];
+    });
 
     extraComponents = [
       ## Everything default_config already pulls in (discovery, mobile_app,
@@ -286,6 +292,30 @@ in {
           ];
         };
 
+        ## Locking only; see the Ytterdörren sensor for why the lock itself
+        ## stays hidden from Assist.
+        las_ytterdorren = {
+          alias = "Lås ytterdörren";
+          description = "Låser ytterdörren. Dörren kan inte låsas upp med rösten; den som vill låsa upp får använda Nuki-appen eller knappsatsen.";
+          mode = "single";
+          sequence = [
+            {
+              action = "lock.lock";
+              target.entity_id = "lock.varmdogatan";
+            }
+            {
+              wait_template = "{{ is_state('lock.varmdogatan', 'locked') }}";
+              timeout = 20;
+              continue_on_timeout = true;
+            }
+            {variables.svar = "{{ {'ytterdörren': states('sensor.ytterdorren')} }}";}
+            {
+              stop = "";
+              response_variable = "svar";
+            }
+          ];
+        };
+
         vaderprognos = {
           alias = "Väderprognos kommande dagar";
           description = "Väderprognos för de kommande dagarna. Anropa alltid detta när någon frågar om vädret framåt i tiden - om det kommer att regna, snöa, blåsa, bli varmare eller kallare någon av de närmaste dagarna. Svarar per dygn med datum, väderläge, högsta och lägsta temperatur samt nederbörd i millimeter. GetLiveContext ger bara vädret just nu och kan inte besvara frågor om framtiden.";
@@ -409,6 +439,33 @@ in {
           value_template = "{{ value_json.rss.channel.item | count }}";
           json_attributes_path = "$.rss.channel";
           json_attributes = ["item"];
+        }
+      ];
+
+      ## The lock itself is not exposed to Assist, so voice cannot unlock the
+      ## door: anyone within earshot counts as the user, and "lås" is one
+      ## misheard word from "lås upp". This answers "är ytterdörren låst?"
+      ## and "står dörren öppen?" from one entity; given the door contact's
+      ## raw on/off, the model read "off" as open.
+      template = [
+        {
+          sensor = [
+            {
+              name = "Ytterdörren";
+              unique_id = "ytterdorren_lasstatus";
+              icon = "mdi:door-closed-lock";
+              state = ''
+                {% set lock = states('lock.varmdogatan') %}
+                {% if is_state('binary_sensor.192_168_20_143_door_sensor', 'on') %}öppen
+                {% elif lock == 'locked' %}stängd och låst
+                {% elif lock == 'unlocked' %}stängd men olåst
+                {% else %}{{ {'locking': 'stängd, låses just nu', 'unlocking': 'stängd, låses upp just nu',
+                              'open': 'öppen', 'opening': 'öppnas just nu',
+                              'jammed': 'låset har fastnat'}.get(lock, 'okänd') }}
+                {% endif %}
+              '';
+            }
+          ];
         }
       ];
 
