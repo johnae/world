@@ -14,7 +14,7 @@ Settings → Voice assistants → Eris:
 |---|---|---|
 | Speech-to-text | `stt.whisper_cpp` (wyoming, `eris:10403`) | kb-whisper-large on the 7900 XTX |
 | Conversation | the `local_openai` "Eris" agent | `gemma4:26b-a4b-it-qat` via ollama |
-| Text-to-speech | `tts.supertonic`, voice F5 (wyoming, `eris:10202`) | Supertonic on the CPU |
+| Text-to-speech | `tts.supertonic`, voice F2 (wyoming, `eris:10202`) | Supertonic on the CPU |
 
 The wyoming entries are added under Settings → Devices & services → Wyoming,
 pointing at eris's tailscale address.
