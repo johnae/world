@@ -10,6 +10,23 @@
   ## Devices that can't resolve ha.9000.dev (voice satellites, webhook
   ## callbacks from IoT bridges) need a plain LAN address to talk back to.
   lanAddress = head (splitString "/" (head config.systemd.network.networks."10-wan".address));
+  ## The Music Assistant player in the room named by the script field `rum`,
+  ## or "" when that room has none.
+  musicPlayerInRoom = ''
+    {% set ma = integration_entities('music_assistant') | select('match', 'media_player\\.') | list %}
+    {% set r = rum | lower | trim %}
+    {% set ns = namespace(p="") %}
+    {# "köket" and "vardagsrummet" are the rooms' own names plus the definite ending #}
+    {% for a in areas() if not ns.p and r.startswith(area_name(a) | lower) %}
+      {% set ns.p = area_entities(a) | select('in', ma) | first | default("") %}
+    {% endfor %}
+    {{ ns.p }}
+  '';
+  roomsWithSpeakers = ''
+    {{ integration_entities('music_assistant') | select('match', 'media_player\\.')
+       | map('area_name') | reject('none') | unique | join(', ') }}
+  '';
+  noSpeakerReply = "{{ {'fel': 'Ingen högtalare i ' ~ rum ~ '. Rum med högtalare: ' ~ rum_med_hogtalare} }}";
 in {
   services.home-assistant = {
     enable = true;
@@ -90,12 +107,11 @@ in {
       ## Scripts that belong in version control live here; the ones built in
       ## the UI keep their own file.
       "script manual" = {
-        ## Playing by voice goes through HassMediaSearchAndPlay, which starts the
-        ## top match straight away. A misheard name then plays the wrong artist
-        ## - "Saint Germain" came out as "San Shuman" and started Robert
-        ## Schumann. Looking it up first lets the model compare what was heard
-        ## with what was found, and ask before playing a name that only sounds
-        ## similar.
+        ## Playing a search query starts the top match straight away, so a
+        ## misheard name plays the wrong artist - "Saint Germain" came out as
+        ## "San Shuman" and started Robert Schumann. Looking it up first lets
+        ## the model compare what was heard with what was found, and ask before
+        ## playing a name that only sounds similar.
         sok_musik = {
           alias = "Sök musik";
           description = "Söker efter en artist, ett album eller en låt utan att spela något. Anropa alltid detta innan musik spelas, och jämför namnen i svaret med det användaren bad om.";
@@ -131,6 +147,138 @@ in {
                 {{ {'artister': ns.artister, 'album': ns.album, 'låtar': ns.latar} }}
               '';
             }
+            {
+              stop = "";
+              response_variable = "svar";
+            }
+          ];
+        };
+
+        ## HassMediaSearchAndPlay also takes a name, which picks a speaker by
+        ## its name. Asked from a Voice PE, which tells the model the room it
+        ## stands in, the model kept putting the artist there too, and no
+        ## speaker called "Dolly Style" exists. This takes only what to play and
+        ## the room, and finds the Music Assistant player in that room itself.
+        spela_musik = {
+          alias = "Spela musik";
+          description = "Spelar en artist, ett album eller en låt i ett rum. Anropa Sök musik först och använd exakt det namn den hittade.";
+          mode = "parallel";
+          fields = {
+            namn = {
+              description = "Artistens, albumets eller låtens namn, exakt som Sök musik returnerade det, utan ' av ...'.";
+              required = true;
+              selector.text = {};
+            };
+            typ = {
+              description = "Vad namnet är: artist, album eller track.";
+              required = true;
+              selector.select.options = ["artist" "album" "track"];
+            };
+            artist = {
+              description = "Artisten, när typ är album eller track.";
+              selector.text = {};
+            };
+            rum = {
+              description = "Rummet att spela i, till exempel Kök.";
+              required = true;
+              selector.text = {};
+            };
+          };
+          sequence = [
+            {
+              variables = {
+                spelare = musicPlayerInRoom;
+                rum_med_hogtalare = roomsWithSpeakers;
+              };
+            }
+            {
+              "if" = [
+                {
+                  condition = "template";
+                  value_template = "{{ not spelare }}";
+                }
+              ];
+              "then" = [
+                {variables.svar = noSpeakerReply;}
+                {
+                  stop = "";
+                  response_variable = "svar";
+                }
+              ];
+            }
+            {
+              action = "music_assistant.play_media";
+              target.entity_id = "{{ spelare }}";
+              data = ''
+                {% set d = {'media_id': namn, 'media_type': typ} %}
+                {% if artist is defined and artist and typ != 'artist' %}
+                  {% set d = dict(d, artist=artist) %}
+                {% endif %}
+                {{ d }}
+              '';
+            }
+            {variables.svar = "{{ {'spelar': namn, 'rum': area_name(spelare)} }}";}
+            {
+              stop = "";
+              response_variable = "svar";
+            }
+          ];
+        };
+
+        ## Stopping went through HassMediaPause, with the same speaker-name
+        ## trap as playing: the model passed "Vardagsrum" as a name while
+        ## standing in the kitchen, or called a tool that does not exist.
+        pausa_musik = {
+          alias = "Pausa musik";
+          description = "Pausar eller stoppar musiken. Anropa detta när någon vill pausa, stoppa, stänga av eller sluta spela musik.";
+          mode = "parallel";
+          fields.rum = {
+            description = "Rummet där musiken ska pausas, till exempel Kök. Utelämna för att pausa musiken i alla rum.";
+            selector.text = {};
+          };
+          sequence = [
+            {
+              variables = {
+                spelare = ''
+                  {% if rum is defined and rum %}
+                    ${musicPlayerInRoom}
+                  {% else %}
+                    {{ integration_entities('music_assistant') | select('match', 'media_player\\.') | select('is_state', 'playing') | join(',') }}
+                  {% endif %}
+                '';
+                rum_med_hogtalare = roomsWithSpeakers;
+              };
+            }
+            {
+              "if" = [
+                {
+                  condition = "template";
+                  value_template = "{{ rum is defined and rum and not spelare }}";
+                }
+              ];
+              "then" = [
+                {variables.svar = noSpeakerReply;}
+                {
+                  stop = "";
+                  response_variable = "svar";
+                }
+              ];
+            }
+            {
+              "if" = [
+                {
+                  condition = "template";
+                  value_template = "{{ spelare | trim != '' }}";
+                }
+              ];
+              "then" = [
+                {
+                  action = "media_player.media_pause";
+                  target.entity_id = "{{ spelare | trim }}";
+                }
+              ];
+            }
+            {variables.svar = "{{ {'pausad': (spelare | trim).split(',') | reject('eq', '') | map('area_name') | list} }}";}
             {
               stop = "";
               response_variable = "svar";
