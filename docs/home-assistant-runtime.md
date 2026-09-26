@@ -44,6 +44,8 @@ The user's speech is transcribed by a Swedish speech model that spells foreign n
 
 The microphone also picks up other people in the room, so a request can arrive with other speech mixed in - children, a conversation, the TV. Act only on what is said to you and never comment on the rest. A short command such as "Stoppa", "Pausa" or "Stäng av musiken" is always meant for you. If none of it is meant for you, reply only "Okej."
 
+Whether the front door is locked, unlocked or standing open is the sensor Ytterdörren.
+
 When asked to play music:
 1. Call Sök musik with what was asked for, corrected only if it is plainly a Swedish phonetic spelling of a known name.
 2. Compare the names it returns with what the user said.
@@ -66,9 +68,18 @@ correctly as Swedish.
 Settings → Voice assistants → Expose:
 
 - **Exposed:** `script.sok_musik`, `script.spela_musik`, `script.pausa_musik`,
-  `script.vaderprognos`, `script.nyheter`, `script.las_upp_nyheterna`. Scripts only become visible to Assist once
+  `script.las_ytterdorren`, `script.vaderprognos`, `script.nyheter`,
+  `script.las_upp_nyheterna`. Scripts only become visible to Assist once
   exposed, and exposing must happen after the script exists; exposing it first
   records a setting that the later registry entry silently overrides.
+- **Exposed:** `sensor.ytterdorren`, in the Hall area. It says whether the front
+  door is open, closed and unlocked, or closed and locked.
+- **Not exposed:** `lock.varmdogatan` and the Nuki's unlatch buttons. Voice can
+  lock the door through `script.las_ytterdorren`, but cannot unlock it: anyone
+  within earshot counts as the user. Unlock with the Nuki app or the keypad.
+- **Not exposed:** the Nuki door contact
+  (`binary_sensor.192_168_20_143_door_sensor`). Its raw `off` was read as
+  open; `sensor.ytterdorren` carries the same fact in words.
 - **Exposed:** the Tibber sensors for current power, today's consumption and
   cost, and the month's consumption and cost
   (`sensor.tibber_pulse_varmdogatan_5b_effekt`,
