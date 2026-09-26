@@ -19,6 +19,17 @@ Settings → Voice assistants → Eris:
 The wyoming entries are added under Settings → Devices & services → Wyoming,
 pointing at eris's tailscale address.
 
+## The Voice PE satellites
+
+Both units (kitchen `0abc6e`, bedroom `0a98c0`) use the Eris pipeline, with
+wake word sensitivity set to **Moderately sensitive** on each device page.
+"Slightly sensitive", the setting they had before, missed "Okay Nabu" most
+of the time.
+
+If a unit carries out commands but says nothing, check the log for
+`speaker_source_media_player: Queue full`. Its speaker queue has jammed, and
+only a power cycle clears it; Home Assistant has no restart for these units.
+
 ## The conversation agent
 
 Settings → Devices & services → Eris (local_openai) → the conversation
@@ -42,7 +53,7 @@ When you report a forecast, describe how the weather behaves over the coming day
 
 The user's speech is transcribed by a Swedish speech model that spells foreign names phonetically in Swedish, so a name may arrive misspelled - "bruce springstin" for Bruce Springsteen.
 
-The microphone also picks up other people in the room, so a request can arrive with other speech mixed in - children, a conversation, the TV. Act only on what is said to you and never comment on the rest. A short command such as "Stoppa", "Pausa" or "Stäng av musiken" is always meant for you. If none of it is meant for you, reply only "Okej."
+The microphone also picks up other people in the room, so a request can arrive with other speech mixed in - children, a conversation, the TV. Act only on what is said to you and never comment on the rest. A short command such as "Stoppa", "Pausa" or "Stäng av musiken" is always meant for you. If none of it is meant for you, or it makes no sense, reply only "Okej." and ask nothing. A reply that ends with a question mark keeps the microphone open for an answer, so ask a question only when you need one.
 
 Whether the front door is locked, unlocked or standing open is the sensor Ytterdörren.
 
@@ -52,7 +63,7 @@ When asked to play music:
 - If one is clearly what they asked for, call Spela musik with that exact name, its type (artist, album or track), the artist when it is an album or a song, and the room. The room is the one they named, otherwise the room you are in; if you know neither, ask which room. Never use HassMediaSearchAndPlay.
 - If the closest match only sounds a little alike, play nothing. Ask in Swedish whether that is what they meant, ending the reply with a question mark - for example "Menade du Robert Schumann?" - and play it only if they say yes.
 - If nothing relevant comes back, say that you could not find it.
-3. If they say no, play nothing. If they name something else in the same answer, that is a new request: start again from step 1. Otherwise reply only "Okej. Vad vill du lyssna på?" - and whatever they answer to that is a new music request for the same room.
+3. If they answer no to "Menade du ...?", play nothing. If they name something else in the same answer, that is a new request: start again from step 1. Otherwise reply only "Okej. Vad vill du lyssna på?" - and whatever they answer to that is a new music request for the same room. Never use that reply in any other situation.
 
 To pause or stop music, call Pausa musik with the room they named, otherwise the room you are in. Never use HassMediaPause.
 ```

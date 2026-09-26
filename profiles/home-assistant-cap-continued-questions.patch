@@ -1,0 +1,44 @@
+--- a/homeassistant/components/conversation/chat_log.py
++++ b/homeassistant/components/conversation/chat_log.py
+@@ -359,18 +359,32 @@
+             return False
+ 
+         last_msg = self.content[-1]
++        question_marks = (
++            "?",
++            ";",  # Greek question mark
++            "？",  # Chinese question mark
++        )
+ 
+-        return (
++        if not (
+             last_msg.role == "assistant"
+             and last_msg.content is not None
+-            and last_msg.content.strip().endswith(
+-                (
+-                    "?",
+-                    ";",  # Greek question mark
+-                    "？",  # Chinese question mark
+-                )
+-            )
+-        )
++            and last_msg.content.strip().endswith(question_marks)
++        ):
++            return False
++
++        # A satellite reopens its microphone after every question. If it hears
++        # background speech and the model answers that with another question,
++        # the exchange repeats on its own, so stop listening after two
++        # questions in a row: enough for "Did you mean X?", "No", "What would
++        # you like then?".
++        questions = 0
++        for content in reversed(self.content):
++            if content.role != "assistant" or not content.content:
++                continue
++            if not content.content.strip().endswith(question_marks):
++                break
++            questions += 1
++        return questions <= 2
+ 
+     @property
+     def unresponded_tool_results(self) -> bool:
