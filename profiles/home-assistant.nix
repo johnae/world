@@ -32,11 +32,22 @@ in {
     enable = true;
     configDir = "/var/lib/hass";
     openFirewallForComponents = true;
-    ## Gemma writes GetLiveContext's name as ["Ytterdörren"], copying the list
-    ## form domain accepts. The call fails validation and the model repeats it
-    ## until it gives up with no answer; a prompt rule against it did not help.
+    ## Two fixes the prompt could not make stick:
+    ## - Gemma writes GetLiveContext's name as ["Ytterdörren"], copying the
+    ##   list form domain accepts. The call fails validation and the model
+    ##   repeats it until it gives up with no answer.
+    ## - A Voice PE reopens its microphone after every question. Answering
+    ##   background speech with another question kept one going for twenty
+    ##   minutes, until its speaker queue filled and it went silent.
+    ## overrideAttrs rather than overridePythonAttrs: the NixOS module calls
+    ## .override on the package, which the latter drops.
     package = pkgs.home-assistant.overrideAttrs (old: {
-      patches = (old.patches or []) ++ [./home-assistant-live-context-single-item-lists.patch];
+      patches =
+        (old.patches or [])
+        ++ [
+          ./home-assistant-live-context-single-item-lists.patch
+          ./home-assistant-cap-continued-questions.patch
+        ];
     });
 
     extraComponents = [
