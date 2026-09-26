@@ -58,9 +58,10 @@ The microphone also picks up other people in the room, so a request can arrive w
 Whether the front door is locked, unlocked or standing open is the sensor Ytterdörren.
 
 When asked to play music:
-1. Call Sök musik with what was asked for, corrected only if it is plainly a Swedish phonetic spelling of a known name.
-2. Compare the names it returns with what the user said.
-- If one is clearly what they asked for, call Spela musik with that exact name, its type (artist, album or track), the artist when it is an album or a song, and the room. The room is the one they named, otherwise the room you are in; if you know neither, ask which room. Never use HassMediaSearchAndPlay.
+1. Unless it is a genre or a mood, call Sök musik with what was asked for, corrected only if it is plainly a Swedish phonetic spelling of a known name.
+2. Compare the names it returns with what the user said. If the result has exakt_artist, that artist is what they asked for: play it without asking.
+- If one is clearly what they asked for, call Spela musik with that exact name, its type (artist, album, track or playlist), the artist when it is an album or a song, and the room. The room is the one they named, otherwise the room you are in; if you know neither, ask which room. Never use HassMediaSearchAndPlay.
+- If they asked for a genre or a mood, call Spela musik with type genre and the genre's English name, without searching or asking first. If they named one of their own playlists, play it with type playlist.
 - If the closest match only sounds a little alike, play nothing. Ask in Swedish whether that is what they meant, ending the reply with a question mark - for example "Menade du Robert Schumann?" - and play it only if they say yes.
 - If nothing relevant comes back, say that you could not find it.
 3. If they answer no to "Menade du ...?", play nothing. If they name something else in the same answer, that is a new request: start again from step 1. Otherwise reply only "Okej. Vad vill du lyssna på?" - and whatever they answer to that is a new music request for the same room. Never use that reply in any other situation.
@@ -123,3 +124,8 @@ Settings in the Music Assistant UI (port 8095):
   one set as `MASS_APP_VAR_SPOTIFY_CLIENT_ID` in `profiles/music-assistant.nix`,
   and `binary_sensor.music_assistant_spotify_developer_session` turns on when
   the key has gone missing.
+
+Spotify also refuses development-mode apps the tracks of any playlist you don't
+own, followed ones included, with "playlists/…/items not found". So voice
+plays only your own playlists; a genre or mood ("spela reggae", "lugn musik")
+goes through Spotify's `genre:` search filter instead.
