@@ -131,10 +131,10 @@ in {
         ## playing a name that only sounds similar.
         sok_musik = {
           alias = "Sök musik";
-          description = "Söker efter en artist, ett album eller en låt utan att spela något. Anropa alltid detta innan musik spelas, och jämför namnen i svaret med det användaren bad om.";
+          description = "Söker efter artister, album, låtar och användarens egna spellistor utan att spela något. Anropa alltid detta innan musik spelas, och jämför namnen i svaret med det användaren bad om.";
           mode = "parallel";
           fields.fraga = {
-            description = "Artisten, albumet eller låten användaren bad om.";
+            description = "Artisten, albumet, låten, spellistan eller genren användaren bad om.";
             required = true;
             selector.text = {};
           };
@@ -148,10 +148,22 @@ in {
               response_variable = "resultat";
             }
             {
+              ## Spotify refuses apps in development mode the tracks of other
+              ## people's playlists, so only the library's own are worth offering.
+              action = "music_assistant.search";
+              data = {
+                config_entry_id = "{{ config_entry_id(integration_entities('music_assistant') | first) }}";
+                name = "{{ fraga }}";
+                media_type = ["playlist"];
+                library_only = true;
+              };
+              response_variable = "egna";
+            }
+            {
               ## Names only, three of each: enough to judge a match, and the full
               ## result would flood the context with URIs and artwork.
               variables.svar = ''
-                {% set ns = namespace(artister=[], album=[], latar=[]) %}
+                {% set ns = namespace(artister=[], album=[], latar=[], spellistor=[], exakt="") %}
                 {% for a in (resultat.artists or [])[:3] %}
                   {% set ns.artister = ns.artister + [a.name] %}
                 {% endfor %}
@@ -161,7 +173,17 @@ in {
                 {% for t in (resultat.tracks or [])[:3] %}
                   {% set ns.latar = ns.latar + [t.name ~ ' av ' ~ ((t.artists or []) | map(attribute='name') | join(', '))] %}
                 {% endfor %}
-                {{ {'artister': ns.artister, 'album': ns.album, 'låtar': ns.latar} }}
+                {% for p in (egna.playlists or [])[:3] %}
+                  {% set ns.spellistor = ns.spellistor + [p.name] %}
+                {% endfor %}
+                {# The model kept asking "Menade du ...?" about a song by someone
+                   else when an artist had exactly the name asked for. #}
+                {% set sokt = fraga | trim | lower %}
+                {% for a in resultat.artists or [] if not ns.exakt and a.name | lower == sokt %}
+                  {% set ns.exakt = a.name %}
+                {% endfor %}
+                {% set svar = {'artister': ns.artister, 'album': ns.album, 'låtar': ns.latar, 'spellistor': ns.spellistor} %}
+                {{ dict(svar, exakt_artist=ns.exakt) if ns.exakt else svar }}
               '';
             }
             {
@@ -178,18 +200,18 @@ in {
         ## the room, and finds the Music Assistant player in that room itself.
         spela_musik = {
           alias = "Spela musik";
-          description = "Spelar en artist, ett album eller en låt i ett rum. Anropa Sök musik först och använd exakt det namn den hittade.";
+          description = "Spelar en artist, ett album, en låt, en spellista eller en genre i ett rum. Anropa Sök musik först och använd exakt det namn den hittade. För en genre eller stämning behövs ingen sökning.";
           mode = "parallel";
           fields = {
             namn = {
-              description = "Artistens, albumets eller låtens namn, exakt som Sök musik returnerade det, utan ' av ...'.";
+              description = "Namnet exakt som Sök musik returnerade det, utan ' av ...'. För en genre, genrens namn på engelska som Spotify skriver det: reggae, chill, jazz, classical.";
               required = true;
               selector.text = {};
             };
             typ = {
-              description = "Vad namnet är: artist, album eller track.";
+              description = "Vad namnet är: artist, album, track, playlist eller genre.";
               required = true;
-              selector.select.options = ["artist" "album" "track"];
+              selector.select.options = ["artist" "album" "track" "playlist" "genre"];
             };
             artist = {
               description = "Artisten, när typ är album eller track.";
@@ -224,15 +246,48 @@ in {
               ];
             }
             {
-              action = "music_assistant.play_media";
-              target.entity_id = "{{ spelare }}";
-              data = ''
-                {% set d = {'media_id': namn, 'media_type': typ} %}
-                {% if artist is defined and artist and typ != 'artist' %}
-                  {% set d = dict(d, artist=artist) %}
-                {% endif %}
-                {{ d }}
-              '';
+              "if" = [
+                {
+                  condition = "template";
+                  value_template = "{{ typ == 'genre' }}";
+                }
+              ];
+              ## Spotify's genre: search filter still works for apps in
+              ## development mode, where genre playlists are out of reach.
+              "then" = [
+                {
+                  action = "music_assistant.search";
+                  data = {
+                    config_entry_id = "{{ config_entry_id(integration_entities('music_assistant') | first) }}";
+                    name = "genre:\"{{ namn }}\"";
+                    media_type = ["track"];
+                    limit = 25;
+                  };
+                  response_variable = "genre";
+                }
+                {
+                  action = "music_assistant.play_media";
+                  target.entity_id = "{{ spelare }}";
+                  data = {
+                    media_id = "{{ genre.tracks | map(attribute='uri') | list }}";
+                    media_type = "track";
+                    enqueue = "replace";
+                  };
+                }
+              ];
+              "else" = [
+                {
+                  action = "music_assistant.play_media";
+                  target.entity_id = "{{ spelare }}";
+                  data = ''
+                    {% set d = {'media_id': namn, 'media_type': typ} %}
+                    {% if artist is defined and artist and typ in ['album', 'track'] %}
+                      {% set d = dict(d, artist=artist) %}
+                    {% endif %}
+                    {{ d }}
+                  '';
+                }
+              ];
             }
             {variables.svar = "{{ {'spelar': namn, 'rum': area_name(spelare)} }}";}
             {
