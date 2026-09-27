@@ -1,6 +1,6 @@
 --- a/music_assistant/providers/spotify/provider.py
 +++ b/music_assistant/providers/spotify/provider.py
-@@ -810,11 +810,16 @@
+@@ -810,11 +810,27 @@
                  if (item and item["id"])
              ]
          except MediaNotFoundError:
@@ -14,10 +14,21 @@
 +            # follows popularity closely - one call instead of one per album.
 +            artist = await self.get_artist(prov_artist_id)
 +            found = await self.search(f'artist:"{artist.name}"', [MediaType.TRACK], limit=10)
-+            return [
++            own = [
 +                track
 +                for track in found.tracks
 +                if any(a.item_id == prov_artist_id for a in track.artists)
++            ]
++            if own:
++                return own
++            # A catalogue can sit under a band named after the artist: Bob
++            # Marley's hits are credited to "Bob Marley & The Wailers", a
++            # separate artist, so none of them match by id.
++            name = artist.name.casefold()
++            return [
++                track
++                for track in found.tracks
++                if any(name in a.name.casefold() for a in track.artists)
 +            ]
  
      async def library_add(self, item: MediaItemType) -> bool:
