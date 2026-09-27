@@ -247,9 +247,11 @@ jobs:
           echo "  as $dest:$tag"
 
           # nixpkgs skopeo ships no default trust policy, and the builders
-          # no longer carry apt's podman that used to leave one behind.
-          install -d -m755 /etc/containers
-          printf '{"default":[{"type":"insecureAcceptAnything"}]}\n' > /etc/containers/policy.json
+          # no longer carry apt's podman that used to leave one behind. The
+          # per-user path works whether the step runs as root or as the
+          # unprivileged step user, which can't write /etc.
+          install -d -m755 "$HOME/.config/containers"
+          printf '{"default":[{"type":"insecureAcceptAnything"}]}\n' > "$HOME/.config/containers/policy.json"
 
           nix shell nixpkgs#skopeo -c sh -c '
             set -eu
