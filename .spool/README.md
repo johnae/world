@@ -22,9 +22,10 @@ push  ->  webhook  ->  world.push  ->  router.sh  ->  world-ci run
   tags off the run's lifecycle event.
 
 Builds need an agent advertising the `build` capability with nix
-installed. Package builds push to `nixcache.9000.dev` when the
-`NCPS_UPLOAD_KEY` project secret is set, and skip the push when it
-isn't. Disk images (`*-qcow2`, `*-containerdisk`, `*-diskformat`) are
+installed. Package builds push to `nixcache.9000.dev` when two project
+secrets are set, and skip the push when either isn't: `NCPS_UPLOAD_KEY`,
+the nix signing key for the narinfos, and `NCPS_UPLOAD_TOKEN`, the
+cache's upload password for the `world-ci` user. Disk images (`*-qcow2`, `*-containerdisk`, `*-diskformat`) are
 built but never pushed: `nix copy` sends a path's whole closure, and
 with `streamLayeredImage` the containerdisk output is a small script
 whose closure holds the ~10G qcow2.

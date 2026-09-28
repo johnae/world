@@ -207,20 +207,24 @@ jobs:
           # change on every input bump, and the registry - not the cache -
           # is where a built one is kept.
           #
-          # Uploads are authorised by signature: `secret-key` signs each
-          # narinfo, and ncps verifies it against the matching public key.
-          # Nothing here needs a client certificate.
-          if [ -n "${NCPS_UPLOAD_KEY:-}" ]; then
-            key=$(mktemp); trap 'rm -f "$key"' EXIT
-            printf '%s' "$NCPS_UPLOAD_KEY" > "$key"; chmod 600 "$key"
+          # Two credentials. `secret-key` signs each narinfo, and ncps
+          # verifies it against the matching public key. The gateway in
+          # front wants a password for anything but reads; nix has no way
+          # to add a request header, so it goes in a netrc, which nix
+          # hands to curl as basic auth.
+          if [ -n "${NCPS_UPLOAD_KEY:-}" ] && [ -n "${NCPS_UPLOAD_TOKEN:-}" ]; then
+            key=$(mktemp); netrc=$(mktemp); trap 'rm -f "$key" "$netrc"' EXIT
+            printf '%s' "$NCPS_UPLOAD_KEY" > "$key"; chmod 600 "$key" "$netrc"
+            printf 'machine nixcache.9000.dev login world-ci password %s\n' \
+              "$NCPS_UPLOAD_TOKEN" > "$netrc"
             nix path-info "${cache_attrs[@]}" > /tmp/world-push
             echo "caching $(wc -l < /tmp/world-push) of ${#pkgs[@]} packages"
             # The upload routes sit under /upload; nix uses the store URL
             # as the base for the paths it PUTs.
-            xargs -r nix copy --to \
+            xargs -r nix copy --option netrc-file "$netrc" --to \
               "https://nixcache.9000.dev/upload?secret-key=$key" < /tmp/world-push
           else
-            echo "NCPS_UPLOAD_KEY unset; not pushing to the cache" >&2
+            echo "NCPS_UPLOAD_KEY or NCPS_UPLOAD_TOKEN unset; not pushing to the cache" >&2
           fi
 
       - name: publish-containerdisk
