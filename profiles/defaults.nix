@@ -20,8 +20,6 @@ in {
       tarball-ttl = 900
     '';
 
-    nixPath = ["nixpkgs=${inputs.nixpkgs}"];
-
     gc = {
       automatic = true;
       dates = "daily";
@@ -31,6 +29,7 @@ in {
     package = pkgs.nix;
 
     settings = {
+      nix-path = ["nixpkgs=${inputs.nixpkgs}"];
       trusted-users = ["root"];
       substituters = [
         "https://cache.nixos.org"
