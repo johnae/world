@@ -48,6 +48,36 @@ jobs:
       attempts: 2
       backoff: 60s
     steps:
+      # Build VMs come without Nix, and their steps run as `runner` with
+      # passwordless sudo (hyperspool ADR 0170), so every job installs it
+      # first. A no-op on a machine that has Nix already, apart from
+      # adding the cache once. Later steps find `nix` through the PATH set
+      # in `env:` above.
+      - name: nix
+        run: |
+          set -euo pipefail
+          as_root() { if [ "$(id -u)" = 0 ]; then "$@"; else sudo -n "$@"; fi; }
+          if [ ! -x /nix/var/nix/profiles/default/bin/nix ]; then
+            curl -fsSL https://install.determinate.systems/nix |
+              as_root sh -s -- install --determinate --no-confirm
+          fi
+          # The daemon ignores substituters an untrusted user asks for, so
+          # our cache goes in its own config (NIX_CONFIG above is not
+          # enough on its own). min-free/max-free keep a long package
+          # build from filling the VM's disk.
+          conf=/etc/nix/nix.custom.conf
+          marker="# world ci caches"
+          if ! as_root grep -qsxF "$marker" "$conf"; then
+            printf '%s\n%s\n%s\n%s\n%s\n' "$marker" \
+              "extra-substituters = https://nixcache.9000.dev" \
+              "extra-trusted-public-keys = nixcache.9000.dev:MNr2kidQv9GfkQKUarqdpaufX7JMMSixX/cdlS5i5i0=" \
+              "min-free = 26843545600" "max-free = 64424509440" \
+              | as_root tee -a "$conf" >/dev/null
+            as_root grep -qs '^!include nix.custom.conf' /etc/nix/nix.conf \
+              || echo '!include nix.custom.conf' | as_root tee -a /etc/nix/nix.conf >/dev/null
+            as_root systemctl restart nix-daemon || echo "restarting nix-daemon failed" >&2
+          fi
+          nix --version
       - name: mint-token
         run: |
           set -euo pipefail
