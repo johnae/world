@@ -6,12 +6,12 @@
 }: let
   inherit (lib) types;
   inherit (config.services.tailscale.auth) enable;
-  cfg = config.services.cloudflare-tailscale-dns;
+  cfg = config.services.tailscale-dns;
 in {
-  options.services.cloudflare-tailscale-dns = lib.mkOption {
+  options.services.tailscale-dns = lib.mkOption {
     type = types.attrsOf (types.submodule ({name, ...}: {
       options = {
-        enable = lib.mkEnableOption "Enable this cloudflare dns tailscale mapping";
+        enable = lib.mkEnableOption "Enable this Scaleway DNS tailscale mapping";
         name = lib.mkOption {
           type = types.str;
           default = name;
@@ -23,8 +23,9 @@ in {
           type = types.nullOr types.str;
           default = null;
         };
-        cloudflareEnvFile = lib.mkOption {
+        environmentFile = lib.mkOption {
           type = types.path;
+          description = "Env file with SCW_SECRET_KEY for a key allowed to write the zone.";
         };
       };
     }));
@@ -33,20 +34,20 @@ in {
 
   config.systemd.services =
     lib.mapAttrs' (name: value: {
-      name = "cloudflare-tailscale-dns-${name}.${value.zone}";
+      name = "tailscale-dns-${name}.${value.zone}";
       value = {
-        description = "Cloudflare dns records mapping ${name}.${value.zone} to host tailscale ip";
+        description = "Scaleway dns records mapping ${name}.${value.zone} to host tailscale ip";
         inherit enable;
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = "yes";
           EnvironmentFile = [
-            value.cloudflareEnvFile
+            value.environmentFile
           ];
         };
         script = let
           fqdn = "${value.name}.${value.zone}";
-          api = "https://api.cloudflare.com/client/v4";
+          api = "https://api.scaleway.com/domain/v2beta1/dns-zones/${value.zone}/records";
           curl = "${pkgs.curl}/bin/curl";
           jq = "${pkgs.jq}/bin/jq";
           tailscale = "${pkgs.tailscale}/bin/tailscale";
@@ -56,19 +57,6 @@ in {
             else ''.Peer[] | select(.DNSName | startswith("${value.host}.")) | .TailscaleIPs[]'';
         in ''
           set -euo pipefail
-
-          cf() {
-            local method="$1"
-            local path="$2"
-            shift 2
-            ${curl} -sS -X "$method" \
-              -H "Authorization: Bearer $CF_API_TOKEN" \
-              -H "Content-Type: application/json" \
-              "${api}$path" "$@" \
-              | ${jq} -e 'if .success then . else (.errors | tojson | halt_error(1)) end'
-          }
-
-          zone_id=$(cf GET "/zones?name=${value.zone}" | ${jq} -er '.result[0].id')
 
           ## Assigned first rather than inlined into the `for` list, where a
           ## tailscale failure would leave the loop empty and the unit green.
@@ -84,19 +72,17 @@ in {
               *) type=A ;;
             esac
 
-            ## Look up by name AND type. flarectl matched on name alone, so once
-            ## an A record existed it could never create the matching AAAA.
-            record_id=$(cf GET "/zones/$zone_id/dns_records?name=${fqdn}&type=$type" \
-              | ${jq} -r '.result[0].id // ""')
+            ## `set` replaces every record with this name and type, creating
+            ## one when there is none, so the call is the same on every boot.
+            body=$(${jq} -nc --arg name "${value.name}" --arg type "$type" --arg data "$ip" \
+              '{return_all_records: false, changes: [{set: {
+                 id_fields: {name: $name, type: $type},
+                 records: [{name: $name, type: $type, data: $data, ttl: 60}]}}]}')
 
-            body=$(${jq} -nc --arg name "${fqdn}" --arg type "$type" --arg content "$ip" \
-              '{name: $name, type: $type, content: $content, ttl: 60, proxied: false}')
-
-            if [ -n "$record_id" ]; then
-              cf PATCH "/zones/$zone_id/dns_records/$record_id" --data "$body" >/dev/null
-            else
-              cf POST "/zones/$zone_id/dns_records" --data "$body" >/dev/null
-            fi
+            ${curl} -sSf -X PATCH \
+              -H "X-Auth-Token: $SCW_SECRET_KEY" \
+              -H "Content-Type: application/json" \
+              "${api}" --data "$body" >/dev/null
             echo "$type ${fqdn} -> $ip"
           done
         '';

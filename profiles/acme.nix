@@ -2,8 +2,10 @@
   security.acme.acceptTerms = true;
   security.acme.defaults = {
     email = "john+certs@9000.dev";
-    dnsResolver = "1.1.1.1:53";
-    dnsProvider = "cloudflare";
-    environmentFile = "/run/agenix/cloudflare-env";
+    # Scaleway's own nameserver answers for the zone, so lego sees its
+    # challenge record without waiting on a resolver's cache.
+    dnsResolver = "ns0.dom.scw.cloud:53";
+    dnsProvider = "scaleway";
+    environmentFile = "/run/agenix/scaleway-dns-env";
   };
 }

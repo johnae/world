@@ -165,7 +165,6 @@
       RemainAfterExit = "yes";
       EnvironmentFile = [
         config.services.restic.backups.remote.environmentFile
-        config.age.secrets.cloudflare-env.path
       ];
     };
     script = ''
@@ -194,15 +193,7 @@
   };
 
   age.secrets = {
-    cloudflare-env.rekeyFile = ../../../secrets/cloudflare-env.age;
-    cloudflare-tunnel-9k = {
-      rekeyFile = ../../../secrets/cloudflare-tunnel-9k.age;
-      owner = "cloudflared";
-    };
-    cloudflare-tunnel-cert-9k = {
-      rekeyFile = ../../../secrets/cloudflare-tunnel-cert-9k.age;
-      owner = "cloudflared";
-    };
+    scaleway-dns-env.rekeyFile = ../../../secrets/scaleway-dns-env.age;
     conduwuit-registration-token = {
       rekeyFile = ../../../secrets/conduwuit-registration-token.age;
       mode = "777";
@@ -264,74 +255,28 @@
     };
   };
 
-  services.my-cloudflared = {
-    enable = true;
-    tunnels."9000-tunnel" = {
-      credentialsFile = config.age.secrets.cloudflare-tunnel-9k.path;
-      default = "http://localhost";
-      originRequest.noTLSVerify = true;
-      originCertPath = config.age.secrets.cloudflare-tunnel-cert-9k.path;
-    };
-  };
-
   services.my-matrix = {
     enable = true;
     server_name = "9000.dev";
   };
 
-  services.cloudflare-tailscale-dns.ollama = {
-    enable = true;
+  ## Tailnet-only names in the 9000.dev zone (Scaleway).
+  services.tailscale-dns = let
     zone = "9000.dev";
-    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
-    host = "eris";
-  };
-
-  services.cloudflare-tailscale-dns.bw = {
-    enable = true;
-    zone = "9000.dev";
-    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
-  };
-
-  services.cloudflare-tailscale-dns.tika = {
-    enable = true;
-    zone = "9000.dev";
-    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
-  };
-
-  services.cloudflare-tailscale-dns.chat = {
-    enable = true;
-    zone = "9000.dev";
-    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
-  };
-
-  services.cloudflare-tailscale-dns.grafana = {
-    enable = true;
-    zone = "9000.dev";
-    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
-  };
-
-  services.cloudflare-tailscale-dns.victoriametrics = {
-    enable = true;
-    zone = "9000.dev";
-    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
-  };
-
-  services.cloudflare-tailscale-dns.victorialogs = {
-    enable = true;
-    zone = "9000.dev";
-    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
-  };
-
-  services.cloudflare-tailscale-dns.ha = {
-    enable = true;
-    zone = "9000.dev";
-    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
-  };
-
-  services.cloudflare-tailscale-dns.ma = {
-    enable = true;
-    zone = "9000.dev";
-    cloudflareEnvFile = config.age.secrets.cloudflare-env.path;
+    environmentFile = config.age.secrets.scaleway-dns-env.path;
+    record = {
+      enable = true;
+      inherit zone environmentFile;
+    };
+  in {
+    ollama = record // {host = "eris";};
+    bw = record;
+    tika = record;
+    chat = record;
+    victoriametrics = record;
+    victorialogs = record;
+    ha = record;
+    ma = record;
   };
 
   services.nginx.tailscaleAuth = {
