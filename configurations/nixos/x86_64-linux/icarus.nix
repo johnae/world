@@ -2,6 +2,7 @@
   adminUser,
   config,
   hostName,
+  lib,
   pkgs,
   ...
 }: {
@@ -541,5 +542,26 @@
     imports = [
       ../../../users/profiles/headless.nix
     ];
+
+    ## The vault key lives in a dedicated pass store with an unprotected gpg key,
+    ## so the bridge can start unattended. All state is kept under ~/Mail.
+    services.protonmail-bridge = {
+      enable = true;
+      extraPackages = [pkgs.gnupg pkgs.pass];
+    };
+    systemd.user.services.protonmail-bridge = let
+      stateDir = "/home/${adminUser.name}/Mail/protonmail-bridge";
+    in {
+      ## headless, so there's no graphical-session.target to hook into
+      Unit.After = lib.mkForce [];
+      Install.WantedBy = lib.mkForce ["default.target"];
+      Service.Environment = [
+        "GNUPGHOME=${stateDir}/gnupg"
+        "XDG_CACHE_HOME=${stateDir}/cache"
+        "XDG_DATA_HOME=${stateDir}/local/data"
+        "XDG_CONFIG_HOME=${stateDir}/local/config"
+        "PASSWORD_STORE_DIR=${stateDir}/password-store"
+      ];
+    };
   };
 }
