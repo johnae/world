@@ -100,6 +100,7 @@
         ".local/share/containers"
         ".local/share/direnv"
         ".local/share/fish"
+        ".local/share/keyrings"
         ".local/share/nix"
         ".local/share/password-store"
         ".local/share/qutebrowser"
