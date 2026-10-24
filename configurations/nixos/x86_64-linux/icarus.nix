@@ -330,6 +330,9 @@
     "/var/lib/private/victoriametrics"
     "/var/sieve"
     "/var/vmail"
+    ## restic's cache grows as big as the repository's index and packs it
+    ## reads (14 GB): on the root tmpfs it filled / at every hourly backup.
+    "/var/cache/restic-backups-remote"
   ];
 
   services.grafana.enable = true;
@@ -561,7 +564,11 @@
         "XDG_DATA_HOME=${stateDir}/local/data"
         "XDG_CONFIG_HOME=${stateDir}/local/config"
         "PASSWORD_STORE_DIR=${stateDir}/password-store"
+        ## SQLite's temporary files for big queries; in /tmp, a full root
+        ## tmpfs made the bridge list INBOX and All Mail as empty.
+        "TMPDIR=${stateDir}/tmp"
       ];
+      Service.ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${stateDir}/tmp";
     };
   };
 }
