@@ -34,6 +34,7 @@ in {
   programs.nushell = {
     enable = true;
     package = pkgs.nushell;
+    loadSessionVariables = false; ## pin legacy default; home-manager's default flips at stateVersion 26.11
     configFile.source = ./config.nu;
     envFile.source = ./env.nu;
     extraConfig = ''
