@@ -51,7 +51,10 @@
         helix-latest = inputs.helix-editor.packages.${system}.default;
         zjstatus = inputs.zjstatus.packages.${system}.default;
         zj-which-key = inputs.zj-which-key.packages.${system}.default;
-        noctalia = inputs.noctalia.packages.${system}.default;
+        noctalia =
+          if pkgs.stdenv.hostPlatform.isLinux
+          then inputs.noctalia.packages.${system}.default
+          else pkgs.hello;
         ## fix this one on darwin
         zwift =
           if pkgs.stdenv.hostPlatform.isLinux

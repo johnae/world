@@ -31,6 +31,9 @@
       rekeyFile = ../../../secrets/github-app-bk-auth.age;
       owner = "${toString adminUser.uid}";
     };
+    spool-agent-token = {
+      rekeyFile = ../../../secrets/spool-agent-mini-token.age;
+    };
   };
 
   imports = [
@@ -58,7 +61,25 @@
 
   services.tailscale.enable = true;
 
-  nix.settings.trusted-users = ["root" adminUser.name "buildkite-agent-nix-build"];
+  # Determinate Nix owns nix.conf (nix.enable is off below) and includes this
+  # file, so trusted users and our cache go here. The first switch needs the
+  # hand-written one moved aside, and the daemon restarted after.
+  environment.etc."nix/nix.custom.conf".text = ''
+    trusted-users = root ${adminUser.name} buildkite-agent-nix-build spool-agent
+    extra-substituters = https://nixcache.9000.dev
+    extra-trusted-public-keys = nixcache.9000.dev:MNr2kidQv9GfkQKUarqdpaufX7JMMSixX/cdlS5i5i0=
+  '';
+
+  # Takes world's aarch64-darwin builds (`requires: [aarch64-darwin]`) for
+  # every project in the 9000 org.
+  services.spool-agent = {
+    enable = true;
+    id = "mini";
+    capabilities = ["shell" "aarch64-darwin"];
+    tokenFile = config.age.secrets.spool-agent-token.path;
+    runtimePackages = [pkgs.bash pkgs.git pkgs.jq pkgs.openssl pkgs.gnutar pkgs.gzip];
+  };
+
   services.buildkite-agents.nix-build = let
     inherit (config.services.buildkite-agents.nix-build) dataDir;
   in {

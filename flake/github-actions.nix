@@ -4,7 +4,7 @@
   self,
   ...
 }: let
-  inherit (lib) mapAttrsToList filterAttrs hasPrefix filter elem;
+  inherit (lib) mapAttrsToList filterAttrs hasPrefix hasSuffix filter elem;
   defaultSkip = [
     "container-"
     "container-processes"
@@ -32,6 +32,22 @@ in {
     in {
       os = ["ubuntu-latest"];
       pkg = filter (item: !(elem item skip)) (mapAttrsToList (name: _: name) ctx.config.packages);
+    });
+
+    # Packages are defined for every system whether they build there or not,
+    # so only the ones whose platforms include darwin are kept. Disk images
+    # and cluster manifests are Linux artifacts, and a few packages are
+    # `hello` stand-ins on darwin.
+    github-actions-package-matrix-aarch64-darwin = withSystem "aarch64-darwin" (ctx @ {pkgs, ...}: let
+      buildsHere = name: drv:
+        !(hasPrefix "images/" name)
+        && !(hasSuffix "-diskformat" name)
+        && !(hasPrefix "kubevirt-" name)
+        && !(elem name (defaultSkip ++ ["noctalia" "persway" "zwift"]))
+        && (builtins.tryEval (lib.meta.availableOn pkgs.stdenv.hostPlatform drv)).value;
+    in {
+      os = ["macos-latest"];
+      pkg = mapAttrsToList (name: _: name) (filterAttrs buildsHere ctx.config.packages);
     });
 
     github-actions-host-matrix-x86-64-linux = {

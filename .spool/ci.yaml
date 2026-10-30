@@ -2,8 +2,8 @@
 # file at the pushed commit and spawns it, so a push builds the pipeline
 # it shipped with.
 #
-# Three jobs mirroring the GitHub Actions workflow: lint, check, and the
-# whole x86_64-linux package set. Each job is claimed independently and
+# Four jobs: lint, check, the whole x86_64-linux package set, and the
+# aarch64-darwin set on the mac mini. Each job is claimed independently and
 # may land on a different builder, so each clones its own workdir -
 # never rely on another job's checkout being on the same machine.
 #
@@ -307,3 +307,57 @@ jobs:
             echo "  pushed"
           '
           echo "deploy with: $dest:$tag"
+
+  # The aarch64-darwin side: the darwin hosts and the packages that build
+  # there, on the mac mini's own agent (the only one advertising
+  # `aarch64-darwin`), pushed to the same cache as the Linux set. New, so
+  # a failure shows on the run without turning the commit red.
+  darwin:
+    requires: [aarch64-darwin]
+    continue_on_error: true
+    timeout: 180m
+    retry:
+      attempts: 2
+      backoff: 30s
+    env:
+      WORKDIR: /tmp/world-darwin
+      # The mini has Nix and its cache configured already (its nix-darwin
+      # config), so there is no nix step. git and jq come from the system
+      # profile; the rest is macOS's own.
+      PATH: "/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    steps:
+      - *checkout
+      - name: build
+        run: |
+          set -euo pipefail
+          cd "$WORKDIR"
+
+          # macOS's /bin/bash is 3.2, so no mapfile or arrays-from-
+          # process-substitution: the attribute list goes in "$@".
+          set --
+          for p in $(nix eval .#github-actions-package-matrix-aarch64-darwin --json | jq -r '.pkg[]'); do
+            set -- "$@" ".#packages.aarch64-darwin.$p"
+          done
+          for h in $(nix eval .#darwinConfigurations --apply builtins.attrNames --json | jq -r '.[]'); do
+            set -- "$@" ".#darwinConfigurations.$h.system"
+          done
+          echo "building $# outputs"
+          nix build --no-link --log-format raw-with-logs \
+            --print-build-logs --print-out-paths "$@" > "$WORKDIR/.outs"
+          echo "built $(wc -l < "$WORKDIR/.outs" | tr -d ' ') output paths"
+
+          # Pushed by name, as in the Linux packages job and for the same
+          # reasons.
+          if [ -n "${NCPS_UPLOAD_KEY:-}" ] && [ -n "${NCPS_UPLOAD_TOKEN:-}" ]; then
+            key=$(mktemp); netrc=$(mktemp); trap 'rm -f "$key" "$netrc"' EXIT
+            printf '%s' "$NCPS_UPLOAD_KEY" > "$key"; chmod 600 "$key" "$netrc"
+            printf 'machine nixcache.9000.dev login world-ci password %s\n' \
+              "$NCPS_UPLOAD_TOKEN" > "$netrc"
+            nix path-info "$@" > "$WORKDIR/.push"
+            echo "caching $(wc -l < "$WORKDIR/.push" | tr -d ' ') store paths and their closures"
+            nix copy --option netrc-file "$netrc" \
+              --to "https://nixcache.9000.dev/upload?secret-key=$key" \
+              $(cat "$WORKDIR/.push")
+          else
+            echo "NCPS_UPLOAD_KEY or NCPS_UPLOAD_TOKEN unset; not pushing to the cache" >&2
+          fi
