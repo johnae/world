@@ -185,7 +185,6 @@
       folders."/home/${adminUser.name}/Sync" = {
         id = "sync";
         devices = [
-          "antares"
           "cygnus"
           "icarus"
           "neptune"
@@ -196,7 +195,6 @@
       folders."/home/${adminUser.name}/Pictures" = {
         id = "pictures";
         devices = [
-          "antares"
           "cygnus"
           "neptune"
         ];
@@ -204,7 +202,6 @@
       folders."/home/${adminUser.name}/Photos" = {
         id = "photos";
         devices = [
-          "antares"
           "cygnus"
           "icarus"
           "neptune"

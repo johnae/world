@@ -18,7 +18,6 @@
   #   "agent-8be5-c91d-diskformat"
   #   "agent-8be5-d4a1-diskformat"
   #   "alnitak-diskformat"
-  #   "antares-diskformat"
   #   "cygnus-diskformat"
   #   "eris-diskformat"
   #   "fluxcd-yaml"
