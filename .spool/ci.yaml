@@ -350,19 +350,29 @@ jobs:
             set -- "$@" ".#darwinConfigurations.$h.system"
           done
           echo "building $# outputs"
-          # --keep-going: one package that fails should not hide the rest.
+          # --keep-going, and the failure held until after the push: one
+          # package that fails must not keep the others out of the cache.
+          status=0
           nix build --no-link --keep-going --log-format raw-with-logs \
-            --print-build-logs --print-out-paths "$@" > "$WORKDIR/.outs"
-          echo "built $(wc -l < "$WORKDIR/.outs" | tr -d ' ') output paths"
+            --print-build-logs "$@" || status=$?
 
-          # Pushed by name, as in the Linux packages job and for the same
-          # reasons.
-          if [ -n "${NCPS_UPLOAD_KEY:-}" ] && [ -n "${NCPS_UPLOAD_TOKEN:-}" ]; then
+          # What built, by name: path-info refuses an output that is not in
+          # the store, so a failed package is simply left out. Pushed by
+          # name, as in the Linux packages job and for the same reasons.
+          : > "$WORKDIR/.push"
+          for attr in "$@"; do
+            nix path-info "$attr" >> "$WORKDIR/.push" 2>/dev/null \
+              || echo "not built, not caching: $attr" >&2
+          done
+          echo "built $(wc -l < "$WORKDIR/.push" | tr -d ' ') of $# outputs"
+
+          if [ ! -s "$WORKDIR/.push" ]; then
+            echo "nothing built; nothing to cache" >&2
+          elif [ -n "${NCPS_UPLOAD_KEY:-}" ] && [ -n "${NCPS_UPLOAD_TOKEN:-}" ]; then
             key=$(mktemp); netrc=$(mktemp); trap 'rm -f "$key" "$netrc"' EXIT
             printf '%s' "$NCPS_UPLOAD_KEY" > "$key"; chmod 600 "$key" "$netrc"
             printf 'machine nixcache.9000.dev login world-ci password %s\n' \
               "$NCPS_UPLOAD_TOKEN" > "$netrc"
-            nix path-info "$@" > "$WORKDIR/.push"
             echo "caching $(wc -l < "$WORKDIR/.push" | tr -d ' ') store paths and their closures"
             nix copy --option netrc-file "$netrc" \
               --to "https://nixcache.9000.dev/upload?secret-key=$key" \
@@ -370,3 +380,4 @@ jobs:
           else
             echo "NCPS_UPLOAD_KEY or NCPS_UPLOAD_TOKEN unset; not pushing to the cache" >&2
           fi
+          exit "$status"
