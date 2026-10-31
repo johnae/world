@@ -187,7 +187,7 @@
   ## needs a restart
   launchd.user.agents = {
     user-paths = {
-      command = "/bin/launchctl config user path '/opt/homebrew/bin:/Users/johnaxele/.nix-profile/bin:/etc/profiles/per-user/johnaxele/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin'";
+      command = "/bin/launchctl config user path '/opt/homebrew/bin:/Users/${adminUser.name}/.nix-profile/bin:/etc/profiles/per-user/${adminUser.name}/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin'";
       serviceConfig.RunAtLoad = true;
     };
   };

@@ -130,7 +130,7 @@
   darwinConfigurations = mapAttrs' (
     name: conf: let
       inherit (conf) system hostconf;
-      adminUser = adminUsers.darwin;
+      adminUser = adminUsers.darwinHosts.${name} or adminUsers.darwin;
     in {
       inherit name;
       value = withSystem system ({pkgs, ...}:
