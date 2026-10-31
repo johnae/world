@@ -138,6 +138,11 @@ in {
         # A failed start (no network at boot) is tried again, not hammered.
         ThrottleInterval = 30;
         ProcessType = "Interactive";
+        # launchd's default of 256 open files is far too few for nix
+        # fetching a flake's inputs; jobs inherit this. 61440 is macOS's
+        # kern.maxfilesperproc.
+        SoftResourceLimits.NumberOfFiles = 61440;
+        HardResourceLimits.NumberOfFiles = 61440;
         StandardOutPath = "/var/log/spool-agent.log";
         StandardErrorPath = "/var/log/spool-agent.log";
       };
