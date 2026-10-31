@@ -36,14 +36,15 @@ in {
 
     # Packages are defined for every system whether they build there or not,
     # so only the ones whose platforms include darwin are kept. Disk images
-    # and cluster manifests are Linux artifacts, and a few packages are
-    # `hello` stand-ins on darwin.
+    # and cluster manifests are Linux artifacts, a few packages are `hello`
+    # stand-ins on darwin, and nordic (KDE icons) and devenv-test claim
+    # darwin but do not evaluate there.
     github-actions-package-matrix-aarch64-darwin = withSystem "aarch64-darwin" (ctx @ {pkgs, ...}: let
       buildsHere = name: drv:
         !(hasPrefix "images/" name)
         && !(hasSuffix "-diskformat" name)
         && !(hasPrefix "kubevirt-" name)
-        && !(elem name (defaultSkip ++ ["noctalia" "persway" "zwift"]))
+        && !(elem name (defaultSkip ++ ["noctalia" "persway" "zwift" "nordic" "devenv-test"]))
         && (builtins.tryEval (lib.meta.availableOn pkgs.stdenv.hostPlatform drv)).value;
     in {
       os = ["macos-latest"];

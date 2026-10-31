@@ -325,6 +325,14 @@ jobs:
       # config), so there is no nix step. git and jq come from the system
       # profile; the rest is macOS's own.
       PATH: "/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+      # Determinate's lazy trees intermittently lost files inside the
+      # nixpkgs input here ("path ... does not exist"). The rest repeats the
+      # top-level NIX_CONFIG, which this replaces.
+      NIX_CONFIG: |
+        accept-flake-config = true
+        lazy-trees = false
+        extra-substituters = https://nixcache.9000.dev
+        extra-trusted-public-keys = nixcache.9000.dev:MNr2kidQv9GfkQKUarqdpaufX7JMMSixX/cdlS5i5i0=
     steps:
       - *checkout
       - name: build
