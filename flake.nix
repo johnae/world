@@ -121,7 +121,6 @@
         flake-parts.flakeModules.touchup
         inputs.agenix-rekey.flakeModule
         ./flake/agenix-rekey.nix
-        ./flake/buildkite-pipeline.nix
         ./flake/configurations.nix
         ./flake/devenv.nix
         ./flake/github-actions.nix

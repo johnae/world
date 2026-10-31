@@ -1,7 +1,6 @@
 {
   imports = [
     ./auto-upgrade-enhanced.nix
-    ./buildkite-nix-build.nix
     ./home.nix
     ./host-config.nix
     ./innernet.nix

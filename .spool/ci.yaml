@@ -201,8 +201,7 @@ jobs:
           # One invocation, so nix schedules the whole set across cores
           # itself instead of one package at a time. --print-build-logs
           # stays: without it a 50-minute build emits a few hundred bytes
-          # and is indistinguishable from a hang. Build logs go to stderr,
-          # so stdout is just the output paths.
+          # and is indistinguishable from a hang.
           #
           # raw-with-logs drops the progress bar and keeps the build
           # logs. The bar redraws constantly under a PTY and was most of
@@ -212,10 +211,20 @@ jobs:
           # It must be raw-WITH-LOGS. Plain `raw` swallows build output
           # even with --print-build-logs, which turns a long build silent
           # and indistinguishable from a hang - measured, not assumed.
-          nix build --no-link --log-format raw-with-logs \
-            --print-build-logs --print-out-paths "${attrs[@]}" \
-            > /tmp/world-outs
-          echo "built $(wc -l < /tmp/world-outs) output paths"
+          #
+          # --keep-going, and the failure held until after the push: one
+          # package that fails must not keep the others out of the cache.
+          status=0
+          nix build --no-link --keep-going --log-format raw-with-logs \
+            --print-build-logs "${attrs[@]}" || status=$?
+
+          # What built: path-info refuses an output that is not in the
+          # store, so a failed package is simply left out of the push.
+          : > /tmp/world-push
+          for attr in "${cache_attrs[@]}"; do
+            nix path-info "$attr" >> /tmp/world-push 2>/dev/null \
+              || echo "not built, not caching: $attr" >&2
+          done
 
           # Push what the commit produces, named explicitly. Two reasons
           # this is not a store-watching push:
@@ -250,8 +259,7 @@ jobs:
             printf '%s' "$NCPS_UPLOAD_KEY" > "$key"; chmod 600 "$key" "$netrc"
             printf 'machine nixcache.9000.dev login world-ci password %s\n' \
               "$NCPS_UPLOAD_TOKEN" > "$netrc"
-            nix path-info "${cache_attrs[@]}" > /tmp/world-push
-            echo "caching $(wc -l < /tmp/world-push) of ${#pkgs[@]} packages"
+            echo "caching $(wc -l < /tmp/world-push) of ${#cache_attrs[@]} cacheable packages"
             # The upload routes sit under /upload; nix uses the store URL
             # as the base for the paths it PUTs.
             xargs -r nix copy --option netrc-file "$netrc" --to \
@@ -259,6 +267,7 @@ jobs:
           else
             echo "NCPS_UPLOAD_KEY or NCPS_UPLOAD_TOKEN unset; not pushing to the cache" >&2
           fi
+          exit "$status"
 
       - name: publish-containerdisk
         run: |

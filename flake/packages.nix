@@ -105,13 +105,6 @@
           '';
         };
 
-        buildkite-agent-patched = pkgs.buildkite-agent.overrideAttrs (oa: {
-          postPatch = ''
-            ${oa.postPatch or ""}
-            substituteInPlace version/version.go --replace 'buildNumber = "x"' 'buildNumber = "123"'
-          '';
-        });
-
         tuwunel-latest = inputs.tuwunel.packages.${system}.default;
 
         unlockremote = pkgs.writeShellApplication {

@@ -131,7 +131,11 @@ Always run linting etc before committing: `world lint && world dead && world dsc
 
 ### CI/CD Pipeline
 
-The repository uses CI (buildkite) for automated updates. Updates create pull requests where all custom packages and machine configurations are built and tested before merging.
+CI runs on hyperspool (see `.spool/`). Every push to main and every pull request
+is linted and checked, and builds the custom packages for x86_64-linux and
+aarch64-darwin plus the darwin hosts (the darwin side on the mac mini), caching
+them in nixcache.9000.dev. A nightly job updates the flake inputs and opens a pull request,
+which merges once that build passes.
 
 ## Resources
 

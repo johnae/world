@@ -15,22 +15,6 @@
       rekeyFile = ../../../secrets/ts-google-9k.age;
       owner = "${toString adminUser.uid}";
     };
-    buildkite-agent-nix-build-token = {
-      rekeyFile = ../../../secrets/buildkite-token.age;
-      owner = "${toString adminUser.uid}";
-    };
-    buildkite-agent-nix-build-ssh-key = {
-      rekeyFile = ../../../secrets/buildkite-ssh-key.age;
-      owner = "${toString adminUser.uid}";
-    };
-    buildkite-agent-nix-build-cachix-signing-key = {
-      rekeyFile = ../../../secrets/cachix-signing-key.age;
-      owner = "${toString adminUser.uid}";
-    };
-    buildkite-agent-nix-build-github-app-auth-key = {
-      rekeyFile = ../../../secrets/github-app-bk-auth.age;
-      owner = "${toString adminUser.uid}";
-    };
     spool-agent-token = {
       rekeyFile = ../../../secrets/spool-agent-mini-token.age;
     };
@@ -67,7 +51,7 @@
   # file, so trusted users and our cache go here. The first switch needs the
   # hand-written one moved aside, and the daemon restarted after.
   environment.etc."nix/nix.custom.conf".text = ''
-    trusted-users = root ${adminUser.name} buildkite-agent-nix-build spool-agent
+    trusted-users = root ${adminUser.name} spool-agent
     extra-substituters = https://nixcache.9000.dev
     extra-trusted-public-keys = nixcache.9000.dev:MNr2kidQv9GfkQKUarqdpaufX7JMMSixX/cdlS5i5i0=
   '';
@@ -80,56 +64,6 @@
     capabilities = ["shell" "aarch64-darwin"];
     tokenFile = config.age.secrets.spool-agent-token.path;
     runtimePackages = [pkgs.bash pkgs.git pkgs.jq pkgs.openssl pkgs.gnutar pkgs.gzip];
-  };
-
-  services.buildkite-agents.nix-build = let
-    inherit (config.services.buildkite-agents.nix-build) dataDir;
-  in {
-    enable = true;
-    tokenPath = config.age.secrets.buildkite-agent-nix-build-token.path;
-    privateSshKeyPath = config.age.secrets.buildkite-agent-nix-build-ssh-key.path;
-    extraConfig = ''
-      plugins-path=${dataDir}/plugins
-      spawn=4
-    '';
-    runtimePackages = [
-      pkgs.bash
-      pkgs.cachix
-      pkgs.coreutils
-      pkgs.curl
-      pkgs.git
-      pkgs.gnutar
-      pkgs.gzip
-      pkgs.jq
-      pkgs.nix
-      pkgs.openssl
-      pkgs.procps
-    ];
-
-    tags = {
-      nix = "true";
-      nix-darwin = "true";
-      macos = "true";
-      arch = "aarch64-darwin";
-      queue = "default-queue";
-    };
-
-    hooks = {
-      environment = ''
-        CACHIX_SIGNING_KEY="$(head -1 ${config.age.secrets."buildkite-agent-nix-build-cachix-signing-key".path})"
-        CACHE_NAME=insane
-        GITHUB_APP_RSA_KEY_FILE="${config.age.secrets."buildkite-agent-nix-build-github-app-auth-key".path}"
-        export CACHIX_SIGNING_KEY CACHE_NAME GITHUB_APP_RSA_KEY_FILE
-      '';
-      pre-command = ''
-        #!/usr/bin/env bash
-        cachix use "$CACHE_NAME"
-      '';
-      command = ''
-        #!/usr/bin/env bash
-        cachix --verbose watch-exec "$CACHE_NAME" -- bash -c "$BUILDKITE_COMMAND"
-      '';
-    };
   };
 
   nix.enable = false;
