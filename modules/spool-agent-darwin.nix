@@ -139,10 +139,11 @@ in {
         ThrottleInterval = 30;
         ProcessType = "Interactive";
         # launchd's default of 256 open files is far too few for nix
-        # fetching a flake's inputs; jobs inherit this. 61440 is macOS's
-        # kern.maxfilesperproc.
-        SoftResourceLimits.NumberOfFiles = 61440;
-        HardResourceLimits.NumberOfFiles = 61440;
+        # fetching a flake's inputs; jobs inherit this. 10240 is macOS's
+        # OPEN_MAX: with the 61440 kern.maxfilesperproc allows, nix's poll()
+        # failed with EINVAL.
+        SoftResourceLimits.NumberOfFiles = 10240;
+        HardResourceLimits.NumberOfFiles = 10240;
         StandardOutPath = "/var/log/spool-agent.log";
         StandardErrorPath = "/var/log/spool-agent.log";
       };

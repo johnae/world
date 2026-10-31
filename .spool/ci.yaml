@@ -350,7 +350,8 @@ jobs:
             set -- "$@" ".#darwinConfigurations.$h.system"
           done
           echo "building $# outputs"
-          nix build --no-link --log-format raw-with-logs \
+          # --keep-going: one package that fails should not hide the rest.
+          nix build --no-link --keep-going --log-format raw-with-logs \
             --print-build-logs --print-out-paths "$@" > "$WORKDIR/.outs"
           echo "built $(wc -l < "$WORKDIR/.outs" | tr -d ' ') output paths"
 
