@@ -32,6 +32,8 @@
   homebrew.casks = [
     "logi-options+"
     "chromium"
+    # nixpkgs' jetbrains.idea can no longer unpack its darwin dmg.
+    "intellij-idea"
   ];
 
   #services.karabiner-elements.enable = true; ## doesn't work atm
@@ -128,7 +130,6 @@
     home.username = "${adminUser.name}";
     home.homeDirectory = "/Users/${adminUser.name}";
     home.packages = [
-      pkgs.jetbrains.idea
       pkgs.grpcurl
     ];
     imports = [../../../users/profiles/mac.nix];
