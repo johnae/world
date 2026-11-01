@@ -199,24 +199,21 @@ jobs:
           done
 
           # One invocation, so nix schedules the whole set across cores
-          # itself instead of one package at a time. --print-build-logs
-          # stays: without it a 50-minute build emits a few hundred bytes
-          # and is indistinguishable from a hang.
+          # itself instead of one package at a time.
           #
-          # raw-with-logs drops the progress bar and keeps the build
-          # logs. The bar redraws constantly under a PTY and was most of
-          # what the run page had to parse; without it the same two
-          # opening steps went from 7.8 MB of buffer to 16 KB.
-          #
-          # It must be raw-WITH-LOGS. Plain `raw` swallows build output
-          # even with --print-build-logs, which turns a long build silent
-          # and indistinguishable from a hang - measured, not assumed.
+          # Plain `raw`: no progress bar (it redraws constantly under a PTY
+          # and was most of what the run page had to parse), and no build
+          # output either. raw-with-logs printed every compiler line of
+          # every build, 55 MB for one nixpkgs bump, which made the run
+          # slow to open. `raw` still prints a line as each derivation
+          # starts, and a failed build's last log-lines lines; a single
+          # long build is quiet until it ends.
           #
           # --keep-going, and the failure held until after the push: one
           # package that fails must not keep the others out of the cache.
           status=0
-          nix build --no-link --keep-going --log-format raw-with-logs \
-            --print-build-logs "${attrs[@]}" || status=$?
+          nix build --no-link --keep-going --log-format raw \
+            --option log-lines 200 "${attrs[@]}" || status=$?
 
           # What built: path-info refuses an output that is not in the
           # store, so a failed package is simply left out of the push.
@@ -361,9 +358,10 @@ jobs:
           echo "building $# outputs"
           # --keep-going, and the failure held until after the push: one
           # package that fails must not keep the others out of the cache.
+          # Quiet `raw` logs, as in the packages job and for the same reason.
           status=0
-          nix build --no-link --keep-going --log-format raw-with-logs \
-            --print-build-logs "$@" || status=$?
+          nix build --no-link --keep-going --log-format raw \
+            --option log-lines 200 "$@" || status=$?
 
           # What built, by name: path-info refuses an output that is not in
           # the store, so a failed package is simply left out. Pushed by
