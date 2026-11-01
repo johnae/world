@@ -70,6 +70,24 @@
     runtimePackages = [pkgs.bash pkgs.git pkgs.jq pkgs.openssl pkgs.gnutar pkgs.gzip];
   };
 
+  # What system.autoUpgrade does on the NixOS hosts, which nix-darwin lacks:
+  # switch to world's main every morning. The nightly update has merged and
+  # CI has cached the darwin build by then, so this mostly downloads. A
+  # switch that changes the spool agent restarts it, which hands a running
+  # job back to be dispatched again.
+  launchd.daemons.darwin-upgrade = {
+    path = [pkgs.git "/nix/var/nix/profiles/default/bin"];
+    script = ''
+      echo "darwin-upgrade: $(date)"
+      /run/current-system/sw/bin/darwin-rebuild switch --refresh --flake github:johnae/world#${hostName}
+    '';
+    serviceConfig = {
+      StartCalendarInterval = [{Hour = 6; Minute = 0;}];
+      StandardOutPath = "/var/log/darwin-upgrade.log";
+      StandardErrorPath = "/var/log/darwin-upgrade.log";
+    };
+  };
+
   nix.enable = false;
 
   users = {
