@@ -34,6 +34,7 @@ in {
   programs.nushell = {
     enable = true;
     package = pkgs.nushell;
+    loadSessionVariables = false; ## pin the legacy default (true from stateVersion 26.11)
     configFile.source = ./config.nu;
     envFile.source = ./env.nu;
     extraConfig = ''
