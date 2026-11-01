@@ -54,6 +54,10 @@
     trusted-users = root ${adminUser.name} spool-agent
     extra-substituters = https://nixcache.9000.dev
     extra-trusted-public-keys = nixcache.9000.dev:MNr2kidQv9GfkQKUarqdpaufX7JMMSixX/cdlS5i5i0=
+    # CI builds the whole darwin set here: collect garbage when less than
+    # 20G is left, up to 60G free, so a big update cannot fill the disk.
+    min-free = 21474836480
+    max-free = 64424509440
   '';
 
   # Takes world's aarch64-darwin builds (`requires: [aarch64-darwin]`) for
