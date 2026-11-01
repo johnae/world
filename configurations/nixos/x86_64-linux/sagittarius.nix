@@ -75,7 +75,6 @@
   };
 
   boot.initrd = {
-    systemd.enable = true;
     systemd.tpm2.enable = true;
     systemd.emergencyAccess = config.users.users.${adminUser.name}.hashedPassword;
   };

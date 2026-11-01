@@ -96,7 +96,6 @@
   disko.devices.disk.disk1.device = "/dev/nvme0n1";
 
   boot.initrd = {
-    systemd.enable = true;
     systemd.emergencyAccess = config.users.users.${adminUser.name}.hashedPassword;
     ## Unlocks itself from the TPM, with a FIDO2 key as the other way in and
     ## the passphrase always behind both. Neither is enrolled by installing -
