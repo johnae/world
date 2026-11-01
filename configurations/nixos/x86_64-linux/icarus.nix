@@ -232,9 +232,6 @@
     "bw.9000.dev" = {
       group = "nginx";
     };
-    "chat.9000.dev" = {
-      group = "nginx";
-    };
     "tika.9000.dev" = {
       group = "nginx";
     };
@@ -272,7 +269,6 @@
     ollama = record // {host = "eris";};
     bw = record;
     tika = record;
-    chat = record;
     victoriametrics = record;
     victorialogs = record;
     ha = record;
@@ -282,7 +278,6 @@
   services.nginx.tailscaleAuth = {
     enable = true;
     virtualHosts = [
-      "chat.9000.dev"
       "grafana.9000.dev"
     ];
   };
@@ -304,27 +299,10 @@
     };
   };
 
-  services.open-webui.enable = true;
-  services.open-webui.port = 11112;
-  services.open-webui.environment = {
-    # PYDANTIC_SKIP_VALIDATING_CORE_SCHEMAS = "True";
-    OLLAMA_BASE_URL = "http://eris:11434";
-    ENABLE_OLLAMA_API = "true";
-    DEFAULT_USER_ROLE = "user";
-    WEBUI_AUTH = "true";
-    WEBUI_AUTH_TRUSTED_EMAIL_HEADER = "X-Webauth-Email";
-    WEBUI_AUTH_TRUSTED_NAME_HEADER = "X-Webauth-Name";
-    ENABLE_OAUTH_SIGNUP = "true";
-    ENABLE_SIGNUP = "true";
-    WEBUI_URL = "https://chat.9000.dev";
-    OAUTH_MERGE_ACCOUNTS_BY_EMAIL = "true";
-  };
-
   environment.persistence."/keep".directories = [
     "/var/dkim"
     "/var/lib/dovecot"
     "/var/lib/grafana"
-    "/var/lib/private/open-webui"
     "/var/lib/private/victorialogs"
     "/var/lib/private/victoriametrics"
     "/var/sieve"
@@ -411,15 +389,6 @@
         useACMEHost = "bw.9000.dev";
         locations."/".proxyPass = "http://localhost:8222";
         locations."/".proxyWebsockets = true;
-        forceSSL = true;
-      };
-      "chat.9000.dev" = {
-        useACMEHost = "chat.9000.dev";
-        locations."/".proxyPass = "http://localhost:11112";
-        locations."/".proxyWebsockets = true;
-        locations."/".extraConfig = ''
-          proxy_set_header X-Webauth-Email "$auth_email";
-        '';
         forceSSL = true;
       };
       "grafana.9000.dev" = {
