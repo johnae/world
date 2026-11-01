@@ -48,7 +48,6 @@
             rbw unlocked || rbw unlock
           '';
         };
-        helix-latest = inputs.helix-editor.packages.${system}.default;
         zjstatus = inputs.zjstatus.packages.${system}.default;
         zj-which-key = inputs.zj-which-key.packages.${system}.default;
         noctalia =

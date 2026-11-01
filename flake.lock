@@ -879,29 +879,6 @@
         "type": "github"
       }
     },
-    "helix-editor": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-overlay": [
-          "rust-overlay"
-        ]
-      },
-      "locked": {
-        "lastModified": 1790649139,
-        "narHash": "sha256-ZjMduEHRsY0H8OHJ5oiF/AcxOBhIiCBwo7D+g1yYwKc=",
-        "owner": "helix-editor",
-        "repo": "helix",
-        "rev": "ba40e547426b0f9896c8bdc699a4ab11f2b37dbc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "helix-editor",
-        "repo": "helix",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -1881,7 +1858,6 @@
         "flake-compat": "flake-compat_2",
         "flake-parts": "flake-parts_3",
         "flake-utils": "flake-utils",
-        "helix-editor": "helix-editor",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "jovian": "jovian",
