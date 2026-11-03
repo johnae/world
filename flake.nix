@@ -26,7 +26,6 @@
     crane.url = "github:ipetkov/crane";
     devenv.inputs.flake-compat.follows = "flake-compat";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
-    devenv.inputs.cachix.follows = "cachix";
     devenv.url = "github:cachix/devenv";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
@@ -85,7 +84,7 @@
     victoriametrics-logs-datasource-plugin.flake = false;
     victoriametrics-logs-datasource-plugin.url = "https://github.com/VictoriaMetrics/victorialogs-datasource/releases/download/v0.33.1/victoriametrics-logs-datasource-v0.33.1.tar.gz"; # gh-release-update
     victoriametrics-metrics-datasource-plugin.flake = false;
-    victoriametrics-metrics-datasource-plugin.url = "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v0.26.1/victoriametrics-metrics-datasource-v0.26.1.tar.gz"; # gh-release-update
+    victoriametrics-metrics-datasource-plugin.url = "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v1.0.0/victoriametrics-metrics-datasource-v1.0.0.tar.gz"; # gh-release-update
     wezterm.inputs.flake-utils.follows = "flake-utils";
     wezterm.inputs.nixpkgs.follows = "nixpkgs";
     wezterm.inputs.rust-overlay.follows = "rust-overlay";
