@@ -26,7 +26,6 @@
     crane.url = "github:ipetkov/crane";
     devenv.inputs.flake-compat.follows = "flake-compat";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
-    devenv.inputs.cachix.follows = "cachix";
     devenv.url = "github:cachix/devenv";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
