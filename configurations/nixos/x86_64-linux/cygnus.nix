@@ -38,7 +38,7 @@
 
   boot.initrd = {
     systemd.emergencyAccess = config.users.users.${adminUser.name}.hashedPassword;
-    luks.devices.encrypted.crypttabExtraOpts = ["tmp2-device=auto" "fido2-device=auto"];
+    luks.devices.encrypted.crypttabExtraOpts = ["tpm2-device=auto" "fido2-device=auto"];
     luks.devices.encrypted-swap.crypttabExtraOpts = ["tpm2-device=auto" "fido2-device=auto"];
   };
 
