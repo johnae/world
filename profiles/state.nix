@@ -112,6 +112,7 @@
         ".local/share/syncthing-data"
         ".local/share/vulkan"
         ".local/state/greed"
+        ".local/state/nix"
         ".mail"
         ".mozilla/firefox/default"
         ".nb"
