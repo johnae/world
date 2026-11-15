@@ -17,7 +17,7 @@
       deps = ["specialfs"];
       text = ''
         mkdir -p /keep/home/${adminUser.name}
-        chown -R ${toString adminUser.uid}:${toString adminUser.gid} /keep/home/${adminUser.name}
+        chown ${adminUser.name}:${config.users.users.${adminUser.name}.group} /keep/home/${adminUser.name}
         chmod 0700 /keep/home/${adminUser.name}
       '';
     };
