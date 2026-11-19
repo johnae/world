@@ -102,6 +102,12 @@ in {
               matchConfig.Name = name;
               networkConfig.DHCPPrefixDelegation = "yes";
               networkConfig.IPv6SendRA = "yes";
+              ## advertise the router as DNS by its link-local address, which
+              ## survives delegated prefix changes
+              ipv6SendRAConfig = {
+                EmitDNS = true;
+                DNS = "_link_local";
+              };
               addresses = [
                 {
                   Address = "${net.address}/${toString net.prefixLength}";
@@ -122,33 +128,6 @@ in {
 
     ## enable jool nat64
     # networking.jool.enable = true;
-    ## enable ipv6 on local network
-    services.corerad = {
-      enable = true;
-      settings = {
-        debug = {
-          address = "localhost:9430";
-          prometheus = true;
-        };
-        interfaces = [
-          {
-            name = cfg.internalInterface;
-            advertise = true;
-            prefix = [
-              {
-                prefix = "::/64";
-              }
-            ];
-            rdnss = [
-              {
-                servers = ["::"];
-                lifetime = "auto";
-              }
-            ];
-          }
-        ];
-      };
-    };
 
     # dnsmasq for DHCP only
     services.dnsmasq.enable = true;

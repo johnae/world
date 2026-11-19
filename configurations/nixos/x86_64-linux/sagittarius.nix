@@ -121,29 +121,6 @@
     '';
   };
 
-  services.vmagent = {
-    prometheusConfig = let
-      relabel_configs = [
-        {
-          action = "replace";
-          replacement = hostName;
-          target_label = "instance";
-        }
-      ];
-    in {
-      scrape_configs = [
-        {
-          job_name = "corerad";
-          scrape_interval = "10s";
-          static_configs = [
-            {targets = ["127.0.0.1:9430"];}
-          ];
-          inherit relabel_configs;
-        }
-      ];
-    };
-  };
-
   age.secrets = {
     ts-google-9k = {
       rekeyFile = ../../../secrets/ts-google-9k.age;
