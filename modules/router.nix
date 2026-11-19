@@ -132,15 +132,6 @@ in {
         };
         interfaces = [
           {
-            name = "pref64";
-            advertise = true;
-            prefix = [
-              {
-                prefix = "64:ff9b::/96";
-              }
-            ];
-          }
-          {
             name = cfg.internalInterface;
             advertise = true;
             prefix = [
