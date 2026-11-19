@@ -17,7 +17,8 @@
       deps = ["specialfs"];
       text = ''
         mkdir -p /keep/home/${adminUser.name}
-        chown ${adminUser.name}:${config.users.users.${adminUser.name}.group} /keep/home/${adminUser.name}
+        ## numeric ids: this may run before the users snippet has written /etc/passwd
+        chown ${toString adminUser.uid}:${toString config.users.groups.${config.users.users.${adminUser.name}.group}.gid} /keep/home/${adminUser.name}
         chmod 0700 /keep/home/${adminUser.name}
       '';
     };

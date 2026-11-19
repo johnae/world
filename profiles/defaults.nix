@@ -2,16 +2,9 @@
   hostName,
   pkgs,
   inputs,
-  config,
   lib,
   ...
-}: let
-  inherit (lib // builtins) attrNames hasAttr mkIf length;
-  hasState =
-    hasAttr "persistence" config.environment
-    && (length (attrNames config.environment.persistence)) > 0;
-  hasSecrets = config.age.secrets != {};
-in {
+}: {
   nix = {
     extraOptions = ''
       experimental-features = nix-command flakes
@@ -150,9 +143,6 @@ in {
   users.mutableUsers = false;
 
   system.stateVersion = "25.05";
-
-  ##
-  system.activationScripts.agenixNewGeneration = mkIf (hasSecrets && hasState && config.ephemeralRoot) {deps = ["persist-files"];};
 
   services.nix-dirs.enable = true;
 }
