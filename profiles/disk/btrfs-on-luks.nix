@@ -6,6 +6,8 @@
   btrfsDisks = config.btrfs.disks;
   tmpfsRootSize = config.tmpfsRoot.size;
 in {
+  imports = [./luks-cryptkey.nix];
+
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";

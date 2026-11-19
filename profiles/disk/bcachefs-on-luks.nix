@@ -6,6 +6,8 @@
   bcacheFsDevices = config.bcachefs.devices;
   tmpfsRootSize = config.tmpfsRoot.size;
 in {
+  imports = [./luks-cryptkey.nix];
+
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
