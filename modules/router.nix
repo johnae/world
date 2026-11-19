@@ -69,6 +69,18 @@ in {
     networking.useDHCP = false;
     networking.firewall.trustedInterfaces = internalInterfaceNames;
 
+    ## The LAN gets a globally routed IPv6 prefix with no NAT in front of it,
+    ## so forwarded traffic needs a default-drop policy. The forward chain
+    ## already accepts established/related, ICMPv6 and DNAT'd (port mapped)
+    ## connections; new connections are only allowed out of the LAN and
+    ## tailscale (exit node).
+    networking.nftables.enable = true;
+    networking.firewall.filterForward = true;
+    networking.firewall.extraForwardRules = ''
+      iifname { ${lib.concatStringsSep ", " internalInterfaceNames} } accept
+      iifname ${config.services.tailscale.interfaceName} accept
+    '';
+
     systemd.network = {
       enable = true;
       networks =
