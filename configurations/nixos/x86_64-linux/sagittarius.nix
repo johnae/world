@@ -105,6 +105,22 @@
     dnsMasqSettings.strict-order = true;
   };
 
+  ## NAT-PMP/PCP only, LAN clients may only map their own high ports.
+  ## Permission rules only cover IPv4, so IPv6 pinholing is disabled.
+  services.miniupnpd = {
+    enable = true;
+    externalInterface = config.services.jae.router.externalInterface;
+    internalIPs = [config.services.jae.router.internalInterface];
+    natpmp = true;
+    upnp = false;
+    appendConfig = ''
+      ipv6_disable=yes
+      secure_mode=yes
+      allow 1024-65535 192.168.20.0/24 1024-65535
+      deny 0-65535 0.0.0.0/0 0-65535
+    '';
+  };
+
   services.vmagent = {
     prometheusConfig = let
       relabel_configs = [
