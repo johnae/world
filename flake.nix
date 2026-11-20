@@ -84,7 +84,7 @@
     victoriametrics-logs-datasource-plugin.flake = false;
     victoriametrics-logs-datasource-plugin.url = "https://github.com/VictoriaMetrics/victorialogs-datasource/releases/download/v0.34.0/victoriametrics-logs-datasource-v0.34.0.tar.gz"; # gh-release-update
     victoriametrics-metrics-datasource-plugin.flake = false;
-    victoriametrics-metrics-datasource-plugin.url = "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v1.0.1/victoriametrics-metrics-datasource-v1.0.1.tar.gz"; # gh-release-update
+    victoriametrics-metrics-datasource-plugin.url = "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v1.0.2/victoriametrics-metrics-datasource-v1.0.2.tar.gz"; # gh-release-update
     wezterm.inputs.nixpkgs.follows = "nixpkgs";
     wezterm.inputs.rust-overlay.follows = "rust-overlay";
     wezterm.url = "github:wez/wezterm?dir=nix";
