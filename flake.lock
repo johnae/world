@@ -83,11 +83,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794862072,
-        "narHash": "sha256-ftyytmVYzl0oUnMTmCBNS7TTMSjqCsHNlnGbswGxYY8=",
+        "lastModified": 1795540830,
+        "narHash": "sha256-HylT4qPuHgLEWR5FkB93Moi7kWlD/BO+hibbey4T+QM=",
         "owner": "cachix",
         "repo": "cachix",
-        "rev": "8231a10ca573fc5cbdd844d2a2802d6c7765f288",
+        "rev": "1f874438ba0e29cc91ed746580c6430b6a1b8da4",
         "type": "github"
       },
       "original": {
@@ -313,11 +313,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1795442488,
-        "narHash": "sha256-xDpXv99LgmEmXw8AHVds2V11bF5u0g6F8ViHtfmK8sk=",
+        "lastModified": 1795527841,
+        "narHash": "sha256-k/viMCCdwb4qsHzRgD01ewD5KLwy14Hrp5RWxsq0MKw=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "9efde4a36d7d36806475c5582de12e248de6fdba",
+        "rev": "221e8c7e447b4fcbd1315bb05259881a9b465ce3",
         "type": "github"
       },
       "original": {
@@ -412,11 +412,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1795466773,
-        "narHash": "sha256-kz8sZPfAhP04BlFyrS9VuTXRRkzamuZFMvJaGpKII9U=",
+        "lastModified": 1795512236,
+        "narHash": "sha256-Ftn28kkbthBQMg5PiFz1UmxOqAljlRHjOIvUppoSdmY=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "1171f4af598e984b16494fadf4f8858180241a60",
+        "rev": "b56455571badeea971266b6fa8589aff4e5711df",
         "type": "github"
       },
       "original": {
@@ -433,11 +433,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1795455967,
-        "narHash": "sha256-1tSiU6ywNrULP/t1kfE75dQS6UctbnurVeAyM/22mxA=",
+        "lastModified": 1795540720,
+        "narHash": "sha256-I4XtLHtuQa4roY8uky/9PqPSpm5sqt6uWkmY5eRxzN0=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "ceca54d1de1c8d7c3b2ecd9fd8c3ff24ba057cee",
+        "rev": "c0e82cad53833b053f4e1ec2c596cb3b18f00cbf",
         "type": "github"
       },
       "original": {
@@ -900,11 +900,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795366757,
-        "narHash": "sha256-Tp4Kh4R7ID1f2mMCDlb2PiFQ/DZZsnXB2u2juWN+TT4=",
+        "lastModified": 1795534022,
+        "narHash": "sha256-xkRZ+PcPWaAyf9YrEBszYD5w2S6/Ac2tIfsufzd4dEQ=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "3b8140d21fa0a70b1b38c2ed29853dfe686234a6",
+        "rev": "b56bcd042b5e69ad188eca20d9bec1bfbf3dd453",
         "type": "github"
       },
       "original": {
@@ -984,11 +984,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795326651,
-        "narHash": "sha256-Pf0DeTP/uSf05+tkmxi95r7owLfB92evtOVmJGGHmgM=",
+        "lastModified": 1795544757,
+        "narHash": "sha256-ctROu99qaztrKCc+uVrUrxbNGeG/LBUKGh4Nh4ZhSxU=",
         "owner": "Jovian-Experiments",
         "repo": "Jovian-NixOS",
-        "rev": "1069ce1dcac046b565cae5c0b2e5c5596a15c709",
+        "rev": "6ec148e9963a8f870c25e2b0057aafed1f662886",
         "type": "github"
       },
       "original": {
@@ -1441,11 +1441,11 @@
         "nixpkgs": "nixpkgs_9"
       },
       "locked": {
-        "lastModified": 1795018746,
-        "narHash": "sha256-glQAHvZGgBVjzGIWgIZYSf3X10gvtO2LPR4rtyP/Soc=",
+        "lastModified": 1795549782,
+        "narHash": "sha256-0mlYwyAv7lUDD6HBgPMqBXjMcIfIZBsLryNnkspeIGs=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "33475966110df258f52d05ec4d4cd6394637cbb9",
+        "rev": "97a30ee0974b815496bec7b136af6b945bd65aef",
         "type": "github"
       },
       "original": {
@@ -1744,11 +1744,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795472103,
-        "narHash": "sha256-Xws5YZ/9XhQUvNMCfht2f6iGibnb2OoKzhsGEyoETWs=",
+        "lastModified": 1795553236,
+        "narHash": "sha256-s2qdPZwHuZDxaNK+dqyIjdzZ7pEYKNgMApztRg87cuo=",
         "owner": "noctalia-dev",
         "repo": "noctalia-shell",
-        "rev": "455d753c5f9bf4d067bd346ebf41e4d46738042d",
+        "rev": "0cec648e15d84977fd27f8dd5ff3d84897c73c91",
         "type": "github"
       },
       "original": {
@@ -1763,11 +1763,11 @@
         "nixpkgs": "nixpkgs_11"
       },
       "locked": {
-        "lastModified": 1795477561,
-        "narHash": "sha256-5oQ1Dzv0vElMFLeQup9qn+FniBU1CdlQFwsFF6W+hjA=",
+        "lastModified": 1795564612,
+        "narHash": "sha256-UzyAn5i5S2Jh8XD41yduD7QazQC5UztgEroxNcmWafM=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "ac963afde76bdf74dd5c370ed668bf352713d4e7",
+        "rev": "be93fce72013d94ea51a73a9e29048ef7bcf4a92",
         "type": "github"
       },
       "original": {
@@ -1907,11 +1907,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1795329345,
-        "narHash": "sha256-hZfnhkmliBbx1rw19SpSMNXJ+BxdhAeYy2L3/Iz33q4=",
+        "lastModified": 1795455634,
+        "narHash": "sha256-dQs68Zn+7G1CX+Z40TmtPCIfw3fpfYEuZ90EqiZWIaE=",
         "owner": "rust-lang",
         "repo": "rust-analyzer",
-        "rev": "37721d141370e0904033f7fc3a3abe11c446c4c1",
+        "rev": "9c74e78e01d7cd31663f4ecf71e65b1cc4b9ccb8",
         "type": "github"
       },
       "original": {
@@ -1949,11 +1949,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795429968,
-        "narHash": "sha256-MJVmTxxAm87tT7yxH5BU8EnKGza32SQ2pqYsHWpJ1H4=",
+        "lastModified": 1795522582,
+        "narHash": "sha256-2UgrrjTeYt4UMmsjdcUjhxSnCGYOlzMuGuk7dRB5Kq4=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "ea2084066e0f3fed86a76a2654658ed2eb998046",
+        "rev": "639e209cc8eecd0c307fd95c8aabc011bf047c41",
         "type": "github"
       },
       "original": {
@@ -2215,14 +2215,14 @@
     "victoriametrics-metrics-datasource-plugin": {
       "flake": false,
       "locked": {
-        "lastModified": 1795091540,
-        "narHash": "sha256-g9F7dA9JHPPPvQGGV1jV2MElaGEId4/QkEqkJX7/b0Q=",
+        "lastModified": 1795529631,
+        "narHash": "sha256-cvE+lotD47sGBh880mVagK+DShjIDjB368z3v4W1miw=",
         "type": "tarball",
-        "url": "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v1.0.2/victoriametrics-metrics-datasource-v1.0.2.tar.gz"
+        "url": "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v1.0.3/victoriametrics-metrics-datasource-v1.0.3.tar.gz"
       },
       "original": {
         "type": "tarball",
-        "url": "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v1.0.2/victoriametrics-metrics-datasource-v1.0.2.tar.gz"
+        "url": "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v1.0.3/victoriametrics-metrics-datasource-v1.0.3.tar.gz"
       }
     },
     "wezterm": {
@@ -2295,11 +2295,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795434855,
-        "narHash": "sha256-R2BZyn0NAM3maHw1GfzEtHFpUPAuJyg4t8I6Dbuzsjg=",
+        "lastModified": 1795509874,
+        "narHash": "sha256-rGtp5IIchBAs1SL6UCWRpSJOGNnSwQwV0beeQcd8emc=",
         "owner": "0xc000022070",
         "repo": "zen-browser-flake",
-        "rev": "e2e4f8220406ce60d64395cfbf91e2189c894769",
+        "rev": "21385ea8b9e0c32b0962029b0836af2b621b7800",
         "type": "github"
       },
       "original": {
