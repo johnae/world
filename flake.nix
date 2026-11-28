@@ -80,9 +80,9 @@
     rust-overlay.url = "github:oxalica/rust-overlay";
     systems.url = "github:nix-systems/default";
     victorialogs.flake = false;
-    victorialogs.url = "https://github.com/VictoriaMetrics/VictoriaLogs/releases/download/v1.54.0/victoria-logs-linux-amd64-v1.54.0.tar.gz"; # gh-release-update
+    victorialogs.url = "https://github.com/VictoriaMetrics/VictoriaLogs/releases/download/v1.55.0/victoria-logs-linux-amd64-v1.55.0.tar.gz"; # gh-release-update
     victoriametrics-logs-datasource-plugin.flake = false;
-    victoriametrics-logs-datasource-plugin.url = "https://github.com/VictoriaMetrics/victorialogs-datasource/releases/download/v0.34.0/victoriametrics-logs-datasource-v0.34.0.tar.gz"; # gh-release-update
+    victoriametrics-logs-datasource-plugin.url = "https://github.com/VictoriaMetrics/victorialogs-datasource/releases/download/v0.35.0/victoriametrics-logs-datasource-v0.35.0.tar.gz"; # gh-release-update
     victoriametrics-metrics-datasource-plugin.flake = false;
     victoriametrics-metrics-datasource-plugin.url = "https://github.com/VictoriaMetrics/victoriametrics-datasource/releases/download/v1.0.3/victoriametrics-metrics-datasource-v1.0.3.tar.gz"; # gh-release-update
     wezterm.inputs.nixpkgs.follows = "nixpkgs";
