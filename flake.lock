@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792507013,
-        "narHash": "sha256-8tKjSQajD3mUND1GaAuaWTcuyUpgcGsh5V+l4ibzC7U=",
+        "lastModified": 1795823210,
+        "narHash": "sha256-yPlK2RCDORlzdflKxIudPZ1fspEGTvHxrdUl54R1mOk=",
         "owner": "ryantm",
         "repo": "agenix",
-        "rev": "5e5b88a0c8e56f291a108c2fe9934054d9745b2e",
+        "rev": "60b6a60f2503f93d131b74c2f7f8600dc6ffbb28",
         "type": "github"
       },
       "original": {
@@ -313,11 +313,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1795705068,
-        "narHash": "sha256-8gV3NznanVOWAw7ylL9gqiwJ3MwahvePOxr9GKL8x3g=",
+        "lastModified": 1795785651,
+        "narHash": "sha256-1ji5ntUVo83tZc5453OkgXG4N1QA/CZ7pgB78n/2rJU=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "e874a14853d5bbf7ff43acd25960dbf9dc2f3e45",
+        "rev": "8566ba531135bf196863afb5fc746b255e4205e9",
         "type": "github"
       },
       "original": {
@@ -412,11 +412,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1795719061,
-        "narHash": "sha256-auCfRrykuofDdcmb6+MTGKP2CzCuVtwa/CBJl7IJdvU=",
+        "lastModified": 1795805240,
+        "narHash": "sha256-ud0NFIG/SWx7cVbfSx6LCpnnAuTUXoCQhmS5svfAp7A=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "614686617c277b07f15c2002e67f9c9add883b27",
+        "rev": "ff3361a80b6e0f5a51ddf6e43525125d5a3a7f97",
         "type": "github"
       },
       "original": {
@@ -433,11 +433,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1795711196,
-        "narHash": "sha256-3y7g6HcL3Mx4vOsGR42aDqGmc7yxzodB7lFupBVuglo=",
+        "lastModified": 1795796693,
+        "narHash": "sha256-49zoYsywWHYYXhw2RYhWWwGlATaDejGSVwVgDFoqvTE=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "bd6a1aca2abf2c8d754447f7bd37624b69ba1b17",
+        "rev": "e1d61eced75126471e69a90f58502c138e50014a",
         "type": "github"
       },
       "original": {
@@ -900,11 +900,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795713076,
-        "narHash": "sha256-GUY/RHSSnAJKKI3xk7xrSXrsXFgIOgFrRJOD4uub5J8=",
+        "lastModified": 1795748630,
+        "narHash": "sha256-J1iQ1QMnkFwZFXnlPt2t3Qx7TsGjw08/0L3QMqNt+Wg=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "361da94fb55c67094ec47322d2757d6616a0de92",
+        "rev": "54f903fdaaf5d5720ed36706fe75332af69eb793",
         "type": "github"
       },
       "original": {
@@ -984,11 +984,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795693671,
-        "narHash": "sha256-mPoDkM113JQUwabcyFaGgmIJ7ELmLN7wTggQ7h7vm1w=",
+        "lastModified": 1795794906,
+        "narHash": "sha256-dsW2DdE1ZG9rEXVwIJW5AooWzr3Zb64onGaxPwGU8MI=",
         "owner": "Jovian-Experiments",
         "repo": "Jovian-NixOS",
-        "rev": "0bc47feabb2d7991537b7b3d589a4d579436808c",
+        "rev": "8ef2bb8e3f5111eb47942a6049c4c7002bd28d4d",
         "type": "github"
       },
       "original": {
@@ -1215,11 +1215,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792603708,
-        "narHash": "sha256-9KB9OFCP71d8n4Gg09saO6H1VuVzHdjusheiHtgn9jc=",
+        "lastModified": 1795018104,
+        "narHash": "sha256-KbmQ/OAzNBf1dRGWYoXNpv6cU6WqfxnuVJ7MC213/pM=",
         "owner": "cachix",
         "repo": "nix",
-        "rev": "082f14105a3e545e1d60bbbc9028dba19f114a0d",
+        "rev": "fdd46da628fef434436769e55b3ae2bd75dc9e20",
         "type": "github"
       },
       "original": {
@@ -1236,11 +1236,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795373241,
-        "narHash": "sha256-Gd1+Oaj8nS+p1qLpKk4MGv/qGh62+lTkX4262e2UDgc=",
+        "lastModified": 1795747999,
+        "narHash": "sha256-VTPsIOYem/zQCO1QF3cpa4pLg2EoexjX5R1u3fs3L4k=",
         "owner": "LnL7",
         "repo": "nix-darwin",
-        "rev": "663d8b962a11cda261b6e9f14e03911fac94baf0",
+        "rev": "594c680c429be020d7130cc2b17d43c4760d17c7",
         "type": "github"
       },
       "original": {
@@ -1744,11 +1744,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795735096,
-        "narHash": "sha256-ib2e733yMWJdVN58/jF+K0fGAZHMTJhcGyGfvu0/4fQ=",
+        "lastModified": 1795797641,
+        "narHash": "sha256-gSj0GrlTj2QNsTZwH19wKqX8LSwOwZGz9jfSD+LyU14=",
         "owner": "noctalia-dev",
         "repo": "noctalia-shell",
-        "rev": "54958562e9f8a83aaa07eba7c0ff353ba45b1167",
+        "rev": "17e51bdbcd13da9f57858fbb30f19b7d723e629c",
         "type": "github"
       },
       "original": {
@@ -1763,11 +1763,11 @@
         "nixpkgs": "nixpkgs_11"
       },
       "locked": {
-        "lastModified": 1795732664,
-        "narHash": "sha256-V5+7HGCRCh4/MszwqhmZObYT/NSYGWHsOMH+h86g01E=",
+        "lastModified": 1795823332,
+        "narHash": "sha256-pk0CuKjxBDHuhNEcohAJmEMlKhFwyQ+FjSlfNlW2EyY=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "8074f9de2102a2a9d598449c6f96a57b282037ff",
+        "rev": "484597354d82ae3f6efdecb0a4d3524cf88ac553",
         "type": "github"
       },
       "original": {
@@ -2189,27 +2189,27 @@
     "victorialogs": {
       "flake": false,
       "locked": {
-        "lastModified": 1794565710,
-        "narHash": "sha256-qpW32ikl2q4st/gZeJ0Sh+Mjj+ahXEoa4WOxgYe+K0s=",
+        "lastModified": 1795749219,
+        "narHash": "sha256-Td/fFOje7AJ57p52Cqq+mbm9P/H/hrtyK58qrc7KvQs=",
         "type": "tarball",
-        "url": "https://github.com/VictoriaMetrics/VictoriaLogs/releases/download/v1.54.0/victoria-logs-linux-amd64-v1.54.0.tar.gz"
+        "url": "https://github.com/VictoriaMetrics/VictoriaLogs/releases/download/v1.55.0/victoria-logs-linux-amd64-v1.55.0.tar.gz"
       },
       "original": {
         "type": "tarball",
-        "url": "https://github.com/VictoriaMetrics/VictoriaLogs/releases/download/v1.54.0/victoria-logs-linux-amd64-v1.54.0.tar.gz"
+        "url": "https://github.com/VictoriaMetrics/VictoriaLogs/releases/download/v1.55.0/victoria-logs-linux-amd64-v1.55.0.tar.gz"
       }
     },
     "victoriametrics-logs-datasource-plugin": {
       "flake": false,
       "locked": {
-        "lastModified": 1793964551,
-        "narHash": "sha256-Ij0WREDYdDsS5cab1k/Yq7SEWfCFd6OXskhi17sic/8=",
+        "lastModified": 1795780275,
+        "narHash": "sha256-lyhKOYEvuo2zGZ/GTp3YStwmF7pi2eB75XvfItN/ze0=",
         "type": "tarball",
-        "url": "https://github.com/VictoriaMetrics/victorialogs-datasource/releases/download/v0.34.0/victoriametrics-logs-datasource-v0.34.0.tar.gz"
+        "url": "https://github.com/VictoriaMetrics/victorialogs-datasource/releases/download/v0.35.0/victoriametrics-logs-datasource-v0.35.0.tar.gz"
       },
       "original": {
         "type": "tarball",
-        "url": "https://github.com/VictoriaMetrics/victorialogs-datasource/releases/download/v0.34.0/victoriametrics-logs-datasource-v0.34.0.tar.gz"
+        "url": "https://github.com/VictoriaMetrics/victorialogs-datasource/releases/download/v0.35.0/victoriametrics-logs-datasource-v0.35.0.tar.gz"
       }
     },
     "victoriametrics-metrics-datasource-plugin": {
@@ -2240,11 +2240,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1795679280,
-        "narHash": "sha256-maNMASXjDzY3tJvLCdu8b4xv7Kx6d4CN+yvDgNogNpA=",
+        "lastModified": 1795767011,
+        "narHash": "sha256-SJ2b4THJ+pBvJdF+ZjXE9QSCkiNst+6WSh+jb/MDVXo=",
         "owner": "wez",
         "repo": "wezterm",
-        "rev": "c41674ceee93687867dbdb2d948e46a13c35a5b9",
+        "rev": "1026152aa1e6ed6f98e6dc73eda2a98a5c0ef575",
         "type": "github"
       },
       "original": {
@@ -2295,11 +2295,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795668840,
-        "narHash": "sha256-hZTHT7oXTrxXi36tKUN4G0lElMgnHQ1nVEV02qxXRZ0=",
+        "lastModified": 1795802018,
+        "narHash": "sha256-VOYmjnE6Ky9MbAZqJ5LGwnpO1vhRJU5x2iPpwpWvKbY=",
         "owner": "0xc000022070",
         "repo": "zen-browser-flake",
-        "rev": "abbd61739b1d73fe0c2c4413143efb9ccafea59e",
+        "rev": "1b4434a8a6751b8a7eb4dd695ee5f645870acf99",
         "type": "github"
       },
       "original": {
